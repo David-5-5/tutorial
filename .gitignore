@@ -1,0 +1,17 @@
+# common file patterns
+.DS_STORE
+.idea
+*.iml
+*.pyc
+__pycache__
+*.jar
+*.class
+.project
+*.prefs
+_build
+venv
+*.log
+*.tar.gz
+*.db
+*.db-journal
+.env

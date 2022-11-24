@@ -9,6 +9,7 @@ class Solution:
         tmp = [0 for _ in range(n)]
         while bin < n:
             m = n // (2 * bin)
+            if n % (2 * bin) != 0 : m += 1
             for i in range(m):
                 self.mergeSort(nums, 2 * i * bin  , 2 * i * bin + bin, n, tmp)
             bin = bin * 2
@@ -18,7 +19,7 @@ class Solution:
         return self.total
     
     def mergeSort(self, nums, begin1, begin2, n, tmp):
-        end1 = begin2
+        end1 = min(begin2, n)
         end2 = min(2 * begin2 - begin1, n)
         tmpNum = end2 - begin1
         cur = begin1
@@ -92,7 +93,7 @@ if __name__ == "__main__":
     sol = Solution()
     # nums = [7,5,6,4]
     import random
-    nums = [random.randint(1,20000) for _ in range(23)]
+    nums = [random.randint(1,20000) for _ in range(1234)]
     nums2 = nums.copy()
     from datetime import datetime
     begin = datetime.now()

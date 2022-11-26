@@ -3,16 +3,11 @@ class Solution:
         if len(stickers) == 0: return -1
         n = len(stickers)
 
-        alphaDict = {}
-        inx = 0
-        for letter in target:
-            if letter not in alphaDict:
-                alphaDict[letter] = inx
-                inx += 1
+        dp = [0 for _ in range(2 ^ n)]
         
-        matrix = [[0 for _ in range(len(alphaDict))] for _ in range(n + 1)]
-        
-                
+
+
+        return dp[2^n -1]        
             
         
         

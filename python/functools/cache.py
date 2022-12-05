@@ -32,3 +32,10 @@ fib_with_cache(120)
 end = time.time()
   
 print("Time taken to execute the function with lru_cache is", end-begin)
+
+@lru_cache(maxsize = 100)
+def count_vowels(sentence):
+    sentence = sentence.casefold()
+    return sum(sentence.count(vowel) for vowel in 'aeiou')
+      
+print(count_vowels("Welcome to Geeksforgeeks"))

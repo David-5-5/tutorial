@@ -15,3 +15,8 @@ venv
 *.db
 *.db-journal
 .env
+
+**/target
+
+.vscode
+.VSCodeCounter

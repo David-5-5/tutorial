@@ -143,7 +143,7 @@ if __name__ == "__main__":
     print("begin naive algo ...")
     begin = datetime.now()
     naive = Naive()
-    print("Pattern occur at = %d, duration=%f" %(naive.match(s, p), (datetime.now()- begin).total_seconds()))
+    print(f"Pattern occur at = {naive.match(s, p)}, duration={(datetime.now()- begin).total_seconds()}" )
     
     # print("begin bf kmf ...")
     # begin = datetime.now()

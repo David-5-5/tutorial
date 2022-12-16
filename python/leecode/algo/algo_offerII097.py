@@ -21,8 +21,8 @@ class Solution:
 
 if __name__ == "__main__":
     sol = Solution()
-    # s = "aabb"
-    # t = "abb"
+    # s = "rabbbit"
+    # t = "rabbit"
     s = "babgbag"
     t = "bag"
     from datetime import datetime

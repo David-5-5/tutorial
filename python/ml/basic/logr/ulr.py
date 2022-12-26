@@ -107,7 +107,7 @@ def plot_reg(X, y, beta):
 	
 if __name__ == "__main__":
 	# load the dataset
-	dataset = loadCSV('dataset1.csv')
+	dataset = loadCSV('./python/ml/basic/logr/dataset1.csv')
 	
 	# normalizing feature matrix
 	X = normalize(dataset[:, :-1])

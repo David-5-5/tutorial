@@ -1716,7 +1716,7 @@ loop:   for(int x=0, offset=0; x<nCodePoints; x++, offset+=len) {
             if (root == matchRoot) {
                 root = hasSupplementary ? new StartS(matchRoot) : new Start(matchRoot);
             }
-        } else if (matchRoot instanceof Begin || matchRoot instanceof First) {
+        } else if (matchRoot instanceof Begin /*|| matchRoot instanceof First*/) {
             root = matchRoot;
         } else {
             root = hasSupplementary ? new StartS(matchRoot) : new Start(matchRoot);
@@ -2827,6 +2827,16 @@ loop:   for(int x=0, offset=0; x<nCodePoints; x++, offset+=len) {
         root = null;
         int ch = next();
         if (ch == '?') {
+            // Special constructs (named-capturing and non-capturing)
+            // (?<name>X)	X, as a named-capturing group
+            // (?:X)	X, as a non-capturing group
+            // (?idmsuxU-idmsuxU) 	Nothing, but turns match flags i d m s u x U on - off
+            // (?idmsux-idmsux:X)  	X, as a non-capturing group with the given flags i d m s u x on - off
+            // (?=X)	X, via zero-width positive lookahead
+            // (?!X)	X, via zero-width negative lookahead
+            // (?<=X)	X, via zero-width positive lookbehind
+            // (?<!X)	X, via zero-width negative lookbehind
+            // (?>X)	X, as an independent, non-capturing group
             ch = skip();
             switch (ch) {
             case ':':   //  (?:xxx) pure group
@@ -4990,6 +5000,7 @@ loop:   for(int x=0, offset=0; x<nCodePoints; x++, offset+=len) {
      * (greedy problem) and without a lot of wasted search time (reluctant
      * problem).
      */
+    /**
     static final class First extends Node {
         Node atom;
         First(Node node) {
@@ -5019,7 +5030,8 @@ loop:   for(int x=0, offset=0; x<nCodePoints; x++, offset+=len) {
             return next.study(info);
         }
     }
-
+     */
+    /**
     static final class Conditional extends Node {
         Node cond, yes, not;
         Conditional(Node cond, Node yes, Node not) {
@@ -5054,7 +5066,7 @@ loop:   for(int x=0, offset=0; x<nCodePoints; x++, offset+=len) {
             return next.study(info);
         }
     }
-
+    */
     /**
      * Zero width positive lookahead.
      */

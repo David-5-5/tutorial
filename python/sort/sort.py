@@ -1,3 +1,10 @@
+def verify(msg: str, nums1, nums2) -> bool:
+    for i, j in zip(nums1, nums2):
+        if i != j:
+            print(f"{msg} is wrong!")
+            return False
+    return True
+
 class Sort:
     def insertSort(self, nums):
         n = len(nums)
@@ -48,19 +55,15 @@ if __name__ == '__main__':
     begin = datetime.now()
     sort.insertSort(numsc)
     print(f"insert sort duration for 10 ** 3: {(datetime.now()- begin).total_seconds()}")
-    for i, j in zip(nums, numsc):
-        if i != j:
-            print(f"insert sort is wrong!")
+    verify("insert sort", nums, numsc)
+
 
     nums = [random.randint(1,20000) for _ in range(10 ** 5)]
     numsc = copy.deepcopy(nums)
-    from datetime import datetime
     begin = datetime.now()
     nums.sort()
     print(f"python sort duration for 10 ** 5: {(datetime.now()- begin).total_seconds()}")
     begin = datetime.now()
     sort.shellSort(numsc)
     print(f"shell sort duration for 10 ** 5: {(datetime.now()- begin).total_seconds()}")
-    for i, j in zip(nums, numsc):
-        if i != j:
-            print(f"shell sort is wrong!")
+    verify("shell sort", nums, numsc)

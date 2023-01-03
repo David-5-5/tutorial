@@ -3,8 +3,6 @@ package tutorial.util;
 import java.util.Arrays;
 import java.util.Random;
 
-import javafx.scene.chart.ValueAxis;
-
 class TimSort {
     static int MIN_MERGE = 32;
  
@@ -156,7 +154,7 @@ class TimSort {
     // Driver code
     public static void main(String[] args)
     {
-        int n = 1 << 19;
+        int n = 1 << 26;
         int[] arr1 = new int[n];
         int[] arr2 = new int[n];
         Random random = new Random();

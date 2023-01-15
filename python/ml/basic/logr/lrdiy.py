@@ -29,8 +29,9 @@ def logistic_func(beta, X):
 	return 1 / (1 + np.exp(np.dot(X, beta.T)))
 
 
-def grad_desc(beta, X , Y):
-    l = 0.01
+
+def grad_desc(beta, X , Y, lr = .01):
+    
     logic = logistic_func(beta, X)
     
 

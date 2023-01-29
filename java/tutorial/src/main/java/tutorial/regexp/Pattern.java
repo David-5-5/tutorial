@@ -953,6 +953,7 @@ public final class Pattern
     /**
      * The starting point of state machine for the find operation.  This allows
      * a match to start anywhere in the input.
+     * 查找操作的状态机的起点。这允许在输入中的任何位置开始匹配。
      */
     transient Node root;
 
@@ -1999,6 +2000,7 @@ loop:   for(int x=0, offset=0; x<nCodePoints; x++, offset+=len) {
      * The expression is parsed with branch nodes added for alternations.
      * This may be called recursively to parse sub expressions that may
      * contain alternations.
+     * 解析表达式时会添加分支节点以供替换。这可以递归调用，以解析可能包含替换的子表达式。
      */
     private Node expr(Node end) {
         Node prev = null;
@@ -2022,6 +2024,8 @@ loop:   for(int x=0, offset=0; x<nCodePoints; x++, offset+=len) {
                     // if the node returned from sequence() is "end"
                     // we have an empty expr, set a null atom into
                     // the branch to indicate to go "next" directly.
+                    // 如果从sequence()返回的节点是“end”，我们有一个空的expr，那么在分支中
+                    // 设置一个空原子以指示直接进入“next”。
                     node = null;
                 } else {
                     // the "tail.next" of each atom goes to branchConn
@@ -2073,12 +2077,12 @@ loop:   for(int x=0, offset=0; x<nCodePoints; x++, offset+=len) {
                 // Double return: Tail was returned in root
                 tail = root;
                 continue;
-            case '[':
+            case '[': // Character classes 字符组
                 node = clazz(true);
                 break;
             case '\\':
                 ch = nextEscaped();
-                if (ch == 'p' || ch == 'P') {
+                if (ch == 'p' || ch == 'P') { // POSIX character classes (US-ASCII only)
                     boolean oneLetter = true;
                     boolean comp = (ch == 'P');
                     ch = next(); // Consume { if present
@@ -2491,6 +2495,8 @@ loop:   for(int x=0, offset=0; x<nCodePoints; x++, offset+=len) {
      * Consumes a ] on the way out if consume is true. Usually consume
      * is true except for the case of [abc&&def] where def is a separate
      * right hand node with "understood" brackets.
+     * 分析一个字符类，并返回与之匹配的节点。如果consume为true，则在退出时使用a]。
+     * 通常consume为true，但[abc&&def]的情况除外，其中def是一个单独的右手节点，带有“可理解”括号。
      */
     private CharProperty clazz(boolean consume) {
         CharProperty prev = null;
@@ -3412,12 +3418,15 @@ loop:   for(int x=0, offset=0; x<nCodePoints; x++, offset+=len) {
      * is made of individual elements that handle constructs in the Pattern.
      * Each type of object knows how to match its equivalent construct with
      * the match() method.
+     * 以下类是表示已编译正则表达式的对象树的构建组件。对象树由处理模式中构造的各个元素组成。
+     * 每种类型的对象都知道如何使用match()方法匹配其等效构造。
      */
 
     /**
      * Base class for all node classes. Subclasses should override the match()
      * method as appropriate. This class is an accepting node, so its match()
      * always returns true.
+     * 所有节点类的基类。子类应酌情重写match()方法。此类是一个接受节点，因此其match()始终返回true。
      */
     static class Node extends Object {
         Node next;
@@ -3435,6 +3444,7 @@ loop:   for(int x=0, offset=0; x<nCodePoints; x++, offset+=len) {
         }
         /**
          * This method is good for all zero length assertions.
+         * 此方法适用于所有零长度断言
          */
         boolean study(TreeInfo info) {
             if (next != null) {
@@ -3450,6 +3460,7 @@ loop:   for(int x=0, offset=0; x<nCodePoints; x++, offset+=len) {
          * This method implements the classic accept node with
          * the addition of a check to see if the match occurred
          * using all of the input.
+         * 该方法通过添加检查来实现经典的accept节点，以查看是否使用所有输入进行了匹配。
          */
         boolean match(Matcher matcher, int i, CharSequence seq) {
             if (matcher.acceptMode == Matcher.ENDANCHOR && i != matcher.to)
@@ -4585,6 +4596,8 @@ loop:   for(int x=0, offset=0; x<nCodePoints; x++, offset+=len) {
      * "next" but not the "study", so we can collect the TreeInfo
      * of each atom node without including the TreeInfo of the
      * "next".
+     * 分支中每个原子节点末端的守护节点。它的目的是将“匹配”操作链接到"next"，而不是"study"，
+     * 因此我们可以收集每个原子节点的TreeInfo，而不包括"next"的TreeInfo。
      */
     static final class BranchConn extends Node {
         BranchConn() {};
@@ -4600,6 +4613,7 @@ loop:   for(int x=0, offset=0; x<nCodePoints; x++, offset+=len) {
      * Handles the branching of alternations. Note this is also used for
      * the ? quantifier to branch between the case where it matches once
      * and where it does not occur.
+     * 处理交替的分支。注意，这也用于?量词在匹配一次的情况和不匹配的情况之间进行分支。
      */
     static final class Branch extends Node {
         Node[] atoms = new Node[2];

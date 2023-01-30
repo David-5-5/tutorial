@@ -2063,7 +2063,7 @@ loop:   for(int x=0, offset=0; x<nCodePoints; x++, offset+=len) {
         for (;;) {
             int ch = peek();
             switch (ch) {
-            case '(':
+            case '(': // (X) X, as a capturing group 作为捕获组
                 // Because group handles its own closure,
                 // we need to treat it differently
                 node = group0();
@@ -2083,10 +2083,12 @@ loop:   for(int x=0, offset=0; x<nCodePoints; x++, offset+=len) {
             case '\\':
                 ch = nextEscaped();
                 if (ch == 'p' || ch == 'P') { // POSIX character classes (US-ASCII only)
+                    
                     boolean oneLetter = true;
                     boolean comp = (ch == 'P');
                     ch = next(); // Consume { if present
                     if (ch != '{') {
+                        // 例如 \p{Lower}, \p{ASCII}, \p{Alnum}等等
                         unread();
                     } else {
                         oneLetter = false;
@@ -2687,6 +2689,7 @@ loop:   for(int x=0, offset=0; x<nCodePoints; x++, offset+=len) {
 
     /**
      * Parses a Unicode character family and returns its representative node.
+     * 分析Unicode字符族并返回其代表节点。
      */
     private CharProperty family(boolean singleLetter,
                                 boolean maybeComplement)

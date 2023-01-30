@@ -2,6 +2,7 @@ class Solution:
     def countPalindromes(self, s: str) -> int:
         n = len(s)
 
+    # dynamic programing, but the Time Complexity is not satisfied
     def countPalindromes2(self, s: str) -> int:
 
         n = len(s)

@@ -999,7 +999,7 @@ public final class Pattern
 
     /**
      * Index into the pattern string that keeps track of how much has been
-     * parsed.
+     * parsed. 模式字符串的索引，用于跟踪已解析的内容。
      */
     private transient int cursor;
 
@@ -1859,6 +1859,7 @@ loop:   for(int x=0, offset=0; x<nCodePoints; x++, offset+=len) {
 
     /**
      * Advance the cursor by one, and peek the next character.
+     * 将光标前移一步，然后查看下一个字符。
      */
     private int next() {
         int ch = temp[++cursor];
@@ -1947,6 +1948,7 @@ loop:   for(int x=0, offset=0; x<nCodePoints; x++, offset+=len) {
 
     /**
      * Read the character after the next one, and advance the cursor by two.
+     * 读取下一个字符后的字符，并将光标前移两个
      */
     private int skip() {
         int i = cursor;
@@ -2053,7 +2055,7 @@ loop:   for(int x=0, offset=0; x<nCodePoints; x++, offset+=len) {
 
     @SuppressWarnings("fallthrough")
     /**
-     * Parsing of sequences between alternations.
+     * Parsing of sequences between alternations. 交替之间的序列分析
      */
     private Node sequence(Node end) {
         Node head = null;
@@ -2307,11 +2309,12 @@ loop:   for(int x=0, offset=0; x<nCodePoints; x++, offset+=len) {
 
     /**
      * Parses an escape sequence to determine the actual value that needs
-     * to be matched.
+     * to be matched.分析转义序列以确定需要匹配的实际值。
      * If -1 is returned and create was true a new object was added to the tree
      * to handle the escape sequence.
+     * 如果返回-1并且create为true，则会向树中添加一个新对象来处理转义序列。
      * If the returned value is greater than zero, it is the value that
-     * matches the escape sequence.
+     * matches the escape sequence.如果返回的值大于零，则该值与转义序列匹配
      */
     private int escape(boolean inclass, boolean create, boolean isrange) {
         int ch = skip();
@@ -3195,7 +3198,8 @@ loop:   for(int x=0, offset=0; x<nCodePoints; x++, offset+=len) {
     }
 
     /**
-     *  Utility method for parsing control escape sequences.
+     * Utility method for parsing control escape sequences.
+     * 用于分析控件转义序列的实用方法。形如：\cx 与x对应的控制字符
      */
     private int c() {
         if (cursor < patternLength) {
@@ -3205,7 +3209,8 @@ loop:   for(int x=0, offset=0; x<nCodePoints; x++, offset+=len) {
     }
 
     /**
-     *  Utility method for parsing octal escape sequences.
+     * Utility method for parsing octal escape sequences.
+     * 用于解析八进制转义序列的实用方法
      */
     private int o() {
         int n = read();
@@ -3226,7 +3231,8 @@ loop:   for(int x=0, offset=0; x<nCodePoints; x++, offset+=len) {
     }
 
     /**
-     *  Utility method for parsing hexadecimal escape sequences.
+     * Utility method for parsing hexadecimal escape sequences.
+     * 用于分析十六进制转义序列的实用方法。
      */
     private int x() {
         int n = read();
@@ -3249,9 +3255,6 @@ loop:   for(int x=0, offset=0; x<nCodePoints; x++, offset+=len) {
         throw error("Illegal hexadecimal escape sequence");
     }
 
-    /**
-     *  Utility method for parsing unicode escape sequences.
-     */
     private int cursor() {
         return cursor;
     }
@@ -3272,6 +3275,10 @@ loop:   for(int x=0, offset=0; x<nCodePoints; x++, offset+=len) {
         return n;
     }
 
+    /**
+     * Utility method for parsing unicode escape sequences.
+     * 用于解析unicode转义序列的实用方法。
+     */
     private int u() {
         int n = uxxxx();
         if (Character.isHighSurrogate((char)n)) {
@@ -3289,7 +3296,6 @@ loop:   for(int x=0, offset=0; x<nCodePoints; x++, offset+=len) {
     //
     // Utility methods for code point support
     //
-
     private static final int countChars(CharSequence seq, int index,
                                         int lengthInCodePoints) {
         // optimization

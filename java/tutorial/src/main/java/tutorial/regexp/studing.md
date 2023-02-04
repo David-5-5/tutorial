@@ -87,11 +87,14 @@ lastAccept-->accept((next:$Node#50))
 
 ```
 上述`Node`结构说明如下：
-- 统一使用`#`代替`@`，`@`为mermaid制图工具的特殊符号
-- `$Node*2*`即为`$Node[2]`,[]在mermaid制图工具为直角长方形
-- next:$Node#50为类`Pattern`的静态成员`accept`
-- next:LastNode#35为类`Pattern`的静态成员`lastAccept`
+- 基本说明：
+  - 统一使用`#`代替`@`，`@`为mermaid制图工具的特殊符号
+  - `$Node*2*`即为`$Node[2]`,[]在mermaid制图工具为直角长方形
+  - $Node#50为类`Pattern`的静态成员`accept`, 并为多个Node节点共享
+  - LastNode#35为类`Pattern`的静态成员`lastAccept`
+- 起始类型节点`matchRoot:$Begin#37`, `Begin`类型节点对应于正则串中起始字符`^`,而`Dollar`类型节点对应于正则串中起始字符`$`
 - next:$Curly#47的说明：
-  - ctype:1024，类型定义在类`ASCII`中`static final int DIGIT   = 0x00000400;`，表明是数字类型，
+  - ctype:1024，类型定义在类`ASCII`中`static final int DIGIT = 0x00000400;`，表明是数字类型，
   - 长度为cmax=4，cmin=3
   - 匹配正则表达式中的`d{3,4}`要求
+  - 子节点next:$Single#49，对应于正则串中起始字符`-`

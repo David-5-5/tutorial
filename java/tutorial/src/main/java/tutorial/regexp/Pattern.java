@@ -3675,6 +3675,9 @@ loop:   for(int x=0, offset=0; x<nCodePoints; x++, offset+=len) {
      *
      * Like ^ the $ operator matches at a position, it does not match the
      * line terminators themselves.
+     * 基于多行模式，要定位在行的末尾或输入的末尾的节点。当不处于多行模式时，$只能在输入的末尾匹配，
+     * 除非输入以行终止符结尾，在该行终止符中，$正好匹配最后一行终止符。
+     * 请注意，\r\n被视为原子线终止符。就像^$运算符在某个位置匹配一样，它与行终止符本身不匹配。
      */
     static final class Dollar extends Node {
         boolean multiline;

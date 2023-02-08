@@ -1,5 +1,5 @@
 from cmath import inf
-#from functools import cache
+from functools import lru_cache
 import heapq
 
 
@@ -8,7 +8,7 @@ class Solution:
         factory.sort(key=lambda f: f[0])
         robot.sort()
         n, m = len(factory), len(robot)
-        # @cache
+        @lru_cache(maxsize = None)
         def f(i: int, j: int) -> int:
             if j == m: return 0
             if i == n - 1:

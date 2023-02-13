@@ -3561,6 +3561,8 @@ loop:   for(int x=0, offset=0; x<nCodePoints; x++, offset+=len) {
      * Node to anchor at the beginning of input. This object implements the
      * match for a \A sequence, and the caret anchor will use this if not in
      * multiline mode.
+     * 输入开始时要锚定的节点。此对象实现了\A序列的匹配，如果不是在多行模式下，^插入符号锚将使用此匹配。
+     * 多行情况下，^插入符号参见{@link Pattern.Caret} 
      */
     static final class Begin extends Node {
         boolean match(Matcher matcher, int i, CharSequence seq) {
@@ -3596,6 +3598,7 @@ loop:   for(int x=0, offset=0; x<nCodePoints; x++, offset+=len) {
     /**
      * Node to anchor at the beginning of a line. This is essentially the
      * object to match for the multiline ^.
+     * 要锚定在行开头的节点。这基本上是要匹配多行^的对象。单行模式下参见{@link Pattern.Begin}
      */
     static final class Caret extends Node {
         boolean match(Matcher matcher, int i, CharSequence seq) {
@@ -4255,6 +4258,7 @@ loop:   for(int x=0, offset=0; x<nCodePoints; x++, offset+=len) {
      * Handles the curly-brace style repetition with a specified minimum and
      * maximum occurrences. The * quantifier is handled as a special case.
      * This class handles the three types.
+     * 处理具有指定最小和最大出现次数的大括号样式重复。*量词作为特殊情况处理。此类处理这三种类型。
      */
     static final class Curly extends Node {
         Node atom;

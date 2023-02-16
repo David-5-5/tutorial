@@ -988,12 +988,15 @@ public final class Pattern
     /**
      * The number of capturing groups in this Pattern. Used by matchers to
      * allocate storage needed to perform a match.
+     * 在匹配期间，所有匹配者都具有Pattern使用的状态。此Pattern中捕获组的数量。
+     * 由匹配器用于分配执行匹配所需的存储。
      */
     transient int capturingGroupCount;
 
     /**
      * The local variable count used by parsing tree. Used by matchers to
      * allocate storage needed to perform a match.
+     * 分析树使用的本地变量计数。由匹配器用于分配执行匹配所需的存储。
      */
     transient int localCount;
 
@@ -1996,6 +1999,7 @@ loop:   for(int x=0, offset=0; x<nCodePoints; x++, offset+=len) {
     /**
      *  The following methods handle the main parsing. They are sorted
      *  according to their precedence order, the lowest one first.
+     *  以下方法处理主解析。它们按照优先顺序排序，首先是最低的一个。
      */
 
     /**
@@ -4187,6 +4191,7 @@ loop:   for(int x=0, offset=0; x<nCodePoints; x++, offset+=len) {
     /**
      * Implements the Unicode category ALL and the dot metacharacter when
      * in dotall mode.
+     * 在dotall模式下实现Unicode类别ALL和点元字符。
      */
     static final class All extends CharProperty {
         boolean isSatisfiedBy(int ch) {
@@ -4196,6 +4201,7 @@ loop:   for(int x=0, offset=0; x<nCodePoints; x++, offset+=len) {
 
     /**
      * Node class for the dot metacharacter when dotall is not enabled.
+     * 未启用dotall时点元字符的节点类。
      */
     static final class Dot extends CharProperty {
         boolean isSatisfiedBy(int ch) {
@@ -4208,6 +4214,7 @@ loop:   for(int x=0, offset=0; x<nCodePoints; x++, offset+=len) {
     /**
      * Node class for the dot metacharacter when dotall is not enabled
      * but UNIX_LINES is enabled.
+     * 当未启用dotall但启用UNIX_LINES时，点元字符的节点类。
      */
     static final class UnixDot extends CharProperty {
         boolean isSatisfiedBy(int ch) {

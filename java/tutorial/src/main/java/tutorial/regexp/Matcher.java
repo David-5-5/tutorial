@@ -215,6 +215,7 @@ public final class Matcher implements MatchResult {
 
     /**
      * All matchers have the state used by Pattern during a match.
+     * 在匹配期间，所有matcher都具有Pattern使用的状态。
      */
     Matcher(Pattern parent, CharSequence text) {
         this.parentPattern = parent;

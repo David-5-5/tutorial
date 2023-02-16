@@ -10,19 +10,29 @@ sequenceDiagram
 
 loop 循环处理
 
-    expr->>sequence: 交替之间的序列分析
+  expr->>sequence: 交替之间的序列分析
 
-    alt is '('
-        sequence->>group0: 捕获组
-    else is '['
-        sequence->>clazz: Character classes 字符组
-    else is '\\'
-        alt is 'P'
-            sequence->>family: family
-        else is others
-            sequence->>atom: atom
-        end
+  alt '('
+    sequence->>group0: 捕获组
+  else '['
+    sequence->>clazz: Character classes 字符组
+  else '\\'
+    alt 'P'
+      sequence->>family: family
+    else
+      sequence->>atom: atom
     end
+  else '^'
+    sequence->>clazz: Character classes 字符组
+  end
+
+  alt is 'prev==null'
+    expr->>expr:prev赋值sequence方法返回值
+  else
+    expr->>BranchConn: 分支
+  end
+
+  expr->>next: 下一个节点
 
 end
 

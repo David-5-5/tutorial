@@ -1,11 +1,31 @@
-class Solution:
-    def minimumWhiteTiles(self, floor: str, numCarpets: int, carpetLen: int) -> int:
-        n = len(floor)
-        if numCarpets * carpetLen >= n: return 0
-        dp = [[0] * numCarpets for _ in range(n)]
-        for i in range(n):
-            dp[i][0] = floor[i] + dp[i-1][0] if i else 0
-        
-        
+from functools import lru_cache
 
-        return dp[n-1][numCarpets-1]
+
+class Solution:
+    '''
+    Pass with Poor spatial complexity 
+    '''
+    def minimumWhiteTiles(self, floor: str, numCarpets: int, carpetLen: int) -> int:
+        n = len(floor)        
+        whites = [0] * n
+        
+        for i in range(n):
+            whites[i] = int(floor[i]) + (whites[i-1] if i else 0)
+        
+        if whites[i] <= numCarpets: return 0
+        
+        @lru_cache(maxsize = None)
+        def whiteTiles(cur, leftCarpets) -> int:
+            if cur <= carpetLen * leftCarpets: return 0
+            if leftCarpets == 0: return whites[cur-1]
+            minT = whiteTiles(cur-carpetLen, leftCarpets-1)
+            return min(minT, whiteTiles(cur-1, leftCarpets) + int(floor[cur-1]))
+        
+        return whiteTiles(n, numCarpets)
+
+if __name__ == "__main__":
+    sol = Solution()
+    floor = "10110101"
+    numCarpets = 2
+    carpetLen = 2
+    print(sol.minimumWhiteTiles(floor, numCarpets, carpetLen))

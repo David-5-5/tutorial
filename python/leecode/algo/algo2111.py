@@ -1,5 +1,6 @@
 class Solution:
     def kIncreasing(self, arr, k: int) -> int:
+        # time complexity is o(n2)
         def lengthOfLIS2(nums) -> int:
             n = len(nums)
             dp = [1] * n
@@ -8,7 +9,7 @@ class Solution:
                     if nums[i] <= nums[j]:
                         dp[i] = max(dp[i], dp[j]+1)
             return max(dp)
-            
+        # time complexity is o(nlogn)
         def lengthOfLIS(nums) -> int:
             d = []
             for n in nums:

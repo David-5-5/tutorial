@@ -1,4 +1,3 @@
-import heapq
 class Solution:
     
     def minCost(self, maxTime: int, edges, passingFees) -> int: 

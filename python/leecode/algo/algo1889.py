@@ -30,6 +30,9 @@ class Solution:
 
     
     def minWastedSpace2(self, packages, boxes) -> int:
+        '''
+        The official solution
+        '''
         from itertools import accumulate
         from bisect import bisect_right
         mod = 10**9 + 7

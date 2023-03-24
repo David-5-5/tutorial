@@ -1,3 +1,9 @@
+'''
+In machine Learning, Classification is the process of categorizing a given set of 
+data into different categories. In Machine Learning, To measure the performance of
+the classification model we use the confusion matrix.
+在机器学习中，分类是将给定的数据集分类为不同类别的过程。在机器学习中，为了衡量分类模型的性能，我们使用混淆矩阵。
+'''
 
 # Importing the dataset.
 from sklearn.datasets import fetch_openml
@@ -5,8 +11,8 @@ mnist = fetch_openml('mnist_784', version=1)
   
 # Creating independent and dependent variables.
 X, y = mnist['data'], mnist['target']
-  
-# Splitting the data into training set and test set.
+
+# Splitting the data into training set and test set.yum
 X_train, X_test, y_train, y_test = X[:60000], X[60000:], y[:60000], y[60000:]
   
 """
@@ -40,7 +46,9 @@ from sklearn.model_selection import cross_val_predict
 y_train_pred = cross_val_predict(never_5_clf, X_train, y_train_5, cv=3)
   
 """
-You could make predictions on the test set, but use the test set only at the very end of your project, once you have a classifier that you are ready to launch.
+You could make predictions on the test set, but use the test set only 
+at the very end of your project, once you have a classifier that 
+you are ready to launch.
 """
   
 # Constructing the confusion matrix.

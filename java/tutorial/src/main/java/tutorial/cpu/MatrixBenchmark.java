@@ -14,7 +14,8 @@ import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.Warmup;
 
 @Fork(2)
-@BenchmarkMode(Mode.AverageTime)
+@BenchmarkMode(Mode.Throughput)
+//@BenchmarkMode(Mode.AverageTime)
 @State(Scope.Benchmark)
 // 预热3次
 @Warmup(iterations = 3, time = 1)

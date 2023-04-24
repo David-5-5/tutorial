@@ -1,6 +1,9 @@
 class Solution:
     def isTransformable(self, s: str, t: str) -> bool:
         '''
+        Optimal solution
+        Modify binary heap to list, Since the stored values are array ordinals, 
+        they are themselves ordered
         '''
         if len(s) != len(t):return False
 
@@ -24,6 +27,9 @@ class Solution:
 
     
     def isTransformable2(self, s: str, t: str) -> bool:
+        '''
+        Able to pass all test cases, but it is unnecessary to use the binary heap.
+        '''
         import heapq
         if len(s) != len(t):return False
 
@@ -46,6 +52,11 @@ class Solution:
         return True
 
     def isTransformable3(self, s: str, t: str) -> bool:
+        '''
+        Introduce the stack to reduce time complexity, but there is a conflict in the logic of 
+        comparing the target value with the input value and the value in the stack. 
+        And the time complexity still does not meet the requirements
+        '''
         if len(s) != len(t):return False
 
         if s == "312": return False
@@ -95,6 +106,9 @@ class Solution:
             return False
 
     def isTransformable4(self, s: str, t: str) -> bool:
+        '''
+        The naive method, time complexity is O(n2) does not meet the requirements
+        '''
         if len(s) != len(t):return False
         
         n = len(s)

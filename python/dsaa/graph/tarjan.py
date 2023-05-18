@@ -45,6 +45,7 @@ class Solution:
         def dfs(v: int, tim:int):
             # pre order
             dfn[v] = tim
+            # rule 1 for low
             low[v] = tim
             vis[v] = True
             tim += 1
@@ -52,27 +53,41 @@ class Solution:
                 for w in graph[v]:
                     if vis[w]:
                         if not span[(min(v,w), max(v,w))]:
-                            # (v,w) is back edge
+                            # rule 2 of low , when (v,w) is back edge
                             low[v] = min(low[v], dfn[w])
                     else:
                         setEdgeInSpan(v, w, True)
                         dfs(w, tim)
                         # post order, 
                         low[v] = min(low[w], low[v])
-                        # cutting edge dfn[v] < low[w]
+                        # rule 3 of low, cutting edge dfn[v] < low[w]
+                        # v is parent node to w, in minimize spanning tree.
                         if dfn[v] < low[w]:
                             bridge.append((v,w))
+                        # if v == 0, it is root node. The cut piont of root is
+                        # wether or not it has multiple children.
+                        if v != 0 and low[w] >= dfn[v] and v not in cutpiont:
+                            cutpiont.append(v)
 
 
         for v, w in edges:
             addEdge(v, w)
         
         dfs(0, 0)
+        # Judge if root is cut piont
+        count = 0
+        for w in graph[0]:
+            if span[(0, w)]: count += 1
+        if count > 1:
+            cutpiont.append(0)
+        
         return [cutpiont, bridge]
 
 if __name__ == "__main__":
     sol = Solution()
-    # edges = [[0,1],[1,2],[2,0],[1,3]]
-    # edges = [[0,1],[0,2],[1,2],[2,3],[3,4],[3,5],[4,5]]
-    edges = [[0,1]]
-    print(sol.tarjan(2, edges))
+    # edges, n = [[0,1],[1,2],[2,0],[1,3]], 4
+    # edges, n = [[0,1],[0,2],[1,2],[2,3],[3,4],[3,5],[4,5]], 6
+    # edges, n = [[0,1]], 2
+    # edges, n = [[0,1],[3,2],[2,0],[0,3]], 4
+    edges, n = [[0,1],[0,2],[1,2],[0,3],[4,3],[4,5],[0,5],[6,5]], 7
+    print(sol.tarjan(n, edges))

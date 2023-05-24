@@ -151,12 +151,17 @@ ConcreteFactory2 --> ProductA2 : 关联
 ConcreteFactory2 --> ProductB2 : 关联
 
 ```
-
 上述类图说明如下：
+- AbastractFactory声明一个创建抽象对象的操作接口
+- ConcreteFactory实现创建具体产品对象的操作
+- AbastractProduct为一类产品对象声明一个接口
+- ConcreteProduct定义一个将被相应的具体工厂对象创建的产品对象并实现AbastractProduct类的接口
+- Client仅使用由AbastractFactory和AbastractProduct的接口
+  - 对类Client而言，仅抽象的接口可见：AbastractFactory、AbastractProductA、AbastractProductB。隐藏具体的实现类，包括：ConcreteFactory1、ProductA1、ProductB1、ConcreteFactory2、ProductA2、ProductB2
+  - AbastractFactory根据实现语言及实现的具体方式，可以是接口或类，因此ConcreteFactory1和AbastractFactory的关系可以是实现或继承。AbastractProductA和ProductA1的关系亦类似
+  - 简化起见，图中类之间的关联并未一一标出。例如仅标出ConcreteFactory2类与产品类的关联关系，而未标出ConcreteFactory1与产品的关系
 
-- 对类Client而言，仅抽象的接口可见：AbastractFactory、AbastractProductA、AbastractProductB。隐藏具体的实现类，包括：ConcreteFactory1、ProductA1、ProductB1、ConcreteFactory2、ProductA2、ProductB2
-- AbastractFactory根据实现语言及实现的具体方式，可以是接口或类，因此ConcreteFactory1和AbastractFactory的关系可以是实现或继承。AbastractProductA和ProductA1的关系亦类似
-- 简化起见，图中类之间的关联并未一一标出。例如仅标出ConcreteFactory2类与产品类的关联关系，而未标出ConcreteFactory1与产品的关系
+AbastractFactory模式的实现及优缺点说明：
 - <font color="Blue">**优点**
   - 分离了具体的类
   - 使得易于交换产品系列
@@ -300,7 +305,7 @@ class Factory {
 
 ```
 
-## 3.2 <span id="3.2">BUILDER生成器</span>
+## 3.2 <span id="3.2">BUILDER 生成器</span>
 
 类型：对象创建型模式
 
@@ -332,10 +337,14 @@ Builder <|.. ConcreteBuilder : 实现
 ConcreteBuilder ..> Product : 依赖
 
 ```
-
 上述类图说明如下：
-
-- Director类中Construct()方法的代码伪码如下：
+- Builder为创建一个Product对象的各个部件指定抽象接口对象
+- ConcreteBuilder的作用包括:
+  - 为实现Builder的接口以构造和装配该产品的各个部件
+  - 定义并明确它所创建的表示
+  - 提供一个检索产品的接口，类如GetRusult() 
+- Director构造一个使用Builder接口的对象
+  Director类中Construct()方法的代码伪码如下：
     ```java
     public construct() {
         for (builder : builders) {
@@ -344,10 +353,10 @@ ConcreteBuilder ..> Product : 依赖
         Product product = xxx.getResult()
     }
     ```
-- ConcreteBuilder有一个或多个实现类
 - Product
   - 表示被构造的复杂对象。ConcreteBuilder创建该产品的内部表示并定义它的装配过程
   - 保护定义组成部件的类，包括将这些部件装配成最终产品的接口
+
 
 一般的调用流程
 ```mermaid
@@ -455,7 +464,7 @@ MazeBuilder <|.. CountingMazeBuilder : 实现
 - 相比较于抽象工厂，Builder模式可以隐藏组件的类的层次结构。例如MazeGame并不关心Room和Door是否有公共的继承类或接口
 
 
-## 3.3 <span id="3.3">FACTORY METHOD</span>
+## 3.3 <span id="3.3">FACTORY METHOD工厂方法</span>
 
 类型：对象创建型模式
 
@@ -570,8 +579,10 @@ Figure类可以实现createManipulator方法，返回一个默认Manipulator的�
         }
     }
     ```
-- 特定语言的变化和问题。lazy intialization
-- 使用模板以避免创建子类
+- 特定语言的变化和问题。
+  - 在Creator类的构造函数里不要调用工厂方法
+  - lazy intialization
+- 使用模板以避免创建子类*针对特定语言，类如C++*
 - 命名约定
 
 
@@ -658,6 +669,70 @@ public class MazeGame {
   - 结合到具体的迷宫，工厂方法通过实现多个MazeGame来扩展迷宫构件类型
   - 抽象工厂类，通过增加工厂方法，提供不同迷宫构件的套件。
   - 3.1节中**抽象工厂的实现可以采用工厂方法。**进一步增加理解
+
+
+## 3.4 <span id="3.4">PROTOTYPE 原型</span>
+
+类型：对象创建型模式
+
+### 3.4.1 <span id="3.4.1">定义及类图</span>
+
+用原型实例指定创建对象的种类，并且通过拷贝这些原型创建新的对象
+
+工厂模式的通用的类图结构如下：
+
+```mermaid
+classDiagram
+
+class Client {
+	Operation()
+}
+
+class ProtoType {
+	Clone()
+}
+
+class ConcretePrototype1 {
+	Clone()
+}
+
+class ConcretePrototype1 {
+	Clone()
+}
+
+Client ..> ProtoType : 依赖
+
+ProtoType <|.. ConcretePrototype1 : 实现
+ProtoType <|.. ConcretePrototype2 : 实现
+```
+上述类图说明如下：
+- Prototype声明一个克隆自身的接口
+- ConcretePrototype实现一个克隆自身的操作
+- Client让一个原型克隆自身从而创建一个新的对象
+
+PROTOTYPE模式的作用及优缺点：
+- 原型模式和Abstract Factory及Buidler模式一样，对客户隐藏了具体的产品类
+- 使得客户无需改变即可使用与特定应用相关类
+- 原型模式有如下优点：
+  -  运行时刻增加和删除产品
+  -  改变值以指定新对象
+  -  改变结构以指定新对象
+  -  减少子类构造
+  -  用类动态配置应用
+
+
+### 3.4.2 <span id="3.4.2">应用场景</span>
+
+适用的场景包括：
+- 当一个系统应该独立于它的产品创建、构成和表示时，要使用原型模式
+- 当要实例化的类是在运行时刻指定时，例如动态装载
+- 为了避免创建一个于产品类层次平行的工厂类层次时
+- 当一个类的实例只能由几个不同状态组合中的一种时。建立相应数目的原型并克隆它们可能比每次用合适的状态手工实例化该类更方便一些
+
+
+### 3.4.2.1 <span id="3.4.2.1">迷宫的优化</span>
+将定义3.2.2.1节中[MazeFactory](#3.2.2.1)的子类MazePrototypeFactory。该子类将要要使用对象的原型来初始化，这样不需要仅为了改变墙壁或房间而生成子类了
+
 
 
 

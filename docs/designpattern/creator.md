@@ -721,6 +721,12 @@ PROTOTYPE模式的作用及优缺点：
   -  用类动态配置应用
 
 
+原型模式的实现需要考虑如下问题：
+- 使用一个原型管理器，当一个系统中原型数目不固定时，要保持一个可用原型的注册表。这个注册表称为原型管理器
+- 实现克隆操作，原型模式最大的困难在于正确的实现Clone操作，当对象包含循环引用时，这尤为棘手。
+- 初始化克隆对象 部分程序需要使用一些值来初始化对象。一般说来，克隆操作时传递参数会破坏克隆接口的统一性。
+
+
 ### 3.4.2 <span id="3.4.2">应用场景</span>
 
 适用的场景包括：
@@ -733,7 +739,107 @@ PROTOTYPE模式的作用及优缺点：
 ### 3.4.2.1 <span id="3.4.2.1">迷宫的优化</span>
 将定义3.2.2.1节中[MazeFactory](#3.2.2.1)的子类MazePrototypeFactory。该子类将要要使用对象的原型来初始化，这样不需要仅为了改变墙壁或房间而生成子类了
 
+迷宫示例结合原型模式（基于抽象工厂模式），部分新增及修改的UML类图如下：
 
+```mermaid
+classDiagram
+
+class MazeGame {
+    Maze createMaze(MazeFactory factory)
+}
+
+class MazeFactory {
+    Maze MakeMaze()
+    Wall MakeWall()
+    Room MakeRoom()
+    Door MakeDoor()
+}
+
+class MazePrototypeFactory {
+    Maze prototypeMaze
+    Wall prototypeWall
+    Room prototypeRoom
+    Door prototypeDoor
+
+    MazePrototypeFactory MazePrototypeFactory(Maze m, Wall w, Room r, Door d)
+}
+
+MazeGame ..> MazeFactory : 依赖
+
+MazeFactory <|.. MazePrototypeFactory : 实现
+
+```
+结合迷宫原型类图，其关键方法的实现说明：
+- 遵循原型模式的通用类图定义，每个原型产品墙壁、房间和门都定义clone()接口
+- 用于创建墙壁、房间和门的成员函数是相似的：每个的都要克隆一个原型，然后初始化。举例说明MazePrototypeFactory类中MakeWall和MakeDoor的成员方法的代码实现：
+  ```Java
+  public Wall MakeWall() {
+    return prototypeWall.clone();
+  }
+
+  public Door MakeDoor(Room r1, Room r2) {
+    Door door = prototypeDoor.clone();
+    door.initialize(r1, r2);
+    return door;
+  }
+  ```
+- 只需使用基本迷宫构件的原型进行初始化，就可以由来创建一个原型的缺省的迷宫
+  ```Java
+  MazeGame game;
+  MazePrototypeFactory prototype = new MazePrototypeFactory(
+    new Maze(),new Wall(),
+    new Roow(), new Door())
+  
+  Maze maze = game.CreateMaze(prototype)
+  ```
+- 为了改变迷宫的类型，用一个不同的原型结合来初始化MazePrototypeFactory，下面调用一个BoomedDoor及BoomedRoom来创建一个迷宫
+  ```Java
+  MazePrototypeFactory prototype = new MazePrototypeFactory(
+    new Maze(),new Wall(),
+    new BoomedRoom(), new BoomedDoor())
+  ```
+
+
+
+## 3.5 <span id="3.5">SINGLETON 单例</span>
+
+类型：对象创建型模式
+
+### 3.5.1 <span id="3.5.1">定义及类图</span>
+
+保证一个类仅有一个实例，并提供一个访问它的全局点
+
+单例模式的通用的类图结构如下：
+
+```mermaid
+classDiagram
+
+class Singleton {
+    static instance()
+    singletonOperation()
+    getSingletonData()
+    static uniqueInstance
+    singletonData
+}
+
+```
+上述类图Singleton类说明如下：
+- 定义一个instance操作，允许客户访问它的唯一实例
+- 可能负责创建它自己的唯一实例
+
+
+Singleton模式作用及优缺点：
+- 只能通过Singleton的instance操作访问一个Singleton实例，
+- 对唯一实例的受控访问
+- 缩小名空间，单例模式是对全局变量的一种改进
+- 允许对操作和表示的精化，Singleton类可以有子类，而且用这个扩展类的实例来配置一个应用是很容易的。
+- 允许可变数目的实例
+- 比类操作更灵活
+
+
+单例模式的实现跟语言相关，单例模式需要考虑的实现问题：
+- 保证一个唯一的实例
+- 创建Singleton类的子类
 
 
 ## <span id="A">附录A 其他</span>

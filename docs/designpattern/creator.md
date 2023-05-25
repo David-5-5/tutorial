@@ -594,7 +594,7 @@ Figure类可以实现createManipulator方法，返回一个默认Manipulator的�
 - 当类将创建对象的职责委托给多个帮助子类中的某一个，并且你希望将哪一个帮助子类是代理者这一个信息局部化的时候
 
 
-### 3.3.2.1 <span id="3.3.2.1">迷宫的优化</span>
+#### 3.3.2.1 <span id="3.3.2.1">迷宫的优化</span>
 
 ```mermaid
 classDiagram
@@ -736,7 +736,7 @@ PROTOTYPE模式的作用及优缺点：
 - 当一个类的实例只能由几个不同状态组合中的一种时。建立相应数目的原型并克隆它们可能比每次用合适的状态手工实例化该类更方便一些
 
 
-### 3.4.2.1 <span id="3.4.2.1">迷宫的优化</span>
+#### 3.4.2.1 <span id="3.4.2.1">迷宫的优化</span>
 将定义3.2.2.1节中[MazeFactory](#3.2.2.1)的子类MazePrototypeFactory。该子类将要要使用对象的原型来初始化，这样不需要仅为了改变墙壁或房间而生成子类了
 
 迷宫示例结合原型模式（基于抽象工厂模式），部分新增及修改的UML类图如下：
@@ -839,7 +839,44 @@ Singleton模式作用及优缺点：
 
 单例模式的实现跟语言相关，单例模式需要考虑的实现问题：
 - 保证一个唯一的实例
-- 创建Singleton类的子类
+- 创建Singleton类的子类, 与其说定义子类不如说建立它的唯一实例，这样外部程序就可以使用它。
+  - 指向单例实例的变量必须用子类的实例进行初始化
+  - 另一个选择Singleton子类的方法是将Instance的实现从父类中分离出来并将它放入子类
+  - 一个更灵活的方法是使用一个单例注册表，这个注册表在单例名称和单例实例之间建立映射。
+
+
+### 3.4.2 <span id="3.4.2">应用场景</span>
+
+适用的场景包括：
+- 当类只能有一个实例而且客户可以从一个众所周知的访问点访问它时
+- 当这个唯一实例应该是通过子类化可以扩展的，并且客户无需更改代码就能使用一个扩展的实例时。
+
+
+#### 3.5.2.1 <span id="3.5.2.1">迷宫的优化</span>
+
+基于抽象工厂模式，定义了MazeFactory类用于建造迷宫。MazeFactory定义了一个建造迷宫不同部件的接口。子类可以重新定义这些操作以返回特定产品类的实例，例如用BoomedWall对象代替普通的Wall对象。由于：
+1. Maze应用仅需迷宫工厂的一个实例
+2. 且这个实例对建造迷宫任何部件的代码都是可用的
+这样就引入Singleton模式，将MazeFactory作为单例，我们无需借助全局变量就可以使迷宫对象具有全局可访问性。
+不存在MazeFactory子类的情况下，代码优化如下：
+```Java
+public class MazeFactory {
+    private MazeFactory instance;
+
+    public static  MazeFactory instance() {
+        if (instance == null) {
+            instance = new MazeFactory()
+        }
+        return instance;
+    }
+
+    protected MazeFactory() {}
+}
+```
+
+考虑当存在MazeFactory的多个子类时，而且应用必须决定使用哪个子类的情况下：
+- 通过环境变量选择迷宫的种类或由应用指定迷宫的类型
+- 通过lookup选择单例注册表，返回指定类型的MazeFactory子类
 
 
 ## <span id="A">附录A 其他</span>

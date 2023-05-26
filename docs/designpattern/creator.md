@@ -594,7 +594,7 @@ Figure类可以实现createManipulator方法，返回一个默认Manipulator的�
 - 当类将创建对象的职责委托给多个帮助子类中的某一个，并且你希望将哪一个帮助子类是代理者这一个信息局部化的时候
 
 
-### 3.3.2.1 <span id="3.3.2.1">迷宫的优化</span>
+#### 3.3.2.1 <span id="3.3.2.1">迷宫的优化</span>
 
 ```mermaid
 classDiagram
@@ -721,6 +721,12 @@ PROTOTYPE模式的作用及优缺点：
   -  用类动态配置应用
 
 
+原型模式的实现需要考虑如下问题：
+- 使用一个原型管理器，当一个系统中原型数目不固定时，要保持一个可用原型的注册表。这个注册表称为原型管理器
+- 实现克隆操作，原型模式最大的困难在于正确的实现Clone操作，当对象包含循环引用时，这尤为棘手。
+- 初始化克隆对象 部分程序需要使用一些值来初始化对象。一般说来，克隆操作时传递参数会破坏克隆接口的统一性。
+
+
 ### 3.4.2 <span id="3.4.2">应用场景</span>
 
 适用的场景包括：
@@ -730,10 +736,147 @@ PROTOTYPE模式的作用及优缺点：
 - 当一个类的实例只能由几个不同状态组合中的一种时。建立相应数目的原型并克隆它们可能比每次用合适的状态手工实例化该类更方便一些
 
 
-### 3.4.2.1 <span id="3.4.2.1">迷宫的优化</span>
+#### 3.4.2.1 <span id="3.4.2.1">迷宫的优化</span>
 将定义3.2.2.1节中[MazeFactory](#3.2.2.1)的子类MazePrototypeFactory。该子类将要要使用对象的原型来初始化，这样不需要仅为了改变墙壁或房间而生成子类了
 
+迷宫示例结合原型模式（基于抽象工厂模式），部分新增及修改的UML类图如下：
 
+```mermaid
+classDiagram
+
+class MazeGame {
+    Maze createMaze(MazeFactory factory)
+}
+
+class MazeFactory {
+    Maze MakeMaze()
+    Wall MakeWall()
+    Room MakeRoom()
+    Door MakeDoor()
+}
+
+class MazePrototypeFactory {
+    Maze prototypeMaze
+    Wall prototypeWall
+    Room prototypeRoom
+    Door prototypeDoor
+
+    MazePrototypeFactory MazePrototypeFactory(Maze m, Wall w, Room r, Door d)
+}
+
+MazeGame ..> MazeFactory : 依赖
+
+MazeFactory <|.. MazePrototypeFactory : 实现
+
+```
+结合迷宫原型类图，其关键方法的实现说明：
+- 遵循原型模式的通用类图定义，每个原型产品墙壁、房间和门都定义clone()接口
+- 用于创建墙壁、房间和门的成员函数是相似的：每个的都要克隆一个原型，然后初始化。举例说明MazePrototypeFactory类中MakeWall和MakeDoor的成员方法的代码实现：
+  ```Java
+  public Wall MakeWall() {
+    return prototypeWall.clone();
+  }
+
+  public Door MakeDoor(Room r1, Room r2) {
+    Door door = prototypeDoor.clone();
+    door.initialize(r1, r2);
+    return door;
+  }
+  ```
+- 只需使用基本迷宫构件的原型进行初始化，就可以由来创建一个原型的缺省的迷宫
+  ```Java
+  MazeGame game;
+  MazePrototypeFactory prototype = new MazePrototypeFactory(
+    new Maze(),new Wall(),
+    new Roow(), new Door())
+  
+  Maze maze = game.CreateMaze(prototype)
+  ```
+- 为了改变迷宫的类型，用一个不同的原型结合来初始化MazePrototypeFactory，下面调用一个BoomedDoor及BoomedRoom来创建一个迷宫
+  ```Java
+  MazePrototypeFactory prototype = new MazePrototypeFactory(
+    new Maze(),new Wall(),
+    new BoomedRoom(), new BoomedDoor())
+  ```
+
+
+
+## 3.5 <span id="3.5">SINGLETON 单例</span>
+
+类型：对象创建型模式
+
+### 3.5.1 <span id="3.5.1">定义及类图</span>
+
+保证一个类仅有一个实例，并提供一个访问它的全局点
+
+单例模式的通用的类图结构如下：
+
+```mermaid
+classDiagram
+
+class Singleton {
+    static instance()
+    singletonOperation()
+    getSingletonData()
+    static uniqueInstance
+    singletonData
+}
+
+```
+上述类图Singleton类说明如下：
+- 定义一个instance操作，允许客户访问它的唯一实例
+- 可能负责创建它自己的唯一实例
+
+
+Singleton模式作用及优缺点：
+- 只能通过Singleton的instance操作访问一个Singleton实例，
+- 对唯一实例的受控访问
+- 缩小名空间，单例模式是对全局变量的一种改进
+- 允许对操作和表示的精化，Singleton类可以有子类，而且用这个扩展类的实例来配置一个应用是很容易的。
+- 允许可变数目的实例
+- 比类操作更灵活
+
+
+单例模式的实现跟语言相关，单例模式需要考虑的实现问题：
+- 保证一个唯一的实例
+- 创建Singleton类的子类, 与其说定义子类不如说建立它的唯一实例，这样外部程序就可以使用它。
+  - 指向单例实例的变量必须用子类的实例进行初始化
+  - 另一个选择Singleton子类的方法是将Instance的实现从父类中分离出来并将它放入子类
+  - 一个更灵活的方法是使用一个单例注册表，这个注册表在单例名称和单例实例之间建立映射。
+
+
+### 3.5.2 <span id="3.5.2">应用场景</span>
+
+适用的场景包括：
+- 当类只能有一个实例而且客户可以从一个众所周知的访问点访问它时
+- 当这个唯一实例应该是通过子类化可以扩展的，并且客户无需更改代码就能使用一个扩展的实例时。
+
+
+#### 3.5.2.1 <span id="3.5.2.1">迷宫的优化</span>
+
+基于抽象工厂模式，定义了MazeFactory类用于建造迷宫。MazeFactory定义了一个建造迷宫不同部件的接口。子类可以重新定义这些操作以返回特定产品类的实例，例如用BoomedWall对象代替普通的Wall对象。由于：
+1. Maze应用仅需迷宫工厂的一个实例
+2. 且这个实例对建造迷宫任何部件的代码都是可用的
+这样就引入Singleton模式，将MazeFactory作为单例，我们无需借助全局变量就可以使迷宫对象具有全局可访问性。
+不存在MazeFactory子类的情况下，代码优化如下：
+```Java
+public class MazeFactory {
+    private MazeFactory instance;
+
+    public static  MazeFactory instance() {
+        if (instance == null) {
+            instance = new MazeFactory()
+        }
+        return instance;
+    }
+
+    protected MazeFactory() {}
+}
+```
+
+考虑当存在MazeFactory的多个子类时，而且应用必须决定使用哪个子类的情况下：
+- 通过环境变量选择迷宫的种类或由应用指定迷宫的类型
+- 通过lookup选择单例注册表，返回指定类型的MazeFactory子类
 
 
 ## <span id="A">附录A 其他</span>

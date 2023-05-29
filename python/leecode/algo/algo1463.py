@@ -22,3 +22,8 @@ class Solution:
             return best + getValue(i, j1, j2)
 
         return dfs(0, 0, cols-1)
+
+if __name__ == "__main__":
+    sol = Solution()
+    grid = [[3,1,1],[2,5,1],[1,5,5],[2,1,1]]
+    print(sol.cherryPickup(grid))

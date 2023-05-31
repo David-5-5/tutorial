@@ -117,4 +117,27 @@ Adapter模式可以使用类适配器和对象适配器两种类型（比较上�
 - 需要使用一些已经存在的类，但是不可能对每一个都进行子类化以匹配他们的接口。对象适配器可以适配它的父类接口
 
 
+### 4.1.2.1 <span id="4.1.2.1">MyBatis</span>
 
+
+### 4.1.2.2 <span id="4.1.2.2">JDK</span>
+
+InputStreamReader(InputStream in)构造函数，返回Reader接口的实现类
+
+```mermaid
+classDiagram
+
+
+class InputStreamReader {
+  private StreamDecoder sd
+  InpuStreamReader(InputStream in)
+}
+
+Reader <|.. InputStreamReader : 实现
+Reader <|.. StreamDecoder : 实现
+
+InputStream <.. StreamDecoder : 依赖
+StreamDecoder <.. InputStreamReader : 依赖
+
+
+```

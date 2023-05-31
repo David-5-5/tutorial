@@ -96,17 +96,74 @@ Adapter模式可以使用类适配器和对象适配器两种类型（比较上�
 
 
 使用Adapter模式需要考虑的一些其他因素有：
-1. Adatper的匹配程度
+1. Adatper的匹配程度。Adapter的工作量取决于Target接口与Adaptee接口的相似程度
 2. 可插入的Adatper
-3. 使用双向适配器提供透明操作
+   - 当其他类使用一个类时，如果所需的假定条件越少，这个类就更具可复用性
+   - 如果将接口匹配构建为一个类，就不需要假定对其他的类可见的是一个相同的接口。也就是说接口匹配，使得可以将自己的类加入到一些现有的系统中去
+     > go语言的特性是更好的支持可插入Adapter
+3. 使用双向适配器提供透明操作。一个潜在的问题，它不对所有的客户都透明。被适配的对象不再兼容Adaptee接口，因此并不是所有的Adaptee对象可以被使用的地方它都可以被使用。双向适配器提供了这样的透明性。在两个不同的客户需要用不同的方式查看同一个对象时，双向适配器尤其有用
 
 
 实现Adapter模式，需要注意的一些问题：
 1. 使用C++实现适配器类
-2. 可插入的适配器
-   - 使用抽象操作
-   - 使用代理对象
-   - 参数化的适配器
+2. 可插入的适配器，有三种方法可以实现可插入的适配器。首先为Adaptee找到一个“窄”接口，即可用于适配的最小操作集。包含较少的操作的“窄”接口更容易进行匹配，对于“窄”接口有以下三个实现途径：
+   - 使用抽象操作，在Target类中定义“窄”Adaptee接口相应的抽象方法。由Adapter子类来实现这些抽象方法，并调用Adaptee接口来匹配具体的实现。
+     ```mermaid
+     classDiagram
+     class TreeDisplay {
+       getChildren(Node node)
+       createGraphicNode(Node node)
+       display()
+       buildTree()
+     }
+     
+     class DirectoryTreeDisplay {
+       getChildren(Node node)
+       createGraphicNode(Node node)
+     }
+
+     TreeDisplay<|.. DirectoryTreeDisplay : 实现
+     FileSystemEntity <.. DirectoryTreeDisplay : 依赖
+     ```
+     上述类图中，
+     - TreeDisplay承担Client和Target角色任务
+     - DirectoryTreeDisplay承担Adapter角色任务
+     - FileSystemEntity承担Adaptee角色任务
+
+   - 使用代理对象，客户将请求发送到代理对象Target，客户进行一些选择，并将这些选择提供给代理对象，这样客户就可以对Adapter加以控制
+     ```mermaid
+     classDiagram
+     class TreeDisplay {
+       setDelegate(Delegate delegate)
+       display()
+       buildTree()
+     }
+     
+     class TreeAccessorDelegate {
+       getChildren(TreeDisplay display, Node node)
+       createGraphicNode(TreeDisplay display, Node node)
+     }
+
+     class DirectoryBrowser {
+       getChildren(TreeDisplay display, Node node)
+       createGraphicNode(TreeDisplay display, Node node)
+       createFile()
+       deleteFile()
+     }
+
+     TreeAccessorDelegate <.. TreeDisplay : 依赖
+     TreeAccessorDelegate <|.. DirectoryBrowser : 实现
+     TreeDisplay <.. DirectoryBrowser : 依赖
+     FileSystemEntity <.. DirectoryBrowser : 依赖
+     ```
+     上述类图中，
+     - TreeDisplay承担Client角色任务
+     - TreeAccessorDelegate承担Target角色任务
+     - DirectoryBrowser承担Adapter角色任务
+     - FileSystemEntity承担Adaptee角色任务
+
+   - 参数化的适配器，用一个或多个模块对适配器进行参数化。
+
 
 
 ### 4.1.2 <span id="4.1.2">应用场景</span>
@@ -139,5 +196,50 @@ Reader <|.. StreamDecoder : 实现
 InputStream <.. StreamDecoder : 依赖
 StreamDecoder <.. InputStreamReader : 依赖
 
+
+```
+
+
+## 4.2 <span id="4.2">BRIDGE 桥接</span>
+
+类型：对象结构型模式
+
+### 4.2.1 <span id="4.2.1">定义及类图</span>
+
+将抽象部分与它的实现部分分离，使得它们都可以独立的变化
+
+Bridge 桥接的通用UML类图如下：
+
+```mermaid
+classDiagram
+
+class Abstraction {
+  operation()
+}
+
+class RefinedAbstraction {
+  operation()
+}
+
+class Implementor {
+  operationImpl()
+}
+
+class ConcreteImplementorA {
+  operationImpl()
+}
+
+class ConcreteImplementorB {
+  operationImpl()
+}
+
+Abstraction <.. Client : 依赖
+
+Abstraction <|.. RefinedAbstraction : 实现
+
+Abstraction o-- Implementor : 聚合 Aggregation
+
+Implementor <|.. ConcreteImplementorA : 实现
+Implementor <|.. ConcreteImplementorB : 实现
 
 ```

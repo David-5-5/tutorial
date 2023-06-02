@@ -184,7 +184,6 @@ InputStreamReader(InputStream in)构造函数，返回Reader接口的实现类
 ```mermaid
 classDiagram
 
-
 class InputStreamReader {
   private StreamDecoder sd
   InpuStreamReader(InputStream in)
@@ -196,8 +195,17 @@ Reader <|.. StreamDecoder : 实现
 InputStream <.. StreamDecoder : 依赖
 StreamDecoder <.. InputStreamReader : 依赖
 
-
 ```
+上述类图说明如下
+- InputStreamReader、StreamDecoder、Reader为JDK中的类
+- 其中InputStreamReader实现将InputStream接口转换为Reader接口，InputStream和Reader接口的差异如下：
+  - InputStreamReader是用来读取字节流的
+  - Reader是用来读取字符的，因此Reader和字符的编码结构相关，特别是涉及到ASCII码之外的语言编码
+- InputStreamReader、StreamDecoder承担Adapter角色，将封装一个InputStream对象，并实现Reaer接口
+- Reader为Target角色
+- InputStream承担Adaptee角色
+
+详情可参见StreamDecoder类中实现Reader接口中read方法的代码实现。读取InputStream中字节流，并根据编码要求，转换为字符流。
 
 
 ## 4.2 <span id="4.2">BRIDGE 桥接</span>
@@ -243,3 +251,10 @@ Implementor <|.. ConcreteImplementorA : 实现
 Implementor <|.. ConcreteImplementorB : 实现
 
 ```
+上述桥接模式的类图说明如下：
+- Abstraction，定义抽象类的接口，维护一个指向Implementor类型对象
+- RefinedAbstraction， 扩充由Abstraction定义的接口
+- Implementor，定义实现类的接口。
+  - 该接口不一定与Abstraction的接口完全一致
+  - 一般来讲，Implementor接口仅提供基本操作，而Abstraction则定义了基于这些基本操作的较高层次的操作。
+

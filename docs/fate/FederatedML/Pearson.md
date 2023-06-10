@@ -13,6 +13,7 @@ $$
 $$
 
 Let
+
 $$
 \begin{equation}
 \tilde{X} = \frac{X-\mu_X}{\sigma_X}, \tilde{Y}=\frac{Y-\mu_Y}{\sigma_Y}

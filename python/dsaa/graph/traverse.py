@@ -75,7 +75,7 @@ class Graph:
             # Get all adjacent vertices of the popped vertex s
             # If a adjacent has not been visited, then push it
             # to the stack.
-            for node in self.adj[s]:
+            for node in self.graph[s]:
                 if (not visited[node]):
                     stack.append(node)
  
@@ -95,6 +95,10 @@ if __name__ == '__main__':
     print("Following is Breadth First Traversal"
           " (starting from vertex 2)")
     g.BFS(2)
+    print()
+    print("Following is Depht First Traversal"
+          " (starting from vertex 2)")
     g.DFS(2)
+    print()
  
 # This code is contributed by Neelam Yadav

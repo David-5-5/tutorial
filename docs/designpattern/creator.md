@@ -299,12 +299,96 @@ Fabric提供抽象工厂，包括符合PKCS11规范的硬件加密实现pcksFact
 ```mermaid
 classDiagram
 
-class Factory {
-    
+class BCCSPFactory {
+    string Name()
+    (bccsp.BCCSP, error) Get(opts *FactoryOpts)
+}
+
+class SWFactory {
+    string Name()
+    (bccsp.BCCSP, error) Get(opts *FactoryOpts)
+}
+
+class PKCS11Factory {
+    string Name()
+    (bccsp.BCCSP, error) Get(opts *FactoryOpts)
 }
 
 
+BCCSPFactory <|.. SWFactory : 实现
+BCCSPFactory <|.. PKCS11Factory : 实现
+
+BCCSP <|.. swImpl : 实现
+BCCSP <|.. swImpl : 实现
+
+SWFactory ..> swImpl : 依赖
+PKCS11Factory ..> swImpl : 依赖
+PKCS11Factory ..> pkcs11Impl : 依赖
+
 ```
+上述类图说明如下：、
+- 通过build编译选项：
+  >`// +build !pkcs11` bccsp/factory/nopkcs11.go
+  `// +build pkcs11`   bccsp/factory/pkcs11.go
+
+  初始化SWFactory或PKCS11Factory。SWFactory提供swImpl结构体实现BCCSP接口。而PKCS11Factory提供swImpl及pkcs11Impl两种实现。
+- pkcs11接口连接HSM实现BCCSP接口功能，实现是代码：
+  ```go
+  lib := opts.Library
+  pin := opts.Pin
+  label := opts.Label
+  ctx, slot, session, err := loadLib(lib, pin, label)
+  ```
+  lib为加密机提供的动态库，pin为加密机连接的pin码
+  具体的实现通过第三方库实现github.com/miekg/pkcs11
+- 商密sm2、sm3、sm4算法通过加入sw套件，提供多种加解密算法
+  ```go
+  swbccsp, err := New(keyStore)
+  if err != nil {
+	return nil, err
+  }
+
+  // Set the Signers
+  swbccsp.AddWrapper(reflect.TypeOf(&ecdsaPrivateKey{}), &ecdsaSigner{})
+  swbccsp.AddWrapper(reflect.TypeOf(&sm2PrivateKey{}), &sm2Signer{})
+
+  // Set the Verifiers
+  swbccsp.AddWrapper(reflect.TypeOf(&ecdsaPrivateKey{}), &ecdsaPrivateKeyVerifier{})
+  swbccsp.AddWrapper(reflect.TypeOf(&ecdsaPublicKey{}), &ecdsaPublicKeyKeyVerifier{})
+  swbccsp.AddWrapper(reflect.TypeOf(&sm2PrivateKey{}), &sm2PrivateKeyVerifier{})
+  swbccsp.AddWrapper(reflect.TypeOf(&sm2PublicKey{}), &sm2PublicKeyKeyVerifier{})
+
+  // Set the Hashers
+  swbccsp.AddWrapper(reflect.TypeOf(&bccsp.SHA256Opts{}), &hasher{hash: sha256.New})
+  swbccsp.AddWrapper(reflect.TypeOf(&bccsp.SM3Opts{}), &hasher{hash: sm3.New})
+
+  // Set the key generators
+  swbccsp.AddWrapper(reflect.TypeOf(&bccsp.ECDSAKeyGenOpts{}), &ecdsaKeyGenerator{curve: conf.ellipticCurve})
+  swbccsp.AddWrapper(reflect.TypeOf(&bccsp.ECDSAP256KeyGenOpts{}), &ecdsaKeyGenerator{curve: elliptic.P256()})
+  swbccsp.AddWrapper(reflect.TypeOf(&bccsp.SM2KeyGenOpts{}), &sm2KeyGenerator{})
+
+  // Set the key derivers
+  swbccsp.AddWrapper(reflect.TypeOf(&ecdsaPrivateKey{}), &ecdsaPrivateKeyKeyDeriver{})
+  swbccsp.AddWrapper(reflect.TypeOf(&ecdsaPublicKey{}), &ecdsaPublicKeyKeyDeriver{})
+  swbccsp.AddWrapper(reflect.TypeOf(&sm2PrivateKey{}), &sm2PrivateKeyKeyDeriver{})
+  swbccsp.AddWrapper(reflect.TypeOf(&sm2PublicKey{}), &sm2PublicKeyKeyDeriver{})
+
+  // Set the key importers
+  swbccsp.AddWrapper(reflect.TypeOf(&bccsp.AES256ImportKeyOpts{}), &aes256ImportKeyOptsKeyImporter{})
+  swbccsp.AddWrapper(reflect.TypeOf(&bccsp.HMACImportKeyOpts{}), &hmacImportKeyOptsKeyImporter{})
+  swbccsp.AddWrapper(reflect.TypeOf(&bccsp.ECDSAPKIXPublicKeyImportOpts{}), &ecdsaPKIXPublicKeyImportOptsKeyImporter{})
+  swbccsp.AddWrapper(reflect.TypeOf(&bccsp.ECDSAPrivateKeyImportOpts{}), &ecdsaPrivateKeyImportOptsKeyImporter{})
+  swbccsp.AddWrapper(reflect.TypeOf(&bccsp.ECDSAGoPublicKeyImportOpts{}), &ecdsaGoPublicKeyImportOptsKeyImporter{})
+  swbccsp.AddWrapper(reflect.TypeOf(&bccsp.SM2PKIXPublicKeyImportOpts{}), &sm2PKIXPublicKeyImportOptsKeyImporter{})
+  swbccsp.AddWrapper(reflect.TypeOf(&bccsp.SM2PrivateKeyImportOpts{}), &sm2PrivateKeyImportOptsKeyImporter{})
+  swbccsp.AddWrapper(reflect.TypeOf(&bccsp.SM2GoPublicKeyImportOpts{}), &sm2GoPublicKeyImportOptsKeyImporter{})
+
+  return swbccsp, nil
+
+  ```
+  bccsp的密钥的管理和签名接口中，增加sm国密相关的密钥及算法，其中签名算法根据生成的密钥类型自动选择，类如ECDSA密钥则选择密钥的签名及密钥管理接口方法。Hash算法根据opts设置默认的算法，原有为`SHA256`，修改为`SM3`
+
+
 
 ## 3.2 <span id="3.2">BUILDER 生成器</span>
 

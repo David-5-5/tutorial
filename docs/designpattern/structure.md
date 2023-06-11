@@ -216,6 +216,14 @@ StreamDecoder <.. InputStreamReader : 依赖
 
 将抽象部分与它的实现部分分离，使得它们都可以独立的变化
 
+动机
+由于继承机制有两个不足之处：
+- 不同种类的扩展，即继承一个父类，都需要定义一整套实现类。新增一套类型扩展，需要定义一整套类实现相关接口
+- 继承机制使得客户代码于平台（Windows，linux，mac）和语言相关，很难将客户代码移植到其他平台和语言上去
+BRIDGE桥接模式将类的抽象和定义于实现分离开，即以下类图中Abstraction及Implementor的分离
+
+
+
 Bridge 桥接的通用UML类图如下：
 
 ```mermaid
@@ -257,4 +265,51 @@ Implementor <|.. ConcreteImplementorB : 实现
 - Implementor，定义实现类的接口。
   - 该接口不一定与Abstraction的接口完全一致
   - 一般来讲，Implementor接口仅提供基本操作，而Abstraction则定义了基于这些基本操作的较高层次的操作。
+- ConcreteImplementor，实现Implementor接口并定义它的具体实现
 
+
+Bridge桥接模式的优点：
+- 分离接口及其实现部分。
+  - 一个实现未必不变的绑定在一个接口上。抽象类的实现可以在运行时刻进行配置，一个对象甚至可以在运行时刻改变它的实现。
+  - 接口与实现的分离有助于分层，从而产生更好的结构化系统，系统的高层仅需知道Abstraction及Implementor即可
+- 提高可扩充性，独立的扩充Abstraction及Implementor
+- 实现细节对客户透明
+
+
+实现Bridge桥接模式需要注意的问题：
+- 仅有一个Implementor。仅有一个类是Bridge桥接模式退化的情况，没有必要创建一个抽象的Implementor类
+- 创建正确的Implementor对象
+- 共享Implementor对象
+- 采用多重继承机制
+
+
+
+### 4.2.2 <span id="4.2.2">应用场景</span>
+
+适用的场景包括：
+- 不希望在抽象和它的实现部分之间有一个固定的绑定关系
+- 类的抽象以及它的实现都应该可以通过生成子类的方法加以扩充。Bridge模式使得可以对不同的抽象接口和实现部分进行组合，并分别对他们进行扩充。
+- 对一个抽象的实现部分的修改应对客户的不产生影响，即客户代码不必重新编译
+- 由于许多类要生成，这样一种类层次结构说明，需要将一个对象分解成两个部分，抽象定义和实现，通过桥接代替继承
+- 需要在多个对象间共享实现，但同时要求客户并不知道这一点
+
+
+### 4.2.2.1 <span id="4.2.2.1">JDK</span>
+
+桥接模式允许抽象和实现之间的分离，以便它们可以彼此独立开发，但仍然有一种方式或桥梁来共存和交互。
+
+Java 中的一个例子是 JDBC API。 它充当 Oracle、MySQL 和 PostgreSQL 等数据库及其特定实现之间的链接。
+
+JDBC API 是一组标准接口，例如 Driver、Connection 和 ResultSet，仅举几例。 这使不同的数据库供应商可以有各自的实现。
+
+从客户的视角
+```java
+// url is a String that can represent any database vendor.
+// postgresql Vendor
+// String url = "jdbc:postgresql://localhost/demo";
+
+// MySQL Vendor
+String url = "jdbc:mysql://localhost/demo";
+Connection connection = DriverManager.getConnection(url);
+
+```

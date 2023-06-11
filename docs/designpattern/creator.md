@@ -717,32 +717,39 @@ MazeGame <|-- EnchantedMazeGame : 实现
 上述类图结构说明如下：
 - 改造MazeGame类，增加工厂方法MakeMaze、MakeRoom、MakeDoor、MakeWall
 - BoomedMazeGame、EnchantedMazeGame继承扩展MazeGame类，以提供特殊的Room及Door等对象
+- MazeGame类的createMaze提供默认的迷宫实现
+    ```Java
+    public class MazeGame {
+        // Factory Method:
+        abstract void Maze MakeMaze();
+        abstract void Maze MakeRoom(int n);
+        abstract void Maze MakeWall();
+        abstract void Maze MakeDoor(Room r1, Room r2);
 
--MazeGame类的createMaze提供默认的迷宫实现
-```Java
-public class MazeGame {
-    Maze createMaze(MazeFactory factory) {
-        Maze maze = MakeMaze();
-        Room r1 = MakeRoom(1);
-        Room r2 = Room(2);
-        Door door = MakeDoor(r1, r2);
-        
-        maze.addRoom(r1);
-        maze.addRoom(r2);
-        r1.setSide(North, MakeWall());
-        r1.setSide(East, door);
-        r1.setSide(West, MakeWall());
-        r1.setSide(South, MakeWall());
 
-        r2.setSide(North, MakeWall());
-        r2.setSide(East, MakeWall());
-        r2.setSide(West, door);
-        r2.setSide(South, MakeWall());
-        
-        return maze;
+        Maze createMaze(MazeFactory factory) {
+            Maze maze = MakeMaze();
+            Room r1 = MakeRoom(1);
+            Room r2 = Room(2);
+            Door door = MakeDoor(r1, r2);
+            
+            maze.addRoom(r1);
+            maze.addRoom(r2);
+            r1.setSide(North, MakeWall());
+            r1.setSide(East, door);
+            r1.setSide(West, MakeWall());
+            r1.setSide(South, MakeWall());
+
+            r2.setSide(North, MakeWall());
+            r2.setSide(East, MakeWall());
+            r2.setSide(West, door);
+            r2.setSide(South, MakeWall());
+            
+            return maze;
+        }
     }
-}
-```
+    ```
+
 上述代码与抽象工厂分析比较如下
 - 对象创建
   - 工厂方法Factory Method模式下，MazeGame类实现工厂方法MakeMaze、MakeRoom、MakeDoor、MakeWall，由createMaze调用MazeGame类的工厂方法（抽象方法）创建对象，代替原始的new操作符，实例化一个具体的类。

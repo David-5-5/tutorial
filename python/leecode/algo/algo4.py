@@ -1,35 +1,79 @@
 class Solution:
     def findMedianSortedArrays(self, nums1, nums2) -> float:
-        from bisect import bisect_right
-        n1, n2 = len(nums1), len(nums2)
-        odd = (n1 + n2) % 2
+        '''
+        按照官方视频解答
+        '''
+        if len(nums1) > len(nums2):
+            return self.findMedianSortedArrays(nums2, nums1)
         
-        expect = (n1 + n2) // 2 - (1-odd)
-        l1, r1, l2, r2 = 0, n1, 0, n2
-        m1 = n1 // 2
-        m2 = n2 // 2
-        if n1 == 0 : return nums2[m2] if odd else (nums2[m2 - 1] + nums2[m2])/ 2
-        if n2 == 0 : return nums1[m1] if odd else (nums1[m1 - 1] + nums1[m1])/ 2
-    
-        while m1 + m2 != expect:
-            if nums1[m1] == nums2[m2]:
-                return nums1[m1]
-            elif nums1[m1] < nums2[m2]:
-                l1 = m1
-                r1 = bisect_right(nums1, nums2[m2], lo=m1, hi=r1)
-                l2 = bisect_right(nums2, nums1[m1], lo=l2, hi=m2)
-                r2 = m2
-                m1 = (l1 + r1) // 2
-                m2 = m2 -1 if m2 == (l2 + r2) // 2 else (l2 + r2) // 2
+        m = len(nums1)
+        n = len(nums2)
+        odd = (m + n) % 2
+        totalLeft = (m + n + 1) // 2
+
+        left = 0
+        right = m
+        count = 0
+        while left < right:
+            count += 1
+            i = left + (right - left + 1) // 2
+            j = totalLeft - i
+            if nums1[i-1] > nums2[j]:
+                right = i - 1
             else:
-                l1 = bisect_right(nums1, nums2[m2], lo=l1, hi=m1)
-                r1 = m1
-                l2 = m2
-                r2 = bisect_right(nums2, nums1[m1], lo=m2, hi=r2)
-                m1 = m1 -1 if m1 == (l1 + r1) // 2 else (l1 + r1) // 2
-                m2 = (l2 + r2) // 2
+                left = i
+        print(count)
+        i = left
+        j = totalLeft - i
+        nums1LeftMax = nums1[i-1] if i else - float("inf")
+        nums1RightMin = nums1[i] if i < m else float("inf")
+        nums2LeftMax = nums2[j-1] if j else - float("inf")
+        nums2RightMin = nums2[j] if j < n else float("inf")
+
+        if odd:
+            return max(nums1LeftMax, nums2LeftMax)
+        else:
+            return (max(nums1LeftMax, nums2LeftMax)+min(nums1RightMin, nums2RightMin))/2
+
+    def findMedianSortedArrays3(self, nums1, nums2) -> float:
+        if len(nums1) > len(nums2):
+            return self.findMedianSortedArrays(nums2, nums1)
         
-        return min(nums1[m1],nums2[m2]) if odd else (nums1[m1]+nums2[m2]) / 2
+        m = len(nums1)
+        n = len(nums2)
+        odd = (m + n) % 2
+        totalLeft = (m + n + 1) // 2
+
+        left = 0
+        right = m
+        count = 0
+        while left < right:
+            count += 1
+            i = left + (right - left) // 2
+            j = totalLeft - i
+            if nums2[j-1] > nums1[i]:
+                left = i + 1
+            elif i and nums1[i-1] > nums2[j]:
+                '''
+                相比官方视频, 增加条件判断, 更快的完成比较, 性能更高
+                '''
+                right = i
+            else:
+                # 将最后一次计算的中间值带出
+                left = i
+                break
+        print(count)
+        i = left
+        j = totalLeft - i
+        nums1LeftMax = nums1[i-1] if i else - float("inf")
+        nums1RightMin = nums1[i] if i < m else float("inf")
+        nums2LeftMax = nums2[j-1] if j else - float("inf")
+        nums2RightMin = nums2[j] if j < n else float("inf")
+
+        if odd:
+            return max(nums1LeftMax, nums2LeftMax)
+        else:
+            return (max(nums1LeftMax, nums2LeftMax)+min(nums1RightMin, nums2RightMin))/2
 
     def findMedianSortedArrays2(self, nums1, nums2) -> float:
         nums1.extend(nums2)
@@ -44,18 +88,26 @@ if __name__ == "__main__":
     from datetime import datetime
     import random
     
-    # nums1 = [random.randint(-10000, 10000) for _ in  range(1000000)]
-    # nums2 = [random.randint(-10000, 10000) for _ in  range(1000000)]
-    # nums1.sort()
-    # nums2.sort()
-    #nums1, nums2 = [2,2,2], [2]
-    nums1, nums2 = [1,2,3,4,8], [5,6,7,9,10]
+    nums1 = [random.randint(-10000, 10000) for _ in  range(1000000)]
+    nums2 = [random.randint(-10000, 10000) for _ in  range(1000000)]
+    nums1.sort()
+    nums2.sort()
+    # nums1, nums2 = [3], [-2, -1]
+    # nums1, nums2 = [1, 2], [3, 4]
+    # nums1, nums2 = [1, 3], [2, 4]
+    # nums1, nums2 = [1, 4], [2, 3]
+    # nums1, nums2 = [2,2,2], [1,1,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3]
+    # nums1, nums2 = [1,2,2,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,5,5], [3,3,3]
+    # nums1, nums2 = [5,6,7,9,10], [1,2,3,4,8]
+    # nums1, nums2 = [1,2,3,4,8], [2,2,7,9,10]
     begin = datetime.now()
     ret1 = sol.findMedianSortedArrays(nums1, nums2)
     print((datetime.now()- begin).total_seconds())
 
     begin = datetime.now()
-    ret2 = sol.findMedianSortedArrays2(nums1,nums2)
+    ret2 = sol.findMedianSortedArrays3(nums1,nums2)
     print((datetime.now()- begin).total_seconds())
     if  ret1 != ret2:
-        print("Wrong")
+        print(f'Wrong, Results of the {ret1} {ret2}')
+    else:
+        print(f'Right, Results of the {ret1}')

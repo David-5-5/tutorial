@@ -313,3 +313,68 @@ String url = "jdbc:mysql://localhost/demo";
 Connection connection = DriverManager.getConnection(url);
 
 ```
+
+jdbc的java.sql, javax.sql的桥接模式定义以及Implementor的具体实现示例mysql-connector-j的核心类图如下：
+
+
+```mermaid
+classDiagram
+
+class Connection {
+  PreparedStatement	prepareStatement(String sql)
+  void	commit()
+  void	rollback()
+  void	close()
+}
+
+class PreparedStatement {
+  boolean execute()
+}
+
+class DataSource {
+  Connection	getConnection()
+}
+
+class DriverManager {
+  static Connection	getConnection(String url)
+  static void	registerDriver(Driver driver)
+  static Driver	getDriver(String url)
+}
+
+class Driver {
+  Connection connect(String url, Properties info)
+}
+
+class NonRegisteringDriver {
+  Connection connect(String url, Properties info)
+}
+
+class ConnectionImpl {
+  PreparedStatement	prepareStatement(String sql)
+  void	commit()
+  void	rollback()
+  void	close()
+}
+
+DriverManager o-- Driver : 聚合 Aggregation
+
+Connection <.. Driver : 依赖
+Connection <.. DataSource : 依赖
+
+PreparedStatement <.. Connection : 依赖
+
+
+Connection <|.. ConnectionImpl : 实现
+Driver <|.. NonRegisteringDriver : 实现
+
+```
+上述桥接模式的类图说明如下：
+- 类DriverManager承担Bridge模式的Abstraction
+- Driver、Connection以及PreparedStatement一系列接口，定义了Implementor的接口功能要求
+- NonRegisteringDriver及ConnectionImpl为msyql-connector-j项目中，实现Implementor接口的一系列的扩展接口和类
+- 接口javax.sql.DataSource承担RefinedAbstraction角色（*DataSource未继承DriverManager接口*）。
+  - DataSource对象是Connection的物理数据源的工厂， 作为DriverManager的替代方法
+  - DataSource对象是获取连接的首选方法。
+  - 实现DataSource接口的对象通常会注册到基于JNDI的命名服务。
+
+

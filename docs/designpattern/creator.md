@@ -403,6 +403,10 @@ Builder生成器模式通用的UML类图结构如下
 ```mermaid
 classDiagram
 
+note for Director "for all objectin structure {
+&nbsp;&nbsp;&nbsp;&nbsp;builder.BuildPar()
+}"
+
 class Director {
     List<Builder> builders
     Construct()
@@ -567,9 +571,16 @@ class Creator {
     AnOperation()
 }
 
+note for Creator"...
+product = FactoryMethod()
+..."
+
 class ConcreteCreator {
     ConcreteProudct FactoryMethod()
 }
+
+note for ConcreteCreator "return new ConcreteCreator"
+
 
 Creator ..> Product : 依赖
 ConcreteCreator ..> ConcreteProduct : 依赖
@@ -780,6 +791,8 @@ class Client {
 	Operation()
 }
 
+note for Client "p = prototype.Clone()"
+
 class ProtoType {
 	Clone()
 }
@@ -788,7 +801,7 @@ class ConcretePrototype1 {
 	Clone()
 }
 
-class ConcretePrototype1 {
+class ConcretePrototype2 {
 	Clone()
 }
 
@@ -796,6 +809,11 @@ Client ..> ProtoType : 依赖
 
 ProtoType <|.. ConcretePrototype1 : 实现
 ProtoType <|.. ConcretePrototype2 : 实现
+
+note for ConcretePrototype1 "return copy of self"
+
+note for ConcretePrototype2 "return copy of self"
+
 ```
 上述类图说明如下：
 - Prototype声明一个克隆自身的接口

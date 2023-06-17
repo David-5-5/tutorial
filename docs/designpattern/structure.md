@@ -37,8 +37,10 @@ class Adaptee {
 }
 
 class Adapter {
-    request
+    request()
 }
+
+note for Adapter "specificRequest()"
 
 Client ..> Target : 依赖
 
@@ -61,8 +63,11 @@ class Adaptee {
 }
 
 class Adapter {
-    request
+    request()
 }
+
+note for Adapter "Adaptee.specificRequest()"
+
 
 Client ..> Target : 依赖
 
@@ -227,11 +232,16 @@ BRIDGE桥接模式将类的抽象和定义于实现分离开，即以下类图�
 Bridge 桥接的通用UML类图如下：
 
 ```mermaid
+---
+title: Common Bridge Pattern Class Diagram
+---
 classDiagram
 
 class Abstraction {
   operation()
 }
+
+note for Abstraction "impl.OperationImpl()"
 
 class RefinedAbstraction {
   operation()
@@ -318,6 +328,9 @@ jdbc的java.sql, javax.sql的桥接模式定义以及Implementor的具体实现�
 
 
 ```mermaid
+---
+title: Bridge Pattern： JDBC Sample
+---
 classDiagram
 
 class Connection {
@@ -372,9 +385,59 @@ Driver <|.. NonRegisteringDriver : 实现
 - 类DriverManager承担Bridge模式的Abstraction
 - Driver、Connection以及PreparedStatement一系列接口，定义了Implementor的接口功能要求
 - NonRegisteringDriver及ConnectionImpl为msyql-connector-j项目中，实现Implementor接口的一系列的扩展接口和类
-- 接口javax.sql.DataSource承担RefinedAbstraction角色（*DataSource未继承DriverManager接口*）。
+- **个人理解**：接口javax.sql.DataSource承担RefinedAbstraction角色（*DataSource未继承DriverManager接口*）。
   - DataSource对象是Connection的物理数据源的工厂， 作为DriverManager的替代方法
   - DataSource对象是获取连接的首选方法。
   - 实现DataSource接口的对象通常会注册到基于JNDI的命名服务。
 
 
+## 4.3 <span id="4.2">COMPOSITE 组合</span>
+
+类型：对象结构型模式
+
+### 4.3.1 <span id="4.3.1">定义及类图</span>
+
+将对象组合成树形结构以表示“部分-整体”的层次结构。Composite组合模式使得用户对单个对象和组合对象的操作具有一致性。
+
+动机
+- 使用类似元件和容器的类时，对于开发者需要区别对待元件和容器对象，但对于用户而言，它们是一样的。对于不同类的区别适用，使得程序更加复杂
+
+
+
+Composite组合模式的通用UML类图如下：
+
+```mermaid
+---
+title: Common Composite Pattern Class Diagram
+---
+classDiagram
+
+class Component {
+  void operation()
+  void add(Component c)
+  void remove(Component c)
+  Component getChilld(int id)
+}
+
+class Composite {
+  void operation()
+  void add(Component c)
+  void remove(Component c)
+  Component getChilld(int id)  
+}
+
+note for Composite "for all g in childern
+g.operation()"
+
+class Leaf {
+  void operation()
+}
+
+Component <|.. Composite : 实现
+Component <|.. Leaf : 实现
+
+Composite *-- Component
+
+Component <.. Client
+
+```

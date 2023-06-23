@@ -473,15 +473,29 @@ Composite组合模式优缺点：
 
 
 实现Composite组合模式的关注的问题：
-1. 显示的父部件引用
-2. 共享组件
-3. 最大化Component接口
-4. 声明管理子部件的操作
-5. Component是否该实现一个Component列表
-6. 子部件排序
-7. 使用高速缓冲存储改善性能
-8. 应该由谁删除Component
-9. 存储组件最好用哪一种数据结构
+- 显示的父部件引用
+
+- 共享组件
+
+- 最大化Component接口
+
+- 声明管理子部件的操作：Composite类实现Add和Remove操作，但在类的哪个层次声明这些操作，需要在安全性和透明性之间作出权衡：
+  - 在类层次结构的根部定义子节点的管理接口的方式具有良好的透明性，因为可以一致地使用所有的组件。但是以安全性为代价，例如在Leaf中增加和擅长对象
+  - 在Composite类中定义管理子部件的方法具有良好的安全性。但是损失了透明性，因为Leaf和Composite类具有不同的接口。
+  - 一种折中的办法，在Component类中声明一个`Composite GetComponent()`方法：
+    - Component类中提供一个返回空指针的缺省操作
+    - `GetComponent()`方法允许查询一个组件，是否是一个组合
+    - 可以对返回的组合进行Add和Remove操作。
+
+- Component是否该实现一个Component列表
+
+- 子部件排序
+
+- 使用高速缓冲存储改善性能
+
+- 应该由谁删除Component
+
+- 存储组件最好用哪一种数据结构
 
 
 
@@ -495,6 +509,22 @@ Composite组合模式优缺点：
 ### 4.3.2.1 <span id="4.3.2.1">java.util.Map</span>
 
 java.util.Map#putAll(Map)
+
+代码示例如下：
+```Java
+Map<String, String> personAttributes = new HashMap<>();
+personAttributes.put("site_role", "person");
+personAttributes.put("access_role", "limited");
+
+Map<String, String> groupAttributes = new HashMap<>();
+personAttributes.put("group_role", "claims");
+
+Map<String, String> secAttributes = new HashMap<>();
+secAttributes.putAll(personAttributes);
+secAttributes.putAll(groupAttributes);
+
+```
+
 
 
 

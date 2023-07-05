@@ -1,24 +1,42 @@
 class Solution:
-    def countSpecialNumbers(self, n: int) -> int:
-        if n < 10: return n
-        
+    def countSpecialNumbers(self, n: int) -> int:           
         sn = str(n)
         bits = len(sn)
+        '''
+        特殊整数的算法包含两部分, 
+        1、一部分是小于n位数bits的所有各位数的特殊整数的和, 利用组合方式计算, 各位数的特殊整数计算在full列表中
+        2、从最高位开始, 就算小于当前位的数量, 
+            例如45321当前位为最高位, 包含所有3****特殊整数数量, 即3 * 后四位数量
+                    当前位为第二位, 固定4, 3***特殊整数数量, 首位避开首位4 即3 * 后三位数量
+                    当前位为第三位, 固定45, 2**特殊整数数量, 即2 * 后两位位数量
+                    当前位为第四位, 固定453, 1*特殊整数数量, 即1 * 后1位位数量
+                    当前位为第五位, 固定4532, 0特殊整数数量, 即0 * 1(小于)
+            后*位数量计算在ff列表中
+        '''
+        if n < 10: return n
+
+        # full列表包含各位数下的各位值都不相同特殊整数的数量
+        # 例如个位数的特殊整数为9，两位数的特殊整数为9 * 8，三位数的特殊整数个数为9 * 8 * 7， 以此类推
         full = [0] * (bits-1)
-        ff = [1] * (bits)
         for i in range(len(full)):
             full[i] = 9
             for j in range(i):
                 full[i] = full[i] * (9 - j)
         
-        for i in range(1, bits):
-            ff[i] = ff[i-1] * (10 - (bits - i))
-
-       
         ret = 0
         for i in range(bits-1):
             ret += full[i]
         
+        # ff小于指定值及位数的特殊整数的基数，它取决于的n位数。
+        # 例如5位数，个位数的特殊整数基数为1，
+        #         两位数，后一位的基数为10-(5-1)* 个位特殊基数 = 6, 避开前4位，取值为6
+        #         三位数，后两位的的基数为10-(5-2) * 两位特殊基数 = 7 * 6 = 42, 避开前3位，取值为7，乘后续的数量
+        #         四位数，后三位的的基数为10-(5-3) * 三位特殊基数 = 8 * 42 = 336， 同上
+        #         五位数，后四位的的基数为10-(5-4) * 四位特殊基数 = 9 * 336 = 3024， 同上
+        ff = [1] * (bits)
+        for i in range(1, bits):
+            ff[i] = ff[i-1] * (10 - (bits - i))
+
         procs = set()
         for i in range(bits):
             if len(procs) < i: break
@@ -30,9 +48,22 @@ class Solution:
             digit = (digit - exclude + (1 if i else 0))
             ret += (digit if digit > -1 else 0) * ff[bits - i - 1]
             procs.add(int(sn[i]))
+        
+        # n中的各位数字都不相同，也是特殊整数，数量 + 1
         if len(procs) == bits:ret +=1
         return ret
 
 if __name__ == "__main__":
     sol = Solution()
-    print(sol.countSpecialNumbers(1425))
+    # 15830 
+    # 45321的特殊整数计数
+    # 个位特殊整数9 + 两位特殊整数 9 * 9 + 三位特殊整数 9 * 9 * 8 + 四位特殊整数 9 * 9 * 8 * 7  注首位不为0
+    # = 9 + 81 + 648 + 4536 = 5274
+    # 最高位取值3、2、1，数量 3 * 3024 = 9072
+    # 固定4，避开4，第四位取值 3，2，1，0 = 4 * 336 = 1344
+    # 固定45，第三位取值2，1，0，3 * 42 = 126
+    # 固定453，第四位取值1，0 2 * 6 = 12
+    # 固定4532，第五位取值0， 1 * 1 = 1
+    # 固定45321，所有位取值不同 + 1
+    # 5274 + 9072 + 1344 + 126 + 12 + 1 + 1 = 15830
+    print(sol.countSpecialNumbers(45321))

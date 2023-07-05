@@ -392,7 +392,7 @@ Driver <|.. NonRegisteringDriver : 实现
   - 实现DataSource接口的对象通常会注册到基于JNDI的命名服务。
 
 
-## 4.3 <span id="4.2">COMPOSITE 组合</span>
+## 4.3 <span id="4.3">COMPOSITE 组合</span>
 
 类型：对象结构型模式
 
@@ -526,7 +526,90 @@ secAttributes.putAll(groupAttributes);
 ```
 
 
+## 4.4 <span id="4.4">DECORATOR 装饰</span>
+
+类型：对象结构型模式
+
+### 4.4.1 <span id="4.4.1">定义及类图</span>
+
+Decorator装饰模式动态的给一个对象添加一些额外的职责。就增加功能来说，Decorator装饰模式相比生成子类更加灵活。
+
+动机：
+有时，希望给某个对象而不是整个类添加一些功能。
+Decorator的子类为特定功能可以自由的添加一些操作。客户通常不会感觉到装饰过的组件与未装饰的组件之间的差异，也不会与装饰产生任何依赖关系。
 
 
 
+Decorator装饰模式的通用UML类图如下：
 
+```mermaid
+---
+title: Common Decorator Pattern Class Diagram
+---
+classDiagram
+
+class Component {
+  void operation()
+}
+
+class ConcreteComponent {
+  void operation()
+}
+
+class Decorator {
+  void operation()
+}
+
+note for Decorator "component.operation()"
+
+class ConcreteDecoratorA {
+  void operation()
+  addedState
+}
+
+class ConcreteDecoratorB {
+  void operation()
+  void addBehavior()
+}
+
+note for ConcreteDecoratorB "decorator.operation()\naddBehavior()"
+
+
+Component <|.. ConcreteComponent : 实现
+Component <|.. Decorator : 实现
+
+Decorator o-- Component : 聚合 Aggregation
+
+Decorator <|.. ConcreteDecoratorA : 实现
+Decorator <|.. ConcreteDecoratorB : 实现
+
+```
+上述类图说明如下：
+- Component，定义一个对象接口，可以给这些对象动态的添加职责
+- ConcreteComponent，定义一个对象，可以给这个对象添加一些职责
+- Decorator，维持一个指向Component对象的引用，并定义一个与Component接口一致的接口
+- ConcreteDecorator，向组件添加职责
+
+
+Decorator装饰模式有如下优缺点：
+- 比静态继承更灵活
+  - 用添加和分离的方法，用装饰在运行时刻增加和删除职责
+  - 为特定的Component类提供多个不同的Decorator类，这就使得可以对一些职责进行混合和匹配。
+- 避免在层次结构高层的类有太多的特征
+  - Decorator装饰模式提供一个一种“即用即付”的方法来添加职责。它不试图在复杂的可定制的类中支持所有可预见的特征。相反，可以从一个简单的部件组合出复杂的功能。
+  - 应用程序不必为不必要的特征付出代价
+  - 可以独立的定义新类型的Decorator扩展
+- Decorator与它的Component不一样，Decorator是一个透明的包装，使用装饰时不应该依赖对象标识
+- 有许多小对象
+
+
+
+### 4.3.2 <span id="4.3.2">应用场景</span>
+
+适用的场景包括：
+- 在不影响其他对象的情况下，以动态、透明的方式给单个对象添加职责
+- 处理那些可以撤销的职责
+- 当不能用生成子类的方式进行扩充时。
+
+
+### 4.3.2.1 <span id="4.3.2.1"></span>

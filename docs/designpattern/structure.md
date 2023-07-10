@@ -179,10 +179,10 @@ Adapter模式可以使用类适配器和对象适配器两种类型（比较上�
 - 需要使用一些已经存在的类，但是不可能对每一个都进行子类化以匹配他们的接口。对象适配器可以适配它的父类接口
 
 
-### 4.1.2.1 <span id="4.1.2.1">MyBatis</span>
+#### 4.1.2.1 <span id="4.1.2.1">MyBatis</span>
 
 
-### 4.1.2.2 <span id="4.1.2.2">java.io.InputStreamReader</span>
+#### 4.1.2.2 <span id="4.1.2.2">java.io.InputStreamReader</span>
 
 InputStreamReader(InputStream in)构造函数，返回Reader接口的实现类
 
@@ -305,7 +305,7 @@ Bridge桥接模式的优点：
 - 需要在多个对象间共享实现，但同时要求客户并不知道这一点
 
 
-### 4.2.2.1 <span id="4.2.2.1">JDBC API</span>
+#### 4.2.2.1 <span id="4.2.2.1">JDBC API</span>
 
 桥接模式允许抽象和实现之间的分离，以便它们可以彼此独立开发，但仍然有一种方式或桥梁来共存和交互。
 
@@ -506,7 +506,7 @@ Composite组合模式优缺点：
 - 希望用户忽略组合对象和单个对象的不同，用户将统一使用组合对象中的所有对象
 
 
-### 4.3.2.1 <span id="4.3.2.1">java.util.Map</span>
+#### 4.3.2.1 <span id="4.3.2.1">java.util.Map</span>
 
 java.util.Map#putAll(Map)
 
@@ -603,6 +603,13 @@ Decorator装饰模式有如下优缺点：
 - 有许多小对象
 
 
+实现Decorator装饰模式需要注意的问题：
+- 接口的一致性
+- 省略抽象的Decorator类
+- 保持Component类的简单性
+- 改变对象的外壳与改变对象的内核
+
+
 
 ### 4.3.2 <span id="4.3.2">应用场景</span>
 
@@ -612,4 +619,168 @@ Decorator装饰模式有如下优缺点：
 - 当不能用生成子类的方式进行扩充时。
 
 
-### 4.3.2.1 <span id="4.3.2.1"></span>
+#### 4.3.2.1 <span id="4.3.2.1">java.io.Buffered*</span>
+
+当我们想在不修改原始对象本身的情况下增强对象的行为时，这种模式就会发挥作用。这是通过向对象添加相同类型的包装器来实现的，以便为其附加额外的责任。
+
+这个模式最普遍的用法之一可以在java.io包中找到，包括：
+java.io.BufferedInputStream
+java.io.BufferedReader
+java.io.BufferedWriter
+
+
+```Java
+BufferedInputStream bis = new BufferedInputStream(new FileInputStream(new File("test.txt")));
+while (bis.available() > 0) {
+    char c = (char) bis.read();
+    System.out.println("Char: " + c);
+}
+```
+这里，BufferedInputStream正在修饰FileInputStream，以添加缓冲输入的功能。值得注意的是，这两个类都有InputStream作为共同的祖先。这意味着装饰的对象和正在装饰的对象都是相同的类型。这是装饰器模式的一个明确无误的指标。
+
+BufferedInputStream作为Decorator装饰类，其相关类图及代码实现如下：
+
+```mermaid
+---
+title: Decorator in JDK - BufferedInputStream Class Diagram
+---
+classDiagram
+
+class InputStream {
+  int read()
+}
+
+class FileInputStream {
+  int read()
+}
+
+class FileInputStream {
+  int read()
+}
+
+class BufferedInputStream {
+  byte[] getBufIfOpen()
+  int read()
+}
+
+InputStream <|.. FileInputStream : 实现
+InputStream <|.. FilterInputStream : 实现
+
+FilterInputStream o-- InputStream : 聚合 Aggregation
+
+FilterInputStream <|.. BufferedInputStream : 实现
+
+```
+上述类图说明如下：
+- `InputStream`相当于`Component`类
+- `FileInputStream`相当于`ConcreteComponent`类
+- `FilterInputStream`相当于`Decorator`类
+- `BufferedInputStream`相当于`ConcreteDecorator`类
+
+`FilterInputStream`类中read方法代码如下：
+```Java
+public class FilterInputStream extends InputStream {   
+    protected volatile InputStream in;
+
+    protected FilterInputStream(InputStream in) {
+        this.in = in;
+    }
+
+    public int read() throws IOException {
+        return in.read();
+    }
+}
+```
+
+`BufferedInputStream`类中read方法代码如下：
+```Java
+public class BufferedInputStream extends FilterInputStream {
+    /**
+     * The internal buffer array where the data is stored. When necessary,
+     * it may be replaced by another array of
+     * a different size.
+     */
+    protected volatile byte buf[];
+
+    /**
+     * Check to make sure that buffer has not been nulled out due to
+     * close; if not return it;
+     */
+    private byte[] getBufIfOpen() throws IOException {
+        byte[] buffer = buf;
+        if (buffer == null)
+            throw new IOException("Stream closed");
+        return buffer;
+    }
+
+    public BufferedInputStream(InputStream in) {
+        this(in, DEFAULT_BUFFER_SIZE);
+    }
+    public BufferedInputStream(InputStream in, int size) {
+        super(in);
+        if (size <= 0) {
+            throw new IllegalArgumentException("Buffer size <= 0");
+        }
+        buf = new byte[size];
+    }
+    /**
+     * Fills the buffer with more data, taking into account
+     * shuffling and other tricks for dealing with marks.
+     * Assumes that it is being called by a synchronized method.
+     * This method also assumes that all data has already been read in,
+     * hence pos > count.
+     */
+    private void fill() throws IOException {
+        byte[] buffer = getBufIfOpen();
+        if (markpos < 0)
+            pos = 0;            /* no mark: throw away the buffer */
+        else if (pos >= buffer.length)  /* no room left in buffer */
+            if (markpos > 0) {  /* can throw away early part of the buffer */
+                int sz = pos - markpos;
+                System.arraycopy(buffer, markpos, buffer, 0, sz);
+                pos = sz;
+                markpos = 0;
+            } else if (buffer.length >= marklimit) {
+                markpos = -1;   /* buffer got too big, invalidate mark */
+                pos = 0;        /* drop buffer contents */
+            } else if (buffer.length >= MAX_BUFFER_SIZE) {
+                throw new OutOfMemoryError("Required array size too large");
+            } else {            /* grow buffer */
+                int nsz = (pos <= MAX_BUFFER_SIZE - pos) ?
+                        pos * 2 : MAX_BUFFER_SIZE;
+                if (nsz > marklimit)
+                    nsz = marklimit;
+                byte nbuf[] = new byte[nsz];
+                System.arraycopy(buffer, 0, nbuf, 0, pos);
+                if (!bufUpdater.compareAndSet(this, buffer, nbuf)) {
+                    // Can't replace buf if there was an async close.
+                    // Note: This would need to be changed if fill()
+                    // is ever made accessible to multiple threads.
+                    // But for now, the only way CAS can fail is via close.
+                    // assert buf == null;
+                    throw new IOException("Stream closed");
+                }
+                buffer = nbuf;
+            }
+        count = pos;
+        int n = getInIfOpen().read(buffer, pos, buffer.length - pos);
+        if (n > 0)
+            count = n + pos;
+    }
+
+    public synchronized int read() throws IOException {
+        if (pos >= count) {
+            fill();
+            if (pos >= count)
+                return -1;
+        }
+        return getBufIfOpen()[pos++] & 0xff;
+    }
+    
+}
+```
+`BufferedInputStream`会通过`FileInputstream`进行一次磁盘IO, 一口气读取多个数据，`DEFAULT_BUFFER_SIZE`默认8192个字节先到自己的buf数组中【这样数据就在内存中】，后面即使你只读取1个字节，直接去buf中慢慢取。这样会减少直接对文件的IO，因为读取内存的数据更快。
+
+
+
+#### 4.3.2.2 <span id="4.3.2.2">In Python</span>

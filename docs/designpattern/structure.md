@@ -784,3 +784,90 @@ public class BufferedInputStream extends FilterInputStream {
 
 
 #### 4.3.2.2 <span id="4.3.2.2">In Python</span>
+
+装饰器是Python中非常强大和有用的工具，因为它允许程序员修改函数或类的行为。装饰器允许我们包装另一个函数，以扩展包装函数的行为，而无需永久修改它。我们可以将装饰器定义为类 为此，我们必须使用类的`__call__`方法。当用户需要创建一个充当函数的对象时，函数装饰器需要返回一个充当函数的对象，因此`__call__`可能很有用。例如带有 `*args` 和 `**kwargs` 的类装饰器：
+为了使用带有参数 `*args` 和 `**kwargs` 的类装饰器，我们使用了`__call__`函数并在给定函数中传递了这两个参数
+
+```Python
+# Python program showing class decorator with *args and **kwargs
+ 
+class MyDecorator:
+    def __init__(self, function):
+        self.function = function
+     
+    def __call__(self, *args, **kwargs):
+ 
+        # We can add some code
+        print("Before function")
+ 
+        self.function(*args, **kwargs)
+ 
+        # We can also add some code
+        # after function call.
+        print("After action")
+     
+ 
+# adding class decorator to the function
+@MyDecorator
+def function(name, message ='Hello'):
+    print("{}, {}".format(message, name))
+ 
+function("world", "hello")
+```
+
+使用类装饰器打印 执行程序所需的时间 ：
+为了打印执行程序所需的时间，我们使用`__call__`函数并使用时间模块，以便我们可以获得程序的执行时间
+
+```Python
+# Python program to execute time of a program
+ 
+# importing time module
+from time import time
+class Timer:
+    def __init__(self, func):
+        self.function = func
+    def __call__(self, *args, **kwargs):
+        start_time = time()
+        result = self.function(*args, **kwargs)
+        end_time = time()
+        print("result is {}".format(result))
+        print("Execution took {} seconds".format(end_time-start_time))
+
+# adding a decorator to the function
+@Timer
+def some_function(delay):
+    from time import sleep
+    # Introducing some time delay to
+    # simulate a time taking function.
+    sleep(delay)
+    return delay
+
+some_function(3)
+```
+
+使用类装饰器检查错误参数：这种类型的类装饰器是最常用的。此装饰器在执行函数之前检查参数，防止函数过载，并使其能够仅存储逻辑和必要
+
+```Python
+# Python program checking error parameter using class decorator
+
+class ErrorCheck:
+    def __init__(self, function):
+        self.function = function
+    def __call__(self, *params):
+        if any([isinstance(i, str) for i in params]):
+            raise TypeError("parameter cannot be a string !!")
+        else:
+            return self.function(*params)
+
+@ErrorCheck
+def add_numbers(*numbers):
+    return sum(numbers)
+
+#  returns 6
+print(add_numbers(1, 2, 3))
+
+# raises Error. 
+print(add_numbers(1, '2', 3))
+```
+
+

@@ -871,3 +871,90 @@ print(add_numbers(1, '2', 3))
 ```
 
 
+## 4.5 <span id="4.5">FACADE 外观</span>
+
+类型：对象结构型模式
+
+### 4.5.1 <span id="4.5.1">定义及类图</span>
+
+Facade外观模式为子系统中的一组接口提供一个一致的接口，Facade模式定义了一个高层的接口，这个接口使得这一子系统更加容易使用。
+
+动机：
+将一个系统划分成为若干个子系统有利于降低系统的复杂性。一个常见的设计目标是使子系统间的通信和相互依赖关系达到最小。它为子系统中较一般的的设施提供了一个单一而简单的界面。
+
+原有系统之间调用图
+```mermaid
+graph TB
+
+
+subgraph outer
+outer1
+outer2
+outer3
+end
+
+subgraph original subsystem
+outer1-->inner1
+outer1-->inner2
+outer1-->inner3
+outer1-->inner4
+outer2-->inner1
+outer2-->inner2
+outer2-->inner3
+outer2-->inner4
+outer3-->inner1
+outer3-->inner2
+outer3-->inner3
+outer3-->inner4
+inner1-->inner2
+inner2-->inner3
+inner4-->inner1
+inner3-->inner4
+
+end
+
+```
+
+采用Facade模式后系统之间结构图
+```mermaid
+graph TB
+
+
+subgraph outer
+outer1
+outer2
+outer3
+end
+
+subgraph subsystem
+outer1-->Facade
+outer2-->Facade
+outer3-->Facade
+Facade-->inner1
+Facade-->inner2
+Facade-->inner3
+Facade-->inner4
+inner1-->inner2
+inner2-->inner3
+inner4-->inner1
+inner3-->inner4
+
+end
+
+```
+上述结构图说明如下：
+- Facade
+  - 知道那些子系统类负责处理请求
+  - 将客户的请求代理给适当的子系统对象
+- Subsystem
+  - 实现子系统的功能
+  - 处理由Facade对象指派的任务
+  - 没有Facade的任何相关信息，即没有指向Facade的引用或指针
+
+
+Facade外观模式的优点：
+- 对客户屏蔽子系统组件，因此减少了客户处理的对象的数目并使得子系统使用起来更加方便
+- 它实现了子系统与客户之间的松耦合关系，而子系统内部的功能组件往往是紧耦合的。松耦合关系使得子系统的组件变化不会影响到它的客户。
+  - Facade模式有助于建立层次结构系统
+  - 也有助于对对象之间的依赖关系分层，消除复杂的循环依赖
+- 如果应用需要，并不限制它们使用子系统类。因此可以在易用性和通用性之间加以选择。

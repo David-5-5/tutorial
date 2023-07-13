@@ -1,4 +1,4 @@
-package tutorial.cpu;
+package tutorial.benchmark;
 
 import java.io.IOException;
 import java.util.Random;
@@ -18,9 +18,9 @@ import org.openjdk.jmh.annotations.Warmup;
 //@BenchmarkMode(Mode.AverageTime)
 @State(Scope.Benchmark)
 // 预热3次
-@Warmup(iterations = 3, time = 1)
+@Warmup(iterations = 1, time = 1)
 // 循环 10 次
-@Measurement(iterations = 10, time = 1)
+@Measurement(iterations = 1, time = 1)
 public class MatrixBenchmark {
     private static int[][] A = new int[1000][1000];
     private static int[][] B = new int[1000][1000];

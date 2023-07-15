@@ -806,7 +806,7 @@ class MyDecorator:
         # after function call.
         print("After action")
      
- 
+
 # adding class decorator to the function
 @MyDecorator
 def function(name, message ='Hello'):

@@ -1,4 +1,4 @@
-package tutorial.cpu;
+package tutorial.benchmark;
 
 public class Matrix {
 

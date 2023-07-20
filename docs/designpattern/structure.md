@@ -611,7 +611,7 @@ Decorator装饰模式有如下优缺点：
 
 
 
-### 4.3.2 <span id="4.3.2">应用场景</span>
+### 4.4.2 <span id="4.4.2">应用场景</span>
 
 适用的场景包括：
 - 在不影响其他对象的情况下，以动态、透明的方式给单个对象添加职责
@@ -619,7 +619,7 @@ Decorator装饰模式有如下优缺点：
 - 当不能用生成子类的方式进行扩充时。
 
 
-#### 4.3.2.1 <span id="4.3.2.1">java.io.Buffered*</span>
+#### 4.4.2.1 <span id="4.4.2.1">java.io.Buffered*</span>
 
 当我们想在不修改原始对象本身的情况下增强对象的行为时，这种模式就会发挥作用。这是通过向对象添加相同类型的包装器来实现的，以便为其附加额外的责任。
 
@@ -783,7 +783,7 @@ public class BufferedInputStream extends FilterInputStream {
 
 
 
-#### 4.3.2.2 <span id="4.3.2.2">In Python</span>
+#### 4.4.2.2 <span id="4.4.2.2">In Python</span>
 
 装饰器是Python中非常强大和有用的工具，因为它允许程序员修改函数或类的行为。装饰器允许我们包装另一个函数，以扩展包装函数的行为，而无需永久修改它。我们可以将装饰器定义为类 为此，我们必须使用类的`__call__`方法。当用户需要创建一个充当函数的对象时，函数装饰器需要返回一个充当函数的对象，因此`__call__`可能很有用。例如带有 `*args` 和 `**kwargs` 的类装饰器：
 为了使用带有参数 `*args` 和 `**kwargs` 的类装饰器，我们使用了`__call__`函数并在给定函数中传递了这两个参数
@@ -958,3 +958,166 @@ Facade外观模式的优点：
   - Facade模式有助于建立层次结构系统
   - 也有助于对对象之间的依赖关系分层，消除复杂的循环依赖
 - 如果应用需要，并不限制它们使用子系统类。因此可以在易用性和通用性之间加以选择。
+
+
+实现Facade模式需要注意的地方：
+- 降低客户-子系统之间的耦合度
+- 公共子系统类和私有子系统类。子系统与一个类的相似之处时，它们都有接口，并且它们都封装了一些东西
+  - 类封装了状态和操作
+  - 子系统封装了一些类
+
+
+### 4.5.2 <span id="4.5.2">应用场景</span>
+
+适用的场景包括：
+- 当要为一个复杂子系统提供一个简单接口时
+- 客户程序与抽象类的实现部分之间存在着很大的依赖性。引入Facade模式有助于将这个子系统与客户以及其他的子系统分离，可以提高子系统的独立性和可移植性。
+- 当需要构建一个层次结构的子系统时
+
+
+#### 4.5.2.1 <span id="4.5.2.1">java.lang.Class</span>
+
+
+
+
+## 4.6 <span id="4.6">FLYWEIGHT 享元</span>
+
+类型：对象结构型模式
+
+### 4.6.1 <span id="4.6.1">定义及类图</span>
+
+FlyWeight享元模式
+
+动机：
+有些应用程序得益于在其整个设计过程中采用对象技术，但简单化的实现代价极大。例如文档编辑器的实现中，文本都有格式化和编辑功能，使用对象来表示文档中的每个字符会极大的提高应用程序的灵活性，但这种设计的缺点在于代价太大。即使一个中等大小的文档也可能要求成百上千的字符对象。所以通常并不是对每个字符都用一个对象来表示。
+
+FlyWeight享元模式描述了如何共享对象，使得可以细粒度的使用它们而无需高昂的代价。
+
+FlyWeight享元模式的通用UML类图如下：
+
+```mermaid
+---
+title: Common FlyWeight Pattern Class Diagram
+---
+classDiagram
+
+
+class FlyweightFactory {
+  Flyweight getFlyweight(key)
+}
+
+note for FlyweightFactory "if (flyweight[key] exists){\n  return existing flyweight;\n}else {\n  create new flyweight;\n  add it to pool of flyweight;\n return the new flyweight;\n}"
+
+class Flyweight {
+  operation(extrinisicState)
+}
+
+
+class ConcreteFlyweight {
+  operation(extrinisicState)
+  intrinsicState
+}
+
+class UnsharedConcreteFlyweight {
+  operation(extrinisicState)
+  allState
+}
+
+FlyweightFactory o-- Flyweight : 聚合 Aggregation
+
+ConcreteFlyweight ..|> Flyweight : 实现 Realization
+UnsharedConcreteFlyweight ..|> Flyweight : 实现 Realization
+
+Client ..> FlyweightFactory : 依赖 Dependency
+Client ..> ConcreteFlyweight : 依赖 Dependency
+Client ..> UnsharedConcreteFlyweight : 依赖 Dependency
+```
+上述类图说明如下：
+- Flyweight类，描述一个接口，通过这个接口flyweight可以接受并作用于外部状态
+- ConcreteFlyweight类
+  - 实现Flyweight接口，并为内部状态增加存储空间。
+  - ConcreteFlyweight对象必须时可共享的。
+  - 它所存储的状态必须是内部的；即，它必须独立于ConcreteFlyweight对象的场景
+- UnsharedConcreteFlyweight类
+  - 并非所有的Flyweight类子类都需要被共享。Flyweight接口使得共享成为可能，但它并不强制共享。
+  - 在Flyweight对象结构的某些层次，UnsharedConcreteFlyweight对象通常将ConcreteFlyweight对象作为子节点。
+- FlyweightFactory类
+  - 创建并管理Flyweight对象
+  - 确保合理的共享Flyweight对象，当用户请求一个flyweight对象时，FlyweightFactory对象提供一个已创建的实例或者创建一个新的实例
+- Client类
+  - 维持一个对Flyweight的引用
+  - 计算或存储一个Flyweight的外部状态
+- 类及对象之间的协作
+  - Flyweight执行时所需的状态必定是内部的或外部的。
+    - 内部状态存储于ConcreteFlyweight对象之中；
+    - 外部对象则由Client对象存储或计算
+    - 当用户调用Flyweight对象进行操作时，将该状态传递给它。
+  - 用户不应直接对ConcreteFlyweight类进行实例化，而只能从FlyweightFactory对象得到ConcreteFlyweight对象，这可以保证对它们适当的进行共享。
+
+
+### 4.6.2 <span id="4.6.2">应用场景</span>
+
+FlyWeight享元模式的有效性很大程度上取决于如何使用它以及在何处使用拓
+适用的场景包括：
+- 一个应用程序使用大量的对象
+- 完全由于使用大量的对象，造成很大的存储开销
+- 对象的大多数状态都可以变为外部状态
+- 如果删除对象的外部状态，那么可以用相对较少的共享对象取代很多组对象
+- 应用程序不依赖于对象标识。由于FlyWeight对象可以被共享，对于概念上明显有别的对象，标识测试将其返回真值。
+
+
+#### 4.6.2.1 <span id="4.6.2.1">java.lang.Integer</span>
+
+缓存以高效地支持大量较小的对象，包括
+- `java.lang.Integer#valueOf(int)`
+- `java.lang.Boolean#valueOf(boolean)`
+- `java.lang.Byte#valueOf(byte)`
+- `java.lang.Character#valueOf(char)`
+
+其中`java.lang.Integer#valueOf(int)`的代码实现如下：
+
+```Java
+public final class Integer extends Number implements Comparable<Integer> {
+
+    public static Integer valueOf(int i) {
+        if (i >= IntegerCache.low && i <= IntegerCache.high)
+            return IntegerCache.cache[i + (-IntegerCache.low)];
+        return new Integer(i);
+    }
+
+    private static class IntegerCache {
+        static final int low = -128;
+        static final int high;
+        static final Integer cache[];
+
+        static {
+            // high value may be configured by property
+            int h = 127;
+            String integerCacheHighPropValue =
+                sun.misc.VM.getSavedProperty("java.lang.Integer.IntegerCache.high");
+            if (integerCacheHighPropValue != null) {
+                try {
+                    int i = parseInt(integerCacheHighPropValue);
+                    i = Math.max(i, 127);
+                    // Maximum array size is Integer.MAX_VALUE
+                    h = Math.min(i, Integer.MAX_VALUE - (-low) -1);
+                } catch( NumberFormatException nfe) {
+                    // If the property cannot be parsed into an int, ignore it.
+                }
+            }
+            high = h;
+
+            cache = new Integer[(high - low) + 1];
+            int j = low;
+            for(int k = 0; k < cache.length; k++)
+                cache[k] = new Integer(j++);
+
+            // range [-128, 127] must be interned (JLS7 5.1.7)
+            assert IntegerCache.high >= 127;
+        }
+
+        private IntegerCache() {}
+    }
+}
+
+```

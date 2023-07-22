@@ -986,12 +986,19 @@ Facade外观模式的优点：
 
 ### 4.6.1 <span id="4.6.1">定义及类图</span>
 
-FlyWeight享元模式
+FlyWeight享元模式运用共享技术有效的支持大量细粒度的对象。
 
 动机：
 有些应用程序得益于在其整个设计过程中采用对象技术，但简单化的实现代价极大。例如文档编辑器的实现中，文本都有格式化和编辑功能，使用对象来表示文档中的每个字符会极大的提高应用程序的灵活性，但这种设计的缺点在于代价太大。即使一个中等大小的文档也可能要求成百上千的字符对象。所以通常并不是对每个字符都用一个对象来表示。
 
 FlyWeight享元模式描述了如何共享对象，使得可以细粒度的使用它们而无需高昂的代价。
+
+FlyWeight享元模式中，FlyWeight对象不能对它所运行的场景作出任何假设。其关键概念是内部状态和外部状态之间的区别：
+- 内部状态存储于flyweight对象中，它包含了独立于flyweight场景的信息，这些信息使得flyweight可以被共享。
+- 外部状态取决于FlyWeight场景，并根据场景而变化，因此不可以共享。
+- 用户对象负责在必要时，将外部状态传递给flyweight
+- 例如文本编辑器中的每个字母都可以创建一个flyweight共享对象，其内部状态是字符代码，而其他信息，比如字符的位置、风格、大小都是外部状态
+
 
 FlyWeight享元模式的通用UML类图如下：
 
@@ -1054,10 +1061,16 @@ Client ..> UnsharedConcreteFlyweight : 依赖 Dependency
     - 当用户调用Flyweight对象进行操作时，将该状态传递给它。
   - 用户不应直接对ConcreteFlyweight类进行实例化，而只能从FlyweightFactory对象得到ConcreteFlyweight对象，这可以保证对它们适当的进行共享。
 
+实现FlyWeight享元模式所需注意的问题：
+- 删除外部状态，FlyWeight享元模式的可用性很大程度上取决于是否容易识别外部状态并将它从共享对象中删除。理想情形是为外部状态可以由一个单独的对象结构计算得到，且该结构的存储要求非常小。
+- 管理共享对象
+  - 因为对象是共享的，用户不能直接对它进行实例化，FlyweightFactory可以帮助用户查找或创建某个特定的Flyweight对象
+  - 共享还意味着某种形式的引用计数和垃圾回收
+
 
 ### 4.6.2 <span id="4.6.2">应用场景</span>
 
-FlyWeight享元模式的有效性很大程度上取决于如何使用它以及在何处使用拓
+FlyWeight享元模式的有效性很大程度上取决于如何使用它以及在何处使用它
 适用的场景包括：
 - 一个应用程序使用大量的对象
 - 完全由于使用大量的对象，造成很大的存储开销
@@ -1121,3 +1134,74 @@ public final class Integer extends Number implements Comparable<Integer> {
 }
 
 ```
+
+
+
+## 4.7 <span id="4.7">PROXY 代理</span>
+
+类型：对象结构型模式
+
+### 4.7.1 <span id="4.7.1">定义及类图</span>
+
+Proxy代理模式为其他对象提供一种代理以控制对这个对象的访问。
+
+动机：
+对一个对象的进行访问控制的一个原因是为了只有在我们确实需要这个对象时才对它进行创建和初始化。对于开销很大的对象，应该根据需要进行创建。问题可采用Proxy，替代哪个真正的对象。
+
+
+Proxy代理模式的通用UML类图如下：
+
+```mermaid
+---
+title: Common Proxy Pattern Class Diagram
+---
+classDiagram
+
+class Subject {
+  request()
+}
+
+class Proxy {
+  request()
+}
+
+note for Proxy "realSubject.request()"
+
+class RealSubject {
+  request()
+}
+
+Proxy ..|> Subject : 实现 Realization
+RealSubject ..|> Subject : 实现 Realization
+
+Proxy ..> RealSubject : 依赖 Dependency
+Client ..> Subject : 依赖 Dependency
+
+```
+上述类图说明如下：
+- Proxy，根据其种类，适当的时候向RealSubject转发请求
+  - 保存一个引用使得代理可以访问实体。若RealSubject和Subject的接口相同，Proxy会引用Subject。
+  - 提供一个与Subject的接口相同的接口，这样代理就可以用来代替实体
+  - 控制对实体的存取，并可能负责创建和删除它
+  - 其他功能依赖代理的类型：
+    - Remote Proxy负责对请求及其参数进行编码，并向不同地址空间中的实体发送已编码的请求
+    - Virtual Proxy可以缓存实体的附加信息，以便延迟对它的访问
+    - Protection Proxy检查调用者是否具有实现一个请求所必需的访问权限
+- Subject，定义RealSubject和Proxy的共有接口，这样就在任何使用RealSubject的地方都可以使用Proxy
+- RealSubject，定义Proxy所代表的实体
+
+
+### 4.7.2 <span id="4.7.2">应用场景</span>
+
+Proxy代理模式在需要用比较通用的对象代替简单的指针或引用时，下面是一些可以使用Proxy代理常见情况：
+- 远程代理
+- 虚代理
+- 保护代理
+- 智能指引
+
+
+#### 4.7.2.1 <span id="4.7.2.1">java.lang.reflect.Proxy</span>
+
+
+
+

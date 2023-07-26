@@ -1190,18 +1190,60 @@ Client ..> Subject : 依赖 Dependency
 - Subject，定义RealSubject和Proxy的共有接口，这样就在任何使用RealSubject的地方都可以使用Proxy
 - RealSubject，定义Proxy所代表的实体
 
+实现Proxy需要注意的问题：
+- 在具体的实现时，Proxy并不总是需要知道实体的类型。若Proxy类能够完全通过一个抽象接口处理它的实体，则无需为每个RealSubject类都生成一个Proxy类；Proxy可以统一处理所有的RealSubject类
+- 如果Proxy要实例化RealSubject，那么它必须知道具体的类
+
 
 ### 4.7.2 <span id="4.7.2">应用场景</span>
 
 Proxy代理模式在需要用比较通用的对象代替简单的指针或引用时，下面是一些可以使用Proxy代理常见情况：
-- 远程代理
-- 虚代理
-- 保护代理
-- 智能指引
+- 远程代理，为一个对象在不同的地址空间提供局部代表。可以隐藏一个对象存在与不同地址空间的事实。
+- 虚代理，根据需要创建开销很大的对象
+- 保护代理，控制对原始对象的访问
+- 智能指引，取代了简单的指针，它在访问对象时执行一些附加的操作。它典型的用途包括：
+  - 对指向实际对象的引用计数
+  - 当第一次引用一个持久对象时，将它装入内存
+  - 在访问一个对象前，检查是否已经锁定了它，以确保其他对象不能改变它。
+
+
+Proxy模式还可以对用户隐藏称之为copy-on-write的优化方式，该优化与根据需要创建对象有关：
+- 拷贝一个庞大而复杂的对象是一种开销很大的操作，如果这个拷贝根本没有被修改，那么这些开销就没有必要。
+- 用代理延迟这一拷贝过程，可以保证只有当对象被修改时才对它进行拷贝
+- 实现copy-on-write时，必须对实体进行引用计数。拷贝代理仅会增加引用计数。
+- 只有当用户请求修改该实体的操作时，代理才会真正拷贝它。这种情况下，代理还必须减少实体的引用计数。
 
 
 #### 4.7.2.1 <span id="4.7.2.1">java.lang.reflect.Proxy</span>
 
+java.lang包中存在一个Proxy类。Proxy类具有用于创建动态代理类和实例的某些方法，并且由这些方法创建的所有类都充当该Proxy类的子类。
 
+`java.lang.reflect.Proxy`用法示例：
+```Java
+Map proxyInstance = (Map) Proxy.newProxyInstance(
+      this.getClass().getClassLoader(), 
+      new Class[] { Map.class },
+      (proxy, method, methodArgs) -> {
+        if (method.getName().equals("get")) {
+            return 42;
+        } else {
+            throw new UnsupportedOperationException("Unsupported method: " + method.getName());
+        }
+      }
+);
 
+int result = (int) proxyInstance.get("hello");
+
+assertEquals(42, result);
+
+try {
+    proxyInstance.put("hello", "world");
+    fail();
+} catch(UnsupportedOperationException e) {
+    // expected
+}
+```
+上述示例代码中`java.lang.reflect.Proxy`动态创建Map接口的实现类，
+- 实现了`Map#get`方法，返回一个固定值42
+- 其他方法未实现，调用`Map#put`方法则抛出异常
 

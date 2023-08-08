@@ -82,6 +82,58 @@ id2 --> id3
   - 请求也可能因没有被正确配置而得不到处理
 
 
+责任链的实现问题：
+1. 实现后续者链的两种方法：
+  - 定义新的链接，通常在Handler中定义，但也可由ConcreteHandler来定义
+  - 使用已有的链接。
+    - 使用已有的对象引用来形成后续者链。
+    - 当已有的链接能支持所需的链时，完全可以使用它们。
+2. 连接后续者，如果没有已有的引用可定义一个链，必须自行引入它们。这种情况下Handler不仅定义该请求的接口，通常也维护后续链接。
+
+```C++
+class HelpHandler {
+public:
+    HelpHandler(HelpHandler* s) : _successor(s) { }
+    virtual void HandleHelp();
+private:
+    HelpHandler* _successor;
+};
+
+void HelpHandler::HandleHelp () {
+    if (_successor) {
+        _successor->HandleHelp();
+    }
+}
+```
+上述代码`HelpHandler(HelpHandler* s) : _successor(s) { }`为C++构造函数的初始化成员列表用法
+> 成员初始化表达式列表
+构造函数可以选择具有成员初始化表达式列表，该列表会在构造函数主体运行之前初始化类成员。 （成员初始化表达式列表与类型为 std::initializer_list<T> 的初始化表达式列表不同。）
+首选成员初始化表达式列表，而不是在构造函数主体中赋值。 成员初始化表达式列表直接初始化成员。 以下示例演示了成员初始化表达式列表，该列表由冒号后的所有 identifier(argument) 表达式组成：
+```C++
+Box(int width, int length, int height)
+        : m_width(width), m_length(length), m_height(height)
+    {}
+```
+
+为便于理解，将上述C++转换为Java语言如下
+```Java
+public class HelpHandler {
+    private HelpHandler _successor;
+
+    public HelpHandler(HelpHandler s) {
+        _successor = s;
+    }
+
+    public void HandleHelp() {
+        if (_successor != null) {
+            _successor.HandleHelp();
+        }
+    }
+}
+
+```
+
+3. 表示请求
 
 
 
@@ -121,6 +173,7 @@ Java Servlet 规范 2.3 版引入了一种新的组件类型，称为`Filter`。
 - 调用筛选器链中的下一个实体。如果当前`Filter`是链中以目标servlet结束的最后一个过滤器，那么下一个实体就是链末端的资源；否则，它就是WAR中配置的下一个`Filter`。它通过调用链对象上的`doFilter`方法来调用下一个实体（传入调用它的请求和响应，或者它可能创建的包装版本）。或者，它可以选择通过不调用下一个实体来阻止请求。在后一种情况下，`Filter`负责填写响应。
 - 在调用链中的下一个`Filter`后检查响应标头
 - 引发异常以指示处理中的错误
+
 
 以下是认证过滤器的代码示例：
 ```Java

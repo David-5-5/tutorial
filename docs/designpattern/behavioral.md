@@ -7,6 +7,8 @@
 - 行为类模式使用继承机制在类间分派行为
 - 行为对象模式使用对象复合而不是继承
 
+
+
 ## 5.1 <span id="5.1">CHAIN OF RESPONSIBILITY职责链</span>
 
 类型：对象行为型模式
@@ -145,7 +147,60 @@ public class HelpHandler {
 - 可处理一个请求的对象集合应被动态指定
 
 
-#### 5.1.2.1 <span id="5.1.2.1">Servlet Filters</span>
+#### 5.1.2.1 <span id="5.1.2.1">Commons-chain</span>
+
+Chain将Template Method模版方法和Chain of Responsibility责任链两个模式组合成一个可复用的Java框架用于描述顺序的处理流程。
+
+Commons Chain的类和接口
+```mermaid
+classDiagram
+
+class Command {
+    boolean execute(Context cnt)
+}
+
+class Chain {
+    void addCommand(Command cmd)
+    boolean execute(Context cnt)
+}
+
+class ChainBase {
+    void addCommand(Command cmd)
+    boolean execute(Context cnt)
+    Command[] getCommands()
+}
+
+class Filter {
+    boolean execute(Context cnt)
+    boolean postprocess(Context cnt, Exception ex)
+}
+
+
+Command --o Chain : 聚合 Aggregation
+Command <|-- Filter : 继承
+
+Chain <|.. ChainBase : 实现
+
+Context <|.. ContextBase : 实现
+
+Command ..> Context : 依赖 Dependency
+
+```
+Command 类和Chain类的关系就是组合模式（Composite pattern）。Chain不仅由多个Command组成，而且自己也是Command。这使你可以非常简单得将单个命令（Command）替换成由多个命令（Command）组成的链（Chain）。
+- Command: 一个可执行的"指令"，多个command组成"责任链"。
+  - 它只有一个方法，boolean execute(Context context)，当"责任链"开始调用时，将会依次执行链上的所有Command对象execute方法，直到结束，或者抛出异常，或者某个command返回true终止调用。context对象表示当前"责任链"的上下文信息，它可以用来保存一些临时变量(可以在command间共享)。
+  - 此方法如果返回false，表示继续责任链将会继续执行后续command，
+  - 如果返回true，则表示终止调用，后续的command将不会被执行.
+- Chain：实现类为ChainBase，command组织者，包括addCommand方法，可以添加多个command，再通过调用execute方法，会依次执行command链中的execute方法。
+- Filter：它本身也扩展了Command接口,能够和Command一样添加到Chain中。
+  - 当所有command以及filter的execute方法都执行完毕且没有异常，那么将会对Filter的postprocess方法按倒序执行；
+  - 一旦链路发生异常，将立即执行filter的postprocess方法，如果方法处理完后返回true，表示错误处理已经完成，链的执行并不会就此结束，但是本质上来说这个错误被捕捉而且不会再向外抛出。
+  - 如果postprocess方法返回false，那错误会继续向外抛出，然后链就会非正常结束。
+- Context：类似于"session"，用来保存当前Chain中需要被保持的"变量参数"或者"Command执行的结果"，Context内部存储结构为一个Map，它的数据可以被Chain中的Command操作，Context并非为线程安全的，也不期望此实例能够被重用，每次Chain被调用，都应该创建新的Context实例，其实现类为ContextBase。
+
+
+
+#### 5.1.2.2 <span id="5.1.2.2">Servlet Filters</span>
 
 Java Servlet 规范 2.3 版引入了一种新的组件类型，称为`Filter`。`Filter`动态截获请求和响应，以转换或使用请求或响应中包含的信息。`Filter`本身通常不会创建响应，而是提供可以“附加”到任何类型的 servlet 或 JSP 页面的通用函数。
 
@@ -188,3 +243,112 @@ public class AuthenticatingFilter implements Filter {
     }
 }
 ```
+
+
+
+## 5.2 <span id="5.2">COMMADN 命令</span>
+
+类型：对象行为型模式
+
+### 5.2.1 <span id="5.2.1">定义及类图</span>
+
+将一个请求封装为一个对象，从而使你的可用不同的请求对客户进行参数化链；对请求派对或记录请求日至，以及支持可撤销的操作。
+
+有时向某一个对象提交请求，但并不知道关于被请求的操作或请求的接受者的任何信息。命令模式通过将请求本身变成一个对象来使请求接受者可向指定的应用对象提出请求。
+- 这个对象的可被存储并像其他对象一样被传递
+- 这一模式的关键是一个抽象的Command类，它定义了一个执行操作的接口。
+
+Command 适配器的通用UML类图如下：
+
+- 类适配器使用多重继承对一个接口与另一个接口进行匹配
+```mermaid
+classDiagram
+
+class Receivor {
+    action()
+}
+
+class Command {
+    execute()
+}
+
+class ConcreteCommand {
+    State state
+    execute()
+}
+
+note for ConcreteCommand "receivo->action()"
+
+Client ..> Receivor : 依赖
+Client ..> ConcreteCommand : 依赖
+
+Invoker o-- Command : 组合
+
+Command <|.. ConcreteCommand : 实现
+Receivor <.. ConcreteCommand : 依赖
+
+```
+上述类图说明如下：
+- Command，声明执行操作的接口
+- ConcreteCommand
+  - 将一个接受者对象绑定于一个动作
+  - 调用接受者相应的操作，以实现Execute
+- Client， 创建一个具体命令对象并设定它的接受者
+- Invoker，要求该命令执行这个请求
+- Receivor, 知道如何实施与执行一个请求相关的操作。任何类都可能作为一个接受者。
+- 类之间的协作
+  - Client创建一个ConcreteCommand对象并指定它的Receivor对象
+  - Invoker对象存储该ConcreteCommand对象
+  - Invoker对象通过调用Command对象的execute操作来提交一个请求。若该命令是可撤销的，ConcreteCommand就在执行Execute操作之前存储当前状态以用于取消该命令。
+  - ConcreteCommand对象对调用它的Receivor的一些操作以执行该请求
+
+下图展示了这些对象之间的交互。它说明了Command是如何将调用者和接受者解耦的
+```mermaid
+sequenceDiagram
+
+participant aReceivor
+
+aClient ->> aCommand: new Command(aReceivor)
+activate aClient
+activate aCommand
+deactivate aCommand
+aClient ->> anInvoker: StoreCommand(aCommand)
+activate anInvoker
+deactivate anInvoker
+deactivate aClient
+
+anInvoker ->> aCommand : execute
+activate anInvoker
+activate aCommand
+
+aCommand ->> aReceivor : action
+
+activate aReceivor
+deactivate aReceivor
+deactivate aCommand
+deactivate anInvoker
+
+```
+
+
+### 5.2.2 <span id="5.2.2">应用场景</span>
+
+适用的场景包括：
+- 类似于MenuItem对象那样，抽象出待执行的动作以参数化某对象。可使用过程语言中的回调函数表达这种参数化机制
+- 在不同的时刻指定、排列和执行请求
+  - 一个Command对象可以有一个与初始请求无关的生存期。
+  - 如果一个请求的接受者可用一种与地址空间无关的方式表达，那么就可将负责该请求的命令对象传送给另一个不同的进程并在那里实现该请求
+- 支持取消操作
+  - Commmand的Execute操作可在实施操作前将状态存储起来，在取消操作时这个状态用来消除该操作的影响。
+  - Command接口必须添加一个Unexecute操作，该操作取消上一次Execute调用的效果。
+  - 执行的命令被存储在一个历史列表中，可通过向后和向前遍历这一列表并分别调用Unexecute和Execute操作来实现重数不限的"Undo"和"Redo"
+- 支持修改日志，这样当系统崩溃是，这些修改可以被重做一遍
+- 用构建在原语操作上的高层操作构造一个系统。这样一种结构在支持事务的信息系统中很常见
+
+
+#### 5.2.2.1 <span id="5.2.2.1"></span>
+
+
+
+
+

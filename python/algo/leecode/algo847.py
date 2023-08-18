@@ -1,5 +1,9 @@
 class Solution:
     def shortestPathLength(self, graph) -> int:
+        '''
+        One testcase fail. 
+        Use dfs, traverse each vertex and small degree first
+        '''
         n = len(graph)
         degree = [len(graph[i]) for i in range(n)]
 
@@ -51,29 +55,12 @@ class Solution:
         return ans
 
 
-    def shortestPathLength2(self, graph) -> int:
-        n = len(graph)
-        dp = [float("inf")] * (1 << n)
-        
-        def bfs(visited):
-            while visited:
-                u, vexs, edges = visited.pop(0)
-                for i in graph[u]:
-                    if (1 << i) & vexs == 0:
-                        dp[vexs|1<<i] = min(dp[vexs|1<<i], dp[vexs] + 1)
-                        visited.append((i,vexs|1<<i, edges+[(u,i)]))
-                    elif vexs < (1 << n)-1 and (u,i) not in edges:
-                        dp[vexs] += 1
-                        visited.append((i,vexs, edges+[(u,i)]))
-
-        for i in range(n):
-            dp[1 << i] = 0
-            bfs([(i,1 << i,[])])
-        
-        return dp[(1 << n) -1]
-
 
     def shortestPathLength3(self, graph) -> int:
+        '''
+        The official solution
+        Use bfs, (u, mask, distance), avoid repeat, to check (u,mask)
+        '''
         n = len(graph)
 
         q = [(i, 1 << i, 0) for i in range(n)]

@@ -47,7 +47,15 @@ class Solution:
         while todo_c:
             cur = todo_c.pop(0)
             parent = tree[cur][p_i]
-            sum_dis[cur] = sum_dis[parent] - 2*tree[cur][cc_i] + n - 2
+            # 节点的子节点的和为
+            # sum(c) = sum(p) - count_child(c) + n - 2 - count_child(c)
+            # 相比较父节点的和，对于子节点的所有后代子节点长度都少以，因此减去子节点数量，即为
+            # count_child(c) 
+            # 同时除去当前父子节点和子节点的后代，其他节点的长度都增加1，即增加其他节点数量，也就是
+            # n - 2 - count_child(c)
+            # 综合以上
+            # sum(c) = sum(p) - 2 * count_child(c) + n - 2
+            sum_dis[cur] = sum_dis[parent] - 2 * tree[cur][cc_i] + n - 2
             todo_c.extend(tree[cur][chd_i])
 
         return sum_dis

@@ -16,7 +16,7 @@ class Solution:
         # The element of wall is tuple(cell1, cell2)
         #   cell1 < cell2
         #   cell = x * m + y, 
-        walls = []
+        walls = set()
         
         adt = [-1] * (m*n)
         
@@ -101,7 +101,7 @@ class Solution:
                 for _x, _y in [(0,1),(0,-1),(-1,0),(1,0)]:
                     if 0<=x+_x<m and 0<=y+_y<n and (x+_x)*n+y+_y in _areas[areaI[inx]]:
                         if (min(pos, (x+_x)*n+y+_y),max(pos, (x+_x)*n+y+_y)) not in walls:
-                            walls.append((min(pos, (x+_x)*n+y+_y),max(pos, (x+_x)*n+y+_y)))
+                            walls.add((min(pos, (x+_x)*n+y+_y),max(pos, (x+_x)*n+y+_y)))
             
             # clear the area of install wall
             _areas[areaI[inx]] = []
@@ -122,6 +122,9 @@ class Solution:
 
 
     def containVirus2(self, isInfected) -> int:
+        '''
+        Change list to set
+        '''
         m, n = len(isInfected), len(isInfected[0])
 
         # The _areaAdt is key/value dict
@@ -137,7 +140,7 @@ class Solution:
         # The element of wall is tuple(cell1, cell2)
         #   cell1 < cell2
         #   cell = x * m + y, 
-        walls = []
+        walls = set()
         
         def find(x:int) -> int:
             if adt[x] < 0:
@@ -195,17 +198,17 @@ class Solution:
             roots, cntL, cntPosL = [], [], []
 
             for key in _areaAdt.keys():
-                cl =[]
+                cl = set()
                 
                 for pos in _areaAdt[key]:
                     x, y = pos // n, pos % n
                     for _x, _y in [(0,1),(0,-1),(-1,0),(1,0)]:
                         if 0<=x+_x<m and 0<=y+_y<n and isInfected[x+_x][y+_y]==0 and not isWall(x,y,_x,_y) and (x+_x)*n+y+_y not in cl:
-                            cl.append((x+_x)*n+y+_y)
+                            cl.add((x+_x)*n+y+_y)
                 
                 roots.append(key)
                 cntL.append(len(cl))
-                cntPosL.append(cl)
+                cntPosL.append(list(cl))
 
             return roots, cntL, cntPosL
         
@@ -218,7 +221,7 @@ class Solution:
                 for _x, _y in [(0,1),(0,-1),(-1,0),(1,0)]:
                     if 0<=x+_x<m and 0<=y+_y<n and (x+_x)*n+y+_y in _areaAdt[roots[inx]]:
                         if (min(pos, (x+_x)*n+y+_y),max(pos, (x+_x)*n+y+_y)) not in walls:
-                            walls.append((min(pos, (x+_x)*n+y+_y),max(pos, (x+_x)*n+y+_y)))
+                            walls.add((min(pos, (x+_x)*n+y+_y),max(pos, (x+_x)*n+y+_y)))
             
             # clear the area of install wall
             del _areaAdt[roots[inx]]

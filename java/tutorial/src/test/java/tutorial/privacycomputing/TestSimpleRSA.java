@@ -1,4 +1,4 @@
-package tutorial.prime;
+package tutorial.privacycomputing;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

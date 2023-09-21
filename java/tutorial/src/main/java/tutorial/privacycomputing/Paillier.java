@@ -1,4 +1,4 @@
-package tutorial.prime;
+package tutorial.privacycomputing;
 
 import static java.math.BigInteger.ONE;
 import java.math.BigInteger;
@@ -10,13 +10,14 @@ public class Paillier {
 
     // private key: (phi)
     // public key:  (n, g)
-    private BigInteger n, g, phi;
+    private BigInteger n, g, phi, nSquare;
     private BigInteger denominator;
 
     private Paillier(BigInteger p, BigInteger q) {
         this.n = p.multiply(q);
         this.g = n.add(ONE);
         this.phi = (p.subtract(ONE)).multiply(q.subtract(ONE));
+        this.nSquare = n.multiply(n);
     }    
 
     public static Paillier newInstance() {
@@ -39,35 +40,41 @@ public class Paillier {
 
     public BigInteger enc(BigInteger plain) {
         Random random = new Random();
-        BigInteger r = new BigInteger(n.pow(2).bitLength(), random);
+        BigInteger r = new BigInteger(nSquare.bitLength(), random);
 
         // gcd(e, n^2) = 1, 即e, n^2 互质
-        while (r.compareTo(ONE) <= 0 || !n.pow(2).gcd(r).equals(ONE) || r.compareTo(n.pow(2)) >= 0) {
-            r = new BigInteger(n.pow(2).bitLength() - 1, random);
+        while (r.compareTo(ONE) <= 0 || !nSquare.gcd(r).equals(ONE) || r.compareTo(nSquare) >= 0) {
+            r = new BigInteger(nSquare.bitLength() - 1, random);
         }
-        return r.modPow(n, n.pow(2)).multiply(plain.multiply(n).add(ONE)).mod(n.pow(2));
+        return r.modPow(n, nSquare).multiply(plain.multiply(n).add(ONE)).mod(nSquare);
     }
 
     public BigInteger enc2(BigInteger plain) {
         Random random = new Random();
-        BigInteger r = new BigInteger(n.pow(2).bitLength(), random);
+        BigInteger r = new BigInteger(nSquare.bitLength(), random);
 
         // gcd(e, n^2) = 1, 即e, n^2 互质
-        while (r.compareTo(ONE) <= 0 || !n.pow(2).gcd(r).equals(ONE) || r.compareTo(n.pow(2)) >= 0) {
-            r = new BigInteger(n.pow(2).bitLength() - 1, random);
+        while (r.compareTo(ONE) <= 0 || !nSquare.gcd(r).equals(ONE) || r.compareTo(nSquare) >= 0) {
+            r = new BigInteger(nSquare.bitLength() - 1, random);
         }
-        return g.modPow(plain, n.pow(2)).multiply(r.modPow(n,n.pow(2))).mod(n.pow(2));
+        return g.modPow(plain, nSquare).multiply(r.modPow(n, nSquare)).mod(nSquare);
     }    
 
     public BigInteger dec(BigInteger chiper) {
 
-        return chiper.modPow(phi, n.pow(2)).subtract(ONE).divide(n).add(n).divide(getDenominator());
+        return chiper.modPow(phi, nSquare).subtract(ONE).divide(n).multiply(getDenominator().modInverse(n)).mod(n);
     }
 
-    public synchronized BigInteger getDenominator() {
+    // The value is equals to phi
+    // It should depend on g, where g = n + 1, the result is equals to phi
+    private synchronized BigInteger getDenominator() {
         if (denominator == null) {
-            denominator = g.modPow(phi, n.pow(2)).subtract(ONE).divide(n);
+            denominator = g.modPow(phi, nSquare).subtract(ONE).divide(n);
         }
         return denominator;
+    }
+
+    public BigInteger getNSquare() {
+        return nSquare;
     }
 }

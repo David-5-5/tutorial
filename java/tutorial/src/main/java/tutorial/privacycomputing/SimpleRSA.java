@@ -1,4 +1,4 @@
-package tutorial.prime;
+package tutorial.privacycomputing;
 
 import static java.math.BigInteger.ONE;
 

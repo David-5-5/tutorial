@@ -1,4 +1,4 @@
-package tutorial.prime;
+package tutorial.privacycomputing;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -29,4 +29,19 @@ public class TestPaillier {
         assertEquals(op1.add(op2), paillier.dec(c1.multiply(c2)));
     }
     
+
+    @Test
+    public void TestProduct() throws Exception {
+        Paillier paillier = Paillier.newInstance(512, 50);
+
+        BigInteger op = new BigInteger("8");
+
+        BigInteger c1 = paillier.enc(op);
+        assertEquals(op, paillier.dec(c1));
+
+        c1 = paillier.enc2(op);
+        assertEquals(op, paillier.dec(c1));
+
+        assertEquals(op.multiply(op), paillier.dec(c1.modPow(op, paillier.getNSquare())));
+    }
 }

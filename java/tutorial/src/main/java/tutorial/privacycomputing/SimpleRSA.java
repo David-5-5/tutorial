@@ -3,11 +3,9 @@ package tutorial.privacycomputing;
 import static java.math.BigInteger.ONE;
 
 import java.math.BigInteger;
-import java.util.Random;
+import java.security.SecureRandom;
 
-public class SimpleRSA {
-    static final int BITS = 256;
-    static final int CERTAINTY = 20;
+public class SimpleRSA implements PrimeGeneratable {
 
     // private key: (n, d)
     // public key:  (n, e)
@@ -25,7 +23,7 @@ public class SimpleRSA {
     }
 
     public static SimpleRSA newInstance(int bits, int certainty) {
-        Random r = new Random();
+        SecureRandom r = new SecureRandom();
 
         int adjustedBitLength = (int) Math.ceil(((double) bits) / 2);
         // p,q 为两个大质数

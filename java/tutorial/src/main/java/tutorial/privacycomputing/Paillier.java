@@ -1,12 +1,12 @@
 package tutorial.privacycomputing;
 
 import static java.math.BigInteger.ONE;
-import java.math.BigInteger;
-import java.util.Random;
 
-public class Paillier {
-    static final int BITS = 256;
-    static final int CERTAINTY = 20;
+import java.math.BigInteger;
+import java.security.SecureRandom;
+
+public class Paillier implements PrimeGeneratable {
+
 
     // private key: (phi)
     // public key:  (n, g)
@@ -25,7 +25,7 @@ public class Paillier {
     }
 
     public static Paillier newInstance(int bits, int certainty) {
-        Random random = new Random();
+        SecureRandom random = new SecureRandom();
 
         int adjustedBitLength = (int) Math.ceil(((double) bits) / 2);
         // p,q 为两个大质数
@@ -39,7 +39,7 @@ public class Paillier {
     }
 
     public BigInteger enc(BigInteger plain) {
-        Random random = new Random();
+        SecureRandom random = new SecureRandom();
         BigInteger r = new BigInteger(nSquare.bitLength(), random);
 
         // gcd(e, n^2) = 1, 即e, n^2 互质
@@ -50,7 +50,7 @@ public class Paillier {
     }
 
     public BigInteger enc2(BigInteger plain) {
-        Random random = new Random();
+        SecureRandom random = new SecureRandom();
         BigInteger r = new BigInteger(nSquare.bitLength(), random);
 
         // gcd(e, n^2) = 1, 即e, n^2 互质

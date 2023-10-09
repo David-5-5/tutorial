@@ -101,4 +101,4 @@ if __name__ == "__main__":
     print((datetime.now()- begin).total_seconds())
     begin = datetime.now()
     print(sol.reversePairs(nums2))
-    print((datetime.now()- begin).total_seconds())
+    

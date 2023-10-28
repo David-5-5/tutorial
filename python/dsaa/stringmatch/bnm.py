@@ -46,40 +46,47 @@ def search(txt, pat):
             print("Pattern occur at shift = {}".format(s))
  
             '''   
-                Shift the pattern so that the next character in text
-                      aligns with the last occurrence of it in pattern.
-                The condition s+m < n is necessary for the case when
-                   pattern occurs at the end of text
-               '''
+            Shift the pattern so that the next character in text
+                    aligns with the last occurrence of it in pattern.
+            The condition s+m < n is necessary for the case when
+                pattern occurs at the end of text
+            '''
             s += (m-badChar[ord(txt[s+m])] if s+m<n else 1)
         else:
             '''
-               Shift the pattern so that the bad character in text
-               aligns with the last occurrence of it in pattern. The
-               max function is used to make sure that we get a positive
-               shift. We may get a negative shift if the last occurrence
-               of bad character in pattern is on the right side of the
-               current character.
+            Shift the pattern so that the bad character in text
+            aligns with the last occurrence of it in pattern. The
+            max function is used to make sure that we get a positive
+            shift. We may get a negative shift if the last occurrence
+            of bad character in pattern is on the right side of the
+            current character.
             '''
             s += max(1, j-badChar[ord(txt[s+j])])
  
  
 # Driver program to test above function
 def main():
-    # with open('txt.txt') as file:
-    #     s = file.read()
+    with open('./python/dsaa/stringmatch/txt.txt') as file:
+        txt = file.read()
     
-    # with open('pattern.txt') as file:
-    #     p = file.read()
+    with open('./python/dsaa/stringmatch/pattern.txt') as file:
+        pat = file.read()
 
-    s = "abbadcababacab"
-    p = "babac"
+    with open('./python/dsaa/stringmatch/txt2.txt') as file:
+        txt2 = file.read()
+    
+    with open('./python/dsaa/stringmatch/pattern2.txt') as file:
+        pat2= file.read()
 
     from datetime import datetime
     begin = datetime.now()
-    search(s, p)
+    search(txt, pat)
     print((datetime.now()- begin).total_seconds())
  
+    begin = datetime.now()
+    search(txt2, pat2)
+    print((datetime.now()- begin).total_seconds())
+
 
 if __name__ == '__main__':
     main()

@@ -24,6 +24,21 @@ def search(pat, txt):
             print("Pattern found at index ", i)
 
     print("count = ", count)
+
+
+def search2(pat, txt):
+    M = len(pat)
+    N = len(txt)
+    count = 0
+    # A loop to slide pat[] one by one */
+    for i in range(N - M + 1):
+        count += 1
+ 
+        if txt[i:i+M] == pat:
+            print("Pattern found at index ", i)
+
+    print("count = ", count)
+
 # Driver's Code
 if __name__ == '__main__':
     # txt = "AABAACAADAABAAABAA"
@@ -50,4 +65,10 @@ if __name__ == '__main__':
     print((datetime.now()- begin).total_seconds())
     begin = datetime.now()
     search(p2, s2)
+    print((datetime.now()- begin).total_seconds())    
+    begin = datetime.now()
+    search2(p, s)
+    print((datetime.now()- begin).total_seconds())
+    begin = datetime.now()
+    search2(p2, s2)
     print((datetime.now()- begin).total_seconds())

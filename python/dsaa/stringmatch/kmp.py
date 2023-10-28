@@ -54,16 +54,107 @@ def computeLPSArray(pat, M, lps):
                 lps[i] = 0
                 i += 1
 
-with open('txt.txt') as file:
+with open('./python/dsaa/stringmatch/txt.txt') as file:
     s = file.read()
 
-with open('pattern.txt') as file:
+with open('./python/dsaa/stringmatch/pattern.txt') as file:
     p = file.read() 
-# txt = "ABABDABACDABABCABAB"
-# pat = "ABABCABAB"
+
+with open('./python/dsaa/stringmatch/txt2.txt') as file:
+    s2 = file.read()
+
+with open('./python/dsaa/stringmatch/pattern2.txt') as file:
+    p2= file.read()
+
 from datetime import datetime
 begin = datetime.now()
 KMPSearch(p, s)
 print((datetime.now()- begin).total_seconds())
 
 # This code is contributed by Bhavya Jain
+
+
+# As following code is writed by studing algo from OI-Wiki
+
+# Calculate prefix function with naive algo
+# The time complexity is O(n**3)
+def prefix_function_naive(s):
+    n = len(s)
+    pi = [0] * n
+    for i in range(1, n):
+        for j in range(i, -1, -1):
+            if s[0:j] == s[i+1-j:i+1]:
+                pi[i] = j
+                break
+
+    return pi
+
+begin = datetime.now()
+# For performance, truncate 3000 charactes.
+# prefix_function_naive(s[0:3000])
+# print((datetime.now()- begin).total_seconds())
+
+# Calculate prefix function with optimize：
+# for pi[i], the max is pi[i-1] + 1, so iterate j from 'pi[i-1] + 1' instead of 'i'
+# The time complexity is O(n**2)
+def prefix_function_optimize_1(s):
+    n = len(s)
+    pi = [0] * n
+    for i in range(1, n):
+        for j in range(pi[i-1]+1, -1, -1):
+            if s[0:j] == s[i+1-j:i+1]:
+                pi[i] = j
+                break
+
+    return pi
+
+# begin = datetime.now()
+# prefix_function_optimize_1(s)
+# print((datetime.now()- begin).total_seconds())
+
+# Calculate prefix function with more optimize：
+# for pi[i], the max is pi[i-1] + 1, so iterate j from 'pi[i-1] + 1' instead of 'i'
+# The time complexity is O(n**2)
+def prefix_function(s):
+    n = len(s)
+    pi = [0] * n
+    for i in range(1, n):
+        j = pi[i-1]
+        while j>0 and s[j] != s[i]:
+            j = pi[j-1]
+        if s[i] == s[j]:
+            j += 1
+        pi[i] = j
+    return pi
+
+# begin = datetime.now()
+# prefix_function(s)
+# print((datetime.now()- begin).total_seconds())
+
+
+
+def kmp_prefix_function(p:str, txt:str):
+    s = p + "#" + txt
+    n = len(s)
+    pi = [0] * n
+    count = 0
+    for i in range(1, n):
+        j = pi[i-1]
+        while j>0 and s[j] != s[i]:
+            count += 1
+            j = pi[j-1]
+        if s[i] == s[j]:
+            j += 1
+        pi[i] = j
+        count += 1
+        if j == len(p):
+            print ("Found pattern at index " + str(i-2*j))
+    print("count = ", count)
+    return pi
+
+begin = datetime.now()
+kmp_prefix_function(p, s)
+print((datetime.now()- begin).total_seconds())
+begin = datetime.now()
+kmp_prefix_function(p2, s2)
+print((datetime.now()- begin).total_seconds())

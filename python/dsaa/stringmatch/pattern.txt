@@ -1,1 +1,1 @@
-The implementation tries all possible prefixes starting from the longest possible that can be a suffix of pat[0..k-1]x. There are better implementations to O(m*NO_OF_CHARS) construct FA in O(m*NO_OF_CHARS)
+TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTThe implementation tries all possible prefixes starting from the longest possible that can be a suffix of pat[0..k-1]x. There are better implementations to O(m*NO_OF_CHARS) construct FA in O(m*NO_OF_CHARS)

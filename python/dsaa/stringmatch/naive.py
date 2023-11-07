@@ -6,7 +6,6 @@
 def search(pat, txt):
     M = len(pat)
     N = len(txt)
-    count = 0
     # A loop to slide pat[] one by one */
     for i in range(N - M + 1):
         j = 0
@@ -14,30 +13,22 @@ def search(pat, txt):
         # For current index i, check
         # for pattern match */
         while(j < M):
-            count += 1
             if (txt[i + j] != pat[j]):
                 break
             j += 1
-            count += 1
  
         if (j == M):
             print("Pattern found at index ", i)
-
-    print("count = ", count)
 
 
 def search2(pat, txt):
     M = len(pat)
     N = len(txt)
-    count = 0
     # A loop to slide pat[] one by one */
     for i in range(N - M + 1):
-        count += 1
  
         if txt[i:i+M] == pat:
             print("Pattern found at index ", i)
-
-    print("count = ", count)
 
 # Driver's Code
 if __name__ == '__main__':

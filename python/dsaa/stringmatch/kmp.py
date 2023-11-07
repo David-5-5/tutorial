@@ -137,19 +137,15 @@ def kmp_prefix_function(p:str, txt:str):
     s = p + "#" + txt
     n = len(s)
     pi = [0] * n
-    count = 0
     for i in range(1, n):
         j = pi[i-1]
         while j>0 and s[j] != s[i]:
-            count += 1
             j = pi[j-1]
         if s[i] == s[j]:
             j += 1
         pi[i] = j
-        count += 1
         if j == len(p):
             print ("Found pattern at index " + str(i-2*j))
-    print("count = ", count)
     return pi
 
 begin = datetime.now()
@@ -158,3 +154,19 @@ print((datetime.now()- begin).total_seconds())
 begin = datetime.now()
 kmp_prefix_function(p2, s2)
 print((datetime.now()- begin).total_seconds())
+
+# Compare the computeLPSArray and prefix_function
+def compare(pat):
+    m = len(pat)
+    lps = [0] * m
+    computeLPSArray(pat, m, lps)
+    pi = prefix_function(pat)
+
+    for i in range(m):
+        if lps[i] != pi[i]:
+            print(f"The array is not match at {i}, {lps[i]} != {pi[i]}")
+            return
+    print("The result of computeLPSArray and prefix_function is match")
+    print(f"The len of lps is {len(lps)}, pf is {len(pi)}")
+compare(p)
+compare(p2)

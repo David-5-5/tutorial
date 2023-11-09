@@ -127,6 +127,8 @@ class Solution:
         
         return ret
 
+
+
     def addOperators_original_recursion(self, num: str, target: int):
         '''
         !!!!!!!!!!!!!RECURSION IS MUST!!!!!!!!!!!!
@@ -190,13 +192,63 @@ class Solution:
         backtrack(0, "", [])
         return ret
 
+    def addOperators_eval(self, num: str, target: int):
+        '''
+        !!!!!!!!!!!!!OVERTIME!!!!!!!!!!!!!
+        !!!PERFROMANCE OF EVAL IS WORST!!!
+        '''
+        n = len(num)
+        multi, add, sub = "*", "+", "-"
+
+        ret = []
+        ops = [(0, "")]
+        while ops:
+            inx, expr = ops.pop(0)
+            if inx == n:
+                if eval(expr) == target:
+                    ret.append(expr)
+                continue
+            
+            for i in range(1, n+1-inx):
+                if num[inx] == "0" and i > 1:break
+                if i == n - inx:
+                    ops.append((i + inx, expr+num[inx:i + inx]))
+                    continue
+                for op in [multi, add, sub]:
+                    ops.append((i + inx, expr+num[inx:i + inx]+op))
+        
+        return ret
+
+    def addOperators_eval_recursion(self, num: str, target: int):
+        '''
+        !!SHOULD PASS WITH BAD PERFORMANCE!!
+        '''
+        n = len(num)
+        multi, add, sub = "*", "+", "-"
+
+        ret = []
+        def backtrack(inx, expr):
+            if inx == n:
+                if eval(expr) == target:
+                    ret.append(expr)
+                return
+            
+            for i in range(1, n+1-inx):
+                if num[inx] == "0" and i > 1:break
+                if i == n - inx:
+                    backtrack(i + inx, expr+num[inx:i + inx])
+                    continue
+                for op in [multi, add, sub]:
+                    backtrack(i + inx, expr+num[inx:i + inx]+op)
+        backtrack(0, "")
+        return ret
 
 if __name__ == "__main__":
     sol = Solution()
     num, target = "123", 6
     num, target = "105", 5
     num, target = "3456237490", 9191
-    num, target = "123456789", 45
+    # num, target = "123456789", 45
     from datetime import datetime
     # begin = datetime.now()
     # print(sol.addOperators(num, target))
@@ -214,3 +266,6 @@ if __name__ == "__main__":
     print(sol.addOperators_original_recursion(num, target))
     print((datetime.now()- begin).total_seconds())
 
+    begin = datetime.now()
+    print(sol.addOperators_eval_recursion(num, target))
+    print((datetime.now()- begin).total_seconds())

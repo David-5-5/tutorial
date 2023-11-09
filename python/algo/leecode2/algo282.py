@@ -1,11 +1,76 @@
 class Solution:
 
     def addOperators(self, num: str, target: int):
+        '''
+        use last multiple value instead of cacluate by precedence
+        BUT, OVERTIME!!!!!!!!!!!!!
+        '''
+        n = len(num)
+        
+        ans = []
+        # bfs array
+        ops = [(0, "", 0, 0)]
+        count = 0
+        while ops:
+            count += 1
+            inx, expr, ret, mul = ops.pop(0)
+            if inx == n:
+                if ret == target:
+                    ans.append(expr)
+                continue
+            
+            for i in range(1, n+1-inx):
+                if num[inx] == "0" and i > 1:break
+                val = int(num[inx:i + inx])
+                if inx == 0:
+                    ops.append((i, num[inx:i + inx], val, val))
+                else:
+                    ops.append((i + inx, expr+"*"+num[inx:i + inx], ret - mul + mul * val, mul*val))
+                    ops.append((i + inx, expr+"+"+num[inx:i + inx], ret+val, val))
+                    ops.append((i + inx, expr+"-"+num[inx:i + inx], ret-val, -val))
+        print(count)
+        return ans
+
+
+    def addOperators_recursion(self, num: str, target: int):
+        '''
+        The final solution:
+        First, use recusion instead of bfs array, why?????????
+        Secord, use last multiple value instead of cacluate by precedence
+        '''
+        n = len(num)
+        
+        ans = []
+        count = 0
+        def backtrack(inx, expr, ret, mul):
+            nonlocal count
+            count += 1
+            if inx == n:
+                if ret == target:
+                    ans.append(expr)
+                return
+            
+            for i in range(1, n+1-inx):
+                if num[inx] == "0" and i > 1:break
+                val = int(num[inx:i + inx])
+                if inx == 0:
+                    backtrack(i, num[inx:i + inx], val, val)
+                else:
+                    backtrack(i + inx, expr+"*"+num[inx:i + inx], ret - mul + mul * val, mul*val)
+                    backtrack(i + inx, expr+"+"+num[inx:i + inx], ret+val, val)
+                    backtrack(i + inx, expr+"-"+num[inx:i + inx], ret-val, -val)
+        
+        backtrack(0, "", 0, 0)
+        print(count)
+        return ans    
+
+    def addOperators_original(self, num: str, target: int):
+        '''
+        !!!!!!!!!!!!!OVERTIME!!!!!!!!!!!!!
+        '''
         multi = "*"
         add = "+"
         sub = "-"
-        # concate two digit
-        con = "|"
 
         def calculate(stack) -> int:
             opd2, op, opd1 = int(stack.pop(-1)), stack.pop(-1), int(stack.pop(-1))
@@ -16,140 +81,113 @@ class Solution:
                 stack.append(opd1 + opd2)
             if op == sub:
                 stack.append(opd1 - opd2)
-            if op == con:
-                stack.append(opd1 * 10 + opd2)
 
         # If return True, pop op1 from prev to calcuate
         # If return False, push op2 into stack
         def precedence(op1:str, op2:str) -> bool:
-            if op1 == con:
-                return True
-            if op1 == multi and op2 == con:
-                return False
-            elif op1 == multi:
+            if op1 == multi:
                 return True
             if op1 in [add, sub] and op2 in [add,sub]:
                 return True
-            if op1 in [add, sub] and op2 in [multi, con]:
+            if op1 in [add, sub] and op2 in [multi]:
                 return False
 
-
         n = len(num)
-        if n == 1:
-            if int(num) == target:
-                return [num]
-            else:
-                return []
         
         ret = []
-        ops = [(num, [])]
+        ops = [(0, "", [])]
         while ops:
-            cur, stack = ops.pop(0)
-            if len(cur) == 2*n - 1:
-                stack.append(cur[2*n-2])
+            inx, expr, stack = ops.pop(0)
+            if inx == n:
                 while len(stack) > 1:
                     calculate(stack)
                 if stack[0] == target:
-                    ret.append(cur)
+                    ret.append(expr)
                 continue
-
-            inx = (len(cur) - n) * 2
-            for op in [multi, add, sub, con]:
-                if stack and stack[-1] != con and op == con and cur[inx]=='0':continue
-                if not stack and op == con and cur[inx]=='0':continue
-
-                t_stack = stack.copy()
-                if t_stack and  precedence(t_stack[-1], op):
-                        t_stack.append(cur[inx])
+            
+            for i in range(1, n+1-inx):
+                if num[inx] == "0" and i > 1:break
+                if i == n - inx:
+                    t_stack = stack.copy()
+                    t_stack.append(int(num[inx:]))
+                    ops.append((i + inx, expr+num[inx:i + inx], t_stack))
+                    continue
+                for op in [multi, add, sub]:
+                    t_stack = stack.copy()
+                    if t_stack and  precedence(t_stack[-1], op):
+                        t_stack.append(int(num[inx:i+inx]))
                         calculate(t_stack)
+                        while len(t_stack) > 1 and precedence(t_stack[-2],op[i]):
+                            calculate(stack)
                         t_stack.append(op)
-                else:
-                    t_stack.append(cur[inx])
-                    t_stack.append(op)
-
-                ops.append((cur[0:inx+1] + op + cur[inx+1:], t_stack))
-
+                    else:
+                        t_stack.append(num[inx:i+inx])
+                        t_stack.append(op)
+                    ops.append((i + inx, expr+num[inx:i + inx]+op, t_stack))
+        
         return ret
 
-
-    def addOperators2(self, num: str, target: int):
+    def addOperators_original_recursion(self, num: str, target: int):
+        '''
+        !!!!!!!!!!!!!RECURSION IS MUST!!!!!!!!!!!!
+        '''        
         multi = "*"
         add = "+"
         sub = "-"
-        # concate two digit
-        con = "|"
-        empty = ""
 
-        def calculate(op: str, opd1: int, opd2: int) -> int:
+        def calculate(stack) -> int:
+            opd2, op, opd1 = int(stack.pop(-1)), stack.pop(-1), int(stack.pop(-1))
+
             if op == multi:
-                return opd1 * opd2
+                stack.append(opd1 * opd2)
             if op == add:
-                return opd1 + opd2
+                stack.append(opd1 + opd2)
             if op == sub:
-                return opd1 - opd2
-            if op == con:
-                return opd1 * 10 + opd2
+                stack.append(opd1 - opd2)
 
         # If return True, pop op1 from prev to calcuate
         # If return False, push op2 into stack
         def precedence(op1:str, op2:str) -> bool:
-            if op1 == empty:
+            if op1 == multi:
+                return True
+            if op1 in [add, sub] and op2 in [add, sub]:
+                return True
+            if op1 in [add, sub] and op2 in [multi]:
                 return False
-            if op2 == empty:
-                return True
-            if op1 == con:
-                return True
-            if op1 == multi and op2 == con:
-                return False
-            elif op1 == multi:
-                return True
-            if op1 in [add, sub] and op2 in [add,sub]:
-                return True
-            if op1 in [add, sub] and op2 == multi:
-                return False
-
-
-        def combine(operands: str ,operates: str):
-            comb = operands[0]
-            for i in range(len(operates)):
-                comb += (operates[i] if operates[i]!=con else "") + operands[i+1]
-            return comb
 
         n = len(num)
-        if n == 1:
-            if int(num) == target:
-                return [num]
-            else:
-                return []
-        
-        ops = [""]
-        while len(ops[0]) < n-1:
-            cur = ops.pop(0)
-            ops.append(cur+multi)
-            ops.append(cur+add)
-            ops.append(cur+sub)
-            ops.append(cur+con)
         
         ret = []
-        while ops:
-            inx = 0
-            stack_opd = [int(num[0])]
-            stack_opr = []
-            operate = ops.pop(0)
-            while inx <= len(operate):
-                while precedence(stack_opr[-1] if stack_opr else empty, operate[inx] if inx<len(operate) else empty):
-                    op2 = stack_opd.pop(-1)
-                    op1 = stack_opd.pop(-1)
-                    op = stack_opr.pop(-1)
-                    result = calculate(op, op1, op2)
-                    stack_opd.append(result)
-                if inx < len(operate) :
-                    stack_opr.append(operate[inx])
-                    stack_opd.append(int(num[inx+1]))
-                inx += 1
-            if stack_opd[0] == target:
-                ret.append(combine(num, operate))
+        def backtrack(inx, expr, stack):
 
+            if inx == n:
+                while len(stack) > 1:
+                    calculate(stack)
+                if stack[0] == target:
+                    ret.append(expr)
+                return
+            
+            for i in range(1, n+1-inx):
+                if num[inx] == "0" and i > 1:break
+                if i == n - inx:
+                    t_stack = stack.copy()
+                    t_stack.append(int(num[inx:]))
+                    backtrack(i + inx, expr+num[inx:i + inx], t_stack)
+                    continue
+                for op in [multi, add, sub]:
+                    t_stack = stack.copy()
+                    if t_stack and  precedence(t_stack[-1], op):
+                        t_stack.append(int(num[inx:i+inx]))
+                        calculate(t_stack)
+                        while len(t_stack) > 1 and precedence(t_stack[-2], op):
+                            calculate(t_stack)                        
+                        t_stack.append(op)
+                    else:
+                        t_stack.append(int(num[inx:i+inx]))
+                        t_stack.append(op)
+                    backtrack(i + inx, expr+num[inx:i + inx]+op, t_stack)
+        
+        backtrack(0, "", [])
         return ret
 
 
@@ -157,5 +195,22 @@ if __name__ == "__main__":
     sol = Solution()
     num, target = "123", 6
     num, target = "105", 5
-    # num, target = "3456237490", 9191
-    print(sol.addOperators(num, target))
+    num, target = "3456237490", 9191
+    num, target = "123456789", 45
+    from datetime import datetime
+    # begin = datetime.now()
+    # print(sol.addOperators(num, target))
+    # print((datetime.now()- begin).total_seconds())
+
+    # begin = datetime.now()
+    # print(sol.addOperators_recursion(num, target))
+    # print((datetime.now()- begin).total_seconds())
+
+    # begin = datetime.now()
+    # print(sol.addOperators_original(num, target))
+    # print((datetime.now()- begin).total_seconds())
+
+    begin = datetime.now()
+    print(sol.addOperators_original_recursion(num, target))
+    print((datetime.now()- begin).total_seconds())
+

@@ -2,8 +2,7 @@ class Solution:
 
     def addOperators(self, num: str, target: int):
         '''
-        use last multiple value instead of cacluate by precedence
-        BUT, OVERTIME!!!!!!!!!!!!!
+        Use last multiple value instead of cacluate by precedence        
         '''
         n = len(num)
         
@@ -13,7 +12,11 @@ class Solution:
         count = 0
         while ops:
             count += 1
-            inx, expr, ret, mul = ops.pop(0)
+            '''
+            !!!!SOLVE THE OVERTIME!!!!!!!!!!!!!
+            '''
+            # inx, expr, ret, mul = ops.pop(0)
+            inx, expr, ret, mul = ops.pop(-1)
             if inx == n:
                 if ret == target:
                     ans.append(expr)
@@ -97,7 +100,11 @@ class Solution:
         ret = []
         ops = [(0, "", [])]
         while ops:
-            inx, expr, stack = ops.pop(0)
+            '''
+            ops.pop(0) CHANGE TO ops.pop(-1)
+            !!!!SOLVE THE OVERTIME!!!!!!!!!!!!!
+            '''
+            inx, expr, stack = ops.pop(-1)
             if inx == n:
                 while len(stack) > 1:
                     calculate(stack)
@@ -117,8 +124,8 @@ class Solution:
                     if t_stack and  precedence(t_stack[-1], op):
                         t_stack.append(int(num[inx:i+inx]))
                         calculate(t_stack)
-                        while len(t_stack) > 1 and precedence(t_stack[-2],op[i]):
-                            calculate(stack)
+                        while len(t_stack) > 1 and precedence(t_stack[-2], op):
+                            calculate(t_stack)
                         t_stack.append(op)
                     else:
                         t_stack.append(num[inx:i+inx])
@@ -126,7 +133,6 @@ class Solution:
                     ops.append((i + inx, expr+num[inx:i + inx]+op, t_stack))
         
         return ret
-
 
 
     def addOperators_original_recursion(self, num: str, target: int):
@@ -246,9 +252,9 @@ class Solution:
 if __name__ == "__main__":
     sol = Solution()
     num, target = "123", 6
-    num, target = "105", 5
+    num, target = "1054", 5
     num, target = "3456237490", 9191
-    # num, target = "123456789", 45
+    num, target = "123456789", 45
     from datetime import datetime
     # begin = datetime.now()
     # print(sol.addOperators(num, target))
@@ -267,5 +273,5 @@ if __name__ == "__main__":
     print((datetime.now()- begin).total_seconds())
 
     begin = datetime.now()
-    print(sol.addOperators_eval_recursion(num, target))
+    print(sol.addOperators_original(num, target))
     print((datetime.now()- begin).total_seconds())

@@ -2,51 +2,125 @@
 #include <vector>
 #include <string>
 
+using namespace std;
+
+struct element {
+    int inx;
+    string expr;
+    long res;
+    long mul;
+};
+
 class Solution {
 public:
-    std::vector<std::string> addOperators(std::string num, int target) {
-        int n = num.size();
-        std::vector<std::string> ans;
+    vector<string> addOperators(string num, int target) {
+        int n = num.length();
+        vector<string> ans;
         
-        std::vector<std::tuple<int, std::string, int, int>> ops;
-        ops.push_back(std::make_tuple(0, "", 0, 0));
-        int count = 0;
+        vector<element> ops;
+
+        ops.push_back(element{0, "", 0, 0});
         while (!ops.empty()) {
-            count++;
-            int inx, ret, mul;
-            std::string expr;
-            std::tie(inx, expr, ret, mul) = ops.front();
+            element cur = ops.front();
             ops.erase(ops.begin());
-            if (inx == n) {
-                if (ret == target) {
-                    ans.push_back(expr);
+            if (cur.inx == n) {
+                if (cur.res == target) {
+                    ans.push_back(cur.expr);
                 }
                 continue;
+            }
+            for (int i = 1; i <= n - cur.inx; i++) {
+                if (num[cur.inx] == '0' && i > 1) {
+                    break;
+                }
+                long val = stol(num.substr(cur.inx, i));
+                if (cur.inx == 0) {
+                    ops.push_back(element{i, num.substr(cur.inx, i), val, val});
+                } else {
+                    ops.push_back(element{i + cur.inx, cur.expr + "*" + num.substr(cur.inx, i), cur.res - cur.mul + cur.mul * val, cur.mul * val});
+                    ops.push_back(element{i + cur.inx, cur.expr + "+" + num.substr(cur.inx, i), cur.res + val, val});
+                    ops.push_back(element{i + cur.inx, cur.expr + "-" + num.substr(cur.inx, i), cur.res - val, -val});
+                }
+            }
+        }
+        return ans;
+    }
+
+    vector<string> addOperators_recursion(string num, int target) {
+        int n = num.length();
+        vector<string> ans;
+        
+        function<void(string, int, long, long)> backtrack = [&](string expr, int inx, long res, long mul) {
+            if (inx == n) {
+                if (res == target) {
+                    ans.push_back(expr);
+                }
+                return;
             }
             for (int i = 1; i <= n - inx; i++) {
                 if (num[inx] == '0' && i > 1) {
                     break;
                 }
-                int val = std::stoi(num.substr(inx, i));
+                long val = stol(num.substr(inx, i));
                 if (inx == 0) {
-                    ops.push_back(std::make_tuple(i, num.substr(inx, i), val, val));
+                    backtrack(num.substr(inx, i), i, val, val);
                 } else {
-                    ops.push_back(std::make_tuple(i + inx, expr + "*" + num.substr(inx, i), ret - mul + mul * val, mul * val));
-                    ops.push_back(std::make_tuple(i + inx, expr + "+" + num.substr(inx, i), ret + val, val));
-                    ops.push_back(std::make_tuple(i + inx, expr + "-" + num.substr(inx, i), ret - val, -val));
+                    backtrack(expr + "*" + num.substr(inx, i), i + inx, res - mul + mul * val, mul * val);
+                    backtrack(expr + "+" + num.substr(inx, i), i + inx, res + val, val);
+                    backtrack(expr + "-" + num.substr(inx, i), i + inx, res - val, -val);
                 }
             }
-        }
-        std::cout << count << std::endl;
+        };
+        string expr;
+        backtrack(expr, 0, 0, 0);
+        return ans;
+    }
+
+    /// expr transfer string to string&
+    vector<string> addOperators3(string num, int target) {
+        int n = num.length();
+        vector<string> ans;
+        
+        function<void(string&, int, long, long)> backtrack = [&](string& expr, int inx, long res, long mul) {
+            if (inx == n) {
+                if (res == target) {
+                    ans.push_back(expr);
+                }
+                return;
+            }
+            int signIndex = expr.size();
+            if (inx > 0) {
+                expr.push_back(0);
+            }
+            for (int i = 1; i <= n - inx; i++) {
+                if (num[inx] == '0' && i > 1) {
+                    break;
+                }
+                long val = stol(num.substr(inx, i));
+                expr.push_back(num[inx+i-1]);
+                if (inx == 0) {
+                    backtrack(expr, i, val, val);
+                } else {
+                    expr[signIndex] = '*'; backtrack(expr, i + inx, res - mul + mul * val, mul * val);
+                    expr[signIndex] = '+'; backtrack(expr, i + inx, res + val, val);
+                    expr[signIndex] = '-'; backtrack(expr, i + inx, res - val, -val);
+                }
+            }
+            expr.resize(signIndex);
+        };
+        string expr;
+        backtrack(expr, 0, 0, 0);
         return ans;
     }
 };
 
+
+
 int main() {
     Solution solution;
-    std::vector<std::string> result = solution.addOperators("123", 6);
-    for (const std::string& expr : result) {
-        std::cout << expr << std::endl;
+    vector<string> result = solution.addOperators("123456789", 45);
+    for (const string& expr : result) {
+        cout << expr << endl;
     }
     return 0;
 }

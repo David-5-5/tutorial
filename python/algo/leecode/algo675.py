@@ -11,7 +11,7 @@ class Solution:
             # 已遍历的节点不会减少dp值，因此不会重复执行
             # visisted 为List 执行时间 36s
             # visisted 为List 使用bisect_right 维护一个有序列表 执行时间 3s
-            # visisted 为List 执行时间 2.5s
+            # visisted 为Set 执行时间 2.5s
             visited = {(x1,y1)}
             while todo:
                 step, x, y = todo.pop(0)

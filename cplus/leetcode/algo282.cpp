@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <functional>
 
 using namespace std;
 
@@ -21,8 +22,11 @@ public:
 
         ops.push_back(element{0, "", 0, 0});
         while (!ops.empty()) {
-            element cur = ops.front();
-            ops.erase(ops.begin());
+            // change the ops put/pop from queue to stack
+            // element cur = ops.front();
+            // ops.erase(ops.begin());
+            element cur = ops.back();
+            ops.erase(ops.end());
             if (cur.inx == n) {
                 if (cur.res == target) {
                     ans.push_back(cur.expr);

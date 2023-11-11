@@ -155,18 +155,53 @@ begin = datetime.now()
 kmp_prefix_function(p2, s2)
 print((datetime.now()- begin).total_seconds())
 
-# Compare the computeLPSArray and prefix_function
-def compare(pat):
-    m = len(pat)
-    lps = [0] * m
-    computeLPSArray(pat, m, lps)
-    pi = prefix_function(pat)
+# # Compare the computeLPSArray and prefix_function
+# def compare(pat):
+#     m = len(pat)
+#     lps = [0] * m
+#     computeLPSArray(pat, m, lps)
+#     pi = prefix_function(pat)
 
-    for i in range(m):
-        if lps[i] != pi[i]:
-            print(f"The array is not match at {i}, {lps[i]} != {pi[i]}")
-            return
-    print("The result of computeLPSArray and prefix_function is match")
-    print(f"The len of lps is {len(lps)}, pf is {len(pi)}")
-compare(p)
-compare(p2)
+#     for i in range(m):
+#         if lps[i] != pi[i]:
+#             print(f"The array is not match at {i}, {lps[i]} != {pi[i]}")
+#             return
+#     print("The result of computeLPSArray and prefix_function is match")
+#     print(f"The len of lps is {len(lps)}, pf is {len(pi)}")
+# compare(p)
+# compare(p2)
+
+
+
+def boyer_moore(pat, txt):
+    '''
+    参考算法4 手写boyer-moore最基本的算法
+    '''
+    txtlen = len(txt)
+    patlen = len(pat)
+    badRight = [-1] * 256
+    for i in range(patlen):
+        badRight[ord(pat[i])] = i
+    
+    while i <= txtlen-patlen:
+        for j in range(patlen-1, -1, -1):
+            if (txt[i+j] != pat[j]):
+                i += max(1, j-badRight[ord(txt[i+j])])
+                break
+            if j == 0:
+                print ("Found pattern at index " + str(i))
+                # 下面语句代替i += 1, 相当于先执行i += 1
+                # 下一轮 执行 i += max(1, j-badRight[ord(txt[i+j])]), 减少一次比较
+                # txt[i+patlen] == pat[patlen-1], badRight[ord(txt[i+patlen])] = patlen-1,
+                # i 实际也 +1
+                i += (patlen-badRight[ord(txt[i+patlen])] if i+patlen<txtlen else 1)
+
+
+boyer_moore("NEEDLE", "FINDINATHAYSTACKNEEDLE")
+
+begin = datetime.now()
+boyer_moore(p, s)
+print((datetime.now()- begin).total_seconds())
+begin = datetime.now()
+boyer_moore(p2, s2)
+print((datetime.now()- begin).total_seconds())

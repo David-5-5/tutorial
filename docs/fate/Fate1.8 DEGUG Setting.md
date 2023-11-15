@@ -47,9 +47,7 @@ following:
             "connect": {
                 "host": "127.0.0.1",
                 "port": 5678
-            },
-            "envFile": "${workspaceFolder}/.env",
-            "purpose": ["debug-test"]
+            }
         }
     ]
 }

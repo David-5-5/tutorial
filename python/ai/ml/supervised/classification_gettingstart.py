@@ -12,7 +12,9 @@ from sklearn import datasets
 from sklearn import svm
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.naive_bayes import GaussianNB
- 
+from xgboost import XGBClassifier
+
+
 # import the iris dataset
 iris = datasets.load_iris()
 X = iris.data
@@ -47,5 +49,11 @@ svm_clf.fit(X_train, y_train)
 # make predictions
 svm_clf_pred = svm_clf.predict(X_test)
 # print the accuracy
-print("Accuracy of Support Vector Machine: ",
-      accuracy_score(y_test, svm_clf_pred))
+print("Accuracy of Support Vector Machine: ", accuracy_score(y_test, svm_clf_pred))
+
+
+bst = XGBClassifier(n_estimators=2, max_depth=2, learning_rate=1, objective='binary:logistic')
+bst.fit(X_train, y_train)
+bst_preds = bst.predict(X_test)
+# print the accuracy
+print("Accuracy of XGBoost: ",accuracy_score(y_test, bst_preds))

@@ -7,10 +7,7 @@ from sklearn.decomposition import PCA
 from sklearn.metrics import silhouette_score
 
 # Loading the data
-X = pd.read_csv('CC_GENERAL.csv')
-
-# Loading the data
-X = pd.read_csv('CC_GENERAL.csv')
+X = pd.read_csv('./ai/ml/unsupervised/CC_GENERAL.csv')
 
 # Dropping the CUST_ID column from the data
 X = X.drop('CUST_ID', axis = 1)

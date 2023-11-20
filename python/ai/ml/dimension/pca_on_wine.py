@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 # importing or loading the dataset
-dataset = pd.read_csv('./python/ml/dimension/Wine.csv')
+dataset = pd.read_csv('./ai/ml/dimension/Wine.csv')
  
 # distributing the dataset into two components X and Y
 X = dataset.iloc[:, 0:13].values

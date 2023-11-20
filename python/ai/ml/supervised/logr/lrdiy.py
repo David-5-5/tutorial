@@ -38,7 +38,7 @@ def grad_desc(beta, X , Y, lr = .01):
 
 if __name__ == "__main__":
 	# load the dataset
-	dataset = loadCSV('./python/ml/basic/logr/dataset1.csv')
+	dataset = loadCSV('./ai/ml/supervised/logr/dataset1.csv')
 
 	# normalizing feature matrix
 	X = normalize(dataset[:,0:-1])

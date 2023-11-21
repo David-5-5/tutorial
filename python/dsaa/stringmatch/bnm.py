@@ -66,16 +66,16 @@ def search(txt, pat):
  
 # Driver program to test above function
 def main():
-    with open('./python/dsaa/stringmatch/txt.txt') as file:
+    with open('./dsaa/stringmatch/txt.txt') as file:
         txt = file.read()
     
-    with open('./python/dsaa/stringmatch/pattern.txt') as file:
+    with open('./dsaa/stringmatch/pattern.txt') as file:
         pat = file.read()
 
-    with open('./python/dsaa/stringmatch/txt2.txt') as file:
+    with open('./dsaa/stringmatch/txt2.txt') as file:
         txt2 = file.read()
     
-    with open('./python/dsaa/stringmatch/pattern2.txt') as file:
+    with open('./dsaa/stringmatch/pattern2.txt') as file:
         pat2= file.read()
 
     from datetime import datetime

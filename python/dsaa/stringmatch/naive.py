@@ -38,16 +38,16 @@ if __name__ == '__main__':
     # # Function call
     # search(pat, txt)
 
-    with open('./python/dsaa/stringmatch/txt.txt') as file:
+    with open('./dsaa/stringmatch/txt.txt') as file:
         s = file.read()
     
-    with open('./python/dsaa/stringmatch/pattern.txt') as file:
+    with open('./dsaa/stringmatch/pattern.txt') as file:
         p = file.read()
 
-    with open('./python/dsaa/stringmatch/txt2.txt') as file:
+    with open('./dsaa/stringmatch/txt2.txt') as file:
         s2 = file.read()
     
-    with open('./python/dsaa/stringmatch/pattern2.txt') as file:
+    with open('./dsaa/stringmatch/pattern2.txt') as file:
         p2= file.read()
 
     from datetime import datetime

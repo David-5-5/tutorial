@@ -1,5 +1,6 @@
 class Solution:
-    def maxProfit(self, prices) -> int:
+    # 设置k, 兼容leetcode No. 188
+    def maxProfit(self, prices, k=2) -> int:
         '''
         对于buy1而言, 在第i天我们可以不进行任何操作, 保持不变, 也可以在未进行任何操作的前提下
         以prices[i]的价格买入股票, 那么 buy1的状态转移方程即为:
@@ -11,8 +12,7 @@ class Solution:
         buy2=max{buy2,sell1−prices[i]}
         sell2=max{sell2,buy2+prices[i]}
         '''
-        # 设置k, 兼容leetcode No. 188
-        k = 2
+
         '''
         我们考虑第0天时的四个状态:
         1, buy1即为以prices[0]的价格买入股票，因此 buy1=-prices[0]; 
@@ -32,7 +32,9 @@ class Solution:
 
         return max(sell)
 
+
 if __name__ == "__main__":
     sol = Solution()
     prices = [3,3,5,0,0,3,1,4]
     print(sol.maxProfit(prices))
+    print(sol.maxProfit(prices, 3))

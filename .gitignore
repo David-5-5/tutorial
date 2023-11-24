@@ -18,5 +18,8 @@ venv
 
 **/target
 
+# 忽略所有隐藏目录
+.*/
+
 .vscode
 .VSCodeCounter

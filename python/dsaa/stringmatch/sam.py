@@ -1,5 +1,5 @@
 import copy
-
+from typing import List, Any
 
 class State:
     def __init__(self, i) -> None:
@@ -12,13 +12,16 @@ class State:
 
 class SAM:
 
-    def __init__(self):
+    def __init__(self, seq: List[Any]):
         '''
         一开始SAM只包含一个状态t0, 编号为0(其它状态的编号为 1,2, )
         为了方便，对于状态 t0 我们指定 len=0、link=-None
         '''
         self.last = State(0)
         self.t0 = self.last
+
+        for ch in seq:
+            self.add(str(ch))
 
     def add(self, ch: str):
         '''
@@ -73,25 +76,33 @@ class SAM:
         self.last = cur
 
 
-def lcp(s: str, t: str):
-    sam = SAM()
-    for ch in s:
-        sam.add(ch)
+    def lcp(self, t: List[Any]):
+        '''
+        Longest common perfix
+        '''
+        l, best, bestpos = 0, 0, 0
+        p:State = self.t0
+        for i in range(len(t)):
+            while len(p) and str(t[i]) not in p.next.keys():
+                p = p.link
+                l = len(p)
 
-    l, best, bestpos = 0, 0, 0
-    p:State = sam.t0
-    for i in range(len(t)):
-        while len(p) and t[i] not in p.next.keys():
-            p = p.link
-            l = len(p)
-
-        if t[i] in p.next.keys():
-            p = p.next[t[i]]
-            l += 1
-        if l > best:
-            best = l
-            bestpos = i
-    return t[bestpos-best+1:bestpos+1]
+            if str(t[i]) in p.next.keys():
+                p = p.next[str(t[i])]
+                l += 1
+            if l > best:
+                best = l
+                bestpos = i
+        return t[bestpos-best+1:bestpos+1]
 
 
-print(lcp("abcbc", "dcbcd"))
+    def endpos(self, t: List[Any]) -> List[int]:
+        '''
+        结束位置, 字符串s的任意非空子串t我们记endpos(t)为在字符串s中t的所有结束位置
+        例如, 对于字符串"abcbc", 我们有endpos("bc")=[2, 4]
+        '''
+        pass
+
+if __name__ == "__main__":
+    sam = SAM("abcbc")
+    print(sam.lcp("dcbcd"))

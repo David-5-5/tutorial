@@ -1,7 +1,4 @@
 from typing import List
-def count(a: List[int]) -> List[int]:
-    res = 0
-
 import sys
 
 input = sys.stdin.readline()

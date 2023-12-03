@@ -23,7 +23,9 @@ class trie_oi:
             p = self.nex[p][c]
         return self.exist[p]
     
-
+# !!!!!!!!!!!!!The PERFORAMCE IS VERY BAD !!!!!!!!!!!!!
+# Performance compare refer to algo17.25
+# !!!!!!!!!!!!!The PERFORAMCE IS VERY BAD !!!!!!!!!!!!!
 class trie:
     cnt = 0
     root = None
@@ -58,6 +60,28 @@ class trie:
             
         return cur.isEnd
 
+# The good Trie
+class Trie:
+    def __init__(self):
+        self.root = [{}, False]
+    
+    def insert(self, word):
+        cur = self.root
+        for c in word:
+            if c not in cur[0]:
+                cur[0][c] = [{}, False]
+            cur = cur[0][c]
+        cur[1] = True
+
+    # Find str
+    def find(self, word) :
+        cur = self.root
+        for c in word:
+            if c not in cur[0]:
+                return False, False
+            cur = cur[0][c]
+            
+        return True, cur[1]
 
 s = ['aa' 'aba', 'ba', 'caaa', 'cba']
 
@@ -79,3 +103,4 @@ print(oi_trie.find('caaa') == ins_trie.find('caaa'))
 oi_trie.insert('a')
 ins_trie.insert('a')
 print(oi_trie.find('a') == ins_trie.find('a'))
+

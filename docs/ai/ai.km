@@ -1,0 +1,59 @@
+{
+    "root": {
+        "data": {
+            "id": "cxf7lmouihk0",
+            "created": 1701658516787,
+            "text": "AI"
+        },
+        "children": [
+            {
+                "data": {
+                    "id": "cxf7naz2i540",
+                    "created": 1701658648012,
+                    "text": "Ensemble"
+                },
+                "children": [
+                    {
+                        "data": {
+                            "id": "cxf7nkg3b9s0",
+                            "created": 1701658668633,
+                            "text": "GBRT/MART",
+                            "note": "GBDT(Gradient Boosting Decision Tree) 又叫 MART（Multiple Additive Regression Tree)，是一种迭代的决策树算法，该算法由多棵决策树组成，所有树的结论累加起来做最终答案。\n"
+                        },
+                        "children": []
+                    },
+                    {
+                        "data": {
+                            "id": "cxf7s9rebtc0",
+                            "created": 1701659037192,
+                            "text": "DART",
+                            "note": "将Dropouts思想引入MART中，在每棵树的迭代过程中不再单单去拟合前一棵树的残差，而是从前面已有的树中sample一部分树，ensemble一个新model，然后去拟合这部分的残差，从而使得后面的树的贡献变大一些，防止over-specialization"
+                        },
+                        "children": []
+                    }
+                ]
+            },
+            {
+                "data": {
+                    "id": "cxf7r7v6lj40",
+                    "created": 1701658954704,
+                    "text": "Decision Tree"
+                },
+                "children": [
+                    {
+                        "data": {
+                            "id": "cxf7rhst84g0",
+                            "created": 1701658976328,
+                            "text": "CART",
+                            "note": "分类与回归树(Classification and Regression Tree, CART)是一种经典的决策树，可以用来处理涉及连续数据的分类或者回归任务"
+                        },
+                        "children": []
+                    }
+                ]
+            }
+        ]
+    },
+    "template": "default",
+    "theme": "fresh-red-compat",
+    "version": "1.4.43"
+}

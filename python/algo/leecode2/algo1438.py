@@ -12,8 +12,11 @@ class Solution:
             while last and abs(last.peekitem(0)[0] - nums[i])>limit:
                 _, inx = last.popitem(0)
                 begin = max(inx+1, begin)
+            # 提升20%的性能
+            if begin == i: last.clear()
             last[nums[i]] = i
             longest = max(longest, i-begin+1)
+            last.clear()
         return longest
 
 if __name__ == "__main__":

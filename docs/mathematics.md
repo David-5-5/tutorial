@@ -150,9 +150,30 @@ $
 
 
 ## 对齐
-- 展示长公式
+- 拆分对齐方程(以等号对齐)
+$$
+ \begin{align*} 
+ x &= y & w &= z & a &= b+c \\
+ 2x &=-y & 3w &= \frac{1}{2} & a &= b \\
+ -4 + 5x &=2+ y & w+2 &= -1 + w & ab &= cb 
+ \end{align*} 
+$$
+
+- 居中显示方程(不以等号对齐)
+$$
+ \begin{gather*} 
+ x = y & w = z & a = b+c \\
+ 2x =-y & 3w = \frac{1}{2} & a = b \\
+ -4 + 5x =2+ y & w+2 = -1 + w & ab = cb \\
+ 2x - 5y = 8 \\
+ 3x^2 + 9y = 3a + c
+ \end{gather*} 
+$$
+
+
+## 运算符
 $
-\begin{multiline}
-px
-\end{multiline}
+\cos,  \tan, \csc,  \lim, \exp, \dim, \min, \max \\
+\arcsin, \sin, \lg, \tanh, \ln, \arg, \log \\
+\ker, \limsup, \Pr, \hom, \liminf
 $

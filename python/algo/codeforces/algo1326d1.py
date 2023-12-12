@@ -20,7 +20,7 @@ def manacher(s: str) -> (List[int], List[int]):
             d2[i] = min(d2[l+r-i+1], r-i)
         while 0 <= i - d2[i] - 1 and i + d2[i] < n and s[i - d2[i] - 1] == s[i + d2[i]]:
             d2[i] += 1
-        if i + d1[i] > r:
+        if i + d2[i] > r:
             l, r = i - d2[i]-1, i + d2[i]
     return (d2, d1)
 

@@ -5,24 +5,45 @@ def manacher(s: str) -> (List[int], List[int]):
     n = len(s)
     d1 = [0] * n
     d2 = [0] * n
-    l, r  = 0, -1
-    for i in range(n):
-        if i <= r:
-            d1[i] = min(d1[l+r-i], r-i)
-        while 0 <= i - d1[i] and i + d1[i] < n and s[i - d1[i]] == s[i + d1[i]]:
-            d1[i] += 1
-        if i + d1[i] > r:
-            l, r = i - d1[i], i + d1[i]
+    l, r = 0, -1
+    for i in range(0, n):
+        k = 1 if i > r else min(d1[l + r - i], r - i + 1)
+        while 0 <= i - k and i + k < n and s[i - k] == s[i + k]:
+            k += 1
+        d1[i] = k
+        k -= 1
+        if i + k > r:
+            l = i - k
+            r = i + k    
+    # l, r  = 0, -1
+    # for i in range(n):
+    #     if i <= r:
+    #         d1[i] = min(d1[l+r-i], r-i)
+    #     while 0 <= i - d1[i] and i + d1[i] < n and s[i - d1[i]] == s[i + d1[i]]:
+    #         d1[i] += 1
+    #     if i + d1[i] > r:
+    #         l, r = i - d1[i], i + d1[i]
     
-    l, r  = 0, -1
-    for i in range(n):
-        if i <= r:
-            d2[i] = min(d2[l+r-i+1], r-i)
-        while 0 <= i - d2[i] - 1 and i + d2[i] < n and s[i - d2[i] - 1] == s[i + d2[i]]:
-            d2[i] += 1
-        if i + d2[i] > r:
-            l, r = i - d2[i]-1, i + d2[i]
-    return (d2, d1)
+    # l, r  = 0, -1
+    # for i in range(n):
+    #     if i <= r:
+    #         d2[i] = min(d2[l+r-i+1], r-i)
+    #     while 0 <= i - d2[i] - 1 and i + d2[i] < n and s[i - d2[i] - 1] == s[i + d2[i]]:
+    #         d2[i] += 1
+    #     if i + d2[i] > r:
+    #         l, r = i - d2[i]-1, i + d2[i]
+    # return (d2, d1)
+    l, r = 0, -1
+    for i in range(0, n):
+        k = 0 if i > r else min(d2[l + r - i + 1], r - i + 1)
+        while 0 <= i - k - 1 and i + k < n and s[i - k - 1] == s[i + k]:
+            k += 1
+        d2[i] = k
+        k -= 1
+        if i + k > r:
+            l = i - k - 1
+            r = i + k
+    return (d2, d1)            
 
 def solution(s: str):
     n = len(s)

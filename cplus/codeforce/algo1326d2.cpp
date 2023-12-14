@@ -2,6 +2,8 @@
 #include <iostream>
 #include <vector>
 #include <functional>
+#include <time.h>
+#include <math.h>
 
 using namespace std;
 
@@ -32,7 +34,10 @@ string solution(string s)
         d1[i] = k--;
         if (i + k > r)
         {
-            l = i - k;
+            // Bad performance
+            // l,r  = i - k, i + k;
+            // Good performance
+            l = i- k;
             r = i + k;
         }
     }
@@ -107,7 +112,19 @@ int main()
         cin >> input;
         cout << solution(input) << endl;
     }
+
+    // Unit test
     // cout << solution("abcdfdcecba") << endl;
     // cout << solution("abbaxyzyx") << endl;
     // cout << solution("codeforces") << endl;
+    
+    // Benchmark
+    // clock_t start = clock();
+    // string s = "";
+    // s.append(1000, 'x');
+    // int loop = pow(10, 7) / s.length();
+    // for (int i = 0; i < loop ; i++){
+    //     solution(s);
+    // }
+    // cout<<"time = "<<double(clock()-start)/CLOCKS_PER_SEC<<"s"<<endl;
 }

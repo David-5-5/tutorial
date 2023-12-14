@@ -1,4 +1,5 @@
 from typing import List
+import collections
 class Solution:
     def findLadders(self, beginWord: str, endWord: str, wordList: List[str]) -> List[List[str]]:
         if endWord not in wordList : return []
@@ -21,21 +22,29 @@ class Solution:
             return cnt == 1
 
         # 图，key is index of 
-        graph = {}
-        for i in range(n-1):
-            for j in range(i+1, n):
-                if isAdjacent(wordList[i], wordList[j]):
-                    if i in graph.keys():
-                        graph[i].append(j)
-                    else:
-                        graph[i] = [j]
-                    if j in graph.keys():
-                        graph[j].append(i)
-                    else:
-                        graph[j] = [i]
+        # 将每个word的各位替换为'*', 并加入virtual字典中
+        # 若两个单词仅一个字母不同, 单词的有相同虚拟单词, 
+        # 对具有相同的虚拟单词key的单词序号,生成一条边
 
-        # visited = {1:{begin}}
-        visited = {begin}
+        # key = virtual word, value inx of word
+        virtual = collections.defaultdict(list)
+        graph = collections.defaultdict(list)
+        for i in range(n):
+            word = wordList[i]
+            for j in range(m):
+                virtual[word[0:j] + "*" + word[j+1:]].append(i)
+
+        for word in virtual.keys():
+            for i in range(len(virtual[word])-1):
+                for j in range(i+1, len(virtual[word])):
+                    if virtual[word][j] not in graph[virtual[word][i]]:
+                        graph[virtual[word][i]].append(virtual[word][j])
+                    if virtual[word][i] not in graph[virtual[word][j]]:
+                        graph[virtual[word][j]].append(virtual[word][i])
+
+
+        visited = {1:{begin}}
+        # visited = {begin}
         bfs = [str(begin)]
         res = []
         minl = n
@@ -44,24 +53,23 @@ class Solution:
             path = [int(s) for s in txt.split(",")]
             # Next position
             path.append(-1)
-            # if len(path) not in visited.keys():
-            #     visited[len(path)] = set()
-            #     for i in visited[len(path)-1]:
-            #         visited[len(path)].add(i)
+            if len(path) not in visited.keys():
+                visited[len(path)] = set()
+                for i in visited[len(path)-1]:
+                    visited[len(path)].add(i)
             if minl >= len(path) and path[-2] in graph.keys():
                 for u in graph[path[-2]]:
-                    if u not in visited:
+                    if u not in visited[len(path)-1]:
                         if u == end:
                             path[-1] = u
                             words = []
                             for inx in path:
                                 words.append(wordList[inx])
                             res.append(words)
-                            return res
                             minl = min(minl, len(path))
                         if minl > len(path):
                             path[-1] = u
-                            visited.add(u)
+                            visited[len(path)].add(u)
                             bfs.append(",".join(str(i) for i in path))
         return res
 

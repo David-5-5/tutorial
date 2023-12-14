@@ -1,7 +1,56 @@
 from typing import List
 import collections
 class Solution:
-    def ladderLength(self, beginWord: str, endWord: str, wordList) -> int:
+    def ladderLength(self, beginWord: str, endWord: str, wordList: List[str]) -> int:
+        if endWord not in wordList : return 0
+        m = len(beginWord)
+        
+        begin = 0
+        if beginWord not in wordList: 
+            wordList.insert(0, beginWord)
+        else:
+            begin = wordList.index(beginWord)
+
+        end = wordList.index(endWord)
+        n = len(wordList)
+
+        # 图，key is index of 
+        # 将每个word的各位替换为'*', 并加入virtual字典中
+        # 若两个单词仅一个字母不同, 单词的有相同虚拟单词, 
+        # 对具有相同的虚拟单词key的单词序号,生成一条边
+
+        # key = virtual word, value inx of word
+        virtual = collections.defaultdict(list)
+        graph = collections.defaultdict(list)
+        for i in range(n):
+            word = wordList[i]
+            for j in range(m):
+                virtual[word[0:j] + "*" + word[j+1:]].append(i)
+
+        for word in virtual.keys():
+            for i in range(len(virtual[word])-1):
+                for j in range(i+1, len(virtual[word])):
+                    if virtual[word][j] not in graph[virtual[word][i]]:
+                        graph[virtual[word][i]].append(virtual[word][j])
+                    if virtual[word][i] not in graph[virtual[word][j]]:
+                        graph[virtual[word][j]].append(virtual[word][i])
+
+
+        dis = [float("inf")] * n
+        bfs = collections.deque([begin])
+        dis[begin] = 1
+        while bfs:
+            v = bfs.popleft()
+            for u in graph[v]:
+                if dis[u] == float("inf"):
+                    dis[u] = dis[v] + 1
+                    if u == end: 
+                        return dis[u]
+                    bfs.append(u)
+        
+        return 0
+
+    def ladderLength_original(self, beginWord: str, endWord: str, wordList) -> int:
         if endWord not in wordList : return 0
         m = len(beginWord)
         
@@ -107,48 +156,7 @@ class Solution:
         return 0
 
 
-    def ladderLength3(self, beginWord: str, endWord: str, wordList: List[str]) -> int:
-        if endWord not in wordList : return 0
-        m = len(beginWord)
-        
-        begin = 0
-        if beginWord not in wordList: 
-            wordList.insert(0, beginWord)
-        else:
-            begin = wordList.index(beginWord)
 
-        end = wordList.index(endWord)
-        n = len(wordList)
-
-        def isAdjacent(word1, word2):
-            cnt = 0
-            for i in range(m):
-                if word1[i] != word2[i]:
-                    cnt += 1
-            return cnt == 1
-
-        # 图，key is index of 
-        graph = collections.defaultdict(list)
-        for i in range(n-1):
-            for j in range(i+1, n):
-                if isAdjacent(wordList[i], wordList[j]):
-                    graph[i].append(j)
-                    graph[j].append(i)
-
-        dis = [float("inf")] * n
-        bfs = collections.deque([begin])
-        dis[begin] = 1
-        while bfs:
-            v = bfs.popleft()
-            for u in graph[v]:
-                if dis[u] == float("inf"):
-                    dis[u] = dis[v] + 1
-                    if u == end: 
-                        return dis[u]
-                    bfs.append(u)
-        
-        return 0
-    
 if __name__ == "__main__":
     sol = Solution()
     beginWord = "hit"
@@ -163,4 +171,3 @@ if __name__ == "__main__":
 
     print(sol.ladderLength(beginWord, endWord, wordList))
     # print(sol.ladderLength2(beginWord, endWord, wordList))
-    print(sol.ladderLength3(beginWord, endWord, wordList))

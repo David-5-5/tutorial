@@ -37,33 +37,79 @@ class Solution:
                     if virtual[word][i] not in graph[virtual[word][j]]:
                         graph[virtual[word][j]].append(virtual[word][i])
 
-
-        visited = set()
-        bfs = [str(begin)]
+        ''' Backtracking and pruning 回溯与剪枝
+        '''
         res = []
-        minl = n
+        result = []
+        # 建立广度搜索列表, 并按层创建已访问节点列表
+        visited = {1:{begin}}
+        bfs = [str(begin)]
+
+        found = False
+
+        # The path structure
+        handled = set()
+        prefix = collections.defaultdict(set)
+        # 到达结束节点后, 所以前缀节点都加入路径中
+        def push(path):
+            cur = path[-1]
+            part = [str(cur)]
+            while len([int(s) for s in part[0].split(",")]) < len(path):
+                suf = [int(s) for s in part.pop(0).split(",")]
+                pres = prefix[suf[0]]
+                suf.insert(0, -1)
+                for pre in pres:
+                    suf[0] = pre
+                    part.append(",".join(str(i) for i in suf))
+            return part
+        
         while bfs:
             txt = bfs.pop(0)
             path = [int(s) for s in txt.split(",")]
-            visited.add(path[-1])
+
+            # Create the path structure
+            if len(path) > 1 : prefix[path[-1]].add(path[-2])
+
+            if found:
+                if path[-1] == end:
+                    res.extend(push(path))
+                continue
+            
+            # A vertex only find deep target only once
+            if path[-1] not in handled:
+                handled.add(path[-1])
+                if path[-1] == end:
+                    res.extend(push(path))
+                    found = True
+            else:
+                continue
 
             # Next position
             path.append(-1)
-            if minl >= len(path) and path[-2] in graph.keys():
-                for u in graph[path[-2]]:
-                    if u not in visited:
-                        path[-1] = u
-                        if u == end:
-                            words = []
-                            for inx in path:
-                                words.append(wordList[inx])
-                            res.append(words)
-                            minl = min(minl, len(path))
-                        if minl > len(path):
-                            bfs.append(",".join(str(i) for i in path))
-        return res
+            if len(path) not in visited.keys():
+                visited[len(path)] = set()
+                for i in visited[len(path)-1]:
+                    visited[len(path)].add(i)
 
-    def findLadders2(self, beginWord: str, endWord: str, wordList: List[str]) -> List[List[str]]:
+            if path[-2] in graph.keys():
+                for u in graph[path[-2]]:
+                    if u not in visited[len(path)-1]:
+                        path[-1] = u
+                        visited[len(path)].add(u)
+                        bfs.append(",".join(str(i) for i in path))
+        
+        for txt in res:
+            path = [int(s) for s in txt.split(",")]
+            words = []
+            for i in path:
+                words.append(wordList[i])
+            if words not in result: result.append(words)
+        return result
+
+
+    def findLadders_overtime(self, beginWord: str, endWord: str, wordList: List[str]) -> List[List[str]]:
+        ''' !!!!!!!!OVERTIME!!!!!!!!!
+        '''
         if endWord not in wordList : return []
         m = len(beginWord)
         
@@ -98,71 +144,31 @@ class Solution:
                         graph[virtual[word][j]].append(virtual[word][i])
 
 
-        visited = {1:{begin}}
-        handled = set()
+        visited = set()
         bfs = [str(begin)]
-        # dp = collections.defaultdict(list)
-        
-        # def push(path):
-        #     for inx in range(len(path)-2, -1, -1):
-        #         for suf in dp[path[inx+1]]:
-        #             if str(path[inx])+","+suf not in dp[path[inx]]:
-        #                 dp[path[inx]].append(str(path[inx])+","+suf)
-        parent = collections.defaultdict(set)
         res = []
-        result = []
-        found = False
+        minl = n
         while bfs:
             txt = bfs.pop(0)
             path = [int(s) for s in txt.split(",")]
+            visited.add(path[-1])
 
-            if found:
-                if path[-1] == end:
-                    words = []
-                    for inx in path:
-                        words.append(wordList[inx])
-                    result.append(words)
-                continue
-            
-            if len(path) > 1 : parent[path[-1]].add(path[-2])
-
-            if path[-1] not in handled:
-                handled.add(path[-1])
-                if path[-1] == end:
-                    cur = path[-1]
-                    res = [str(cur)]
-                    while len([int(s) for s in res[0].split(",")]) < len(path):
-                        suf = [int(s) for s in res.pop(0).split(",")]
-                        pres = parent[suf[0]]
-                        suf.insert(0, -1)
-                        for pre in pres:
-                            suf[0] = pre
-                            res.append(",".join(str(i) for i in suf))
-                    found = True
-
-            else:
-                continue
             # Next position
             path.append(-1)
-            if len(path) not in visited.keys():
-                visited[len(path)] = set()
-                for i in visited[len(path)-1]:
-                    visited[len(path)].add(i)
-
-            if path[-2] in graph.keys():
+            if minl >= len(path) and path[-2] in graph.keys():
                 for u in graph[path[-2]]:
-                    if u not in visited[len(path)-1]:
+                    if u not in visited:
                         path[-1] = u
-                        visited[len(path)].add(u)
-                        bfs.append(",".join(str(i) for i in path))
-        
-        for txt in res:
-            path = [int(s) for s in txt.split(",")]
-            words = []
-            for i in path:
-                words.append(wordList[i])
-            result.append(words)
-        return result
+                        if u == end:
+                            words = []
+                            for inx in path:
+                                words.append(wordList[inx])
+                            res.append(words)
+                            minl = min(minl, len(path))
+                        if minl > len(path):
+                            bfs.append(",".join(str(i) for i in path))
+        return res
+
 
 
 if __name__ == "__main__":
@@ -179,5 +185,8 @@ if __name__ == "__main__":
     # beginWord = "cet"
     # endWord = "ism"
     # wordList = ["kid","tag","pup","ail","tun","woo","erg","luz","brr","gay","sip","kay","per","val","mes","ohs","now","boa","cet","pal","bar","die","war","hay","eco","pub","lob","rue","fry","lit","rex","jan","cot","bid","ali","pay","col","gum","ger","row","won","dan","rum","fad","tut","sag","yip","sui","ark","has","zip","fez","own","ump","dis","ads","max","jaw","out","btu","ana","gap","cry","led","abe","box","ore","pig","fie","toy","fat","cal","lie","noh","sew","ono","tam","flu","mgm","ply","awe","pry","tit","tie","yet","too","tax","jim","san","pan","map","ski","ova","wed","non","wac","nut","why","bye","lye","oct","old","fin","feb","chi","sap","owl","log","tod","dot","bow","fob","for","joe","ivy","fan","age","fax","hip","jib","mel","hus","sob","ifs","tab","ara","dab","jag","jar","arm","lot","tom","sax","tex","yum","pei","wen","wry","ire","irk","far","mew","wit","doe","gas","rte","ian","pot","ask","wag","hag","amy","nag","ron","soy","gin","don","tug","fay","vic","boo","nam","ave","buy","sop","but","orb","fen","paw","his","sub","bob","yea","oft","inn","rod","yam","pew","web","hod","hun","gyp","wei","wis","rob","gad","pie","mon","dog","bib","rub","ere","dig","era","cat","fox","bee","mod","day","apr","vie","nev","jam","pam","new","aye","ani","and","ibm","yap","can","pyx","tar","kin","fog","hum","pip","cup","dye","lyx","jog","nun","par","wan","fey","bus","oak","bad","ats","set","qom","vat","eat","pus","rev","axe","ion","six","ila","lao","mom","mas","pro","few","opt","poe","art","ash","oar","cap","lop","may","shy","rid","bat","sum","rim","fee","bmw","sky","maj","hue","thy","ava","rap","den","fla","auk","cox","ibo","hey","saw","vim","sec","ltd","you","its","tat","dew","eva","tog","ram","let","see","zit","maw","nix","ate","gig","rep","owe","ind","hog","eve","sam","zoo","any","dow","cod","bed","vet","ham","sis","hex","via","fir","nod","mao","aug","mum","hoe","bah","hal","keg","hew","zed","tow","gog","ass","dem","who","bet","gos","son","ear","spy","kit","boy","due","sen","oaf","mix","hep","fur","ada","bin","nil","mia","ewe","hit","fix","sad","rib","eye","hop","haw","wax","mid","tad","ken","wad","rye","pap","bog","gut","ito","woe","our","ado","sin","mad","ray","hon","roy","dip","hen","iva","lug","asp","hui","yak","bay","poi","yep","bun","try","lad","elm","nat","wyo","gym","dug","toe","dee","wig","sly","rip","geo","cog","pas","zen","odd","nan","lay","pod","fit","hem","joy","bum","rio","yon","dec","leg","put","sue","dim","pet","yaw","nub","bit","bur","sid","sun","oil","red","doc","moe","caw","eel","dix","cub","end","gem","off","yew","hug","pop","tub","sgt","lid","pun","ton","sol","din","yup","jab","pea","bug","gag","mil","jig","hub","low","did","tin","get","gte","sox","lei","mig","fig","lon","use","ban","flo","nov","jut","bag","mir","sty","lap","two","ins","con","ant","net","tux","ode","stu","mug","cad","nap","gun","fop","tot","sow","sal","sic","ted","wot","del","imp","cob","way","ann","tan","mci","job","wet","ism","err","him","all","pad","hah","hie","aim"]
-    # print(sol.findLadders(beginWord, endWord, wordList))
-    print(sol.findLadders2(beginWord, endWord, wordList))
+    # beginWord = "red"
+    # endWord = "tax"
+    # wordList = ["ted","tex","red","tax","tad","den","rex","pee"]
+    print(sol.findLadders(beginWord, endWord, wordList))
+    print(sol.findLadders_overtime(beginWord, endWord, wordList))

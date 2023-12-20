@@ -19,11 +19,12 @@ class Solution:
 
         def pushup(p: int):
             l, r = p*2+1, p*2+2
+            dp[p] = [0, 0]
             for i in range(k):
                 # '>>i & 1' 将第i位右移到最后一位, 并消除掉除最后一位的 1
                 # 完成操作后'1 << i', 再左移到i位, 并按位或, 合并位操作结果
-                dp[p][0] |= dp[r][dp[l][0]>>i & 1] >> i & 1 << i
-                dp[p][1] |= dp[r][dp[l][1]>>i & 1] >> i & 1 << i
+                dp[p][0] |= (dp[r][dp[l][0]>>i & 1] >> i & 1) << i
+                dp[p][1] |= (dp[r][dp[l][1]>>i & 1] >> i & 1) << i
 
 
         def build(l: int, r: int, p: int):
@@ -32,8 +33,8 @@ class Solution:
             r, current right inx of segment, start with 0
             p, the inx of tree(dp), 0 is root
             '''
-            dp[p][0] = 1 << k -1
             if l == r:
+                dp[p][0] = (1 << k) - 1
                 set(p, arr[l])
                 return
             
@@ -45,6 +46,8 @@ class Solution:
         def update(l: int, r: int, p: int, inx:int, val:int):
             if l == r:
                 set(p, val)
+                return
+            
             mid = (l + r) // 2
             if mid >= inx:
                 update(l, mid, p*2+1, inx, val)
@@ -59,11 +62,12 @@ class Solution:
             if op[0] == 0:
                 update(0, n-1, 0, op[1], op[2])
                 continue
-            
+
+            x = op[1]
             for i in range(k):
-                x, y = op[1], op[2] >> i & i
-                res = dp[0][y] >> i & i
-                if y != res and not (x == 1 or dp[res] >> i & i == res):
+                y = op[2] >> i & 1
+                res = dp[0][y] >> i & 1
+                if y != res and not (x == 1 or dp[0][res] >> i & 1 == res):
                     res = y ^ x%2
 
                 ans ^= res << i
@@ -74,4 +78,5 @@ class Solution:
 if __name__ == "__main__":
     sol = Solution()
     k, arr, operations = 3, [1,2], [[1,2,3],[0,0,3],[1,2,2]]
+    k, arr, operations = 4, [4,6,4,7,10,9,11], [[1,5,7],[1,7,14],[0,6,7],[1,6,5]]
     print(sol.getNandResult(k, arr, operations))

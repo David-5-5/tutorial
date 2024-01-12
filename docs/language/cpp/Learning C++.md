@@ -1,6 +1,19 @@
-# Learing C++
+# Learing C++remove_extent
 
 [toc]
+
+## Metaprogramming library
+
+### std::remove_extent
+
+```cpp
+template< class T > struct remove_extent; // (since C++11)
+template< class T > using remove_extent_t = typename remove_extent<T>::type; //	(since C++14)
+```
+如果 T 是某种类型 X 的数组，则提供等于 X 的成员 typedef 类型，否则 type 为 T。
+
+为 std::remove_extent 添加专用化的程序的行为未定义。
+
 
 
 ## Utility library
@@ -28,21 +41,63 @@ C++ 包括各种实用程序库, 这些库提供从位计数到部分函数应�
 
 `std::shared_ptr`是一个智能指针，它通过指针保留对象的共享所有权。多个`shared_ptr`对象可能拥有同一个对象。当发生以下任一情况时，对象将被销毁并解除其内存分配：
 - 拥有该对象的最后剩余`shared_ptr`被销毁;
-- 拥有该对象的最后剩余`shared_ptr`通过 `operator=` 或 `reset（）` 分配另一个指针。
+- 拥有该对象的最后剩余`shared_ptr`通过 `operator=` 或 `reset()` 分配另一个指针。
 
 使用 `delete-expression` 或在构造过程中提供给 `shared_ptr` 的自定义删除器销毁对象。
 
-`shared_ptr`可以共享对象的所有权，同时存储指向另一个对象的指针。此功能可用于在拥有成员对象所属对象时指向成员对象。存储的指针是由 get（）、取消引用和比较运算符访问的指针。托管指针是当使用计数达到零时传递给删除程序的指针。
+`shared_ptr`可以共享对象的所有权，同时存储指向另一个对象的指针。此功能可用于在拥有成员对象所属对象时指向成员对象。存储的指针是由 get()、取消引用和比较运算符访问的指针。托管指针是当使用计数达到零时传递给删除程序的指针。
 
-`shared_ptr`也可能不拥有任何对象，在这种情况下，它被称为空（如果使用别名构造函数创建空shared_ptr，则空可能具有非 null 存储的指针）。
+`shared_ptr`也可能不拥有任何对象，在这种情况下，它被称为空(如果使用别名构造函数创建空shared_ptr，则空可能具有非 null 存储的指针)。
 
 `shared_ptr`的所有specializations都满足 `CopyConstructible`、`CopyAssignable` 和 `LessThanComparable` 的要求，并且可以在上下文中转换为 bool。
 
-所有成员函数（包括复制构造函数和复制赋值）都可以由不同`shared_ptr`实例上的多个线程调用，而无需额外同步，即使这些实例是同一对象的副本并共享所有权。如果多个执行线程在不同步的情况下访问同一个`shared_ptr`实例，并且其中任何一个访问都使用了 `shared_ptr` 的非常量成员函数，则将发生数据争用;原子函数的`shared_ptr`重载可用于防止数据争用。
+所有成员函数(包括复制构造函数和复制赋值)都可以由不同`shared_ptr`实例上的多个线程调用，而无需额外同步，即使这些实例是同一对象的副本并共享所有权。如果多个执行线程在不同步的情况下访问同一个`shared_ptr`实例，并且其中任何一个访问都使用了 `shared_ptr` 的非常量成员函数，则将发生数据争用;原子函数的`shared_ptr`重载可用于防止数据争用。
 
 
+##### std::make_shared, std::make_shared_for_overwrite
 
-#### std::enable_shared_from_this
+```cpp
+// (1)	(since C++11) (T is not array)
+template< class T, class... Args >
+shared_ptr<T> make_shared( Args&&... args );
+
+// (2)	(since C++20) (T is U[])
+template< class T >
+shared_ptr<T> make_shared( std::size_t N );
+
+// (3)	(since C++20) (T is U[N])
+template< class T >
+shared_ptr<T> make_shared();
+// (4)	(since C++20) (T is U[])
+template< class T >
+shared_ptr<T> make_shared( std::size_t N, const std::remove_extent_t<T>& u );
+
+// (5)	(since C++20) (T is U[N])
+template< class T >
+shared_ptr<T> make_shared( const std::remove_extent_t<T>& u );
+
+// (6)	(since C++20) (T is not U[])
+template< class T >
+shared_ptr<T> make_shared_for_overwrite();
+
+// (7)	(since C++20) (T is U[])
+template< class T >
+shared_ptr<T> make_shared_for_overwrite( std::size_t N );
+```
+说明：
+- (1) 构造一个 T 类型的对象，并使用 args 作为 T 构造函数的参数列表将其包装在 `std::shared_ptr` 中。对象的构造方式类似于表达式 ::new (pv) T(std::forward<Args>(args)...)，其中 pv 是指向适合保存 T 类型对象的存储的内部 void* 指针。存储通常大于 `sizeof(T)`，以便对共享指针的控制块和 T 对象使用一个分配。此函数调用的 `std::shared_ptr` 构造函数允许使用指向 T 类型的新构造对象的指针进行`shared_from_this`。
+仅当 T 不是数组类型时，此重载才参与重载解析。(从 C++20 开始)
+
+- (2,3) 与 (1) 相同，但构造的对象是一个可能的多维数组，其 std::remove_all_extents_t 类型的非数组元素<T>被值初始化，就像通过 placement-new 表达式 ::new(pv) std::remove_all_extents_t<T>() 一样。重载 (2) 沿第一维创建一个大小为 N 的数组。数组元素按其地址的升序初始化，当其生存期结束时，将按其原始构造的相反顺序销毁。
+
+- (4,5) 与 (2,3) 相同，但每个元素都是从默认值 u 初始化的。如果 U 不是数组类型，则与 (1) 中相同的 placement-new 表达式执行此操作;否则，这就像使用与(1)中相同的placement-new表达式将数组的每个非数组元素初始化为U中的相应元素来执行(可能是多维的)数组。重载 (4) 沿第一维创建一个大小为 N 的数组。数组元素按其地址的升序初始化，当其生存期结束时，将按其原始构造的相反顺序销毁。
+
+- (6) 如果 T 不是数组类型，则与 (1) 和 (3) 如果 T 为 U[N] 相同，只是创建的对象是默认初始化的。
+
+- (7)与 (2) 相同，只是单个数组元素是默认初始化的。
+
+
+##### std::enable_shared_from_this
 
 定义:
 ```cpp
@@ -52,6 +107,24 @@ template< class T > class enable_shared_from_this;
 `std::enable_shared_from_this` 允许当前由名为 pt 的 `std::shared_ptr` 管理的对象 t 安全地生成其他 `std::shared_ptr` 实例 pt1、pt2、...所有 T 与 PT 共享所有权。
 
 公开继承自 `std::enable_shared_from_this<T>` 为类型 T 提供成员函数`shared_from_this`。如果 T 类型的对象 t 由名为 pt 的 `std::shared_ptr` 管理，<T>则调用 T::shared_from_this 将返回一个新的 std::shared_ptr，该 std::<T> 与 pt 共享 t 的所有权。
+
+
+
+#### std::unique_ptr
+
+std::unique_ptr 是一个智能指针，它通过指针拥有和管理另一个对象，并在unique_ptr超出范围时释放该对象。
+
+当发生以下任一情况时，将使用关联的删除程序释放对象：
+- 管理unique_ptr对象被销毁。
+- 通过 operator= 或 reset() 为管理 unique_ptr 对象分配另一个指针。
+
+通过调用 get_deleter()(ptr)，使用可能由用户提供的删除程序来释放对象。默认删除程序使用 delete 运算符，该运算符会销毁对象并解除分配内存。
+
+unique_ptr也可以不拥有任何对象，在这种情况下，它被称为空。
+
+std::unique_ptr 有两个版本：
+- 管理单个对象(例如，使用 new 分配)。
+- 管理动态分配的对象数组(例如，使用 new[] 分配)。
 
 
 
@@ -209,7 +282,7 @@ const_cast<target-type expression>()
 
 ##### 抛弃恒常性 Casting away constness
 <span id="Casting_away_constness"></span>
-对于两种不同的类型 T1 和 T2，如果存在 T2 形式的限定分解，则从 T1 到 T2 的转换会抛弃恒定性cv2_0 P2_0 cv2_1 P2_1......cv2_n-1 P2_n-1 cv2_n U2“，并且没有将 T1 转换为”cv2_0 P1_0 cv2_1 P1_1 ...cv2_n-1 P1_n-1 cv2_n U1“（相同的 cv 分量、不同的 P 分量和 U 分量）。
+对于两种不同的类型 T1 和 T2，如果存在 T2 形式的限定分解，则从 T1 到 T2 的转换会抛弃恒定性cv2_0 P2_0 cv2_1 P2_1......cv2_n-1 P2_n-1 cv2_n U2“，并且没有将 T1 转换为”cv2_0 P1_0 cv2_1 P1_1 ...cv2_n-1 P1_n-1 cv2_n U1“(相同的 cv 分量、不同的 P 分量和 U 分量)。
 
 如果从 T1* 类型的 prvalue 转换为 T2* 类型的转换会丢弃恒定性，则引用const_casts(item (2)) 也将会降低恒定性。
 
@@ -228,8 +301,8 @@ static_cast<target-type>(expression)
 ```
 
 只有以下转换可以用`static_cast`完成, 除非这种转换会[抛弃恒常性casting away constness](#Casting_away_constness)(或波动性)
-- 如果 target-type 是对某个完整类 D 的引用，而 expression 是其非虚拟基 B 的左值，或者 target-type 是指向某个完整类 D 的指针，而 expression 是指向其非虚拟基 B 的 prvalue 指针，则 static_cast 执行下转换。（如果 B 不明确、不可访问或虚拟碱基（或虚拟碱基的碱基）为 D，则此下沉格式不正确。
-这种向下转换不会进行运行时检查以确保对象的运行时类型实际上是 D，并且只有在通过其他方式（例如实现静态多态性时）保证此前提条件时才能安全使用。安全的下沉可以用`dynamic_cast`来完成。如果对象表达式引用或指向实际上是 D 类型对象的基类子对象，则结果引用 D 类型的封闭对象。 否则，行为未定义：
+- 如果 target-type 是对某个完整类 D 的引用，而 expression 是其非虚拟基 B 的左值，或者 target-type 是指向某个完整类 D 的指针，而 expression 是指向其非虚拟基 B 的 prvalue 指针，则 static_cast 执行下转换。(如果 B 不明确、不可访问或虚拟碱基(或虚拟碱基的碱基)为 D，则此下沉格式不正确。
+这种向下转换不会进行运行时检查以确保对象的运行时类型实际上是 D，并且只有在通过其他方式(例如实现静态多态性时)保证此前提条件时才能安全使用。安全的下沉可以用`dynamic_cast`来完成。如果对象表达式引用或指向实际上是 D 类型对象的基类子对象，则结果引用 D 类型的封闭对象。 否则，行为未定义：
     ```cpp
     struct B {};
     struct D : B { B b; };
@@ -242,34 +315,34 @@ static_cast<target-type>(expression)
     static_cast<D&>(br2); // UB: the b subobject is not a base class subobject
     ```
 
-- 如果 target-type 是右值引用类型，则`static_cast`将 glvalue、Class prvalue 或数组 prvalue（直到 C++17）的值转换为引用与表达式相同的对象的 xvalue（自 C++17 起）或其基本子对象（取决于目标类型）。如果目标类型是表达式类型的不可访问或不明确的基，则程序格式不正确。如果表达式是位字段左值，则首先将其转换为基础类型的 prvalue。这种类型的static_cast用于在 std::move 中实现移动语义。
+- 如果 target-type 是右值引用类型，则`static_cast`将 glvalue、Class prvalue 或数组 prvalue(直到 C++17)的值转换为引用与表达式相同的对象的 xvalue(自 C++17 起)或其基本子对象(取决于目标类型)。如果目标类型是表达式类型的不可访问或不明确的基，则程序格式不正确。如果表达式是位字段左值，则首先将其转换为基础类型的 prvalue。这种类型的static_cast用于在 std::move 中实现移动语义。
 
-- 如果存在从 expression 到 target-type 的隐式转换序列，或者如果从 expression 直接初始化对象或引用 target-type 类型的重载解析会找到至少一个可行的函数，则 `static_cast<target-type>(expression)` 返回虚构变量 Temp 初始化，就像通过目标类型 Temp（expression ）;一样初始化，这可能涉及隐式转换， 对 target-type 构造函数的调用或对用户定义的转换运算符的调用。对于非引用目标类型，static_cast prvalue 表达式的结果对象是直接初始化的对象。（自 C++17 起）
+- 如果存在从 expression 到 target-type 的隐式转换序列，或者如果从 expression 直接初始化对象或引用 target-type 类型的重载解析会找到至少一个可行的函数，则 `static_cast<target-type>(expression)` 返回虚构变量 Temp 初始化，就像通过目标类型 Temp(expression );一样初始化，这可能涉及隐式转换， 对 target-type 构造函数的调用或对用户定义的转换运算符的调用。对于非引用目标类型，static_cast prvalue 表达式的结果对象是直接初始化的对象。(自 C++17 起)
 
-- 如果 target-type 是 void 类型（可能是 cv 限定的），static_cast在计算 expression 的值后将其丢弃。
+- 如果 target-type 是 void 类型(可能是 cv 限定的)，static_cast在计算 expression 的值后将其丢弃。
 
-- 如果存在从目标类型到表达式类型的标准转换序列，其中不包括左值到右值lvalue-to-rvalue、数组到指针array-to-pointer、函数到指针function-to-pointer、空指针null pointer、空成员指针null member pointer、函数指针function pointer（自 C++17 起）或布尔转换，则static_cast可以执行该隐式转换的逆转换。
+- 如果存在从目标类型到表达式类型的标准转换序列，其中不包括左值到右值lvalue-to-rvalue、数组到指针array-to-pointer、函数到指针function-to-pointer、空指针null pointer、空成员指针null member pointer、函数指针function pointer(自 C++17 起)或布尔转换，则static_cast可以执行该隐式转换的逆转换。
 
 - 如果表达式到目标类型的转换涉及左值到右值、数组到指针或函数到指针的转换，则可以通过 `static_cast`显式执行。
 
 - 作用域枚举类型可以转换为整数或浮点类型。
-  - 当目标类型为 bool（可能是 cv 限定）时，如果原始值为零，则结果为 false，而所有其他值为 true。对于其余整型，如果枚举可以由目标类型表示，则结果为枚举的值，否则未指定。（直到 C++20）
+  - 当目标类型为 bool(可能是 cv 限定)时，如果原始值为零，则结果为 false，而所有其他值为 true。对于其余整型，如果枚举可以由目标类型表示，则结果为枚举的值，否则未指定。(直到 C++20)
   - 结果与从枚举的基础类型到目标类型的隐式转换相同。
 
 - 整数或枚举类型的值可以转换为任何完整的枚举类型。
-  - 如果基础类型不是固定的，则当 expression 的值超出范围时，行为是未定义的（该范围是足够大以容纳目标枚举的所有枚举器的最小位域的所有可能值）。
+  - 如果基础类型不是固定的，则当 expression 的值超出范围时，行为是未定义的(该范围是足够大以容纳目标枚举的所有枚举器的最小位域的所有可能值)。
   - 如果基础类型是固定的，则结果与先将原始值转换为枚举的基础类型，然后再转换为枚举类型相同。
 - 浮点类型的值也可以转换为任何完整的枚举类型。
   - 结果与先将原始值转换为枚举的基础类型，然后再转换为枚举类型相同。
 
 - 浮点类型的 prvalue 可以显式转换为任何其他浮点类型。
   - 如果源值可以精确地表示在目标类型中，则它不会更改。
-  - 如果源值介于目标类型的两个可表示值之间，则结果是这两个值之一（这是实现定义的，尽管如果支持 IEEE 算术，则舍入默认为最接近值）。
+  - 如果源值介于目标类型的两个可表示值之间，则结果是这两个值之一(这是实现定义的，尽管如果支持 IEEE 算术，则舍入默认为最接近值)。
   - 否则，行为是未定义的。
 
 - 指向某个完整类 D 的成员的指针可以向上转换为指向其明确、可访问的基类 B 的成员的指针。此static_cast不进行任何检查以确保成员实际存在于指向对象的运行时类型中：如果 B 不包含原始成员，并且不是包含原始成员的类的基类，则行为未定义。
 
-- 指向 void 的指针类型的 prvalue（可能是 cv 限定的）可以转换为指向任何对象类型 T 的指针。
+- 指向 void 的指针类型的 prvalue(可能是 cv 限定的)可以转换为指向任何对象类型 T 的指针。
   - 如果原始指针值表示内存中某个字节的地址，该地址不满足 T 的对齐要求，则未指定生成的指针值。
   - 否则，如果原始指针值指向对象 a，并且存在一个类型类似于 T 的对象 b，该对象可与 a 进行指针互换，则结果是指向 b 的指针。
   - 否则，指针值保持不变。
@@ -277,8 +350,8 @@ static_cast<target-type>(expression)
 
 
 与所有强制转换表达式一样，结果是：
-- 如果目标类型是左值引用类型或对函数类型的右值引用，则为左值（自 C++11 起）;
-- 如果 target-type 是对对象类型的右值引用，则为 xvalue; （从 C++11 开始）
+- 如果目标类型是左值引用类型或对函数类型的右值引用，则为左值(自 C++11 起);
+- 如果 target-type 是对对象类型的右值引用，则为 xvalue; (从 C++11 开始)
 - 否则为 pr值。
 
 
@@ -363,12 +436,12 @@ template< class... Args > constexpr reference emplace_back( Args&&... args );
 ```
 将新元素追加到容器的末尾。元素是通过 `std::allocator_traits::construct` 构造的，它通常使用 placement-new 在容器提供的位置就地构造元素。参数 `args...` 作为 `std::forward<Args>(args)....` 转发到构造函数。
 
-如果在操作后，新的 `size()` 大于旧的 `capacity()`，则会发生重新分配，在这种情况下，所有迭代器（包括 `end()` 迭代器）和对元素的所有引用都将失效。否则，只有 `end()`  迭代器无效。
+如果在操作后，新的 `size()` 大于旧的 `capacity()`，则会发生重新分配，在这种情况下，所有迭代器(包括 `end()` 迭代器)和对元素的所有引用都将失效。否则，只有 `end()`  迭代器无效。
 
 参数:
 - `args` 转发给元素构造函数的参数
-- 类型要求 `T`（容器的元素类型）必须满足 `MoveInsertable` 和 `EmplaceConstructible` 的要求。
-- 返回值（无）
+- 类型要求 `T`(容器的元素类型)必须满足 `MoveInsertable` 和 `EmplaceConstructible` 的要求。
+- 返回值(无)
 
 使用 `emplace_back` 方法的优点是避免产生不必要的临时变量，避免不必要的临时对象的产生，举个例子：
 ```cpp

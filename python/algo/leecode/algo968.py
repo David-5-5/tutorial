@@ -1,31 +1,6 @@
-class TreeNode:
-    def __init__(self, val=0, left=None, right=None):
-        self.val = val
-        self.left = left
-        self.right = right
-
-def createTreeNode(values:list) -> TreeNode:
-    n = len(values)
-    if n == 0:
-        return None
-    root = TreeNode(values[0])
-    cursor = 1
-    fifo = [root]
-    while len(fifo) > 0 and cursor < n:
-        node = fifo[0]
-        del(fifo[0])
-        right, left = None, None
-        if values[cursor] is not None:
-            left = TreeNode(values[cursor])
-            fifo.append(left)
-        if cursor + 1 < n and values[cursor+1] is not None:
-            right = TreeNode(values[cursor+1])
-            fifo.append(right)
-        cursor += 2
-        node.right = right
-        node.left = left
- 
-    return root
+import sys
+sys.path.append(sys.path[0] + "/../..")
+from common import TreeNode, createTreeNode
 
 class Solution:
     def minCameraCover(self, root: TreeNode) -> int:

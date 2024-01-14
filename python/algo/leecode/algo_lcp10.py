@@ -1,6 +1,8 @@
 # Definition for a binary tree node.
+import sys
+sys.path.append(sys.path[0] + "/../..")
 import typing
-from common import TreeNode
+from common import TreeNode, createTreeNode
 
 def dfs(root: TreeNode) -> typing.Tuple[int,float]:
     if root is None: return (0, 0.0)
@@ -51,7 +53,6 @@ if __name__ == "__main__":
     sol = Solution()
     # nums = [7,5,6,4]
     l1 = [1,3,3,None,None,4,4]
-    import common
 
-    root = common.createTreeNode(l1)
+    root = createTreeNode(l1)
     print(sol.minimalExecTime2(root))

@@ -65,9 +65,9 @@ class Solution:
                 pushdown(s, t, p)
             sum = 0
             if l <= m:
-                sum = getsum(l, r, s, m, p * 2)
+                sum = getsum(l, r, s, m, p * 2 + 1)
             if r > m:
-                sum = sum + getsum(l, r, m + 1, t, p * 2 + 1)
+                sum = sum + getsum(l, r, m + 1, t, p * 2 + 2)
             return sum
 
         build(0, n-1, 0)

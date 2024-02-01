@@ -1,5 +1,6 @@
 # No. 115
 class Solution:
+    # 题目变更为 LCR 097, equals to No. 115 of main site
     def numDistinct(self, s: str, t: str) -> int:
         '''
         dp[i][j]表示s中前j个字符包含t中前i个字符串出现的次数, 初始化全为0

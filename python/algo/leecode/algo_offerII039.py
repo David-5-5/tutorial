@@ -1,4 +1,5 @@
 class Solution:
+    # 题目变更为 LCR 039
     def largestRectangleArea(self, heights) -> int:
         n  = len(heights)
         if n == 1: return heights[0]

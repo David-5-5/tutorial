@@ -1,5 +1,6 @@
 import collections
 class Solution:
+    # 与主战 No 239相同 剑指分类取消了
     def maxSlidingWindow(self, nums , k: int) :
         n = len(nums)
         def slide(begin, x, curMax) -> int:

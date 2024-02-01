@@ -1,4 +1,5 @@
 class Solution:
+    # 题目变更为 LCR 040. 最大矩形
     def maximalRectangle(self, matrix) -> int:
         n = len(matrix)
         if n == 0: return 0

@@ -1,4 +1,5 @@
 class Solution:
+    # 题目变更为 LCR 170 
     total = 0
     def reversePairs(self, nums) -> int:
         if len(nums) < 2:return 0

@@ -240,7 +240,7 @@ Copy and direct initialization would simply drop the fractional part, resulting 
 复制和直接初始化只会删除小数部分, 从而导致值 4 初始化为可变宽度(编译器可能会对此产生警告, 因为很少希望丢失数据)。但是, 在列表初始化时, 编译器将生成错误, 迫使您在继续操作之前解决此问题。
 
 
-### 表达式
+### Expressions
 表达式是一系列运算符及其操作数, 用于指定计算。
 
 表达评估可能产生结果(例如, 评估2 + 2产生结果4), 并可能产生副作用(例如std::printf(“%d”,  4)打印字符'4'在标准输出上)。
@@ -248,6 +248,105 @@ Copy and direct initialization would simply drop the fractional part, resulting 
 
 - 值类别(lvalue、rvalue、glvalue、prvalue、xvalue)按值对表达式进行分类(自 C++11 起)
 - 参数和子表达式的计算顺序指定获得中间结果的顺序
+
+#### Constant expressions
+Defines an expression that can be evaluated at compile time.定义可在编译时计算的表达式。
+
+Such expressions can be used as non-type template arguments, array sizes, and in other contexts that require constant expressions, e.g. 此类表达式可用作非类型模板参数、数组大小以及其他需要常量表达式的上下文，例如
+
+##### Core constant expressions
+A core constant expression is any expression whose evaluation would not evaluate any one of the following核心常量表达式是不会计算以下任何一项的任何表达式:
+1. the this pointer, except in a constexpr function that is being evaluated as part of the expression this 指针，但作为表达式的一部分计算的 constexpr 函数除外
+2. a control flow that passes through a declaration of a variable with static or thread-local storage duration, and unusable in constant expressions 一个控制流，它通过具有静态或线程本地存储持续时间的变量的声明，在常量表达式中不可用
+3. a function call expression that calls a function (or a constructor) that is not declared constexpr 调用未声明 constexpr 的函数（或构造函数）的函数调用表达式
+   ```cpp
+   constexpr int n = std::numeric_limits<int>::max(); // OK: max() is constexpr
+   constexpr int m = std::time(nullptr); // Error: std::time() is not constexpr
+   ```
+4. a function call to a constexpr function which is declared, but not defined 对已声明但未定义的 constexpr 函数的函数调用
+5. a function call to a constexpr function/constructor template instantiation where the instantiation fails to satisfy constexpr function/constructor requirements. 对 constexpr 函数/构造函数模板实例化的函数调用，其中实例化无法满足 constexpr 函数/构造函数要求。
+6. a function call to a constexpr virtual function, invoked on an object not usable in constant expressions and whose lifetime began outside this expression. 对 constexpr 虚函数的函数调用，在常量表达式中不可用的对象上调用，并且其生存期在此表达式之外开始。
+7. an expression that would exceed the implementation-defined limits 将超出实现定义的限制的表达式
+8. an expression whose evaluation leads to any form of core language undefined behavior (including signed integer overflow, division by zero, pointer arithmetic outside array bounds, etc). 一个表达式，其计算结果会导致任何形式的核心语言未定义行为（包括有符号整数溢出、除以零、指针算术、数组边界外等）。
+9. (until C++17) a lambda expression
+10. an lvalue-to-rvalue implicit conversion unless applied to a non-volatile literal-type glvalue that 左值到右值的隐式转换，除非应用于非易失性文本类型 glvalue
+    - designates an object that is usable in constant expressions, 指定可在常量表达式中使用的对象
+    - refers to a non-volatile object whose lifetime began within the evaluation of this expression 指非易失性对象，其生存期在此表达式的计算中开始
+11. an lvalue-to-rvalue implicit conversion or modification applied to a non-active member of a union or its subobject (even if it shares a common initial sequence with the active member) 应用于联合的非活动成员或其子对象的左值到右值的隐式转换或修改（即使它与活动成员共享一个通用的初始序列）
+12. an lvalue-to-rvalue implicit conversion on an object whose value is indeterminate 值不确定的对象的左值到右值的隐式转换
+13. an invocation of implicit copy/move constructor/assignment for a union whose active member is mutable (if any), with lifetime beginning outside the evaluation of this expression 对活动成员可变（如果有）的联合的隐式复制/移动构造函数/赋值的调用，其生存期从此表达式的计算范围开始
+14. (until C++20) an assignment expression that would change the active member of a union 将更改联合的活动成员的赋值表达式
+15. an id-expression referring to a variable or a data member of reference type, unless the reference is usable in constant expressions or its lifetime began within the evaluation of this expression 引用变量或引用类型的数据成员的 id-expression，除非引用在常量表达式中可用，或者其生存期在此表达式的计算中开始
+16. conversion from pointer to void to a pointer-to-object type T* unless the pointer points to an object whose type is similar to T(since C++26) 从指针到 void 到指向对象类型的 T* 的转换，除非指针指向类型类似于 T 的对象
+17. (until C++20) dynamic_cast
+18. reinterpret_cast
+19. (until C++20) pseudo-destructor call
+20. (until C++14) an increment or a decrement operator 递增或递减运算符
+21. (since C++14) modification of an object, unless the object has non-volatile literal type and its lifetime began within the evaluation of the expression 修改对象，除非该对象具有非易失性文本类型，并且其生存期从表达式的计算开始
+22. (since C++20) a destructor call or pseudo destructor call for an object whose lifetime did not begin within the evaluation of this expression 析构函数调用或伪析构函数调用对象，其生存期未在此表达式的计算中开始 
+23. (until C++20) a typeid expression applied to a glvalue of polymorphic type 应用于多态类型的 glvalue 的 TypeID 表达式
+24. a new-expression or a call to std::allocator<T>::allocate, unless the selected allocation function is a replaceable global allocation function and the allocated storage is deallocated within the evaluation of this expression(since C++20) new-expression 或对 std::Allocator<T>::Allocate 的调用，除非所选分配函数是可替换的全局分配函数，并且分配的存储在此表达式的计算中被释放
+25. a delete-expression or a call to std::allocator<T>::deallocate, unless it deallocates a region of storage allocated within the evaluation of this expression(since C++20) delete-expression 或对 std::allocator<T>::deallocate 的调用，除非它释放了在此表达式的计算中分配的存储区域
+26. (since C++20) Coroutines: an await-expression or a yield-expression 协程：await-expression 或 yield-expression
+27. (since C++20) a three-way comparison when the result is unspecified 结果未指定时的三向比较
+28. an equality or relational operator whose result is unspecified 结果未指定的相等运算符或关系运算符
+29. (until C++14) an assignment or a compound assignment operator 赋值或复合赋值运算符
+30. a throw expression
+31. an asm-declaration
+32. an invocation of the va_arg macro 对 va_arg 宏的调用
+33. a goto statement
+34. a dynamic_cast or typeid expression that would throw an exception 会引发异常的 dynamic_cast 或 typeid 表达式
+35. inside a lambda-expression, a reference to this or to a variable defined outside that lambda, if that reference would be an odr-use 在 lambda 表达式中，对 this 或对在该 lambda 外部定义的变量的引用（如果该引用是 odr-use）
+    ```cpp
+    void g()
+    {
+      const int n = 0;
+ 
+      constexpr int j = *&n; // OK: outside of a lambda-expression
+ 
+      [=]
+      {
+        constexpr int i = n;   // OK: 'n' is not odr-used and not captured here.
+        constexpr int j = *&n; // Ill-formed: '&n' would be an odr-use of 'n'.
+      };
+    }
+    ```
+Even if an expression E does not evaluate anything stated above, it is unspecified whether E is a core constant expression if evaluating E would evalute any of the following 即使表达式 E 不计算上述任何内容，如果计算 E 将计算以下任何一项，则无法指定 E 是否为核心常量表达式：
+- An operation with undefined behavior in the standard library. 标准库中具有未定义行为的操作
+- An invocation of the va_start macro. 调用 va_start 宏
+- A call to a function that was previously declared with the [[noreturn]] attribute, and that call returns to its caller. 对以前使用 [[noreturn]] 属性声明的函数的调用，该调用返回到其调用方。
+- An assumption [[assume(expr)]]; such that if expr evaluated where the assumption appears, the result is not true, while E is not disqualified from being a core constant expression (i.e., the hypothetical evaluation of expr would evaluate any item of the previous list).假设 [[assume（expr）]];这样，如果 expr 在假设出现的地方求值，则结果不成立，而 E 不会被取消作为核心常数表达式的资格（即，expr 的假设求值将求值前一个列表中的任何项目）。
+
+##### Constant expression
+A constant expression is either
+- an lvalue(until C++14)a glvalue(since C++14) core constant expression that refers to
+  - an object with static storage duration that is not a temporary, or
+  - an object with static storage duration that is a temporary, but whose value satisfies the constraints for prvalues below, or
+  - a non-immediate(since C++20) function
+- a prvalue core constant expression whose value satisfies the following constraints:
+  - if the value is an object of class type, each non-static data member of reference type refers to an entity that satisfies the constraints for lvalues(until C++14)glvalues(since C++14) above
+  - if the value is of pointer type, it holds
+    - address of an object with static storage duration
+    - address past the end of an object with static storage duration
+    - address of a non-immediate(since C++20) function
+    - a null pointer value
+  - if the value is of pointer-to-member-function type, it does not designate an immediate function
+  - if the value is an object of class or array type, each subobject satisfies these constraints for valuesif the value is an object of class or array type, each subobject satisfies these constraints for values
+
+###### Integral constant expression
+
+###### Converted constant expression
+
+###### Historical categories
+
+##### Constant subexpression
+
+##### Usable in constant expressions
+
+##### Manifestly constant-evaluated expressions
+
+##### Functions and variables needed for constant evaluation
+
 
 
 #### const_cast 转换
@@ -347,14 +446,89 @@ static_cast<target-type>(expression)
   - 否则，如果原始指针值指向对象 a，并且存在一个类型类似于 T 的对象 b，该对象可与 a 进行指针互换，则结果是指向 b 的指针。
   - 否则，指针值保持不变。
 
-
-
 与所有强制转换表达式一样，结果是：
 - 如果目标类型是左值引用类型或对函数类型的右值引用，则为左值(自 C++11 起);
 - 如果 target-type 是对对象类型的右值引用，则为 xvalue; (从 C++11 开始)
 - 否则为 pr值。
 
 
+### Declarations
+
+#### constexpr specifier
+specifies that the value of a variable or function can appear in constant expressions. 指定变量或函数的值可以出现在常量表达式中
+
+The constexpr specifier declares that it is possible to evaluate the value of the function or variable at compile time. Such variables and functions can then be used where only compile time constant expressions are allowed (provided that appropriate function arguments are given). constexpr 说明符声明可以在编译时计算函数或变量的值。然后，可以在仅允许编译时常量表达式的情况下使用此类变量和函数（前提是给定适当的函数参数）。
+
+A constexpr specifier used in an object declaration or non-static member function(until C++14) implies const. A constexpr specifier used in a function or static data member(since C++17) declaration implies inline. If any declaration of a function or function template has a constexpr specifier, then every declaration must contain that specifier. 对象声明或非静态成员函数中使用的 constexpr 说明符（直到 C++14）表示 const。函数或静态数据成员（自 C++17 起）声明中使用的 constexpr 说明符意味着内联。如果函数或函数模板的任何声明都具有 constexpr 说明符，则每个声明都必须包含该说明符。
+
+
+##### constexpr variable
+A constexpr variable must satisfy the following requirements:
+- its type must be a LiteralType
+- it must be immediately initialized
+- the full-expression of its initialization, including all implicit conversions, constructors calls, etc, must be a constant expression 其初始化的完整表达式，包括所有隐式转换、构造函数调用等，必须是常量表达式
+- it must have constant destruction, i.e. either:
+  - it is not of class type nor (possibly multi-dimensional) array thereof, or 它不是类类型，也不是（可能是多维的）数组，或者
+  - it is of class type or (possibly multi-dimensional) array thereof, that class type has a constexpr destructor, and for a hypothetical expression e whose only effect is to destroy the object, e would be a core constant expression if the lifetime of the object and its non-mutable subobjects (but not its mutable subobjects) were considered to start within e. 它是类类型或（可能是多维的）数组，该类类型具有 constexpr 析构函数，对于唯一作用是销毁对象的假设表达式 e，如果对象及其不可变子对象（但不是其可变子对象）的生存期被认为是在 e 内开始的，则 e 将是一个核心常量表达式。
+
+If a constexpr variable is not translation-unit-local, it should not be initialized to point to, or refer to, or have a (possibly recursive) subobject that points to or refers to, a translation-unit-local entity that is usable in constant expressions. Such initialization is disallowed in a module interface unit (outside its private-module-fragment, if any) or a module partition, and is deprecated in any other context. 如果 constexpr 变量不是 translation-unit-local，则不应将其初始化为指向或引用，或具有指向或引用可在常量表达式中使用的翻译单元本地实体的（可能是递归的）子对象。在模块接口单元（在其 private-module-fragment 之外，如果有）或模块分区中不允许进行此类初始化，并且在任何其他上下文中均不推荐使用。
+
+
+##### constexpr function
+A constexpr function must satisfy the following requirements:
+- it must not be virtual
+- it must not be a function-try-block
+- it must not be a coroutine
+- for constructor and destructor(since C++20), the class must have no virtual base classes 对于构造函数和析构函数，该类必须没有虚拟基类
+- its return value (if any) and each of its parameters must be of a LiteralType 其返回值（如果有）及其每个参数都必须为 LiteralType
+- there exists at least one set of argument values such that an invocation of the function could be an evaluated subexpression of a core constant expression (for constructors, use in a constant initializer is sufficient). No diagnostic is required for a violation of this bullet. 至少存在一组参数值，因此函数的调用可以是核心常量表达式的计算子表达式（对于构造函数，在常量初始值设定项中使用就足够了）。违反此项目符号不需要诊断。
+- the function body must be either deleted or defaulted or contain only the following 函数体必须被删除或默认，或者仅包含以下内容:
+  - null statements (plain semicolons)
+  - static_assert declarations
+  - typedef declarations and alias declarations that do not define classes or enumerations
+  - using declarations
+  - using directives
+  - if the function is not a constructor, exactly one return statement
+- the function body must not contain:
+  - a goto statement
+  - a statement with a label other than case and default
+  - a try-block
+  - an asm declaration
+  - a definition of a variable for which no initialization is performed
+  - a definition of a variable of non-literal type
+  - a definition of a variable of static or thread storage duration
+
+
+##### constexpr constructor
+
+
+##### constexpr destructor
+
+
+
+### Classes
+
+#### static members
+Inside a class definition, the keyword static declares members that are not bound to class instances. Outside a class definition, it has a different meaning: see storage duration. 在类定义中，关键字 static 声明未绑定到类实例的成员。在类定义之外，它具有不同的含义：请参阅存储持续时间。
+
+##### Syntax
+A declaration for a static member is a member declaration whose declaration specifiers contain the keyword static. The keyword static usually appears before other specifiers (which is why the syntax is often informally described as static data-member or static member-function), but may appear anywhere in the specifier sequence. 静态成员的声明是其声明说明符包含关键字 static 的成员声明。关键字 static 通常出现在其他说明符之前（这就是为什么语法通常被非正式地描述为静态数据成员或静态成员函数），但也可能出现在说明符序列中的任何位置。
+
+The name of any static data member and static member function must be different from the name of the containing class. 任何静态数据成员和静态成员函数的名称必须与包含类的名称不同。
+
+##### Explanation
+
+Static members of a class are not associated with the objects of the class: they are independent variables with static or thread(since C++11) storage duration or regular functions. 类的静态成员不与类的对象相关联：它们是具有静态或线程（自 C++11 以来）存储持续时间或常规函数的独立变量。
+
+The static keyword is only used with the declaration of a static member, inside the class definition, but not with the definition of that static member static 关键字仅用于类定义中静态成员的声明，而不用于该静态成员的定义:
+```cpp
+class X { static int n; }; // declaration (uses 'static')
+int X::n = 1;              // definition (does not use 'static')
+```
+
+The declaration inside the class body is not a definition and may declare the member to be of incomplete type (other than void), including the type in which the member is declared: 类体中的声明不是一个定义，可以将成员声明为不完整类型（无效除外），包括声明成员的类型：
+
+However, if the declaration uses constexpr or inline(since C++17) specifier, the member must be declared to have complete type. 但是，如果声明使用 constexpr 或 inline（自 C++17 起）说明符，则必须将成员声明为具有完整类型。
 
 
 
@@ -456,12 +630,9 @@ v.insert(someIterator, {42, 3.1416});    ///< 需要产生一个临时变量
 ```
 
 
-
 ## GCC Command Options
 
 ### Attribute Syntax
-
-
 `__attribute__` 是一个用于在声明时指定一些特性的编译器指令, 可以让我们进行更多的错误检查以及高级优化工作。关于__attribute__具体解释, 查了一下GNU C关于它的描述, 摘录如下
 > The syntax with which `__attribute__` may be used, and the constructs to which attribute specifiers bind, for the C language. Some details may vary for C++ and Objective-C. Because of infelicities in the grammar for attributes, some forms described here may not be successfully parsed in all cases.
 对于 C 语言, 可以使用 `__attribute__` 的语法, 以及属性说明符绑定到的构造。对于 C++ 和 Objective-C, 某些细节可能会有所不同。由于属性语法的缺陷, 此处描述的某些形式可能无法在所有情况下都成功解析。
@@ -480,6 +651,4 @@ __attribute__((no_sanitize_undefined))
 __attribute__((unused))
 __attribute__((__always_inline__))
 ```
-
-
 

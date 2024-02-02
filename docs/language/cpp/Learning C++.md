@@ -317,27 +317,58 @@ Even if an expression E does not evaluate anything stated above, it is unspecifi
 - A call to a function that was previously declared with the [[noreturn]] attribute, and that call returns to its caller. 对以前使用 [[noreturn]] 属性声明的函数的调用，该调用返回到其调用方。
 - An assumption [[assume(expr)]]; such that if expr evaluated where the assumption appears, the result is not true, while E is not disqualified from being a core constant expression (i.e., the hypothetical evaluation of expr would evaluate any item of the previous list).假设 [[assume（expr）]];这样，如果 expr 在假设出现的地方求值，则结果不成立，而 E 不会被取消作为核心常数表达式的资格（即，expr 的假设求值将求值前一个列表中的任何项目）。
 
+
 ##### Constant expression
 A constant expression is either
 - an lvalue(until C++14)a glvalue(since C++14) core constant expression that refers to
-  - an object with static storage duration that is not a temporary, or
-  - an object with static storage duration that is a temporary, but whose value satisfies the constraints for prvalues below, or
-  - a non-immediate(since C++20) function
-- a prvalue core constant expression whose value satisfies the following constraints:
-  - if the value is an object of class type, each non-static data member of reference type refers to an entity that satisfies the constraints for lvalues(until C++14)glvalues(since C++14) above
+  - an object with static storage duration that is not a temporary, or 具有非临时静态存储持续时间的对象，或者
+  - an object with static storage duration that is a temporary, but whose value satisfies the constraints for prvalues below, or 具有静态存储持续时间的对象，该对象是临时的，但其值满足以下 prvalues 的约束，或者
+  - a non-immediate(since C++20) function 非即时函数
+- a prvalue core constant expression whose value satisfies the following constraints 一个 PRvalue 核心常量表达式，其值满足以下约束:
+  - if the value is an object of class type, each non-static data member of reference type refers to an entity that satisfies the constraints for lvalues(until C++14)glvalues(since C++14) above 如果该值是类类型的对象，则引用类型的每个非静态数据成员都引用满足lvalues、glvalues约束的实体
   - if the value is of pointer type, it holds
-    - address of an object with static storage duration
-    - address past the end of an object with static storage duration
-    - address of a non-immediate(since C++20) function
+    - address of an object with static storage duration 具有静态存储持续时间的对象的地址
+    - address past the end of an object with static storage duration 具有静态存储持续时间的对象末尾的地址
+    - address of a non-immediate(since C++20) function 非即时函数的地址
     - a null pointer value
-  - if the value is of pointer-to-member-function type, it does not designate an immediate function
-  - if the value is an object of class or array type, each subobject satisfies these constraints for valuesif the value is an object of class or array type, each subobject satisfies these constraints for values
+  - if the value is of pointer-to-member-function type, it does not designate an immediate function 如果该值是指向成员函数类型的指针，则它不指定即时函数
+  - if the value is an object of class or array type, each subobject satisfies these constraints for valuesif the value is an object of class or array type, each subobject satisfies these constraints for values 如果值是类或数组类型的对象，则每个子对象都满足值的这些约束如果值是类或数组类型的对象，则每个子对象都满足这些值约束
+
 
 ###### Integral constant expression
+Integral constant expression is an expression of integral or unscoped enumeration type implicitly converted to a prvalue, where the converted expression is a core constant expression. If an expression of class type is used where an integral constant expression is expected, the expression is contextually implicitly converted to an integral or unscoped enumeration type. 整型常量表达式是隐式转换为 prvalue 的整型或无作用域枚举类型的表达式，其中转换后的表达式是核心常量表达式。如果在需要整数常量表达式的地方使用类类型的表达式，则该表达式将在上下文中隐式转换为整数或无作用域枚举类型。
+
+The following contexts require an integral constant expression:
+- array bounds 数组边界
+- the dimensions in new-expressions other than the first 除第一个表达式外的 new-expression 中的维度
+- bit-field lengths 位场长度
+- enumeration initializers when the underlying type is not fixed 基础类型不固定时的枚举初始值设定项
+- alignments. 路线
+
 
 ###### Converted constant expression
+A converted constant expression of type T is an expression implicitly converted to type T, where the converted expression is a constant expression, and the implicit conversion sequence contains only 
+T 类型的转换常量表达式是隐式转换为 T 类型的表达式，其中转换后的表达式是常量表达式，隐式转换序列仅包含:
+- constexpr user-defined conversions (so a class can be used where integral type is expected) constexpr 用户定义的转换（因此可以在需要整型类型的地方使用类）
+- lvalue-to-rvalue conversions 左值到右值的转换
+- integral promotions
+- non-narrowing integral conversions 非缩小积分转换
+- array-to-pointer conversions 数组到指针的转换
+- function-to-pointer conversions 函数到指针的转换
+- function pointer conversions (pointer to noexcept function to pointer to function) 函数指针转换（指向 noexcept 的指针到指向函数的指针）
+- qualification conversions
+- null pointer conversions from std::nullptr_t
+- null member pointer conversions from std::nullptr_t
+- And if any reference binding takes place, it is direct binding (not one that constructs a temporary object) 如果发生任何引用绑定，则它是直接绑定（而不是构造临时对象的绑定）
+
 
 ###### Historical categories
+Categories of constant expressions listed below are no longer used in the standard since C++14 标准中不再使用下面列出的常量表达式类别:
+
+- A literal constant expression is a prvalue core constant expression of non-pointer literal type (after conversions as required by context). A literal constant expression of array or class type requires that each subobject is initialized with a constant expression. 文本常量表达式是非指针文本类型的 prvalue 核心常量表达式（根据上下文要求进行转换后）。数组或类类型的文本常量表达式要求使用常量表达式初始化每个子对象。
+- A reference constant expression is an lvalue core constant expression that designates an object with static storage duration or a function. 引用常量表达式是一个左值核心常量表达式，用于指定具有静态存储持续时间的对象或函数。
+- An address constant expression is a prvalue core constant expression (after conversions required by context) of type std::nullptr_t or of a pointer type, which points to an object with static storage duration, one past the end of an array with static storage duration, to a function, or is a null pointer. 地址常量表达式是 std：：nullptr_t 类型或指针类型的 prvalue 核心常量表达式（在上下文所需的转换之后），它指向具有静态存储持续时间的对象、超过具有静态存储持续时间的数组末尾的对象、指向函数或空指针。
+
 
 ##### Constant subexpression
 

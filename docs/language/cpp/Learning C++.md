@@ -336,7 +336,8 @@ A constant expression is either
 
 
 ###### Integral constant expression
-Integral constant expression is an expression of integral or unscoped enumeration type implicitly converted to a prvalue, where the converted expression is a core constant expression. If an expression of class type is used where an integral constant expression is expected, the expression is contextually implicitly converted to an integral or unscoped enumeration type. 整型常量表达式是隐式转换为 prvalue 的整型或无作用域枚举类型的表达式，其中转换后的表达式是核心常量表达式。如果在需要整数常量表达式的地方使用类类型的表达式，则该表达式将在上下文中隐式转换为整数或无作用域枚举类型。
+Integral constant expression is an expression of integral or unscoped enumeration type implicitly converted to a prvalue, where the converted expression is a core constant expression. If an expression of class type is used where an integral constant expression is expected, the expression is contextually implicitly converted to an integral or unscoped enumeration type. 
+整型常量表达式是隐式转换为 prvalue 的整型或无作用域枚举类型的表达式，其中转换后的表达式是核心常量表达式。如果在需要整数常量表达式的地方使用类类型的表达式，则该表达式将在上下文中隐式转换为整数或无作用域枚举类型。
 
 The following contexts require an integral constant expression:
 - array bounds 数组边界
@@ -363,7 +364,8 @@ T 类型的转换常量表达式是隐式转换为 T 类型的表达式，其中
 
 
 ###### Historical categories
-Categories of constant expressions listed below are no longer used in the standard since C++14 标准中不再使用下面列出的常量表达式类别:
+Categories of constant expressions listed below are no longer used in the standard since C++14
+标准中不再使用下面列出的常量表达式类别:
 
 - A literal constant expression is a prvalue core constant expression of non-pointer literal type (after conversions as required by context). A literal constant expression of array or class type requires that each subobject is initialized with a constant expression. 文本常量表达式是非指针文本类型的 prvalue 核心常量表达式（根据上下文要求进行转换后）。数组或类类型的文本常量表达式要求使用常量表达式初始化每个子对象。
 - A reference constant expression is an lvalue core constant expression that designates an object with static storage duration or a function. 引用常量表达式是一个左值核心常量表达式，用于指定具有静态存储持续时间的对象或函数。
@@ -481,6 +483,45 @@ static_cast<target-type>(expression)
 - 如果目标类型是左值引用类型或对函数类型的右值引用，则为左值(自 C++11 起);
 - 如果 target-type 是对对象类型的右值引用，则为 xvalue; (从 C++11 开始)
 - 否则为 pr值。
+
+
+#### operator overloading
+Customizes the C++ operators for operands of user-defined types. 自定义用户定义类型的操作数的 C++ 运算符。
+
+##### Syntax
+Overloaded operators are functions with special function names:
+- operator op	(1)	
+- operator type	(2)	
+- operator new
+- operator new []	(3)	
+- operator delete
+- operator delete []	(4)	
+- operator "" suffix-identifier	(5)	(since C++11)
+- operator co_await	(6)	(since C++20)
+
+
+op	-	any of the following operators:+ - * / % ^ & | ~ ! = < > += -= *= /= %= ^= &= |= << >> >>= <<= == != <= >= <=>(since C++20) && || ++ -- , ->* -> ( ) [ ]
+1) overloaded operator;
+2) user-defined conversion function;
+3) allocation function;
+4) deallocation function;
+5) user-defined literal;
+6) overloaded co_await operator for use in co_await expressions.
+
+##### Overloaded operators
+When an operator appears in an expression, and at least one of its operands has a class type or an enumeration type, then overload resolution is used to determine the user-defined function to be called among all the functions whose signatures match the following:
+当运算符出现在表达式中，并且其操作数中至少有一个具有类类型或枚举类型时，则使用重载解析来确定要在签名与以下内容匹配的所有函数中调用的用户定义函数：
+
+Expression | As member function | As non-member function | Example
+| --- | --- | --- | --- |
+@a | (a).operator@ ( ) | operator@ (a) | `!std::cin` calls  `std::cin.operator!()`
+a@b | (a).operator@ (b) | operator@ (a, b) | `std::cout << 42` calls `std::cout.operator<<(42)`
+a=b | (a).operator= (b) | cannot be non-member | Given `std::string s;`, `s = "abc";` calls `s.operator=("abc")`
+a(b...) | (a).operator()(b...) | cannot be non-member | Given `std::random_device r;`, `auto n = r();` calls `r.operator()()`
+a[b...] | (a).operator[](b...) | cannot be non-member | Given `std::map<int, int> m;, m[1] = 2;` calls `m.operator[]`(1)
+a-> | (a).operator-> ( ) | cannot be non-member | Given `std::unique_ptr<S> p;`, `p->bar()` calls `p.operator->()`
+a@ | (a).operator@ (0) | operator@ (a, 0) | Given `std::vector<int>::iterator i;`, `i++` calls `i.operator++(0)`
+
 
 
 ### Declarations

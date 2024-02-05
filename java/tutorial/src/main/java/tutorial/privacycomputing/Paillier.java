@@ -46,6 +46,11 @@ public class Paillier implements PrimeGeneratable {
         while (r.compareTo(ONE) <= 0 || !nSquare.gcd(r).equals(ONE) || r.compareTo(nSquare) >= 0) {
             r = new BigInteger(nSquare.bitLength() - 1, random);
         }
+        // 简化运算 g.modPow(plain, nSquare)
+        // g ^ m mod n ^ 2, g ^ m = (n + 1) ^ m, 二项式展开
+        // (c(m, 0) + c(m, 1)n + c(m, 2) n ^ 2 + ... + c(m,m)n ^ m) mod n2
+        // = (c(m,0) + c(m, 1)n) mod n ^ 2 = (1 + mn) mod n ^ 2
+        // 最终简化为 plain.multiply(n).add(ONE)
         return r.modPow(n, nSquare).multiply(plain.multiply(n).add(ONE)).mod(nSquare);
     }
 

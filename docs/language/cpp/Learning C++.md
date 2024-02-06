@@ -619,6 +619,28 @@ A constexpr function must satisfy the following requirements:
 ##### constexpr destructor
 
 
+#### inline specifier
+The inline specifier, when used in a function's decl-specifier-seq, declares the function to be an inline function. 当在函数的 decl-specifier-seq 中使用内联说明符时，将函数声明为内联函数。
+
+A function defined entirely inside a class/struct/union definition, whether it's a member function or a non-member friend function, is implicitly an inline function unless it is attached to a named module(since C++20).
+完全在类/结构/联合定义中定义的函数，无论是成员函数还是非成员友元函数，除非它附加到命名模块（自 C++20 起），否则都是隐式内联函数。
+
+A function declared constexpr or consteval(since C++20) on its first declaration is implicitly an inline function.
+在其第一个声明中声明为 constexpr 或 consteval（自 C++ 起）的函数是隐式内联函数。
+
+A deleted function is implicitly an inline function: its (deleted) definition can appear in more than one translation unit.
+deleted函数隐式是内联函数：其（deleted）定义可以出现在多个翻译单元中。
+
+C++ provides inline functions to reduce the function call overhead. An inline function is a function that is expanded in line when it is called. When the inline function is called whole code of the inline function gets inserted or substituted at the point of the inline function call. This substitution is performed by the C++ compiler at compile time. An inline function may increase efficiency if it is small.
+C++ 提供内联函数来减少函数调用开销。内联函数是在调用时内联展开的函数。调用内联函数时，内联函数的整个代码将在内联函数调用点插入或替换。此替换由 C++ 编译器在编译时执行。如果内联函数很小，则可以提高效率。
+
+The compiler may not perform inlining in such circumstances as: 
+- If a function contains a loop. (for, while and do-while) 
+- If a function contains static variables. 
+- If a function is recursive. 
+- If a function return type is other than void, and the return statement doesn’t exist in a function body. 如果函数返回类型不是 void，并且函数体中不存在 return 语句。
+- If a function contains a switch or goto statement. 
+
 
 ### Classes
 

@@ -645,6 +645,56 @@ The declaration inside the class body is not a definition and may declare the me
 However, if the declaration uses constexpr or inline(since C++17) specifier, the member must be declared to have complete type. 但是，如果声明使用 constexpr 或 inline（自 C++17 起）说明符，则必须将成员声明为具有完整类型。
 
 
+#### Default constructors
+A default constructor is a constructor which can be called with no arguments.
+默认构造函数是可以在不带参数的情况下调用的构造函数。
+
+语法：
+- class-name (parameter-list (optional));	(1)	
+  Declaration of a default constructor inside of class definition. 在类定义中声明默认构造函数。
+
+- class-name (parameter-list (optional)) function-body	(2)	
+  Definition of a default constructor inside of class definition. 类定义中的默认构造函数的定义。
+
+- class-name () = default;	(3)	(since C++11)
+  The default constructor is explicitly-defaulted. 默认构造函数是显式默认的。
+
+- class-name (parameter-list (optional)) = delete;	(4)	(since C++11)
+  The default constructor is deleted. 默认构造函数将被删除。
+
+- class-name ::class-name (parameter-list (optional)) function-body	(5)	
+  Definition of a default constructor outside of class definition (the class must contain a declaration (1)).类定义之外的默认构造函数的定义
+
+- class-name ::class-name () = default;	(6)	(since C++11)
+  The default constructor is explicitly-defaulted. 默认构造函数是显式默认的。
+  
+##### Defaulted constructors
+Explicitly defaulted function declaration is a new form of function declaration that is introduced into the C++11 standard which allows you to append the ‘=default;’ specifier to the end of a function declaration to declare that function as an explicitly defaulted function. This makes the compiler generate the default implementations for explicitly defaulted functions, which are more efficient than manually programmed function implementations. 
+显式默认函数声明是 C++11 标准中引入的一种新的函数声明形式，它允许您将“=default;”说明符附加到函数声明的末尾，以将该函数声明为显式默认函数。这使得编译器为显式默认函数生成默认实现，这比手动编程的函数实现更有效。
+
+A defaulted function needs to be a special member function (default constructor, copy constructor, destructor etc), or has no default arguments. 
+默认函数必须是特殊成员函数（默认构造函数、复制构造函数、析构函数等），或者没有默认参数。
+
+What are the advantages of ‘=default’ when we could simply leave an empty body of the function using ‘{}’? 
+当我们可以简单地使用“{}”保留函数的空体时，“=default”有什么好处？
+Even though the two may behave the same, there are still benefits of using default over leaving an empty body of the constructor. The following points explain how: 
+尽管两者的行为可能相同，但与保留构造函数的空正文相比，使用 default 仍然有好处。以下几点说明了如何：
+- Giving a user-defined constructor, even though it does nothing, makes the type not an aggregate and also not trivial. If you want your class to be an aggregate or a trivial type (or by transitivity, a POD type), then you need to use ‘= default’. 给出一个用户定义的构造函数，即使它什么都不做，也会使类型不是聚合，也不是微不足道的。如果你希望你的类是一个聚合或一个普通类型（或者通过传递性，一个 POD 类型），那么你需要使用 '= default'。
+- Using ‘= default’ can also be used with copy constructor and destructors. An empty copy constructor, for example, will not do the same as a defaulted copy constructor (which will perform member-wise copy of its members). Using the ‘= default’ syntax uniformly for each of these special member functions makes code easier to read. 使用 '= default' 也可以与复制构造函数和析构函数一起使用。例如，空复制构造函数不会执行与默认复制构造函数相同的操作（该构造函数将执行其成员的成员级复制）。对每个特殊成员函数统一使用“= default”语法可使代码更易于阅读。
+
+
+
+##### Deleted constructors
+Prior to C++ 11, the operator delete had only one purpose, to deallocate a memory that has been allocated dynamically. 在 C++ 11 之前，运算符 delete 只有一个目的，即释放已动态分配的内存。
+The C++ 11 standard introduced another use of this operator, which is: To disable the usage of a member function. This is done by appending the =delete; specifier to the end of that function declaration. C++ 11 标准引入了此运算符的另一种用法，即：禁用成员函数的使用。这是通过附加 =delete;说明符添加到该函数声明的末尾。
+Any member function whose usage has been disabled by using the ‘=delete’ specifier is known as an explicitly deleted function. 使用“=delete”说明符禁用其用法的任何成员函数都称为显式删除函数。
+Although not limited to them, but this is usually done to implicit functions. 虽然不限于它们，但这通常是对隐式函数完成的。
+
+What are the advantages of explicitly deleting functions? 
+- Deleting of special member functions provides a cleaner way of preventing the compiler from generating special member functions that we don’t want. 删除特殊成员函数提供了一种更简洁的方法，可以防止编译器生成我们不需要的特殊成员函数。
+- Deleting of normal member function or non-member functions prevents problematic type promotions from causing an unintended function to be called 删除普通成员函数或非成员函数可防止有问题的类型升级导致调用意外函数
+
+
 
 ## Containers
 

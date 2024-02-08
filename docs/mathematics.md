@@ -177,3 +177,5 @@ $
 \arcsin, \sin, \lg, \tanh, \ln, \arg, \log \\
 \ker, \limsup, \Pr, \hom, \liminf
 $
+
+> https://zhuanlan.zhihu.com/p/679557799

@@ -258,247 +258,196 @@ The evaluation key is computed as in BFV.SecKeygen.
 
 ##### BFV.PubEncrypt(PK, M) -> C
 BFV.Pub.Encrypt first maps the message 𝑀 which comes from the message space into an element in the ring 𝑅/𝑝𝑅 . 
-To encrypt a message 𝑀 from 𝑅/𝑝𝑅, parse the public key as a pair (𝑝𝑘0, 𝑝𝑘1). Encryption consists of 
-two LWE samples using a secret 𝑢 where (𝑝𝑘0, 𝑝𝑘1) is treated as public randomness. The first LWE 
-sample encodes the message 𝑀, whereas the second sample is auxiliary. 
-In particular, 𝐶 = (𝑝𝑘0𝑢 + 𝑒1 + 𝑊𝑀, 𝑝𝑘1𝑢 + 𝑒2) where 𝑢 is a sampled from 𝐷1 and 𝑒1, 𝑒2 are 
-sampled from 𝐷2. 
-• BFV.SecEncrypt(PK, M) -> C
-• BFV.Decrypt(SK, C) -> M
-The main invariant of the BFV scheme is that when we interpret the elements of a ciphertext
-𝐶 as the coefficients of a polynomial then, 𝐶(𝑠) = 𝑊 𝑀 + 𝑒 for some “small” error 𝑒. The message 𝑀
-can be recovered by dividing the polynomial 𝐶(𝑠) by 𝑊 , rounding each coefficient to the nearest 
-integer, and reducing each coefficient modulo 𝑝. • BFV.EvalAdd(EK, C1, C2) -> C3
-Parse the ciphertexts as 𝐶𝑖 = (𝑐𝑖,0, 𝑐𝑖,1). Then, addition corresponds to component-wise addition of two 
-ciphertext components. That is, 𝐶3 = (𝑐1,0 + 𝑐2,0, 𝑐1,1 + 𝑐2,1).
-It is easy to verify that 𝐶3(𝑠) = 𝑊 (𝑀1 + 𝑀2) + 𝑒, where 𝑀1, 𝑀2 are messages encrypted in 𝐶1, 𝐶2
-and 𝑒 is the new error component. 
-• BFV.EvalMult(EK, C1, C2) -> C3
-EvalMult takes as input ciphertexts 𝐶1 = (𝑐1,0, 𝑐1,1) and 𝐶2 = (𝑐2,0, 𝑐2,1). First, it computes 
-𝐶3′ = (𝑐1,0𝑐2,0, 𝑐1,0𝑐2,1 + 𝑐1,1𝑐2,0, 𝑐1,1𝑐2,1) over the integers (instead of mod 𝑞 as in BGV scheme 
-above). Then set 𝐶3 = 𝑟𝑜𝑢𝑛𝑑((𝑝𝑞) 𝐶3′) 𝑚𝑜𝑑 𝑞.
+
+To encrypt a message 𝑀 from 𝑅/𝑝𝑅, parse the public key as a pair $(𝑝𝑘_0, 𝑝𝑘_1)$. Encryption consists of two LWE samples using a secret 𝑢 where $(𝑝𝑘_0, 𝑝𝑘_1)$ is treated as public randomness. The first LWE sample encodes the message 𝑀, whereas the second sample is auxiliary. 
+要加密来自 R/pR 的消息 M，请将公钥解析为一对$(𝑝𝑘_0, 𝑝𝑘_1)$。加密由两个使用密钥 u 的 LWE 样本组成，其中$(𝑝𝑘_0, 𝑝𝑘_1)$被视为公共随机性。第一个 LWE 样本对消息 M 进行编码，而第二个样本是辅助样本。
+
+In particular, $𝐶 = (𝑝𝑘_0𝑢 + 𝑒_1 + 𝑊𝑀, 𝑝𝑘_1𝑢 + 𝑒_2)$ where 𝑢 is a sampled from 𝐷1 and 𝑒1, 𝑒2 are sampled from 𝐷2. 
+
+##### BFV.SecEncrypt(PK, M) -> C
+
+##### BFV.Decrypt(SK, C) -> M
+The main invariant of the BFV scheme is that when we interpret the elements of a ciphertext 𝐶 as the coefficients of a polynomial then, 𝐶(𝑠) = 𝑊 𝑀 + 𝑒 for some “small” error 𝑒. The message 𝑀 can be recovered by dividing the polynomial 𝐶(𝑠) by 𝑊 , rounding each coefficient to the nearest integer, and reducing each coefficient modulo 𝑝. 
+
+
+##### BFV.EvalAdd(EK, C1, C2) -> C3
+Parse the ciphertexts as 𝐶𝑖 = (𝑐𝑖,0, 𝑐𝑖,1). Then, addition corresponds to component-wise addition of two ciphertext components. That is, $𝐶3 = (𝑐_{1,0} + 𝑐_{2,0}, 𝑐_{1,1} + 𝑐_{2,1})$.
+
+It is easy to verify that 𝐶3(𝑠) = 𝑊 (𝑀1 + 𝑀2) + 𝑒, where 𝑀1, 𝑀2 are messages encrypted in 𝐶1, 𝐶2 and 𝑒 is the new error component. 
+
+
+##### BFV.EvalMult(EK, C1, C2) -> C3
+EvalMult takes as input ciphertexts $𝐶1 = (𝑐_{1,0}, 𝑐_{1,1})$ and $𝐶2 = (𝑐_{2,0}, 𝑐_{2,1})$. First, it computes 𝐶3′ = $(𝑐_{1,0}𝑐_{2,0}, 𝑐_{1,0}𝑐_{2,1} + 𝑐_{1,1}𝑐_{2,0}, 𝑐_{1,1}𝑐_{2,1})$ over the integers (instead of mod 𝑞 as in BGV scheme above). Then set $𝐶3 = 𝑟𝑜𝑢𝑛𝑑((\frac𝑝𝑞) 𝐶3^′) 𝑚𝑜𝑑 𝑞$.
+
 One can verify that 𝐶3(𝑠) = 𝑊(𝑀1 ∗ 𝑀2) + 𝑒, for some error term 𝑒. 
-Note that the ciphertext size increases in this operation. One may apply a Relinearization algorithm as in 
-the BGV scheme to obtain a new ciphertext of the original size encrypting the same message 𝑀1 ∗ 𝑀2. 
-Properties Supported. The complete BFV scheme supports many features described in Section 6, 
-including packed evaluations of circuits and can be extended into a threshold homomorphic encryption 
-scheme. In terms of security, the BFV homomorphic evaluation algorithms can be augmented to provide 
-evaluation privacy.
+
+Note that the ciphertext size increases in this operation. One may apply a Relinearization algorithm as in the BGV scheme to obtain a new ciphertext of the original size encrypting the same message 𝑀1 ∗ 𝑀2. 
+
+**Properties Supported.** The complete BFV scheme supports many features described in Section 6, including packed evaluations of circuits and can be extended into a threshold homomorphic encryption scheme. In terms of security, the BFV homomorphic evaluation algorithms can be augmented to provide evaluation privacy.
+
 For details on the implementation of the full BFV scheme, we refer the reader to [B12], [FV12]. 
-c. Comparison between BGV and BFV
-When implementing HE schemes, there are many choices which can be made to optimize performance 
-for different architectures and different application scenarios. This makes a direct comparison of these 
-schemes quite challenging. A paper by Costache and Smart [CS16] gives some initial comparisons 
-between BGV, BFV and two of the schemes described below: YASHE and LTV/NTRU. A paper by Kim and 
-Lauter [KL15] compares the performance of the BGV and YASHE schemes in the context of applications.
-Since there is further ongoing work in this area, we leave this comparison as an open research question.
-Section 1.1.4. The GSW Scheme and bootstrapping
-Currently, the most practical homomorphic encryption schemes only allow to perform bounded depth 
-computations. These schemes can be transformed into fully homomorphic ones (capable of arbitrary 
-computations) using a “bootstrapping” technique introduced by Gentry [G09], which essentially consists 
-of a homomorphic evaluation of the decryption algorithm given the encryption of the secret key. 
-Bootstrapping is a very time-consuming operation and improving on its efficiency is still a very active 
-research area. So, it may still not be ready for standardization, but it is the next natural step to be 
-considered. 
-Bootstrapping using the BGV or BFV schemes requires assuming that lattice problems are 
-computationally hard to approximate within factors that grow superpolynomially in the lattice 
-dimension n. This is a stronger assumption than the inapproximability within polynomial factors 
-required by standard (non-homomorphic) lattice-based public key encryption.
-In [GSW13], Gentry, Sahai and Waters proposed a new homomorphic encryption scheme (still based on 
-lattices) that offers a different set of trade-offs than BGV and BFV. An important feature of this scheme 
-is that it can be used to bootstrap homomorphic encryption based on the assumption that lattice 
-problems are hard to approximate within polynomial factors. Here we briefly describe the GSW 
-encryption and show how both its security and applicability to bootstrapping are closely related to LWE 
-encryption, as used by the BGV and BFV schemes. So, future standardization of bootstrapping (possibly 
-based on the GSW scheme) could build on the current standardization effort.
-For simplicity, we focus on secret key encryption, as this is typically enough for applications to 
-bootstrapping. The GSW secret key encryption scheme (or, more specifically, its secret key, ring-based 
-variant presented in [AP14, DM15]) can be described as follows:
-• GSW.Keygen(params):
-This is essentially the same as the key generation procedure of the BGV or BFV schemes, taking 
-a similar set of security parameters, and producing a random ring element S which serves as a 
-secret key.
-• GSW.SecEncrypt(S,M):
-Choose an uniformly random vector 𝐴 in 𝑅2 log(𝑞)
-, a small random vector 𝐸 (with entries chosen 
-independently at random from the error distribution), and output the ciphertext 𝐶 = (𝐴, 𝐴 ∗ 𝑆 + 𝐸) + 𝑀 ∗ 𝐺 where 𝐺 = [𝐼, 2 𝐼, … , 2𝑘−1𝐼] is a gadget matrix consisting of 𝑘 = 𝑙𝑜𝑔(𝑞) copies 
-of the 2x2 identity matrix 𝐼 (over the ring), scaled by powers of 2.
-We note that there are other possibilities for choosing the gadget matrix G above (for example the 
-constants 2,4, … , 2𝑘−1
-can be replaced by others). Other choices may be described in future documents. 
+
+#### c. Comparison between BGV and BFV
+When implementing HE schemes, there are many choices which can be made to optimize performance for different architectures and different application scenarios. This makes a direct comparison of these schemes quite challenging. A paper by Costache and Smart [CS16] gives some initial comparisons between BGV, BFV and two of the schemes described below: YASHE and LTV/NTRU. A paper by Kim and Lauter [KL15] compares the performance of the BGV and YASHE schemes in the context of applications.Since there is further ongoing work in this area, we leave this comparison as an open research question.
+在实施 HE 方案时，可以做出许多选择来优化不同架构和不同应用场景的性能。这使得对这些方案的直接比较非常具有挑战性。Costache 和 Smart [CS16] 的一篇论文对 BGV、BFV 和下面描述的两种方案进行了一些初步比较：YASHE 和 LTV/NTRU。Kim 和 Lauter [KL15] 的一篇论文比较了 BGV 和 YASHE 方案在应用环境中的性能。由于该领域还有进一步的工作，我们将这种比较作为一个开放的研究问题。
+
+
+
+### Section 1.1.4. The GSW Scheme and bootstrapping
+Currently, the most practical homomorphic encryption schemes only allow to perform bounded depth computations. These schemes can be transformed into fully homomorphic ones (capable of arbitrary computations) using a “bootstrapping” technique introduced by Gentry [G09], which essentially consists of a homomorphic evaluation of the decryption algorithm given the encryption of the secret key. Bootstrapping is a very time-consuming operation and improving on its efficiency is still a very active research area. So, it may still not be ready for standardization, but it is the next natural step to be considered. 
+目前，最实用的同态加密方案只允许执行有界深度计算。这些方案可以使用 Gentry [G09] 引入的“引导”技术转换为完全同态的方案（能够进行任意计算），该技术本质上包括对给定密钥加密的解密算法的同态评估。引导是一项非常耗时的操作，提高其效率仍然是一个非常活跃的研究领域。因此，它可能还没有准备好进行标准化，但这是下一个自然而然的步骤。
+
+Bootstrapping using the BGV or BFV schemes requires assuming that lattice problems are computationally hard to approximate within factors that grow superpolynomially in the lattice dimension n. This is a stronger assumption than the inapproximability within polynomial factors required by standard (non-homomorphic) lattice-based public key encryption.
+使用 BGV 或 BFV 方案进行自举需要假设晶格问题在计算上难以近似在晶格维数 n 中超多项式增长的因子内。这比标准（非同态）基于格子的公钥加密所要求的多项式因子内的不近似性更强。
+
+In [GSW13], Gentry, Sahai and Waters proposed a new homomorphic encryption scheme (still based on lattices) that offers a different set of trade-offs than BGV and BFV. An important feature of this scheme is that it can be used to bootstrap homomorphic encryption based on the assumption that lattice problems are hard to approximate within polynomial factors. Here we briefly describe the GSW encryption and show how both its security and applicability to bootstrapping are closely related to LWE encryption, as used by the BGV and BFV schemes. So, future standardization of bootstrapping (possibly based on the GSW scheme) could build on the current standardization effort.
+在 [GSW13] 中，Gentry、Sahai 和 Waters 提出了一种新的同态加密方案（仍然基于格），它提供了与 BGV 和 BFV 不同的权衡。该方案的一个重要特征是，它可用于基于格问题在多项式因子内难以近似的假设来引导同态加密。在这里，我们简要介绍了 GSW 加密，并展示了其安全性和对引导的适用性如何与 BGV 和 BFV 方案使用的 LWE 加密密切相关。因此，未来的自举标准化（可能基于GSW方案）可以建立在当前的标准化工作之上。
+
+For simplicity, we focus on secret key encryption, as this is typically enough for applications to bootstrapping. The GSW secret key encryption scheme (or, more specifically, its secret key, ring-based variant presented in [AP14, DM15]) can be described as follows:
+为简单起见，我们专注于密钥加密，因为这通常足以让应用程序引导。GSW密钥加密方案（或者更具体地说，[AP14，DM15]中介绍的基于密钥的基于环的变体）可以描述如下：
+- GSW.Keygen(params):
+This is essentially the same as the key generation procedure of the BGV or BFV schemes, taking a similar set of security parameters, and producing a random ring element S which serves as a secret key.
+这与 BGV 或 BFV 方案的密钥生成过程基本相同，采用一组类似的安全参数，并生成一个用作密钥的随机环元素 S。
+
+- GSW.SecEncrypt(S,M):
+Choose an uniformly random vector 𝐴 in 𝑅2 log(𝑞), a small random vector 𝐸 (with entries chosen independently at random from the error distribution), and output the ciphertext 𝐶 = (𝐴, 𝐴 ∗ 𝑆 + 𝐸) + 𝑀 ∗ 𝐺 where 𝐺 = [𝐼, 2 𝐼, … , 2𝑘−1𝐼] is a gadget matrix consisting of 𝑘 = 𝑙𝑜𝑔(𝑞) copies of the 2x2 identity matrix 𝐼 (over the ring), scaled by powers of 2.
+
+We note that there are other possibilities for choosing the gadget matrix G above (for example the constants 2,4, … , 2𝑘−1can be replaced by others). Other choices may be described in future documents. 
+
 We omit the description of the decryption procedure, as it is not needed for bootstrapping. Notice that:
-• The secret key generation process is the same as most other LWE-based encryption schemes, 
-including BGV and BFV.
-• The encryption procedure essentially consists of 2 𝑙𝑜𝑔(𝑞) independent application of the basic 
-LWE/BGV/BFV encryption: choose random key elements 𝑎 and 𝑒, and outputs (𝑎, 𝑎𝑠 + 𝑒 + 𝑚), 
-but applied to scaled copies of the message 𝑚 = 2𝑖 𝑀. (The even rows of the GSW ciphertext 
-encrypt the message as (𝑎 + 𝑚, 𝑎𝑠 + 𝑒), but this is just a minor variant on LWE encryption, and 
-equivalent to it from a security standpoint.)
-• Security rests on the standard LWE assumption, as used also by BGV and BFV, which says that 
-the distribution (𝐴, 𝐴 ∗ 𝑆 + 𝐸) is pseudorandom. 
-So, GSW can be based on LWE security estimates similar to those used to instantiate the BGV or BFV 
-cryptosystems.
-In [GSW13] it is shown how (a public key version of) this cryptosystem supports both addition and 
-multiplication, without the need for an evaluation key, which has applications to identity-based and 
-attribute-based homomorphic encryption. Later, in [BV14] it was observed how the GSW multiplication 
-operation exhibits an asymmetric noise growth that can be exploited to implement bootstrapping based 
-on the hardness of approximating lattice problems within polynomial factors. Many subsequent papers 
-(e.g., [AP14, DM15, GINX16, CGGI16]) improve on the efficiency of [BV14], but they all share the 
-following features with [BV14]: 
-• They all use variants of the GSW encryption to implement bootstrapping.
-• Security only relies on the hardness of approximating lattice problems within polynomial factors.
-• They are capable of bootstrapping any LWE-based encryption scheme, i.e., any scheme which 
-includes an LWE encryption of the message as part of the ciphertext. LWE-based schemes 
-include BGV, BFV and GSW.
-In particular, GSW can be used to implement the bootstrapping procedure for BGV and BFV and turn 
-them into fully homomorphic encryption (FHE) schemes.
-Section 1.1.5. Other Schemes
-Yet Another Somewhat Homomorphic Encryption ([YASHE13]) is similar to the BGV and BFV schemes 
-and offers the same set of features. 
-The scheme NTRU/Lopez-Alt-Tromer-Vaikuntanathan ([HPS98]/[LTV12]) relies on the NTRU assumption 
-(also called the “small polynomial ratios assumption”). It offers all the features of BGV and BFV, and in 
-addition, also offers an extension that supports multi-key homomorphism. However, it must be used 
-with a much wider error distribution than the other schemes that are described in this document (or 
-else it becomes insecure), and therefore it should only be used with a great deal of care. This standard 
-does not cover security for these schemes.
-Another scheme, called CKKS, with plaintext type approximate numbers, was recently proposed by 
-Cheon, Kim, Kim and Song [CKKS17]. This scheme is not described here, but we expect future version of 
-this standard to include it.
-Section 1.1.6. Additional Features & Discussion
-a. Distributed HE
-Homomorphic Encryption is especially suitable to use for multiple users who may want to run 
-computations on an aggregate of their sensitive data. For the setting of multiple users, an additional 
-property which we call threshold-HE is desirable. In threshold-HE the key-generation algorithms, 
-encryption and decryption algorithms are replaced by a distributed-key-generation (DKG) algorithm, 
-distributed-encryption (DE) and distributed-decryption (DD) algorithms. Both the distributed-key￾generation algorithm and the distributed-decryption algorithm are executed via an interactive process 
-among the participating users. The evaluation algorithms EvalAdd, EvalMult, EvalMultConst, 
-EvalAddConst and Refresh remain unchanged.
+- The secret key generation process is the same as most other LWE-based encryption schemes, including BGV and BFV.
+- The encryption procedure essentially consists of 2 𝑙𝑜𝑔(𝑞) independent application of the basic LWE/BGV/BFV encryption: choose random key elements 𝑎 and 𝑒, and outputs (𝑎, 𝑎𝑠 + 𝑒 + 𝑚), but applied to scaled copies of the message 𝑚 = 2𝑖 𝑀. (The even rows of the GSW ciphertext encrypt the message as (𝑎 + 𝑚, 𝑎𝑠 + 𝑒), but this is just a minor variant on LWE encryption, and equivalent to it from a security standpoint.)
+- Security rests on the standard LWE assumption, as used also by BGV and BFV, which says that the distribution (𝐴, 𝐴 ∗ 𝑆 + 𝐸) is pseudorandom. 
+
+So, GSW can be based on LWE security estimates similar to those used to instantiate the BGV or BFV cryptosystems. 因此，GSW可以基于LWE安全估计，类似于用于实例化BGV或BFV密码系统的估计。
+
+In [GSW13] it is shown how (a public key version of) this cryptosystem supports both addition and multiplication, without the need for an evaluation key, which has applications to identity-based and attribute-based homomorphic encryption. Later, in [BV14] it was observed how the GSW multiplication operation exhibits an asymmetric noise growth that can be exploited to implement bootstrapping based on the hardness of approximating lattice problems within polynomial factors. Many subsequent papers (e.g., [AP14, DM15, GINX16, CGGI16]) improve on the efficiency of [BV14], but they all share the following features with [BV14]: 
+在 [GSW13] 中，展示了该密码系统（公钥版本）如何支持加法和乘法，而无需评估密钥，该密钥具有基于身份和基于属性的同态加密的应用。后来，在 [BV14] 中观察到 GSW 乘法运算如何表现出不对称噪声增长，可以利用这种增长来实现基于多项式因子内近似晶格问题的硬度的自举。许多后续论文（例如，[AP14，DM15，GINX16，CGGI16]）提高了[BV14]的效率，但它们都共享[BV14] 的以下功能：
+- They all use variants of the GSW encryption to implement bootstrapping.
+它们都使用 GSW 加密的变体来实现引导。
+- Security only relies on the hardness of approximating lattice problems within polynomial factors.安全性仅取决于多项式因子内近似晶格问题的硬度。
+- They are capable of bootstrapping any LWE-based encryption scheme, i.e., any scheme which includes an LWE encryption of the message as part of the ciphertext. LWE-based schemes include BGV, BFV and GSW.
+它们能够引导任何基于 LWE 的加密方案，即任何将消息的 LWE 加密作为密文的一部分的方案。基于 LWE 的方案包括 BGV、BFV 和 GSW。
+
+In particular, GSW can be used to implement the bootstrapping procedure for BGV and BFV and turn them into fully homomorphic encryption (FHE) schemes.
+特别是，GSW 可用于实现 BGV 和 BFV 的引导过程，并将它们转换为完全同态加密 （FHE） 方案。
+
+
+### Section 1.1.5. Other Schemes
+Yet Another Somewhat Homomorphic Encryption ([YASHE13]) is similar to the BGV and BFV schemes and offers the same set of features. 
+
+The scheme NTRU/Lopez-Alt-Tromer-Vaikuntanathan ([HPS98]/[LTV12]) relies on the NTRU assumption (also called the “small polynomial ratios assumption”). It offers all the features of BGV and BFV, and in addition, also offers an extension that supports multi-key homomorphism. However, it must be used with a much wider error distribution than the other schemes that are described in this document (or else it becomes insecure), and therefore it should only be used with a great deal of care. This standard does not cover security for these schemes.
+方案 NTRU/Lopez-Alt-Tromer-Vaikuntanathan （[HPS98]/[LTV12]） 依赖于 NTRU 假设（也称为“小多项式比率假设”）。它提供了 BGV 和 BFV 的所有功能，此外，还提供了支持多键同态的扩展。但是，与本文档中描述的其他方案相比，它必须具有更广泛的错误分布（否则会变得不安全），因此只能非常小心地使用它。本标准不包括这些方案的安全性。
+
+Another scheme, called CKKS, with plaintext type approximate numbers, was recently proposed by Cheon, Kim, Kim and Song [CKKS17]. This scheme is not described here, but we expect future version of this standard to include it.
+Cheon， Kim， Kim and Song [CKKS17] 最近提出了另一种称为 CKKS 的方案，具有明文类型的近似数字。此处未描述此方案，但我们希望该标准的未来版本将包含它。
+
+
+### Section 1.1.6. Additional Features & Discussion
+
+#### a. Distributed HE
+Homomorphic Encryption is especially suitable to use for multiple users who may want to run computations on an aggregate of their sensitive data. For the setting of multiple users, an additional property which we call threshold-HE is desirable. In threshold-HE the key-generation algorithms, encryption and decryption algorithms are replaced by a distributed-key-generation (DKG) algorithm, distributed-encryption (DE) and distributed-decryption (DD) algorithms. Both the distributed-key￾generation algorithm and the distributed-decryption algorithm are executed via an interactive process among the participating users. The evaluation algorithms EvalAdd, EvalMult, EvalMultConst, EvalAddConst and Refresh remain unchanged.
+同态加密特别适合于可能希望对其敏感数据的聚合运行计算的多个用户。对于多个用户的设置，我们称之为阈值 HE 的附加属性是可取的。在阈值 HE 中，密钥生成算法、加密和解密算法被分布式密钥生成 （DKG） 算法、分布式加密 （DE） 和分布式解密 （DD） 算法所取代。分布式密钥生成算法和分布式解密算法都是通过参与用户之间的交互过程执行的。评估算法 EvalAdd、EvalMult、EvalMultConst、EvalAddConst 和 Refresh 保持不变。
+
 We will now describe the functionality of the new algorithms.
-We begin with the distributed-key-generation (DKG) algorithm to be implemented by an interactive 
-protocol among 𝑡 parties 𝑝1, … , 𝑝𝑡. The DKG algorithm is a randomized algorithm. The inputs to DKG are: 
-security parameter, number of parties 𝑡, and threshold parameter 𝑑. The output of DKG is a vector of 
-secret keys 𝑠 = (𝑠1, . . . . , 𝑠𝑡) of dimension 𝑡 and a public evaluation key Ek where party 𝑝𝑖
-receives 
-(Ek,𝑠𝑖
-). We remark that party 𝑝𝑖 doesn’t receive 𝑠𝑗
-for 𝑖 ≠ 𝑗 and party 𝑖 should maintain the secrecy of 
-its secret key 𝑠𝑖.
-Next, the distributed-encryption (DE) algorithm is described. The DE algorithm is a randomized 
-algorithm which can be run by any party 𝑝𝑖. The inputs to DE run by party 𝑝𝑖 are: the secret key 𝑠𝑖 and 
-the plaintext 𝑀. The output of DE is a ciphertext C
-Finally, we describe the distributed-decryption (DD) algorithm to be implemented by an interactive 
-protocol among a subset of the 𝑡 parties 𝑝1, … , 𝑝𝑡. The DD algorithm is a randomized algorithm.
-The inputs to DD are: a subset of secret keys 𝑠 = (𝑠1, . . . . , 𝑠𝑡), the threshold parameter 𝑑, and a 
-ciphertext C. In particular, every participating party 𝑝𝑖 provides the input𝑠𝑖
-. The ciphertext C can be 
-provided by any party. The output of DD is: plaintext 𝑀.
-The correctness requirement that the above algorithms should satisfy is as follows.
-If at least 𝑑 of the parties correctly follow the prescribed interactive protocol that implements the DD 
-decryption algorithm, then the output of the decryption algorithm will be correct.
-The security requirement is for semantic security to hold as long as fewer than 𝑑 parties collude 
-adversarially.
-An example usage application for (DKG,DE,DD) is for two hospitals, 𝑡 = 2 and 𝑑 = 2 with sensitive data 
-sets 𝑀1 and 𝑀2(respectively) who want to compute some analytics 𝐹 on the joint data set without 
-revealing anything about 𝑀1 and 𝑀2 except for what is revealed by 𝐹(𝑀1, 𝑀2).
-In such a case the two hospitals execute the interactive protocol for DKG and obtain their respective 
-secret keys 𝑠1 and 𝑠2 and the evaluation key EK. They each use DE on secret key 𝑠𝑖 and data 𝑀𝑖
-to 
-produce ciphertext Ci. The evaluation algorithms on C1, C2 and the evaluation key EK allow the 
-computation of a ciphertext C which is an encryption of 𝐹(𝑀1, 𝑀2). Now, the hospitals execute the 
-interactive protocol DD using their secret keys and ciphertext C to obtain 𝐹(𝑀1, 𝑀2).
-b. Active Attacks
-One can consider stronger security requirements beyond semantic security. For example, consider an 
-attack on a client that holds data 𝑀 and wishes to compute 𝐹(𝑀) for a specified algorithm 𝐹, and wants 
-to outsource the computation of 𝐹(𝑀) to a cloud, while maintaining the privacy of 𝑀. The client 
-encrypts 𝑀 into ciphertext C and hands C to the cloud server. The server is supposed to use the 
-evaluation algorithms to compute a ciphertext C’ which is an encryption of 𝐹(𝑀) and return this to the 
-client for decryption.
-Suppose that instead the cloud computes some other C’’ which is the encryption of 𝐺(𝑀) for some 
-other function 𝐺. This may be problematic to the client as it would introduce errors of potentially 
-significant consequences. This is an example of an active attack which is not ruled out by semantic 
-security. 
-Another, possibly even more severe attack, is the situation where the adversary somehow gains the 
-ability to decrypt certain ciphertexts, or glean some information about their content (perhaps by 
-watching the external behavior of the client after decrypting them). This may make it possible to the 
-attacker to mount (perhaps limited) chosen-ciphertext attacks, which may make it possible to 
-compromise the security of encrypted data. Such attacks are not addressed by the semantic security 
-guarantee, countering them requires additional measures beyond the use of homomorphic encryption.
-c. Evaluation Privacy
-A desirable additional security property beyond semantic security would be that the ciphertext C hides 
-which computations were performed homomorphically to obtain C. We call this security requirement 
-Evaluation Privacy.
-For example, suppose a cloud service offers a service in the form of computing a proprietary machine 
-learning algorithm 𝐹 on the client’s sensitive data. As before, the client encrypts its data 𝑀 to obtain C 
-and sends the cloud C and the evaluation key EK. The cloud now computes C’ which is an encryption of 
-𝐹(𝑀) to hand back to the client. Evaluation privacy will guarantee that C’ does not reveal anything 
-about the algorithm 𝐹 which is not derivable from the pair (𝑀, 𝐹(𝑀)). Here we can also distinguish 
-between semi-honest and malicious evaluation privacy depending on whether the ciphertext C is 
-generated correctly according to the Encrypt algorithm.
-A weaker requirement would be to require evaluation privacy only with respect to an adversary who 
-does not know the secret decryption key. This may be relevant for an adversary who intercepts 
-encrypted network traffic.
-d. Key Evolution
-Say that a corpus of ciphertexts encrypted under a secret key SK is held by a server, and the client who 
-owns SK realizes that SK may have been compromised.
-It is desirable for an encryption scheme to have the following key evolution property. Allow the client to 
-generate a new secret key SK’ which replaces SK, a new evaluation key EK’, and a transformation key TK 
-such that: the server, given only TK and EK’, may convert all ciphertexts in the corpus to new ciphertexts 
-which (1) can be decrypted using SK’ and (2) satisfy semantic security even for an adversary who holds 
-SK.
-Any sufficiently homomorphic encryption scheme satisfies the key evolution property as follows. Let TK 
-be the encryption of SK under SK’. Namely, TK is a ciphertext which when decrypted using secret key SK’ 
-yields SK. A server given TK and EK’, can convert a ciphertext C in the corpus into C’ by homomorphically 
-evaluating the decryption process. Security follows from semantic security of the original homomorphic 
-encryption scheme.
-e. Side Channel Attacks
-Side channel attacks consider adversaries who can obtain partial information about the secret key of an 
-encryption scheme, for example by running timing attacks during the execution of the decryption 
-algorithm. A desirable security requirement from an encryption scheme is resiliency against such 
-attacks, often referred to as leakage resiliency. That is, it should be impossible to violate semantic 
-security even in presence of side channel attacks. Naturally, leakage resilience can hold only against 
-limited information leakage about the secret key. 
-An attractive feature of encryption schemes based on intractability of integer lattice problems, and in 
-particular known HE schemes based on intractability of integer lattice problems, is that they satisfy 
-leakage resilience to a great extent. This is in contrast to public-key cryptosystems such as RSA.
-f. Identity Based Encryption
-In an identity based encryption scheme it is possible to send encrypted messages to users without 
-knowing either a public key or a secret key, but only the identity of the recipient where the identity can 
-be a legal name or an email address.
-This is possible as long as there exists a trusted party (TP) that publishes some public parameters PP and 
-holds a master secret key MSK. A user with identity X upon authenticating herself to the TP (e.g. by 
-showing a government issued ID), will receive a secret key SKx that the user can use to decrypt any 
-ciphertext that was sent to the identity X. To encrypt message M to identity X, one needs only to know 
-the public parameters PP and X.
-Identity based homomorphic encryption is a variant of public key homomorphic encryption which may 
-be desirable.
+
+We begin with the distributed-key-generation (DKG) algorithm to be implemented by an interactive protocol among 𝑡 parties 𝑝1, … , 𝑝𝑡. The DKG algorithm is a randomized algorithm. The inputs to DKG are: security parameter, number of parties 𝑡, and threshold parameter 𝑑. The output of DKG is a vector of secret keys 𝑠 = (𝑠1, . . . . , 𝑠𝑡) of dimension 𝑡 and a public evaluation key Ek where party 𝑝𝑖 receives (Ek,𝑠𝑖). We remark that party 𝑝𝑖 doesn’t receive 𝑠𝑗 for 𝑖 ≠ 𝑗 and party 𝑖 should maintain the secrecy of its secret key 𝑠𝑖.
+我们从分布式密钥生成 （DKG） 算法开始，该算法将由 t 方 p1， ... ， pt 之间的交互式协议实现。DKG算法是一种随机算法。DKG 的输入为：安全参数、参与方数 t 和阈值参数 d。DKG 的输出是维度 t 的密钥 s = （s1， . . . . ， st） 和公共评估密钥 Ek 的向量，其中 party pi 接收 （Ek，si）。我们指出，方 pi 不会收到 i ≠ j 的 sj，方 i 应该保持其密钥 si 的保密性。
+
+Next, the distributed-encryption (DE) algorithm is described. The DE algorithm is a randomized algorithm which can be run by any party 𝑝𝑖. The inputs to DE run by party 𝑝𝑖 are: the secret key 𝑠𝑖 and the plaintext 𝑀. The output of DE is a ciphertext C
+接下来，介绍分布式加密 （DE） 算法。DE 算法是一种随机算法，可以由任何一方 pi 运行。参与方 pi 运行的 DE 输入是：密钥 si 和明文 M。DE 的输出是密文 C
+
+Finally, we describe the distributed-decryption (DD) algorithm to be implemented by an interactive protocol among a subset of the 𝑡 parties 𝑝1, … , 𝑝𝑡. The DD algorithm is a randomized algorithm. The inputs to DD are: a subset of secret keys 𝑠 = (𝑠1, . . . . , 𝑠𝑡), the threshold parameter 𝑑, and a ciphertext C. In particular, every participating party 𝑝𝑖 provides the input 𝑠𝑖. The ciphertext C can be provided by any party. The output of DD is: plaintext 𝑀.
+最后，我们描述了分布式解密（DD）算法，该算法由交互协议在t方p1，...，pt的子集之间实现。DD算法是一种随机算法。DD 的输入是：密钥 s = （s1， . . . . ， st） 的子集、阈值参数 d 和密文 C。特别是，每个参与方 pi 都提供输入 si。密文 C 可以由任何一方提供。DD 的输出为：明文 M。
+
+The correctness requirement that the above algorithms should satisfy is as follows. If at least 𝑑 of the parties correctly follow the prescribed interactive protocol that implements the DD decryption algorithm, then the output of the decryption algorithm will be correct.The security requirement is for semantic security to hold as long as fewer than 𝑑 parties collude adversarially.
+上述算法应满足的正确性要求如下。如果至少有 d 方正确地遵循了实现 DD 解密算法的规定交互协议，则解密算法的输出将是正确的。安全要求是，只要少于 d 方进行对抗性串通，语义安全就成立。
+
+An example usage application for (DKG,DE,DD) is for two hospitals, 𝑡 = 2 and 𝑑 = 2 with sensitive data sets 𝑀1 and 𝑀2(respectively) who want to compute some analytics 𝐹 on the joint data set without revealing anything about 𝑀1 and 𝑀2 except for what is revealed by 𝐹(𝑀1, 𝑀2).
+（DKG，DE，DD） 的示例使用应用程序适用于两家医院，t = 2 和 d = 2，分别具有敏感数据集 M1 和 M2，他们希望在联合数据集上计算一些分析 F，而不透露任何关于 M1 和 M2 的信息，除了 F（M1， M2） 显示的内容。
+
+In such a case the two hospitals execute the interactive protocol for DKG and obtain their respective secret keys 𝑠1 and 𝑠2 and the evaluation key EK. They each use DE on secret key 𝑠𝑖 and data 𝑀𝑖 to produce ciphertext Ci. The evaluation algorithms on C1, C2 and the evaluation key EK allow the computation of a ciphertext C which is an encryption of 𝐹(𝑀1, 𝑀2). Now, the hospitals execute the interactive protocol DD using their secret keys and ciphertext C to obtain 𝐹(𝑀1, 𝑀2).
+在这种情况下，两家医院执行 DKG 的交互式协议，并获取各自的密钥 s1 和 s2 以及评估密钥 EK。它们各自使用密钥 si 上的 DE 和数据 Mi 来生成密文 Ci。C1、C2 和评估密钥 EK 上的评估算法允许计算密文 C，该密文是 F（M1， M2） 的加密。现在，医院使用其密钥和密文 C 执行交互式协议 DD 以获得 F（M1， M2）。
+
+
+#### b. Active Attacks
+One can consider stronger security requirements beyond semantic security. For example, consider an attack on a client that holds data 𝑀 and wishes to compute 𝐹(𝑀) for a specified algorithm 𝐹, and wants to outsource the computation of 𝐹(𝑀) to a cloud, while maintaining the privacy of 𝑀. The client encrypts 𝑀 into ciphertext C and hands C to the cloud server. The server is supposed to use the evaluation algorithms to compute a ciphertext C’ which is an encryption of 𝐹(𝑀) and return this to the client for decryption.
+除了语义安全之外，还可以考虑更严格的安全要求。例如，考虑对持有数据 M 并希望计算指定算法 F 的 F（M） 的客户端的攻击，并希望将 F（M） 的计算外包给云，同时维护 M 的隐私。客户端将 M 加密为密文 C，并将 C 交给云服务器。服务器应该使用评估算法来计算密文 C'，它是 F（M） 的加密，并将其返回给客户端进行解密。
+
+Suppose that instead the cloud computes some other C’’ which is the encryption of 𝐺(𝑀) for some other function 𝐺. This may be problematic to the client as it would introduce errors of potentially significant consequences. This is an example of an active attack which is not ruled out by semantic security. 
+假设云计算了一些其他的 C''，这是其他一些函数 G 的 G（M） 加密。这对客户来说可能是有问题的，因为它会引入可能产生重大后果的错误。这是语义安全不排除的主动攻击示例。
+
+Another, possibly even more severe attack, is the situation where the adversary somehow gains the ability to decrypt certain ciphertexts, or glean some information about their content (perhaps by watching the external behavior of the client after decrypting them). This may make it possible to the attacker to mount (perhaps limited) chosen-ciphertext attacks, which may make it possible to compromise the security of encrypted data. Such attacks are not addressed by the semantic security guarantee, countering them requires additional measures beyond the use of homomorphic encryption.
+另一种可能更严重的攻击是，攻击者以某种方式获得解密某些密文的能力，或收集有关其内容的一些信息（可能通过在解密后观察客户端的外部行为）。这可能使攻击者有可能发起（可能是有限的）选择的密文攻击，从而有可能危及加密数据的安全性。此类攻击没有通过语义安全保证来解决，除了使用同态加密之外，还需要采取其他措施。
+
+
+
+#### c. Evaluation Privacy
+A desirable additional security property beyond semantic security would be that the ciphertext C hides which computations were performed homomorphically to obtain C. We call this security requirement Evaluation Privacy.
+除了语义安全之外，一个理想的附加安全属性是密文 C 隐藏了哪些计算是以同态方式执行以获得 C。我们将此安全要求称为评估隐私。
+
+For example, suppose a cloud service offers a service in the form of computing a proprietary machine learning algorithm 𝐹 on the client’s sensitive data. As before, the client encrypts its data 𝑀 to obtain C and sends the cloud C and the evaluation key EK. The cloud now computes C’ which is an encryption of 𝐹(𝑀) to hand back to the client. Evaluation privacy will guarantee that C’ does not reveal anything about the algorithm 𝐹 which is not derivable from the pair (𝑀, 𝐹(𝑀)). Here we can also distinguish between semi-honest and malicious evaluation privacy depending on whether the ciphertext C is generated correctly according to the Encrypt algorithm.
+例如，假设云服务以计算专有机器学习算法 F 的形式提供服务，该算法对客户端的敏感数据进行计算。和以前一样，客户端对其数据 M 进行加密以获取 C，并发送云 C 和评估密钥 EK。云现在计算 C'，这是 F（M） 的加密，以交还给客户端。评估隐私将保证 C' 不会泄露任何关于算法 F 的任何信息，而这些算法 F 不能从对 （M， F（M） ） 中导出。这里我们还可以根据加密算法是否正确生成密文C来区分半诚实和恶意评价隐私。
+
+A weaker requirement would be to require evaluation privacy only with respect to an adversary who does not know the secret decryption key. This may be relevant for an adversary who intercepts encrypted network traffic.
+一个较弱的要求是仅要求对不知道秘密解密密钥的对手进行评估隐私。这可能与拦截加密网络流量的对手有关。
+
+
+#### d. Key Evolution
+Say that a corpus of ciphertexts encrypted under a secret key SK is held by a server, and the client who owns SK realizes that SK may have been compromised.
+
+It is desirable for an encryption scheme to have the following key evolution property. Allow the client to generate a new secret key SK’ which replaces SK, a new evaluation key EK’, and a transformation key TK such that: the server, given only TK and EK’, may convert all ciphertexts in the corpus to new ciphertexts which (1) can be decrypted using SK’ and (2) satisfy semantic security even for an adversary who holds SK.
+加密方案最好具有以下密钥演化属性。允许客户端生成一个新的密钥 SK' 来替换 SK'、一个新的评估密钥 EK' 和一个转换密钥 TK，这样：服务器，只给出 TK 和 EK'，可以将语料库中的所有密文转换为新的密文，这些密文 （1） 可以使用 SK' 解密，并且 （2） 即使对于持有 SK 的对手也满足语义安全。
+
+Any sufficiently homomorphic encryption scheme satisfies the key evolution property as follows. Let TK be the encryption of SK under SK’. Namely, TK is a ciphertext which when decrypted using secret key SK’ yields SK. A server given TK and EK’, can convert a ciphertext C in the corpus into C’ by homomorphically evaluating the decryption process. Security follows from semantic security of the original homomorphic encryption scheme.
+任何足够同态的加密方案都满足密钥演化属性，如下所示。让 TK 成为 SK' 下 SK 的加密。也就是说，TK 是一个密文，当使用密钥 SK' 解密时会产生 SK。给定 TK 和 EK' 的服务器可以通过同态评估解密过程将语料库中的密文 C 转换为 C'。安全性源于原始同态加密方案的语义安全性。
+
+
+#### e. Side Channel Attacks
+Side channel attacks consider adversaries who can obtain partial information about the secret key of an encryption scheme, for example by running timing attacks during the execution of the decryption algorithm. A desirable security requirement from an encryption scheme is resiliency against such attacks, often referred to as leakage resiliency. That is, it should be impossible to violate semantic security even in presence of side channel attacks. Naturally, leakage resilience can hold only against limited information leakage about the secret key. 
+侧信道攻击是指可以获取有关加密方案密钥的部分信息的攻击者，例如，通过在执行解密算法期间运行计时攻击。加密方案的一个理想的安全要求是针对此类攻击的复原能力，通常称为泄漏复原能力。也就是说，即使存在侧信道攻击，也应该不可能违反语义安全。当然，泄漏恢复能力只能防止有关密钥的有限信息泄漏。
+
+An attractive feature of encryption schemes based on intractability of integer lattice problems, and in particular known HE schemes based on intractability of integer lattice problems, is that they satisfy leakage resilience to a great extent. This is in contrast to public-key cryptosystems such as RSA.
+基于整数格问题的难处理性的加密方案，特别是基于整数格问题的难处理性的已知HE方案，其一个吸引人的特点是它们在很大程度上满足了泄漏弹性。这与 RSA 等公钥密码系统形成鲜明对比。
+
+
+#### f. Identity Based Encryption
+In an identity based encryption scheme it is possible to send encrypted messages to users without knowing either a public key or a secret key, but only the identity of the recipient where the identity can be a legal name or an email address.
+在基于身份的加密方案中，可以在不知道公钥或密钥的情况下向用户发送加密消息，而只知道收件人的身份，其中身份可以是法定名称或电子邮件地址。
+
+This is possible as long as there exists a trusted party (TP) that publishes some public parameters PP and holds a master secret key MSK. A user with identity X upon authenticating herself to the TP (e.g. by showing a government issued ID), will receive a secret key SKx that the user can use to decrypt any ciphertext that was sent to the identity X. To encrypt message M to identity X, one needs only to know the public parameters PP and X.
+只要存在发布一些公共参数 PP 并持有主密钥 MSK 的受信任方 （TP），这是可能的。身份为 X 的用户在向 TP 进行身份验证时（例如，通过出示政府颁发的 ID），将收到一个密钥 SKx，用户可以使用该密钥解密发送给身份 X 的任何密文。要将消息 M 加密为身份 X，只需知道公共参数 PP 和 X。
+
+Identity based homomorphic encryption is a variant of public key homomorphic encryption which may be desirable.
+基于身份的同态加密是公钥同态加密的一种变体，这可能是可取的。
+
 Remark: A modification of GSW supports identity based homomorphic encryption.
-Homomorphic Encryption Standard Section 2.1
-Recommended Security Parameters
-Section 2.1.1. Hard Problems
-This section describes the computational problems whose hardness form the basis for the security of 
-the homomorphic encryption schemes in this document. Known security reductions to other problems 
-are not included here. Section 2.1.2 below describes the best currently known attacks on these 
-problems and their concrete running times. Section 2.1.5 below recommends concrete parameter 
-choices to achieve various security levels against currently known attacks.
-a. The Learning with Errors (LWE) Problem
-The LWE problem is parametrized by four parameters (𝑛, 𝑚, 𝑞, 𝜒), where 𝑛 is a positive integer referred 
-to as the “dimension parameter”, m is “the number of samples”, 𝑞 is a positive integer referred to as the 
-“modulus parameter” and 𝜒 is a probability distribution over rational integers referred to as the “error 
-distribution”.
-The LWE assumption requires that the following two probability distributions are computationally 
-indistinguishable:
-Distribution 1. Choose a uniformly random matrix 𝑚 × 𝑛 matrix 𝐴, a uniformly random vector 𝑠 from 
-the vector space 𝑍𝑞𝑛
-, and a vector 𝑒 from 𝑍𝑚 where each coordinate is chosen from the error 
-distribution 𝜒. Compute 𝑐 ∶= 𝐴𝑠 + 𝑒, where all computations are carried out modulo 𝑞. Output (𝐴, 𝑐).
-Distribution 2. Choose a uniformly random 𝑚 × 𝑛 matrix 𝐴, and a uniformly random vector 𝑐 from 𝑍𝑞𝑚. 
-Output (𝐴, 𝑐).
-The error distribution 𝜒 can be either a discrete Gaussian distribution over the integers, a continuous 
-Gaussian distribution rounded to the nearest integer, or other distributions supported on small integers. 
-We refer the reader to Section 2.1.5 for more details on particular error distributions, algorithms for 
-sampling from these distributions, and the associated security implications. We also mention that the 
-secret vector s can be chosen from the error distribution.
-b. The Ring Learning with Errors (RLWE) Problem
+备注：GSW的修改支持基于身份的同态加密。
+
+
+## Homomorphic Encryption Standard Section 2.1 Recommended Security Parameters
+
+### Section 2.1.1. Hard Problems
+This section describes the computational problems whose hardness form the basis for the security of the homomorphic encryption schemes in this document. Known security reductions to other problems are not included here. Section 2.1.2 below describes the best currently known attacks on these problems and their concrete running times. Section 2.1.5 below recommends concrete parameter choices to achieve various security levels against currently known attacks.
+本节介绍本文档中构成同态加密方案安全性基础的硬度的计算问题。此处不包括对其他问题的已知安全性降低。下面的第 2.1.2 节描述了针对这些问题的当前已知的最佳攻击及其具体运行时间。下面的第 2.1.5 节建议了具体的参数选择，以实现针对当前已知攻击的各种安全级别。
+
+
+#### a. The Learning with Errors (LWE) Problem
+The LWE problem is parametrized by four parameters (𝑛, 𝑚, 𝑞, 𝜒), where 𝑛 is a positive integer referred to as the “dimension parameter”, m is “the number of samples”, 𝑞 is a positive integer referred to as the “modulus parameter” and 𝜒 is a probability distribution over rational integers referred to as the “error distribution”.
+LWE 问题由四个参数（n、m、q、χ）参数化，其中 n 是正整数，称为“维度参数”，m 是“样本数”，q 是正整数，称为“模参数”，χ 是有理整数的概率分布，称为“误差分布”。
+
+The LWE assumption requires that the following two probability distributions are computationally indistinguishable:
+LWE 假设要求以下两个概率分布在计算上是不可区分的：
+
+Distribution 1. Choose a uniformly random matrix 𝑚 × 𝑛 matrix 𝐴, a uniformly random vector 𝑠 from the vector space 𝑍𝑞𝑛, and a vector 𝑒 from 𝑍𝑚 where each coordinate is chosen from the error distribution 𝜒. Compute 𝑐 ∶= 𝐴𝑠 + 𝑒, where all computations are carried out modulo 𝑞. Output (𝐴, 𝑐). 选择一个均匀随机矩阵 m × n 个矩阵 A，从向量空间 Zqn 中选择一个均匀随机向量 s，从 Zm 中选择一个向量 e，其中每个坐标都是从误差分布 χ 中选择的。计算 c ∶= As + e，其中所有计算都是以模 q 进行的。输出 （A， c）。
+
+Distribution 2. Choose a uniformly random 𝑚 × 𝑛 matrix 𝐴, and a uniformly random vector 𝑐 from 𝑍𝑞𝑚. Output (𝐴, 𝑐).从 Zqm 中选择一个均匀随机的 m × n 矩阵 A，以及一个均匀随机的向量 c。输出 （A， c）。
+
+The error distribution 𝜒 can be either a discrete Gaussian distribution over the integers, a continuous Gaussian distribution rounded to the nearest integer, or other distributions supported on small integers. We refer the reader to Section 2.1.5 for more details on particular error distributions, algorithms for sampling from these distributions, and the associated security implications. We also mention that the secret vector s can be chosen from the error distribution.
+误差分布 χ 可以是整数上的离散高斯分布、四舍五入到最接近整数的连续高斯分布，也可以是小整数上支持的其他分布。我们请读者参阅第 2.1.5 节，了解有关特定错误分布、从这些分布中采样的算法以及相关安全隐患的更多详细信息。我们还提到，可以从误差分布中选择秘密向量 s。
+
+
+#### b. The Ring Learning with Errors (RLWE) Problem
 The RLWE problem can be viewed as a specific case of LWE where the matrix 𝐴 is chosen to have special 
 algebraic structure. RLWE is parametrized by parameters (𝑚, 𝑞, 𝜒) where 𝑚 is the number of samples, 
 as in the LWE problem above, 𝑞 is a positive integer (the “modulus parameter”) and 𝜒 is a probability 

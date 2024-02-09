@@ -804,65 +804,29 @@ Travis Morrison txm950@psu.edu
 Amit Sahai amitsahai@gmail.com
 
 ## References
-[Alb17] Albrecht, M. R. (2017). On dual lattice attacks against small-secret LWE and parameter choices in 
-HElib and SEAL. In J. Coron & J. B. Nielsen (Eds.), EUROCRYPT 2017, part ii (Vol. 10211, pp. 103–129). 
-Springer, Heidelberg.
-[AFG14] Martin R. Albrecht, Robert Fitzpatrick, and Florian Gopfert: On the Efficacy of Solving 
-LWE by Reduction to Unique-SVP. In Hyang-Sook Lee and Dong-Guk Han, editors, ICISC 13,
-volume 8565 of LNCS, pages 293-310. Springer, November 2014. 
-[AGVW17] Albrecht, M. R., Göpfert, F., Virdia, F., & Wunderer, T. (2017). Revisiting the expected cost of 
-solving uSVP and applications to LWE. In T. Takagi & T. Peyrin (Eds.), ASIACRYPT 2017, part i (Vol. 10624, 
-pp. 297–322). Springer, Heidelberg.
-[APS15] Martin R. Albrecht, Rachel Player and Sam Scott. On the concrete hardness of Learning with 
-Errors. Journal of Mathematical Cryptology. Volume 9, Issue 3, Pages 169–203, ISSN (Online) 1862-2984, 
-October 2015.
-[ADPS16] Alkim, E., Ducas, L., Pöppelmann, T., & Schwabe, P. (2016). Post-quantum key exchange - A 
-new hope. In T. Holz & S. Savage (Eds.), 25th USENIX security symposium, USENIX security 16 (pp. 327–
-343). USENIX Association. Retrieved from 
-https://www.usenix.org/conference/usenixsecurity16/technical-sessions/presentation/alkim
-[AP14] Alperin-Sheriff, J., Peikert, C.: Faster bootstrapping with polynomial error. In: Garay, J.A., 
-Gennaro, R. (eds.) CRYPTO 2014. LNCS, vol. 8616, pp. 297–314. 
-[AG11] Sanjeev Arora and Rong Ge. New algorithms for learning in the presence of errors. In ICALP, 
-volume 6755 of Lecture Notes in Computer Science, pages 403–415. Springer, 2011.
-[Bab86] László Babai: On Lovász’ lattice reduction and the nearest lattice point problem, Combinatorica, 
-6(1):1-3, 1986. 
-[BDGL16] Becker, A., Ducas, L., Gama, N., & Laarhoven, T. (2016). New directions in nearest neighbor 
-searching with applications to lattice sieving. In R. Krauthgamer (Ed.), 27th soda (pp. 10–24). ACM-SIAM. 
-https://doi.org/10.1137/1.9781611974331.ch2
-[BGV12]: Zvika Brakerski, Craig Gentry, Vinod Vaikuntanathan. (Leveled) fully homomorphic encryption 
-without bootstrapping. In ITCS '12 Proceedings of the 3rd Innovations in Theoretical Computer Science 
-Conference. Pages 309-325.
-[B12] Zvika Brakerski. Fully Homomorphic Encryption without Modulus Switching from Classical 
-GapSVP, In CRYPTO 2012. Pages 868 – 886. 
-[CIV16a] W. Castryck, I. Iliashenko, F. Vercauteren, Provably weak instances of ring-lwe revisited. In: 
-Eurocrypt 2016. vol. 9665, pp. 147–167. Springer (2016)
-[CIV16b] W. Castryck, I. Iliashenko, F. Vercauteren, On error distributions in ring-based LWE. LMS Journal 
-of Computation and Mathematics 19(A), 130–145 (2016) 7. 
-[Che13 ] Chen, Y. (2013). Réduction de réseau et sécurité concrète du chiffrement complètement 
-homomorphe (PhD thesis). Paris 7.
-[CKKS17] Jung Hee Cheon, Andrey Kim, Miran Kim, Yongsoo Song. Homomorphic encryption for 
-arithmetic of approximate numbers, In International Conference on the Theory and Applications of 
-Cryptology and Information Security, pp. 409–437. Springer, Cham. 2017.
-[CLS15] Hao Chen, Kristin Lauter, Katherine E. Stange, Attacks on the Search RLWE Problem with Small 
-Errors, SIAM J. Appl. Algebra Geometry, Society for Industrial and Applied Mathematics, Vol. 1, pp. 665–
-682. (2017) https://eprint.iacr.org/2015/971
-[CLS16] Hao Chen, Kristin Lauter, Katherine E. Stange. Security Considerations for Galois Non-dual RLWE 
-Families, SAC 2016: Selected Areas in Cryptography – SAC 2016 Lecture Notes in Computer Science, Vol. 
-10532. Springer pp 443-462. 
-[CN11] Y. Chen, P.Q. Nguyen. BKZ 2.0: Better Lattice Security Estimates. In: Lee D.H., Wang X. (eds) 
-Advances in Cryptology – ASIACRYPT 2011. ASIACRYPT 2011. Lecture Notes in Computer Science, vol.
-7073. Springer, Berlin, Heidelberg.
-[CGGI16] Chillotti, I., Gama, N., Georgieva, M., Izabachène, M.: Faster fully homomorphic encryption: 
-bootstrapping in less than 0.1 seconds. In: Cheon, J.H., Takagi, T. (eds.) ASIACRYPT 2016. LNCS, vol. 
-10031, pp. 3–33.
-[CS16] Ana Costache, Nigel P. Smart, Which Ring Based Somewhat Homomorphic Encryption Scheme is 
-Best? Topics in Cryptology - CT-RSA 2016, LNCS, volume 9610, Pages 325-340.
+[Alb17] Albrecht, M. R. (2017). On dual lattice attacks against small-secret LWE and parameter choices in HElib and SEAL. In J. Coron & J. B. Nielsen (Eds.), EUROCRYPT 2017, part ii (Vol. 10211, pp. 103–129). Springer, Heidelberg.
+[AFG14] Martin R. Albrecht, Robert Fitzpatrick, and Florian Gopfert: On the Efficacy of Solving LWE by Reduction to Unique-SVP. In Hyang-Sook Lee and Dong-Guk Han, editors, ICISC 13, volume 8565 of LNCS, pages 293-310. Springer, November 2014. 
+[AGVW17] Albrecht, M. R., Göpfert, F., Virdia, F., & Wunderer, T. (2017). Revisiting the expected cost of solving uSVP and applications to LWE. In T. Takagi & T. Peyrin (Eds.), ASIACRYPT 2017, part i (Vol. 10624, pp. 297–322). Springer, Heidelberg.
+[APS15] Martin R. Albrecht, Rachel Player and Sam Scott. On the concrete hardness of Learning with Errors. Journal of Mathematical Cryptology. Volume 9, Issue 3, Pages 169–203, ISSN (Online) 1862-2984, October 2015.
+[ADPS16] Alkim, E., Ducas, L., Pöppelmann, T., & Schwabe, P. (2016). Post-quantum key exchange - A new hope. In T. Holz & S. Savage (Eds.), 25th USENIX security symposium, USENIX security 16 (pp. 327–343). USENIX Association. Retrieved from https://www.usenix.org/conference/usenixsecurity16/technical-sessions/presentation/alkim
+[AP14] Alperin-Sheriff, J., Peikert, C.: Faster bootstrapping with polynomial error. In: Garay, J.A., Gennaro, R. (eds.) CRYPTO 2014. LNCS, vol. 8616, pp. 297–314. 
+[AG11] Sanjeev Arora and Rong Ge. New algorithms for learning in the presence of errors. In ICALP, volume 6755 of Lecture Notes in Computer Science, pages 403–415. Springer, 2011.
+[Bab86] László Babai: On Lovász’ lattice reduction and the nearest lattice point problem, Combinatorica, 6(1):1-3, 1986. 
+[BDGL16] Becker, A., Ducas, L., Gama, N., & Laarhoven, T. (2016). New directions in nearest neighbor searching with applications to lattice sieving. In R. Krauthgamer (Ed.), 27th soda (pp. 10–24). ACM-SIAM. https://doi.org/10.1137/1.9781611974331.ch2
+[BGV12]: Zvika Brakerski, Craig Gentry, Vinod Vaikuntanathan. (Leveled) fully homomorphic encryption without bootstrapping. In ITCS '12 Proceedings of the 3rd Innovations in Theoretical Computer Science Conference. Pages 309-325.
+[B12] Zvika Brakerski. Fully Homomorphic Encryption without Modulus Switching from Classical GapSVP, In CRYPTO 2012. Pages 868 – 886. 
+[CIV16a] W. Castryck, I. Iliashenko, F. Vercauteren, Provably weak instances of ring-lwe revisited. In: Eurocrypt 2016. vol. 9665, pp. 147–167. Springer (2016)
+[CIV16b] W. Castryck, I. Iliashenko, F. Vercauteren, On error distributions in ring-based LWE. LMS Journal of Computation and Mathematics 19(A), 130–145 (2016) 7. [Che13 ] Chen, Y. (2013). Réduction de réseau et sécurité concrète du chiffrement complètement homomorphe (PhD thesis). Paris 7.
+[CKKS17] Jung Hee Cheon, Andrey Kim, Miran Kim, Yongsoo Song. Homomorphic encryption for arithmetic of approximate numbers, In International Conference on the Theory and Applications of Cryptology and Information Security, pp. 409–437. Springer, Cham. 2017.
+[CLS15] Hao Chen, Kristin Lauter, Katherine E. Stange, Attacks on the Search RLWE Problem with Small Errors, SIAM J. Appl. Algebra Geometry, Society for Industrial and Applied Mathematics, Vol. 1, pp. 665–682. (2017) https://eprint.iacr.org/2015/971
+[CLS16] Hao Chen, Kristin Lauter, Katherine E. Stange. Security Considerations for Galois Non-dual RLWE Families, SAC 2016: Selected Areas in Cryptography – SAC 2016 Lecture Notes in Computer Science, Vol. 10532. Springer pp 443-462. 
+[CN11] Y. Chen, P.Q. Nguyen. BKZ 2.0: Better Lattice Security Estimates. In: Lee D.H., Wang X. (eds) Advances in Cryptology – ASIACRYPT 2011. ASIACRYPT 2011. Lecture Notes in Computer Science, vol.7073. Springer, Berlin, Heidelberg.
+[CGGI16] Chillotti, I., Gama, N., Georgieva, M., Izabachène, M.: Faster fully homomorphic encryption: bootstrapping in less than 0.1 seconds. In: Cheon, J.H., Takagi, T. (eds.) ASIACRYPT 2016. LNCS, vol. 10031, pp. 3–33.
+[CS16] Ana Costache, Nigel P. Smart, Which Ring Based Somewhat Homomorphic Encryption Scheme is Best? Topics in Cryptology - CT-RSA 2016, LNCS, volume 9610, Pages 325-340.
 [CP16] Eric Crockett and Chris Peikert. Λ∘λ: Functional Lattice Cryptography. In ACM-CCS 2016.
-[DM15] Ducas, L., Micciancio, D.: FHEW: bootstrapping homomorphic encryption in less than a second. 
-In: Oswald, E., Fischlin, M. (eds.) EUROCRYPT 2015. LNCS, vol. 9056, pp. 617–640.
+[DM15] Ducas, L., Micciancio, D.: FHEW: bootstrapping homomorphic encryption in less than a second. In: Oswald, E., Fischlin, M. (eds.) EUROCRYPT 2015. LNCS, vol. 9056, pp. 617–640.
 [ELOS15] Yara Elias, Kristin Lauter, Ekin Ozman, Katherine E. Stange, Provably weak instances of Ring￾LWE, CRYPTO 2015
-[FV12] J. Fan and F. Vercauteren. Somewhat practical fully homomorphic encryption. Cryptology ePrint 
-Archive, Report 2012/144, 2012. http://eprint.iacr.org/2012/144.pdf
+[FV12] J. Fan and F. Vercauteren. Somewhat practical fully homomorphic encryption. Cryptology ePrint Archive, Report 2012/144, 2012. http://eprint.iacr.org/2012/144.pdf
 [GINX16] Gama, N., Izabachène, M., Nguyen, P.Q., Xie, X.: Structural lattice reduction: generalized worst￾case to average-case reductions. In: EUROCRYPT 2016, https://eprint.iacr.org/2014/283.pdf
 [GSW] C. Gentry, A. Sahai, and B. Waters. Homomorphic Encryption from Learning with Errors: 
 Conceptually-Simpler, Asymptotically-Faster, Attribute-Based. In CRYPTO 2013 (Springer).

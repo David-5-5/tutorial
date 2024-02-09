@@ -448,183 +448,145 @@ The error distribution 𝜒 can be either a discrete Gaussian distribution over 
 
 
 #### b. The Ring Learning with Errors (RLWE) Problem
-The RLWE problem can be viewed as a specific case of LWE where the matrix 𝐴 is chosen to have special 
-algebraic structure. RLWE is parametrized by parameters (𝑚, 𝑞, 𝜒) where 𝑚 is the number of samples, 
-as in the LWE problem above, 𝑞 is a positive integer (the “modulus parameter”) and 𝜒 is a probability 
-distribution over the ring 𝑅 = 𝑍[𝑋]/𝑓(𝑋) (the “error distribution”).
-The RLWE assumption requires that the following two probability distributions are computationally 
-indistinguishable:
-Distribution 1. Choose 𝑚 + 1 uniformly random elements 𝑠, 𝑎1, … , 𝑎𝑚 from the ring 𝑅/𝑞𝑅, and 𝑚 more 
-elements 𝑒1, … , 𝑒𝑚 from the ring 𝑅 chosen from the error distribution 𝜒. Compute 𝑏𝑖 ∶= 𝑠𝑎𝑖 + 𝑒𝑖, all 
-computations carried out over the ring 𝑅/𝑞𝑅. Output {(𝑎𝑖, 𝑏𝑖) ∶ 𝑖 = 1, … 𝑚}.
-Distribution 2. Choose 2m uniformly random elements 𝑎1, … , 𝑎𝑚, 𝑏1, … , 𝑏𝑚 from the ring 𝑅/𝑞𝑅. Output 
-{(𝑎𝑖, 𝑏𝑖) ∶ 𝑖 = 1, … 𝑚}.
-The error distribution χ must be supported on “small” elements in the ring R (with geometry induced by 
-the canonical embedding). For RLWE, it is important to use an error distribution that matches the 
-specific ring 𝑅. See Section 2.1.5 for more details on the error distributions, algorithms for sampling 
-from these distributions, and the associated security implications. Here too, the secret element s can be 
-chosen from the error distribution.
-c. The Module Learning with Errors (RLWE) Problem
-We mention here that there is a general formulation of the learning with errors problem that captures 
-both LWE and RLWE, as well as many other settings. In this formulation, rather than 𝑛-vectors over 𝑍 (as 
-in LWE) or 1-vectors over 𝑅 = 𝑍[𝑥]/𝑓(𝑋) (as in RLWE), we work with vectors of dimension 𝑛1 over a 
-ring of dimension 𝑛2, where the security parameter is related to 𝑛1 ⋅ 𝑛2. This document only deals with 
-LWE and RLWE, but we expect future versions to be extended to deal with more settings.
-Section 2.1.2 Attacks on LWE and their Complexity
-We review algorithms for solving the LWE problem and use them to suggest concrete parameter 
-choices. The schemes described above all have versions based on the LWE and the RLWE assumptions. 
-When the schemes based on RLWE are instantiated with error distributions that match the cyclotomic
-rings (as described later in this document), we do not currently have attacks on RLWE that are 
-meaningfully better than the attacks on LWE. The following estimates and attacks refer to attacks on the 
-LWE problem with the specified parameters.
-Much of this section is based on the paper by Albrecht, Player, and Scott (Albrecht, Player, & Scott, 
-2015), the online Estimator tool which accompanies that paper, and (Albrecht, 2017; Albrecht, Göpfert, 
-Virdia, & Wunderer, 2017). Indeed, we reuse text from those works here. Estimated security levels in all 
-the tables in this section were obtained by running the Estimator based on its state in March 2018. The 
-tables in this section give the best attacks (in terms of running time expressed in 𝑙𝑜𝑔2) among all known 
-attacks as implemented by the Estimator tool. As attacks or implementations of attacks change, or as 
-new attacks are found, these tables will need to be updated. First, we describe all the attacks which give 
-the best running times when working on parameter sizes in the range which are interesting for 
-Homomorphic Encryption.
-The LWE problem asks to recover a secret vector 𝑠 ∈ 𝑍𝑞𝑛
-, given a matrix 𝐴 ∈ 𝑍𝑞𝑚×𝑛
-and a vector 𝑐 ∈ 𝑍𝑞𝑚
-such that 𝐴𝑠 + 𝑒 = 𝑐 𝑚𝑜𝑑 𝑞 for a short error vector 𝑒 ∈ 𝑍𝑞𝑚 sampled coordinate-wise from an error 
-distribution 𝜒. The decision variant of LWE asks to distinguish between an LWE instance (𝐴, 𝑐) and 
-uniformly random (𝐴, 𝑐) ∈ 𝑍𝑞𝑚×𝑛 × 𝑍𝑞𝑚. To assess the security provided by a given set of parameters 
-𝑚, 𝜒, 𝑞, two strategies are typically considered.
-The primal strategy finds the closest vector to 𝑐 in the integral span of columns of 𝐴 mod 𝑞, i.e. it solves 
-the corresponding Bounded Distance Decoding problem (BDD) directly as is explained in [LP11] and 
-[LL15].
-a. Primal (uSVP variant)
-Assume that m > n, i.e. the number of samples available is greater than the dimension of the lattice. 
-Writing [𝐼𝑛|𝐴′] for the reduced row echelon form of 𝐴𝑇 ∈ 𝑍𝑞𝑛×𝑚 (with high probability and after 
-appropriate permutation of columns), this task can be reformulated as solving the unique Shortest 
-Vector Problem (uSVP) in the 𝑚 + 1 dimensional 𝑞-ary lattice
-𝛬 = 𝑍𝑚+1 ⋅ (𝐼𝑛 𝐴′ 0 0 𝑞𝐼𝑚−𝑛 0 𝑐𝑇 𝑡).
+The RLWE problem can be viewed as a specific case of LWE where the matrix 𝐴 is chosen to have special algebraic structure. RLWE is parametrized by parameters (𝑚, 𝑞, 𝜒) where 𝑚 is the number of samples, as in the LWE problem above, 𝑞 is a positive integer (the “modulus parameter”) and 𝜒 is a probability distribution over the ring 𝑅 = 𝑍[𝑋]/𝑓(𝑋) (the “error distribution”).
+RLWE 问题可以看作是 LWE 的一个特殊情况，其中矩阵 A 被选择为具有特殊代数结构。RLWE 由参数 （m， q， χ） 参数化，其中 m 是样本数，如上面的 LWE 问题，q 是正整数（“模参数”），χ 是环 R = Z[X]/f（X） 上的概率分布（“误差分布”）。
+
+The RLWE assumption requires that the following two probability distributions are computationally indistinguishable:
+Distribution 1. Choose 𝑚 + 1 uniformly random elements 𝑠, 𝑎1, … , 𝑎𝑚 from the ring 𝑅/𝑞𝑅, and 𝑚 more elements 𝑒1, … , 𝑒𝑚 from the ring 𝑅 chosen from the error distribution 𝜒. Compute 𝑏𝑖 ∶= 𝑠𝑎𝑖 + 𝑒𝑖, all computations carried out over the ring 𝑅/𝑞𝑅. Output {(𝑎𝑖, 𝑏𝑖) ∶ 𝑖 = 1, … 𝑚}.
+
+Distribution 2. Choose 2m uniformly random elements 𝑎1, … , 𝑎𝑚, 𝑏1, … , 𝑏𝑚 from the ring 𝑅/𝑞𝑅. Output {(𝑎𝑖, 𝑏𝑖) ∶ 𝑖 = 1, … 𝑚}.
+
+The error distribution χ must be supported on “small” elements in the ring R (with geometry induced by the canonical embedding). For RLWE, it is important to use an error distribution that matches the specific ring 𝑅. See Section 2.1.5 for more details on the error distributions, algorithms for sampling from these distributions, and the associated security implications. Here too, the secret element s can be chosen from the error distribution.
+误差分布 χ 必须支持环 R 中的“小”单元（具有由规范嵌入引起的几何形状）。对于 RLWE，使用与特定环 R 匹配的误差分布非常重要。有关错误分布、从这些分布中采样的算法以及相关的安全隐患的更多详细信息，请参见第 2.1.5 节。在这里，也可以从错误分布中选择秘密元素 s。
+
+
+#### c. The Module Learning with Errors (RLWE) Problem
+We mention here that there is a general formulation of the learning with errors problem that captures both LWE and RLWE, as well as many other settings. In this formulation, rather than 𝑛-vectors over 𝑍 (as in LWE) or 1-vectors over 𝑅 = 𝑍[𝑥]/𝑓(𝑋) (as in RLWE), we work with vectors of dimension 𝑛1 over a ring of dimension 𝑛2, where the security parameter is related to 𝑛1 ⋅ 𝑛2. This document only deals with LWE and RLWE, but we expect future versions to be extended to deal with more settings.
+我们在这里提到，有一个错误学习问题的一般表述，它同时捕获了 LWE 和 RLWE，以及许多其他设置。在这个公式中，我们不是在 Z 上使用 n 向量（如在 LWE 中）或在 R = Z[x]/f（X） 上是 1 向量（如在 RLWE 中），而是在维数为 n2 的环上处理维数为 n1 的向量，其中安全参数与 n1 ⋅ n2 相关。本文档仅涉及 LWE 和 RLWE，但我们预计未来的版本将扩展以处理更多设置。
+
+
+### Section 2.1.2 Attacks on LWE and their Complexity
+We review algorithms for solving the LWE problem and use them to suggest concrete parameter choices. The schemes described above all have versions based on the LWE and the RLWE assumptions. When the schemes based on RLWE are instantiated with error distributions that match the cyclotomicrings (as described later in this document), we do not currently have attacks on RLWE that are meaningfully better than the attacks on LWE. The following estimates and attacks refer to attacks on the LWE problem with the specified parameters.
+我们回顾了解决 LWE 问题的算法，并使用它们来建议具体的参数选择。上述方案都具有基于LWE和RLWE假设的版本。当基于RLWE的方案被实例化为与环形组学相匹配的错误分布时（如本文档后面所述），我们目前没有对RLWE的攻击比对LWE的攻击更好。以下估计和攻击是指使用指定参数对 LWE 问题进行的攻击。
+
+Much of this section is based on the paper by Albrecht, Player, and Scott (Albrecht, Player, & Scott, 2015), the online Estimator tool which accompanies that paper, and (Albrecht, 2017; Albrecht, Göpfert, Virdia, & Wunderer, 2017). Indeed, we reuse text from those works here. Estimated security levels in all the tables in this section were obtained by running the Estimator based on its state in March 2018. The tables in this section give the best attacks (in terms of running time expressed in 𝑙𝑜𝑔2) among all known 
+attacks as implemented by the Estimator tool. As attacks or implementations of attacks change, or as new attacks are found, these tables will need to be updated. First, we describe all the attacks which give the best running times when working on parameter sizes in the range which are interesting for Homomorphic Encryption.
+本节的大部分内容基于Albrecht，Player和Scott（Albrecht，Player和Scott，2015）的论文，该论文随附的在线估算工具，以及（Albrecht，2017;Albrecht，Göpfert，Virdia和Wunderer，2017）。事实上，我们在这里重复使用了这些作品中的文本。本部分中所有表中的估计安全级别是通过在 2018 年 3 月根据其状态运行 Estimator 获得的。本节中的表格给出了所有已知攻击中最好的攻击（以 log2 表示的运行时间）
+Estimator 工具实现的攻击。随着攻击或攻击实现的变化，或者发现新的攻击，这些表将需要更新。首先，我们描述了所有攻击，这些攻击在处理参数大小时提供最佳运行时间，这对同态加密来说很有趣。
+
+The LWE problem asks to recover a secret vector 𝑠 ∈ 𝑍𝑞𝑛, given a matrix 𝐴 ∈ 𝑍𝑞𝑚×𝑛 and a vector 𝑐 ∈ 𝑍𝑞𝑚 such that 𝐴𝑠 + 𝑒 = 𝑐 𝑚𝑜𝑑 𝑞 for a short error vector 𝑒 ∈ 𝑍𝑞𝑚 sampled coordinate-wise from an error distribution 𝜒. The decision variant of LWE asks to distinguish between an LWE instance (𝐴, 𝑐) and uniformly random (𝐴, 𝑐) ∈ 𝑍𝑞𝑚×𝑛 × 𝑍𝑞𝑚. To assess the security provided by a given set of parameters 𝑚, 𝜒, 𝑞, two strategies are typically considered.
+
+The primal strategy finds the closest vector to 𝑐 in the integral span of columns of 𝐴 mod 𝑞, i.e. it solves the corresponding Bounded Distance Decoding problem (BDD) directly as is explained in [LP11] and [LL15].
+
+
+#### a. Primal (uSVP variant)
+Assume that m > n, i.e. the number of samples available is greater than the dimension of the lattice. Writing $[𝐼_𝑛|𝐴′]$ for the reduced row echelon form of $𝐴^𝑇 ∈ 𝑍_𝑞^{𝑛×𝑚}$ (with high probability and after appropriate permutation of columns), this task can be reformulated as solving the unique Shortest Vector Problem (uSVP) in the 𝑚 + 1 dimensional 𝑞-ary lattice 
+
+$$𝛬 = 𝑍^{𝑚+1} ⋅ 
+\begin{pmatrix}
+𝐼_𝑛 & 𝐴^′ & 0 \\
+0 & 𝑞𝐼_{𝑚−𝑛} &  0 \\
+𝑐^𝑇 & & 𝑡\end{pmatrix}. $$
+
 by Kannan’s embedding, with embedding factor 𝑡.
-The lattice 𝛬 has volume 𝑡 ⋅ 𝑞𝑚−𝑛
-and contains a vector of norm √∥ 𝑒 ∥2+ 𝑡2 which is unusually short, 
-i.e. the gap between the first and second Minkowski minimum 𝜆2 (𝛬)⁄𝜆1 (𝛬) is large. If the secret 
-vector 𝑠 is also short, there is a second established embedding reducing LWE to uSVP. By inspection, it 
-can be seen that the vector (𝜈𝑠|𝑒|1), for some 𝜈 ≠ 0, is contained in the lattice 𝛬 of dimension 𝑑 = 𝑚 + 𝑛 + 1 𝛬 = {𝑥 ∈ (𝜈𝑍)𝑛 × 𝑍𝑚+1| 𝑥 ⋅ (1𝜈 𝐴|𝐼𝑚| − 𝑐)⊤ ≡ 0 mod 𝑞},
-where 𝜈 allows to balance the size of the secret and the noise. An (𝑛 + 𝑚 + 1) × (𝑛 + 𝑚 + 1) basis 𝑀
-for 𝛬 can be constructed as
-𝑀 = (𝜈𝐼𝑛 −𝐴⊤ 0 0 𝑞𝐼𝑚 0 0 𝑐 1).
-To find short vectors, lattice reduction can be applied. Thus, to establish the cost of solving an LWE 
-instance, we may consider the cost of lattice reduction for solving uSVP. In (Alkim, Ducas, Pöppelmann, 
-& Schwabe, 2016) it is predicted that 𝑒 can be found if:
-√𝛽⁄𝑑 ∥ (𝑒|1) ∥≈ √𝛽𝜎 ≤ 𝛿02𝛽−𝑑
-𝑉𝑜𝑙(𝛬)1⁄𝑑,
-where 𝛿0 denotes the root Hermite factor achievable by BKZ, which depends on 𝛽 which is the block 
-size of the underlying blockwise lattice reduction algorithm. This prediction was experimentally verified 
-in (Albrecht et al., 2017).
-b. Primal by BDD Enumeration (decoding).
-This attack is due to Lindner and Peikert [LP11]. It starts with a sufficiently reduced basis, e.g., using BKZ 
-in block size 𝛽, and then applies a modified version of the recursive Nearest Plane algorithm due to 
-Babai [Bab86]. Given a basis 𝐵 and a target vector 𝑡, the Nearest Plane algorithm finds a vector such that 
-the error vector lies in the fundamental parallelepiped of the Gram-Schmidt orthogonalization (GSO) of 
-𝐵.
-Lindner and Peikert note that for a BKZ-reduced basis 𝐵, the fundamental parallelepiped is long and 
-thin, by the Geometric Series Assumption (GSA) due to Schnorr that the GSO of a BKZ-reduced basis 
-decay geometrically and this makes the probability that the Gaussian error vector 𝑒 falls in the 
-corresponding fundamental parallelepiped very low. To improve this success probability, they “fatten” 
-the parallelepiped by essentially scaling its principal axes. They do this by running the Nearest Plane 
-algorithm on several distinct planes at each level of recursion. For a Gaussian error vector, the 
-probability that it falls in this fattened parallelepiped is expressed in terms of the scaling factors and the 
-lengths of the GSO of 𝐵. This can be seen as a form of pruned CVP enumeration (Liu & Nguyen, 2013).
-The run time of the Nearest Planes algorithm mainly depends on the number of points enumerated, 
-which is the product of the scaling factors. The run time of the basis reduction step depends on the 
-quality of the reduced basis, expressed, for instance, by the root Hermite factor 𝛿0. The scaling factors 
-and the quality of the basis together determine the success probability of the attack. Hence to maximize 
-the success probability, the scaling factors are determined based on the (predicted) quality of the BKZ￾reduced basis. There is no closed formula for the scaling factors. The Estimator uses a simple greedy 
-algorithm to find these parameters due to ([LP11]), but this is known to not be optimal. The scaling 
-factors and the quality of the basis are chosen to achieve a target success probability and to minimize 
-the running time (by balancing the running time of BKZ reduction and the final enumeration step).
-c. Dual.
+
+The lattice 𝛬 has volume $𝑡 ⋅ 𝑞^{𝑚−𝑛} $and contains a vector of norm $\sqrt{\|𝑒\|^2+ 𝑡^2}$ which is unusually short, i.e. the gap between the first and second Minkowski minimum $𝜆_2(𝛬)/⁄𝜆_1(𝛬)$ is large. If the secret vector 𝑠 is also short, there is a second established embedding reducing LWE to uSVP. By inspection, it can be seen that the vector (𝜈𝑠|𝑒|1), for some 𝜈 ≠ 0, is contained in the lattice 𝛬 of dimension 𝑑 = 𝑚 + 𝑛 + 1 
+
+$$𝛬 = \{𝑥 ∈ (𝜈𝑍)^𝑛 × 𝑍^{𝑚+1} | 𝑥 ⋅ (\frac1𝜈 𝐴|𝐼_𝑚| − 𝑐)^⊤ ≡ 0  \bmod 𝑞\},$$
+
+where 𝜈 allows to balance the size of the secret and the noise. An (𝑛 + 𝑚 + 1) × (𝑛 + 𝑚 + 1) basis 𝑀 for 𝛬 can be constructed as 
+
+$$𝑀 = 
+\begin{pmatrix}
+𝜈𝐼_𝑛 & −𝐴^⊤ & 0 \\
+0 & 𝑞𝐼_𝑚 & 0 \\
+0 & 𝑐 & 1
+\end{pmatrix}$$.
+
+To find short vectors, lattice reduction can be applied. Thus, to establish the cost of solving an LWE instance, we may consider the cost of lattice reduction for solving uSVP. In (Alkim, Ducas, Pöppelmann, & Schwabe, 2016) it is predicted that 𝑒 can be found if:
+
+$$\sqrt{𝛽⁄𝑑} \| (𝑒|1) \| ≈ \sqrt𝛽𝜎 ≤ 𝛿_0^{2𝛽−𝑑} 𝑉𝑜𝑙(𝛬)^{1⁄𝑑},$$
+
+where $𝛿_0$ denotes the root Hermite factor achievable by BKZ, which depends on 𝛽 which is the block size of the underlying blockwise lattice reduction algorithm. This prediction was experimentally verified in (Albrecht et al., 2017).
+
+
+#### b. Primal by BDD Enumeration (decoding).
+This attack is due to Lindner and Peikert [LP11]. It starts with a sufficiently reduced basis, e.g., using BKZ in block size 𝛽, and then applies a modified version of the recursive Nearest Plane algorithm due to Babai [Bab86]. Given a basis 𝐵 and a target vector 𝑡, the Nearest Plane algorithm finds a vector such that the error vector lies in the fundamental parallelepiped of the Gram-Schmidt orthogonalization (GSO) of 𝐵.
+这次攻击是由于 Lindner 和 Peikert [LP11] 造成的。它从充分简化的基础开始，例如，在块大小β中使用 BKZ，然后应用由于 Babai [Bab86] 而递归最近平面算法的修改版本。给定基 B 和目标向量 t，最近平面算法找到一个向量，使得误差向量位于 B 的 Gram-Schmidt 正交化 （GSO） 的基本平行六面体中。
+
+Lindner and Peikert note that for a BKZ-reduced basis 𝐵, the fundamental parallelepiped is long and thin, by the Geometric Series Assumption (GSA) due to Schnorr that the GSO of a BKZ-reduced basis decay geometrically and this makes the probability that the Gaussian error vector 𝑒 falls in the corresponding fundamental parallelepiped very low. To improve this success probability, they “fatten” the parallelepiped by essentially scaling its principal axes. They do this by running the Nearest Plane algorithm on several distinct planes at each level of recursion. For a Gaussian error vector, the probability that it falls in this fattened parallelepiped is expressed in terms of the scaling factors and the lengths of the GSO of 𝐵. This can be seen as a form of pruned CVP enumeration (Liu & Nguyen, 2013).
+Lindner 和 Peikert 指出，对于 BKZ 约简基 B，基本平行六面体又长又细，根据几何级数假设 （GSA），由于 Schnorr 认为 BKZ 约简基的 GSO 在几何上衰减，这使得高斯误差向量 e 落在相应基本平行六面体中的概率非常低。为了提高这种成功概率，他们通过基本上缩放平行六面体的主轴来“增肥”平行六面体。他们通过在每个递归级别的几个不同平面上运行最近平面算法来实现这一点。对于高斯误差向量，它落入这个肥大的平行六面体的概率用比例因子和 B 的 GSO 长度表示。这可以看作是修剪CVP枚举的一种形式（Liu&Nguyen，2013）。
+
+The run time of the Nearest Planes algorithm mainly depends on the number of points enumerated, which is the product of the scaling factors. The run time of the basis reduction step depends on the quality of the reduced basis, expressed, for instance, by the root Hermite factor 𝛿0. The scaling factors and the quality of the basis together determine the success probability of the attack. Hence to maximize the success probability, the scaling factors are determined based on the (predicted) quality of the BKZ￾reduced basis. There is no closed formula for the scaling factors. The Estimator uses a simple greedy algorithm to find these parameters due to ([LP11]), but this is known to not be optimal. The scaling factors and the quality of the basis are chosen to achieve a target success probability and to minimize the running time (by balancing the running time of BKZ reduction and the final enumeration step).
+最近平面算法的运行时间主要取决于枚举的点数，点数是比例因子的乘积。基数还原步骤的运行时间取决于还原基的质量，例如，由根 Hermite 因子 δ0 表示。比例因子和基数的质量共同决定了攻击的成功概率。因此，为了最大限度地提高成功概率，比例因子是根据 BKZreduced 基的（预测）质量确定的。比例因子没有封闭的公式。由于 （[LP11]），Estimator 使用简单的贪婪算法来查找这些参数，但已知这不是最优的。选择比例因子和基础质量以实现目标成功概率并最小化运行时间（通过平衡 BKZ 减少的运行时间和最终枚举步骤）。
+
+
+#### c. Dual.
 The dual strategy finds short vectors in the lattice
-𝑞𝛬∗ = {𝑥 ∈ 𝑍𝑞𝑚 | 𝑥 ⋅ 𝐴 ≡ 0 𝑚𝑜𝑑 𝑞},
-i.e. it solves the Short Integer Solutions problem (SIS). Given such a short vector 𝑣, we can decide if an 
-instance is LWE by computing ⟨𝑣, 𝑐⟩ = ⟨𝑣, 𝑒⟩ which is short whenever 𝑣 and 𝑒 are sufficiently short 
-(Micciancio & Regev, 2009).
-We must however ensure that ⟨𝑣, 𝑒⟩ indeed is short enough, since if is too large, the (Gaussian) 
-distribution of will be too flat to distinguish from random. Following ([LP11]), for an LWE instance with 
-parameters 𝑛, 𝛼, 𝑞 and a vector 𝑣 of length ∥ 𝑣 ∥ such that 𝑣 ⋅ 𝐴 ≡ 0 𝑚𝑜𝑑 𝑞, the advantage of 
-distinguishing ⟨𝑣, 𝑒⟩ from random is close to
-𝑒𝑥𝑝(−𝜋(∥ 𝑣 ∥⋅ 𝛼)2).
-To produce a short enough 𝑣, we may again call a lattice-reduction algorithm. In particular, we may call 
-the BKZ algorithm with block size 𝛽. After performing BKZ-𝛽 reduction the first vector in the 
-transformed lattice basis will have norm 𝛿0𝑚 ⋅ 𝑉𝑜𝑙(𝑞𝛬∗)1 𝑚⁄
-. In our case, the expression above simplifies 
-to ∥ 𝑣 ∥≈ 𝛿0𝑚 ⋅ 𝑞𝑛⁄𝑚 whp. The minimum of this expression is attained at 𝑚 = √
-𝑛𝑙𝑜𝑔𝑞
-𝑙𝑜𝑔𝛿0
-(Micciancio & 
-Regev, 2009). The attack can be modified to take small or sparse secrets into account (Albrecht, 2017).
-Lattice Reduction algorithm: BKZ
-BKZ is an iterative, block-wise algorithm for basis reduction. It requires solving the SVP problem (using 
-sieving or enumeration, say) in a smaller dimension 𝛽, the block size. First, the input lattice 𝛬 is LLL 
-reduced, giving a basis 𝑏0, … , 𝑏𝑛−1. For 0 ≤ 𝑖 < 𝑛, the vectors 𝑏𝑖, … , 𝑏𝑚𝑖𝑛(𝑖+𝛽−1,𝑛−1) are projected onto 
-the orthogonal complement of the span of 𝑏0, … 𝑏𝑖−1; this projection is called a local block. In the local 
-block, we find a shortest vector, view it as a vector 𝑏 ∈ 𝛬 of and perform LLL on the list of vectors 
-𝑏𝑖, … , 𝑏𝑚𝑖𝑛(𝑖+𝛽−1,𝑛−1), 𝑏 to remove linear dependencies. We use the resulting vectors to update 
-𝑏𝑖, … , 𝑏𝑚𝑖𝑛(𝑖+𝛽−1,𝑛−1)
-. This process is repeated until a basis is not updated after a full pass.
-There have been improvements to BKZ, which are collectively referred to BKZ 2.0 (see [CN11] for 
-example). There are currently several different assumptions in the literature about the cost of running 
-BKZ, distinguished by how conservative they are, the “sieve” and “ADPS16” cost models, as explained 
-below. In our use of the Estimator we rely on the cost model in the “sieve” implementation, as it seems 
-the most relevant to the parameter sizes which we use for Homomorphic Encryption.
-a. Block Size.
+
+$$𝑞𝛬∗ = {𝑥 ∈ 𝑍𝑞𝑚 | 𝑥 ⋅ 𝐴 ≡ 0 𝑚𝑜𝑑 𝑞}$$,
+
+i.e. it solves the Short Integer Solutions problem (SIS). Given such a short vector 𝑣, we can decide if an instance is LWE by computing ⟨𝑣, 𝑐⟩ = ⟨𝑣, 𝑒⟩ which is short whenever 𝑣 and 𝑒 are sufficiently short (Micciancio & Regev, 2009).
+即它解决了短整数解问题 （SIS）。给定这样一个短向量 v，我们可以通过计算 ⟨v， c⟩ = ⟨v， e⟩ 来判断一个实例是否是 LWE，只要 v 和 e 足够短，它就会很短（Micciancio & Regev，2009）。
+
+We must however ensure that ⟨𝑣, 𝑒⟩ indeed is short enough, since if is too large, the (Gaussian) distribution of will be too flat to distinguish from random. Following ([LP11]), for an LWE instance with parameters 𝑛, 𝛼, 𝑞 and a vector 𝑣 of length ∥ 𝑣 ∥ such that 𝑣 ⋅ 𝐴 ≡ 0 𝑚𝑜𝑑 𝑞, the advantage of distinguishing ⟨𝑣, 𝑒⟩ from random is close to
+
+$$𝑒𝑥𝑝(−𝜋(∥ 𝑣 ∥⋅ 𝛼)^2)$$.
+
+To produce a short enough 𝑣, we may again call a lattice-reduction algorithm. In particular, we may call the BKZ algorithm with block size 𝛽. After performing BKZ-𝛽 reduction the first vector in the transformed lattice basis will have norm $𝛿_0^𝑚 ⋅ 𝑉𝑜𝑙(𝑞𝛬^∗)^{1/𝑚}$. In our case, the expression above simplifies to $\|𝑣\|≈ 𝛿_0^𝑚 ⋅ 𝑞^{𝑛⁄𝑚} $ whp. The minimum of this expression is attained at $𝑚 = \sqrt{\frac{𝑛\log𝑞}{\log𝛿_0}}$ (Micciancio & Regev, 2009). The attack can be modified to take small or sparse secrets into account (Albrecht, 2017).
+
+
+#### Lattice Reduction algorithm: BKZ
+BKZ is an iterative, block-wise algorithm for basis reduction. It requires solving the SVP problem (using sieving or enumeration, say) in a smaller dimension 𝛽, the block size. First, the input lattice 𝛬 is LLL reduced, giving a basis $𝑏_0, … , 𝑏_{𝑛−1}$. For 0 ≤ 𝑖 < 𝑛, the vectors $𝑏_𝑖, … , 𝑏_{𝑚𝑖𝑛(𝑖+𝛽−1,𝑛−1)}$ are projected onto the orthogonal complement of the span of $𝑏_0, … , 𝑏_{𝑖−1}$; this projection is called a local block. In the local block, we find a shortest vector, view it as a vector 𝑏 ∈ 𝛬 of and perform LLL on the list of vectors $𝑏_𝑖, … , 𝑏_{𝑚𝑖𝑛(𝑖+𝛽−1,𝑛−1)}$, 𝑏 to remove linear dependencies. We use the resulting vectors to update $𝑏_𝑖, … , 𝑏_{𝑚𝑖𝑛(𝑖+𝛽−1,𝑛−1)}$. This process is repeated until a basis is not updated after a full pass.
+
+There have been improvements to BKZ, which are collectively referred to BKZ 2.0 (see [CN11] for example). There are currently several different assumptions in the literature about the cost of running BKZ, distinguished by how conservative they are, the “sieve” and “ADPS16” cost models, as explained below. In our use of the Estimator we rely on the cost model in the “sieve” implementation, as it seems the most relevant to the parameter sizes which we use for Homomorphic Encryption.
+对 BKZ 进行了改进，这些改进统称为 BKZ 2.0（例如，参见 [CN11]）。目前，文献中有几种关于运行 BKZ 成本的不同假设，其特点是它们的保守程度，即“筛子”和“ADPS16”成本模型，如下所述。在使用 Estimator 时，我们依赖于“筛子”实现中的成本模型，因为它似乎与我们用于同态加密的参数大小最相关。
+
+##### a. Block Size.
 To establish the required block size 𝛽, we solve
-log 𝛿0 = 𝑙𝑜𝑔 (𝛽/2𝜋𝑒 (𝜋𝛽)1𝛽) ⋅ 1/2(𝛽1− 1)
+$$\log 𝛿_0 = \log (\frac𝛽{2𝜋𝑒} (𝜋𝛽)^{1/𝛽}) ⋅ \frac1{2(𝛽− 1)}$$
 
 for 𝛽, see the PhD Thesis of Yuanmi Chen (Chen, 2013) for a justification of this.
-b. Cost of SVP.
+
+
+##### b. Cost of SVP.
 Several algorithms can be used to realize the SVP oracle inside BKZ. Asymptotically, the fastest known 
 algorithms are sieving algorithms. The fastest, known classical algorithm runs in time 
-20.292𝛽+𝑜(𝛽)
-(Becker, Ducas, Gama, & Laarhoven, 2016).
+$2^{0.292𝛽+𝑜(𝛽)}$ (Becker, Ducas, Gama, & Laarhoven, 2016).
+
 The fastest, known quantum algorithm runs in time
-20.265𝛽+𝑜(𝛽)
-(Laarhoven, 2015).
-The “sieve” estimate approximates 𝑜(𝛽) by 16.4 based on some experimental evidence in (Becker et al., 
-2016). The “ADPS16” from (Alkim et al., 2016) suppresses the 𝑜(𝛽) term completely. All times are 
-expressed in elementary bit operations.
-c. Calls to SVP.
-The BKZ algorithm proceeds by repeatedly calling an oracle for computing a shortest vector on a smaller 
-lattice of dimension 𝛽. In each “tour” on a 𝑑-dimensional lattice, 𝑑 such calls are made and the 
-algorithm is typically terminated once it stops making sufficient progress in reducing the basis. 
-Experimentally, it has been established that only the first few tours make significant progress (Chen, 
-2013), so the “sieve” cost model assumes that one BKZ call costs as much as 8𝑑 calls to the SVP oracle. 
-However, it seems plausible that the cost of these calls can be amortized across different calls, which is 
-why the “ADPS16” cost model from (Alkim et al., 2016) assumes the cost of BKZ to be the same as one
-SVP oracle call, which is a strict underestimate of the attack cost.
-d. BKZ Cost.
+$2^{0.265𝛽+𝑜(𝛽)}$ (Laarhoven, 2015).
+
+The “sieve” estimate approximates 𝑜(𝛽) by 16.4 based on some experimental evidence in (Becker et al., 2016). The “ADPS16” from (Alkim et al., 2016) suppresses the 𝑜(𝛽) term completely. All times are expressed in elementary bit operations.
+根据一些实验证据，“筛子”估计值近似 o（β） 16.4（Becker 等人，2016 年）。（Alkim等人，2016）的“ADPS16”完全抑制了o（β）项。所有时间均以基本位运算表示。
+
+
+##### c. Calls to SVP.
+The BKZ algorithm proceeds by repeatedly calling an oracle for computing a shortest vector on a smaller lattice of dimension 𝛽. In each “tour” on a 𝑑-dimensional lattice, 𝑑 such calls are made and the algorithm is typically terminated once it stops making sufficient progress in reducing the basis. Experimentally, it has been established that only the first few tours make significant progress (Chen, 2013), so the “sieve” cost model assumes that one BKZ call costs as much as 8𝑑 calls to the SVP oracle. However, it seems plausible that the cost of these calls can be amortized across different calls, which is why the “ADPS16” cost model from (Alkim et al., 2016) assumes the cost of BKZ to be the same as oneSVP oracle call, which is a strict underestimate of the attack cost.
+BKZ 算法通过重复调用预言机来计算维数 β 的较小晶格上的最短向量。在d维晶格上的每个“巡视”中，都会进行d次这样的调用，并且一旦算法在减少基数方面停止取得足够的进展，该算法通常会终止。通过实验，已经确定只有前几次巡视取得了重大进展（Chen，2013），因此“筛子”成本模型假设一次BKZ调用的成本与对SVP预言机的8d调用一样多。然而，这些调用的成本可以在不同的调用中摊销，这似乎是合理的，这就是为什么（Alkim et al.， 2016）的“ADPS16”成本模型假设 BKZ 的成本与 oneSVP 预言机调用相同，这是对攻击成本的严格低估。
+
+
+##### d. BKZ Cost.
 In summary:
-sieve
-a call to BKZ-𝛽 costs 8𝑑 ⋅ 20.292𝛽+16.4 operations classically and 8𝑑 ⋅ 20.265𝛽+16.4 operations quantumly.
-ADPST16
+**sieve**
+a call to BKZ-𝛽 costs $8𝑑⋅2^{0.292𝛽+16.4}$ operations classically and $8𝑑⋅2^{0.265𝛽+16.4}$ operations quantumly.
+
+**ADPST16**
 a call to BKZ-𝛽 costs 20.292𝛽 operations classically and 20.265𝛽 operations quantumly.
-We stress that both of these cost models are very conservative, and that no known implementation of 
-lattice reduction achieves these running times. Furthermore, these estimates completely ignore 
-memory consumption, which, too, is 2𝛩(𝛽).
-e. Calls to BKZ.
-To pick parameters, we normalize running times to a fixed success probability. That is, all our expected 
-costs are for an adversary winning with probability 51%. However, as mentioned above, it is often more 
-efficient to run some algorithm many times with parameters that have a low probability of success 
-instead of running the same algorithm under parameter choices which ensure a high probability of 
-success. 
-2.1.3 The Arora-Ge Attack.
-The effectiveness of the lattice attacks above depend on the size of the error and the modulus 𝑞, in 
-contrast Arora and Ge described in [AG11] an attack whose complexity depends only on the size of the 
-error and poly-logarithmically on the modulus 𝑞. Very roughly, for dimension 𝑛 and noise of magnitude 
-bounded by some positive integer 𝑑 in each coordinate, the attack uses 𝑛𝑂(𝑑)
-samples and takes 𝑛𝑂(𝑑)
-operations in the ring of integers modulo 𝑞. For the relevant range of parameters for homomorphic 
-encryption, this attack performs worse than the above lattice attacks even when the error standard 
-deviation is a small constant (e.g., 𝜎 = 2).
-2.1.4 Algebraic Attacks on instances of Ring-LWE
+
+We stress that both of these cost models are very conservative, and that no known implementation of lattice reduction achieves these running times. Furthermore, these estimates completely ignore memory consumption, which, too, is 2𝛩(𝛽).
+
+
+##### e. Calls to BKZ.
+To pick parameters, we normalize running times to a fixed success probability. That is, all our expected costs are for an adversary winning with probability 51%. However, as mentioned above, it is often more efficient to run some algorithm many times with parameters that have a low probability of success instead of running the same algorithm under parameter choices which ensure a high probability of success. 
+为了选择参数，我们将运行时间归一化为固定的成功概率。也就是说，我们所有的预期成本都是对手以 51% 的概率获胜。然而，如上所述，使用成功概率较低的参数多次运行某些算法通常比在确保成功概率高的参数选择下运行相同的算法更有效。
+
+
+### 2.1.3 The Arora-Ge Attack.
+The effectiveness of the lattice attacks above depend on the size of the error and the modulus 𝑞, in contrast Arora and Ge described in [AG11] an attack whose complexity depends only on the size of the error and poly-logarithmically on the modulus 𝑞. Very roughly, for dimension 𝑛 and noise of magnitude bounded by some positive integer 𝑑 in each coordinate, the attack uses $𝑛^{𝑂(𝑑)}$ samples and takes $𝑛^{𝑂(𝑑)}$ operations in the ring of integers modulo 𝑞. For the relevant range of parameters for homomorphic encryption, this attack performs worse than the above lattice attacks even when the error standard deviation is a small constant (e.g., 𝜎 = 2).
+
+
+### 2.1.4 Algebraic Attacks on instances of Ring-LWE
 In practice the ring R is taken to be the ring of integers in a cyclotomic field, 𝑅 = 𝑍[𝑥]/𝑘(𝑥), where 𝑘
 is the cyclotomic polynomial for the cyclotomic index 𝑘, and the degree of 𝑘 is equal to the dimension 
 of the lattice, 𝑛 = (𝑘) where  is the Euler totient function. 

@@ -641,41 +641,34 @@ In some extreme cases, there is a reason to choose an even smaller secret key, e
 
 
 ## TABLES of RECOMMENDED PARAMETERS
-In practice, in order to implement homomorphic encryption for a particular application or task, the 
-application will have to select a dimension 𝑛, and a ciphertext modulus 𝑞, (along with a plaintext 
-modulus and a choice of encoding which are not discussed here). For that reason, we give pairs of (𝑛, 𝑞)
-which achieve different security levels for each 𝑛. In other words, given 𝑛, the table below recommends
-a value of 𝑞 which will achieve a given level of security (e.g. 128 bits) for the given error standard 
-deviation 𝜎 ≈ 3.2. We have the following tables for 3 different security levels, 128-bit, 192-bit, and 256-bit security, where 
-the secret follows the uniform, error, and ternary distributions. For applications, we give values of 𝑛
-from 𝑛 = 2𝑘 where 𝑘 = 10, … ,15. We note that we used commit (560525) of the LWE-estimator of 
-[APS15], which the authors continue to develop and improve. The tables give estimated running times 
-(in bits) for the three attacks described in Section 5.1: uSVP, dec (decoding attack), and dual.
-Table 1: Cost model = BKZ.sieve
-distribution n security 
-level
-logq uSVP dec dual
-uniform 1024 128 29 131.2 145.9 161.0
-192 21 192.5 225.3 247.2
-256 16 265.8 332.6 356.7
-2048 128 56 129.8 137.9 148.2
-192 39 197.6 217.5 233.7
-256 31 258.6 294.3 314.5
-4096 128 111 128.2 132.0 139.5
-192 77 194.7 205.5 216.4
-256 60 260.4 280.4 295.1
-8192 128 220 128.5 130.1 136.3
-192 154 192.2 197.5 205.3
-256 120 256.5 267.3 277.5
-16384 128 440 128.1 129.0 133.9
-192 307 192.1 194.7 201.0
-256 239 256.6 261.6 269.3
-32768 128 880 128.8 129.1 133.6
-192 612 193.0 193.9 198.2
-256 478 256.4 258.8 265.1
-distribution n security 
-level
-logq uSVP dec dual
+In practice, in order to implement homomorphic encryption for a particular application or task, the application will have to select a dimension 𝑛, and a ciphertext modulus 𝑞, (along with a plaintext modulus and a choice of encoding which are not discussed here). For that reason, we give pairs of (𝑛, 𝑞)which achieve different security levels for each 𝑛. In other words, given 𝑛, the table below recommends a value of 𝑞 which will achieve a given level of security (e.g. 128 bits) for the given error standard deviation 𝜎 ≈ 3.2. 
+在实践中，为了实现特定应用程序或任务的同态加密，应用程序必须选择维度 n 和密文模数 q（以及明文模数和编码选择，此处不讨论）。出于这个原因，我们给出了 （n， q） 对，它们对每个 n 实现了不同的安全级别。换言之，给定 n，下表建议的值为 q，该值将达到给定的安全级别（例如 128 位），给定误差标准差 σ ≈ 3.2。
+
+We have the following tables for 3 different security levels, 128-bit, 192-bit, and 256-bit security, where the secret follows the uniform, error, and ternary distributions. For applications, we give values of 𝑛from 𝑛 = 2𝑘 where 𝑘 = 10, … ,15. We note that we used commit (560525) of the LWE-estimator of [APS15], which the authors continue to develop and improve. The tables give estimated running times (in bits) for the three attacks described in Section 5.1: uSVP, dec (decoding attack), and dual.
+下表列出了 3 个不同的安全级别，即 128 位、192 位和 256 位安全级别，其中密钥遵循统一分布、错误分布和三元分布。对于应用程序，我们给出 nfrom n = 2k 的值，其中 k = 10， ... ，15。我们注意到，我们使用了 [APS15] 的 LWE 估计器的提交 （560525），作者继续开发和改进它。这些表给出了第 5.1 节中描述的三种攻击的估计运行时间（以位为单位）：uSVP、dec（解码攻击）和双重攻击。
+
+### Table 1: Cost model = BKZ.sieve
+distribution | n | security <br> level | logq | uSVP | dec | dual
+| --- | --- | --- | --- | --- | --- | --- |
+uniform | 1024 | 128 | 29 | 131.2 | 145.9 | 161.0
+&nbsp;|&nbsp;| 192 | 21 | 192.5 | 225.3 | 247.2
+&nbsp;|&nbsp;| 256 | 16| 265.8 | 332.6 | 356.7
+&nbsp;|2048 | 128 | 56 | 129.8 | 137.9 | 148.2
+&nbsp;|&nbsp;|192 | 39 | 197.6 | 217.5 | 233.7
+&nbsp;|&nbsp;|256 | 31 | 258.6 | 294.3 | 314.5
+&nbsp;|4096 | 128 | 111 | 128.2 | 132.0 | 139.5
+&nbsp;|&nbsp;|192 | 77 | 194.7 | 205.5 | 216.4
+&nbsp;|&nbsp;|256 | 60 | 260.4 | 280.4 | 295.1
+&nbsp;|8192 | 128 | 220 | 128.5 | 130.1 | 136.3
+&nbsp;|&nbsp;|192 | 154 | 192.2 | 197.5 | 205.3
+&nbsp;|&nbsp;|256 | 120 | 256.5 | 267.3 | 277.5
+&nbsp;|16384 | 128 | 440 | 128.1 | 129.0 | 133.9
+&nbsp;|&nbsp;|192 | 307 | 192.1 | 194.7 | 201.0
+&nbsp;|&nbsp;|256 | 239 | 256.6 | 261.6 | 269.3
+&nbsp;|32768 | 128 | 880 | 128.8 | 129.1 | 133.6
+&nbsp;|&nbsp;|192 | 612 | 193.0 | 193.9 | 198.2
+&nbsp;|&nbsp;|256 | 478 | 256.4 | 258.8 | 265.1
+
 error 1024 128 29 131.2 145.9 141.8
 192 21 192.5 225.3 210.2
 256 16 265.8 332.6 300.5

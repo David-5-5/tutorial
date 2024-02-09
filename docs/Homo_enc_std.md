@@ -587,113 +587,60 @@ The effectiveness of the lattice attacks above depend on the size of the error a
 
 
 ### 2.1.4 Algebraic Attacks on instances of Ring-LWE
-In practice the ring R is taken to be the ring of integers in a cyclotomic field, 𝑅 = 𝑍[𝑥]/𝑘(𝑥), where 𝑘
-is the cyclotomic polynomial for the cyclotomic index 𝑘, and the degree of 𝑘 is equal to the dimension 
-of the lattice, 𝑛 = (𝑘) where  is the Euler totient function. 
-As mentioned above, for ring-LWE the choice of the error distribution matters, and there are known 
-examples of natural high-entropy error distributions that are insecure to use in certain rings. Such 
-examples were first given in [ELOS15] and [CLS15], and were subsequently improved in [CIV16a], 
-[CIV16b], and [CLS16]. For example, in [CLS15] it was shown that for a prime cyclotomic index 𝑚, 
-choosing the coefficients of the error polynomial 𝑒 ∈ 𝑍[𝑥]/Φ𝑘(𝑥) independently at random from a 
-distribution of standard deviation sufficiently smaller than √𝑘, can sometimes make this instance of 
-RLWE easy to solve. It is therefore crucial to select an error distribution that “matches” the ring at hand.
-The form of the error distribution for general cyclotomic rings was investigated, e.g., in [LPR13, DD12, 
-LPR13b, P16]. We summarize these results in Section 2.1.5 below, but 
-specifies concrete parameters for power-of-two cyclotomic fields, i.e. 𝑘
-the current document only 
-= 2ℓ
-. We expect future versions 
-of this document to extend the treatment also for generic cyclotomic rings. We stress that when the 
-error is chosen from a sufficiently wide and “well spread” distributions that match the ring at hand, we 
-do not have meaningful attacks on RLWE that are better than LWE attacks, regardless of the ring. For 
-power-of-two cyclotomics, it is sufficient to sample the noise in the polynomial basis, namely choosing 
-the coefficients of the error polynomial 𝑒 ∈ 𝑍[𝑥]/Φ𝑘(𝑥) independently at random from a very “narrow” 
-distribution.
-2.1.5 Secure Parameter Selection for Ring LWE
-Specifying a Ring-LWE scheme for encryption requires specifying a ring, 𝑅, of a given dimension, 𝑛, along 
-with a ciphertext modulus 𝑞, and a choice for the error distribution and a choice for a secret 
-distribution. 
-Ring. In practice, we take the ring 𝑅 to be a cyclotomic ring 𝑅 = 𝑍[𝑥]/Φ𝑘(𝑥), where 𝑚 is the 
-cyclotomic index and 𝑛 = 𝜙(𝑘) is the ring dimension. For example, a power of 2 cyclotomic with index 
-𝑘 = 2ℓ
-is 𝑅 = 𝑍[𝑥]/(𝑥𝑘/2 + 1), of degree 𝑛 = 𝑘/2 = 2ℓ−1
-. 
-Error distribution, power-of-two cyclotomics. For the special case of power-of-two cyclotomics, it is 
-safe to sample the error in the polynomial basis, namely choosing the coefficients of the error 
-polynomial 𝑒(𝑥) ∈ 𝑍[𝑥]/(𝑥𝑘/2 + 1) independently at random from a very “narrow” distribution. 
-Specifically, it is sufficient to choose each coefficient from a Discrete Gaussian distribution (or even 
-rounded continuous Gaussian distribution) with a small constant standard deviation 𝜎. Selecting the 
-error according to a Discrete Gaussian distribution is described more often in the literature, but
-choosing from a rounded continuous Gaussian is easier to implement (in particular when timing attacks 
-need to be countered).
-The LWE attacks mentioned above, however, do not take advantage of the shape of the error 
-distribution, only the standard deviation. Moreover, the security reductions do not apply to the case 
-where the error standard deviation is a small constant and would instead require that the error standard
-deviation grows at least as 𝑛𝜖
-for some constant 𝜖 > 1/2 (or even 𝜖 > 3/4). The analysis of the security 
-levels given below relies on running time estimates which assume that the shape of the error 
-distribution is Gaussian.
-The standard deviation that we use below is chosen as 𝜎 = 8/√2𝜋 ≈ 3.2, which is a value that is used in 
-many libraries in practice and for which no other attacks are known. (Some proposals in the literature 
-suggest even smaller values of 𝜎.) Over time, if our understanding of the error standard deviation
-improves, or new attacks are found, the standard deviation of the error may have to change.
-Error distribution, general cyclotomics. For non-power-of-two cyclotomics, choosing a spherical error in 
-the polynomial basis (i.e., choosing the coefficients independently) may be insecure. Instead, there are 
-two main methods of choosing a safe error polynomial for the general case:
-• The method described in [DD12] begins by choosing an “extended” error polynomial 𝑒′ ∈ 𝑸[𝑋]/(Θ𝑘(𝑥)), where Θ𝑘(𝑥) = 𝑥𝑘 − 1 if 𝑘 is odd, and 𝑥𝑘/2 + 1 if 𝑘 is even. The rational
-coefficients of 𝑒′
-are chosen independently at random from the continuous Gaussian of standard 
-deviation 𝜎√𝑘 (for the same 𝜎 as above), and with sufficient precision, e.g., using double float 
-numbers. Then, the error is computed as
-𝑒 = Round(𝑒′ mod Φ𝑘(𝑥)) • The method described in [CP16] chooses an error of the form 𝑒 = Round(𝑒′ ⋅ 𝑡𝑘), where 𝑡𝑘 ∈ 𝑅 is a 
-fixed ring element (see below), and 𝑒′
-is chosen from a spherical continuous Gaussian distribution in 
-the canonical embedding, of standard deviation 𝜎 (for the same 𝜎 as above). One way of sampling 
-such error polynomial is to choose a spherical 𝑒′
-in the canonical embedding, then multiply by 𝑡𝑘
-and round, but there are much more efficient methods of sampling the error (cf. [CP16]).
-Note that the error so generated may not be very small, since 𝑡𝑘 is not tiny. It is possible to show 
-that 𝑒 is somewhat small, but moreover it is shown in [CP16] that homomorphic computations can 
-be carried out to maintain the invariant that 𝑒/𝑡𝑘 is small (rather than the invariant that 𝑒 itself is 
-small).
-The element 𝑡𝑘 is a generator of the “different ideal”, and it is only defined up to multiplication by a 
-unit, so implementations have some choice for which specific element to use. One option is 𝑡𝑘(𝑥) = Φ𝑘′ (𝑥) (i.e., the formal derivative of Φ𝑘(𝑥)), but other options may lead to more efficient 
-implementations.
-We stress that this document does not make recommendations on the specific parameters to use for 
-non-power-of-two cyclotomic rings, in particular Tables 1-4 below only apply to power-of-two 
-cyclotomic rings.
-Secret key. For most homomorphic encryption schemes, not only the error but also the secret key must 
-be small. The security reductions ensure that choosing the key from the same distribution as the error 
-does not weaken the scheme. However, for many homomorphic encryption schemes (including BGV and 
-BFV), choosing an even smaller secret key has a significant performance advantage. For example, one 
-may choose the secret key from the ternary distribution (i.e., each coefficient is chosen uniformly from 
-{−1,0,1}). In the recommended parameters given below, we present tables for three choices of secret￾distribution: uniform, the error distribution, and ternary.
-In some extreme cases, there is a reason to choose an even smaller secret key, e.g., one with sparse 
-coefficient vector. However, we will not present tables for sparse secrets because the security 
-implications of using such sparse secrets is not well understood yet. We expect to specify concrete 
-parameters for sparse secret keys in future versions of this standard.
-Number of samples. For most of the attacks listed in the tables below, the adversary needs a large 
-number of LWE samples to apply the attack with maximum efficiency. Collecting many samples may be 
-feasible in realistic systems, since from one ring-LWE sample one can extract many “LWE-like” samples. 
-The evaluation keys may also contain some samples.
-Sampling Methods. All the error distributions mentioned above require choosing the coefficients of 
-some initial vector independently at random from either the discrete or the continuous Gaussian with 
-some standard deviation 𝜎 > 0. Sampling from a continuous Gaussian with small parameter is quite 
-straightforward, but sampling from a discrete Gaussian distribution is harder. There are several known 
-methods to sample from a discrete Gaussian, including rejection sampling, inversion sampling, Discrete 
-Zuggurat, Bernoulli-type, Knuth-Yao and Von Neumann-type. For efficiency, we recommend the Von 
-Neumann-type sampling method introduced by Karney in [Kar16]. 
-Constant-time sampling. In some of the aforementioned sampling methods, the time it takes to 
-generate one sample could leak information about the actual sample. In many applications, it is 
-therefore important that the entire error-sampling process is constant-time. This is easier to do when 
-sampling from the continuous Gaussian distribution, but harder for the discrete Gaussian. One possible 
-method is to fix some upper bound 𝑇 > 0 such that sampling all the 𝑛 coordinates 𝑒𝑖
-sequentially 
-without interruption takes time less than 𝑇 time with overwhelming probability. Then after these 
-samples are generated, using time 𝑡, we wait for (𝑇 − 𝑡) time units, so that the entire error-generating 
-time always takes time 𝑇. In this way, the total time does not reveal information about the generated
-error polynomial.
-TABLES of RECOMMENDED PARAMETERS
+In practice the ring R is taken to be the ring of integers in a cyclotomic field, $𝑅 = 𝑍[𝑥]/\Phi_𝑘(𝑥)$, where $\Phi_𝑘$ is the cyclotomic polynomial for the cyclotomic index 𝑘, and the degree of $\Phi_𝑘$ is equal to the dimension of the lattice, $𝑛 = \Phi(𝑘)$ where $\Phi$ is the Euler totient function. 
+
+As mentioned above, for ring-LWE the choice of the error distribution matters, and there are known examples of natural high-entropy error distributions that are insecure to use in certain rings. Such examples were first given in [ELOS15] and [CLS15], and were subsequently improved in [CIV16a], [CIV16b], and [CLS16]. For example, in [CLS15] it was shown that for a prime cyclotomic index 𝑚, choosing the coefficients of the error polynomial $𝑒 ∈ 𝑍[𝑥]/\Phi_𝑘(𝑥)$ independently at random from a distribution of standard deviation sufficiently smaller than $\sqrt𝑘$, can sometimes make this instance of RLWE easy to solve. It is therefore crucial to select an error distribution that “matches” the ring at hand.
+如上所述，对于环LWE，误差分布的选择很重要，并且有一些已知的自然高熵误差分布的例子，在某些环中使用是不安全的。这些例子首先在[ELOS15]和[CLS15]中给出，随后在[CIV16a]、[CIV16b]和[CLS16]中得到改进。例如，在 [CLS15] 中表明，对于素数旋风指数 m，从足够小于 $sqrtk$ 的标准差分布中随机随机选择误差多项式 𝑒 ∈ 𝑍[𝑥]/\Phi_𝑘(𝑥)$ 的系数，有时可以使这个 RLWE 实例易于求解。因此，选择与手头的环“匹配”的误差分布至关重要。
+
+The form of the error distribution for general cyclotomic rings was investigated, e.g., in [LPR13, DD12, LPR13b, P16]. We summarize these results in Section 2.1.5 below, but the current document only specifies concrete parameters for power-of-two cyclotomic fields, i.e. $𝑘 = 2^ℓ$. We expect future versions of this document to extend the treatment also for generic cyclotomic rings. We stress that when the error is chosen from a sufficiently wide and “well spread” distributions that match the ring at hand, we do not have meaningful attacks on RLWE that are better than LWE attacks, regardless of the ring. For power-of-two cyclotomics, it is sufficient to sample the noise in the polynomial basis, namely choosing the coefficients of the error polynomial $𝑒 ∈ 𝑍[𝑥]/\Phi_𝑘(𝑥)$ independently at random from a very “narrow” distribution.
+研究了一般环形环的误差分布形式，例如在[LPR13，DD12，LPR13b，P16]中。我们在下面的第 2.1.5 节中总结了这些结果，但当前文档仅指定了 2 次幂循环场的具体参数，即 $𝑘 = 2^ℓ$. 我们预计本文档的未来版本也将扩展通用环的治疗范围。我们强调，当误差是从与手头的环相匹配的足够宽且“分布良好”的分布中选择的时，无论环如何，我们都没有比 LWE 攻击更好的有意义的 RLWE 攻击。对于二次幂的循环组学，在多项式基中对噪声进行采样就足够了，即从非常“窄”的分布中随机随机选择误差多项式$𝑒 ∈ 𝑍[𝑥]/\Phi_𝑘(𝑥)$ 的系数就足够了。
+
+
+### 2.1.5 Secure Parameter Selection for Ring LWE
+Specifying a Ring-LWE scheme for encryption requires specifying a ring, 𝑅, of a given dimension, 𝑛, along with a ciphertext modulus 𝑞, and a choice for the error distribution and a choice for a secret distribution. 
+指定用于加密的 Ring-LWE 方案需要指定给定维度 n 的环 R 以及密文模数 q，以及错误分布的选择和秘密分布的选择。
+
+**Ring.** In practice, we take the ring 𝑅 to be a cyclotomic ring 𝑅 = 𝑍[𝑥]/Φ𝑘(𝑥), where 𝑚 is the cyclotomic index and 𝑛 = 𝜙(𝑘) is the ring dimension. For example, a power of 2 cyclotomic with index $𝑘 = 2^ℓ$ is $𝑅 = 𝑍[𝑥]/(𝑥^{𝑘/2} + 1)$, of degree $𝑛 = 𝑘/2 = 2^{ℓ−1}$. 
+
+**Error distribution, power-of-two cyclotomics.** For the special case of power-of-two cyclotomics, it is safe to sample the error in the polynomial basis, namely choosing the coefficients of the error polynomial $𝑒(𝑥) ∈ 𝑍[𝑥]/(𝑥^{𝑘/2} + 1)$ independently at random from a very “narrow” distribution. Specifically, it is sufficient to choose each coefficient from a Discrete Gaussian distribution (or even rounded continuous Gaussian distribution) with a small constant standard deviation 𝜎. Selecting the error according to a Discrete Gaussian distribution is described more often in the literature, butchoosing from a rounded continuous Gaussian is easier to implement (in particular when timing attacks need to be countered).
+误差分布，二次幂循环组学。对于二次幂循环组学的特殊情况，在多项式基中对误差进行采样是安全的，即从非常“窄”的分布中随机随机选择误差多项式 $𝑒(𝑥) ∈ 𝑍[𝑥]/(𝑥^{𝑘/2} + 1)$ 的系数。具体来说，从离散高斯分布（甚至四舍五入连续高斯分布）中选择每个系数就足够了，σ具有较小的恒定标准差。根据离散高斯分布选择误差在文献中更常见，但从四舍五入的连续高斯分布中选择更容易实现（特别是当需要反击时序攻击时）。
+
+The LWE attacks mentioned above, however, do not take advantage of the shape of the error distribution, only the standard deviation. Moreover, the security reductions do not apply to the case where the error standard deviation is a small constant and would instead require that the error standard deviation grows at least as $𝑛^𝜖$ for some constant 𝜖 > 1/2 (or even 𝜖 > 3/4). The analysis of the security levels given below relies on running time estimates which assume that the shape of the error distribution is Gaussian.
+然而，上面提到的 LWE 攻击并没有利用误差分布的形状，而只利用了标准差。此外，安全性降低不适用于误差标准差为小常数的情况，而是要求误差标准差至少增长为 $n^ε$ 对于某个常数ε > 1/2（甚至ε > 3/4）。下面给出的安全级别分析依赖于运行时间估计，该估计假设误差分布的形状为高斯分布。
+
+The standard deviation that we use below is chosen as $𝜎 = 8/\sqrt{2𝜋} ≈ 3.2$, which is a value that is used in many libraries in practice and for which no other attacks are known. (Some proposals in the literature suggest even smaller values of 𝜎.) Over time, if our understanding of the error standard deviationimproves, or new attacks are found, the standard deviation of the error may have to change.
+我们在下面使用的标准差被选为$𝜎 = 8/\sqrt{2𝜋} ≈ 3.2$，这是许多库在实践中使用的值，并且没有其他已知的攻击。（文献中的一些建议甚至更小的σ值。随着时间的流逝，如果我们对误差标准差的理解有所提高，或者发现了新的攻击，则误差的标准差可能不得不改变。
+
+**Error distribution, general cyclotomics.** For non-power-of-two cyclotomics, choosing a spherical error in the polynomial basis (i.e., choosing the coefficients independently) may be insecure. Instead, there are two main methods of choosing a safe error polynomial for the general case:
+对于非二次幂的循环组式，在多项式基中选择球面误差（即独立选择系数）可能是不安全的。相反，对于一般情况，有两种主要方法可以选择安全误差多项式：
+- The method described in [DD12] begins by choosing an “extended” error polynomial $𝑒^′ ∈ 𝑸[𝑋]/(Θ_𝑘(𝑥))$, where $Θ𝑘(𝑥) = 𝑥^𝑘 − 1$ if 𝑘 is odd, and $𝑥^{𝑘/2}$ + 1 if 𝑘 is even. The rational coefficients of 𝑒′ are chosen independently at random from the continuous Gaussian of standard deviation $𝜎\sqrt𝑘$ (for the same 𝜎 as above), and with sufficient precision, e.g., using double float numbers. Then, the error is computed as $$𝑒 = Round(𝑒^′ \mod Φ_𝑘(𝑥))$$
+
+- The method described in [CP16] chooses an error of the form $𝑒 = Round(𝑒^′ ⋅ 𝑡_𝑘)$, where $𝑡_𝑘 ∈ 𝑅$ is a fixed ring element (see below), and 𝑒′ is chosen from a spherical continuous Gaussian distribution in the canonical embedding, of standard deviation 𝜎 (for the same 𝜎 as above). One way of sampling such error polynomial is to choose a spherical 𝑒′ in the canonical embedding, then multiply by 𝑡𝑘 and round, but there are much more efficient methods of sampling the error (cf. [CP16]).
+Note that the error so generated may not be very small, since 𝑡𝑘 is not tiny. It is possible to show that 𝑒 is somewhat small, but moreover it is shown in [CP16] that homomorphic computations can be carried out to maintain the invariant that 𝑒/𝑡𝑘 is small (rather than the invariant that 𝑒 itself is small).
+请注意，这样产生的错误可能不是很小，因为 tk 并不小。可以证明 e 有点小，但 [CP16] 中表明，可以进行同态计算来保持 e/tk 很小的不变量（而不是 e 本身很小的不变量）。
+The element 𝑡𝑘 is a generator of the “different ideal”, and it is only defined up to multiplication by a unit, so implementations have some choice for which specific element to use. One option is 𝑡𝑘(𝑥) = Φ𝑘′ (𝑥) (i.e., the formal derivative of Φ𝑘(𝑥)), but other options may lead to more efficient implementations.
+元素 tk 是“不同理想”的生成器，它只被定义为乘以一个单位，因此实现可以选择使用哪个特定元素。一种选择是 tk（x） = Φk′ （x）（即 Φk（x） 的形式导数），但其他选择可能会导致更有效的实现。
+
+We stress that this document does not make recommendations on the specific parameters to use for non-power-of-two cyclotomic rings, in particular Tables 1-4 below only apply to power-of-two cyclotomic rings.
+我们强调，本文件并未就用于非两次幂环的具体参数提出建议，特别是下表1-4仅适用于两次幂环。
+
+**Secret key.** For most homomorphic encryption schemes, not only the error but also the secret key must be small. The security reductions ensure that choosing the key from the same distribution as the error does not weaken the scheme. However, for many homomorphic encryption schemes (including BGV and BFV), choosing an even smaller secret key has a significant performance advantage. For example, one may choose the secret key from the ternary distribution (i.e., each coefficient is chosen uniformly from {−1,0,1}). In the recommended parameters given below, we present tables for three choices of secret￾distribution: uniform, the error distribution, and ternary.
+对于大多数同态加密方案，不仅错误，而且密钥也必须很小。安全性降低可确保从与错误相同的发行版中选择密钥不会削弱方案。然而，对于许多同态加密方案（包括 BGV 和 BFV），选择更小的密钥具有显着的性能优势。例如，可以从三元分布中选择密钥（即，每个系数都是从 {−1,0,1} 中均匀选择的）。在下面给出的推荐参数中，我们提供了三种秘密分布选择的表格：均匀分布、误差分布和三元分布。
+
+In some extreme cases, there is a reason to choose an even smaller secret key, e.g., one with sparse coefficient vector. However, we will not present tables for sparse secrets because the security implications of using such sparse secrets is not well understood yet. We expect to specify concrete parameters for sparse secret keys in future versions of this standard.
+在某些极端情况下，有理由选择更小的密钥，例如具有稀疏系数向量的密钥。但是，我们不会提供稀疏机密的表，因为尚不了解使用此类稀疏机密的安全含义。我们希望在此标准的未来版本中为稀疏密钥指定具体参数。
+
+**Number of samples.** For most of the attacks listed in the tables below, the adversary needs a large number of LWE samples to apply the attack with maximum efficiency. Collecting many samples may be feasible in realistic systems, since from one ring-LWE sample one can extract many “LWE-like” samples. The evaluation keys may also contain some samples.
+对于下表中列出的大多数攻击，攻击者需要大量 LWE 样本才能以最高效率应用攻击。在实际系统中收集许多样品可能是可行的，因为从一个环状LWE样品中可以提取许多“类LWE”样品。评估密钥还可能包含一些示例。
+
+**Sampling Methods.** All the error distributions mentioned above require choosing the coefficients of some initial vector independently at random from either the discrete or the continuous Gaussian with some standard deviation 𝜎 > 0. Sampling from a continuous Gaussian with small parameter is quite straightforward, but sampling from a discrete Gaussian distribution is harder. There are several known methods to sample from a discrete Gaussian, including rejection sampling, inversion sampling, Discrete Zuggurat, Bernoulli-type, Knuth-Yao and Von Neumann-type. For efficiency, we recommend the Von Neumann-type sampling method introduced by Karney in [Kar16]. 
+上面提到的所有误差分布都需要从离散或连续高斯中随机选择一些初始向量的系数，标准差σ > 0。从具有小参数的连续高斯分布中采样非常简单，但从离散高斯分布中采样则更难。有几种已知的离散高斯采样方法，包括拒绝采样、反演采样、离散楚格拉特、伯努利型、Knuth-Yao 型和 Von Neumann 型。为了提高效率，我们推荐 Karney 在 [Kar16] 中引入的 Von Neumann 型采样方法。
+
+**Constant-time sampling.** In some of the aforementioned sampling methods, the time it takes to generate one sample could leak information about the actual sample. In many applications, it is therefore important that the entire error-sampling process is constant-time. This is easier to do when sampling from the continuous Gaussian distribution, but harder for the discrete Gaussian. One possible method is to fix some upper bound 𝑇 > 0 such that sampling all the 𝑛 coordinates 𝑒𝑖 sequentially without interruption takes time less than 𝑇 time with overwhelming probability. Then after these samples are generated, using time 𝑡, we wait for (𝑇 − 𝑡) time units, so that the entire error-generating time always takes time 𝑇. In this way, the total time does not reveal information about the generated error polynomial.
+在上述一些采样方法中，生成一个样本所需的时间可能会泄露有关实际样本的信息。因此，在许多应用中，整个误差采样过程必须是恒定时间的。当从连续高斯分布中采样时，这更容易做到，但对于离散高斯分布来说更难。一种可能的方法是固定一些上限 T > 0，这样按顺序不间断地采样所有 n 个坐标 ei 所需的时间少于 T 时间，概率极大。然后，在生成这些样本后，使用时间t，我们等待（T−t）时间单位，因此整个错误生成时间总是需要时间T。这样，总时间不会显示有关生成的误差多项式的信息。
+
+
+## TABLES of RECOMMENDED PARAMETERS
 In practice, in order to implement homomorphic encryption for a particular application or task, the 
 application will have to select a dimension 𝑛, and a ciphertext modulus 𝑞, (along with a plaintext 
 modulus and a choice of encoding which are not discussed here). For that reason, we give pairs of (𝑛, 𝑞)

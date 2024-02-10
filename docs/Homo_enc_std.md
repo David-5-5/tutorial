@@ -647,9 +647,10 @@ In practice, in order to implement homomorphic encryption for a particular appli
 We have the following tables for 3 different security levels, 128-bit, 192-bit, and 256-bit security, where the secret follows the uniform, error, and ternary distributions. For applications, we give values of 𝑛from 𝑛 = 2𝑘 where 𝑘 = 10, … ,15. We note that we used commit (560525) of the LWE-estimator of [APS15], which the authors continue to develop and improve. The tables give estimated running times (in bits) for the three attacks described in Section 5.1: uSVP, dec (decoding attack), and dual.
 下表列出了 3 个不同的安全级别，即 128 位、192 位和 256 位安全级别，其中密钥遵循统一分布、错误分布和三元分布。对于应用程序，我们给出 nfrom n = 2k 的值，其中 k = 10， ... ，15。我们注意到，我们使用了 [APS15] 的 LWE 估计器的提交 （560525），作者继续开发和改进它。这些表给出了第 5.1 节中描述的三种攻击的估计运行时间（以位为单位）：uSVP、dec（解码攻击）和双重攻击。
 
+
 ### Table 1: Cost model = BKZ.sieve
 distribution | n | security <br> level | logq | uSVP | dec | dual
-| --- | --- | --- | --- | --- | --- | --- |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
 uniform | 1024 | 128 | 29 | 131.2 | 145.9 | 161.0
 &nbsp;|&nbsp;| 192 | 21 | 192.5 | 225.3 | 247.2
 &nbsp;|&nbsp;| 256 | 16| 265.8 | 332.6 | 356.7
@@ -668,133 +669,131 @@ uniform | 1024 | 128 | 29 | 131.2 | 145.9 | 161.0
 &nbsp;|32768 | 128 | 880 | 128.8 | 129.1 | 133.6
 &nbsp;|&nbsp;|192 | 612 | 193.0 | 193.9 | 198.2
 &nbsp;|&nbsp;|256 | 478 | 256.4 | 258.8 | 265.1
+error | 1024 | 128 | 29 | 131.2 | 145.9 | 141.8
+&nbsp;|&nbsp;|192 | 21 | 192.5 | 225.3 | 210.2
+&nbsp;|&nbsp;|256 | 16 | 265.8 | 332.6 | 300.5
+&nbsp;|2048 | 128 | 56 | 129.8 | 137.9 | 135.7
+&nbsp;|&nbsp;|192 | 39 | 197.6 | 217.5 | 209.6
+&nbsp;|&nbsp;|256 | 31 | 258.6 | 294.3 | 280.3
+&nbsp;|4096 | 128 | 111 | 128.2 | 132.0 | 131.4
+&nbsp;|&nbsp;|192 | 77 | 194.7 | 205.5 | 201.5
+&nbsp;|&nbsp;|256 | 60 | 260.4 | 280.4 | 270.1
+&nbsp;|8192 | 128 | 220 | 128.5 | 130.1 | 130.1
+&nbsp;|&nbsp;|192 | 154 | 192.2 | 197.5 | 196.9
+&nbsp;|&nbsp;|256 | 120 | 256.5 | 267.3 | 263.8
+&nbsp;|16384 | 128 | 440 | 128.1 | 129.3 | 130.2
+&nbsp;|&nbsp;|192 | 307 | 192.1 | 194.7 | 196.2
+&nbsp;|&nbsp;|256 | 239 | 256.6 | 261.6 | 264.5
+&nbsp;|32768 | 128 | 883 | 128.5 | 128.8 | 130.0
+&nbsp;|&nbsp;|192 | 613 | 192.7 | 193.6 | 193.4
+&nbsp;|&nbsp;|256 | 478 | 256.4 | 258.8 | 257.9
+(-1, 1) | 1024 | 128 | 27 | 131.6 | 160.2 | 138.7
+&nbsp;|&nbsp;|192 | 19 | 193.0 | 259.5 | 207.7
+&nbsp;|&nbsp;|256 | 14 | 265.6 | 406.4 | 293.8
+&nbsp;|2048 | 128 | 54 | 129.7 | 144.4 | 134.2
+&nbsp;|&nbsp;|192|  37 | 197.5 | 233.0 | 207.8
+&nbsp;|&nbsp;|256 | 29 | 259.1 | 321.7 | 273.5
+&nbsp;|4096 | 128 | 109 | 128.1 | 134.9 | 129.9
+&nbsp;|&nbsp;|192 | 75 | 194.7 | 212.2 | 198.5
+&nbsp;|&nbsp;|256 | 58 | 260.4 | 292.6|  270.1
+&nbsp;|8192 | 128 | 218 | 128.5 | 131.5 | 129.2
+&nbsp;|&nbsp;|192 | 152 | 192.2 | 200.4 | 194.6
+&nbsp;|&nbsp;|256 | 118 | 256.7 | 273.0 | 260.6
+&nbsp;|16384 | 128 | 438 | 128.1 | 129.9 | 129.0
+&nbsp;|&nbsp;|192 | 305 | 192.1 | 196.2 | 193.2
+&nbsp;|&nbsp;|256 | 237 | 256.9 | 264.2 | 259.8
+&nbsp;|32768 | 128 | 881 | 128.5 | 129.1 | 128.5
+&nbsp;|&nbsp;|192 | 611 | 192.7 | 194.2 | 193.7
+&nbsp;|&nbsp;|256 | 476 | 256.4 | 260.2 | 258.2
 
-error 1024 128 29 131.2 145.9 141.8
-192 21 192.5 225.3 210.2
-256 16 265.8 332.6 300.5
-2048 128 56 129.8 137.9 135.7
-192 39 197.6 217.5 209.6
-256 31 258.6 294.3 280.3
-4096 128 111 128.2 132.0 131.4
-192 77 194.7 205.5 201.5
-256 60 260.4 280.4 270.1
-8192 128 220 128.5 130.1 130.1
-192 154 192.2 197.5 196.9
-256 120 256.5 267.3 263.8
-16384 128 440 128.1 129.3 130.2
-192 307 192.1 194.7 196.2
-256 239 256.6 261.6 264.5
-32768 128 883 128.5 128.8 130.0
-192 613 192.7 193.6 193.4
-256 478 256.4 258.8 257.9
-distribution n security 
-level
-logq uSVP dec dual
-(-1, 1) 1024 128 27 131.6 160.2 138.7
-192 19 193.0 259.5 207.7
-256 14 265.6 406.4 293.8
-2048 128 54 129.7 144.4 134.2
-192 37 197.5 233.0 207.8
-256 29 259.1 321.7 273.5
-4096 128 109 128.1 134.9 129.9
-192 75 194.7 212.2 198.5
-256 58 260.4 292.6 270.1
-8192 128 218 128.5 131.5 129.2
-192 152 192.2 200.4 194.6
-256 118 256.7 273.0 260.6
-16384 128 438 128.1 129.9 129.0
-192 305 192.1 196.2 193.2
-256 237 256.9 264.2 259.8
-32768 128 881 128.5 129.1 128.5
-192 611 192.7 194.2 193.7
-256 476 256.4 260.2 258.2
-Post-quantum security. The BKZ.qsieve model assumes access to a quantum computer and gives lower 
-estimates than BKZ.sieve. In what follows, we give tables of recommended (“Post-quantum”) 
-parameters which achieve the desired levels of security against a quantum computer. We also present 
-tables computed using the ``quantum” mode of the BKZ.ADPS16 model, which contain more 
-conservative parameters. 
-Table 2: Cost model = BKZ.qsieve
-distribution n security 
-level
-logq uSVP dec dual
-uniform 1024 128 27 132.2 149.3 164.5
-192 19 199.3 241.6 261.6
-256 15 262.9 341.1 360.8
-2048 128 53 128.1 137.6 147.6
-192 37 193.6 215.8 231.4
-256 29 257.2 297.9 316.6
-4096 128 103 129.1 134.2 141.7
-192 72 193.8 206.2 217.2
-256 56 259.2 281.9 296.5
-8192 128 206 128.2 130.7 136.6
-192 143 192.9 199.3 207.3
-256 111 258.4 270.8 280.7
-16384 128 413 128.2 129.0 132.7
-192 286 192.1 195.3 201.4
-256 222 257.2 263.1 270.6
-32768 128 829 128.1 128.4 130.8
-192 573 192.0 193.3 197.5
-256 445 256.1 259.0 265.2
-distribution n security 
-level
-logq uSVP dec dual
-error 1024 128 27 132.2 149.3 144.5
-192 19 199.3 241.6 224.0
-256 15 262.9 341.1 302.3
-2048 128 53 128.1 137.6 134.8
-192 37 193.6 215.8 206.7
-256 29 257.2 297.9 281.4
-4096 128 103 129.1 134.2 133.1
-192 72 193.8 206.2 201.8
-256 56 259.2 281.9 270.4
-8192 128 206 128.2 130.7 130.1
-192 143 192.9 199.3 198.5
-256 111 258.4 270.8 266.6
-16384 128 413 128.2 129.0 130.1
-192 286 192.1 195.3 196.6
-256 222 257.2 263.1 265.8
-32768 128 829 128.1 128.4 129.8
-192 573 192.0 193.3 192.8
-256 445 256.1 259.0 260.4
-distribution n security 
-level
-logq uSVP dec dual
-(-1, 1) 1024 128 25 132.6 165.5 142.3
-192 17 199.9 284.1 222.2
-256 13 262.6 423.1 296.6
-2048 128 51 128.6 144.3 133.4
-192 35 193.5 231.9 205.2
-256 27 257.1 327.8 274.4
-4096 128 101 129.6 137.4 131.5
-192 70 193.7 213.6 198.8
-256 54 259.7 295.2 270.6
-8192 128 202 129.8 130.7 128.0
-192 141 192.9 202.5 196.1
-256 109 258.3 276.6 263.1
-16384 128 411 128.2 129.5 129.0
-192 284 192.0 196.8 193.7
-256 220 257.2 265.8 260.7
-32768 128 827 128.1 128.7 128.4
-192 571 192.0 194.1 193.1
-256 443 256.1 260.4 260.4
-Appendix A
+**Post-quantum security.** The BKZ.qsieve model assumes access to a quantum computer and gives lower estimates than BKZ.sieve. In what follows, we give tables of recommended (“Post-quantum”) parameters which achieve the desired levels of security against a quantum computer. We also present tables computed using the ``quantum” mode of the BKZ.ADPS16 model, which contain more conservative parameters. 
+**后量子安全性。 BKZ.qsieve 模型假定可以访问量子计算机，并且给出的估计值低于 BKZ.sieve。在下文中，我们给出了推荐的（“后量子”）参数表，这些参数实现了针对量子计算机的所需安全级别。我们还展示了使用 BKZ 的“量子”模式计算的表。ADPS16 模型，其中包含更保守的参数。
+
+
+### Table 2: Cost model = BKZ.qsieve
+distribution | n | security <br> level | logq | uSVP | dec | dual
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+uniform | 1024 | 128 | 27 | 132.2 | 149.3 | 164.5
+&nbsp;|&nbsp;|192 | 19 | 199.3 | 241.6 | 261.6
+&nbsp;|&nbsp;|256 | 15 | 262.9 | 341.1 | 360.8
+&nbsp;|2048 | 128 | 53 | 128.1 | 137.6 | 147.6
+&nbsp;|&nbsp;|192 | 37 | 193.6 | 215.8 | 231.4
+&nbsp;|&nbsp;|256 | 29 | 257.2 | 297.9 | 316.6
+&nbsp;|4096 | 128 | 103 | 129.1 | 134.2 | 141.7
+&nbsp;|&nbsp;|192 | 72 | 193.8 | 206.2 | 217.2
+&nbsp;|&nbsp;|256 | 56 | 259.2|  281.9 | 296.5
+&nbsp;|8192 | 128 | 206 | 128.2 | 130.7 | 136.6
+&nbsp;|&nbsp;|192 | 143 | 192.9 | 199.3 | 207.3
+&nbsp;|&nbsp;|256 | 111 | 258.4 | 270.8 | 280.7
+&nbsp;|16384 | 128 | 413 | 128.2 | 129.0 | 132.7
+&nbsp;|&nbsp;|192 | 286 | 192.1 | 195.3 | 201.4
+&nbsp;|&nbsp;|256 | 222 | 257.2 | 263.1 | 270.6
+&nbsp;|32768 | 128 | 829 | 128.1 | 128.4 | 130.8
+&nbsp;|&nbsp;|192 | 573 | 192.0 | 193.3 | 197.5
+&nbsp;|&nbsp;|256 | 445 | 256.1 | 259.0 | 265.2
+error | 1024 | 128 | 27 | 132.2 | 149.3 | 144.5
+&nbsp;|&nbsp;|192 | 19 | 199.3 | 241.6 | 224.0
+&nbsp;|&nbsp;|256 | 15 | 262.9 | 341.1 | 302.3
+&nbsp;|2048 | 128 | 53 | 128.1 | 137.6 | 134.8
+&nbsp;|&nbsp;|192 | 37 | 193.6 | 215.8 | 206.7
+&nbsp;|&nbsp;|256 | 29 | 257.2 | 297.9 | 281.4
+&nbsp;|4096 | 128 | 103 | 129.1 | 134.2 | 133.1
+&nbsp;|&nbsp;|192 | 72 | 193.8 | 206.2 | 201.8
+&nbsp;|&nbsp;|256 | 56 | 259.2 | 281.9 | 270.4
+&nbsp;|8192 | 128 | 206 | 128.2 | 130.7 | 130.1
+&nbsp;|&nbsp;|192 | 143 | 192.9 | 199.3 | 198.5
+&nbsp;|&nbsp;|256 | 111 | 258.4 | 270.8 | 266.6
+&nbsp;|16384 | 128 | 413 | 128.2 | 129.0 | 130.1
+&nbsp;|&nbsp;|192 | 286 | 192.1 | 195.3 | 196.6
+&nbsp;|&nbsp;|256 | 222 | 257.2 | 263.1 | 265.8
+&nbsp;|32768 | 128 | 829 | 128.1 | 128.4 | 129.8
+&nbsp;|&nbsp;|192 | 573 | 192.0 | 193.3 | 192.8
+&nbsp;|&nbsp;|256 | 445 | 256.1 | 259.0 | 260.4
+(-1, 1) | 1024 | 128 | 25 | 132.6 | 165.5 | 142.3
+&nbsp;|&nbsp;|192 | 17 | 199.9 | 284.1 | 222.2
+&nbsp;|&nbsp;|256 | 13 | 262.6 | 423.1 | 296.6
+&nbsp;|2048 | 128 | 51 | 128.6 | 144.3 | 133.4
+&nbsp;|&nbsp;|192 | 35 | 193.5 | 231.9 | 205.2
+&nbsp;|&nbsp;|256 | 27 | 257.1 | 327.8 | 274.4
+&nbsp;|4096 | 128 | 101 | 129.6 | 137.4 | 131.5
+&nbsp;|&nbsp;|192 | 70 | 193.7|  213.6 | 198.8
+&nbsp;|&nbsp;|256 | 54 | 259.7 | 295.2 | 270.6
+&nbsp;|8192 | 128 | 202 | 129.8 | 130.7 | 128.0
+&nbsp;|&nbsp;|192 | 141 | 192.9 | 202.5 | 196.1
+&nbsp;|&nbsp;|256 | 109 | 258.3 | 276.6 | 263.1
+&nbsp;|16384 | 128 | 411 | 128.2 | 129.5 | 129.0
+&nbsp;|&nbsp;|192 | 284 | 192.0 | 196.8 | 193.7
+&nbsp;|&nbsp;|256 | 220 | 257.2 | 265.8 | 260.7
+&nbsp;|32768 | 128 | 827 | 128.1 | 128.7 | 128.4
+&nbsp;|&nbsp;|192 | 571 | 192.0 | 194.1 | 193.1
+&nbsp;|&nbsp;|256 | 443 | 256.1 | 260.4 | 260.4
+
+
+## Appendix A
+
 Organizers
-Kristin Lauter klauter@microsoft.com
-Vinod Vaikuntanathan vinod.nathan@gmail.com
+Name | Email
+|---|---|
+Kristin Lauter | klauter@microsoft.com
+Vinod Vaikuntanathan |vinod.nathan@gmail.com
+
 Contributors
-Martin Albrecht martinralbrecht@googlemail.com
-Melissa Chase melissac@microsoft.com
-Hao Chen haoche@microsoft.com
-Jintai Ding jintai.ding@gmail.com
-Shafi Goldwasser shafi@theory.csail.mit.edu
-Sergey Gorbunov sgorbunov100@gmail.com
-Shai Halevi shaih@alum.mit.edu
-Jeffrey Hoffstein hoffsteinjeffrey@gmail.com
-Satya Lokam Satya.Lokam@microsoft.com
-Daniele Micciancio daniele@cs.ucsd.edu
-Dustin Moody dustin.moody@nist.gov
-Travis Morrison txm950@psu.edu
-Amit Sahai amitsahai@gmail.com
+
+Name | Email
+|---|---|
+Martin Albrecht | martinralbrecht@googlemail.com
+Melissa Chase | melissac@microsoft.com
+Hao Chen | haoche@microsoft.com
+Jintai Ding | jintai.ding@gmail.com
+Shafi Goldwasser | shafi@theory.csail.mit.edu
+Sergey Gorbunov | sgorbunov100@gmail.com
+Shai Halevi | shaih@alum.mit.edu
+Jeffrey Hoffstein | hoffsteinjeffrey@gmail.com
+Satya Lokam | Satya.Lokam@microsoft.com
+Daniele Micciancio | daniele@cs.ucsd.edu
+Dustin Moody | dustin.moody@nist.gov
+Travis Morrison | txm950@psu.edu
+Amit Sahai | amitsahai@gmail.com
 
 ## References
 [Alb17] Albrecht, M. R. (2017). On dual lattice attacks against small-secret LWE and parameter choices in HElib and SEAL. In J. Coron & J. B. Nielsen (Eds.), EUROCRYPT 2017, part ii (Vol. 10211, pp. 103–129). Springer, Heidelberg.

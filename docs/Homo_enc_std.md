@@ -53,10 +53,10 @@ The parameter generation algorithm is used to instantiate various parameters use
   模整数由待加密的明文数的模数p参数化，即明文空间为$Z_p$。例如，参数 p=1024 表示明文空间为 $Z_{1024}$，即消息空间的每个单独元素都是 [0， 1023] 范围内的一个整数，并且对单个元素的所有操作都是模 p。
   - (EX) Extension rings/fields are parameterized by a modulus p as above, and in addition by a polynomial f(x) over Zp, specifying the plaintext space as $Z[x]/(p, f(x))$. Namely, each element of the message space is an integer polynomial of degree smaller than f(x) with coefficients from the range (0, p-1), and all operations over individual elements are performed modulo f(x), and modulo p. 
   如上所述，扩展环/场由模数 p 参数化，此外还通过 Zp 上的多项式 f（x） 参数化，将明文空间指定为 $Z[x]/(p, f(x))$。也就是说，消息空间的每个元素都是一个小于 f（x） 的整数多项式，系数范围为 （0， p-1），并且对单个元素的所有操作都执行模 f（x） 和模 p。
-- 𝐾 denotes the dimension of the vectors to be encrypted. For instance, 𝐾 = 100, 𝑃𝑇 = (𝑀𝐼, 1024) means the messages to be encrypted are vectors (𝑉1, … , 𝑉𝐾) where each 𝑉𝑖 is chosen from the range (0, 1023) and operations are performed component-wise. That is, by defintion, $(𝑉1, … , 𝑉𝐾) + (𝑉1′, … , 𝑉𝐾′ ) = (𝑉1 + 𝑉1′, … , 𝑉𝐾 + 𝑉𝐾′)$. The multiplication operation over two vectors is defined similarly. The space of all possible vectors (𝑉1, … , 𝑉𝐾) is referred to as the message space (MS). 
-表示要加密的向量的维度。例如，K = 100， PT = （MI， 1024） 表示要加密的消息是向量 （V1， ...， VK），其中每个 Vi 都是从范围 （0， 1023） 中选择的，并且按组件执行操作。也就是说，根据定义，（V1， ...， VK） + （V1′， ...， VK′ ） = （V1 + V1′， ...， VK + VK′）。两个向量的乘法运算定义类似。所有可能的向量（V1，...，VK）的空间称为消息空间（MS）。
+- 𝐾 denotes the dimension of the vectors to be encrypted. For instance, 𝐾 = 100, 𝑃𝑇 = (𝑀𝐼, 1024) means the messages to be encrypted are vectors $(𝑉_1, … , 𝑉_𝐾)$ where each 𝑉𝑖 is chosen from the range (0, 1023) and operations are performed component-wise. That is, by defintion, $(𝑉_1, … , 𝑉_𝐾) + (𝑉_1^′, … , 𝑉_𝐾^′ ) = (𝑉_1 + 𝑉_1^′, … , 𝑉_𝐾 + 𝑉_𝐾^′)$. The multiplication operation over two vectors is defined similarly. The space of all possible vectors $(𝑉_1, … , 𝑉_𝐾)$ is referred to as the message space (MS). 
+表示要加密的向量的维度。例如，K = 100， PT = （MI， 1024） 表示要加密的消息是向量 $(𝑉_1, … , 𝑉_𝐾)$，其中每个 Vi 都是从范围 （0， 1023） 中选择的，并且按组件执行操作。也就是说，根据定义，$(𝑉_1, … , 𝑉_𝐾) + (𝑉_1^′, … , 𝑉_𝐾^′ ) = (𝑉_1 + 𝑉_1^′, … , 𝑉_𝐾 + 𝑉_𝐾^′)$。两个向量的乘法运算定义类似。所有可能的向量$(𝑉_1, … , 𝑉_𝐾)$的空间称为消息空间（MS）。
 - 𝐵: denotes an auxiliary parameter that is used to control the complexity of the programs/circuits that one can expect to run over the encrypted messages. Lower parametersdenote “smaller”, or less expressive, or less complex programs/circuits. Lower parameters generally mean smaller parameters of the entire scheme. This, as a result, translates into smaller ciphertexts and more efficient evaluation procedures. Higher parameters generally increase key sizes, ciphertext sizes, and complexity of the evaluation procedures. Higher parameters are, of course, necessary to evaluate more complex programs. 
-表示一个辅助参数，用于控制可以预期在加密消息上运行的程序/电路的复杂性。较低的参数表示“较小”，或表现力较差，或程序/电路不太复杂。参数越低，通常意味着整个方案的参数越小。因此，这转化为更小的密文和更有效的评估程序。参数越高，通常会增加密钥大小、密文大小和评估过程的复杂性。当然，更高的参数对于评估更复杂的程序是必要的。
+表示一个辅助参数，用于控制可以预期在加密消息上运行的程序/电路的复杂性。较低的参数表示“smaller”，或表现力较差，或程序/电路不太复杂。参数越低，通常意味着整个方案的参数越小。因此，这转化为更小的密文和更有效的评估程序。参数越高，通常会增加密钥大小、密文大小和评估过程的复杂性。当然，更高的参数对于评估更复杂的程序是必要的。
 
 
 #### PubKeygen(Params) → SK, PK, EK
@@ -164,11 +164,11 @@ We focus here on describing the basic version of the BGV encryption scheme. Opti
 Recall that λ is the security level parameter, for BGV the plaintext space PT is either of type MI or EX with integer modulus p > 1, and K ≥ 1 is an integer vector length. 
 回想一下，λ 是安全级别参数，对于 BGV，明文空间 PT 是 MI 或 EX 类型，整数模数 p > 1，K ≥ 1 是整数向量长度。
 
-In the basic BGV scheme, the auxiliary input 𝐵 is an integer that determines the maximum multiplicative depth of the homomorphic computation. This is simply the maximum number of sequential multiplications required to perform the computation. For example, the function 𝑔(𝑥1, 𝑥2 , 𝑥3, 𝑥4) = 𝑥1𝑥2 + 𝑥3𝑥4 has multiplicative depth 1.
-在基本的BGV方案中，辅助输入B是一个整数，它决定了同态计算的最大乘法深度。这只是执行计算所需的最大顺序乘法数。例如，函数 g（x1， x2 ， x3， x4） = x1x2 + x3x4 的乘法深度为 1。
+In the basic BGV scheme, the auxiliary input 𝐵 is an integer that determines the maximum multiplicative depth of the homomorphic computation. This is simply the maximum number of sequential multiplications required to perform the computation. For example, the function $𝑔(𝑥_1, 𝑥_2 , 𝑥_3, 𝑥_4) = 𝑥_1𝑥_2 + 𝑥_3𝑥_4$ has multiplicative depth 1.
+在基本的BGV方案中，辅助输入B是一个整数，它决定了同态计算的最大乘法深度。这只是执行计算所需的最大顺序乘法数。例如，函数$𝑔(𝑥_1, 𝑥_2 , 𝑥_3, 𝑥_4) = 𝑥_1𝑥_2 + 𝑥_3𝑥_4$的乘法深度为 1。
 
 In the basic BGV scheme, the parameters param include the ciphertext modulus parameter 𝑞 and a ring 𝑅 = 𝑍[𝑥]/𝑓(𝑥) and corresponding plaintext ring 𝑅/𝑝𝑅 and ciphertext ring 𝑅/𝑞𝑅. The parameters param also specify a “key distribution” 𝐷1 and an “error distribution” 𝐷2 over 𝑅, the latter is based on a Gaussian distribution with standard deviation σ set according to the security guidelines specified in Section 2.1.5. 
-在基本的BGV方案中，参数参数包括密文模参数q和一个环R = Z[x]/f（x）和对应的明文环R/pR和密文环R/qR。参数参数还指定了 R 上的“密钥分布”D1 和“错误分布”D2，后者基于高斯分布，σ根据第 2.1.5 节中指定的安全准则设置标准差。
+在基本的BGV方案中，参数参数包括密文模参数q和一个环 𝑅 = 𝑍[𝑥]/𝑓(𝑥) 和对应的明文环R/pR和密文环R/qR。参数参数还指定了 R 上的“密钥分布”D1 和“错误分布”D2，后者基于高斯分布，σ根据第 2.1.5 节中指定的安全准则设置标准差。
 
 
 ##### BGV.SecKeygen(params) → SK, EK 
@@ -180,32 +180,34 @@ In the basic BGV scheme, there is no evaluation key EK.
 ##### BGV.PubKeygen(params) → SK, PK, EK.
 In the basic BGV scheme, PubKeygen first runs SecKeygen and obtains (𝑆𝐾, 𝐸𝐾) where 𝑆𝐾 is an element 𝑠 that belongs to the ring 𝑅.
 
-PubKeygen chooses a uniformly random element a from the ring 𝑅/𝑞𝑅 and outputs the public key 𝑃𝐾 which is a pair of ring elements (𝑝𝑘0, 𝑝𝑘1) = (−𝑎, 𝑎𝑠 + 𝑝𝑒) where 𝑒 is chosen from the error distribution 𝐷2. 
-PubKeygen 从环 R/qR 中选择一个均匀随机的元素 a，并输出公钥 PK，它是一对环元素 （pk0， pk1） = （−a， as + pe），其中 e 是从错误分布 D2 中选择的。
+PubKeygen chooses a uniformly random element a from the ring 𝑅/𝑞𝑅 and outputs the public key 𝑃𝐾 which is a pair of ring elements $(𝑝𝑘_0, 𝑝𝑘_1) = (−𝑎, 𝑎𝑠 + 𝑝𝑒)$ where 𝑒 is chosen from the error distribution $𝐷_2$. 
+PubKeygen 从环 R/qR 中选择一个均匀随机的元素 a，并输出公钥 PK，它是一对环元素 $(𝑝𝑘_0, 𝑝𝑘_1) = (−𝑎, 𝑎𝑠 + 𝑝𝑒)$，其中 𝑒 是从错误分布$𝐷_2$中选择的。
 
 
 ##### BGV.SecEncrypt(SK, M) → C
-In the basic BGV scheme, SecEncrypt first maps the message 𝑀 which comes from the plaintext space (either Zp^r or (Zp[x]/f(x)^r) into an element 𝑀̂ of the ring 𝑅/𝑝𝑅.
+In the basic BGV scheme, SecEncrypt first maps the message 𝑀 which comes from the plaintext space (either $Z_p^r$ or $(Z_p[x]/f(x)^r)$ into an element $\hat𝑀$ of the ring 𝑅/𝑝𝑅.
 
-SecEncrypt then samples a uniformly random element 𝑎 from the ring 𝑅/𝑞𝑅 and outputs the pair of ring elements (𝑐0, 𝑐1) = (−𝑎, 𝑎𝑠 + 𝑝𝑒 + 𝑀̂) where 𝑒 is chosen from the error distribution 𝐷2. (See Comments 1, 2 below for more general methods of encoding the message during encryption. The same comments apply also to public-key encryption with BGV.)
-然后，SecEncrypt 从环 R/qR 中采样一个均匀随机的元素 a，并输出一对环元素 （c0， c1） = （−a， as + pe + M̂），其中 e 是从误差分布 D2 中选择的。（请参阅下面的注释 1、2，了解在加密期间对消息进行编码的更一般方法。同样的注释也适用于使用 BGV 进行公钥加密。
+SecEncrypt then samples a uniformly random element 𝑎 from the ring 𝑅/𝑞𝑅 and outputs the pair of ring elements $(𝑐_0, 𝑐_1) = (−𝑎, 𝑎𝑠 + 𝑝𝑒 + \hat𝑀)$ where 𝑒 is chosen from the error distribution $𝐷_2$. (See Comments 1, 2 below for more general methods of encoding the message during encryption. The same comments apply also to public-key encryption with BGV.)
+然后，SecEncrypt 从环 R/qR 中采样一个均匀随机的元素 a，并输出一对环元素$(𝑐_0, 𝑐_1) = (−𝑎, 𝑎𝑠 + 𝑝𝑒 + \hat𝑀)$，其中 𝑒 是从误差分布 $𝐷_2$ 中选择的。（请参阅下面的注释 1、2，了解在加密期间对消息进行编码的更一般方法。同样的注释也适用于使用 BGV 进行公钥加密。
 
 
 ##### BGV.PubEncrypt(PK, M) → C
-In the basic BGV scheme, Pub.Encrypt first maps the message 𝑀 which comes from the plaintext space 𝑍𝑝𝑘 into an element 𝑀̂ of the ring 𝑅/𝑝𝑅. Recall that the public key 𝑃𝐾 is a pair of elements (𝑝𝑘0, 𝑝𝑘1).
+In the basic BGV scheme, Pub.Encrypt first maps the message 𝑀 which comes from the plaintext space $𝑍_𝑝^𝑘$ into an element $\hat𝑀$ of the ring 𝑅/𝑝𝑅. Recall that the public key 𝑃𝐾 is a pair of elements $(𝑝𝑘_0, 𝑝𝑘_1)$.
+在基本的 BGV 方案中，Pub.Encrypt 首先将来自明文空间$𝑍_𝑝^𝑘$的消息 M 映射到环 R/pR 的元素 $\hat𝑀$中。回想一下，公钥 PK 是一对元素 $(𝑝𝑘_0, 𝑝𝑘_1)$。
 
-PubEncrypt then samples three elements 𝑢 from distribution 𝐷1 and 𝑒1, 𝑒2 from the error distribution 𝐷2 and outputs the pair of ring elements (𝑐0, 𝑐1) = (𝑝𝑘0𝑢 + 𝑝𝑒1, 𝑝𝑘1𝑢 + 𝑝𝑒2 + 𝑀̂). 
+PubEncrypt then samples three elements 𝑢 from distribution $𝐷_1$ and $𝑒_1, 𝑒_2$ from the error distribution $𝐷_2$ and outputs the pair of ring elements $(𝑐_0, 𝑐_1) = (𝑝𝑘_0𝑢 + 𝑝𝑒_1, 𝑝𝑘_1𝑢 + 𝑝𝑒_2 + \hat𝑀)$. 
+
 
 ##### BGV.Decrypt(SK, C) → M
 
-In the basic BGV scheme, Decrypt takes as input the secret key which is an element 𝑠 of the ring 𝑅, and a ciphertext 𝐶 = (𝑐0, 𝑐1) which is a pair of elements from the ring 𝑅/𝑞𝑅. 
-在基本的 BGV 方案中，Decrypt 将密钥（环 R 的元素 s）和密文 C = （c0， c1） 作为输入，密文是环 R/qR 中的一对元素。
+In the basic BGV scheme, Decrypt takes as input the secret key which is an element 𝑠 of the ring 𝑅, and a ciphertext $𝐶 = (𝑐_0, 𝑐_1)$ which is a pair of elements from the ring 𝑅/𝑞𝑅. 
+在基本的 BGV 方案中，Decrypt 将密钥（环 R 的元素 s）和密文$𝐶 = (𝑐_0, 𝑐_1)$作为输入，密文是环 R/qR 中的一对元素。
 
 We remark that a ciphertext 𝐶 produced as the output of the encryption algorithm has two elements in 𝑅/𝑞𝑅, but upon homomorphic evaluation, ciphertexts can grow to have more ring elements. The decryption algorithm can be modified appropriately to handle such ciphertexts.
 我们指出，作为加密算法输出的密文 C 在 R/qR 中有两个元素，但在同态评估时，密文可以增长为具有更多的环元素。可以适当修改解密算法以处理此类密文。
 
-Decrypt first computes the ring element 𝑐0𝑠 + 𝑐1 over 𝑅/𝑞𝑅 and interprets it as an element 𝑐’ in the ring 𝑅. It then computes 𝑐’ (mod 𝑝), an element of 𝑅/𝑝𝑅, which it outputs.
-Decrypt 首先计算环元素 c0s + c1 over R/qR，并将其解释为环 R 中的元素 𝑐’。然后，它计算 𝑐’ (mod 𝑝)，这是 R/pR 的一个元素，并输出该元素。
+Decrypt first computes the ring element $𝑐_0𝑠 + 𝑐_1$ over 𝑅/𝑞𝑅 and interprets it as an element 𝑐’ in the ring 𝑅. It then computes 𝑐’ (mod 𝑝), an element of 𝑅/𝑝𝑅, which it outputs.
+Decrypt 首先计算环元素$𝑐_0𝑠 + 𝑐_1$ over R/qR，并将其解释为环 R 中的元素 𝑐’。然后，它计算 𝑐’ (mod 𝑝)，这是 R/pR 的一个元素，并输出该元素。
 
 
 ##### BGV.EvalAdd(Params, EK, C1, C2) → C3. 
@@ -213,22 +215,27 @@ In the basic BGV scheme, EvalAdd takes as input ciphertexts 𝐶1 = (𝑐1,0, �
 outputs 𝐶3 = (𝑐1,0 + 𝑐2,0, 𝑐1,1 + 𝑐2,1), where the operations are done in 𝑅/𝑞𝑅. 
 
 ##### BGV.EvalMult(Params, EK, C1, C2) → C3.
-In the basic BGV scheme, EvalMult takes as input ciphertexts 𝐶1 = (𝑐1,0, 𝑐1,1) and 𝐶2 = (𝑐2,0, 𝑐2,1)and outputs 𝐶3 = (𝑐1,0𝑐2,0, 𝑐1,0𝑐2,1 + 𝑐1,1𝑐2,0, 𝑐1,1𝑐2,1), where the operations are done in 𝑅/𝑞𝑅.
+In the basic BGV scheme, EvalMult takes as input ciphertexts $𝐶1 = (𝑐_{1,0}, 𝑐_{1,1})$ and $𝐶2 = (𝑐_{2,0}, 𝑐_{2,1})$and outputs $𝐶3 = (𝑐_{1,0}𝑐_{2,0}, 𝑐_{1,0}𝑐_{2,1} + 𝑐_{1,1}𝑐_{2,0}, 𝑐_{1,1}𝑐_{2,1})$, where the operations are done in 𝑅/𝑞𝑅.
 
 
-**Comment 1.** The noise term 𝑝𝑒 + 𝑀̂ in the encryption procedure can be generalized to an error term drawn from the coset 𝑀̂ + 𝑝𝑅, according to an error-sampling procedure. All the considerations discussed below for the error distribution 𝐷2, apply equally to the error-sampling procedure in this more general implementation.
+**Comment 1.** The noise term $𝑝𝑒 + \hat𝑀$ in the encryption procedure can be generalized to an error term drawn from the coset $\hat𝑀 + 𝑝𝑅$, according to an error-sampling procedure. All the considerations discussed below for the error distribution $𝐷_2$, apply equally to the error-sampling procedure in this more general implementation.
+根据错误采样过程，加密过程中的噪声项 $𝑝𝑒 + \hat𝑀$ 可以推广为从 coset $\hat𝑀 + 𝑝𝑅$ 中提取的错误项。下面讨论的关于误差分布$𝐷_2$的所有注意事项，同样适用于此更通用的实现中的错误采样过程。
 
-**Comment 2.** There is also an equivalent “MSB encoding” of the message for BGV encryption, where the message is encoded as 𝑊𝑀̂+e (with 𝑊 = ⌊𝑞/𝑝⌋, similarly to the BFV scheme below). There are lossless conversions between these two encoding methods, as long as the plaintext modulus p is co-prime with the ciphertext modulus q.
+**Comment 2.** There is also an equivalent “MSB encoding” of the message for BGV encryption, where the message is encoded as $𝑊\hat𝑀+e$ (with 𝑊 = ⌊𝑞/𝑝⌋, similarly to the BFV scheme below). There are lossless conversions between these two encoding methods, as long as the plaintext modulus p is co-prime with the ciphertext modulus q.
+对于 BGV 加密，消息还有一个等效的“MSB 编码”，其中消息被编码为 $𝑊\hat𝑀+e$（W = ⌊q/p⌋，类似于下面的 BFV 方案）。这两种编码方法之间存在无损转换，只要明文模量 p 与密文模量 q 共质即可。
+
 
 ##### The Full BGV Scheme
 In the basic BGV scheme, ciphertexts grow as a result of EvalMult. For example, given two ciphertexts each composed of two ring elements, EvalMult as described above results in three ring elements. This can be further repeated, but has the disadvantage that upon evaluating a degree-𝑑 polynomial on the plaintexts, the resulting ciphertext has 𝑑 + 1 ring elements.
+在基本的 BGV 方案中，密文因 EvalMult 而增长。例如，给定两个密文，每个密文由两个环形元素组成，如上所述，EvalMult 会产生三个环形元素。这可以进一步重复，但缺点是，在计算明文上的 d 次多项式时，生成的密文具有 d + 1 个环元素。
 
 This deficiency is mitigated in the full BGV scheme, with two additional procedures. The first is called “Key Switching” or “Relinearization” which is implemented by calling the Refresh subroutine with flag = “KeySwitch”, and the second is “Modulus Switching” or “Modulus Reduction” which is implemented by calling the Refresh subroutine with flag = “ModSwitch”. Support for key switching and modulus switching also necessitates augmenting the key generation algorithm.
+在完整的BGV方案中，通过两个额外的程序，这一缺陷得到了缓解。第一个称为“密钥切换”或“Relinearization”，它是通过调用带有 flag = “KeySwitch” 的 Refresh 子程序来实现的，第二个是“模数切换”或“模数降低”，它是通过调用带有 flag = “ModSwitch” 的 Refresh 子程序来实现的。对密钥切换和模数切换的支持还需要增强密钥生成算法。
 
 For details on the implementation of the full BGV scheme, we refer the reader to [BGV12].
 
 **Properties Supported.** The BGV scheme supports many features described in Section 6, including packed evaluations of circuits and can be extended into a threshold homomorphic encryption scheme. In terms of security, the BGV homomorphic evaluation algorithms can be augmented to provide evaluation privacy (with respect to semi-honest adversaries).
-
+**支持的属性。 BGV 方案支持第 6 节中描述的许多功能，包括电路的打包评估，并且可以扩展为阈值同态加密方案。在安全性方面，BGV同态评估算法可以得到增强，以提供评估隐私（相对于半诚实的对手）。
 
 
 #### b. Brakerski/Fan-Vercauteren (BFV)
@@ -236,24 +243,29 @@ We follow the same notations as the previous section.
 
 ##### BFV.ParamGen(λ, PT, K, B) → Params.
 We assume the parameters are instantiated following the recommendations outlined in Section 5. Similarly to BGV, the parameters include:
-- Key- and error-distributions 𝐷1,𝐷2 
+- Key- and error-distributions $𝐷_1,𝐷_2$ 
 - a ring 𝑅 and its corresponding integer modulus 𝑞 
 - Integer modulus 𝑝 for the plaintext
 In addition, the BFV parameters also include:
-- Integer 𝑇, and 𝐿 = log𝑇 𝑞. T is the bit-decomposition modulus.
+- Integer 𝑇, and $𝐿 = log_𝑇 𝑞$. T is the bit-decomposition modulus. T是位分解模量。
 - Integer 𝑊 = ⌊𝑞/𝑝⌋ 
 
 ##### BFV.SecKeygen(Params) -> SK, EK
-The secret key 𝑆𝐾 of the encryption scheme is a random element𝑠 from the distribution 𝐷1 defined as per Section 5. The evaluation key consists of 𝐿 LWE samples encoding the secret 𝑠 in a specific fashion. In particular, for 𝑖 = 1, … , 𝐿, sample a random 𝑎𝑖from 𝑅/𝑞𝑅 and error 𝑒𝑖 from 𝐷2, compute
-𝐸𝐾𝑖 = (−(𝑎𝑖𝑠 + 𝑒𝑖) + 𝑇𝑖𝑠2, 𝑎𝑖),
+The secret key 𝑆𝐾 of the encryption scheme is a random element𝑠 from the distribution $𝐷_1$ defined as per Section 5. The evaluation key consists of 𝐿 LWE samples encoding the secret 𝑠 in a specific fashion. In particular, for 𝑖 = 1, … , 𝐿, sample a random $𝑎_𝑖$ from 𝑅/𝑞𝑅 and error $𝑒_𝑖$ from $𝐷_2$, compute
+加密方案的密钥 SK 是来自第 5 节定义的分布 $𝐷_1$ 的随机元素。评估密钥由 L LWE 样本组成，这些样本以特定方式对密钥进行编码。特别是，对于 i = 1， ... ， L，从 R/qR 中抽取随机 $𝑎_𝑖$，从$𝐷_2$中抽取误差 $𝑒_𝑖$ ，计算
 
-and set 𝐸𝐾 = (𝐸𝐾1, … , 𝐸𝐾𝐿). 
+$$𝐸𝐾_𝑖 = (−(𝑎_𝑖𝑠 + 𝑒_𝑖) + 𝑇^𝑖𝑠^2, 𝑎_𝑖)$$
+
+and set $𝐸𝐾 = (𝐸𝐾_1, … , 𝐸𝐾_𝐿)$. 
+
 
 ##### BFV.PubKeygen(params) -> SK, PK, EK.
-The secret key SK of the encryption scheme is a random element 𝑠 from the distribution 𝐷1. The public key is a random LWE sample with the secret 𝑠. In particular, it is computed by sampling a random element 𝑎 from 𝑅/𝑞𝑅 and an error 𝑒 from the distribution 𝐷2 and setting: 
+The secret key SK of the encryption scheme is a random element 𝑠 from the distribution 𝐷1. The public key is a random LWE sample with the secret 𝑠. In particular, it is computed by sampling a random element 𝑎 from 𝑅/𝑞𝑅 and an error 𝑒 from the distribution $𝐷_2$ and setting: 
+加密方案的密钥 SK 是分布 D1 中的随机元素 s。公钥是带有密钥 s 的随机 LWE 样本。具体而言，它是通过从 R/qR 中抽取随机元素 a 和从分布 D2 中抽取误差 e 来计算的，并设置：
+
 𝑃𝐾 = (−(𝑎𝑠 + 𝑒), 𝑎), where all operations are performed over the ring 𝑅/𝑞𝑅. 
 
-The evaluation key is computed as in BFV.SecKeygen. 
+The evaluation key is computed as in BFV.SecKeygen. 评估密钥的计算方式与BFV.SecKeygen相同。
 
 
 ##### BFV.PubEncrypt(PK, M) -> C
@@ -268,12 +280,15 @@ In particular, $𝐶 = (𝑝𝑘_0𝑢 + 𝑒_1 + 𝑊𝑀, 𝑝𝑘_1𝑢 + �
 
 ##### BFV.Decrypt(SK, C) -> M
 The main invariant of the BFV scheme is that when we interpret the elements of a ciphertext 𝐶 as the coefficients of a polynomial then, 𝐶(𝑠) = 𝑊 𝑀 + 𝑒 for some “small” error 𝑒. The message 𝑀 can be recovered by dividing the polynomial 𝐶(𝑠) by 𝑊 , rounding each coefficient to the nearest integer, and reducing each coefficient modulo 𝑝. 
+BFV 方案的主要不变量是，当我们将密文 C 的元素解释为多项式的系数时，对于一些“小”误差 e，C（s） = W M + e。消息 M 可以通过将多项式 C（s） 除以 W 来恢复，将每个系数四舍五入到最接近的整数，并减去每个系数模 p。
 
 
 ##### BFV.EvalAdd(EK, C1, C2) -> C3
-Parse the ciphertexts as 𝐶𝑖 = (𝑐𝑖,0, 𝑐𝑖,1). Then, addition corresponds to component-wise addition of two ciphertext components. That is, $𝐶3 = (𝑐_{1,0} + 𝑐_{2,0}, 𝑐_{1,1} + 𝑐_{2,1})$.
+Parse the ciphertexts as $𝐶𝑖 = (𝑐_{𝑖,0}, 𝑐_{𝑖,1})$. Then, addition corresponds to component-wise addition of two ciphertext components. That is, $𝐶3 = (𝑐_{1,0} + 𝑐_{2,0}, 𝑐_{1,1} + 𝑐_{2,1})$.
+将密文解析为$𝐶𝑖 = (𝑐_{𝑖,0}, 𝑐_{𝑖,1})$。然后，加法对应于两个密文组件的组件相加。即，$𝐶3 = (𝑐_{1,0} + 𝑐_{2,0}, 𝑐_{1,1} + 𝑐_{2,1})$。
 
-It is easy to verify that 𝐶3(𝑠) = 𝑊 (𝑀1 + 𝑀2) + 𝑒, where 𝑀1, 𝑀2 are messages encrypted in 𝐶1, 𝐶2 and 𝑒 is the new error component. 
+It is easy to verify that $𝐶3(𝑠) = 𝑊 (𝑀_1 + 𝑀_2) + 𝑒$, where 𝑀1, 𝑀2 are messages encrypted in 𝐶1, 𝐶2 and 𝑒 is the new error component. 
+很容易验证$𝐶3(𝑠) = 𝑊 (𝑀_1 + 𝑀_2) + 𝑒$，其中 M1、M2 是在 C1 中加密的消息，C2 和 e 是新的错误组件。
 
 
 ##### BFV.EvalMult(EK, C1, C2) -> C3
@@ -282,10 +297,13 @@ EvalMult takes as input ciphertexts $𝐶1 = (𝑐_{1,0}, 𝑐_{1,1})$ and $𝐶
 One can verify that 𝐶3(𝑠) = 𝑊(𝑀1 ∗ 𝑀2) + 𝑒, for some error term 𝑒. 
 
 Note that the ciphertext size increases in this operation. One may apply a Relinearization algorithm as in the BGV scheme to obtain a new ciphertext of the original size encrypting the same message 𝑀1 ∗ 𝑀2. 
+请注意，密文大小在此操作中会增加。可以应用 BGV 方案中的 Relinearization 算法来获取原始大小的新密文，对相同的消息 M1 ∗ M2 进行加密。
 
 **Properties Supported.** The complete BFV scheme supports many features described in Section 6, including packed evaluations of circuits and can be extended into a threshold homomorphic encryption scheme. In terms of security, the BFV homomorphic evaluation algorithms can be augmented to provide evaluation privacy.
+**支持的属性。 完整的 BFV 方案支持第 6 节中描述的许多功能，包括电路的打包评估，并且可以扩展为阈值同态加密方案。在安全性方面，BFV同态评估算法可以得到增强，以提供评估隐私。
 
 For details on the implementation of the full BFV scheme, we refer the reader to [B12], [FV12]. 
+
 
 #### c. Comparison between BGV and BFV
 When implementing HE schemes, there are many choices which can be made to optimize performance for different architectures and different application scenarios. This makes a direct comparison of these schemes quite challenging. A paper by Costache and Smart [CS16] gives some initial comparisons between BGV, BFV and two of the schemes described below: YASHE and LTV/NTRU. A paper by Kim and Lauter [KL15] compares the performance of the BGV and YASHE schemes in the context of applications.Since there is further ongoing work in this area, we leave this comparison as an open research question.
@@ -311,21 +329,30 @@ This is essentially the same as the key generation procedure of the BGV or BFV s
 
 - GSW.SecEncrypt(S,M):
 Choose an uniformly random vector 𝐴 in 𝑅2 log(𝑞), a small random vector 𝐸 (with entries chosen independently at random from the error distribution), and output the ciphertext 𝐶 = (𝐴, 𝐴 ∗ 𝑆 + 𝐸) + 𝑀 ∗ 𝐺 where 𝐺 = [𝐼, 2 𝐼, … , 2𝑘−1𝐼] is a gadget matrix consisting of 𝑘 = 𝑙𝑜𝑔(𝑞) copies of the 2x2 identity matrix 𝐼 (over the ring), scaled by powers of 2.
+在 R2 log（q） 中选择一个均匀随机的向量 A，一个小的随机向量 E（从误差分布中随机选择条目），并输出密文 C = （A， A ∗ S + E） + M ∗ G，其中 G = [I， 2 I， ...， ， 2k−1I] 是一个小工具矩阵，由 2x2 单位矩阵 I 的 k = log（q） 副本组成（在环上）， 按 2 的幂缩放。
 
 We note that there are other possibilities for choosing the gadget matrix G above (for example the constants 2,4, … , 2𝑘−1can be replaced by others). Other choices may be described in future documents. 
+我们注意到，选择上面的小工具矩阵 G 还有其他可能性（例如常数 2,4， ...， 2k−1 可以被其他常数替换）。其他选择可能会在以后的文件中描述。
 
 We omit the description of the decryption procedure, as it is not needed for bootstrapping. Notice that:
+我们省略了解密过程的描述，因为引导不需要它。请注意：
 - The secret key generation process is the same as most other LWE-based encryption schemes, including BGV and BFV.
 - The encryption procedure essentially consists of 2 𝑙𝑜𝑔(𝑞) independent application of the basic LWE/BGV/BFV encryption: choose random key elements 𝑎 and 𝑒, and outputs (𝑎, 𝑎𝑠 + 𝑒 + 𝑚), but applied to scaled copies of the message 𝑚 = 2𝑖 𝑀. (The even rows of the GSW ciphertext encrypt the message as (𝑎 + 𝑚, 𝑎𝑠 + 𝑒), but this is just a minor variant on LWE encryption, and equivalent to it from a security standpoint.)
+加密过程实质上包括 2 个独立于 log（q） 的基本 LWE/BGV/BFV 加密应用：选择随机密钥元素 a 和 e，并输出 （a， as + e + m），但应用于消息 m = 2i M 的缩放副本。 （GSW 密文的偶数行将消息加密为 （a + m， as + e）， 但这只是 LWE 加密的一个小变体，从安全角度来看，它等效于它。
+
 - Security rests on the standard LWE assumption, as used also by BGV and BFV, which says that the distribution (𝐴, 𝐴 ∗ 𝑆 + 𝐸) is pseudorandom. 
+安全性基于标准的 LWE 假设，BGV 和 BFV 也使用这种假设，即分布（A、A ∗ S + E）是伪随机的。
 
 So, GSW can be based on LWE security estimates similar to those used to instantiate the BGV or BFV cryptosystems. 因此，GSW可以基于LWE安全估计，类似于用于实例化BGV或BFV密码系统的估计。
+
 
 In [GSW13] it is shown how (a public key version of) this cryptosystem supports both addition and multiplication, without the need for an evaluation key, which has applications to identity-based and attribute-based homomorphic encryption. Later, in [BV14] it was observed how the GSW multiplication operation exhibits an asymmetric noise growth that can be exploited to implement bootstrapping based on the hardness of approximating lattice problems within polynomial factors. Many subsequent papers (e.g., [AP14, DM15, GINX16, CGGI16]) improve on the efficiency of [BV14], but they all share the following features with [BV14]: 
 在 [GSW13] 中，展示了该密码系统（公钥版本）如何支持加法和乘法，而无需评估密钥，该密钥具有基于身份和基于属性的同态加密的应用。后来，在 [BV14] 中观察到 GSW 乘法运算如何表现出不对称噪声增长，可以利用这种增长来实现基于多项式因子内近似晶格问题的硬度的自举。许多后续论文（例如，[AP14，DM15，GINX16，CGGI16]）提高了[BV14]的效率，但它们都共享[BV14] 的以下功能：
 - They all use variants of the GSW encryption to implement bootstrapping.
 它们都使用 GSW 加密的变体来实现引导。
+
 - Security only relies on the hardness of approximating lattice problems within polynomial factors.安全性仅取决于多项式因子内近似晶格问题的硬度。
+
 - They are capable of bootstrapping any LWE-based encryption scheme, i.e., any scheme which includes an LWE encryption of the message as part of the ciphertext. LWE-based schemes include BGV, BFV and GSW.
 它们能够引导任何基于 LWE 的加密方案，即任何将消息的 LWE 加密作为密文的一部分的方案。基于 LWE 的方案包括 BGV、BFV 和 GSW。
 

@@ -41,31 +41,23 @@ class Solution:
             allNumber.add(psum-upper)
     
         hvalue, initial  = {}, 0
-        for num in allNumber:
+        for num in sorted(list(allNumber)):
             hvalue[num] = initial
             initial += 1
         
         import math
-        tree = [-1] * (2 ** (math.ceil(math.log(len(allNumber), 2))+1) - 1)
-        def build(l:int, r:int, p:int):
-            if l == r:
-                tree[p] = 0
-            if r > l:
-                mid = (l + r) // 2
-                build(l, mid, p*2 +1)
-                build(mid+1, r, p*2 +2)
-                tree[p] = tree[p*2 + 1] + tree[p*2 + 2]
+        # build the segment tree, it initial count is 0
+        tree = [0] * (2 ** (math.ceil(math.log(len(allNumber), 2))+1) - 1)
         
-        def update(l:int, r:int, s:int, t:int, p:int):
-            if l <= s and t <= r:
-                tree[p] = 1
+        def update(value:int, s:int, t:int, p:int):
+            tree[p] += 1
+            if s == t:
                 return
             m = s + ((t - s) >> 1)
-            if l <= m:
-                update(l, r, s, m, p*2+1)
-            if r > m:
-                update(l, r, m + 1, t, p*2+2)
-            tree[p] = tree[p*2+1] + tree[p*2+2]
+            if value <= m:
+                update(value, s, m, p*2+1)
+            if value > m:
+                update(value, m + 1, t, p*2+2)
         
         def query(l, r, s, t, p):
             if l <= s and t <= r:
@@ -75,12 +67,19 @@ class Solution:
             if l <= m:
                 count = query(l, r, s, m, p * 2 + 1)
             if r > m:
-                sum = sum + query(l, r, m + 1, t, p * 2 + 2)
+                count = count + query(l, r, m + 1, t, p * 2 + 2)
             return count
-        
 
+        ans = 0
+        for i in range(len(psums)):
+            left, right = hvalue[psums[i]-upper], hvalue[psums[i]-lower]
+            ans += query(left, right, 0, len(allNumber)-1, 0)
+            update(hvalue[psums[i]],0, len(allNumber)-1, 0)
+
+        return ans
 
 if __name__ == "__main__":
     sol = Solution()
     nums, lower, upper = [-2,5,-1], -2, 2
     print(sol.countRangeSum(nums, lower, upper))
+    print(sol.countRangeSum_segtree(nums, lower, upper))

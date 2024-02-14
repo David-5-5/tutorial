@@ -1,6 +1,6 @@
 from typing import Callable
 class Fancy:
-
+    # 采用线段树方案，!!!!!! OVERTIME !!!!!!!!
     def pushdown(self, s, t, p):
         if s == t:
             while self.tp[p]:
@@ -85,8 +85,41 @@ class Fancy:
         if idx >= self.cnt: return -1
         return self.get(idx, 0, self.n-1, 0)
 
+
+class Fancy2:
+    '''参考官方题解，
+    keep small, keep quickly
+    '''
+    def __init__(self):
+        self.MOD = 10 ** 9 + 7
+        self.coeff = [[1, 0]]
+        self.values = []
+
+    def append(self, val: int) -> None:
+        self.values.append(val)
+        self.coeff.append([self.coeff[-1][0], self.coeff[-1][1]])
+
+    def addAll(self, inc: int) -> None:
+        # execute mod calculation, keep small        
+        self.coeff[-1][1]= (self.coeff[-1][1]+inc) % self.MOD
+
+    def multAll(self, m: int) -> None:
+        # execute mod calculation, keep small        
+        self.coeff[-1][0] = (self.coeff[-1][0] * m) % self.MOD
+        self.coeff[-1][1] = (self.coeff[-1][1] * m) % self.MOD
+
+    def getIndex(self, idx: int) -> int:
+        if idx >= len(self.values): return -1
+        
+        # compute inverse
+        a = (self.coeff[-1][0] * pow(self.coeff[idx][0], self.MOD-2, self.MOD)) % self.MOD
+        b = self.coeff[-1][1] - a * self.coeff[idx][1]
+        return (a * self.values[idx] + b) % self.MOD
+
+
+
 if __name__ == "__main__":
-    fancy = Fancy()
+    fancy = Fancy2()
     fancy.append(2)
     print(fancy.getIndex(0))
     fancy.multAll(3)

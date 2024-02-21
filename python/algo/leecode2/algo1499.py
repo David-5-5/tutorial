@@ -2,6 +2,18 @@ from collections import deque
 from typing import List
 class Solution:
     def findMaxValueOfEquation(self, points: List[List[int]], k: int) -> int:
+        # 单调队列  对point(xi, yi) 
+        # 首先确定头部出队列的要求：
+        # 1. x_to_append - x_head > k, 队列head需要出队列，单调队列中, 当 i < j满足xi - xt <= k,  
+        # 2. 单调队列中 t < s < .. < i < ..., i分别和头部t及s的函数值分别为xi+yi+yt-xt 和 xi+yi+ys-xs
+        #    当 yt - xt >= ys - xs, 则 point t和任意后续point的函数值都会小于point s，
+        #    因此point t和后续任意点的函数值都小于等于point s的函数值, 将point t出队列
+        # 其次确定尾部出队列的条件，
+        # 1. 对于 ... < t < ... < i , t和尾部point i及待进队列的point k的函数值分别为：xi+yi+yt-xt 和 xk+yk+yt-xt
+        #    当 xi + yi <= xk + yk时，point i和前序所有点的函数都小于等于待进队列和前序的点
+        # 2. 同时随着头部出队列，i及待进队列point k将逐步成为头部，因此i和待进队列point k同时满足yi - xi <= yk- xk
+        #    这样避免i出队列后，和后续point的函数值大于point k和后续point的函数值
+        # 函数值至少需要两个元素，因此仅当队列大于两个元素时，进行出队列操作
         ans = - float("inf")
         q = deque()
         for x, y in points:

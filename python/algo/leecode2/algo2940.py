@@ -1,12 +1,20 @@
 from typing import List
-from sortedcontainers import SortedDict
+from sortedcontainers import SortedDict, SortedList
 class Solution:
     def leftmostBuildingQueries(self, heights: List[int], queries: List[List[int]]) -> List[int]:
         n = len(queries)
         ans = [-1] * n
 
-        q = []
-        sd = SortedDict()
+        q = SortedList()
+        # 首先遍历 queries 数组
+        # 情况1, queries[qi][0] == queries[qi][1], ans[i] = queries[qi][0]
+        # 情况2, 若queries[qi][0/1] < queries[qi][1/0]且 heights[queries[qi][0/1]] < heights[queries[qi][1/0]]
+        #       ans[i] = max(queries[qi][0],queries[qi][1])
+        # 情况3, 若queries[qi][0/1] < queries[qi][1/0]且 heights[queries[qi][0/1]] > heightsqueries[qi][1/0]]
+        #       将[i, max(queries[qi][0],queries[qi][1]), max(heights[queries[qi][0]],heights[queries[qi][1]])
+        #       放入列表，共后续处理， qi 为queries索引， 对应到 ans 的索引
+        #       在 heights 中索引及值同时大于max(queries[i][0],queries[i][1]), 
+        #       max(heights[queries[i][0]],heights[queries[i][1]])的最左的值
         for qi, query in enumerate(queries):
             if query[0] == query[1]:
                 ans[qi] = query[0]
@@ -15,10 +23,17 @@ class Solution:
             if heights[i] < heights[j]:
                 ans[qi] = j
             else:
-                q.append([j, qi, heights[i]])
-        q.sort()
+                # j = max(queries[i][0],queries[i][1])
+                # heights[i] = max(heights[queries[i][0]],heights[queries[i][1]])
+                q.add([j, qi, heights[i]])
 
         m = len(heights)
+        # key: 查询的高度值，value: queries中的索引列表
+        sd = SortedDict()
+        # 遍历 heights
+        # 首先，将 q 待处理列表中 j 小于 heights 中索引 i 的值qi及height放入有序字典 sd
+        # 其次，sd 中找出键值小于 heights[i] 的在 queries 中 索引 qi，其 ans 即为 i
+        # 最后，删除 sd 中键值小于 heights[i] 的键 
         for i in range(m):
             while q and q[0][0] < i:
                 _, idx, val = q.pop(0)

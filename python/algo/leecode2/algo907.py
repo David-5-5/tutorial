@@ -1,5 +1,4 @@
 from typing import List
-from math import factorial
 class Solution:
     def sumSubarrayMins(self, arr: List[int]) -> int:
         MOD = 10 ** 9 + 7

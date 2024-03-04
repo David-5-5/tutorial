@@ -25,6 +25,7 @@ class Solution:
                 if st: ans[st[-1]] -= i - inx - 1
             st.append(i)
         
+        # 若剩余最后的列表，加上相邻两个元素的下标差
         prev = 0
         if st: prev = st[-1]
         while st:
@@ -35,5 +36,5 @@ class Solution:
 
 if __name__ == "__main__":
     sol = Solution()
-    heights = [10,6,8,5,11,9]
+    heights = [9,8,6,7]
     print(sol.canSeePersonsCount(heights))

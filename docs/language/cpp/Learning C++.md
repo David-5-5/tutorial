@@ -129,6 +129,18 @@ std::unique_ptr 有两个版本：
 - 管理动态分配的对象数组(例如，使用 new[] 分配)。
 
 
+### std::move
+```cpp
+template< class T >
+typename std::remove_reference<T>::type&& move( T&& t ) noexcept;
+
+template< class T >
+constexpr std::remove_reference_t<T>&& move( T&& t ) noexcept;
+```
+std::move 用于表示对象 t 可以“移动”，即允许将资源从 t 有效地转移到另一个对象。
+
+具体而言，std::move 会生成一个 xvalue 表达式，用于标识其参数 t。它完全等同于右值引用类型的static_cast。
+
 
 
 ## C++ Language
@@ -560,7 +572,7 @@ Expression | As member function | As non-member function | Example
 a@b | (a).operator@ (b) | operator@ (a, b) | `std::cout << 42` calls `std::cout.operator<<(42)`
 a=b | (a).operator= (b) | cannot be non-member | Given `std::string s;`, `s = "abc";` calls `s.operator=("abc")`
 a(b...) | (a).operator()(b...) | cannot be non-member | Given `std::random_device r;`, `auto n = r();` calls `r.operator()()`
-a[b...] | (a).operator[](b...) | cannot be non-member | Given `std::map<int, int> m;, m[1] = 2;` calls `m.operator[]`(1)
+a[b...] | (a).operator[](b...) | cannot be non-member | Given `std::map<int, int> m;, m[1] = 2;` calls `m.operator[](1)`
 a-> | (a).operator-> ( ) | cannot be non-member | Given `std::unique_ptr<S> p;`, `p->bar()` calls `p.operator->()`
 a@ | (a).operator@ (0) | operator@ (a, 0) | Given `std::vector<int>::iterator i;`, `i++` calls `i.operator++(0)`
 

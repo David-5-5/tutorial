@@ -816,9 +816,14 @@ v.insert(someIterator, {42, 3.1416});    ///< 需要产生一个临时变量
 ```
 
 
-## GCC Command Options
 
-### Attribute Syntax
+
+
+
+## GCC related
+### GCC Command Options
+
+#### Attribute Syntax
 `__attribute__` 是一个用于在声明时指定一些特性的编译器指令, 可以让我们进行更多的错误检查以及高级优化工作。关于__attribute__具体解释, 查了一下GNU C关于它的描述, 摘录如下
 > The syntax with which `__attribute__` may be used, and the constructs to which attribute specifiers bind, for the C language. Some details may vary for C++ and Objective-C. Because of infelicities in the grammar for attributes, some forms described here may not be successfully parsed in all cases.
 对于 C 语言, 可以使用 `__attribute__` 的语法, 以及属性说明符绑定到的构造。对于 C++ 和 Objective-C, 某些细节可能会有所不同。由于属性语法的缺陷, 此处描述的某些形式可能无法在所有情况下都成功解析。
@@ -838,3 +843,20 @@ __attribute__((unused))
 __attribute__((__always_inline__))
 ```
 
+
+### gcc __buildin functions
+以 __builtin 开头的函数，是一种相当神奇的位运算函数
+
+- __builtin_ctz( ) / __buitlin_ctzll( ) 返回括号内数的二进制表示数末尾0的个数
+
+- __buitlin_clz( ) / __buitlin_clzll( ) 返回括号内数的二进制表示数前导0的个数
+
+- __builtin_popcount( ) 返回括号内数的二进制表示数1的个数
+
+- __builtin_parity( ) 判断括号中数的二进制表示数1的个数的奇偶性(偶数返回0 , 奇数返回0)
+
+- __builtin_ffs( ) 返回括号中数的二进制表示数的最后一个1在第几位(从后往前算)
+
+- __builtin_sqrt( ) 快速开平方
+
+- __builtin_sqrtf( ) 快速开平方

@@ -1,7 +1,6 @@
 #include <vector>
 #include <cassert>
 #include <iostream>
-#include <string>
  
 struct President
 {

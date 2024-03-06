@@ -1,5 +1,4 @@
 #include <iostream>
-#include <stdexcept>
  
 // C++11 constexpr functions use recursion rather than iteration
 constexpr int factorial(int n)

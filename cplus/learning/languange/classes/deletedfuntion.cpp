@@ -1,7 +1,6 @@
 
 // C++ program to disable the usage of
 // copy-constructor using delete operator
-#include <iostream>
 using namespace std;
  
 class A {

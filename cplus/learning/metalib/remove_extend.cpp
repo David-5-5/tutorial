@@ -1,7 +1,5 @@
-#include <algorithm>
 #include <iostream>
 #include <iterator>
-#include <type_traits>
  
 template<class A>
     std::enable_if_t<std::rank_v<A> == 1>

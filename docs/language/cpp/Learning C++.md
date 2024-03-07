@@ -577,6 +577,29 @@ a-> | (a).operator-> ( ) | cannot be non-member | Given `std::unique_ptr<S> p;`,
 a@ | (a).operator@ (0) | operator@ (a, 0) | Given `std::vector<int>::iterator i;`, `i++` calls `i.operator++(0)`
 
 
+#### Value categories
+Each C++ expression (an operator with its operands, a literal, a variable name, etc.) is characterized by two independent properties: a type and a value category. Each expression has some non-reference type, and each expression belongs to exactly one of the three primary value categories: prvalue, xvalue, and lvalue.
+每个 C++ 表达式（运算符及其操作数、文本、变量名等）都由两个独立的属性来表征：类型和值类别。每个表达式都有一些非引用类型，并且每个表达式恰好属于三个主要值类别之一：prvalue、xvalue 和 lvalue。
+- a glvalue (“generalized” lvalue) is an expression whose evaluation determines the identity of an object or function;
+glvalue（“广义”左值）是一种表达式，其计算决定了对象或函数的身份;
+
+- a prvalue (“pure” rvalue) is an expression whose evaluation
+prvalue（“纯”右值）是一个表达式，其计算值
+  - computes the value of an operand of a built-in operator (such prvalue has no result object), or
+  计算内置运算符的操作数值（此类 prvalue 没有结果对象），或者
+  - initializes an object (such prvalue is said to have a result object).
+  初始化一个对象（这样的 prvalue 被称为具有 result 对象）。
+  The result object may be a variable, an object created by new-expression, a temporary created by temporary materialization, or a member thereof. Note that non-void discarded expressions have a result object (the materialized temporary). Also, every class and array prvalue has a result object except when it is the operand of decltype;
+  结果对象可以是变量、由 new-expression 创建的对象、由临时物化创建的临时对象或其成员。请注意，非 void 丢弃表达式具有 result 对象（具体化的临时对象）。此外，每个类和数组 prvalue 都有一个结果对象，除非它是 decltype 的操作数;
+
+- an xvalue (an “eXpiring” value) is a glvalue that denotes an object whose resources can be reused;
+xvalue（一个“eXpiring”值）是一个glvalue，表示其资源可以重用的对象;
+
+- an lvalue is a glvalue that is not an xvalue;
+
+- an rvalue is a prvalue or an xvalue;
+
+
 
 ### Declarations
 

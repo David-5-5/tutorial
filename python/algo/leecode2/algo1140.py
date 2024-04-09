@@ -1,4 +1,5 @@
 from typing import List
+from functools import lru_cache
 
 from itertools import accumulate
 class Solution:
@@ -7,19 +8,26 @@ class Solution:
 
         presum = list(accumulate(piles, initial=0))
 
-        dp = [[0] * (n+1) for _ in range(n+1)]
+        @lru_cache(maxsize = None)
+        def dp(begin: int, x: int, m: int):
+            if begin + x >= n:
+                return presum[n]-presum[begin]
+            
+            opp = 0
 
-        for i in range(n-1,-1,-1):
-            for x in range(n):
-                if x+1+i > n:
+            for i in range(2*m):
+                if begin+x+i+1 > n:
                     break;
-                dp[i][x] = presum[n]-presum[i] - max(dp[i+x+1][0:(1+x)*2])
+                opp = max(opp, dp(begin+x, i+1, max(m, (i+1))))
 
-        return max(dp[0][0],dp[0][1])
+            return presum[n]- presum[begin] - opp
+
+        print(dp(0,2,2))
+        return dp(0,1,1)
 
 
 
 if __name__ == "__main__":
     sol = Solution()
-    piles = [77,12,64,35,28,4,87,21,20]
+    piles = [1,2,3,4,5,100]
     print(sol.stoneGameII(piles))

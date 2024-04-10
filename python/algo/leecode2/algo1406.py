@@ -39,7 +39,7 @@ class Solution:
         # 3) 当前玩家选择了一堆石子，那么留给下一位玩家的状态为 dp[i+3]
         #    当前玩家拿到 sum(i..i+2) - dp[i+3]
         # 综上所述：
-        #    dp[i] = max(sum(i..i+j-1)-f[i+j]) j ∈ [1, 3]
+        #    dp[i] = max(sum(i..i+j-1)-dp[i+j]) j ∈ [1, 3]
         dp = [-float("inf")] * n + [0]
 
         presum = list(accumulate(stoneValue, initial=0))

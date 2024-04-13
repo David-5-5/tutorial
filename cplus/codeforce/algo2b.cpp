@@ -2,6 +2,7 @@
 #include <vector>
 #include <map>
 #include <set>
+#include <random>
 
 using namespace std;
 
@@ -54,9 +55,10 @@ string solution(vector<vector<int>> m)
 
     visiting.push_back(start);
     int begin = 0;
-    while (begin++ <= 2*n-2)
+    while (begin++ <= 2 * n - 2)
     {
         candiate.clear();
+
         for (int i = 0; i < visiting.size(); i++)
         {
             Point p = visiting[i];
@@ -93,41 +95,72 @@ string solution(vector<vector<int>> m)
         }
         visiting.clear();
 
-        if (begin == 2*n - 2)
-            break; 
+        if (begin == 2 * n - 2)
+            break;
         for (const auto &[_, v] : candiate)
         {
-            if (v.size() == 1)
+            // if (v.size() == 1)
+            // {
+            //     visiting.push_back(v[0]);
+            // }
+            // else
+            // {
+            // delete the point of which cnt2, cnt5 both small than others
+            //
+            // THE WRONG IMPLEMENTATION
+            //
+            // set<int> todel;
+            // for (int i = 1; i < v.size(); i++)
+            // {
+            //     for (int j = 0; j < i; j++)
+            //     {
+            //         // 2, 5, i > j, both >= , at lease one >
+            //         if (v[j].cnt2 <= v[i].cnt2 && v[j].cnt5 <= v[i].cnt5 && v[j].cnt2 + v[j].cnt5 < v[i].cnt2 + v[i].cnt5)
+            //             todel.insert(i);
+            //         // 2, 5, j > i, both >= , at lease one >
+            //         if (v[i].cnt2 <= v[j].cnt2 && v[i].cnt5 <= v[j].cnt5 && v[i].cnt2 + v[i].cnt5 < v[j].cnt2 + v[j].cnt5)
+            //             todel.insert(j);
+            //         // both equals, reserve one
+            //         if (v[j].cnt2 == v[i].cnt2 && v[j].cnt5 == v[i].cnt5)
+            //             todel.insert(j);
+            //     }
+            // }
+            // for (int i = 0; i < v.size(); i++)
+            // {
+            //     if (todel.find(i) == todel.end())
+            //     {
+            //         visiting.push_back(v[i]);
+            //     }
+            // }
+            // Only reserve the smallest 2, 5
+            int min_inx_2 = 0, min_inx_5 = 0;
+            // begin from 1
+            for (int i = 1; i < v.size(); i++)
             {
-                visiting.push_back(v[0]);
+                if (v[i].cnt2 < v[min_inx_2].cnt2)
+                {
+                    min_inx_2 = i;
+                    if (v[i].cnt5 <= v[min_inx_5].cnt5)
+                        min_inx_5 = i;
+                }
+                if (v[i].cnt5 < v[min_inx_5].cnt5)
+                {
+                    min_inx_5 = i;
+                    if (v[i].cnt2 <= v[min_inx_2].cnt2)
+                        min_inx_2 = i;
+                }
+            }
+            if (min_inx_2 == min_inx_5)
+            {
+                visiting.push_back(v[min_inx_2]);
             }
             else
             {
-                // delete the point of which cnt2, cnt5 both small than others
-                set<int> todel;
-                for (int i = 1; i < v.size(); i++)
-                {
-                    for (int j = 0; j < i; j++)
-                    {
-                        // 2, 5, i > j, both >= , at lease one >
-                        if (v[j].cnt2 <= v[i].cnt2 && v[j].cnt5 <= v[i].cnt5 && v[j].cnt2 + v[j].cnt5 < v[i].cnt2 + v[i].cnt5)
-                            todel.insert(i);
-                        // 2, 5, j > i, both >= , at lease one >
-                        if (v[i].cnt2 <= v[j].cnt2 && v[i].cnt5 <= v[j].cnt5 && v[i].cnt2 + v[i].cnt5 < v[j].cnt2 + v[j].cnt5)
-                            todel.insert(j);
-                        // both equals, reserve one
-                        if (v[j].cnt2 == v[i].cnt2 && v[j].cnt5 == v[i].cnt5)
-                            todel.insert(j);
-                    }
-                }
-                for (int i = 0; i < v.size(); i++)
-                {
-                    if (todel.find(i) == todel.end())
-                    {
-                        visiting.push_back(v[i]);
-                    }
-                }
+                visiting.push_back(v[min_inx_2]);
+                visiting.push_back(v[min_inx_5]);
             }
+
+            // }
         }
     }
 
@@ -146,7 +179,7 @@ string solution(vector<vector<int>> m)
     return candiate[n * n - 1][inx].path;
 }
 
-int main()
+vector<vector<int>> readConsole()
 {
     int n;
     cin >> n;
@@ -163,6 +196,30 @@ int main()
             cin >> matrix[i][j];
         }
     }
+    return matrix;
+}
 
-    cout << solution(matrix) << endl;
+vector<vector<int>> generate()
+{
+    random_device rd;
+    int n = 200;
+    vector<vector<int>> matrix(n);
+    for (int i = 0; i < n; i++)
+    {
+        matrix[i].resize(n);
+    }
+
+    for (int i = 0; i < n; i++)
+    {
+        for (int j = 0; j < n; j++)
+        {
+            matrix[i][j] = rd();
+        }
+    }
+    return matrix;
+}
+
+int main()
+{
+    cout << solution(readConsole()) << endl;
 }

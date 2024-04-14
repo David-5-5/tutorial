@@ -6,28 +6,17 @@
 
 using namespace std;
 
-struct Point
-{
-    int x;
-    int y;
-    int cnt2;
-    int cnt5;
-    string path;
-};
+// include 2,5 count
 
-string solution(vector<vector<int>> m)
+int solution(vector<vector<int>> m)
 {
     int n = m.size();
-
-    // include 2,5 count
-    map<int, int> inc2;
-    map<int, int> inc5;
-
+    vector<map<int, int>> inc(2);
     for (int i = 0; i < n; i++)
     {
         for (int j = 0; j < n; j++)
         {
-            if (inc2.find(m[i][j]) == inc2.end())
+            if (inc[0].find(m[i][j]) == inc[0].end())
             {
                 int count = 0;
                 int value = m[i][j];
@@ -36,147 +25,74 @@ string solution(vector<vector<int>> m)
                     value /= 2;
                     count++;
                 }
-                inc2[m[i][j]] = count;
+                inc[0][m[i][j]] = count;
                 count = 0;
                 while (value % 5 == 0)
                 {
                     value /= 5;
                     count++;
                 }
-                inc5[m[i][j]] = count;
+                inc[1][m[i][j]] = count;
             }
         }
     }
-
-    map<int, vector<Point>> candiate;
-
-    vector<Point> visiting;
-    Point start = Point{0, 0, inc2[m[0][0]], inc5[m[0][0]], ""};
-
-    visiting.push_back(start);
-    int begin = 0;
-    while (begin++ <= 2 * n - 2)
+    vector<vector<vector<int>>> dp(2);
+    dp[0].resize(n);
+    dp[1].resize(n);
+    for (int i = 0; i < n; i++)
     {
-        candiate.clear();
-
-        for (int i = 0; i < visiting.size(); i++)
-        {
-            Point p = visiting[i];
-            // to R
-            if (p.x + 1 < n)
-            {
-                Point r = Point{p.x + 1, p.y, inc2[m[p.x + 1][p.y]] + p.cnt2, inc5[m[p.x + 1][p.y]] + p.cnt5, p.path + "D"};
-                if (candiate.find(r.x * n + r.y) == candiate.end())
-                {
-                    vector<Point> can;
-                    can.push_back(r);
-                    candiate[r.x * n + r.y] = can;
-                }
-                else
-                {
-                    candiate[r.x * n + r.y].push_back(r);
-                }
-            }
-            // to D
-            if (p.y + 1 < n)
-            {
-                Point d = Point{p.x, p.y + 1, inc2[m[p.x][p.y + 1]] + p.cnt2, inc5[m[p.x][p.y + 1]] + p.cnt5, p.path + "R"};
-                if (candiate.find(d.x * n + d.y) == candiate.end())
-                {
-                    vector<Point> can;
-                    can.push_back(d);
-                    candiate[d.x * n + d.y] = can;
-                }
-                else
-                {
-                    candiate[d.x * n + d.y].push_back(d);
-                }
-            }
-        }
-        visiting.clear();
-
-        if (begin == 2 * n - 2)
-            break;
-        for (const auto &[_, v] : candiate)
-        {
-            // if (v.size() == 1)
-            // {
-            //     visiting.push_back(v[0]);
-            // }
-            // else
-            // {
-            // delete the point of which cnt2, cnt5 both small than others
-            //
-            // THE WRONG IMPLEMENTATION
-            //
-            // set<int> todel;
-            // for (int i = 1; i < v.size(); i++)
-            // {
-            //     for (int j = 0; j < i; j++)
-            //     {
-            //         // 2, 5, i > j, both >= , at lease one >
-            //         if (v[j].cnt2 <= v[i].cnt2 && v[j].cnt5 <= v[i].cnt5 && v[j].cnt2 + v[j].cnt5 < v[i].cnt2 + v[i].cnt5)
-            //             todel.insert(i);
-            //         // 2, 5, j > i, both >= , at lease one >
-            //         if (v[i].cnt2 <= v[j].cnt2 && v[i].cnt5 <= v[j].cnt5 && v[i].cnt2 + v[i].cnt5 < v[j].cnt2 + v[j].cnt5)
-            //             todel.insert(j);
-            //         // both equals, reserve one
-            //         if (v[j].cnt2 == v[i].cnt2 && v[j].cnt5 == v[i].cnt5)
-            //             todel.insert(j);
-            //     }
-            // }
-            // for (int i = 0; i < v.size(); i++)
-            // {
-            //     if (todel.find(i) == todel.end())
-            //     {
-            //         visiting.push_back(v[i]);
-            //     }
-            // }
-            // Only reserve the smallest 2, 5
-            int min_inx_2 = 0, min_inx_5 = 0;
-            // begin from 1
-            for (int i = 1; i < v.size(); i++)
-            {
-                if (v[i].cnt2 < v[min_inx_2].cnt2)
-                {
-                    min_inx_2 = i;
-                    if (v[i].cnt5 <= v[min_inx_5].cnt5)
-                        min_inx_5 = i;
-                }
-                if (v[i].cnt5 < v[min_inx_5].cnt5)
-                {
-                    min_inx_5 = i;
-                    if (v[i].cnt2 <= v[min_inx_2].cnt2)
-                        min_inx_2 = i;
-                }
-            }
-            if (min_inx_2 == min_inx_5)
-            {
-                visiting.push_back(v[min_inx_2]);
-            }
-            else
-            {
-                visiting.push_back(v[min_inx_2]);
-                visiting.push_back(v[min_inx_5]);
-            }
-
-            // }
-        }
+        dp[0][i].resize(n);
+        dp[1][i].resize(n);
     }
 
-    auto point = candiate[n * n - 1][0];
-    int inx = 0;
-    int cnt = min(point.cnt2, point.cnt5);
-    for (int i = 1; i < candiate[n * n - 1].size(); i++)
+    for (int k = 0; k < 2; k++)
     {
-        if (cnt > min(candiate[n * n - 1][i].cnt2, candiate[n * n - 1][i].cnt5))
+        for (int i = 0; i < n; i++)
         {
-            cnt = min(candiate[n * n - 1][i].cnt2, candiate[n * n - 1][i].cnt5);
-            inx = i;
+            for (int j = 0; j < n; j++)
+            {
+                dp[k][i][j] = inc[k][m[i][j]];
+
+                if (i > 0 && j > 0)
+                {
+                    dp[k][i][j] += min(dp[k][i - 1][j], dp[k][i][j - 1]);
+                }
+                else if (i > 0)
+                    dp[k][i][j] += dp[k][i - 1][j];
+                else if (j > 0)
+                    dp[k][i][j] += dp[k][i][j - 1];
+            }
         }
     }
-    cout << cnt << endl;
-    return candiate[n * n - 1][inx].path;
+
+    int minc = min(dp[0][n - 1][n - 1], dp[1][n - 1][n - 1]);
+    int minx = 0;
+    if (dp[1][n - 1][n - 1] < dp[0][n - 1][n - 1])
+        minx = 1;
+
+    cout << min(dp[0][n - 1][n - 1], dp[1][n - 1][n - 1]) << endl;
+
+    vector<char> path(2 * n - 2);
+    int inx = path.size();
+    int x = n - 1, y = n - 1;
+    while (inx-- > 0)
+    {
+        if (x > 0 && minc - inc[minx][m[x][y]] == dp[minx][x - 1][y])
+        {
+            path[inx] = 'D';
+            minc = dp[minx][--x][y];
+        }
+        else
+        {
+            path[inx] = 'R';
+            minc = dp[minx][x][--y];
+        }
+    }
+
+    string str(path.begin(), path.end());
+
+    cout << str << endl;
+    return 0;
 }
 
 vector<vector<int>> readConsole()
@@ -202,7 +118,7 @@ vector<vector<int>> readConsole()
 vector<vector<int>> generate()
 {
     random_device rd;
-    int n = 200;
+    int n = 100;
     vector<vector<int>> matrix(n);
     for (int i = 0; i < n; i++)
     {
@@ -221,5 +137,5 @@ vector<vector<int>> generate()
 
 int main()
 {
-    cout << solution(readConsole()) << endl;
+    return solution(readConsole());
 }

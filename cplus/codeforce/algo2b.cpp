@@ -8,42 +8,12 @@ using namespace std;
 
 // include 2,5 count
 
-int solution(vector<vector<int>> m)
+int inc[2][1000][1000];
+int dp[2][1000][1000];
+int n;
+
+int solution()
 {
-    int n = m.size();
-    vector<map<int, int>> inc(2);
-    for (int i = 0; i < n; i++)
-    {
-        for (int j = 0; j < n; j++)
-        {
-            if (inc[0].find(m[i][j]) == inc[0].end())
-            {
-                int count = 0;
-                int value = m[i][j];
-                while (value % 2 == 0)
-                {
-                    value /= 2;
-                    count++;
-                }
-                inc[0][m[i][j]] = count;
-                count = 0;
-                while (value % 5 == 0)
-                {
-                    value /= 5;
-                    count++;
-                }
-                inc[1][m[i][j]] = count;
-            }
-        }
-    }
-    vector<vector<vector<int>>> dp(2);
-    dp[0].resize(n);
-    dp[1].resize(n);
-    for (int i = 0; i < n; i++)
-    {
-        dp[0][i].resize(n);
-        dp[1][i].resize(n);
-    }
 
     for (int k = 0; k < 2; k++)
     {
@@ -51,7 +21,7 @@ int solution(vector<vector<int>> m)
         {
             for (int j = 0; j < n; j++)
             {
-                dp[k][i][j] = inc[k][m[i][j]];
+                dp[k][i][j] = inc[k][i][j];
 
                 if (i > 0 && j > 0)
                 {
@@ -77,7 +47,7 @@ int solution(vector<vector<int>> m)
     int x = n - 1, y = n - 1;
     while (inx-- > 0)
     {
-        if (x > 0 && minc - inc[minx][m[x][y]] == dp[minx][x - 1][y])
+        if (x > 0 && minc - inc[minx][x][y] == dp[minx][x - 1][y])
         {
             path[inx] = 'D';
             minc = dp[minx][--x][y];
@@ -95,47 +65,62 @@ int solution(vector<vector<int>> m)
     return 0;
 }
 
-vector<vector<int>> readConsole()
+void readConsole()
 {
-    int n;
     cin >> n;
-    vector<vector<int>> matrix(n);
-    for (int i = 0; i < n; i++)
-    {
-        matrix[i].resize(n);
-    }
 
     for (int i = 0; i < n; i++)
     {
         for (int j = 0; j < n; j++)
         {
-            cin >> matrix[i][j];
+            int value;
+            cin >> value;
+
+            while (value % 2 == 0)
+            {
+                value /= 2;
+                inc[0][i][j] += 1;
+            }
+
+            while (value % 5 == 0)
+            {
+                value /= 5;
+                inc[1][i][j] += 1;
+            }
         }
     }
-    return matrix;
 }
 
-vector<vector<int>> generate()
+void generate()
 {
     random_device rd;
-    int n = 100;
-    vector<vector<int>> matrix(n);
-    for (int i = 0; i < n; i++)
-    {
-        matrix[i].resize(n);
-    }
+    n = 1000;
 
     for (int i = 0; i < n; i++)
     {
         for (int j = 0; j < n; j++)
         {
-            matrix[i][j] = rd();
+            int value = rd();
+
+            while (value % 2 == 0)
+            {
+                value /= 2;
+                inc[0][i][j] += 1;
+            }
+            while (value % 5 == 0)
+            {
+                value /= 5;
+                inc[1][i][j] += 1;
+            }
         }
     }
-    return matrix;
 }
 
 int main()
 {
-    return solution(readConsole());
+    // clock_t start = clock();
+    readConsole();
+    // generate();
+    solution();
+    // cout << "time = " << double(clock() - start) / CLOCKS_PER_SEC << "s" << endl;
 }

@@ -7,11 +7,11 @@
 using namespace std;
 
 typedef long raw_data;
-int NX = 200;
+int NX = 300;
 
 int PAYLOAD_LENGTH;
 
-raw_data *data_sender;
+raw_data *data_sender = new raw_data[NX];
 unordered_map<raw_data, string> *payload;
 
 void encoder_int(int a, vector<unsigned char> &concat) {
@@ -30,6 +30,7 @@ void data_loader_service(string path)
 {
     ifstream fp(path);
     string payload_tmp;
+    payload = new unordered_map<raw_data, string>();
 
     for (long i = 0; i < NX; i++)
     {

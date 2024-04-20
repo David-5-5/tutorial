@@ -47,8 +47,7 @@ pr calc(int x) {
 	return ret;
 }
 
-signed main() {
-	
+void readConsole(){
 	n=read();
 	for(int i=1;i<=n;i++) {
 		for(int j=1;j<=n;j++) {
@@ -60,11 +59,33 @@ signed main() {
 			}
 		}
 	}
+}
+
+void generate(){
+	random_device rd;
+	n=1200;
+	for(int i=1;i<=n;i++) {
+		for(int j=1;j<=n;j++) {
+			a[i][j]=rd();
+			if(!a[i][j]) {
+				zero=1;
+				zx=i;
+				zy=j;
+			}
+		}
+	}
+}
+// clock_t start;
+
+signed main() {
+	readConsole();
+	// generate();
+	// cout << "generate = " << double(clock() - start) / CLOCKS_PER_SEC << "s" << endl;
 	
 	for(int i=2;i<=n;i++) {
 		f[0][i].five=f[0][i].two=f[i][0].five=f[i][0].two=0x7fffffff;
 	}
-	
+	// cout << "边界 = " << double(clock() - start) / CLOCKS_PER_SEC << "s" << endl;
 	for(int i=1;i<=n;i++) {
 		for(int j=1;j<=n;j++) {
 			pr tmp=calc(a[i][j]);
@@ -87,7 +108,8 @@ signed main() {
 			}
 		}
 	}
-	
+	// cout << "状态转移 = " << double(clock() - start) / CLOCKS_PER_SEC << "s" << endl;
+
 	if(zero&&min(f[n][n].five,f[n][n].two)>1) {//0要特判
 		cout<<1<<endl;
 		for(int i=1;i<zy;i++) {
@@ -141,6 +163,7 @@ signed main() {
 		cout<<ans[i];
 	}
 	cout<<endl;
+	// cout << "time = " << double(clock() - start) / CLOCKS_PER_SEC << "s" << endl;
 	return 0;
 }
 

@@ -15,22 +15,23 @@ class Solution:
         def cal(l:int, r:int)-> int:
 
             if dp[l][r] != -1:return dp[l][r]
+            if l == r: return 0
             if l + 1 == r:
                 dp[l][r] = min(stoneValue[l],stoneValue[r])
                 return dp[l][r]
 
             cur = 0
-            lmax, rmin = l, r
-            for i in range(l,r):
-                if (presum[i+1]-presum[l]) * 2 < presum[r+1] - presum[l]:
-                    lmax = i
-                if (presum[i+1]-presum[l]) * 2 > presum[r+1] - presum[l]:
-                    rmin = i
-                    break
+            # lmax, rmin = l, r
+            # for i in range(l,r):
+            #     if (presum[i+1]-presum[l]) * 2 < presum[r+1] - presum[l]:
+            #         lmax = i
+            #     if (presum[i+1]-presum[l]) * 2 > presum[r+1] - presum[l]:
+            #         rmin = i
+            #         break
             
-            rmin = min(rmin+1, r)
-            for k in range(lmax,rmin): 
-            # for k in range(l,r):
+            # rmin = min(rmin+1, r)
+            # for k in range(lmax,rmin): 
+            for k in range(l,r):
                 if presum[k+1]-presum[l] > presum[r+1] - presum[k+1]:
                     cur = max(cur, cal(k+1,r) + presum[r+1] - presum[k+1])
                 elif presum[k+1]-presum[l] < presum[r+1] - presum[k+1]:
@@ -45,17 +46,16 @@ class Solution:
         cal(0,n-1)
         return dp[0][n-1]
 
-
     def stoneGameV_2(self, stoneValue: List[int]) -> int:
         '''
         Use lru_cache for memory search
         '''
         n = len(stoneValue)
         presum = list(accumulate(stoneValue, initial=0))  # prefix sum
-
         
         @lru_cache(maxsize = None)
         def cal(l:int, r:int)-> int:
+            if l == r: return 0
             if l + 1 == r:
                 return min(stoneValue[l],stoneValue[r])
 

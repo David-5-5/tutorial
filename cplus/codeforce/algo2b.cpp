@@ -7,7 +7,7 @@ using namespace std;
 int inc[2][1001][1001];
 int dp[2][1001][1001];
 int n, zx, zy;
-// clock_t start;
+
 bool zero;
 
 int solution()
@@ -33,19 +33,23 @@ int solution()
         }
     }
     // cout << "状态转移 = " << double(clock() - start) / CLOCKS_PER_SEC << "s" << endl;
-	if(zero&&min(dp[1][n][n],dp[0][n][n])>1) {//0要特判
-		cout<<1<<endl;
-		for(int i=1;i<zy;i++) {
-			cout<<'R';
-		}
-		for(int i=1;i<n;i++) {//注意边界哦~
-			cout<<'D';
-		}
-		for(int i=zy+1;i<=n;i++) {
-			cout<<'R';
-		}
-		return 0;
-	}
+    if (zero && min(dp[1][n][n], dp[0][n][n]) > 1)
+    { // 0要特判
+        cout << 1 << endl;
+        for (int i = 1; i < zy; i++)
+        {
+            cout << 'R';
+        }
+        for (int i = 1; i < n; i++)
+        { // 注意边界哦~
+            cout << 'D';
+        }
+        for (int i = zy + 1; i <= n; i++)
+        {
+            cout << 'R';
+        }
+        return 0;
+    }
 
     int minc = min(dp[0][n][n], dp[1][n][n]);
     int minx = 0;
@@ -108,16 +112,19 @@ void readConsole()
     }
 }
 
-void generate()
-{
-    random_device rd;
-    n = 1200;
+clock_t start = clock();
 
-    for (int i = 0; i < n; i++)
+void generate(vector<int> &data)
+{
+
+    n = 1000;
+
+    for (int i = 1; i <= n; i++)
     {
-        for (int j = 0; j < n; j++)
+        for (int j = 1; j <= n; j++)
         {
-            int value = rd();
+            int inx = (i * 1871 + j * 4001) % data.size();
+            int value = data[inx];
 
             while (value % 2 == 0)
             {
@@ -133,12 +140,44 @@ void generate()
     }
 }
 
+// for Test local
+// signed main()
+// {
+//     // load data for generate
+//     // Open the input file named "input.txt"
+//     ifstream inputFile("algo2b.txt");
+//     string line;
+//     getline(inputFile, line);
+//     inputFile.close();
+
+//     vector<int> data;
+//     size_t begin = 0;
+//     size_t end = line.find(",");
+
+//     start = clock();
+//     while (end != string::npos)
+//     {
+//         data.push_back(stoi(line.substr(begin, end - begin)));
+//         begin = end + 1;
+//         end = line.find(",", begin);
+//     }
+//     data.push_back(stoi(line.substr(begin)));
+
+//     for (int i = 0; i < 100; i++)
+//     {
+//         generate(data);
+//         // cout << "generate = " << double(clock() - start) / CLOCKS_PER_SEC << "s" << endl;
+//         solution();
+//         cout << "time = " << double(clock() - start) / CLOCKS_PER_SEC << "s" << endl;
+//     }
+//     return 0;
+// }
+
+
+// codeforce
 signed main()
 {
-    // start = clock();
     readConsole();
-    // generate();
-    // cout << "generate = " << double(clock() - start) / CLOCKS_PER_SEC << "s" << endl;
     solution();
-    // cout << "time = " << double(clock() - start) / CLOCKS_PER_SEC << "s" << endl;
+    return 0;
 }

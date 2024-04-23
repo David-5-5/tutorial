@@ -54,7 +54,7 @@ $$
 从 n 个对象中选取 k 个进行排列，有 $n(n-1)\dots(n-k-1)$ 种方法，其中每个 k 元组合在这些排列中恰好出现 k！ 次。用$\binom{n}{k}$ 表示组合数。
 
 $$
-\binom{n}{k} = \frac{n(n-1)\cdots(n-k-1)}{k(k-1)\cdots1}
+\binom{n}{k} = \frac{n(n-1)\cdots(n-k-1)}{k(k-1)\cdots1}   \qquad \qquad (2)
 $$
 
 分子 $n(n-1)\cdots(n-k-1)$ 表示从 n 个对象中选取 k 个进行排列的数量
@@ -63,9 +63,9 @@ $$
 对于所有实数 r 和所有整数 k ，我们定义符号 $\binom{r}{k}$
 
 $$
-\binom{r}{k} = \frac{r(r-1)\cdots(r-k-1)}{k(k-1)\cdots1} = \frac{r^{\underline{k}}}{k!} = \prod_{j=1}^k \frac{r+1-j}{j}
+\binom{r}{k} = \frac{r(r-1)\cdots(r-k-1)}{k(k-1)\cdots1} = \frac{r^{\underline{k}}}{k!} = \prod_{j=1}^k \frac{r+1-j}{j}, k \geq 0  \\
+ \binom{r}{k} = 0, k < 0 \qquad \qquad (3)
 $$
-
 
 
 二项式系数历史悠久：
@@ -78,35 +78,42 @@ $$
 #### A. 用阶乘表示二项式系数
 
 $$
-\binom{n}{k} = \frac{n!}{k!(n-k)!} ,  n \geq 0 , k \geq 0
+\binom{n}{k} = \frac{n!}{k!(n-k)!} , \qquad n \geq 0 , k \geq 0 \qquad \qquad (5)
 $$
 
 #### B. 对称性条件
 
 $$
-\binom{n}{k} = \binom{n}{n-k}
+\binom{n}{k} = \binom{n}{n-k} \qquad \qquad (6)
 $$
 
 #### C. 移进括号和移出括号
 
 $$
-\binom{r}{k} = \frac{r}{k}\binom{r-1}{k-1}, k \neq 0
+\binom{r}{k} = \frac{r}{k}\binom{r-1}{k-1}, k \neq 0 \qquad \qquad (7)
 $$
 
 这个公式非常有用，可以用来把一个表达式中的二项式系数同其他部分结合起来，通过初等变换，得到规则：
 
 $$
-k\binom{r}{k} = r\binom{r-1}{k-1}, 
-\frac{1}{r}\binom{r}{k} = \frac{1}{k}\binom{r-1}{k-1}
+k\binom{r}{k} = r\binom{r-1}{k-1}, \frac{1}{r}\binom{r}{k} = \frac{1}{k}\binom{r-1}{k-1} 
 $$
 
 第一条规则对于所有整数 k 成立，第二条规则当除数不为0时成立，还有一个类似的关系式：
 
 $$
-\binom{r}{k} = 
-\frac{r}{r-k}\binom{r-1}{k} , r \neq k
+\binom{r}{k} = \frac{r}{r-k}\binom{r-1}{k} , r \neq k \qquad \qquad (8)
 $$
 
+#### D. 加法公式
 
+$$
+\binom{r}{k} = \binom{r-1}{k} + \binom{r-1}{k-1} , k \in Z \qquad \qquad (9)
+$$
 
+根据等式 (3) ，很容易证明上式是普遍成立的。等式 (7) (8)
+
+$$
+r \binom{r-1}{k} + r\binom{r-1}{k-1} = (r-k)\binom{r}{k} + k \binom{r}{k} = r \binom{r}{k}
+$$
 

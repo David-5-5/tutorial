@@ -117,3 +117,27 @@ $$
 r \binom{r-1}{k} + r\binom{r-1}{k-1} = (r-k)\binom{r}{k} + k \binom{r}{k} = r \binom{r}{k}
 $$
 
+#### E. 求和公式
+
+$$
+\binom{r}{k} = \binom{r-1}{k} + \binom{r-1}{k-1} = \binom{r-1}{k} + \binom{r-2}{k-1} + \binom{r-2}{k-2} = \cdots
+$$
+
+或者
+$$
+\binom{r}{k} = \binom{r-1}{k-1} + \binom{r-1}{k} = \binom{r-1}{k-1}  + \binom{r-2}{k-1} + \binom{r-2}{k} = \cdots
+$$
+
+于是导出了两个重要的求和公式：
+$$
+\sum_{k=0}^{n}\binom{r+k}{k} = \binom{r}{0} + \binom{r+1}{1}  + \cdots + \binom{r+n}{n} = \binom{r+n+1}{n}  \qquad (10) 
+$$
+$$
+\sum_{k=0}^{n}\binom{k}{m} = \binom{0}{m} + \binom{1}{m} + \cdots + \binom{n}{m} = \binom{n+1}{m+1} \qquad (11)
+$$
+
+等式(11) 的应用非常频繁。事实上，当 m=1 时，就是等差数列之和：
+
+$$
+\binom{0}{1} + \binom{1}{1} + \cdots + \binom{n}{1} = \binom{n+1}{2}  = \frac{(n+1)n}{2} \qquad (11)
+$$

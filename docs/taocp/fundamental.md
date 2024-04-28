@@ -120,15 +120,18 @@ $$
 #### E. 求和公式
 
 $$
-\binom{r}{k} = \binom{r-1}{k} + \binom{r-1}{k-1} = \binom{r-1}{k} + \binom{r-2}{k-1} + \binom{r-2}{k-2} = \cdots \\
-\binom{r}{k} = \binom{r-1}{k-1} + \binom{r-1}{k} = \binom{r-1}{k-1}  + \binom{r-2}{k-1} + \binom{r-2}{k} = \cdots \\
+\binom{r}{k} = \binom{r-1}{k} + \binom{r-1}{k-1} = \binom{r-1}{k} + \binom{r-2}{k-1} + \binom{r-2}{k-2} = \cdots
+$$
+及
+$$
+\binom{r}{k} = \binom{r-1}{k-1} + \binom{r-1}{k} = \binom{r-1}{k-1}  + \binom{r-2}{k-1} + \binom{r-2}{k} = \cdots
 $$
 
 于是导出了两个重要的求和公式：
 $$
 \sum_{k=0}^{n}\binom{r+k}{k} = \binom{r}{0} + \binom{r+1}{1}  + \cdots + \binom{r+n}{n} = \binom{r+n+1}{n}  \qquad (10) 
 $$
-及
+和
 $$
 \sum_{k=0}^{n}\binom{k}{m} = \binom{0}{m} + \binom{1}{m} + \cdots + \binom{n}{m} = \binom{n+1}{m+1} \qquad (11)
 $$
@@ -190,11 +193,11 @@ $$
 下面列出几个常见的恒等式，如何对两个二项式系数的乘积求和，其中操作变量 k 分别出现在各种不同的位置。
 
 $$
-\sum_k \binom{r}{k}\binom{s}{n-k} = \binom{r+s}{n} , n \in Z \qquad (21) \\
-\sum_k \binom{r}{m+k}\binom{s}{n+k} = \binom{r+s}{r-m+n} ,   m,n,r \in Z \geq 0 \qquad (22) \\
-\sum_k \binom{r}{k}\binom{s+k}{n}(-1)^{r-k} = \binom{s}{n-r} , n,r \in Z \qquad (23) \\
-\sum_{k=0}^r \binom{r-k}{m}\binom{s}{k-t}(-1)^{k-t} = \binom{r-t-s}{r-t-m} , t,r,m \in Z \geq 0 \qquad (24) \\
-\sum_{k=0}^r \binom{r-k}{m}\binom{s+k}{n} = \binom{r+s+1}{m+n+1} , n,s,m,r \in Z  \geq 0 \qquad (25) \\
-\sum_{k\geq 0} \binom{r-tk}{k}\binom{s-t(n-k)}{n-k}\frac{r}{r-tk} = \binom{r+s-tn}{n} , n \in Z \qquad (26) \\
+\sum_k \binom{r}{k}\binom{s}{n-k} = \binom{r+s}{n} , n \in Z \qquad (21) $$$$
+\sum_k \binom{r}{m+k}\binom{s}{n+k} = \binom{r+s}{r-m+n} ,   m,n,r \in Z \geq 0 \qquad (22) $$$$
+\sum_k \binom{r}{k}\binom{s+k}{n}(-1)^{r-k} = \binom{s}{n-r} , n,r \in Z \qquad (23) $$$$
+\sum_{k=0}^r \binom{r-k}{m}\binom{s}{k-t}(-1)^{k-t} = \binom{r-t-s}{r-t-m} , t,r,m \in Z \geq 0 \qquad (24) $$$$
+\sum_{k=0}^r \binom{r-k}{m}\binom{s+k}{n} = \binom{r+s+1}{m+n+1} , n,s,m,r \in Z  \geq 0 \qquad (25) $$$$
+\sum_{k\geq 0} \binom{r-tk}{k}\binom{s-t(n-k)}{n-k}\frac{r}{r-tk} = \binom{r+s-tn}{n} , n \in Z \qquad (26) 
 $$ 
 在这些恒等式中，等式(21)是迄今为止最重要的一个，通常成为范德蒙德恒等式。范德蒙德1772年发表，然而这个恒等式早已出现在1303年朱世杰的专著中。

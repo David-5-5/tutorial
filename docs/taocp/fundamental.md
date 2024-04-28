@@ -122,16 +122,14 @@ $$
 $$
 \binom{r}{k} = \binom{r-1}{k} + \binom{r-1}{k-1} = \binom{r-1}{k} + \binom{r-2}{k-1} + \binom{r-2}{k-2} = \cdots
 $$
-
 或者
-$$
-\binom{r}{k} = \binom{r-1}{k-1} + \binom{r-1}{k} = \binom{r-1}{k-1}  + \binom{r-2}{k-1} + \binom{r-2}{k} = \cdots
-$$
+
 
 于是导出了两个重要的求和公式：
 $$
 \sum_{k=0}^{n}\binom{r+k}{k} = \binom{r}{0} + \binom{r+1}{1}  + \cdots + \binom{r+n}{n} = \binom{r+n+1}{n}  \qquad (10) 
 $$
+及
 $$
 \sum_{k=0}^{n}\binom{k}{m} = \binom{0}{m} + \binom{1}{m} + \cdots + \binom{n}{m} = \binom{n+1}{m+1} \qquad (11)
 $$
@@ -177,6 +175,7 @@ $$
 $$
 等式(17), 令 r = n，k = n - m，利用等式(6),把 n 从上标的位置移到下标的位置。
 
+
 #### H. 简化乘积
 当出现二项式系数的乘积时，通常可以利用等式(5)把它们展成阶乘再写回二项式系数，从而用多种方式重新表示它们。例如
 $$
@@ -188,3 +187,9 @@ $$
 $$
 
 
+#### I. 乘积之和
+下面列出几个常见的恒等式，如何对两个二项式系数的乘积求和，其中操作变量 k 分别出现在各种不同的位置。
+
+$$
+\sum_k \binom{r}{k}\binom{s}{n-k} = \binom{r+s}{n} , n \in Z
+$$ 

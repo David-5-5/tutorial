@@ -122,8 +122,7 @@ $$
 $$
 \binom{r}{k} = \binom{r-1}{k} + \binom{r-1}{k-1} = \binom{r-1}{k} + \binom{r-2}{k-1} + \binom{r-2}{k-2} = \cdots
 $$
-
-或者
+及
 $$
 \binom{r}{k} = \binom{r-1}{k-1} + \binom{r-1}{k} = \binom{r-1}{k-1}  + \binom{r-2}{k-1} + \binom{r-2}{k} = \cdots
 $$
@@ -132,6 +131,7 @@ $$
 $$
 \sum_{k=0}^{n}\binom{r+k}{k} = \binom{r}{0} + \binom{r+1}{1}  + \cdots + \binom{r+n}{n} = \binom{r+n+1}{n}  \qquad (10) 
 $$
+和
 $$
 \sum_{k=0}^{n}\binom{k}{m} = \binom{0}{m} + \binom{1}{m} + \cdots + \binom{n}{m} = \binom{n+1}{m+1} \qquad (11)
 $$
@@ -139,7 +139,7 @@ $$
 等式(11) 的应用非常频繁。事实上，当 m=1 时，就是等差数列之和：
 
 $$
-\binom{0}{1} + \binom{1}{1} + \cdots + \binom{n}{1} = \binom{n+1}{2}  = \frac{(n+1)n}{2} \qquad (11)
+\binom{0}{1} + \binom{1}{1} + \cdots + \binom{n}{1} = \binom{n+1}{2}  = \frac{(n+1)n}{2} \qquad (12)
 $$
 
 
@@ -177,6 +177,7 @@ $$
 $$
 等式(17), 令 r = n，k = n - m，利用等式(6),把 n 从上标的位置移到下标的位置。
 
+
 #### H. 简化乘积
 当出现二项式系数的乘积时，通常可以利用等式(5)把它们展成阶乘再写回二项式系数，从而用多种方式重新表示它们。例如
 $$
@@ -188,3 +189,15 @@ $$
 $$
 
 
+#### I. 乘积之和
+下面列出几个常见的恒等式，如何对两个二项式系数的乘积求和，其中操作变量 k 分别出现在各种不同的位置。
+
+$$
+\sum_k \binom{r}{k}\binom{s}{n-k} = \binom{r+s}{n} , n \in Z \qquad (21) $$$$
+\sum_k \binom{r}{m+k}\binom{s}{n+k} = \binom{r+s}{r-m+n} ,   m,n,r \in Z \geq 0 \qquad (22) $$$$
+\sum_k \binom{r}{k}\binom{s+k}{n}(-1)^{r-k} = \binom{s}{n-r} , n,r \in Z \qquad (23) $$$$
+\sum_{k=0}^r \binom{r-k}{m}\binom{s}{k-t}(-1)^{k-t} = \binom{r-t-s}{r-t-m} , t,r,m \in Z \geq 0 \qquad (24) $$$$
+\sum_{k=0}^r \binom{r-k}{m}\binom{s+k}{n} = \binom{r+s+1}{m+n+1} , n,s,m,r \in Z  \geq 0 \qquad (25) $$$$
+\sum_{k\geq 0} \binom{r-tk}{k}\binom{s-t(n-k)}{n-k}\frac{r}{r-tk} = \binom{r+s-tn}{n} , n \in Z \qquad (26) 
+$$ 
+在这些恒等式中，等式(21)是迄今为止最重要的一个，通常成为范德蒙德恒等式。范德蒙德1772年发表，然而这个恒等式早已出现在1303年朱世杰的专著中。

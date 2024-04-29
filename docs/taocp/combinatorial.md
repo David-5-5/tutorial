@@ -120,7 +120,42 @@ x\oplus y = (x+y)\mod 2 \qquad (5)
 $$
 
 
+__基本恒等式__
+考察一下运算符$\vee, \wedge, \oplus, \overline x$的相互作用，因为其他运算符很容易通过这四种运算符表示。$\vee, \wedge, \oplus$的每一个都是可结合和可交换的。除了分配率(1)和(2)，还有以下分配率：
+$$
+(x\oplus y)\wedge z = (x\wedge z)\oplus(y\wedge z) \qquad (6)
+$$
+以及吸收率：
+$$
+(x\wedge y)\vee x = (x\vee y)\wedge x \qquad (7)
+$$
+_注，编程语言使用&，|代替 $\wedge, \vee$_
 
 
+一个最简单也最有用的恒等式
+$$
+x\oplus x = 0 \qquad (8)
+$$
+因为它特别蕴含
+$$
+(x\oplus y)\oplus x = y, (x\oplus y)\oplus y = x  \qquad (9)
+$$
+只要利用$x\oplus 0=x$这个明显的事实，既可以看出上式推导成立，同时也不要忽略简单的补定率：
+$$
+\overline x = x\oplus 1 \qquad(10)
+$$
+另外一对重要的恒等式称为 _德摩根定律_，它阐明了“一个聚合命题的反命题是其成员反命题的复合；一个复合命题的反命题是其成员反命题的聚合。因此(A,B)和AB具有对于反命题ab和(a,b).”。即
+$$
+\overline {x\wedge y } = \overline x \vee \overline y \qquad(11) \\
+\overline {x\vee y } = \overline x \wedge \overline y \qquad(12)
+$$
+德摩根定律以及其他几个恒等式可以用$\vee, \wedge, \oplus$互相表示：
+$$
+x\wedge y  = \overline {\overline x\vee \overline y } = x \oplus y \oplus (x\vee y) \qquad(13) \\
+x\vee y  = \overline {\overline x\wedge \overline y } = x \oplus y \oplus (x\wedge y) \qquad(14) \\
+x \oplus y = (x\vee y)\wedge \overline {x\wedge y } = (x\wedge \overline y)\vee(\overline x\wedge y) \qquad(15)
+$$
 
+
+__n 变量函数__
 

@@ -193,11 +193,35 @@ $$
 下面列出几个常见的恒等式，如何对两个二项式系数的乘积求和，其中操作变量 k 分别出现在各种不同的位置。
 
 $$
-\sum_k \binom{r}{k}\binom{s}{n-k} = \binom{r+s}{n} , n \in Z \qquad (21) $$$$
-\sum_k \binom{r}{m+k}\binom{s}{n+k} = \binom{r+s}{r-m+n} ,   m,n,r \in Z \geq 0 \qquad (22) $$$$
-\sum_k \binom{r}{k}\binom{s+k}{n}(-1)^{r-k} = \binom{s}{n-r} , n,r \in Z \qquad (23) $$$$
-\sum_{k=0}^r \binom{r-k}{m}\binom{s}{k-t}(-1)^{k-t} = \binom{r-t-s}{r-t-m} , t,r,m \in Z \geq 0 \qquad (24) $$$$
-\sum_{k=0}^r \binom{r-k}{m}\binom{s+k}{n} = \binom{r+s+1}{m+n+1} , n,s,m,r \in Z  \geq 0 \qquad (25) $$$$
+\sum_k \binom{r}{k}\binom{s}{n-k} = \binom{r+s}{n} , n \in Z \qquad (21) $$
+$$
+\sum_k \binom{r}{m+k}\binom{s}{n+k} = \binom{r+s}{r-m+n} ,   m,n,r \in Z \geq 0 \qquad (22) $$
+$$
+\sum_k \binom{r}{k}\binom{s+k}{n}(-1)^{r-k} = \binom{s}{n-r} , n,r \in Z \qquad (23) $$
+$$
+\sum_{k=0}^r \binom{r-k}{m}\binom{s}{k-t}(-1)^{k-t} = \binom{r-t-s}{r-t-m} , t,r,m \in Z \geq 0 \qquad (24) $$
+$$
+\sum_{k=0}^r \binom{r-k}{m}\binom{s+k}{n} = \binom{r+s+1}{m+n+1} , n,s,m,r \in Z  \geq 0 \qquad (25) $$
+$$
 \sum_{k\geq 0} \binom{r-tk}{k}\binom{s-t(n-k)}{n-k}\frac{r}{r-tk} = \binom{r+s-tn}{n} , n \in Z \qquad (26) 
 $$ 
 在这些恒等式中，等式(21)是迄今为止最重要的一个，通常成为范德蒙德恒等式。范德蒙德1772年发表，然而这个恒等式早已出现在1303年朱世杰的专著中。
+
+在等式(26)中，如果 r=tk，可以消去分子中的一个因式，从而避免 0 作分母。所以等式(26)是关于变量 r,s,t 的多项式恒等式。显然等式(21)是等式(26)取 t=0 的一个特例。
+
+等式(23)和等式(25)有一种不是一目了然的用法：用左端更复杂的表达式代替右端简单的二项式系数，交换求和的顺序，再进行简化。我们可以把两式左端视为
+$$
+\binom{s}{n+a} 用 \binom{s+k}{n} 
+$$
+表示的表达式。等式(23)用于取值为负的a，等式(25)用于取值为正的a。
+
+
+__例4 证明__
+$$
+\sum A_k(r,t)A_{n-k}(s,t) = A_n(r+s,t), n \in Z, n\geq 0 \qquad (30) 
+$$
+其中$A_n(x,t)$是x的n次多项式，满足
+$$
+A_n(x,t) = \binom{x-nt}{n}\frac{x}{x-nt}, x\neq nt
+$$
+__解__ 

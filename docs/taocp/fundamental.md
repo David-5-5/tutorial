@@ -225,3 +225,34 @@ $$
 A_n(x,t) = \binom{x-nt}{n}\frac{x}{x-nt}, x\neq nt
 $$
 __解__ 
+假定$0 \leq k \leq n$时，有$r \neq kt \neq s$，我们求解的问题为：
+$$
+\sum_k \binom{r-kt}{k} \binom{s-(n-k)t}{k}\frac{r}{r-kt}\frac{s}{s-(n-k)t}
+$$
+我们有
+$$
+\frac{r}{r-kt}\frac{s}{s-(n-k)t} = \frac{1}{r+s-nt}(\frac{1}{r-kt}+\frac{1}{s-(n-k)t})
+$$
+待人需要求解的式子得到
+$$
+\frac{s}{r+s-nt} \sum_k \binom{r-kt}{k} \binom{s-(n-k)t}{k} \frac{r}{r-kt} + \\
+\frac{r}{r+s-nt} \sum_k \binom{r-kt}{k} \binom{s-(n-k)t}{k} \frac{s}{s-(n-k)t} 
+$$
+在第二个和式中把 k 改为 n-k，等式(26)可求出这两个和的值，由此立即推出所求的结果。
+
+上述例子可能使读者以为二项式系数是所向披靡的利器，然而应该指出，尽管存在等式(10)(11)(18)，对于类似的和
+$$
+\sum_{k=0}^n \binom{m}{k} = \binom{m}{0} + \binom{m}{1} + \cdots + \binom{m}{n} \qquad (36) 
+$$
+在 n < m 时却似乎没有简单的求和公式。当 m 为明确给出的副整数时，这个和确实有闭合式，可写成 n 的函数，例如:
+$$
+\sum_{k=0}^n \binom{-2}{k} = (-1)^n \Big \lceil \frac{n+1}{2} \Big \rceil \qquad (37)
+$$
+还有一个简单公式:
+$$
+\sum_{k=0}^n \binom{m}{k}(k-\frac{m}{2}) = -\frac{m}{2} \binom{m-1}{n}  \qquad (38)
+$$
+所求和式看起来似乎应当更难，而不是如此容易。
+
+
+

@@ -99,7 +99,8 @@ __表1 两个变量的16种逻辑运算__
 0000 | 0 | $\bot$ | 永假式；假值；自相矛盾；常数0
 0001 | $xy, x\wedge y, x\&y$ | $\wedge$ | 和取；与
 0010 | $x\wedge \overline y, x\not\supset y, [x>y], x y$ |  | 非蕴含；差；与非；但非
-0110 | | $\oplus$ | xor；异或
+0110 | $x \oplus y$,x ^ y| $\oplus$ | 互斥析取；xor；异或
+0111 | $x \vee y$| $\vee$ | 析取；或；与/或
 1001 | | $\equiv$ | 等价
 1111 | 1 | T | 永真式；肯定式；重言式；常数1
 
@@ -185,4 +186,34 @@ h(x_1,x_2,\cdots x_{n-1}) = f(x_1,x_2,\cdots x_{n-1},1)\qquad(21)
 $$
 等式(21)以代替式(17)，重复迭代布尔的过程，利用分配率(1)，并消除常数，留下一个0或小项的析取公式，其中每个小项是$x_1\wedge \overline x_2 \wedge \cdots \wedge x_n$这样的与(合取)，每个变量的或它的补都在小项中出现，一个小项恰好在一点为真的布尔函数。
 
+考虑或多或少随机的函数f(w,x,y,z)，它的真值表是 1100 1001 0000 1111  (22)，当重复应用布尔定律(20)展开这个函数时，我们获得8个小项的析取，真值表中的每个1都有一个对应的小项：
+$$
+f(w,x,y,z) = (\overline w \wedge \overline x \wedge \overline y \wedge \overline z) 
+\vee (\overline w \wedge \overline x \wedge \overline y \wedge z) 
+\vee (\overline w \wedge x \wedge \overline y \wedge \overline z) 
+\vee (\overline w \wedge x \wedge y \wedge z) \\
+\vee (w \wedge x \wedge \overline y \wedge \overline z) 
+\vee (w \wedge x \wedge \overline y \wedge z) 
+\vee (w \wedge x \wedge y \wedge \overline z) 
+\vee (w \wedge x \wedge y \wedge z)  \qquad(23)
+$$
+> 没看明白
 
+小项的析取通常称为 _全析取范式_。每个布尔函数都可以用这种方式表示，而且结果是唯一的。我们一般说的 _析取范式_ (disjunctive normal form，简称DNF)是指和取的 _任意_ 析取
+$$
+\vee_{j=1}^{m} \wedge_{k=1}^{s_j} u_{jk} = (u_{11} \wedge \cdots \wedge u_{1s_1}) \vee \cdots \vee (u_{m1} \wedge \cdots \wedge u_{ms_m})  \qquad(25)
+$$
+其中每个$u_{jk}$是字面值，也就是变量$x_i$或它的补。同样，_和取范式_(conjunctive normal form,，简称CNF)是指析取的 _任意_ 和取：
+$$
+\wedge_{j=1}^{m} \vee_{k=1}^{s_j} u_{jk} = (u_{11} \vee \cdots \vee u_{1s_1}) \wedge \cdots \wedge (u_{m1} \vee \cdots \vee u_{ms_m})  \qquad(26)
+$$
+
+通常把DNF中的项称为 _蕴含元_，因为析取的任何小项的真值蕴含整个公式的真值。例如在像：
+$$
+f(x,y,z) = (x \wedge \overline y \wedge z) \vee (y \wedge z) \vee (\overline x \wedge y \wedge \overline z)
+$$
+这样的公式中，$x \wedge \overline y \wedge z$为真时f为真，就是说当(x,y,z)=(1,0,1)时f为真。在这个例子中$x \wedge z$也是f的蕴含元，所以，可以有更简单的公式
+$$
+f(x,y,z) = (x \wedge z) \vee (y \wedge z) \vee (\overline x \wedge y) \qquad(27)
+$$
+对于一个蕴含元，如果通过消除它的字面值作进一步的分解时导致其弱化到不再时蕴含元，那么，称其为 _素蕴含元_。

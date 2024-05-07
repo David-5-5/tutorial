@@ -255,4 +255,19 @@ $$
 所求和式看起来似乎应当更难，而不是如此容易。
 
 
+系统化、机械化处理二项式系数求和的主要工具是超几何函数的性质。超几何函数是用阶乘升幂定义的下述无穷级数：
+$$
+F \begin{pmatrix}
+a_1, \cdots, a_m \\
+b_1, \cdots, b_n \\ 
+\end{pmatrix} = 
+\sum_{k \geq 0} \frac{a_1^{\overline k}\cdots a_m^{\overline k}}{b_1^{\overline k}\cdots b_n^{\overline k}} \frac{z^k}{k!} \qquad (39)
+$$
+
+二项式系数的概念有若干重大的推广，首先可以考虑对$\binom{r}{k}$ 中的下标 k 取任意实数值。另一种推广是：
+$$
+\binom{r}{k}_q = \frac{(1-q^r)(1-q^{r-1}) \cdots (1-q{r-k+1})}{(1-q^k)(1-q^{k-1}) \cdots (1-q^1))} \qquad (40)
+$$
+当q趋近极限1时，左端系数变成平常的二项式系数$\binom{r}{k}_1=\binom{r}{k}$ ，他可以看成是用 1-q 除以分子和分母中每一项的结果。
+
 

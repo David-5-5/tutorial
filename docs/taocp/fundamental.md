@@ -144,10 +144,10 @@ $$
 
 
 #### F. 二项式定理
-$$
+```math
 (x+y)^r = \sum_k \binom{r}{k} x^ky^{r-k} , 整数 r\geq 0 \qquad (13)      
-$$ 
-在等式中用的是$\sum_k$而不是$\sum_{k=0}^r$，如果对 k 不加限制，我们是对所有整数 k 求和。等式(13)给出了 $0^0 = 1 \qquad (14)$。我们将采用这个约定。
+```
+在等式中用的是$`\sum_k`$而不是$`\sum_{k=0}^r`$，如果对 k 不加限制，我们是对所有整数 k 求和。等式(13)给出了 $`0^0 = 1 \qquad (14)`$。我们将采用这个约定。
 
 在等式(13)中 y=1 的特例很重要，特别给出
 $$
@@ -183,7 +183,7 @@ $$
 $$
 \binom{r}{m}\binom{m}{k} = \binom{r}{k} \binom{r-k}{m-k}, n \in Z, k \in Z \qquad (20)
 $$
-等式(7)是等式(20)在 k=1 时的特例。当 $r \geq m$的整数时，等式(8)足以证明等式(20)成立；当$0 \leq k \leq m$时也可以，于是有：
+等式(7)是等式(20)在 k=1 时的特例。当 $`r \geq m`$的整数时，等式(8)足以证明等式(20)成立；当$`0 \leq k \leq m`$时也可以，于是有：
 $$
 \binom{r}{m}\binom{m}{k} = \frac{r!m!}{m!(r-m)!k!(m-k)!} = \frac{r!(r-k)!}{k!(r-k)!(m-k)!(r-m)!} = \binom{r}{k} \binom{r-k}{m-k}
 $$
@@ -220,12 +220,12 @@ __例4 证明__
 $$
 \sum A_k(r,t)A_{n-k}(s,t) = A_n(r+s,t), n \in Z, n\geq 0 \qquad (30) 
 $$
-其中$A_n(x,t)$是x的n次多项式，满足
+其中$`A_n(x,t)`$是x的n次多项式，满足
 $$
 A_n(x,t) = \binom{x-nt}{n}\frac{x}{x-nt}, x\neq nt
 $$
 __解__ 
-假定$0 \leq k \leq n$时，有$r \neq kt \neq s$，我们求解的问题为：
+假定$`0 \leq k \leq n`$时，有$`r \neq kt \neq s`$，我们求解的问题为：
 $$
 \sum_k \binom{r-kt}{k} \binom{s-(n-k)t}{k}\frac{r}{r-kt}\frac{s}{s-(n-k)t}
 $$
@@ -264,11 +264,11 @@ b_1, \cdots, b_n \\
 \sum_{k \geq 0} \frac{a_1^{\overline k}\cdots a_m^{\overline k}}{b_1^{\overline k}\cdots b_n^{\overline k}} \frac{z^k}{k!} \qquad (39)
 $$
 
-二项式系数的概念有若干重大的推广，首先可以考虑对$\binom{r}{k}$ 中的下标 k 取任意实数值。另一种推广是：
+二项式系数的概念有若干重大的推广，首先可以考虑对$`\binom{r}{k}`$ 中的下标 k 取任意实数值。另一种推广是：
 $$
 \binom{r}{k}_q = \frac{(1-q^r)(1-q^{r-1}) \cdots (1-q{r-k+1})}{(1-q^k)(1-q^{k-1}) \cdots (1-q^1))} \qquad (40)
 $$
-当q趋近极限1时，左端系数变成平常的二项式系数$\binom{r}{k}_1=\binom{r}{k}$ ，他可以看成是用 1-q 除以分子和分母中每一项的结果。
+当q趋近极限1时，左端系数变成平常的二项式系数$`\binom{r}{k}_1=\binom{r}{k}`$ ，他可以看成是用 1-q 除以分子和分母中每一项的结果。
 
 最重要的推广是 _多项式系数_：
 $$

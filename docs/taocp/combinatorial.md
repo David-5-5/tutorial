@@ -226,7 +226,9 @@ f(x,y,z) = (x \wedge z) \vee (y \wedge z) \vee (\overline x \wedge y) \qquad(27)
 式(28)中的这8个点对应于全析取范式(23)中显式表示的小项蕴含元，但那些蕴含元中实际上没有一个是素蕴含元。如果像数据库查询时用星号表示通配符，那么式(28)的前两个点构成子立方 000\*，后四个点构成子立方 11\*\*。所以 $`\overline w \wedge \overline x \wedge \overline y`$ 是 f 的蕴含元，$`w \wedge x`$ 也是 f 的蕴含元。同样可以看出，式(28)中第一个点和第三个点构成子立方 0\*00，使 $`\overline w \wedge \overline y \wedge \overline z`$ 成为蕴含元。
 
 一般说来，每个素蕴含元以这种方式对应一个最大子立方，这个子立方停留在使 f 为真的点集内。式(28)的8个点中，最大子立方是
+
 000\*, 0\*00, \*100, \*111, 11\*\*,  (29)
+
 所以式(23)中的函数 f(w,x,y,z) 的全部素蕴含元的析取是：
 ```math
 (\overline w \wedge \overline x \wedge \overline y ) 

@@ -22,9 +22,9 @@ $$
 误差约为 1/(12n)
 
 n! 分解为素因子的准确值。素数 p 是 n！ 的因子，重数为
-$$
+```math
 \mu = \lceil \frac{n}{p} \rceil + \lceil \frac{n}{p^2} \rceil + \lceil \frac{n}{p^3} \rceil + ...  = \sum_{k>0}\lceil \frac{n}{p^k} \rceil
-$$
+```
 
 例如，如果 n = 1000, p = 3, 那么
 
@@ -42,16 +42,16 @@ n! = \lim_{x\to\infty} \frac{m^nm!}{(n+1)(n+2)\cdots(n+m)}
 $$
 
 然而，当 n 不是整数时，通常不用记号 n!， 改用勒让德提出的记号：
-$$
+```math
 n! = \Gamma(n+1) = n\Gamma(n)
-$$
+```
 
 后面太难了，o(╥﹏╥)o ，略过........
 
 
 ### 1.2.6 二项式系数
 
-从 n 个对象中选取 k 个进行排列，有 $n(n-1)\dots(n-k-1)$ 种方法，其中每个 k 元组合在这些排列中恰好出现 k！ 次。用$\binom{n}{k}$ 表示组合数。
+从 n 个对象中选取 k 个进行排列，有 $n(n-1)\dots(n-k-1)$ 种方法，其中每个 k 元组合在这些排列中恰好出现 k！ 次。用$` \binom{n}{k} `$ 表示组合数。
 
 $$
 \binom{n}{k} = \frac{n(n-1)\cdots(n-k-1)}{k(k-1)\cdots1}   \qquad \qquad (2)
@@ -292,5 +292,34 @@ b_1, \cdots, b_n \\
 所以我们可以应用处理二项式系数的已知方法。等式(20)的两端是三项式系数$`\binom{r}{k,m-k,r-m}`$
 
 本小节的最后，对多项式从 x 的幂表示到二项式系数表示的变换，做个简要的分析，这个变换用到的系数成为 _斯特林数_，出现在众多的算法的研究中。
+斯特林数有两类：分别用以下公式表示：$`\begin{bmatrix} n \\ k \end{bmatrix} `$ 及 $`\begin{Bmatrix} n \\ k \end{Bmatrix} `$
 
+现在罗列包含斯特林数的重要恒等式。在这些恒等式中，变量 m 和 n 总是表示非负整数。
+加法公式(46)：
+```math
+\begin{bmatrix} n+1 \\ m \end{bmatrix} = n \begin{bmatrix} n \\ m \end {bmatrix} + \begin{bmatrix} n \\ m-1\end {bmatrix} \\
+\begin{Bmatrix} n+1 \\ m \end{Bmatrix} = n \begin{Bmatrix} n \\ m \end {Bmatrix} + \begin{Bmatrix} n \\ m-1\end {Bmatrix}  
+```
 
+反演公式(47)(同等式(33)比较)
+```math
+\sum_k \begin{bmatrix} n \\ k \end{bmatrix}\begin{Bmatrix} k \\ m \end{Bmatrix}(-1)^{n-k} = \delta_{mn} \\
+\sum_k \begin{Bmatrix} n \\ k \end{Bmatrix}\begin{bmatrix} k \\ m \end{bmatrix}(-1)^{n-k} = \delta_{mn} 
+```
+
+特殊值(48)~(50)
+```math
+\binom{0}{n} = \begin{bmatrix} 0 \\ n \end{bmatrix} = \begin{Bmatrix} 0 \\ n \end{Bmatrix} = \delta_{n0} ,
+\binom{n}{n} = \begin{bmatrix} n \\ n \end{bmatrix} = \begin{Bmatrix} n \\ n \end{Bmatrix} = 1
+```
+
+```math
+\begin{bmatrix} n \\ n-1 \end{bmatrix} = \begin{Bmatrix} n \\ n-1\end{Bmatrix} =  \binom{n}{2} 
+```
+
+```math
+\begin{bmatrix} n+1 \\ 0 \end{bmatrix} = \begin{Bmatrix} n+1 \\ 0\end{Bmatrix} = 0 ,
+\begin{bmatrix} n+1 \\ 1 \end{bmatrix} = n!,
+\begin{Bmatrix} n+1 \\ 1\end{Bmatrix} = 1,
+ \begin{Bmatrix} n+1 \\ 2\end{Bmatrix} = 2^n-1
+```

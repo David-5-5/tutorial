@@ -150,141 +150,146 @@ $$
 在等式中用的是$`\sum_k`$而不是$`\sum_{k=0}^r`$，如果对 k 不加限制，我们是对所有整数 k 求和。等式(13)给出了 $`0^0 = 1 \qquad (14)`$。我们将采用这个约定。
 
 在等式(13)中 y=1 的特例很重要，特别给出
-$$
+```math
 \sum_k \binom{r}{k} x^k  = (1+x)^r, 整数 r\geq 0 或 |x| < 0 \qquad (15)      
-$$
+```
 
 二项式定理是牛顿1676年发现的，但是没有给出证明。欧拉在1774年首次试图证明，不过他的证明并不完整。最后高斯于1812年首次给出了真正的证明。尼尔斯.阿尔贝发现了二项式等式(13)的一个推广：
-$$
+```math
 (x+y)^n = \sum_k \binom{n}{k} x(x-kz)^{k-1}(y+kz)^{n-k}  , 整数 n\geq 0, x \neq 0 \qquad (16)
-$$
+```
 这是三个变量 x, y, z 的恒等式。
 
 
 #### G. 上标取反
 由定义(3)，对分子的每一项加负号，直接推出基本恒等式
-$$
+```math
 \binom{r}{k} = (-1)^k \binom{k - r -1}{k}, k \in Z \qquad (17)
-$$
+```
 这对上标取相反数的变换经常很有用，等式(17)的一个简单推论是求和公式
-$$
+```math
 \sum_{k \leq n}\binom{r}{k}(-1)^k = \binom{r}{0} - \binom{r}{1} +  \cdots + (-1)^n\binom{r}{n} = (-1)^n\binom{r-1}{n}, n \in Z \qquad (18)
-$$
+```
 等式(18)可以利用等式(9)用归纳法证明，也可以直接利用等式(17)和(10)证明。
 等式(17)中令 r 取整数可获得另外一个重要的应用：
-$$
+```math
 \binom{n}{m} = (-1)^{n-m} \binom{-(m+1)}{n-m}, n \geq 0, m \in Z \qquad (19)
-$$
+```
 等式(17), 令 r = n，k = n - m，利用等式(6),把 n 从上标的位置移到下标的位置。
 
 
 #### H. 简化乘积
 当出现二项式系数的乘积时，通常可以利用等式(5)把它们展成阶乘再写回二项式系数，从而用多种方式重新表示它们。例如
-$$
+```math
 \binom{r}{m}\binom{m}{k} = \binom{r}{k} \binom{r-k}{m-k}, n \in Z, k \in Z \qquad (20)
-$$
+```
 等式(7)是等式(20)在 k=1 时的特例。当 $`r \geq m`$的整数时，等式(8)足以证明等式(20)成立；当$`0 \leq k \leq m`$时也可以，于是有：
-$$
+```math
 \binom{r}{m}\binom{m}{k} = \frac{r!m!}{m!(r-m)!k!(m-k)!} = \frac{r!(r-k)!}{k!(r-k)!(m-k)!(r-m)!} = \binom{r}{k} \binom{r-k}{m-k}
-$$
+```
 
 
 #### I. 乘积之和
 下面列出几个常见的恒等式，如何对两个二项式系数的乘积求和，其中操作变量 k 分别出现在各种不同的位置。
 
-$$
-\sum_k \binom{r}{k}\binom{s}{n-k} = \binom{r+s}{n} , n \in Z \qquad (21) $$
-$$
-\sum_k \binom{r}{m+k}\binom{s}{n+k} = \binom{r+s}{r-m+n} ,   m,n,r \in Z \geq 0 \qquad (22) $$
-$$
-\sum_k \binom{r}{k}\binom{s+k}{n}(-1)^{r-k} = \binom{s}{n-r} , n,r \in Z \qquad (23) $$
-$$
-\sum_{k=0}^r \binom{r-k}{m}\binom{s}{k-t}(-1)^{k-t} = \binom{r-t-s}{r-t-m} , t,r,m \in Z \geq 0 \qquad (24) $$
-$$
-\sum_{k=0}^r \binom{r-k}{m}\binom{s+k}{n} = \binom{r+s+1}{m+n+1} , n,s,m,r \in Z  \geq 0 \qquad (25) $$
-$$
+```math
+\sum_k \binom{r}{k}\binom{s}{n-k} = \binom{r+s}{n} , n \in Z \qquad (21)
+```
+```math
+\sum_k \binom{r}{m+k}\binom{s}{n+k} = \binom{r+s}{r-m+n} ,   m,n,r \in Z \geq 0 \qquad (22)
+```
+```math
+\sum_k \binom{r}{k}\binom{s+k}{n}(-1)^{r-k} = \binom{s}{n-r} , n,r \in Z \qquad (23)
+```
+```math
+\sum_{k=0}^r \binom{r-k}{m}\binom{s}{k-t}(-1)^{k-t} = \binom{r-t-s}{r-t-m} , t,r,m \in Z \geq 0 \qquad (24) 
+```
+```math
+\sum_{k=0}^r \binom{r-k}{m}\binom{s+k}{n} = \binom{r+s+1}{m+n+1} , n,s,m,r \in Z  \geq 0 \qquad (25) 
+```
+```math
 \sum_{k\geq 0} \binom{r-tk}{k}\binom{s-t(n-k)}{n-k}\frac{r}{r-tk} = \binom{r+s-tn}{n} , n \in Z \qquad (26) 
-$$ 
+```
 在这些恒等式中，等式(21)是迄今为止最重要的一个，通常成为范德蒙德恒等式。范德蒙德1772年发表，然而这个恒等式早已出现在1303年朱世杰的专著中。
 
 在等式(26)中，如果 r=tk，可以消去分子中的一个因式，从而避免 0 作分母。所以等式(26)是关于变量 r,s,t 的多项式恒等式。显然等式(21)是等式(26)取 t=0 的一个特例。
 
 等式(23)和等式(25)有一种不是一目了然的用法：用左端更复杂的表达式代替右端简单的二项式系数，交换求和的顺序，再进行简化。我们可以把两式左端视为
-$$
+```math
 \binom{s}{n+a} 用 \binom{s+k}{n} 
-$$
+```
 表示的表达式。等式(23)用于取值为负的a，等式(25)用于取值为正的a。
 
 
 __例4 证明__
-$$
+```math
 \sum A_k(r,t)A_{n-k}(s,t) = A_n(r+s,t), n \in Z, n\geq 0 \qquad (30) 
-$$
+```
 其中$`A_n(x,t)`$是x的n次多项式，满足
-$$
+```math
 A_n(x,t) = \binom{x-nt}{n}\frac{x}{x-nt}, x\neq nt
-$$
+```
 __解__ 
 假定$`0 \leq k \leq n`$时，有$`r \neq kt \neq s`$，我们求解的问题为：
-$$
+```math
 \sum_k \binom{r-kt}{k} \binom{s-(n-k)t}{k}\frac{r}{r-kt}\frac{s}{s-(n-k)t}
-$$
+```
 我们有
-$$
+```math
 \frac{r}{r-kt}\frac{s}{s-(n-k)t} = \frac{1}{r+s-nt}(\frac{1}{r-kt}+\frac{1}{s-(n-k)t})
-$$
+```
 待人需要求解的式子得到
-$$
+```math
 \frac{s}{r+s-nt} \sum_k \binom{r-kt}{k} \binom{s-(n-k)t}{k} \frac{r}{r-kt} + \\
 \frac{r}{r+s-nt} \sum_k \binom{r-kt}{k} \binom{s-(n-k)t}{k} \frac{s}{s-(n-k)t} 
-$$
+```
 在第二个和式中把 k 改为 n-k，等式(26)可求出这两个和的值，由此立即推出所求的结果。
 
 上述例子可能使读者以为二项式系数是所向披靡的利器，然而应该指出，尽管存在等式(10)(11)(18)，对于类似的和
-$$
+```math
 \sum_{k=0}^n \binom{m}{k} = \binom{m}{0} + \binom{m}{1} + \cdots + \binom{m}{n} \qquad (36) 
-$$
+```
 在 n < m 时却似乎没有简单的求和公式。当 m 为明确给出的副整数时，这个和确实有闭合式，可写成 n 的函数，例如:
-$$
+```math
 \sum_{k=0}^n \binom{-2}{k} = (-1)^n \Big \lceil \frac{n+1}{2} \Big \rceil \qquad (37)
-$$
+```
 还有一个简单公式:
-$$
+```math
 \sum_{k=0}^n \binom{m}{k}(k-\frac{m}{2}) = -\frac{m}{2} \binom{m-1}{n}  \qquad (38)
-$$
+```
 所求和式看起来似乎应当更难，而不是如此容易。
 
 
 系统化、机械化处理二项式系数求和的主要工具是超几何函数的性质。超几何函数是用阶乘升幂定义的下述无穷级数：
-$$
+```math
 F \begin{pmatrix}
 a_1, \cdots, a_m \\
 b_1, \cdots, b_n \\ 
 \end{pmatrix} = 
 \sum_{k \geq 0} \frac{a_1^{\overline k}\cdots a_m^{\overline k}}{b_1^{\overline k}\cdots b_n^{\overline k}} \frac{z^k}{k!} \qquad (39)
-$$
+```
 
 二项式系数的概念有若干重大的推广，首先可以考虑对$`\binom{r}{k}`$ 中的下标 k 取任意实数值。另一种推广是：
-$$
+```math
 \binom{r}{k}_q = \frac{(1-q^r)(1-q^{r-1}) \cdots (1-q{r-k+1})}{(1-q^k)(1-q^{k-1}) \cdots (1-q^1))} \qquad (40)
-$$
+```
 当q趋近极限1时，左端系数变成平常的二项式系数$`\binom{r}{k}_1=\binom{r}{k}`$ ，他可以看成是用 1-q 除以分子和分母中每一项的结果。
 
 最重要的推广是 _多项式系数_：
-$$
+```math
 \binom{k_1+k_2+\cdots+k_m}{k_1,k_2,\cdots,k_m} = \frac{(k_1+k_2+\cdots\ +k_m)}{k_1!k_2!\cdots k_m!}, k \in Z, k \geq 0  \qquad (41)
-$$
+```
 
 多项式系数的主要性质是等式(13)的推广：
-$$
+```math
 (x_1+x_2+\cdots+x_m)^n = \sum_{k_1+k_2+\cdots+k_m=n} \binom{n}{k_1,k_2,\cdots,k_m} \qquad (42)
-$$
+```
 
 任何多项式系数都可以通过二项式系数表示：
-$$
+```math
 \binom{k_1+k_2+\cdots+k_m}{k_1,k_2,\cdots,k_m} = \binom{k_1+k_2}{k_1}\binom{k_1+k_2+k_3}{k_1+k_2}\cdots\binom{k_1+k_2+\cdots+k_m}{k_1+k_2+\cdots+k_{m-1}} \qquad (43)
-$$
-所以我们可以应用处理二项式系数的已知方法。等式(20)的两端是三项式系数$\binom{r}{k,m-k,r-m}$
+```
+所以我们可以应用处理二项式系数的已知方法。等式(20)的两端是三项式系数$`\binom{r}{k,m-k,r-m}`$
 
 本小节的最后，对多项式从 x 的幂表示到二项式系数表示的变换，做个简要的分析，这个变换用到的系数成为 _斯特林数_，出现在众多的算法的研究中。
 

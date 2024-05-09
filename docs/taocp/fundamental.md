@@ -72,7 +72,7 @@ $$
 - 1653年，出现在帕斯卡的算术三角论中，称为帕斯卡三角
 - 1303年，元代数学家朱世杰
 - 1261年，杨辉把它归为贾宪的发现，称为杨辉三角
-- 850年，印度数学家马哈维拉解释$`\binom{n}{k}`$的计算规则
+- 850年，印度数学家马哈维拉解释 $`\binom{n}{k}`$ 的计算规则
 
 
 #### A. 用阶乘表示二项式系数
@@ -147,7 +147,7 @@ $$
 ```math
 (x+y)^r = \sum_k \binom{r}{k} x^ky^{r-k} , 整数 r\geq 0 \qquad (13)      
 ```
-在等式中用的是$`\sum_k`$而不是$`\sum_{k=0}^r`$，如果对 k 不加限制，我们是对所有整数 k 求和。等式(13)给出了 $`0^0 = 1 \qquad (14)`$。我们将采用这个约定。
+在等式中用的是 $`\sum_k`$ 而不是 $`\sum_{k=0}^r`$，如果对 k 不加限制，我们是对所有整数 k 求和。等式(13)给出了 $`0^0 = 1 \qquad (14)`$。我们将采用这个约定。
 
 在等式(13)中 y=1 的特例很重要，特别给出
 ```math
@@ -183,7 +183,7 @@ $$
 ```math
 \binom{r}{m}\binom{m}{k} = \binom{r}{k} \binom{r-k}{m-k}, n \in Z, k \in Z \qquad (20)
 ```
-等式(7)是等式(20)在 k=1 时的特例。当 $`r \geq m`$的整数时，等式(8)足以证明等式(20)成立；当$`0 \leq k \leq m`$时也可以，于是有：
+等式(7)是等式(20)在 k=1 时的特例。当 $`r \geq m`$ 的整数时，等式(8)足以证明等式(20)成立；当 $`0 \leq k \leq m`$ 时也可以，于是有：
 ```math
 \binom{r}{m}\binom{m}{k} = \frac{r!m!}{m!(r-m)!k!(m-k)!} = \frac{r!(r-k)!}{k!(r-k)!(m-k)!(r-m)!} = \binom{r}{k} \binom{r-k}{m-k}
 ```
@@ -225,12 +225,12 @@ __例4 证明__
 ```math
 \sum A_k(r,t)A_{n-k}(s,t) = A_n(r+s,t), n \in Z, n\geq 0 \qquad (30) 
 ```
-其中$`A_n(x,t)`$是x的n次多项式，满足
+其中 $`A_n(x,t)`$ 是x的n次多项式，满足
 ```math
 A_n(x,t) = \binom{x-nt}{n}\frac{x}{x-nt}, x\neq nt
 ```
 __解__ 
-假定$`0 \leq k \leq n`$时，有$`r \neq kt \neq s`$，我们求解的问题为：
+假定 $`0 \leq k \leq n`$ 时，有 $`r \neq kt \neq s`$，我们求解的问题为：
 ```math
 \sum_k \binom{r-kt}{k} \binom{s-(n-k)t}{k}\frac{r}{r-kt}\frac{s}{s-(n-k)t}
 ```
@@ -269,11 +269,11 @@ b_1, \cdots, b_n \\
 \sum_{k \geq 0} \frac{a_1^{\overline k}\cdots a_m^{\overline k}}{b_1^{\overline k}\cdots b_n^{\overline k}} \frac{z^k}{k!} \qquad (39)
 ```
 
-二项式系数的概念有若干重大的推广，首先可以考虑对$`\binom{r}{k}`$ 中的下标 k 取任意实数值。另一种推广是：
+二项式系数的概念有若干重大的推广，首先可以考虑对 $`\binom{r}{k}`$ 中的下标 k 取任意实数值。另一种推广是：
 ```math
 \binom{r}{k}_q = \frac{(1-q^r)(1-q^{r-1}) \cdots (1-q{r-k+1})}{(1-q^k)(1-q^{k-1}) \cdots (1-q^1))} \qquad (40)
 ```
-当q趋近极限1时，左端系数变成平常的二项式系数$`\binom{r}{k}_1=\binom{r}{k}`$ ，他可以看成是用 1-q 除以分子和分母中每一项的结果。
+当q趋近极限1时，左端系数变成平常的二项式系数 $`\binom{r}{k}_1=\binom{r}{k}`$ ，他可以看成是用 1-q 除以分子和分母中每一项的结果。
 
 最重要的推广是 _多项式系数_：
 ```math
@@ -289,7 +289,7 @@ b_1, \cdots, b_n \\
 ```math
 \binom{k_1+k_2+\cdots+k_m}{k_1,k_2,\cdots,k_m} = \binom{k_1+k_2}{k_1}\binom{k_1+k_2+k_3}{k_1+k_2}\cdots\binom{k_1+k_2+\cdots+k_m}{k_1+k_2+\cdots+k_{m-1}} \qquad (43)
 ```
-所以我们可以应用处理二项式系数的已知方法。等式(20)的两端是三项式系数$`\binom{r}{k,m-k,r-m}`$
+所以我们可以应用处理二项式系数的已知方法。等式(20)的两端是三项式系数 $`\binom{r}{k,m-k,r-m}`$
 
 本小节的最后，对多项式从 x 的幂表示到二项式系数表示的变换，做个简要的分析，这个变换用到的系数成为 _斯特林数_，出现在众多的算法的研究中。
 斯特林数有两类：分别用以下公式表示：$`\begin{bmatrix} n \\ k \end{bmatrix} `$ 及 $`\begin{Bmatrix} n \\ k \end{Bmatrix} `$
@@ -323,3 +323,55 @@ b_1, \cdots, b_n \\
 \begin{Bmatrix} n+1 \\ 1\end{Bmatrix} = 1,
  \begin{Bmatrix} n+1 \\ 2\end{Bmatrix} = 2^n-1
 ```
+
+
+展开公式：
+```math
+\sum_k \begin{bmatrix} n \\ k \end{bmatrix}\binom{k}{m}= \begin{bmatrix} n+1 \\ m+1 \end{bmatrix} ,
+\sum_k \begin{bmatrix} n+1 \\ k+1 \end{bmatrix}\binom{k}{m}(-1)^{k-m} = \begin{bmatrix} n \\ m \end{bmatrix} \qquad (51)
+```
+
+```math
+\sum_k \begin{Bmatrix} k \\ m \end{Bmatrix}\binom{n}{k}= \begin{Bmatrix} n+1 \\ m+1 \end{Bmatrix} ,
+\sum_k \begin{Bmatrix} k+1 \\ m+1 \end{Bmatrix}\binom{n}{k}(-1)^{n-k} = \begin{Bmatrix} n \\ m \end{Bmatrix} \qquad (52)
+```
+
+```math
+\sum_k \binom{m}{k}(-1)^{m-k}k^n= m!\begin{Bmatrix} n \\ m \end{Bmatrix} \qquad (53)
+```
+
+```math
+\sum_k \binom{m-n}{m+k} \binom{m+n}{n+k}\begin{Bmatrix} m+k \\ k \end{Bmatrix}= \begin{bmatrix} n \\ n-m \end{bmatrix} ,\\
+\sum_k \binom{m-n}{m+k} \binom{m+n}{n+k}\begin{bmatrix} m+k \\ k \end{bmatrix}= \begin{Bmatrix} n \\ n-m \end{Bmatrix} ;\\ (54)
+```
+
+```math
+\sum_k \begin{Bmatrix} n+1 \\ k+1 \end{Bmatrix}\begin{bmatrix} k \\ m \end{bmatrix} (-1)^{k-m} = \binom{n}{m};\qquad (55)
+```
+
+```math
+\sum_{k \leq n} \begin{bmatrix} k \\ m \end{bmatrix} \frac{n!}{k!} = \begin{bmatrix} n+1 \\ m+1 \end{bmatrix}, \\
+\sum_{k \leq n} \begin{Bmatrix} k \\ m \end{Bmatrix} (m+1)^{n-k} = \begin{Bmatrix} n+1 \\ m+1 \end{Bmatrix}. \\ (56)
+```
+
+等式(49)是一种普遍现象的一个实例: m 为非负整数时，两类斯特林数 $` \begin{bmatrix} n \\ n-m \end{bmatrix} `$ 和 $` \begin{Bmatrix} n \\ n-m \end{Bmatrix} `$ 就是 n 的 2m 次多项式。例如， m = 2 和 m = 3 时，相应的公式为
+```math
+\begin{bmatrix} n \\ n-2 \end{bmatrix} = \binom{n}{4} + 2\binom{n+1}{4}, \\
+\begin{Bmatrix} n \\ n-2 \end{Bmatrix} = \binom{n+1}{4} + 2\binom{n}{4}, \\
+\begin{bmatrix} n \\ n-3 \end{bmatrix} = \binom{n}{6} + 8\binom{n+1}{6} + 6\binom{n+2}{6}, \\
+\begin{Bmatrix} n \\ n-3 \end{Bmatrix} = \binom{n+2}{6} + 8\binom{n+1}{6} + 6\binom{n}{6} \\ (57)
+```
+因此对于 r 的任意实数值(或者复数值)定义数 $` \begin{bmatrix} r \\ r-m \end{bmatrix} `$ 和 $` \begin{Bmatrix} r \\ r-m \end{Bmatrix} `$ 是有意义的。采用这个推广，两类斯特林数有一个有趣的对偶定律
+```math
+\begin{Bmatrix} n \\ m \end{Bmatrix} = \begin{bmatrix} -m \\ -n \end{bmatrix} \qquad (58)
+```
+统一起来，斯特林的原始讨论中隐含了这个结论。此外，每当 z 的实部为正数时，无穷级数
+```math
+z^r = \sum_k \begin{Bmatrix} r \\ r-k \end{Bmatrix} z^{\underline{r-k}} \qquad (59)
+```
+收敛。在这个意义下，一般的等式仍然成立。类似的，对应的式也可以推广到一个具有渐进性的级数:
+```math
+z^r = \sum_{k=0}^m \begin{bmatrix} r \\ r-k \end{bmatrix} (-1) ^k z^{r-k} + O(z^{r-m-1}) \qquad (60)
+```
+
+

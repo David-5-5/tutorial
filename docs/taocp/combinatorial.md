@@ -261,4 +261,25 @@ f(x_1,\cdots,x_n) = (t_1 \vee u_1 \vee v1) \wedge (t_2 \vee u_2 \vee v2) \wedge 
 这 8 个子句中的任何 7 个子句恰好以两种方式可满足，而且他们强行决定了 3 个变量的值。例如最后七子句意味着有 $` x_1x_2x_3 = 001 `$。但是八子句的完整集合不可能同时满足。
 
 
+__简单特例。__ 有两类重要的布尔公式，它们的可满足性问题已被证明是很容易判定的。这些特例出现在被检验的合取范式完全由“霍恩子句” (Horn clause) 或者完全由“克罗姆子句” (Krom clause) 组成的时候。霍恩子句是包含一些字面值的 OR，其中全部字面值或者几乎全部字面值是带补的变量。克罗姆子句是恰好两个字面值的 OR。因此类如:
+```math
+\overline x \vee \overline y, w \vee \overline y \vee \overline z,\overline u \vee \overline v \vee \overline w \vee \overline x \vee \overline y \vee z, x
+```
+是霍恩子句的例子，而
+```math
+x \vee x,\overline x \vee \overline x,\overline x \vee \overline y,x \vee \overline y,\overline x \vee y,x \vee y
+```
+是克罗姆子句的例子，其中只有最后的子句不同时为霍恩子句。当局限于克罗姆子句时，其实是在考虑2SAT问题。在两种情形下都将看到，可以在线性时间内判定可满足性问题；也就是说，给定长度为N的公式能够在O(N)个简单步骤内求解。
+
+首先考察霍恩子句子句。为什么它容易处理？主要原因，像$` \overline u \vee \overline v \vee \overline w \vee \overline x \vee \overline y \vee z`$, 都可以转化为 $`\neg（u \wedge v \wedge w \wedge x \wedge y） \vee z`$ 的形式，这同
+```math
+u \wedge v \wedge w \wedge x \wedge y \Rightarrow  z
+```
+是一样的。还句话说，如果u，v，w，x，y全部为真，那么 z 也必为真。
+
+__定理H.__ 布尔函数 $`f(x_1,x_2,\cdots,x_n)`$ 可以表示成若干霍恩子句的合取，当且仅当对于所有布尔值 $`x_j`$ 和 $`y_j`$ 有
+```math
+f(x_1,x_2,\cdots,x_n) = f(y_1,y_2,\cdots,y_n) = 1 蕴涵 f(x_1 \wedge y_1,x_2 \wedge y_2,\cdots,x_n \wedge y_n) = 1 \qquad(33)
+```
+
 

@@ -292,7 +292,31 @@ b_1, \cdots, b_n \\
 所以我们可以应用处理二项式系数的已知方法。等式(20)的两端是三项式系数 $`\binom{r}{k,m-k,r-m}`$
 
 本小节的最后，对多项式从 x 的幂表示到二项式系数表示的变换，做个简要的分析，这个变换用到的系数成为 _斯特林数_，出现在众多的算法的研究中。
-斯特林数有两类：分别用以下公式表示：$`\begin{bmatrix} n \\ k \end{bmatrix} `$ 及 $`\begin{Bmatrix} n \\ k \end{Bmatrix} `$
+斯特林数有两类：分别用以下公式表示：$`\begin{bmatrix} n \\ k \end{bmatrix} `$ 及 $`\begin{Bmatrix} n \\ k \end{Bmatrix} `$。
+- 能记住第二类斯特林数 $`\begin{Bmatrix} n \\ k \end{Bmatrix} `$ 中的大括号{}，因为大括号表示集合，而 $`\begin{Bmatrix} n \\ k \end{Bmatrix} `$ 正是把 n 个元素的集合分拆成 k 个不相交子集的分拆数。
+- 第一类斯特林数 $`\begin{bmatrix} n \\ k \end{bmatrix} `$ 也可以从组合学角度理解，把 n 个字母排列成 k 个环的排列数。
+
+第一类斯特林数用来把阶乘幂转换为普通的幂：
+```math
+x^{\underline n} = x(x-1)\cdots(x-n+1)\\
+= \begin{bmatrix} n \\ n \end{bmatrix} x^n - \begin{bmatrix} n \\ n-1 \end{bmatrix} x^{n-1} + \cdots + (-1)^n \begin{bmatrix} n \\ 0 \end{bmatrix} \\
+= \sum_k (-1)^{n-k} \begin{bmatrix} n \\ k \end{bmatrix} x^k \qquad (44)
+```
+例如：
+```math
+\binom{x}{5} = \frac{x^5}{5!} = \frac{1}{120}(x^5-10x^4+35x^3-50x^2+24x)
+```
+
+第二类斯特林数用来把普通的幂转换为阶乘幂：
+```math
+x^n = \begin{Bmatrix} n \\ n \end{Bmatrix}x^{\underline n} + \cdots + \begin{Bmatrix} n \\ 0 \end{Bmatrix} x^{\underline 0} = \sum_k \begin{Bmatrix} n \\ k \end{Bmatrix}x^{\underline k} \qquad (45)
+```
+例如：
+```math
+x^5 = x^{{\underline 5}} + 10x^{{\underline 4}} + 25x^{{\underline 3}}+15x^{{\underline 2}}+x^{{\underline 1}} \\
+=120\binom{x}{5} + 240\binom{x}{4} + 150\binom{x}{3} + 30\binom{x}{2} + \binom{x}{1}
+```
+
 
 现在罗列包含斯特林数的重要恒等式。在这些恒等式中，变量 m 和 n 总是表示非负整数。
 加法公式(46)：

@@ -296,6 +296,32 @@ b_1, \cdots, b_n \\
 - 能记住第二类斯特林数 $`\begin{Bmatrix} n \\ k \end{Bmatrix} `$ 中的大括号{}，因为大括号表示集合，而 $`\begin{Bmatrix} n \\ k \end{Bmatrix} `$ 正是把 n 个元素的集合分拆成 k 个不相交子集的分拆数。
 - 第一类斯特林数 $`\begin{bmatrix} n \\ k \end{bmatrix} `$ 也可以从组合学角度理解，把 n 个字母排列成 k 个环的排列数。
 
+表2 两类斯特林数
+
+n | $`\begin{bmatrix} n \\ 0 \end{bmatrix} `$ | $`\begin{bmatrix} n \\ 1 \end{bmatrix} `$ | $`\begin{bmatrix} n \\ 2 \end{bmatrix} `$ |$`\begin{bmatrix} n \\ 3 \end{bmatrix} `$ | $`\begin{bmatrix} n \\ 4 \end{bmatrix} `$ | $`\begin{bmatrix} n \\ 5 \end{bmatrix} `$ | $`\begin{bmatrix} n \\ 6 \end{bmatrix} `$ | $`\begin{bmatrix} n \\ 7 \end{bmatrix} `$ | $`\begin{bmatrix} n \\ 8 \end{bmatrix} `$
+|:-:|--:|--:|--:|--:|--:|--:|--:|--:|--:|
+0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0
+1 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0
+2 | 0 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0
+3 | 0 | 2 | 3 | 1 | 0 | 0 | 0 | 0 | 0
+4 | 0 | 6 | 11 | 6 | 1 | 0 | 0 | 0 | 0
+5 | 0 | 24 | 50 | 35 | 10 | 1 | 0 | 0 | 0
+6 | 0 | 120 | 274 | 225 | 85 | 15 | 1 | 0 | 0
+7 | 0 | 720 | 1764 | 1624 | 735 | 175 | 21 | 1 | 0
+8 | 0 | 5040 | 13068 | 13132 | 6769 | 1960 | 322 | 28 | 1
+ |  |  |  |  |  |  |  |  | 
+n | $`\begin{Bmatrix} n \\ 0 \end{Bmatrix} `$ | $`\begin{Bmatrix} n \\ 1 \end{Bmatrix} `$ | $`\begin{Bmatrix} n \\ 2 \end{Bmatrix} `$ |$`\begin{Bmatrix} n \\ 3 \end{Bmatrix} `$ | $`\begin{Bmatrix} n \\ 4 \end{Bmatrix} `$ | $`\begin{Bmatrix} n \\ 5 \end{Bmatrix} `$ | $`\begin{Bmatrix} n \\ 6 \end{Bmatrix} `$ | $`\begin{Bmatrix} n \\ 7 \end{Bmatrix} `$ | $`\begin{Bmatrix} n \\ 8 \end{Bmatrix} `$
+0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0
+1 | 0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0
+2 | 0 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0
+3 | 0 | 1 | 3 | 1 | 0 | 0 | 0 | 0 | 0
+4 | 0 | 1 | 7 | 6 | 1 | 0 | 0 | 0 | 0
+5 | 0 | 1 | 15 | 25 | 10 | 1 | 0 | 0 | 0
+6 | 0 | 1 | 31 | 90 | 65 | 15 | 1 | 0 | 0
+7 | 0 | 1 | 63 | 301 | 350 | 140 | 21 | 1 | 0
+8 | 0 | 1 | 127 | 966 | 1701 | 1050 | 266 | 28 | 1
+
+
 第一类斯特林数用来把阶乘幂转换为普通的幂：
 ```math
 x^{\underline n} = x(x-1)\cdots(x-n+1)\\

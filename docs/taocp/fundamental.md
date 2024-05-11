@@ -461,5 +461,21 @@ H_\infty^{(2)} = \frac{\pi^2}{6}, H_\infty^{(4)} = \frac{\pi^4}{90}, H_\infty^{(
 ```
 这些结果是欧拉得到。1755年欧拉给出了伯努利数的生成函数：
 ```math
-\frac{x}{e^x-1} = \sum_{n=0}^\infty \frac{B_nx^n}{n!}
+\frac{x}{e^x-1} = \sum_{n=0}^\infty \frac{B_nx^n}{n!}, \qquad (7)
 ```
+
+现在考察涉及调和数的几个重要的和。首先：
+```math
+\sum_{k=1}^n H_k = (n+1)H_n - n, \qquad (8)
+```
+要得到上式只需交换求和次序：
+```math
+\sum_{k=1}^n \sum_{j=1}^k \frac{1}{j} = \sum_{j=1}^n \sum_{k=j}^n \frac{1}{j} = \sum_{j=1}^n \frac{n+1-j}{j}
+```
+式(8)是和式 $` \sum_{k=1}^n \binom{k}{m} H_k `$ 的一个特例。现在利用一种重要的方法--分布求和，来确定这个一般的和。只要 $` \sum a_k 和 (b_{k+1} - b_k) `$ 这两个量具有的简单的形式，就适合分部求和计算 $` \sum a_k b_k `$。注意到本例中有
+```math
+\binom{k}{m} = \binom{k+1}{m+1} - \binom{k}{m+1}
+```
+
+
+

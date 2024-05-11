@@ -291,6 +291,8 @@ b_1, \cdots, b_n \\
 ```
 所以我们可以应用处理二项式系数的已知方法。等式(20)的两端是三项式系数 $`\binom{r}{k,m-k,r-m}`$
 
+#### 斯特林数 stirling number
+
 本小节的最后，对多项式从 x 的幂表示到二项式系数表示的变换，做个简要的分析，这个变换用到的系数成为 _斯特林数_，出现在众多的算法的研究中。
 斯特林数有两类：分别用以下公式表示：$`\begin{bmatrix} n \\ k \end{bmatrix} `$ 及 $`\begin{Bmatrix} n \\ k \end{Bmatrix} `$。
 - 能记住第二类斯特林数 $`\begin{Bmatrix} n \\ k \end{Bmatrix} `$ 中的大括号{}，因为大括号表示集合，而 $`\begin{Bmatrix} n \\ k \end{Bmatrix} `$ 正是把 n 个元素的集合分拆成 k 个不相交子集的分拆数。
@@ -425,3 +427,39 @@ z^r = \sum_{k=0}^m \begin{bmatrix} r \\ r-k \end{bmatrix} (-1) ^k z^{r-k} + O(z^
 ```
 
 
+### 1.2.7 调和数
+在后面的讨论中，下述和式极为重要：
+```math
+H_n = 1 + \frac{1}{2} + \frac{1}{3} + \cdots + \frac{1}{n} = \sum_{k=1}^n \frac{1}{k}, n \geq 0\ qquad (1)
+```
+字母 H 代表 harmonic，即“调和”，我们将 $`H_n`$ 称为调和数。__早在公元前 186 年以前，中国人已在竹简上写明了 $`H_{10} = \frac{7381}{2520} `$__。
+
+乍看之下，当 n 取很大的值时，$`H_n`$ 似乎不会特别大，因为向级数中加进的数越来越小，但是如果取足够大的 n，$`H_n`$ 的值可以随意增大，因为：
+```math
+H_{2^m} \geq 1 + \frac{m}{2}, m \geq 0 \qquad (2)
+```
+
+$`H_n`$ 大小的近似值可以表示为：
+```math
+H_n = \ln n + \gamma + \frac{1}{2n} - \frac{1}{12n^2} + \frac{1}{120n^4} - \epsilon, 0 < \epsilon < \frac{1}{252n^6} \qquad (3)
+```
+这里，$`\gamma = 0.5772156649... `$ 是欧拉提出的 _欧拉常数_。由此看来，$`H_n`$ 同 n 的自然对数是相当接近的。在一定意义上，当 n 越来越大时，$`H_n`$ 仅勉强的趋近无穷大，因为对所有的 n，当 r 为大于 1 的任意实值指数时，类似的和：
+```math
+1 + \frac{1}{2^r} + \frac{1}{3^r} + \cdots + \frac{1}{n^r} \qquad (4)
+```
+总是有界的。把式(4)中的和记为 $`H_n^{(r)}`$ 。当式(4)中的指数 r 至少为2时，只要 n 不是太小，$`H_n^{(r)}`$ 的值就非常接近其最大值 $`H_\infty^{(r)}`$。$`H_\infty^{(r)}`$ 在数学上是个非常著名的量，成为黎曼 $`\zeta`$ 函数:
+```math
+H_\infty^{(r)} = \zeta(r) = \sum_{k \geq 1} \frac{1}{k^r}, \qquad (5)
+```
+已经知道，如果 r 为偶整数，$`\zeta`$ 的值等于：
+```math
+H_\infty^{(r)} = \frac{1}{2}|B_r|\frac{(2\pi)^r}{r!}, r/2 \geq 1, \qquad (6)
+```
+其中 $`B_r`$ 是伯努利数。特别的
+```math
+H_\infty^{(2)} = \frac{\pi^2}{6}, H_\infty^{(4)} = \frac{\pi^4}{90}, H_\infty^{(6)} = \frac{\pi^6}{945}, H_\infty^{(8)} = \frac{\pi^8}{9450} \qquad (6)
+```
+这些结果是欧拉得到。1755年欧拉给出了伯努利数的生成函数：
+```math
+\frac{x}{e^x-1} = \sum_{n=0}^\infty \frac{B_nx^n}{n!}
+```

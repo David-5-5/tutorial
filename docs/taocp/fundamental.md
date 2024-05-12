@@ -507,8 +507,8 @@ H_\infty^{(2)} = \frac{\pi^2}{6}, H_\infty^{(4)} = \frac{\pi^4}{90}, H_\infty^{(
 
 所以
 ```math
-\sum_{k=1}^n \binom{k}{m} H_k = (\binom{2}{m+1} H_2 - \binom{1}{m+1} H_1) + \cdots \\
-+ (\binom{n+1}{m+1} H_{n+1} - \binom{n}{m+1} H_n) - \sum_{k=1}^n \binom{k+1}{m+1} \frac{1}{k+1} \\
+\sum_{k=1}^n \binom{k}{m} H_k = (\binom{2}{m+1} H_2 - \binom{1}{m+1} H_1) + \cdots \\\\\\
++ (\binom{n+1}{m+1} H_{n+1} - \binom{n}{m+1} H_n) - \sum_{k=1}^n \binom{k+1}{m+1} \frac{1}{k+1} \\\\\\
 = \binom{n+1}{m+1} H_{n+1} - \binom{1}{m+1} H_1 - \frac{1}{m+1} \sum_{k=0}^n \binom{k}{m} + \frac{1}{m+1} \binom{0}{m} 
 ```
 
@@ -522,11 +522,11 @@ H_\infty^{(2)} = \frac{\pi^2}{6}, H_\infty^{(4)} = \frac{\pi^4}{90}, H_\infty^{(
 
 最后，考察一种不同类型的和式：$`\sum_k \binom{n}{k} x^kH_k`$。为简单起见，暂时用 $`S_n`$ 表示它。由于
 
-$$\begin{align\*}
+```math
 S_{n+1} = \sum_k (\binom{n}{k} + \binom{n}{k-1})x^kH_k \\\\\\
         = S_n + x \sum_{k \geq 1}\binom{n}{k-1}x^{k-1}(H_{k-1}+\frac{1}{k}) \\\\\\
         = S_n + x S_n + \frac{1}{n+1} \sum_{k \geq 1} \binom{n=1}{k}x^k.
-\end{align\*}$$
+```
 
 因此
 ```math

@@ -522,8 +522,8 @@ H_\infty^{(2)} = \frac{\pi^2}{6}, H_\infty^{(4)} = \frac{\pi^4}{90}, H_\infty^{(
 
 最后，考察一种不同类型的和式：$`\sum_k \binom{n}{k} x^kH_k`$。为简单起见，暂时用 $`S_n`$ 表示它。由于
 ```math
-S_{n+1} = \sum_k (\binom{n}{k} + \binom{n}{k-1})x^kH_k \\
-        = S_n + x \sum_{k \geq 1}\binom{n}{k-1}x^{k-1}(H_{k-1}+\frac{1}{k}) \\
+S_{n+1} = \sum_k (\binom{n}{k} + \binom{n}{k-1})x^kH_k \\\\
+        = S_n + x \sum_{k \geq 1}\binom{n}{k-1}x^{k-1}(H_{k-1}+\frac{1}{k}) \\\\
         = S_n + x S_n + \frac{1}{n+1} \sum_{k \geq 1} \binom{n=1}{k}x^k.
 ```
 
@@ -547,7 +547,7 @@ S_{n+1} = (x+1)S_n + ((x+1)^{n+1}-1)/(n+1),
 \sum_{k>n} \frac{1}{k(x+1)^k} <  \frac{1}{(n+1)(x+1)^{n+1}}\sum_{k \geq 0} \frac{1}{(x+1)^k} = \frac{1}{(n+1)(x+1)^nx}  (10)
 ```
 
-这就证明了下述定理/
+这就证明了下述定理
 
 __定理A.__ 如果 x>0，那么
 ```math

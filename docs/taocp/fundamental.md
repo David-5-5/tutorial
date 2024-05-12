@@ -522,11 +522,11 @@ H_\infty^{(2)} = \frac{\pi^2}{6}, H_\infty^{(4)} = \frac{\pi^4}{90}, H_\infty^{(
 
 最后，考察一种不同类型的和式：$`\sum_k \binom{n}{k} x^kH_k`$。为简单起见，暂时用 $`S_n`$ 表示它。由于
 
-```math
+$$\begin{align\*}
 S_{n+1} = \sum_k (\binom{n}{k} + \binom{n}{k-1})x^kH_k \\\\\\
         = S_n + x \sum_{k \geq 1}\binom{n}{k-1}x^{k-1}(H_{k-1}+\frac{1}{k}) \\\\\\
         = S_n + x S_n + \frac{1}{n+1} \sum_{k \geq 1} \binom{n=1}{k}x^k.
-```
+\end{align\*}$$
 
 因此
 ```math

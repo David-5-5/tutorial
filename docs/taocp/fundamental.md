@@ -67,6 +67,27 @@ $$
  \binom{r}{k} = 0, k < 0 \qquad \qquad (3)
 $$
 
+k 取特殊值时，有
+$$
+\binom{r}{0} = 1,  \binom{r}{1} = r, \binom{r}{2} = \frac{r(r-1)}{2}. \qquad (3)
+$$
+
+
+表1 二项式系数表(帕斯卡三角)
+
+r | $`\binom{r}{0}`$ | $`\binom{r}{1}`$ | $`\binom{r}{2}`$ | $`\binom{r}{3}`$ | $`\binom{r}{4}`$ | $`\binom{r}{5}`$ | $`\binom{r}{6}`$ | $`\binom{r}{7}`$ | $`\binom{r}{8}`$ | $`\binom{r}{9}`$ 
+|:-:|--:|--:|--:|--:|--:|--:|--:|--:|--:|--:|
+0 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0
+1 | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0
+2 | 1 | 2 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 0
+3 | 1 | 3 | 3 | 1 | 0 | 0 | 0 | 0 | 0 | 0
+4 | 1 | 4 | 6 | 4 | 1 | 0 | 0 | 0 | 0 | 0
+5 | 1 | 5 | 10 | 10 | 5 | 1 | 0 | 0 | 0 | 0
+6 | 1 | 6 | 15 | 20 | 15 | 15 | 1 | 0 | 0 | 0
+7 | 1 | 7 | 21 | 35 | 35 | 21 | 7 | 1 | 0 | 0
+8 | 1 | 8 | 28 | 56 | 70 | 56 | 28 | 8 | 1 | 0
+9 | 1 | 9 | 36 | 84 | 126 | 126 | 84 | 36 | 9 | 1
+
 
 二项式系数历史悠久：
 - 1653年，出现在帕斯卡的算术三角论中，称为帕斯卡三角
@@ -430,7 +451,7 @@ z^r = \sum_{k=0}^m \begin{bmatrix} r \\ r-k \end{bmatrix} (-1) ^k z^{r-k} + O(z^
 ### 1.2.7 调和数
 在后面的讨论中，下述和式极为重要：
 ```math
-H_n = 1 + \frac{1}{2} + \frac{1}{3} + \cdots + \frac{1}{n} = \sum_{k=1}^n \frac{1}{k}, n \geq 0\ qquad (1)
+H_n = 1 + \frac{1}{2} + \frac{1}{3} + \cdots + \frac{1}{n} = \sum_{k=1}^n \frac{1}{k}, n \geq 0\ \qquad (1)
 ```
 字母 H 代表 harmonic，即“调和”，我们将 $`H_n`$ 称为调和数。__早在公元前 186 年以前，中国人已在竹简上写明了 $`H_{10} = \frac{7381}{2520} `$__。
 
@@ -438,6 +459,7 @@ H_n = 1 + \frac{1}{2} + \frac{1}{3} + \cdots + \frac{1}{n} = \sum_{k=1}^n \frac{
 ```math
 H_{2^m} \geq 1 + \frac{m}{2}, m \geq 0 \qquad (2)
 ```
+
 
 $`H_n`$ 大小的近似值可以表示为：
 ```math
@@ -464,6 +486,7 @@ H_\infty^{(2)} = \frac{\pi^2}{6}, H_\infty^{(4)} = \frac{\pi^4}{90}, H_\infty^{(
 \frac{x}{e^x-1} = \sum_{n=0}^\infty \frac{B_nx^n}{n!}, \qquad (7)
 ```
 
+
 现在考察涉及调和数的几个重要的和。首先：
 ```math
 \sum_{k=1}^n H_k = (n+1)H_n - n, \qquad (8)
@@ -477,5 +500,58 @@ H_\infty^{(2)} = \frac{\pi^2}{6}, H_\infty^{(4)} = \frac{\pi^4}{90}, H_\infty^{(
 \binom{k}{m} = \binom{k+1}{m+1} - \binom{k}{m+1}
 ```
 
+因此
+```math
+\binom{k}{m} H_k = \binom{k+1}{m+1}(H_{k+1}-\frac{1}{k+1}) - \binom{k}{m+1}H_k ,
+```
 
+所以
+```math
+\sum_{k=1}^n \binom{k}{m} H_k = (\binom{2}{m+1} H_2 - \binom{1}{m+1} H_1) + \cdots \\
++ (\binom{n+1}{m+1} H_{n+1} - \binom{n}{m+1} H_n) - \sum_{k=1}^n \binom{k+1}{m+1} \frac{1}{k+1} \\
+= \binom{n+1}{m+1} H_{n+1} - \binom{1}{m+1} H_1 - \frac{1}{m+1} \sum_{k=0}^n \binom{k}{m} + \frac{1}{m+1} \binom{0}{m} 
+```
+
+应用式1.2.6-(11)得到所求公式：
+```math
+\sum_{k=1}^n \binom{k}{m} H_k = \binom{n+1}{m+1}(H_{n+1}-\frac{1}{m+1}).
+```
+> [!TIP]
+> $`\binom{1}{m+1} H_1 = 0`$, 参见1.2.6-表1 二项式系数表 m+1 > 1时，$`\binom{1}{m+1} = 0`$
+> $`\frac{1}{m+1} \binom{0}{m} = 0`$, 同理由于 $`\binom{0}{m+1} = 0`$
+
+最后，考察一种不同类型的和式：$`\sum_k \binom{n}{k} x^kH_k`$。为简单起见，暂时用 $`S_n`$ 表示它。由于
+```math
+S_{n+1} = \sum_k (\binom{n}{k} + \binom{n}{k-1})x^kH_k \\
+        = S_n + x \sum_{k \geq 1}\binom{n}{k-1}x^{k-1}(H_{k-1}+\frac{1}{k}) \\
+        = S_n + x S_n + \frac{1}{n+1} \sum_{k \geq 1} \binom{n=1}{k}x^k.
+```
+
+因此
+```math
+S_{n+1} = (x+1)S_n + ((x+1)^{n+1}-1)/(n+1),
+```
+
+而我们有
+```math
+\frac{S_{n+1}}{(x+1)^{n+1}} = \frac{S_n}{(x+1)^n} + \frac{1}{n+1} - \frac{1}{(n+1)(x+1)^{n+1}} 
+```
+
+这个等式连同 $`S_1=x`$，证明
+```math
+\frac{S_n}{(x+1)^n} = H_n - \sum_{k=1}^n \frac{1}{k(x+1)^k}.  \qquad (10)
+```
+
+这个新的和是无穷级数1.2.9-(17)的一部分，因为 $` \ln(1/(1-1/(x+1))) = \ln(1+1/x)`$, 并且这个级数当 x > 0 时收敛，两者之差为：
+```math
+\sum_{k>n} \frac{1}{k(x+1)^k} <  \frac{1}{(n+1)(x+1)^{n+1}}\sum_{k \geq 0} \frac{1}{(x+1)^k} = \frac{1}{(n+1)(x+1)^nx}  (10)
+```
+
+这就证明了下述定理/
+
+__定理A.__ 如果 x>0，那么
+```math
+\sum_{k=1}^n \binom{n}{k}x^kH_k = (x+1)^n(H_n - \ln(1+\frac{1}{x})) + \epsilon.
+```
+其中 $`0<\epsilon<1/(x(n+1))`$
 

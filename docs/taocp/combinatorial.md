@@ -313,7 +313,7 @@ y_0 \vee \overline y_1 \vee \cdots \vee \overline y_k = 1 \\
 <变量> \to <字母> |<变量><字母>| <变量><数字>
 ```
 ```math
-<字面> \to a | b | c
+<字母> \to a | b | c
 ```
 ```math
 <常数> \to <数字> | <常数><数字>
@@ -321,5 +321,31 @@ y_0 \vee \overline y_1 \vee \cdots \vee \overline y_k = 1 \\
 ```math
 <数字> \to 1 | 0  \qquad(34)
 ```
+
+例如，字符串 $`a/(-b0-10)+cc*cc`$ 符合 <表达式> 的语法，而且每条语法规则至少用到一次。
+
+假定想知道什么字符配对可能彼此相续出现在这样的表达式中。确定的霍恩子句提供了答案，因为我们可以把问题表述如下：假设Xx，xY，xy 表示布尔“命题”，其中 X 是符号 {E, T, F, V, L, C, D} 之一，分别代表 <表达式> <项> <因式> <变量> <字母> <常数> <数字>，而 x 和 y 是集合 {+, -, *, /, (, ), a, b, c, 0, 1} 中的符合。命题 Xx 表示 “X 可以以 x 结束”；同样，命题 xX 表示 “X 可以以 x 开始”；同时，xy 表示“子阿表达式中字符 x 之后可以直接跟着字符 y”。总共有 7 * 11 + 11 * 7 + 11 * 11 = 275 个命题。于是可以写出
+
+$$
+\begin{array}{|rrrrrrrr|}
+xT \Rightarrow xE & \Rightarrow -T & xC \Rightarrow xF & Vx \wedge yL \Rightarrow xy & \Rightarrow Lc \\
+...\\
+Fx \Rightarrow Tx & Vx \Rightarrow Fx & Lx \Rightarrow Vx & \Rightarrow cL & \Rightarrow D1 
+\end{array}
+ \qquad(35)
+$$
+
+> 待补充
+
+如果喜欢布尔代数神秘记号而不用(35)中的惯用符合 $`\Rightarrow`$, 可以从形式上把它们写成
+```math
+(\overline {+T} \vee +E) \wedge (\overline {-T} \vee -E) \wedge \cdots  \wedge (\overline {V+} \vee \overline {OL} \vee +0) \wedge \cdots  \wedge (D1)
+```
+
+为什么要进行这种处理？因为所有这些子句的核心是这个特定语法中为真的全部命题的集合。例如，可以证实 -E 为真，因此在表达式中符号 (- 可以彼此相续出现。但是 ++ 和 *- 这两对符合不能这样。
+
+此外，对于一组任意给定的霍恩子句，找出它们的核心并不是难事。当 $`\Rightarrow`$ 的左端为空时，就从 $`\Rightarrow`$ 右侧单独出现的命题开始， 式(35)中出现了13个这种类型的子句。一旦确定了这些命题的真值，就可以会找到一个或多个左端已知为真的子句。因此，他们的右端也属于核心，而且可以用同样的方法继续进行。
+
+
 
 

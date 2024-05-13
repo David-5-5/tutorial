@@ -130,7 +130,7 @@ __基本恒等式__
 ```math
 (x\wedge y)\vee x = (x\vee y)\wedge x \qquad (7)
 ```
-_注，编程语言使用&，|代替 $\wedge, \vee$_
+_注，编程语言使用&，|代替 $`\wedge, \vee`$_
 
 
 一个最简单也最有用的恒等式
@@ -169,7 +169,7 @@ g(x_1,x_2,\cdots x_{n-1}) = h(x_1,x_2,\cdots x_{n-1},0)  \\
 \\
 h(x_1,x_2,\cdots x_{n-1}) = f(x_1,x_2,\cdots x_{n-1},0) \oplus f(x_1,x_2,\cdots x_{n-1},1) \qquad(17)
 ```
-运算符$\wedge$优先于$\oplus$，所以等式(16)对于g和h递归地重复这个过程，直到降至0元函数，而且常数时常可以简化掉，因为有
+运算符 $`\wedge`$ 优先于 $`\oplus`$ ，所以等式(16)对于g和h递归地重复这个过程，直到降至0元函数，而且常数时常可以简化掉，因为有
 ```math
 x \wedge 0 = 0 和 x \wedge 1 = x \oplus 0  =x \qquad(18)
 ```
@@ -204,7 +204,7 @@ f(w,x,y,z) = (\overline w \wedge \overline x \wedge \overline y \wedge \overline
 ```math
 \vee_{j=1}^{m} \wedge_{k=1}^{s_j} u_{jk} = (u_{11} \wedge \cdots \wedge u_{1s_1}) \vee \cdots \vee (u_{m1} \wedge \cdots \wedge u_{ms_m})  \qquad(25)
 ```
-其中每个$u_{jk}$是字面值，也就是变量$x_i$或它的补。同样，_和取范式_(conjunctive normal form,，简称CNF)是指析取的 _任意_ 和取：
+其中每个 $`u_{jk}`$ 是字面值，也就是变量 $`x_i`$ 或它的补。同样，_和取范式_(conjunctive normal form,，简称CNF)是指析取的 _任意_ 和取：
 ```math
 \wedge_{j=1}^{m} \vee_{k=1}^{s_j} u_{jk} = (u_{11} \vee \cdots \vee u_{1s_1}) \wedge \cdots \wedge (u_{m1} \vee \cdots \vee u_{ms_m})  \qquad(26)
 ```
@@ -213,13 +213,13 @@ f(w,x,y,z) = (\overline w \wedge \overline x \wedge \overline y \wedge \overline
 ```math
 f(x,y,z) = (x \wedge \overline y \wedge z) \vee (y \wedge z) \vee (\overline x \wedge y \wedge \overline z)
 ```
-这样的公式中，$x \wedge \overline y \wedge z$为真时f为真，就是说当(x,y,z)=(1,0,1)时f为真。在这个例子中$x \wedge z$也是f的蕴含元，所以，可以有更简单的公式
+这样的公式中，$`x \wedge \overline y \wedge z`$ 为真时f为真，就是说当(x,y,z)=(1,0,1)时f为真。在这个例子中 $`x \wedge z`$ 也是f的蕴含元，所以，可以有更简单的公式
 ```math
 f(x,y,z) = (x \wedge z) \vee (y \wedge z) \vee (\overline x \wedge y) \qquad(27)
 ```
 对于一个蕴含元，如果通过消除它的字面值作进一步的分解时导致其弱化到不再时蕴含元，那么，称其为 _素蕴含元_。
 
-如果简化记号，并采纳一种更具几何学的观点，把$`f(x_1,x_2,\cdots,x_n)`$直接写成f(x)，把 x 看成是向量，或者长度为 n 的二进制串。例如使式(22)的函数为真的二进制串 wxyz 是
+如果简化记号，并采纳一种更具几何学的观点，把 $`f(x_1,x_2,\cdots,x_n)`$ 直接写成f(x)，把 x 看成是向量，或者长度为 n 的二进制串。例如使式(22)的函数为真的二进制串 wxyz 是
 
 {0000,0001,0100,0111,1100,1101,1110,1111}   (28)
 
@@ -324,7 +324,7 @@ y_0 \vee \overline y_1 \vee \cdots \vee \overline y_k = 1 \\
 
 例如，字符串 $`a/(-b0-10)+cc*cc`$ 符合 <表达式> 的语法，而且每条语法规则至少用到一次。
 
-假定想知道什么字符配对可能彼此相续出现在这样的表达式中。确定的霍恩子句提供了答案，因为我们可以把问题表述如下：假设Xx，xY，xy 表示布尔“命题”，其中 X 是符号 {E, T, F, V, L, C, D} 之一，分别代表 <表达式> <项> <因式> <变量> <字母> <常数> <数字>，而 x 和 y 是集合 {+, -, *, /, (, ), a, b, c, 0, 1} 中的符合。命题 Xx 表示 “X 可以以 x 结束”；同样，命题 xX 表示 “X 可以以 x 开始”；同时，xy 表示“子阿表达式中字符 x 之后可以直接跟着字符 y”。总共有 7 * 11 + 11 * 7 + 11 * 11 = 275 个命题。于是可以写出
+假定想知道什么字符配对可能彼此相续出现在这样的表达式中。确定的霍恩子句提供了答案，因为我们可以把问题表述如下：假设`Xx，xY，xy` 表示布尔“命题”，其中 X 是符号 `{E, T, F, V, L, C, D}` 之一，分别代表 <表达式> <项> <因式> <变量> <字母> <常数> <数字>，而 x 和 y 是集合 `{+, -, *, /, (, ), a, b, c, 0, 1}` 中的符合。命题 Xx 表示 “X 可以以 x 结束”；同样，命题 xX 表示 “X 可以以 x 开始”；同时，xy 表示“子阿表达式中字符 x 之后可以直接跟着字符 y”。总共有 `7 * 11 + 11 * 7 + 11 * 11 = 275` 个命题。于是可以写出
 
 $$
 \begin{array}{|rrrrrrrr|}

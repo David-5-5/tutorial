@@ -367,6 +367,41 @@ $`START(c)`$ 指出 c 的假设出现在 MEM 的什么位置。(“假设”是�
 
 - C2. [准备循环]。如果 s = 0，算法终止。现在，所求的核心由那些 TRUTH 已经设置为 1 的所有命题组成。否则，置 $`s \leftarrow s-1, p \leftarrow S_s, c \leftarrow LAST(p)`$。
 
-- C3. [循环结束?]。
+- C3. [循环结束?]。如果 $`c = \Lambda`$， 返回 C2。否则，置 $`k \leftarrow COUNT(c)-1, l \leftarrow START(c), c' \leftarrow PREV(c)`$。
+
+- C4. [处理完c?]。如果 k=0，转到C5。否则，
+  - 置 $`p \leftarrow MEM[l+k]`$
+  - 如果 $`TRUTH(p)=1`$，置 $`k \leftarrow k-1`$，重复此步骤。否则，
+  - 置 $`COUNT(c) \leftarrow k, PREV(c) \leftarrow LAST(p), LAST(p) \leftarrow c`$，转到 C6
+
+- C4. [推断CONCLUSION(c)。] 置 $`p \leftarrow CONCLUSION(c)`$。如果 $`TRUTH(p)=0`$，置 $`TRUTH(p) \leftarrow 1, S_s \leftarrow p, s \leftarrow s+1`$
+
+- C6. [对c循环。] 置 $`c \leftarrow c‘`$，返回 C3。
+
+算法C 在许多方面同算法 2.2.3T (拓扑排序)相似，实际上，可以把算法 2.2.3T 看成是算法C的特例，其中每个命题恰好出现在一个子句的右端。
+
+现在转到克罗姆函数和 2SAT 问题。又有一个线性时间的算法。首先考察一额简化而实际的应用，假定由七位喜剧演员，每个人都同意在三天节日期间的哦阿五家宾馆中的两家做一夜的独白诙谐表演：
+- Tomlin 应于第 1 天和第 2 天在 Aladdin 和 Caesars 表演；
+- Unwin 应于第 1 天和第 2 天在 Bellagio 和 Excalibur 表演；
+- Vegas 应于第 2 天和第 3 天在 Desert 和 Excalibur 表演；
+- Williams 应于第 1 天和第 3 天在 Aladdin 和 Desert 表演；
+- Xie 应于第 1 天和第 3 天在 Caesars 和 Excalibur 表演；
+- Yankovic 应于第 2 天和第 3 天在 Bellagio 和 Desert 表演；
+- Zany 应于第 1 天和第 2 天在 Bellagio 和 Caesars 表演；
+
+但是由于其他承诺，他们每个人在那三天中只有两天可以参演。有可能安排全部无冲突的表演日程吗？
+
+__定理K__ 每个子句带有两个字面值的合取范式是可满足的，当且仅当相关联的有向图的强分图不会同时包含一个变量和它的补。
+
+证明：如果存在从 x 到 x 以及从 x 到 x 的路径，公式肯定是不可满足的。
+反之，假定不存在这样的路径，任何有向图至少有一个强分图 S，它是不包含来自其他任何强分图顶点的引入弧的“源点”。 
+
+> [!tip] 
+> 略
+
+罗伯特.塔杨建立了以线性时间寻找强分图的算法，从而由 定理k 立刻的出 2SAT 问题的一个有效解。
+
+
+
 
 

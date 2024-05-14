@@ -401,19 +401,19 @@ __定理K__ 每个子句带有两个字面值的合取范式是可满足的，�
 
 罗伯特.塔杨建立了以线性时间寻找强分图的算法，从而由 定理k 立刻的出 2SAT 问题的一个有效解。
 
-__中位数__ 还有一种重要的三元运算符 $`<xyz>`$, 称为 $`x,y,z`$ 的中位数：
+__中位数__ 还有一种重要的三元运算符 $`\langle xyz \rangle`$, 称为 $`x,y,z`$ 的中位数：
 ```math
-<xyz> = (x\wedge y) \vee (y\wedge z) \vee (z\wedge x) = (x\vee y) \wedge (y\vee z) \wedge (z\vee x)  \qquad(43)
+\langle xyz\rangle  = (x\wedge y) \vee (y\wedge z) \vee (z\wedge x) = (x\vee y) \wedge (y\vee z) \wedge (z\vee x)  \qquad(43)
 ```
-事实上，$`<xyz>`$ 或许是这整个领域中最重要的三元运算，因为它存在正在不断发展和重现发现的惊人性质。
+事实上，$`\langle xyz\rangle `$ 或许是这整个领域中最重要的三元运算，因为它存在正在不断发展和重现发现的惊人性质。
 
-首先，关于 $`<xyz>`$ 这个公式描述了任何三个布尔量 $`x,y,z`$ 的 _过半数_： $`<000>=<001>=0, <011>=<111>=1`$，称 $`<xyz>`$ 为 “中位数” 而不说 “过半数”，原因在于，如果 $`x,y,z`$ 为任意实数，而且式(43)中的运算 $`\wedge 和 \vee`$ 分别表示 min 和 max，那么：
+首先，关于 $`\langle xyz\rangle `$ 这个公式描述了任何三个布尔量 $`x,y,z`$ 的 _过半数_： $`\langle 000\rangle =\langle 001\rangle =0, \langle 011\rangle =\langle 111\rangle =1`$，称 $`\langle xyz\rangle `$ 为 “中位数” 而不说 “过半数”，原因在于，如果 $`x,y,z`$ 为任意实数，而且式(43)中的运算 $`\wedge 和 \vee`$ 分别表示 min 和 max，那么：
 ```math
-<xyz> = y \qquad(44)
+\langle xyz\rangle  = y \qquad(44)
 ```
 其次，基本二元运算 $`\wedge 和 \vee`$ 是中位数的特例 
 ```math
-x \wedge y = <x0y>, x \vee y = <x1y> \qquad(45)
+x \wedge y = \langle x0y\rangle , x \vee y = \langle x1y\rangle  \qquad(45)
 ```
 因此，任何单调布尔函数函数可以用三元中位数运算符以及常数 0 和 1 表示。
 
@@ -423,12 +423,12 @@ x \wedge y = <x0y>, x \vee y = <x1y> \qquad(45)
 ```
 那么称它为 __自对偶__ 的。布尔函数是单调的，当且仅当它可以用 $`\wedge 和 \vee`$ 表示。根据德摩根定律(11)和(12)，单调公式是子对偶的，当且仅当可以交换符号 $`\wedge 和 \vee`$ 而不改变公式的值。因此式(43)定义的中位数运算不仅是单调的而且是子对偶的。实际上，它是该类型的最简单的非平凡函数，因为除了投射运算 外，在表1中没有其他二元运算既是单调的又是子对偶的。
 
-此外，完全用中位数运算符构成并且不带常数的任何表达式，不仅是单调的，而且是子对偶的。例如函数 $`<w<xyz><w<uvw>x>>`$
+此外，完全用中位数运算符构成并且不带常数的任何表达式，不仅是单调的，而且是子对偶的。例如函数 $`\langle w\langle xyz\rangle \langle w\langle uvw\rangle x\rangle \rangle `$
 
-__定理P__ 每个单调子对偶布尔函数 $`f(x_1,x_2,\cdots,x_n)`$ 完全可以用中位数运算 $`<xyz>`$ 表示。
+__定理P__ 每个单调子对偶布尔函数 $`f(x_1,x_2,\cdots,x_n)`$ 完全可以用中位数运算 $`\langle xyz\rangle `$ 表示。
 证明：首先注意到
 ```math
-<x_1y<x_2y\cdots y<x_{s-1}yx_s>\cdots>>\\
+\langle x_1y\langle x_2y\cdots y\langle x_{s-1}yx_s\rangle \cdots\rangle \rangle \\
 = ((x_1 \vee x_2 \vee \cdots \vee x_{s-1} \vee x_s) \wedge y) \vee (x_1 \wedge x_2 \wedge \cdots \wedge x_{s-1} \wedge x_s) \qquad(46)
 ```
 通过对 s 的归纳法，容易证实这个重复取中位数的公式。
@@ -443,7 +443,7 @@ f(x_1,x_2,\cdots,x_n) = t_1 \vee \cdots \vee t_m, t_j = x_{j1} \wedge \cdots \we
 或者
 当 $`x = y = 0 且 u = v = w = 1`$ 时
 f 的值将是 1，同函数的子对偶性矛盾。
-因此，如果任何 $`t_j`$ 包含单个变量 x，它必定时唯一的素蕴涵元，此时 f 是平凡函数 $`f(x_1,x_2,\cdots,x_n) = x = <xxx>`$
+因此，如果任何 $`t_j`$ 包含单个变量 x，它必定时唯一的素蕴涵元，此时 f 是平凡函数 $`f(x_1,x_2,\cdots,x_n) = x = \langle xxx\rangle `$
 
 
 

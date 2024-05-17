@@ -467,5 +467,58 @@ g_j(x_1,\cdots,x_n) = h(x_{j1},\cdots,x_{js_j};g_{j-1}(x_1,\cdots,x_n)) \\
 
 
 __中位数代数与中位数图__ 
+如果把  $`\wedge 和 \vee`$ 分别表示 min 和 max 运算符，那么，当 x,y,z 属于实数集之类的任何有序集时，三元 < xyz > 是很有用的。_中位数代数_ 是指任意的集合 _M_，在其上定义了三元运算 < xyz >，把  _M_ 的元素变成 _M_ 的元素，并且遵守下面三条公理：
+```math
+\langle xxy\rangle = x 过半数定理； \qquad(50) 
+```
+```math
+\langle xyz\rangle = \langle xzy\rangle = \langle yxz\rangle 
+ = \langle yzx\rangle  = \langle zxy\rangle  = \langle zxy\rangle 交换律； \qquad(51) 
+```
+```math
+\langle xw\langle ywz\rangle \rangle = \langle \langle xwy\rangle wz \rangle 结合律； \qquad(52) 
+```
+在布尔代数的情形，例如结合律(52)对于 w=0 和 w=1 成立， 因为 $`\wedge 和 \vee`$ 是结合的。这三条公理还蕴涵中位数的分配律，它具有短形式
+```math
+\langle xyz\langle uv\rangle \rangle = \langle x\langle yuw\rangle \langle zuv\rangle \rangle \qquad(53) 
+```
+和更对称的长形式
+```math
+\langle xyz\langle uv\rangle \rangle = \langle \langle xuv\rangle\langle yuw\rangle \langle zuv\rangle \rangle \qquad(54) 
+```
+这个事实没有已知的简单证明，但至少可以证实(53)(54)当 y=u 且 z=v 时的特例，有
+```math
+\langle xyz\langle yz\rangle \rangle = \langle xyz\rangle \qquad(54) 
+```
+因为两端都等于 < xy < zyz >>。事实上，结合律(52)恰好是 (53) y=u 时的特例。同时还可以用 (55)(52)证实 x=u 时的特例：
+```math
+\langle \langle uyz \rangle uv\rangle = \langle vu\langle yuz\rangle\rangle = 
+\langle\langle vuy\rangle uz\rangle = \langle \langle yuz\rangle uz\rangle = \\
+\langle \langle \langle yuz\rangle uv\rangle uz \rangle = 
+\langle \langle yuv\rangle u \langle vuz\rangle \rangle = \langle u \langle yuv \rangle\langle zuv\rangle \rangle
+```
+中位数代数 M 的理想时结合 $`C \subseteq M`$，满足
+```math
+\langle xyz \rangle \in C, 当 x \in C, y \in C, z \in M. \qquad(56) 
+```
+如果 u 和 v 是 M 的任意元素，则区间 [u..v] 定义为
+```math
+[u..v] = \{\langle xyz \rangle | x \in M\} \qquad(57) 
+```
+说 “x 在 u 和 v 之间” 当且仅当 $`x \in [u..v]`$。按照这些定义，u 和 v 总是属于区间[u..v]。
 
+__引理 M__ 每个区间 [u..v] 都是一个理想，而且 $`x \in [u..v] \Leftrightarrow x = \langle xyz \rangle `$。
 
+证明 另 < xuv > 和 < yuv > 是 [u..v] 的任意元素。那么，根据 (51)和(53)，对于所有 $`z \in M`$，有
+```math
+\langle\langle xuv\rangle \langle yuv\rangle z\rangle = \langle \langle xyz\rangle uv\rangle \in [u..v]
+```
+所以 [u..v] 是一个理想。此外，根据(51)和(55)，每个元素 $`\langle xuv \rangle \in [u..v]`$ 满足 $`\langle xuv \rangle = \langle u \langle xuv\rangle v \rangle`$
+
+根据中位数定律，区间 [u..v] 具备良好的性质：
+```math
+x \in [u..v] \Rightarrow u = v;  \qquad(58)  \\
+x \in [u..v] 且 y \in [u..x] \Rightarrow y \in [u..v];  \qquad(59)  \\
+x \in [u..v] 且 y \in [u..z] 且 y \in [v..x] \Rightarrow y \in [x..z];  \qquad(60)
+```
+这些性质相当于： [u..u] = {u}；如果 $`x \in [u..v] 那么 [u..x] \subseteq [u..v]`$；对于所有的 z，$`x \in [u..v]`$ 蕴涵 $`[u..z]\cap[v..z] \subseteq [x..z]`$ 

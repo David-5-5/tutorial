@@ -699,11 +699,9 @@ G(z)^2 = \frac{1}{5} (\frac{1}{(1-\phi z)^2} + \frac{1}{(1-\hat\phi z)^2} - \fra
 ```
 并且 $`G(z)^2`$ 中 $`z_n`$ 的系数是 $`\sum_{k=0}^n F_nF_{n-k}`$。因此推出
 ```math
-\begin{multline*}
 \sum_{k=0}^n F_nF_{n-k} = \frac{1}{5} ((n+1)(phi^n + \hat\phi^n)-2F_{n+1}) \\
 = \frac{1}{5}((n+1)(F_n+2F_{n-1})-2F_{n+1}) \\
 = \frac{1}{5}(n-1)F_n + \frac{2}{5}nF_{n-1}  \qquad (17)
-\end{multline*}
 ```
 
 

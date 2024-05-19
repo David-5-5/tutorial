@@ -7,8 +7,7 @@ int n, W, w[maxn], v[maxn], f[maxn];
  * 由于每个物体只有两种可能的状态(取与不取), 对应二进制中的 0 和 1,
  * 这类问题便被称为 [0-1 背包问题]
  */
-int main()
-{
+void knapsack0_1() {
     // Input of console
     // n : count of goods
     // W : The weight of knapsack to hold goods
@@ -18,10 +17,13 @@ int main()
         cin >> w[i] >> v[i]; // 读入数据
     for (int i = 1; i <= n; i++)
         for (int l = W; l >= w[i]; l--)
+            // 由上述状态转移方程可知，dp[i][j]的值只与dp[i-1][0,...,j-1]有关，
+            // 所以我们可以采用动态规划常用的方法(滚动数组)对空间进行优化(即去掉dp的第一维)。
+            // 需要注意的是，为了防止上一层循环的dp[0,...,j-1]被覆盖，循环的时候 j 
+            // 只能逆向枚举（空间优化前没有这个限制）
             if (f[l - w[i]] + v[i] > f[l])
                 f[l] = f[l - w[i]] + v[i]; // 状态方程
     cout << f[W];
-    return 0;
 }
 
 /**
@@ -47,3 +49,37 @@ int main()
  * 为了避免这种情况发生，我们可以改变枚举的顺序，从 W 枚举到 w_{i}，这样就不会出现上述的错误，
  * 因为 f_{i,j} 总是在 f_{i,j-w_{i}} 前被更新。
 */
+
+
+/**
+ * 完全背包的状态转移方程：
+ * 状态转移方程：f(i,w)=max(f(i-1,w),f(i,w-w[i])+v[i])
+ * 
+ * 这个状态转移方程与01背包问题唯一不同就是max第二项不是dp[i-1]而是dp[i]。
+ */
+void knapsack_unbounded() {
+    // Input of console
+    // n : count of goods
+    // W : The weight of knapsack to hold goods
+    cin >> n >> W;
+    // loop line of n from console, each line is weight, value of goods
+    for (int i = 1; i <= n; i++)
+        cin >> w[i] >> v[i]; // 读入数据
+    for (int i = 1; i <= n; i++)
+        for (int l = w[i]; l<=W ; l++)
+            // 在于这里的 j 只能正向枚举而01背包只能逆向枚举，
+            if (f[l - w[i]] + v[i] > f[l])
+                f[l] = f[l - w[i]] + v[i]; // 状态方程
+    cout << f[W];
+}
+
+
+
+int main()
+{
+    knapsack0_1();
+    return 0;
+}
+
+
+

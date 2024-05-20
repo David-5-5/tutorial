@@ -522,3 +522,59 @@ x \in [u..v] 且 y \in [u..x] \Rightarrow y \in [u..v];  \qquad(59)  \\
 x \in [u..v] 且 y \in [u..z] 且 y \in [v..x] \Rightarrow y \in [x..z];  \qquad(60)
 ```
 这些性质相当于： [u..u] = {u}；如果 $`x \in [u..v] 那么 [u..x] \subseteq [u..v]`$；对于所有的 z，$`x \in [u..v]`$ 蕴涵 $`[u..z]\cap[v..z] \subseteq [x..z]`$ 
+
+现在，在顶点集 M 山定义一个具有下述边的图：
+```math
+u - v \Leftrightarrow u \neq v 且对于所有 x \in M 有 \langle xuv \rangle \in [u..v] \qquad(61)
+```
+换句话说，顶点 u 和 v 是邻接的，当且仅当区间 [u..v] 恰好仅由 u 和 v 这两个点组成。
+
+__定理 G.__ 如果 M 是任意有限的中位数代数，那么由(61)定义的图是连通的。此外，顶点 x 属于区间 [u..v]，当且仅当 x 位于从 u 到 v 的最短路径上。
+证明. 如果 M 不是连通的，那么选择 u 和 v，使得不存在从 u 到 v 的路径，且区间 [u..v] 具有尽可能少的元素。
+
+令 $`x \in [u..v]`$ 是不同于 u 和 v 的元素。那么 $`\langle xuv \rangle = x \neq v`$，所以 $`v \notin [u..x]`$；同理，$`u \notin [x..v]`$。
+
+但是由(59)可知，[u..x] 和 [x..v] 是包含在 [u..v] 内的区间，所以他们是更小的区间，因此必定有一条从 u 到 x 以及 从 x 到 v 的路径。导致矛盾。
+
+目前，从中位数代数开始，利用它定义带有的某些性质的图。如果 u 和 v 是任意图的顶点，那么，把区间 [u..v] 定义为 u 和 v 之间的那些最短路径的所有点的集合。
+
+如果一个有限图只有工艺额顶点位于连接任何三个给定顶点 x,y,z 的三个区间交集 $`[x..y]\cap[x..z]\cap[y..z]`$ 上，那么，这个有限图称为 _中位数图_。
+
+按照这个定义，很多重要的图是中位数图。例如，任何自由树都是中位数图。
+
+
+__中位数标记__ 
+如果 u 和 v 是中位数代数的任意元素，取 $`x \to \langle xuv \rangle`$ 的映射 f(x) 是一个 _同态_。根据长分配率(54)，它满足
+```math
+f(\langle xyz \rangle) = \langle f(x)f(y)f(z) \rangle  \qquad(62)
+```
+根据(57)，这个函数 $`\langle xuv \rangle`$ 把任何给定的点 x “投影”到区间 [u..v] 上。
+
+当 u-v 是相应图的一条边时，它特别有趣，因为此时 f(x) 时二值函数，实质上是一个布尔映射。
+
+> 有图，不变记录，后续需要加强学习
+> 自由树，待学习，算法导论中有相关章节
+
+如果当 $`u \in C 且 v \in C`$ 时，有 $`[u..v] \subseteq C`$，则图中的顶点结合 C 称为凸集。即当一条最短路径的两个端点属于 C 时，这条路径上的所有顶点必定也出现在 C 中。
+
+因此凸集同前面所说的“理想”是相同的。现在，使用几何语言而不是代数语言。
+
+我们把 $`\{v_1,\cdots,v_m\}`$ 的凸包定义为包含每一个顶点  $`v_1,\cdots,v_m`$ 的最小凸集。前述理论结果已经证明，每个区间 [u..v] 都是凸集。因此，[u..v] 是两点集合 {u,v} 的凸包。
+
+__中位数标记__ 
+中位数图中 $`\{v_1,v_2,\cdots,v_m\}`$ 的凸包是所有点的集合
+```math
+C = \{\langle v_1xv_2x\cdots xv_m\rangle | x \in M\}  \qquad(66)
+```
+此外，$`x \in C`$ 当且仅当 x = $`\langle v_1xv_2x\cdots xv_m \rangle`$
+
+证明 对于 $`1 \leq j \leq m`$ 有 $`x_j \in C`$。因为点 x‘ = $`\langle v_2x\cdots xv_m \rangle`$ 在凸包中，而且 $`\langle v_1xv_2x\cdots xv_m \rangle \in [v_1..x']`$，所以 C 的每个点必定属于凸包。 0-1 原则证明
+```math
+\langle x \langle v_1yv_2y\cdots yv_m \rangle\langle v_1zv_2z\cdots zv_m \rangle\rangle 
+= \langle v_1\langle xyz\rangle v_2\langle xyz\rangle \cdots \langle xyz\rangle v_m \rangle \qquad(67)
+```
+因此 C 是凸集。在这个公式中设 y=x，证明 $`\langle v_1xv_2x\cdots xv_m \rangle`$ 是 C 中离 x 最近的点，而且对于所有 $`z \in C`$ 有 $`\langle v_1xv_2x\cdots xv_m \rangle \in [x..z]`$
+
+
+
+

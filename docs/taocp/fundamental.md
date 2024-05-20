@@ -736,8 +736,9 @@ G(z)称为序列 $`a_0, a_1, a_2, \cdots`$ 的 _生成函数_。生成函数带�
 \alpha \sum_{n\geq 0} a_nz^n + \beta \sum_{n\geq 0} b_nz^n = \sum_{n\geq 0}(\alpha a_n+\beta b_n)z^n. \qquad (2)
 ```
 
+
 #### B. 移位
-若G(z)是 <$`a_n`$> = $`a_0, a_1, a_2, \cdots`$ 的生成函数，则 $`z^mG(z)`$ 是 <$`a_{n-m}`$> = $`0,\cdtos,0,a_0, a_1, a_2, \cdots`$ 的生成函数:
+若G(z)是 <$`a_n`$> = $`a_0, a_1, a_2, \cdots`$ 的生成函数，则 $`z^mG(z)`$ 是 <$`a_{n-m}`$> = $`0,\cdots,0,a_0, a_1, a_2, \cdots`$ 的生成函数:
 ```math
 z^m \sum_{n\geq 0} a_nz^n = \sum_{n\geq m} a_{n-m}z^n.  \qquad (3)
 ```
@@ -760,6 +761,7 @@ z^{-m} \sum_{n\geq m} a_nz^n = \sum_{n\geq 0} a_{n+m}z^n.  \qquad (4)
 \frac{1}{1-z} = 1 + z + z^2 + \cdots.  \qquad (5)
 ```
 
+
 #### C. 乘法
 若G(z)是 <$`a_n`$> = $`a_0, a_1, a_2, \cdots`$ 的生成函数，H(z)是 <$`b_n`$> = $`b_0, b_1, b_2, \cdots`$ 的生成函数，则
 $`G(z)H(z)`$ = $`(a_0 + a_1z + a_2z^2 + \cdots)`$ $`(b_0 + b_1z + b_2z^2 + \cdots)`$
@@ -769,8 +771,60 @@ $`G(z)H(z)`$ = $`(a_0 + a_1z + a_2z^2 + \cdots)`$ $`(b_0 + b_1z + b_2z^2 + \cdot
 ```math
 c_n = \sum_{k=0}^n a_kb{n-k}.  \qquad (6)
 ```
+式(3)的是这个结果的一个非常特殊的特例。另外一个重要的特例出现在每个 $`b_n`$ 都等于 1 的时候：
+```math
+\frac{1}{1-z}G(z) = a_0 + (a_0+a_1)z + (a_0+a_1+a_2)z^2 + \cdots \qquad (7) 
+```
+得到原序列的部分和序列的生成函数。
+
+对于三个函数的乘积，生成序列的规则由式(6)推出；F(z)G(z)H(z)生成序列 $`d_0, d_1, d_2, \cdots`$，其中
+```math
+d_n = \sum_{i,j,k\geq 0,i+j+k=n} a_ib_jc_k. \qquad (8) 
+```
+对于任意多个函数的乘积，生成序列的一般规则是
+```math
+\prod_{j\geq 0} \sum_{k\geq 0} a_jkz^k = 
+\sum_{n\geq 0}z^n \sum_{k_0,k_1,\cdots\geq 0, k_0+k_1+\cdots=n} a_0k_0a_1k_1\cdots.     \qquad (9) 
+```
+当某个序列的递归公式包含二项式系数时，通常要求获得由
+```math
+c_n = \sum_k \binom{n}{k} a_kb_{n-k}. \qquad (10) 
+```
+定义的序列 $`c_0, c_1, c_2, \cdots`$ 的生成函数。在这种情况下，更应该利用序列 <$`a_n/n!`$>, <$`b_n/n!`$>, <$`c_n/n!`$> 的生成函数，因为有：
+```math
+(\frac{a_0}{0!} + \frac{a_1}{1!}z + \frac{a_2}{2!}z^2 + \cdots)
+(\frac{b_0}{0!} + \frac{b_1}{1!}z + \frac{b_2}{2!}z^2 + \cdots)
+= (\frac{c_0}{0!} + \frac{c_1}{1!}z + \frac{c_2}{2!}z^2 + \cdots), \qquad (11) 
+```
+其中 $`c_n`$ 由式(10)给定。
 
 
+#### D. z 的变换
+显然，G(cz) 是序列 $`a_0, ca_1, c^2a_2, \cdots`$ 的生成函数。特例 $`1, c, c^2. c^3 cdots`$ 的生成函数是 1/(1-cz)。
+
+在级数里隔一项取一项时，有一种常见的技巧：
+```math
+\frac{1}{2}(G(z)+G(-z)) = a_0 + a_2z^2 + a_4z^4 + \cdots,
+```
+```math
+\frac{1}{2}(G(z)-G(-z)) = a_1 + a_3z^3 + a_5z^5 + \cdots,. \qquad (12) 
+```
+利用单位复根，可以推广这种思想，每个 m - 1项提取第 m 项：令 $`\omega=e^{2\pi i/m} = \cos(2\pi/m)+i\sin(2\pi/m)`$，有
+```math
+\sum_{n\geq 0,n \mod m=r} a_nz^n = \frac{1}{m} \sum_{0\leq k < m} \omega^{-kr}G(\omega^kz), 0 \leq r < m  \qquad (13) 
+```
+例如，如果 m=3,r=1，单位复立方根之一是 $`\omega=-\frac{1}{2}+\frac{\sqrt{3}}{2}i`$，由此推出
+```math
+a_1z + a_4z^4 + a_7z^7 + \cdots = \frac{1}{3}(G(z)+\omega^{-1}G(wz)+\omega^{-2}G(\omega^2z)).
+```
+
+
+#### E. 微分与积分
+微积分的方法带来了利用生成函数的更多运算。假定 G(z) 是由式 (1) 给定的，那么它的导数为
+```math
+G‘(z) = a_1 + 2a_2z + 3a_3z^2 + \cdots = \sum_{k\geq 0}(k+1)a_{k+1}z^k. \qquad (14) 
+```
+序列 <$`na_n`$> 的生成函数是 $`zG‘(z)`$。因此，通过对生成函数做运算，可以把一个序列的第 n 项同 n 的多项式结合起来。
 
 
 

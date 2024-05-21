@@ -277,7 +277,7 @@ u \wedge v \wedge w \wedge x \wedge y \Rightarrow  z
 ```
 是一样的。还句话说，如果u，v，w，x，y全部为真，那么 z 也必为真。
 
-__定理H.__ 布尔函数 $`f(x_1,x_2,\cdots,x_n)`$ 可以表示成若干霍恩子句的合取，当且仅当对于所有布尔值 $`x_j`$ 和 $`y_j`$ 有
+__定理 H.__ 布尔函数 $`f(x_1,x_2,\cdots,x_n)`$ 可以表示成若干霍恩子句的合取，当且仅当对于所有布尔值 $`x_j`$ 和 $`y_j`$ 有
 ```math
 f(x_1,x_2,\cdots,x_n) = f(y_1,y_2,\cdots,y_n) = 1 蕴涵 f(x_1 \wedge y_1,x_2 \wedge y_2,\cdots,x_n \wedge y_n) = 1 \qquad(33)
 ```
@@ -347,7 +347,7 @@ $$
 此外，对于一组任意给定的霍恩子句，找出它们的核心并不是难事。当 $`\Rightarrow`$ 的左端为空时，就从 $`\Rightarrow`$ 右侧单独出现的命题开始， 式(35)中出现了13个这种类型的子句。一旦确定了这些命题的真值，就可以会找到一个或多个左端已知为真的子句。因此，他们的右端也属于核心，而且可以用同样的方法继续进行。
 
 
-__算法C__ (计算确定霍恩子句的核心) 给定命题变元的集合 P 和子句的集合 C，每个子命题的形式为
+__算法 C__ (计算确定霍恩子句的核心) 给定命题变元的集合 P 和子句的集合 C，每个子命题的形式为
 ```math
 u_1 \wedge \cdots \wedge u_k \Rightarrow v, 其中 k \geq 0 且 {u_1,\cdots,u_k, v} \subseteq P, \qquad(36)
 ```
@@ -391,7 +391,7 @@ $`START(c)`$ 指出 c 的假设出现在 MEM 的什么位置。(“假设”是�
 
 但是由于其他承诺，他们每个人在那三天中只有两天可以参演。有可能安排全部无冲突的表演日程吗？
 
-__定理K__ 每个子句带有两个字面值的合取范式是可满足的，当且仅当相关联的有向图的强分图不会同时包含一个变量和它的补。
+__定理 K__ 每个子句带有两个字面值的合取范式是可满足的，当且仅当相关联的有向图的强分图不会同时包含一个变量和它的补。
 
 证明：如果存在从 x 到 $`\overline x`$ 以及从 $`\overline x`$ 到 x 的路径，公式肯定是不可满足的。
 反之，假定不存在这样的路径，任何有向图至少有一个强分图 S，它是不包含来自其他任何强分图顶点的引入弧的“源点”。 
@@ -425,7 +425,7 @@ x \wedge y = \langle x0y\rangle , x \vee y = \langle x1y\rangle  \qquad(45)
 
 此外，完全用中位数运算符构成并且不带常数的任何表达式，不仅是单调的，而且是子对偶的。例如函数 $`\langle w\langle xyz\rangle \langle w\langle uvw\rangle x\rangle \rangle `$
 
-__定理P__ 每个单调子对偶布尔函数 $`f(x_1,x_2,\cdots,x_n)`$ 完全可以用中位数运算 $`\langle xyz\rangle `$ 表示。
+__定理 P__ 每个单调子对偶布尔函数 $`f(x_1,x_2,\cdots,x_n)`$ 完全可以用中位数运算 $`\langle xyz\rangle `$ 表示。
 证明：首先注意到
 ```math
 \langle x_1y\langle x_2y\cdots y\langle x_{s-1}yx_s\rangle \cdots\rangle \rangle \\
@@ -576,5 +576,73 @@ C = \{\langle v_1xv_2x\cdots xv_m\rangle | x \in M\}  \qquad(66)
 因此 C 是凸集。在这个公式中设 y=x，证明 $`\langle v_1xv_2x\cdots xv_m \rangle`$ 是 C 中离 x 最近的点，而且对于所有 $`z \in C`$ 有 $`\langle v_1xv_2x\cdots xv_m \rangle \in [x..z]`$
 
 
+__推论 C__
+对于 <$`1\leq j\leq m`$>，令 $`v_j`$ 的标记是 $`v_{j1},\cdots,v_{jt}`$。那么，$`\{v_1,\cdots,v_m\} `$ 的凸包是所有这样的 $`x \in M`$ 的集合，当  $`v_{1j} = v_{2j} = \cdots = v_{mj} = c_j`$ 时 x 的标记 $`x_1,\cdots,x_t`$ 满足 $`x_j=c_j`$。
+
+
+__算法 H__
+> 略，太难了，等看第二遍
+
+
+__中位数集合__
+_中位数集合_ 是具有下特征的二进制向量的集合 X：每当 $`x \in X, y \in X, z \in X`$ 时有 $`\langle xyz\rangle`$，其中中位数是处理中位数标记那样按分量计算的。
+
+托马斯舍费在 1978 年注意到，对于定理 H中的霍恩函数的表征，_中位数集合_ 提供了富有吸引力的对照。
+
+
+__定理 S.__
+布尔函数 $`f(x_1,\cdots,x_n)`$ 可以表示成克罗姆子句的合取，当且仅当对于所有的布尔值有 $`x_j, y_j, z_j`$ 有
+```math
+f(x_1,\cdots,x_n) = f(y_1,\cdots,y_n) = f(z_1,\cdots,z_n) 蕴涵
+f(\langle x_1y_1z_1\rangle,\cdots,\langle x_ny_nz_n\rangle) = 1
+\qquad(68)
+```
+证明 如果 $`x_1\vee x_2=y_1\vee y_2=z_1\vee z_2=1`$，同时 $`x_1\leq y_1\leq z_1`$，那么
+```math
+\langle x_1y_1z_1\rangle\vee\langle x_2y_2z_2\rangle=y_1\vee\langle x_2y_2z_2\rangle=1
+```
+因为 $`y_1=0`$ 蕴涵 $`x_2=y_2=1`$。因此(68)是必要条件
+
+反之，如果(68)成立，假定 $`u_1\vee\cdots\vee u_k`$ 是 f 的素子句，其中每个 $`u_j=0`$ 都是字面值。
+那么对于  $`1\leq j\leq k`$，子句  $`u_1\vee\cdots\vee u_{j-1}\vee u_{j+1}\vee\cdots\vee u_k`$ 不是 f 的子句。
+
+所以，存在一个向量 $`x^{(j)}`$ 满足 $`f(x^{(j)})=1`$，但对于所有 $`i \neq j`$ 时，$`u_i^{(j)}=0`$ 。
+
+如果 $`k\geq 3`$，则中位数 $`\langle x^{(1)}x^{(2)}x^{(3)}\rangle`$ 对于 $`1\leq i\leq k`$ 有  $`u_i=0`$。但这是不可能的，因此已假定 $`u_1\vee\cdots\vee u_k`$ 是子句。因此 $`k\geq 2`$
+证毕。
+
+这样中位数集合与 “2SAT范例” 相同，是满足用 2CNF 表示的某个公式 f 的点的集合。
+
+如果中位数集合的向量 $`x=x_1\cdots,x_t`$ 不包含冗余分量，也就是说，它是缩减的。
+
+
+__定理 F__
+> 略，太难了，等看第二遍
+
+
+__推论 F__
+> 略，太难了，等看第二遍
+
+
+__门限函数__
+一类特别有吸引力的重要布尔函数 $`f(x_1,x_2,\cdots,x_n)`$ 出现在 f 可以用公式
+```math
+f(x_1,x_2,\cdots,x_n) = [w_1x_1+w_2x_2+\cdots+w_nx_n+\geq t] \qquad(75)
+```
+定义的时候，其中常数 $`w_1,w_2,\cdots,w_n`$ 是整数“权值”，t 是整数 “门限”。甚至当所有权值都是 1 时，门限函数也很重要，有：
+```math
+x_1\wedge x_2\wedge\cdots\wedge x_n = [x_1+x_2+\cdots+x_n+\geq n] \qquad(76)
+```
+```math
+x_1\vee x_2\vee\cdots\vee x_n = [x_1+x_2+\cdots+x_n+\geq 1] \qquad(77)
+```
+```math
+\langle x_1x_2\cdots x_{2t-1}\rangle = [x_1+x_2+\cdots+x_{2t-1}+\geq t] \qquad(78)
+```
+其中 $`\langle x_1x_2\cdots x_{2t-1}\rangle`$ 代表由任意奇数布尔值 {$`x_1,x_2,\cdots,x_{2t-1}`$} 组成的多重集的中位数值。特别是，基本映射 $`x\wedge y,x \vee y, \langle xyz\rangle`$ 全都是门限函数，所以
+```math
+\overline x = [-x\geq 0] \qquad(79)
+```
+也是门限函数。
 
 

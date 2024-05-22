@@ -645,4 +645,73 @@ x_1\vee x_2\vee\cdots\vee x_n = [x_1+x_2+\cdots+x_n+\geq 1] \qquad(77)
 ```
 也是门限函数。
 
+使用更一般的权值，得到许多其他有趣的函数，如
+```math
+[2^{n-1}x_1+2^{n-2}x_2+\cdots+x^n \geq (t_1t_2\cdots t_n)_2] \qquad(80)
+```
+这个门限函数为真，当且仅当二进制串 $`x_1x_2\cdots x_n`$ 按照字典序大于等于给定的二进制串 $`t_1t_2\cdots t_n`$。
+
+给定大小分别为 $`w_1w_2\cdots w_n`$ 的那个对象的集合，这些对象的一个子集能够装进大小为 t-1 的背包，当且仅当  $`f(x_1,x_2,\cdots,x_n) = 0`$，其中 $`x_j=1`$ 表示对象 j 出现在子集中。
+
+通过置 $`x_j \Leftarrow\overline x_j,w_j \Leftarrow -w_j,t \Leftarrow t+|w_j|`$ ，我们可以消除任何负权值  $`w_j`$，这样，一般的门限函数可以约化为正门限函数，其中所有权值都是非负的。此外可以把任何正门限函数(75)表示成奇数个变量的中位数/过半数的函数，因为有
+```math
+\langle 0^a1^bx_1^{w_1}x_2^{w_2}\cdots x_n^{w_n}\rangle =
+[b + w_1x_1 + w_2x_2 + \cdots + w_nx_n \geq b+t], \qquad(81)
+```
+其中 $`x^m`$ 代表 x 的 m 个副本，而 a 和 b 是由规则
+```math
+a=\max(0,2t-1-w), b=\max(0,w+1-2t), w=w_1+w_2+\cdots+w_n  \qquad(82)
+```
+定义的。例如当所有权值都是 1 时，有
+```math
+\langle 0^{n-1}x_1x_2\cdots x_n\rangle = x_1\wedge x_2\wedge\cdots\wedge x_n 和
+\langle 1^{n-1}x_1x_2\cdots x_n\rangle = x_1\vee x_2\vee\cdots\vee x_n , \qquad(83)
+```
+当 n=2 时，已经在式(45)中建国这两个公式。一般情况下，不是 a 为 0 就是 b 为 0，式(81)的左端代表 2T - 1个元素的中位数，其中
+```math
+T = b + t = \max(t, w_1 + w_2 + \cdots + w_n + 1 - t). \qquad(84)
+```
+令 a 和 b 都大于 0 毫无意义，因为过半数函数显然满足消去律
+```math
+\langle 01x_1x_2\cdots x_{2t-1}\rangle = \langle x_1x_2\cdots x_{2t-1}\rangle \qquad(85)
+```
+式(81)有一个重要推论：通过置 $`x_0=0`$ 或 $`x_0=1`$，每一个正门限函数来源于纯过半数函数
+```math
+g(x_0,x_1,x_2,\cdots,x_n) = \langle x_0^{a+b}x_1^{w_1}x_2^{w_2}\cdots x_n^{w_n}\rangle \qquad(86)
+```
+换句话，知道 n 个变量的所有门限函数，当且仅当知道 n+1 个或者更少变量的所有不同的奇数个变量的中位数函数。每个纯多半数函数都是单调自对偶函数。
+
+通过置 $`w=0`$ 或 $`w=1`$，获得 3 个变量的所有正门限函数 f(x,y,z):
+```math
+\langle 0\rangle,\langle 1\rangle,\langle 00xyz\rangle,\langle 11xyz\rangle,
+\langle 0yz\rangle,\langle 1yz\rangle,\langle 0xyzz\rangle,\langle 1xyzz\rangle,
+\langle xyz\rangle,\langle z\rangle,
+```
+```math
+\langle 0xyyz\rangle,\langle 0xyyz\rangle,\langle y\rangle,\langle 0xz\rangle,
+\langle 1xz\rangle,\langle 0xxyz\rangle,\langle 1xxyz\rangle,
+\langle x\rangle,\langle 0xy\rangle,\langle 1xy\rangle. \qquad(87)
+```
+
+存在权值 $`w_1,w_2,\cdots,w_n`$ 的无限数量的序列，但是，对于任意给定的 n 值，仅有为数有限的门限函数。所以，许多不同的权值序列显然是等价的。例如，考虑纯过半数函数
+```math
+\langle x_1^2x_2^3x_3^5x_4^7x_5^{11}x_6^{13}\rangle,
+```
+其中用素数作为权值。暴力检验 $`2^6`$ 种情形，可以证明
+```math
+\langle x_1^2x_2^3x_3^5x_4^7x_5^{11}x_6^{13}\rangle = \langle x_1x_2^2x_3^2x_4^3x_5^3x_6^5 \rangle.  \qquad(88)
+```
+因此，可以用数量少得多的权值表示同一个函数。同样作为式(80)的特例，门限函数
+```math
+[(x_1x_2\cdots x_20)_2 \geq (01100100100001111110)_2] = 
+\langle 1^{225028}x_1^{524288}x_2^{262144}\cdots x_20\rangle 
+```
+可以简化为
+```math
+\langle 1^{323}x_1^{764}x_2^{323}x_3^{323}x_4^{118}x_5^{118}x_6^{87}x_7^{31}x_8^{31}x_9^{25}
+x_{10}^6x_{11}^6x_{12}^6x_{13}^6x_{13}x_{14}x_{15}x_{16}x_{17}x_{18}x_{19}\rangle  \qquad(89)
+```
+
+周绍康发现标识门限函数的好方案，可以把唯一的标识符赋予任何一个门限函数。给定任意布尔函数 $`f(x_1,x_2,\cdots,x_n)`$，令 N(f) 是使 f(x)=1 的向量 $`x = (x_1,x_2,\cdots,x_n)`$ 的数量，$`\sum f(x)`$ 是所有这些向量的和。例如，如果 $`f(x_1,x_2)=x_1 \vee x_2`$，有 N(f)=3 以及 $`\sum f(x)=(0,1)+(1,0)+(1,1)=(2,2)`$。
+
 

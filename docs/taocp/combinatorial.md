@@ -89,7 +89,7 @@ G = (V,E), G补图 $\overline{G} = (V,\overline{E})$。补图就是原先没有�
 
 在研究二进制位量的高层概念和技术之前，我们最好能够透彻了解他们的基本性质。
 
-## 7.1.1 布尔代数基础
+### 7.1.1 布尔代数基础
 
 存在16种可能的函数f(x,y)，它们把两个给定的二进制位 x 和 y 变换成第三个二进制位 z=f(x,y)，因为对每个f(0,0)，f(0,1)，f(1,0)，f(1,1)有两种选择。
 
@@ -121,7 +121,7 @@ x\oplus y = (x+y)\mod 2 \qquad (5)
 ```
 
 
-__基本恒等式__
+#### 基本恒等式
 考察一下运算符 $`\vee, \wedge, \oplus, \overline x`$ 的相互作用，因为其他运算符很容易通过这四种运算符表示。$`\vee, \wedge, \oplus`$ 的每一个都是可结合和可交换的。除了分配率(1)和(2)，还有以下分配率：
 ```math
 (x\oplus y)\wedge z = (x\wedge z)\oplus(y\wedge z) \qquad (6)
@@ -158,7 +158,7 @@ x \oplus y = (x\vee y)\wedge \overline {x\wedge y } = (x\wedge \overline y)\vee(
 ```
 
 
-__n 变量函数__
+#### n 变量函数
 3个布尔变量x,y,z的布尔函数f(x,y,z)可以用它的8位真值表f(0,0,0)f(0,0,1)...f(1,1,1)定义。一般来说，每个n元布尔函数 $`f(x_1,x_2,\cdots x_n)`$ 对应于依次取值的f(0,0,...,0)f(0,0,...,1)...f(1,1,...,1)的 $`2^n`$ 位真值表。当n>0时，总是可以写出
 ```math
 f(x_1,x_2,\cdots x_n) = g(x_1,x_2,\cdots x_{n-1}) \oplus h(x_1,x_2,\cdots x_{n-1})\wedge x_n \qquad(16)
@@ -247,7 +247,8 @@ __定理Q. 单调布尔函数的最短析取范式是它的析取素式。__
 
 __推论Q. 单调布尔函数的析取范式是它的析取素式，但且仅当当它没有带补的字面值，而且它的蕴涵元没有一个包含在另外一个中。__
 
-__可满足性。__ 如果布尔函数不恒等于 0，即至少有一个蕴涵元，就说它是可满足的。如果布尔公式包含 30 个布尔变量，那么，进行 $` 2^30`$ 个事例的强行检验无疑会解决问题。所以，对于可满足性问题，找到确实有效的解法将是令人惊叹的成就。
+#### 可满足性。
+如果布尔函数不恒等于 0，即至少有一个蕴涵元，就说它是可满足的。如果布尔公式包含 30 个布尔变量，那么，进行 $` 2^30`$ 个事例的强行检验无疑会解决问题。所以，对于可满足性问题，找到确实有效的解法将是令人惊叹的成就。
 
 可满足性检验通常是很棘手的。即使试图把布尔函数表示成“3CNF范式”，也就是表示成每个子句中仅有 3 个字面值的和取范式，以此来简化它:
 ```math
@@ -261,7 +262,8 @@ f(x_1,\cdots,x_n) = (t_1 \vee u_1 \vee v1) \wedge (t_2 \vee u_2 \vee v2) \wedge 
 这 8 个子句中的任何 7 个子句恰好以两种方式可满足，而且他们强行决定了 3 个变量的值。例如最后七子句意味着有 $` x_1x_2x_3 = 001 `$。但是八子句的完整集合不可能同时满足。
 
 
-__简单特例。__ 有两类重要的布尔公式，它们的可满足性问题已被证明是很容易判定的。这些特例出现在被检验的合取范式完全由“霍恩子句” (Horn clause) 或者完全由“克罗姆子句” (Krom clause) 组成的时候。霍恩子句是包含一些字面值的 OR，其中全部字面值或者几乎全部字面值是带补的变量。克罗姆子句是恰好两个字面值的 OR。因此类如:
+#### 简单特例
+有两类重要的布尔公式，它们的可满足性问题已被证明是很容易判定的。这些特例出现在被检验的合取范式完全由“霍恩子句” (Horn clause) 或者完全由“克罗姆子句” (Krom clause) 组成的时候。霍恩子句是包含一些字面值的 OR，其中全部字面值或者几乎全部字面值是带补的变量。克罗姆子句是恰好两个字面值的 OR。因此类如:
 ```math
 \overline x \vee \overline y, w \vee \overline y \vee \overline z,\overline u \vee \overline v \vee \overline w \vee \overline x \vee \overline y \vee z, x
 ```
@@ -401,7 +403,8 @@ __定理 K__ 每个子句带有两个字面值的合取范式是可满足的，�
 
 罗伯特.塔杨建立了以线性时间寻找强分图的算法，从而由 定理k 立刻的出 2SAT 问题的一个有效解。
 
-__中位数__ 还有一种重要的三元运算符 $`\langle xyz \rangle`$, 称为 $`x,y,z`$ 的中位数：
+#### 中位数
+还有一种重要的三元运算符 $`\langle xyz \rangle`$, 称为 $`x,y,z`$ 的中位数：
 ```math
 \langle xyz\rangle  = (x\wedge y) \vee (y\wedge z) \vee (z\wedge x) = (x\vee y) \wedge (y\vee z) \wedge (z\vee x)  \qquad(43)
 ```
@@ -466,7 +469,7 @@ g_j(x_1,\cdots,x_n) = h(x_{j1},\cdots,x_{js_j};g_{j-1}(x_1,\cdots,x_n)) \\
 < vxwxyz > = < v< xyz< wx< wyz>>>>  $`\qquad(49) `$
 
 
-__中位数代数与中位数图__ 
+#### *中位数代数与中位数图
 如果把  $`\wedge 和 \vee`$ 分别表示 min 和 max 运算符，那么，当 x,y,z 属于实数集之类的任何有序集时，三元 < xyz > 是很有用的。_中位数代数_ 是指任意的集合 _M_，在其上定义了三元运算 < xyz >，把  _M_ 的元素变成 _M_ 的元素，并且遵守下面三条公理：
 ```math
 \langle xxy\rangle = x 过半数定理； \qquad(50) 
@@ -543,7 +546,7 @@ __定理 G.__ 如果 M 是任意有限的中位数代数，那么由(61)定义�
 按照这个定义，很多重要的图是中位数图。例如，任何自由树都是中位数图。
 
 
-__中位数标记__ 
+#### *中位数标记
 如果 u 和 v 是中位数代数的任意元素，取 $`x \to \langle xuv \rangle`$ 的映射 f(x) 是一个 _同态_。根据长分配率(54)，它满足
 ```math
 f(\langle xyz \rangle) = \langle f(x)f(y)f(z) \rangle  \qquad(62)
@@ -561,8 +564,8 @@ f(\langle xyz \rangle) = \langle f(x)f(y)f(z) \rangle  \qquad(62)
 
 我们把 $`\{v_1,\cdots,v_m\}`$ 的凸包定义为包含每一个顶点  $`v_1,\cdots,v_m`$ 的最小凸集。前述理论结果已经证明，每个区间 [u..v] 都是凸集。因此，[u..v] 是两点集合 {u,v} 的凸包。
 
-__中位数标记__ 
-中位数图中 $`\{v_1,v_2,\cdots,v_m\}`$ 的凸包是所有点的集合
+
+__定理 C__ 中位数图中 $`\{v_1,v_2,\cdots,v_m\}`$ 的凸包是所有点的集合
 ```math
 C = \{\langle v_1xv_2x\cdots xv_m\rangle | x \in M\}  \qquad(66)
 ```
@@ -584,7 +587,7 @@ __算法 H__
 > 略，太难了，等看第二遍
 
 
-__中位数集合__
+#### *中位数集合
 _中位数集合_ 是具有下特征的二进制向量的集合 X：每当 $`x \in X, y \in X, z \in X`$ 时有 $`\langle xyz\rangle`$，其中中位数是处理中位数标记那样按分量计算的。
 
 托马斯舍费在 1978 年注意到，对于定理 H中的霍恩函数的表征，_中位数集合_ 提供了富有吸引力的对照。
@@ -624,7 +627,7 @@ __推论 F__
 > 略，太难了，等看第二遍
 
 
-__门限函数__
+#### 门限函数
 一类特别有吸引力的重要布尔函数 $`f(x_1,x_2,\cdots,x_n)`$ 出现在 f 可以用公式
 ```math
 f(x_1,x_2,\cdots,x_n) = [w_1x_1+w_2x_2+\cdots+w_nx_n+\geq t] \qquad(75)
@@ -712,6 +715,70 @@ g(x_0,x_1,x_2,\cdots,x_n) = \langle x_0^{a+b}x_1^{w_1}x_2^{w_2}\cdots x_n^{w_n}\
 x_{10}^6x_{11}^6x_{12}^6x_{13}^6x_{13}x_{14}x_{15}x_{16}x_{17}x_{18}x_{19}\rangle  \qquad(89)
 ```
 
-周绍康发现标识门限函数的好方案，可以把唯一的标识符赋予任何一个门限函数。给定任意布尔函数 $`f(x_1,x_2,\cdots,x_n)`$，令 N(f) 是使 f(x)=1 的向量 $`x = (x_1,x_2,\cdots,x_n)`$ 的数量，$`\sum f(x)`$ 是所有这些向量的和。例如，如果 $`f(x_1,x_2)=x_1 \vee x_2`$，有 N(f)=3 以及 $`\sum f(x)=(0,1)+(1,0)+(1,1)=(2,2)`$。
+周绍康发现标识门限函数的好方案，可以把唯一的标识符赋予任何一个门限函数。给定任意布尔函数 $`f(x_1,x_2,\cdots,x_n)`$，令 N(f) 是使 f(x)=1 的向量 $`x = (x_1,x_2,\cdots,x_n)`$ 的数量，$`\sum (f)`$ 是所有这些向量的和。例如，如果 $`f(x_1,x_2)=x_1 \vee x_2`$，有 N(f)=3 以及 $`\sum f(x)=(0,1)+(1,0)+(1,1)=(2,2)`$。
+
+__定理 T.__
+令 $`f(x_1,x_2,\cdots x_n)`$ 和 $`g(x_1,x_2,\cdots x_n)`$ 是满足条件 N(f)=N(g) 和 $`\sum (f)= \sum (g)`$ 的布尔函数，其中 f 为门限函数。那么 f = g.
+证明： 假定恰有 k 个向量 $`x^{(1)},\cdots,x^{(k)}`$ 使得 $`f(x^{(j)})=1`$ 且 $`g(x^{(j)})=0`$。
+
+由于 N(f)=N(g)， 必定恰有 k 个向量 $`y^{(1)},\cdots,y^{(k)}`$ 使得 $`f(y^{(j)})=0`$ 且 $`g(x^{(j)})=1`$。
+
+同时由于 $`\sum (f)= \sum (g)`$，必定还有 $`x^{(1)}+\cdots+x^{(n)} = y^{(1)}+\cdots+y^{(k)}`$。
+
+现在假定 f 是门限函数(75)。那么，对于 $`1\leq j \leq k`$，使得有 $`w\cdot x^{(j)}\geq t`$ 且 $`w\cdot y^{(j)} < t`$。但是，如果 $`f \neq g`$，有 k>0，而且
+```math
+w\dot(x^{(1)}+\cdots+x^{(k)}) \geq > w\cdot (y^{(1)}+\cdots+y^{(k)})
+```
+出现矛盾，证毕。
+
+
+#### 对称布尔函数
+如果对于 {1,...,n} 的所有排列 p(1),...p(n)，函数 $`f(x_1,x_2,\cdots x_n)`$ 等于 $`f(x_{p(1)},x_{p(2)},\cdots x_{p(n)})`$，就称函数 $`f(x_1,x_2,\cdots x_n)`$ 是对称的。
+
+当所有的 为 0 或 1 时，这个条件意味着 f 仅依赖于自变量中出现的 1 的数量，也就是 “位叠加和”：
+```math
+vx = v(x_1,\cdots,x_n) = x_1 + \cdots + x_n.
+```
+记号 $`S_{k_1,k_2,\cdots,k_r}(x_1,x_2,\cdots x_n)`$ 常用于表示这样的布尔函数：它为真，当且仅当 vx 或者是 $`k_1`$，或者是 $`k_2,\cdots`$，或者是 $`k_r`$。例如：
+```math
+S_{1,3,5}(v,w,x,y,z) = v\oplus w\oplus x\oplus y\oplus z,
+S_{3,4,5}(v,w,x,y,z) = \langle vwxuz\rangle, S_{4,5}(v,w,x,y,z) = \langle 00vwxuz\rangle
+```
+对称性的许多应用同仅当 vx=k 时为真的基本函数S_k(x1,\cdots,x_n)有关。
+
+例如，$`S_3(x_1,x_2,x_3,x_4,x_5,x_6)`$ 为真。当且仅当变量 {$`x_1,\cdots,x_6`$} 恰有一半为真，一半为假。显然有
+```math
+S_k(x_1,x_2,\cdots x_n) = S_{\geq k}(x_1,x_2,\cdots x_n)\wedge \overline{S_{\geq k+1}(x_1,x_2,\cdots x_n)}.  \qquad(90)
+```
+其中 $`S_{\geq k}(x_1,x_2,\cdots x_n)`$ 是 $`S_{k,k-1,\cdots,n}(x_1,x_2,\cdots x_n)`$ 的缩写。当然函数 $`S_{\geq k}(x_1,x_2,\cdots x_n)`$ 是探讨过的门限函数 $`[x_1+x_2+\cdots+x_n+\geq k]`$ 
+
+更复杂的情形可以作为的门限函数的门限函数处理。例如有
+```math
+S_{2,3,6,8,9}(x_1,x_2,\cdots x_{12}) = [vx\geq 2 + 4[vx\geq 4] + 2[vx\geq 7] + 5[vx\geq 10]] \\
+= \langle 00x_1\cdots x_{12}\langle 0^5\overline x_1\cdots \overline x_{12}\rangle^4
+\langle 1\overline x_1\cdots \overline x_{12}\rangle^2
+\langle 1^7\overline x_1\cdots \overline x_{12}\rangle^5\rangle, \qquad(91)
+```
+因为当 $`x_1+x_2+\cdots x_{12}=(0,1,\cdots,12)`$ 时，在最外层的 25 的过半数中，二进制位 1 的数量分别为 (11,12，13,14,11,12,13,12,13,14,10,11,12)。一种类似的两层结构在一般情形是适用的。多三层或更多层逻辑，可以进一步减少门限运算的数量。
+
+业已发现的各种巧妙方法用于计算对称布尔函数。例如，室贺三郎把下面著名的算式序列归功于佐佐木不可止
+```math
+x_0\oplus x_1\oplus\cdots\oplus x_{2m} = \langle \overline x_0s_1s_2\cdots s_{2m}\rangle,\\
+where s_j=\langle x_0x_jx_{j+1}\cdots x_{j+m-1}\overline x_{j+m}\overline x_{j+m+1}\cdots\overline x_{j+2m-1}\rangle, \qquad(92)
+```
+条件是 m > 0，而且，当 $`k\geq 1`$ 时把 $`x_{2m+k}`$ 和 $`x_k`$ 看成是相同的。特别的，当 m=1 和 m=2 时，有恒等式
+```math
+x_0\oplus x_1\oplus x_2 = \langle\overline x_0 \langle x_0x_1\overline x_2\rangle
+\langle x_0x_2\overline x_1\rangle\rangle \qquad(93)
+```
+```math
+x_0\oplus\cdots\oplus x_4 = \langle\overline x_0
+\langle x_0x_1x_2\overline x_3\overline x_4\rangle
+\langle x_0x_2x_3\overline x_4\overline x_1\rangle
+\langle x_0x_3x_4\overline x_1\overline x_2\rangle
+\langle x_0x_4x_1\overline x_2\overline x_3\rangle\rangle   \qquad(93)
+```
+两式右端完全时对称的。
+
 
 

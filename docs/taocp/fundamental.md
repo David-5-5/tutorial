@@ -826,10 +826,78 @@ G‘(z) = a_1 + 2a_2z + 3a_3z^2 + \cdots = \sum_{k\geq 0}(k+1)a_{k+1}z^k. \qquad
 ```
 序列 <$`na_n`$> 的生成函数是 $`zG‘(z)`$。因此，通过对生成函数做运算，可以把一个序列的第 n 项同 n 的多项式结合起来。
 
+逆转这个过程，求积分给出另一种有用的运算：
+```math
+\int_0^z G(t) dt = a_0z + \frac{1}{2}a_1z^2 + \frac{1}{3}a_2z^3 + \cdots = \sum_{k\geq 1} \frac{1}{k} a_{k-1}z^k   \qquad (15) 
+```
+作为特例，有式(5)的导数和积分：
+```math
+\frac{1}{(1-z)^2} = 1 + 2z + 3z^2 + \cdots = \sum_{k\geq 0} (k+1)z^k .  \qquad (16)
+```
+```math
+\ln \frac{1}{1-z} = z + \frac{1}{2}z^2 + \frac{1}{3}z^2 + \cdots = \sum_{k\geq 1} \frac{1}{k}z^k .  \qquad (17)
+```
+把第二个公式同式(7)结合，可以得到调和数的生成函数：
+```math
+\frac{1}{1-z}\ln \frac{1}{1-z} = z + \frac{3}{2}z^2 + \frac{11}{6}z^3 + \cdots = \sum_{k\geq 0} H_kz^k . \qquad (18) 
+```
 
 
+#### F. 已知的生成函数
+每当能够确定一个函数的幂级数展开时，已经找到一个特定序列的生成函数。下面列举几个最重要的幂级数展开式：
 
+(i) 二项式定理
+```math
+(1+z)^r = 1 + rz + \frac{r(r-1)}{2}z^2 + \cdots = \sum_{k\geq 0} \binom{r}{k}z^k . \qquad (19) 
+```
+当 r 为负整数时，得到一个反映在等式(5)(16)中的特例：
+```math
+\frac{1}{(1-z)^{n+1}} = \sum_{k\geq 0} \binom{-n-1}{k}(-z)^k = \sum_{k\geq 0} \binom{n+k}{n}z^k  . \qquad (20) 
+```
 
+如果 x 是 z 的连续函数，满足方程 $`x^{t+1}=x^t+z`$，其中当 z=0 时 x=1，那么
+```math
+x^r = 1 + rz + \frac{r(r-2t-1)}{2}z^2 + \cdots = \sum_{k\geq 0} \binom{r-kt}{k} \frac{r}{r-kt}z^k . \qquad (21) 
+```
 
+(ii) 指数级数
+```math
+exp z = e^z = 1 + z + \frac{1}{2!}z^2 + \cdots =  \sum_{k\geq 0}\frac{1}{k!}z^k . \qquad (22) 
+```
+一般的，有包含斯特林数的公式：
+```math
+(e^z-1)^n = z^n + \frac{1}{n+1}\begin{Bmatrix}n+1\\n\end{Bmatrix}z^{n+1} + \cdots 
+=  n! \sum_k\begin{Bmatrix}k\\n\end{Bmatrix}\frac{z^k}{k!} . \qquad (23) 
+```
+
+(iii) 对数级数 (见式(17)和(18))
+```math
+\ln(1+z) = z - \frac{1}{2}z^2 + \frac{1}{3}z^3 - \cdots = \sum_{k\geq 1}\frac{(-1)^{k+1}}{k}z^k \qquad (24) 
+```
+```math
+\frac{1}{(1-z)^{m+1}}\ln(1-z) = \sum_{k\geq 1}(H_{m+k}-H_m)\binom{m+k}{k}z^k \qquad (25) 
+```
+式(23)的斯特林给出了更一般的等式：
+```math
+(\ln\frac{1}{(1-z)})^n  = z^n + \frac{1}{n+1}\begin{bmatrix}n+1\\n\end{bmatrix}z^{n+1} + \cdots 
+=  n! \sum_k\begin{bmatrix}k\\n\end{bmatrix}\frac{z^k}{k!} . \qquad (26) 
+```
+
+(iv) 其他
+```math
+z(z+1) \cdots z(z+n-1) = \sum_k\begin{bmatrix}n\\k\end{bmatrix}z^k \qquad (27) 
+```
+```math
+\frac{z^n}{(1-z)(1-2z)\cdots(1-nz)} = \sum_k\begin{Bmatrix}n\\k\end{Bmatrix}z^k \qquad (28) 
+```
+```math
+\frac{z}{e^z-1} = 1 - \frac{1}{2}z + \frac{1}{12}z^2 + \cdots = \sum_{k\geq 1}\frac{B_kz^k}{k!} \qquad (29) 
+```
+最后一个公式中的系数 $`B_k`$ 是伯努利数，后续将深入探讨。
+
+等式(21)类似的另一个恒等式：如果 x 是 z 的连续函数，满足方程 $`x=e^{zx^t}`$，其中当 z=0 时 x=1，那么
+```math
+x^r = 1 + rz + \frac{r(r+2t)}{2}z^2 + \cdots = \sum_{k\geq 0} \frac{r(r+kt)^{k-1}}{k!}z^k . \qquad (30) 
+```
 
 

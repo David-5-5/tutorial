@@ -1,5 +1,6 @@
 from typing import List
 from bisect import bisect_right
+import heapq
 class Solution:
     def minimumDeviation(self, nums: List[int]) -> int:
         nums.sort()
@@ -9,10 +10,6 @@ class Solution:
             res = min(res, max(nums[-1], 2*nums[inx]) - nums[inx+1])
             inx += 1 
 
-        inx = len(nums) - 1
-        while nums[inx] % 2 == 0 and inx > 0:
-            res = min(res, nums[inx-1] - min(nums[0], nums[inx]//2))
-            inx -= 1 
 
         loop = []
         change = True
@@ -40,23 +37,46 @@ class Solution:
         return res
     
     def minimumDeviation2(self, nums: List[int]) -> int:
-        nums.sort()
-        res = nums[-1] + 1
-        while res > nums[-1] - nums[0]:
-            res = nums[-1] - nums[0]
+        newnums = []
+        for num in nums:
+            sub = [num]
+            if num % 2 == 0:
+                while num % 2 == 0:
+                    num //= 2
+                    sub.append(num)
+            else:
+                sub.append(num*2)
+            sub.sort()
+            newnums.append(sub)
 
-            if nums[-1] % 2 == 0:
-                div = nums.pop(-1) // 2
-                inx = bisect_right(nums, div)
-                nums.insert(inx, div)
+        def smallestRange(nnums):
+            rows = len(nnums)
+            hq = []
+            curUpper = -10 ** 5 
+            for i in range(rows):
+                curUpper = max(curUpper, nnums[i][0])
+                heapq.heappush(hq, (nnums[i][0], (i,0)))
+            curLower, pos = heapq.heappop(hq)
+            upper = curUpper
+            lower = curLower
+            while True:
+                if upper - lower == 0:break
+                if pos[1] + 1 < len(nnums[pos[0]]):
+                    curUpper = max(curUpper, nnums[pos[0]][pos[1]+1])
+                    heapq.heappush(hq, (nnums[pos[0]][pos[1]+1], (pos[0],pos[1]+1)))
+                else:
+                    break
+                
+                curLower, pos = heapq.heappop(hq)
+                if upper - lower > curUpper - curLower:
+                    lower = curLower
+                    upper = curUpper
             
-            if nums[0] % 2 == 1:
-                mul = nums.pop(0) * 2
-                inx = bisect_right(nums, mul)
-                nums.insert(inx, mul)
+            return [lower, upper]
 
-        return res   
+        distinct = smallestRange(newnums)
+        return distinct[1] - distinct[0]
 if __name__ == "__main__":
     sol = Solution()
-    nums = [100006875, 100009557, 100085011, 100156725, 100199892, 100211652, 100261757, 100275031, 100322578, 100324729, 100330645, 100341912, 100343078, 100367446, 100384366, 100404186, 100417232, 100581588, 100611117, 100686954, 199433768, 199471414, 199494095, 199559817, 199583910, 199717348, 199736048, 199749556, 199757855, 199762309, 199825000, 199857056, 199863014, 199867151, 199929782, 199933217, 199941995, 199969885, 199973064, 199994746]
-    print(sol.minimumDeviation(nums))
+    nums = [1,2,3,4]
+    print(sol.minimumDeviation2(nums))

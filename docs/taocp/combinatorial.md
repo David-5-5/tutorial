@@ -776,7 +776,7 @@ x_0\oplus\cdots\oplus x_4 = \langle\overline x_0
 \langle x_0x_1x_2\overline x_3\overline x_4\rangle
 \langle x_0x_2x_3\overline x_4\overline x_1\rangle
 \langle x_0x_3x_4\overline x_1\overline x_2\rangle
-\langle x_0x_4x_1\overline x_2\overline x_3\rangle\rangle   \qquad(93)
+\langle x_0x_4x_1\overline x_2\overline x_3\rangle\rangle   \qquad(94)
 ```
 两式右端完全时对称的。
 
@@ -844,7 +844,33 @@ $`x\wedge y`$ | 24 | $`(x\wedge y)\vee(\overline x\wedge z)`$ | 24
 $`x\oplus y`$ |6 | $`(x\vee y)\wedge(x\oplus z)`$ | 48
 $`x\wedge y\wedge z`$ | 16 | $`(x\oplus y)\vee(x\oplus z)`$ | 8
 $`x\oplus y\oplus z`$ | 2 | $`\langle xyz \rangle`$ | 8
-$`x\wedge(y\vee z)`$ | 48 | $`S_1(x,y,z)`$ | 16
+$`x\wedge(y\vee z)`$ | 48 | $`S_1(x,y,z)`$ | 16 
+(95)
+
+
+### 7.1.2 布尔函数求值
+
+布尔函数求值同在4.6.4节讨论的多项式求职方法非常相似。研究这一主题的的一种自然途径是考虑函数的基本运算链，这种链类似于前面讨论的多项式链。
+
+对于 n 变量函数 $`(x_1,\cdots,x_n)`$， _布尔链_ 就是每一步组合了先前两步的序列 $`(x_{n+1},\cdots,x_(n+r))`$:
+```math
+x_i = x_{j(i)} o_i x_{k(i)}, n+1\leq i \leq n+r   \qquad(1)
+```
+其中 $`1\leq j(i) < i,1\leq k(i) < i, o_i`$ 是表7.1.1-1 中 16种二元运算符之一。例如，当 n=3 时，两条链
+```math
+x_4 = x_1\wedge x_2 \qquad x_4 = x_2\oplus x_3  \\
+x_5 = \overline x_1\wedge x_5 \qquad x_5 = x_1\wedge x_4 \\
+x_6 = x_4\vee x_5 \qquad x_6 = x_3\oplus x_5  \qquad(2)
+```
+都是计算 “多路复用器” 函数或 “若-则-否则” 函数 $`x_6=(x_1?x_2:x_3)`$，它的取 $`x_2`$ 或 $`x_3`$ 的值取决于 $`x_1`$ 是 1 (真) 或 $`x_1`$ 是 0 (假)。
+
+布尔链自然的对应于电子线路，链中的每一步对应于有两个输入和一个输出的 “门” 电路。
+
+此外也可以把布尔链画成二叉树，当布尔链的中间步骤被多次使用时，这种二叉树会有交叠的子树。每个内部节点用二元运算符标记，外部节点用代表变量的 $`x_k`$ 整数 k 标记。
+
+> [!tip]
+> 太多图，略，不作笔记了，直接看书
+
 
 
 

@@ -901,3 +901,89 @@ x^r = 1 + rz + \frac{r(r+2t)}{2}z^2 + \cdots = \sum_{k\geq 0} \frac{r(r+kt)^{k-1
 ```
 
 
+#### G. 提取系数
+对于 G(z) 中的 $`z_n`$ 项的系数，采用记号
+```math
+[z_n]G(z). \qquad (31) 
+```
+通常是很方便的。例如，如果 G(z) 是式(1) 中的生成函数，有 $`[z_n]G(z)=a_n`$ 和 $`[z_n]G(z)/(1-z)=\sum_{k=0}^n a_k`$。在复变函数中，一个极其基本的结果是柯西的一个公式，借助周线积分，可以利用此公式提取任何想要的系数：
+```math
+[z_n]G(z)=\frac{1}{2\pi i} \oint_{|z|=r} \frac{G(z)dz}{z^{n+1}} . \qquad (32) 
+```
+只要 G(z) 对于 $`z=z_0`$ 和  $`0<r<|z_0|`$ 收敛。基本思想是，对于所有整数 $`m\neq -1`$，积分 $`\oint_{|z|=r} z^m dz`$ 为 0；而 m = -1 时为
+```math
+\int_{-\pi}^\pi (re^{i\theta})^{-1}d(re^{i\theta}) = i \int_{-\pi}^\pi d\theta = 2\pi i.
+```
+讨论一个系数的近似值时，等式(32)尤其重要。
+
+最后，回过头讨论1.2.3节中仅获得部分解决的一个问题。由等式1.2.3-(13)和习题1.2.3-29，已经知道
+```math
+\sum_{1\leq i\leq j\leq n} x_ix_j = \frac{1}{2}(\sum_{k=1}^nx_k)^2 + \frac{1}{2}(\sum_{k=1}^nx_k^2) ,
+```
+```math
+\sum_{1\leq i\leq j\leq k\leq n} x_ix_jx_k = \frac{1}{6}(\sum_{k=1}^nx_k)^3 + 
+\frac{1}{2}(\sum_{k=1}^nx_k)(\sum_{k=1}^nx_k^2) + \frac{1}{3}(\sum_{k=1}^nx_k^3).
+```
+一般的，假定有 n 个数 $`x_1,\cdots, x_n`$，希望求和
+```math
+h_m = \sum_{1\leq j_1\leq\cdots\leq j_m\leq n} x_{j1}\cdots x_{jm}. \qquad (33)
+```
+如果可能，应当用 $`S_1,S_2,\cdots, S_m`$ 表示这个和，其中
+```math
+S_j = \sum_{k=1}^n x_k^j, \qquad (34)
+```
+即 j 次幂之和。利用这种更紧凑的记号，上面的公式变成：
+```math
+h_2 = \frac{1}{2}S_1^2 + \frac{1}{2}S_2, h_3 = \frac{1}{6}S_1^3 + \frac{1}{2}S_1S_2 + \frac{1}{3}S_3.
+```
+通过建立生成函数
+```math
+G(z) = 1 + h_1z + h_2z^2 + \cdots = \sum_{k\geq 0} h_kz^k. \qquad (35)
+```
+按照级数相乘的规则，求出：
+```math
+G(z) =(1 + x_1z + x_1^2z^2 + \cdots)(1 + x_2z + x_2^2z^2 + \cdots)\cdots(1 + x_nz + x_n^2z^2 + \cdots)
+```
+```math
+=\frac{1}{(1-x_1z)(1-x_2z)\cdots(1-x_nz)}. \qquad (36)
+```
+所以 G(z) 是一个多项式的倒数。对乘积取对数常常有用，从式(17)中求出
+```math
+\ln G(z) =\ln\frac{1}{(1-x_1z)} + \cdots + \ln\frac{1}{(1-x_nz)}
+```
+```math
+=(\sum_{k\geq 1}\frac{x_1^kz^k}{k}) + \cdots + (\sum_{k\geq 1}\frac{x_n^kz^k}{k}) = \sum_{k\geq 1}\frac{S_k^kz^k}{k}. \qquad (37)
+```
+至此，$`\ln G(z)`$ 已经由 S 表示。为了获得问题的答案，借助等式(22)(9)再次计算 G(z) 的幂级数展开：
+```math
+G(z) =e^{\ln G(z)} = exp(\sum_{k\geq 1}\frac{S_kz^k}{k}) = \prod_{k\geq 1} e^{s_kz^k/k}
+```
+```math
+= (1+S_1z+\frac{S_1^2z^2}{2!}+\cdots)(1+\frac{S_2z^2}{2}+\frac{S_2^2z^4}{2^2\cdot 2!}+\cdots)\cdots
+```
+```math
+= \sum_{k\geq 0}(\sum_{k_1,\cdots,k_m\geq 0,\\k_1+2k_2+\cdots+mk_m=m}\frac{S_1^{k_1}}{1^{k_1}k_1!}
+\frac{S_2^{k_2}}{2^{k_2}k_2!}\cdots\frac{S_m^{k_m}}{m^{k_m}k_m!})z^m. \qquad (38)
+```
+括号中的量是 $`h_m`$，仔细考察便知，这个颇为壮观的和其实并不复杂。对特定的 m 值，项数就是 m 的分拆数 p(m)。例如 12 的分拆数是
+```math
+12 = 5 + 2 + 2 + 2 + 1.
+```
+分拆对应方程
+```math
+k_1 + 2k_2 + \cdots + 12k_{12} = 12
+```
+的解，其中 $`k_j`$ 是分拆中 j 的个数。在上面的例子中 $`k_1=1,k_2=3,k_5=1,`$，而其余 k 为 0；所以 $`h_{12}`$ 的表达式含有项
+```math
+\frac{S_1}{1^11!}\frac{S_2^3}{2^33!}\frac{S_5}{5^11!}=\frac{1}{240}S_1S_2^3S_5. 
+```
+对式(37)求导数，不难导出递归公式
+```math
+h_n = \frac{1}{n}(S_1h{n-1}+S_2h_{n-2}+\cdots+S_nh_0), n \geq 1. \qquad (39)
+```
+波利亚对生成函数的应用做了有趣的介绍，《具体数学》第7章沿用了他的方法。
+
+
+
+
+

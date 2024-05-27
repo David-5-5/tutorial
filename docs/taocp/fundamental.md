@@ -910,7 +910,7 @@ x^r = 1 + rz + \frac{r(r+2t)}{2}z^2 + \cdots = \sum_{k\geq 0} \frac{r(r+kt)^{k-1
 ```math
 [z_n]G(z)=\frac{1}{2\pi i} \oint_{|z|=r} \frac{G(z)dz}{z^{n+1}} . \qquad (32) 
 ```
-只要 G(z) 对于 $`z=z_0`$ 和  $`0<r<|z_0|`$ 收敛。基本思想是，对于所有整数 $`m\neq -1`$，积分 $`\oint_{|z|=r} z^m dz`$ 为 0；而 m = -1 时为
+只要 G(z) 对于 $`z=z_0`$ 和  $`0 < r < |z_0|`$ 收敛。基本思想是，对于所有整数 $`m\neq -1`$，积分 $`\oint_{|z|=r} z^m dz`$ 为 0；而 m = -1 时为
 ```math
 \int_{-\pi}^\pi (re^{i\theta})^{-1}d(re^{i\theta}) = i \int_{-\pi}^\pi d\theta = 2\pi i.
 ```

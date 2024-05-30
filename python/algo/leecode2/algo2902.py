@@ -2,6 +2,7 @@ from typing import List
 from collections import Counter
 class Solution:
     def countSubMultisets(self, nums: List[int], l: int, r: int) -> int:
+        # 经典多重背包算法，超时
         MOD = 10 ** 9 + 7
         iter = Counter(nums)
         n = len(iter)
@@ -16,6 +17,12 @@ class Solution:
         return sum(dp[-1][l:]) % MOD
 
     def countSubMultisets2(self, nums: List[int], l: int, r: int) -> int:
+        # 滚动数组优化
+        # dp[i+1][j] = dp[i][j] + dp[i][j-x] + ... + dp[i][j-k*x]
+        # dp[i+1][j-x] = dp[i][j-x] + dp[i][j-2*x] ... + dp[i][j-k*x] + dp[i][j-(k+1)*x]
+        # 综合上面两式得出
+        # dp[i+1][j] = dp[i+1][j-x] + dp[i][j-x] - dp[i][j-(k+1)*x]
+        # 无需对 k 进行遍历，修改上面方案如下
         MOD = 10 ** 9 + 7
         cnt = Counter(nums)
         # n = len(cnt)

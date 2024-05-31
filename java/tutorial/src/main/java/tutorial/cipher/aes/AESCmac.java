@@ -3,13 +3,15 @@ package tutorial.cipher.aes;
 import java.security.Security;
 import java.util.Arrays;
 
+import org.bouncycastle.crypto.BlockCipher;
+import org.bouncycastle.crypto.engines.AESEngine;
 import org.bouncycastle.crypto.macs.CMac;
 import org.bouncycastle.crypto.params.KeyParameter;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 public class AESCmac {
     public static String keyString = "606162636465666768696A6B6C6D6E6F";// 固定密钥
-    public static String msg = "003815163A2222B000B1000000002E0C0114FF98FDF620C194358C2657BBE12B917D0BE572050000000000000000000000000000000000000000000000000000";
+    public static String msg = "003815163A2222B000B1000000002E0C0114FF98FDF620C194358C2657BBE12B917D0BE57205000000000000000000000000";
 
     static {
         // 添加 Bouncy Castle 作为安全提供者
@@ -25,7 +27,7 @@ public class AESCmac {
         KeyParameter keyParam = new KeyParameter(key);
 
         // 创建CMAC对象，使用AES算法
-        CMac cmac = new CMac(new org.bouncycastle.crypto.engines.AESEngine(), 16 * 8); // AES-128
+        CMac cmac = new CMac(AESEngine.newInstance(), 16 * 8); // AES-128
         cmac.init(keyParam);
 
         // 进行CMAC处理
@@ -59,6 +61,20 @@ public class AESCmac {
         } else {
             System.out.println("验证失败，返回NRC 35 36");
         }
+
+
+        calculateCMAC(key, message, 16);
+    }
+
+    public static byte[] calculateCMAC(byte[] keybytes, byte[] msg, int lengthBits) {
+        BlockCipher cipher = AESEngine.newInstance();
+        CMac cmac = new CMac(cipher);
+        cmac.init( new KeyParameter(keybytes));
+        cmac.update(msg, 0, msg.length);
+        byte[] out = new byte[cmac.getMacSize()];
+        cmac.doFinal(out, 0);
+        System.out.println(bytesToHex(out));
+        return Arrays.copyOf(out, lengthBits/0x08);
     }
 
     // 辅助方法：模拟从ECU接收加密后的 CMAC（此处假设）

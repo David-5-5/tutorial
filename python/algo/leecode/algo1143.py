@@ -35,8 +35,26 @@ class Solution:
         
         return dp[m-1][n-1]
 
+    def longestCommonSubsequence2(self, text1: str, text2: str) -> int:
+        n = len(text1)
+        m = len(text2)
+        '''
+        思路同上, 避免i,j小于零的情况, 增加一行，一列
+        '''
+        dp = [[0] * (n+1) for _ in range(m+1)]
+
+        for i in range(m):
+            for j in range(n):
+                if text2[i] == text1[j]:
+                    dp[i+1][j+1] = dp[i][j] + 1
+                else:
+                    dp[i+1][j+1] = max(dp[i+1][j], dp[i][j+1])
+        
+        return dp[m][n]
+    
 if __name__ == "__main__":
     sol = Solution()
     text1, text2 = "abcde", "ace" 
     text1, text2  = "bl", "yby"
     print(sol.longestCommonSubsequence(text1, text2))
+    print(sol.longestCommonSubsequence2(text1, text2))

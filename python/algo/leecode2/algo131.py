@@ -1,7 +1,7 @@
 from typing import List
-# 使用回溯子集型回溯的模板二
 # refer to python/dsaa/backtracing.py
 class Solution:
+    # 使用回溯子集型回溯的模板二
     def partition(self, s: str) -> List[List[str]]:
         ans = []
         path = []
@@ -21,3 +21,30 @@ class Solution:
 
         dfs(0)
         return ans
+
+    # 使用回溯子集型回溯的模板一
+    def partition(self, s: str) -> List[List[str]]:
+        ans = []
+        path = []
+        n = len(s)
+
+        def dfs(pre:str, i:int):
+            if i+1 == n:
+                if pre == pre[::-1]:
+                    path.append(pre)
+                    ans.append(path.copy())
+                    path.pop()
+                return
+            
+            # 不选
+            dfs(pre+s[i+1], i+1)
+
+            # 选
+            if pre == pre[::-1]:
+                path.append(pre)
+                dfs(s[i+1], i+1)
+                path.pop() # 恢复现场，回溯
+
+        dfs(s[0], 0)
+        return ans
+

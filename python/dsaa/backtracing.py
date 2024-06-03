@@ -17,10 +17,6 @@ from typing import List
 # 
 # 回溯是使用递归完成增量构造答案的过程
 # 
-# 回溯三问：
-# 1 当前操作 2 子问题 3 下一个子问题
-# 对于回溯中递归参数 i 不是第 i 个而是大于等于 i 的部分
-# dfs(i) -> dfs(i+1)
 
 # 一般的模板
 def backtracing(n:int, enums):
@@ -40,6 +36,10 @@ def backtracing(n:int, enums):
 
 # 子集型回溯:
 # 模板一，从输入的角度，每个元素 选/不选
+# 回溯三问：
+# 1 当前操作 2 子问题 3 下一个子问题
+# 对于回溯中递归参数 i 不是第 i 个而是大于等于 i 的部分
+# dfs(i) -> dfs(i+1)
 def subset_1(nums:List[int]):
     ans = []
     path = []
@@ -78,4 +78,47 @@ def subset_2(nums:List[int]):
             path.pop() # 恢复现场，回溯
 
     dfs(0)
+    return ans
+
+# 组合型回溯: 与子集型回溯相似，它同样也会涉及元素的选与不选，不同的是组合型回溯
+# 需要增加判断条件来满足题意，达到剪枝优化的目的
+def combine_1(n:int, k:int):
+    ans = []
+    path = [] # [0] * k , k 表示组合的数量
+
+    def dfs(i):
+        d = k - len(path)
+        if i < d:                       # 剪枝，根据题意
+            return
+        if len(path) == k:              # 边界条件
+            ans.append(path.copy())
+            return
+        for j in range(i,0,-1):
+            path.append(j)
+            dfs(i-1)
+            path.pop()
+    dfs(n)
+    return ans
+
+
+# 排列型回溯，相比较组合型回溯(1,2)(2,1)是相同的结果，
+# 排列型回溯需要对下一个子问题给出可选列表
+# dfs(i,s) -> dfs(i+1, s-{xi1})
+#          -> dfs(i+1, s-{xi2})
+#              ...  ... ...
+#          -> dfs(i+1, s-{xik})
+def premute(nums:List[int]):
+    n = len(nums)
+    ans = []
+    path = [0] * n # [] , n 表示组合的数量
+
+    def dfs(i,s):
+        if i == n:              # 边界条件
+            ans.append(path.copy())
+            return
+        for x in s:
+            path[i] = x
+            dfs(i+1,s-{x})
+
+    dfs(0, set(nums))
     return ans

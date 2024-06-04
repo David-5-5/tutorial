@@ -7,8 +7,8 @@ from functools import lru_cache
 # 第 i 天状态可以为 持有/不持有，其状态转移方程为
 # dfs(i, False) = max(dfs(i-1, False),          不变化
 #                 dfs(i-1, True) + prices[i])   卖掉股票
-# dfs(i, True) = max(dfs(i-1, False),           不变化
-#                dfs(i-1, False) - prices[i])   买入股票
+# dfs(i, True) = max(dfs(i-1, True),           不变化
+#                dfs(i-2, False) - prices[i])   买入股票
 # 最后一天当然不持有股票的利润最大，因此从
 # 边界条件:
 #   dfs(-1,False) = 0

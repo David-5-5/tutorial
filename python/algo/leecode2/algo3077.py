@@ -28,14 +28,51 @@ class Solution:
         dp = [[0] * (n+1) for _ in range(k+1)]
         for i in range(1, k+1):
             dp[i][i-1] = mx = - float("inf")
+            w = (1 if (i+1) % 2 == 0 else -1) * (k-i+1)
             for j in range(i, n+1):
-                w = (1 if (i+1) % 2 == 0 else -1) * (k-i+1)
                 mx = max(mx, dp[i-1][j-1] - s[j-1] * w)
                 dp[i][j] = max(dp[i][j-1], s[j] * w + mx)
                 
         return dp[k][n]
 
+    # 二维 -> 一维 
+    def maximumStrength2(self, nums: List[int], k: int) -> int:
+        n = len(nums)
+
+        s = list(accumulate(nums, initial=0))
+        dp = [0] * (n+1)
+        for i in range(1, k+1):
+            prev = dp[i-1]
+            dp[i-1] = mx = - float("inf")
+            w = (1 if (i+1) % 2 == 0 else -1) * (k-i+1)
+            for j in range(i, n+1):                
+                mx = max(mx, prev - s[j-1] * w) # prev 替换 dp[i-1][j-1] j从 i开始循环，因此prev 初始为i-1
+                prev = dp[j]                    # 提供给下一次循环使用
+                dp[j] = max(dp[j-1], s[j] * w + mx)
+                
+        return dp[n]
+
+    # 去掉低效的max函数 
+    def maximumStrength3(self, nums: List[int], k: int) -> int:
+        n = len(nums)
+
+        s = list(accumulate(nums, initial=0))
+        dp = [0] * (n+1)
+        for i in range(1, k+1):
+            prev = dp[i-1]
+            dp[i-1] = mx = - float("inf")
+            w = (1 if (i+1) % 2 == 0 else -1) * (k-i+1)
+            for j in range(i, n+1):
+
+                mx = mx if mx > prev - s[j-1] * w else prev - s[j-1] * w
+                prev = dp[j]                  
+                dp[j] = dp[j-1] if dp[j-1]>s[j] * w + mx else s[j] * w + mx
+                
+        return dp[n]
+
+    
 if __name__ == "__main__":
     sol = Solution()
     nums, k = [1,2,3,-1,2], 3
     print(sol.maximumStrength(nums, k))
+    print(sol.maximumStrength3(nums, k))

@@ -7,7 +7,7 @@ def KMPSearch(pat, txt):
     # values for pattern
     lps = [0]*M
     j = 0 # index for pat[]
- 
+    ans = []
     # Preprocess the pattern (calculate lps[] array)
     computeLPSArray(pat, M, lps)
  
@@ -18,7 +18,8 @@ def KMPSearch(pat, txt):
             j += 1
  
         if j == M:
-            print ("Found pattern at index " + str(i-j))
+            # print ("Found pattern at index " + str(i-j))
+            ans.append(i-j)
             j = lps[j-1]
  
         # mismatch after j matches
@@ -29,7 +30,8 @@ def KMPSearch(pat, txt):
                 j = lps[j-1]
             else:
                 i += 1
- 
+
+    return ans
 def computeLPSArray(pat, M, lps):
     len = 0 # length of the previous longest prefix suffix
  
@@ -205,3 +207,25 @@ print((datetime.now()- begin).total_seconds())
 begin = datetime.now()
 boyer_moore(p2, s2)
 print((datetime.now()- begin).total_seconds())
+
+
+
+print("KMP find aa..aa")
+from datetime import datetime
+begin = datetime.now()
+print(KMPSearch(''.ljust(100000,'a'), ''.ljust(300000,'a')))
+print((datetime.now()- begin).total_seconds())
+
+# print("boyer_moore find aa..aa")
+# begin = datetime.now()
+# boyer_moore(apttern, aaa)
+# print((datetime.now()- begin).total_seconds())
+
+
+# print("use str.find()")
+# begin = datetime.now()
+# i = aaa.find(apttern)
+# while i != -1:
+#     # print("Pattern found at index %d", i)
+#     i = aaa.find(apttern, i+1)
+# print((datetime.now()- begin).total_seconds())

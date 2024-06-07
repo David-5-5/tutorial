@@ -38,16 +38,16 @@ if __name__ == '__main__':
     # # Function call
     # search(pat, txt)
 
-    with open('./dsaa/stringmatch/txt.txt') as file:
+    with open('./dsaa/string/txt.txt') as file:
         s = file.read()
     
-    with open('./dsaa/stringmatch/pattern.txt') as file:
+    with open('./dsaa/string/pattern.txt') as file:
         p = file.read()
 
-    with open('./dsaa/stringmatch/txt2.txt') as file:
+    with open('./dsaa/string/txt2.txt') as file:
         s2 = file.read()
     
-    with open('./dsaa/stringmatch/pattern2.txt') as file:
+    with open('./dsaa/string/pattern2.txt') as file:
         p2= file.read()
 
     from datetime import datetime
@@ -62,4 +62,12 @@ if __name__ == '__main__':
     print((datetime.now()- begin).total_seconds())
     begin = datetime.now()
     search2(p2, s2)
+    print((datetime.now()- begin).total_seconds())
+
+    print("use str.find()")
+    begin = datetime.now()
+    i = s.find(p, 0)
+    while i != -1:
+        print("Pattern found at index %d", i)
+        i = s.find(p, i+1)
     print((datetime.now()- begin).total_seconds())

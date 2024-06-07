@@ -43,7 +43,7 @@ def search(txt, pat):
         # If the pattern is present at current shift,
         # then index j will become -1 after the above loop
         if j<0:
-            print("Pattern occur at shift = {}".format(s))
+            # print("Pattern occur at shift = {}".format(s))
  
             '''   
             Shift the pattern so that the next character in text
@@ -87,6 +87,24 @@ def main():
     search(txt2, pat2)
     print((datetime.now()- begin).total_seconds())
 
+    begin = datetime.now()
+    txt = ''.ljust(30000,'a')
+    pattern = ''.ljust(10000,'a')
+
+    begin = datetime.now()
+    # search(aaa, apttern)
+    import pybmoore
+    matches = pybmoore.search(pattern, txt)
+    print(f"Occurrences: {len(matches)}")
+    print((datetime.now()- begin).total_seconds())
+
+    print("use str.find()")
+
+    i = txt.find(pattern)
+    while i != -1:
+        # print("Pattern found at index %d", i)
+        i = txt.find(pattern, i+1)
+    print((datetime.now()- begin).total_seconds())
 
 if __name__ == '__main__':
     main()

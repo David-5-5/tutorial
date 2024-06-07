@@ -11,7 +11,7 @@ def badCharHeuristic(string, size):
  
     # Fill the actual value of last occurrence
     for i in range(size):
-        badChar[ord(string[i])] = i;
+        badChar[ord(string[i])] = i
  
     # return initialized list
     return badChar
@@ -66,16 +66,16 @@ def search(txt, pat):
  
 # Driver program to test above function
 def main():
-    with open('./dsaa/stringmatch/txt.txt') as file:
+    with open('./dsaa/string/txt.txt') as file:
         txt = file.read()
     
-    with open('./dsaa/stringmatch/pattern.txt') as file:
+    with open('./dsaa/string/pattern.txt') as file:
         pat = file.read()
 
-    with open('./dsaa/stringmatch/txt2.txt') as file:
+    with open('./dsaa/string/txt2.txt') as file:
         txt2 = file.read()
     
-    with open('./dsaa/stringmatch/pattern2.txt') as file:
+    with open('./dsaa/string/pattern2.txt') as file:
         pat2= file.read()
 
     from datetime import datetime

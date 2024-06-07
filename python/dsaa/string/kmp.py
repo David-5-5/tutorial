@@ -54,16 +54,16 @@ def computeLPSArray(pat, M, lps):
                 lps[i] = 0
                 i += 1
 
-with open('./dsaa/stringmatch/txt.txt') as file:
+with open('./dsaa/string/txt.txt') as file:
     s = file.read()
 
-with open('./dsaa/stringmatch/pattern.txt') as file:
+with open('./dsaa/string/pattern.txt') as file:
     p = file.read() 
 
-with open('./dsaa/stringmatch/txt2.txt') as file:
+with open('./dsaa/string/txt2.txt') as file:
     s2 = file.read()
 
-with open('./dsaa/stringmatch/pattern2.txt') as file:
+with open('./dsaa/string/pattern2.txt') as file:
     p2= file.read()
 
 from datetime import datetime

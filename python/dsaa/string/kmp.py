@@ -210,11 +210,11 @@ print((datetime.now()- begin).total_seconds())
 
 
 
-print("KMP find aa..aa")
-from datetime import datetime
-begin = datetime.now()
-print(KMPSearch(''.ljust(100000,'a'), ''.ljust(300000,'a')))
-print((datetime.now()- begin).total_seconds())
+# print("KMP find aa..aa")
+# from datetime import datetime
+# begin = datetime.now()
+# print(KMPSearch(''.ljust(10000,'a'), ''.ljust(30000,'a')))
+# print((datetime.now()- begin).total_seconds())
 
 # print("boyer_moore find aa..aa")
 # begin = datetime.now()
@@ -229,3 +229,31 @@ print((datetime.now()- begin).total_seconds())
 #     # print("Pattern found at index %d", i)
 #     i = aaa.find(apttern, i+1)
 # print((datetime.now()- begin).total_seconds())
+
+
+# 如下算法来源于算法第 4 版
+# 仅能查找部分
+def search(txt:str, pat:str):
+    n, m = len(txt), len(pat)
+    dfa = [[0]*m for _ in range(256)]
+
+    dfa[0][0] = 1
+    x = 0
+    for j in range(m):
+        for c in range(256):
+            dfa[c][j] = dfa[c][x]
+        dfa[ord(pat[j])][j] = j+1
+        x = dfa[ord(pat[j])][x]
+    
+    j=0
+    ans = []
+    for i in range(n):
+        j = dfa[ord(txt[i])][j]
+        if j==m:
+            ans.append(i+1-m)
+            i = i+1-m
+            j = 0
+            
+    return ans
+
+print(search(''.ljust(300,'a'), ''.ljust(100,'a')))

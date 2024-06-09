@@ -25,14 +25,15 @@ class Solution:
             up = ord(s2[i]) - a_ord if is_right else 25  
             
             for d in range(low, up + 1):
-                new_pre = pre
-                while new_pre > 0 and d != ord(evil[new_pre]) - a_ord:
-                    new_pre=p_pi[new_pre-1]
-                if d == ord(evil[pre]) - a_ord:
-                    new_pre += 1
-                if new_pre == len(evil):
+                j = pre
+                while j > 0 and d != ord(evil[j]) - a_ord:
+                    j=p_pi[j-1]
+            
+                if d == ord(evil[j]) - a_ord:
+                    j += 1
+                if j == len(evil):
                     continue
-                res += f(i+1, is_left and d == low, is_right and d == up, new_pre) % MOD
+                res += f(i+1, is_left and d == low, is_right and d == up, j) % MOD
 
             return res % MOD
         return f(0, True, True, 0)

@@ -1452,3 +1452,87 @@ B_3 = B_5 = B_7 = B_9 = \cdots = 0.  \qquad (6)
 B_m(x)=\sum_k\binom{m}{k}B_kx^{m-k}. \qquad (8)
 ``` 
 如果 m=1，那么 $`B_1(x)=B_0+B_1=x-\frac{1}{2}`$，对应于上面 (3) 中使用的多项式。如果 m>1，那么由 (7) 有 $`B_m(1)=B_m=B_m(0)`$；还句话说，$`B_m({x})`$ 在整数点 x 处不间断。
+
+
+讲了伯努利多项式和伯努利数，它们与我们的问题之间有什么关系？答案立即揭晓。对等式 (8) 求导，得到
+```math
+B_m'(x)=\sum_k\binom{m}{k}(m-k)B_kx^{m-k-1} \\
+= m\sum_k\binom{m-1}{k}B_kx^{m-k-1} 
+= mB_{m-1}(x). \qquad (9)
+``` 
+因此，当 $`m\geq 1`$ 时，可以分部积分如下：
+```math
+\frac{1}{m!}\int_1^n B_m({x})f^{(m)}(x)dx = \frac{1}{(m+1)!}(B_{m+1}(1)f^{(m)}(n)-B_{m+1}(0)f^{(m)}(1)) \\
+- \frac{1}{(m+1)!}\int_1^n B_{m+1}({x})f^{(m+1)}(x)dx.
+``` 
+据此可以继续改进式 (3) 的近似值，并且利用式 (6) 得到欧拉的一般公式：
+```math
+\sum_{1\leq k < n}f(k) = \int_1^nf(x)dx - \frac{1}{2}(f(n)-f(1)) + \frac{B_2}(f'(n)-f'(1)) + \cdots \\
++ \frac{(-1)^mB_m}{m!}(f^{(m-1)}(n)-f^{(m-1)}(1)) + R_{mn}
+= \int_1^n f(x)dx + \sum_{k=1}^m\frac{B_k}{k!}(f^{(k-1)}(n)-f^{(k-1)}(1)) + R_{mn}, \qquad (10)
+``` 
+其中
+```math
+R_{mn} = \frac{(-1)^{m+1}}{m!}\int_1^n B_m({x})f^{(m)}(x)dx. \qquad (11)
+```
+当 $`B_m({x})f^{(m)}(x)/m!`$ 非常小的时候，余项 $`R_{mn}`$ 是很小的。事实上，可以证明，当 m 为偶数时，
+```math
+\left| \frac{B_m({x})}{m!}\right| \leq \frac{B_m}{m!} < \frac{4}{(2\pi)^m}. \qquad (12)
+``` 
+另外，当 m 增加时，$`f^{(m)}(x)`$ 通常随之变大。所以对于给定的 n，存在 m 的“最佳”值，使 $`|R_{mn}|`$ 取最小值。
+
+已经知道，当 m 为偶数时，存在数 $`\theta`$ 满足：只要 $`f^{(m+2)}(x)f^{(m+4)}(x) > 0`$ 对于 成立，就有
+```math
+R_{mn} = \theta \frac{B_{m+2}}{(m+2)!}(f^{(m+1)}(n)-f^{(m+1)}(1)), 0 < \theta < 1. \qquad (13)
+```
+所以此时余项与第一个舍弃项符号相同，而绝对值更小。这个结果有一种更简单的形式，将在习题 3 证明。
+
+现在把欧拉公式应用到两个重要的例子中。首先，置 f(x)=1/x。它的 m 阶导数为 $`f^{(m)}(x)=(-1)^mm!/x^{m+1}`$，所以由式 (10) 得到
+```math
+H_{n-1} = \ln n + \sum_{k=1}^m\frac{B_k}{k}(-1)^{k-1}(\frac{1}{n^k}-1) + R_{mn}. \qquad (14)
+```
+现在求出
+```math
+\gamma = \lim_{n\to \infty}(H_{n-1}-\ln n) = \sum_{k=1}^\frac{B_k}{k}(-1)^k + \lim_{n\to \infty}R_{mn}. \qquad (15)
+```
+由于 $`\lim_{n\to \infty}R_{mn}=-\int_1^n B_m({x})dx/x^{m+1}`$ 存在，证明确实存在常数 $`\gamma`$ 。因此可以结合式 (14) 和 (15)，推出调和数的一般近似值：
+```math
+H_{n-1} = \ln n + \gamma + \sum_{k=1}^m\frac{(-1)^{k-1}B_k}{kn^k} + \int_n^\infty \frac{B_m({x})}{x^{m+1}}dx.
+= \ln n + \gamma + \sum_{k=1}^m\frac{(-1)^{k-1}B_k}{kn^k} + O(\frac{1}{n^m}).
+```
+把 m 换成 m+1 ，得出
+```math
+H_{n-1} = \ln n + \gamma + \sum_{k=1}^m\frac{(-1)^{k-1}B_k}{kn^k} + O(\frac{1}{n^{m+1}}). \qquad (16)
+```
+此外，从等式 (13) 看出，误差小于第个舍弃项。可以得到一个特例，对两端加 1/n：
+
+这就是式1.2.7-(3) 看出，对于很大的 k，伯努利数 $`B_k`$ 将变得非常大，当 k 为偶数时近似等于 $`(-1)^{1+k/2}2(k!/(2\pi)^k)`$，所以式 (16) 对于任何固定的 n 值，不可能扩展为一个收敛的无穷级数。
+
+可以用同样的方式推导出斯特林近似公式。这一次置 $`f(x)=\ln x`$，由式 (10) 得到
+```math
+\ln (n-1)! = n\ln n - n + 1 - \frac{1}{2}\ln n + \sum_{k=1}^m\frac{B_k(-1)^{k-1}}{k(k-1)}(\frac{1}{n^k}-1) + R_{mn}. \qquad (17)
+```
+沿用上面的做法，发现极限
+```math
+\lim_{n\to \infty}(\ln n! - n\ln n + n - \frac{1}{2}\ln n) = 
+1 + \sum_{k=1}^m\frac{B_k(-1)^{k-1}}{k(k-1)} + \lim_{n\to \infty}R_{mn}. 
+```
+存在；暂且把它称为 “斯特林常数”，得到斯特林的结果
+```math
+\ln n!=(n+\frac{1}{2})\ln n - n + \sigma + \sum_{k=1}^m\frac{B_k(-1)^{k-1}}{k(k-1)n^{k-1}} + O(\frac{1}{n^m}). \qquad (18)
+```
+特别地，令 m=5，得到
+```math
+\ln n!=(n+\frac{1}{2})\ln n - n + \sigma + \frac{1}{12n} - \frac{1}{360n^3} + O(\frac{1}{n^5}). 
+```
+为两端为指数，求 e 的幂
+```math
+n!=e^\sigma\sqrt{n}(\frac{n}{e})^n exp(\frac{1}{12n}-\frac{1}{360n^3} + O(\frac{1}{n^5}))
+```
+利用 $`e^\sigma=sqrt{2\pi}`$，展开指数部分，获得最终结果
+```math
+n!=\sqrt{2\pi n}(\frac{n}{e})^n(1+\frac{1}{12n} + \frac{1}{288n^2} - \frac{139}{51840n^3} -\frac{571}{2488320n^4} + O(\frac{1}{n^5})). \qquad (19)
+```
+
+
+

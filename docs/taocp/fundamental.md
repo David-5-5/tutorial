@@ -1373,5 +1373,166 @@ n^{\underline r}=\sum_{k=0}^m(-1)^k\begin{bmatrix}r\\r-k\end{bmatrix}n^{r-k}+O(n
 ```
 对于所有 n 发散。当然，但 r 为非负整数时，$`n^{\overline r}`$ 和 $`n^{\underline r}`$ 都只是 r 次多项式，式(17) 实际上即是1.2.6-(44)。当 r 是负整数且 |n|>|r| 时，无限和 $`\sum_{k=0}^\infty\begin{bmatrix}r \\ r-k\end{bmatrix}n^{r-k}`$ 确实收敛到 $`n^{\overline r} = 1/(n-)^{\underline {-r}}`$；利用等式1.2.6-(58)，还可以把这个和写成更自然的形式 $`\sum_{k=0}^\infty\begin{Bmatrix}k-r \\ -r\end{Bmatrix}n^{r-k}`$。
 
+举一个简单的例子来说明至今所介绍的概念。考虑 $`\sqrt[n]{n}`$ 这个量：当 n 增大时，求 n 次根的运算使其值有减少的趋势，但是 $`\sqrt[n]{n}`$ 究竟是减少还是增大，并不是一目了然的。实际上， 会减少到 1 。再考虑稍微复杂一些的量 $`n(\sqrt[n]{n}-1)`$ 。当 n 变大时，现在知道 $`(\sqrt[n]{n}-1)`$ 却会变小，那么 $`n(\sqrt[n]{n}-1)`$ 会怎样变化？
+
+应用上面的公式，这个问题迎刃而解，有
+```math
+\sqrt[n]{n}= e^{\ln n/n} = 1 + (\ln n/n) + O(\ln n/n)^2, \qquad (18)
+```
+因为当 $`n\Leftarrow \infty `$ 时，$`\ln n/n \Leftarrow 0`$。这个等式证明现前的论断，即 $`\sqrt[n]{n}\Leftarrow 1`$。此外
+```math
+n(\sqrt[n]{n}-1) = n(\ln n/n + O((\ln n/n)^2)) = \ln n + O((\ln n)^2/n). \qquad (19)
+```
+还句话说， $`n(\sqrt[n]{n}-1)`$ 近似等于 $`\ln n`$；两者之差为 $`O((\ln n)^2/n)`$，当 n 趋近无穷大时，它趋近于 0。
+
+人们时常滥用大 O 记号，以为它表示确切的增长量级。有些人在使用它的时候，以为它不仅说明上界，还限定下界。例如，对 n 个数排序的一种算法有可能被斥为效率过低，理由是运行时间为 $`O(n^2)`$。但是 $`O(n^2)`$ 的运行时间并非一定意味着它不是 $`O(n)`$ 的。还有另外一个大 $`\Omega`$ 记号，它是用来表示下界的：
+```math
+g(n) = \Omega(f(n)). \qquad (20)
+```
+意味着存在两个正常数 L 和 $`n_0`$ 使得
+```math
+|g(n)| \geq L|f(n)| \forall n \geq n_0 . \qquad (20)
+```
+使用这个记号，能够正确的断定，如果 n 足够大，那么运行时间为 $`\Omega(n^2)`$ 的排序算法不如运行时间为 $`O(n\log n)`$ 的算法高效，但是如果不知道大 O 和 大 $`\Omega`$ 中隐含的常数因子，就完全不知道 $`O(n\log n)`$ 的算法将从多么大的 n 开始表现出优势。
+
+最后，如果要说明严格的增长量级，但不想指明常数大小，那么可以使用大 $`\Theta`$：
+```math
+g(n) = \Theta(f(n)) \iff g(n) = O(f(n)) and g(n) = \Omega(f(n)). \qquad (21)
+```
+
+
+### 1.2.11.2 *欧拉求和公式
+欧拉提出了一种极有用的求和方法，能获得令人满意的近似值。它的方法是用积分逼近有限和，在许多情况下，利用这种手段可以不断改进近似值。
+
+当函数 可微，欧拉给出了计算 $`\int_1^n f(x)dx`$ 和 $`\sum_{k=1}^{n-1}f(k)`$ 这两个公式之差的有用的公式 。
+
+为方便起见，将使用记号
+```math
+{x} = x \mod 1 = x -  \lfloor x\rfloor . \qquad (1)
+```
+推导将从下述恒等式开始：
+```math
+\int_k^{k+1}({x}-\frac{1}{2})f'(x)dx = (x-k-\frac{1}{2})f(x)\big|_k^{k+1} - \int_k^{k+1}f(x)dx \\
+= \frac{1}{2}(f(k+1)+f(k)) -  \int_k^{k+1}f(x)dx . \qquad (2)
+```
+等式的两端都对 $`1\leq k < n`$ 求和，得到
+```math
+\int_1^n({x}-\frac{1}{2})f'(x)dx = \sum_{1\leq k < n}f(k)+\frac{1}{2}(f(n)-f(1)) - \int_1^nf(x)dx 
+```
+即
+```math
+\sum_{1\leq k < n}f(x) = \int_1^nf(x)dx - \frac{1}{2}(f(n)-f(1)) + \int_1^n B_1({x})f'(x)dx, \qquad (3)
+``` 
+其中 $`B_1(x)`$ 是多项式 $`x-\frac{1}{2}`$。这便是所求的有限和与积分之间的联系。
+
+如果继续分部积分，可以进一步求近似值。但是在此之前，先来讨论 伯努利数，即下述无穷级数的系数：
+```math
+\frac{z}{e^z-1}= B_0 + B_1z + \frac{B_2z^2}{2!} + ... = \sum_{k\geq 0}\frac{B_kz^k}{k!}. \qquad (4)
+``` 
+几个级数的系数出现在形形色色的应用问题中。雅各布伯努利去世后出版的著作《猜度术》将它介绍给了欧洲数学家。无独有偶，日本的关孝和也发现了这类数。
+
+前几个伯努利数是
+```math
+B_0=1, B_1 = -\frac{1}{2}, B_2 = \frac{1}{6}, B_3 = 0, B_4 = -\frac{1}{30}. \qquad (5)
+``` 
+附录A的表3中列出了接下去的一些数值。由于
+```math
+\frac{z}{e^z-1} + \frac{z}{2} = \frac{z}{2}\frac{e^z+1}{e^z-1}=-\frac{z}{2}\frac{e^{-z}+1}{e^{-z}-1}
+``` 
+是一个偶函数，因此
+```math
+B_3 = B_5 = B_7 = B_9 = \cdots = 0.  \qquad (6)
+``` 
+如果伯努利数的定义式 (4) 两端同事乘以 ，并令 z 的同次幂的系数相等，便等到公式
+```math
+\sum_k\binom{n}{k}B_k = B_n + \delta_{n1}. \qquad (7)
+``` 
+现在定义的 _伯努利多项式_
+```math
+B_m(x)=\sum_k\binom{m}{k}B_kx^{m-k}. \qquad (8)
+``` 
+如果 m=1，那么 $`B_1(x)=B_0+B_1=x-\frac{1}{2}`$，对应于上面 (3) 中使用的多项式。如果 m>1，那么由 (7) 有 $`B_m(1)=B_m=B_m(0)`$；还句话说，$`B_m({x})`$ 在整数点 x 处不间断。
+
+
+讲了伯努利多项式和伯努利数，它们与我们的问题之间有什么关系？答案立即揭晓。对等式 (8) 求导，得到
+```math
+B_m'(x)=\sum_k\binom{m}{k}(m-k)B_kx^{m-k-1} \\
+= m\sum_k\binom{m-1}{k}B_kx^{m-k-1} 
+= mB_{m-1}(x). \qquad (9)
+``` 
+因此，当 $`m\geq 1`$ 时，可以分部积分如下：
+```math
+\frac{1}{m!}\int_1^n B_m({x})f^{(m)}(x)dx = \frac{1}{(m+1)!}(B_{m+1}(1)f^{(m)}(n)-B_{m+1}(0)f^{(m)}(1)) \\
+- \frac{1}{(m+1)!}\int_1^n B_{m+1}({x})f^{(m+1)}(x)dx.
+``` 
+据此可以继续改进式 (3) 的近似值，并且利用式 (6) 得到欧拉的一般公式：
+```math
+\sum_{1\leq k < n}f(k) = \int_1^nf(x)dx - \frac{1}{2}(f(n)-f(1)) + \frac{B_2}(f'(n)-f'(1)) + \cdots \\
++ \frac{(-1)^mB_m}{m!}(f^{(m-1)}(n)-f^{(m-1)}(1)) + R_{mn}
+= \int_1^n f(x)dx + \sum_{k=1}^m\frac{B_k}{k!}(f^{(k-1)}(n)-f^{(k-1)}(1)) + R_{mn}, \qquad (10)
+``` 
+其中
+```math
+R_{mn} = \frac{(-1)^{m+1}}{m!}\int_1^n B_m({x})f^{(m)}(x)dx. \qquad (11)
+```
+当 $`B_m({x})f^{(m)}(x)/m!`$ 非常小的时候，余项 $`R_{mn}`$ 是很小的。事实上，可以证明，当 m 为偶数时，
+```math
+\left| \frac{B_m({x})}{m!}\right| \leq \frac{B_m}{m!} < \frac{4}{(2\pi)^m}. \qquad (12)
+``` 
+另外，当 m 增加时，$`f^{(m)}(x)`$ 通常随之变大。所以对于给定的 n，存在 m 的“最佳”值，使 $`|R_{mn}|`$ 取最小值。
+
+已经知道，当 m 为偶数时，存在数 $`\theta`$ 满足：只要 $`f^{(m+2)}(x)f^{(m+4)}(x) > 0`$ 对于 成立，就有
+```math
+R_{mn} = \theta \frac{B_{m+2}}{(m+2)!}(f^{(m+1)}(n)-f^{(m+1)}(1)), 0 < \theta < 1. \qquad (13)
+```
+所以此时余项与第一个舍弃项符号相同，而绝对值更小。这个结果有一种更简单的形式，将在习题 3 证明。
+
+现在把欧拉公式应用到两个重要的例子中。首先，置 f(x)=1/x。它的 m 阶导数为 $`f^{(m)}(x)=(-1)^mm!/x^{m+1}`$，所以由式 (10) 得到
+```math
+H_{n-1} = \ln n + \sum_{k=1}^m\frac{B_k}{k}(-1)^{k-1}(\frac{1}{n^k}-1) + R_{mn}. \qquad (14)
+```
+现在求出
+```math
+\gamma = \lim_{n\to \infty}(H_{n-1}-\ln n) = \sum_{k=1}^\frac{B_k}{k}(-1)^k + \lim_{n\to \infty}R_{mn}. \qquad (15)
+```
+由于 $`\lim_{n\to \infty}R_{mn}=-\int_1^n B_m({x})dx/x^{m+1}`$ 存在，证明确实存在常数 $`\gamma`$ 。因此可以结合式 (14) 和 (15)，推出调和数的一般近似值：
+```math
+H_{n-1} = \ln n + \gamma + \sum_{k=1}^m\frac{(-1)^{k-1}B_k}{kn^k} + \int_n^\infty \frac{B_m({x})}{x^{m+1}}dx.
+= \ln n + \gamma + \sum_{k=1}^m\frac{(-1)^{k-1}B_k}{kn^k} + O(\frac{1}{n^m}).
+```
+把 m 换成 m+1 ，得出
+```math
+H_{n-1} = \ln n + \gamma + \sum_{k=1}^m\frac{(-1)^{k-1}B_k}{kn^k} + O(\frac{1}{n^{m+1}}). \qquad (16)
+```
+此外，从等式 (13) 看出，误差小于第个舍弃项。可以得到一个特例，对两端加 1/n：
+
+这就是式1.2.7-(3) 看出，对于很大的 k，伯努利数 $`B_k`$ 将变得非常大，当 k 为偶数时近似等于 $`(-1)^{1+k/2}2(k!/(2\pi)^k)`$，所以式 (16) 对于任何固定的 n 值，不可能扩展为一个收敛的无穷级数。
+
+可以用同样的方式推导出斯特林近似公式。这一次置 $`f(x)=\ln x`$，由式 (10) 得到
+```math
+\ln (n-1)! = n\ln n - n + 1 - \frac{1}{2}\ln n + \sum_{k=1}^m\frac{B_k(-1)^{k-1}}{k(k-1)}(\frac{1}{n^k}-1) + R_{mn}. \qquad (17)
+```
+沿用上面的做法，发现极限
+```math
+\lim_{n\to \infty}(\ln n! - n\ln n + n - \frac{1}{2}\ln n) = 
+1 + \sum_{k=1}^m\frac{B_k(-1)^{k-1}}{k(k-1)} + \lim_{n\to \infty}R_{mn}. 
+```
+存在；暂且把它称为 “斯特林常数”，得到斯特林的结果
+```math
+\ln n!=(n+\frac{1}{2})\ln n - n + \sigma + \sum_{k=1}^m\frac{B_k(-1)^{k-1}}{k(k-1)n^{k-1}} + O(\frac{1}{n^m}). \qquad (18)
+```
+特别地，令 m=5，得到
+```math
+\ln n!=(n+\frac{1}{2})\ln n - n + \sigma + \frac{1}{12n} - \frac{1}{360n^3} + O(\frac{1}{n^5}). 
+```
+为两端为指数，求 e 的幂
+```math
+n!=e^\sigma\sqrt{n}(\frac{n}{e})^n exp(\frac{1}{12n}-\frac{1}{360n^3} + O(\frac{1}{n^5}))
+```
+利用 $`e^\sigma=sqrt{2\pi}`$，展开指数部分，获得最终结果
+```math
+n!=\sqrt{2\pi n}(\frac{n}{e})^n(1+\frac{1}{12n} + \frac{1}{288n^2} - \frac{139}{51840n^3} -\frac{571}{2488320n^4} + O(\frac{1}{n^5})). \qquad (19)
+```
+
 
 

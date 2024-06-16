@@ -1535,4 +1535,60 @@ n!=\sqrt{2\pi n}(\frac{n}{e})^n(1+\frac{1}{12n} + \frac{1}{288n^2} - \frac{139}{
 ```
 
 
+### 1.2.11.3 *若干渐进计算式
+这一节研究下面三个令人感兴趣的和，目的在于推导它们的近似值：
+```math
+P(n) = 1 + \frac{n-1}{n} + \frac{n-2}{n}\frac{n-2}{n-1} + \cdots = \sum_{k=0}^{n} \frac{(n-k)^k(n-k)!}{n!} . \qquad (1)
+```
+```math
+Q(n) = 1 + \frac{n-1}{n} + \frac{n-1}{n}\frac{n-2}{n} + \cdots = \sum_{k=0}^{n} \frac{n!}{(n-k)!n^k} . \qquad (2)
+```
+```math
+R(n) = 1 + \frac{n}{+1n} + \frac{n}{n+1}\frac{n}{n+2} + \cdots = \sum_{k\geq 0} \frac{n!n^k}{(n+k)!} . \qquad (3)
+```
+这三个函数出现在后面将要遇到的若干算法中，它们的形式相似而内在性质不同。P(n) 和 Q(n) 为有限和，而 R(n) 是无限和。当 n 为很大的数时，这三个函数看上去近乎相等，不过不能明显看出它们当中的任何一个近似值是什么。探讨这三个函数的近似值，将带来很多富有启发性的附带结果。
+
+首先，注意 P(n) 和 Q(n) 之间的了一个重要联系：
+```math
+Q(n)+R(n) = \frac{n!}{n^n}((1+n+\cdots+\frac{n^{n-1}}{(n-1)!})+(\frac{n^n}{n!}+\frac{n^{n+1}}{(n+1)!})) = \frac{n!e^n}{n^n} . \qquad (4)
+```
+斯特林公式告诉，$`n!e^n/n^n`$ 近似等于 $`\sqrt{2\pi n}`$，所以可以推测 Q(n) 和 R(n) 都粗略地等于 $`\sqrt{\pi n/2}`$。
+
+下一步，必须考虑 的级数的部分和。利用带余项的泰勒公式
+```math
+f(x) = f(0) + f'(0)x + \cdots + \frac{f^{(n)}(0)x^n}{n!} + \int_0^x \frac{t^n}{n!} f^{(n+1)}(x-t)dt. \qquad (5)
+```
+立即导出一个重要的函数
+```math
+\gamma(a,x) = \int_0^x e^{-t}t^{a-1}dt . \qquad (6)
+```
+这个函数称为 _不完全 $`\gamma(a,x)`$ 函数_。假定 a>0。 有 $`\gamma(a,\infty)=\Gamma(a)`$；这就是 “不完全 $`\gamma(a,x)`$ 函数” 这个名称的由来。它有两个很有用的按 x 展开的级数:
+```math
+\gamma(a,x) = \frac{x^a}{a} - \frac{x^{a+1}}{a+1} + \frac{x^{a+2}}{a+2} - \cdots . = \sum_{k\geq 0}  \frac{(-1)^kx^{a+k}}{k!(a+k)} \qquad (7)
+```
+```math
+e^{x}\gamma(a,x) = \frac{x^a}{a} + \frac{x^{a+1}}{a(a+1)} + \frac{x^{a+2}}{a(a+1)(a+2)} + \cdots . = \sum_{k\geq 0} \frac{x^{a+k}}{a(a+1)\cdots(a+k)} \qquad (8)
+```
+从第二个公式看出它同 R(n) 的联系：
+```math
+R(n) = \frac{n!e^n}{n^n}(\frac{\Gamma(n,n)}{(n-1)!})  \qquad (9)
+```
+这里特意不把这个等式写成最简形式，因为 $`\gamma(n,n)`$ 是 $`\gamma(n,\infty)=\Gamma(n)=(n-1)!`$ 的一部分，而 $`n!e^n/n^n`$ 是关系式 (4) 右端的量。
+
+求近似值问题于是归结为求 $`\gamma(n,n)/(n-1)!`$ 的理想估计。现在假定 y 是固定的，x 取很大的值，来确定 $`\gamma(x=1,x+y)/\Gamma(x+1)`$ 的近似值。下面使用的方法比将要获得的结果更为重要。
+
+按照定义有
+```math
+\frac{\gamma(x+1,x+y)}{\Gamma(x+1)} = \frac{1}{\Gamma(x+1)}\int_0^{x+y} e^{-t}t^{x}dt \\
+= 1 - \frac{1}{\Gamma(x+1)}\int_x^\infty e^{-t}t^{x}dt + \frac{1}{\Gamma(x+1)}\int_x^{x+y} e^{-t}t^{x}dt \qquad (10)
+```
+置
+```math
+I_1 = \int_x^\infty e^{-t}t^{x}dt, \\
+I_1 = \int_x^{x+y} e^{-t}t^{x}dt, \\
+```
+依次考察这两个积分。
+
+
+
 

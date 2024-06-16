@@ -64,6 +64,8 @@ public class SWAR {
 
         System.out.println(parseDataPoint(byteArrayToLong(temperature.getBytes())));
 
+        System.out.println(Integer.MIN_VALUE >> 1);
+        System.out.println(Integer.MIN_VALUE >>> 1);
         
     }
 }

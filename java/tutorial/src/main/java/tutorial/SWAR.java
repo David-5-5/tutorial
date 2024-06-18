@@ -94,7 +94,7 @@ public class SWAR {
         long digits = alignedToTemplate & ASCII_TO_DIGIT_MASK;
         long absValue = ((digits * MAGIC_MULTIPLIER) >>> 32) & 0x3FF;
         long temperature = (absValue ^ broadcastSign) - broadcastSign;
-        long nextLineStart = (dotPos >>> 3) + 3;
+        // long nextLineStart = (dotPos >>> 3) + 3;
         return (int) temperature;
     }
 

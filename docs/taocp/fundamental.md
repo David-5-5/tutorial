@@ -1590,5 +1590,92 @@ I_1 = \int_x^{x+y} e^{-t}t^{x}dt, \\
 依次考察这两个积分。
 
 
+$`I_1`$ 的估计：代入 t=x(1+u) ，把 $`I_1`$ 转换成从 0 到无穷大的积分；进一步代入 v=u-ln(1+u) 和 dv = (1 - 1/(1+u))du，
+```math
+I_1 = e^{-x}x^x\int_0^\infty xe{-xu}du = e^{-x}x^x\int_0^\infty xe^{-xv}(1+\frac{1}{u})dv. \qquad (11)
+```
+在最后这个积分中，用 的一个幂级数替换 。得到
+```math
+v = \frac{1}{2}u^2 - \frac{1}{3}u^3 + \frac{1}{4}u^4 - \frac{1}{5}u^5 + \cdots = 
+(u^2/2)(1-\frac{2}{3}u+\frac{1}{2}u^2-\frac{2}{5}u^3+\cdots) .
+```
+置 $`w=\sqrt{2v}`$，因此有
+```math
+w = u(1-\frac{2}{3}u+\frac{1}{2}u^2-\frac{2}{5}u^3+\cdots)^\frac{1}{2} = u - \frac{1}{3}u^2 + \frac{7}{36}u^3 - \frac{73}{540}u^4 + \frac{1331}{12960}u^5 + O(u^6).
+```
+这个展开式可以通过二项式定理获得。，现在可以把 u 作为 w 的幂级数求解：
+```math
+u = w + \frac{1}{3}w^2 + \frac{1}{36}w^3 - \frac{1}{270}w^4 + \frac{1}{4320}w^5 + O(w^6).
+```
+```math
+1 + \frac{1}{u} = 1 + \frac{1}{w} - \frac{1}{3} + \frac{1}{12}w - \frac{2}{135}w^2 + \frac{1}{864}w^3 + O(w^4)\\
+= \frac{1}{\sqrt{2}}v^{-1/2} + \frac{2}{3} + \frac{\sqrt{2}}{12}v^{1/2} - \frac{4}{135}v + \frac{\sqrt{2}}{432}v^{3/2} + O(v^2) \qquad (12)
+```
+在所有这些公式中，大 O 记号都是指很小的变量值，就是说，对于足够小的正数 r，有 $`|u|\leq r,|v|\leq r,|w|\leq r`$。这样足以令人满意吗？在等式 (11) 中，用 v 代换 1+1/u 的时候，应当对于 $`0\leq x <\infty`$ 成立，而不仅对于 $`|v|\leq r`$ 成立。幸好，对于这个积分，从 0 到 $`\infty`$ 的积分值几乎完全依赖于被积函数在自变量接近零时的取值。事实上，对于任意固定的 r>0 以及很大的 x，有
+```math
+\infty xe^{-xv}(1+\frac{1}{u})dv = O(e^{-rx}) \qquad (13)
+```
+感兴趣的是一直到 $`O(x^{-m})`$ 项的近似值；由于对于任意正数 r 和 m，$`O((1/e^r)^x)`$ 都远远小于 $`O(x^{-m})`$，仅需要从 0 到任何固定的正数 r 积分。因此取足够小的 r，就可以保证上面对幂级数的所有处理都是正确的。
+```math
+\int_r^\infty xe^{-xv}(1+\frac{1}{u})dv = O(e^{-rx}) \qquad (13)
+```
+现在有
+```math
+\int_0^\infty xe^{-xv}v^\alpha dv = \frac{1}{x^\alpha}\int_0^\infty e^{-q}q^\alpha dq = \frac{1}{x^\alpha}\Gamma(\alpha+1) , where \alpha > -1, \qquad (14)
+```
+所以，通过把级数 (12) 插入积分 (11)，终于得到
+```math
+I_1 = e^{-x}x^x(\sqrt{\frac{\pi}{2}}x^{1/2} + \frac{2}{3} + \frac{\sqrt{2\pi}}{24}x^{-1/2} - \frac{4}{135}x^{-1} + \frac{\sqrt{2\pi}}{576}x^{-3/2} + O(x^{-2})) \qquad (15)
+```
+$`I_2`$ 的估计：在积分 中代入 t=u+x，得到
+```math
+I_2 = e^{-x}x^x\int_0^ye{-u}(1+\frac{u}{x})^x du \qquad (16)
+```
+于是有
+```math
+e{-u}(1+\frac{u}{x})^x = exp(-u + x\ln(1+\frac{u}{x})) = exp(\frac{-u^2}{2x} + \frac{x^3}{2x^2} + O(x^{-3})) \\
+= 1 - \frac{u^2}{2x} + \frac{u^4}{8x^2} + \frac{u^3}{3x^2} + O(x^{-3})
+```
+其中 $`0\leq u\leq y`$，x 很大。因此求出
+```math
+I_2 = e^{-x}x^x(y-\frac{y^3}{6}x^{-1}+(\frac{y^4}{12} +\frac{y^5}{40})x^{-2} + O(x^{-3})) \qquad (17)
+```
+最后在分析式 (10) 中用因式 $`1/\Gamma(x+1)`$ 乘式 (15) 和 (17) 时出现的系数 $`e^{-x}x^x/\Gamma(x+1)`$。斯特林近似式对于 $`\Gamma`$ 函数成立；由此可得
+```math
+\frac{e^{-x}x^x}{\Gamma(x+1)}=\frac{e^{-1/12x+O(x^{-3})}}{\sqrt{2\pi x}} \\
+= \frac{1}{\sqrt{2\pi}}x^{-1/2} - \frac{1}{12\sqrt{2\pi}}x^{-3/2} + \frac{1}{288\sqrt{2\pi}}x^{-5/2} + O(x^{-7/2}) \qquad (18)
+```
+现在集 (10)(15)(17)(18) 之大成，隆重推出 --
+
+__定理 A.__ 对于很大的 x 和固定的 y，
+```math
+\frac{\gamma(x+1,x+y)}{\Gamma(x+1)} = \frac{1}{2} + \frac{y-2/3}{\sqrt{2\pi}}x^{-1/2} + 
+\frac{1}{\sqrt{2\pi}}(\frac{23}{270}-\frac{y}{12}-\frac{y^3}{6})x^{-3/2} + O(x^{-5/2}) \qquad (19)
+```
+上面的方法已经表明，这个近似式可以扩展到想达到的任意阶 x 幂。
+
+利用等式 (4) 和 (9)，可以用 __定理 A__ 求 R(n) 和 Q(n) 的近似值，但是此项计算以后再做。现在研究 P(n)，它似乎需要采用不同的方法。有
+```math
+P(n) = \sum_{k=0}^n\frac{k^{n-k}k!}{n!} = \frac{\sqrt{2\pi}}{n!}\sum_{k=0}^nk^{n+1/2}e{-k}(1+\frac{1}{12k}+O(k^{-2})) \qquad (20)
+```
+因此，为了得到 P(n) 的值，必须研究形如
+```math
+\sum_{k=0}^nk^{n+1/2}e{-k}
+```
+的和。
+
+令 $`f(x)=x^{n+1/2}e{-x}`$，应用欧拉求和公式
+```math
+\sum_{k=0}^nk^{n+1/2}e{-k}=\int_0^n x^{n+1/2}e{-x} + \frac{1}{2}n^{n+1/2}e{-n} + \frac{1}{24}n^{n-1/2}e{-n} - R. qquad (21)
+```
+对余式的粗略分析表明，$`R=O(n^ne{-n})`$；又由于积分是一个不完全 $`\gamma`$ 函数，有
+```math
+\sum_{k=0}^nk^{n+1/2}e{-k}=\gamma(n+\frac{2}{3},n) + \frac{1}{2}n^{n+1/2}e{-n} + O(n^ne{-n}). qquad (22)
+```
+式 (20) 还需要估计和式
+```math
+\sum_{k=0}^nk^{n-1/2}e{-k}=\sum_{0\leq k\leq n-1}k^{(n-1)+1/2}e{-k} n^{n-1/2}e{-n},
+```
+这个估计也可以通过式 (22) 获得。
 
 

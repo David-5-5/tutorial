@@ -211,10 +211,10 @@ print((datetime.now()- begin).total_seconds())
 
 
 # print("KMP find aa..aa")
-# from datetime import datetime
-# begin = datetime.now()
-# print(KMPSearch(''.ljust(10000,'a'), ''.ljust(30000,'a')))
-# print((datetime.now()- begin).total_seconds())
+from datetime import datetime
+begin = datetime.now()
+print(KMPSearch(''.ljust(3000,'a'), ''.ljust(10000,'a')))
+print((datetime.now()- begin).total_seconds())
 
 # print("boyer_moore find aa..aa")
 # begin = datetime.now()

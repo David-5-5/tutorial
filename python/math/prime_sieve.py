@@ -82,25 +82,9 @@ N = 10 ** 5 + 1
 
 
 # 求 数 i 不同质因子的数量
-def pre(n:int):
-    g = [0] * N
-    primes = []
-    is_prime = [True] * (n+1)
-    is_prime[0]  = is_prime[1] = False
+g = [0] * N
 
-    for i in range(2, n+1):
-        if not is_prime[i]: continue
-        primes.append(i)
-        # g[i] = 1
-        if i*i > n: continue
-        # 倍数从当前素数开始, 类如2 * 2, 后续元素 + 2
-        # 3 从 3 * 3 开始,  后续元素 + 3,  不需要从 6 开始
-        # 同理 5, 从 5 * 5开始,  后续元素 + 5 
-        for j in range(i, n+1, i):
-            is_prime[j] = False
-            g[j] += 1
-    
-    print(g[200:220])
-    return primes
-
-pre(100000)
+for i in range(2, N):  # 预处理 omega
+    if g[i] == 0:  # i 是质数
+        for j in range(i, N, i):
+            g[j] += 1  # i 是 j 的一个质因子

@@ -1,5 +1,5 @@
 from typing import List
-# 力扣周赛 359, 属于[线性 DP]
+# 力扣周赛 359, 属于[线性 DP] 不相交区间
 # refer to https://www.bilibili.com/video/BV1Xj411K7oF/
 # https://leetcode.cn/problems/maximize-the-profit-as-the-salesman/solutions/2396402/xian-xing-dpfu-xiang-si-ti-mu-pythonjava-wmh7/
 # https://leetcode.cn/circle/discuss/tXLS3i/

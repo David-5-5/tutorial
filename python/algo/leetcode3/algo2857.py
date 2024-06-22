@@ -1,23 +1,16 @@
-import collections
+
+from collections import Counter
 from typing import List
 
 class Solution:
     def countPairs(self, coordinates: List[List[int]], k: int) -> int:
-        n = len(coordinates)
-        m = 10 ** 6 + 1
-        group = collections.defaultdict(int)
-        for pos in coordinates:
-            group[pos[0]*m+pos[1]] += 1
+        cnt = Counter()
         
         ans = 0
-        for i in range(n-1):
-            x, y = coordinates[i][0], coordinates[i][1]
-            group[x*m+y] -= 1 
-
+        for x, y in coordinates:
             for j in range(k+1):
-                x_ = x ^ j
-                y_ = y ^ (k-j)
-                ans += group[x_*m+y_]
+                ans += cnt[x ^ j, y ^ (k-j)]
+            cnt[x,y] += 1
         return ans
 
 if __name__ == "__main__":

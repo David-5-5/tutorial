@@ -4,24 +4,30 @@ from typing import List
 class Solution:
     def minEdgeReversals(self, n: int, edges: List[List[int]]) -> List[int]:
         
-        children = set()
-        graph = defaultdict(list)
+        graph = [[] for _ in range(n)] 
 
         for e in edges:
-            graph[e[0]].append(e[1])
-            children.add(e[1])
+            graph[e[0]].append((e[1],1))
+            graph[e[1]].append((e[0],-1))
         
-        root = list(set([i for i in range(n)]) - children)
 
         ans = [0] * n
+        def dfs(i:int, fa:int) :
+            for v, dir in graph[i]:
+                if v != fa:
+                    if dir < 0: ans[0]+=1
+                    dfs(v,i)
+
+        dfs(0, -1)
         
-        que = deque()
-        que.append((root[0], 0))
-        while que:
-            i, l = que.popleft()
-            ans[i] = l
-            for v in graph[i]:
-                que.append((v, l+1))
+        def reroot(i:int, fa:int): 
+            for v, dir in graph[i]:
+                if v != fa:
+                    ans[v] = ans[i] + dir
+                    reroot(v, i)
+                    
+        reroot(0, -1)             
+
         return ans
 if __name__ == "__main__":
     sol = Solution()

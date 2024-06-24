@@ -1067,9 +1067,26 @@ __*确定最小代价__
 事实上，当 n=4 且 r=6 时，这 $`25\cdot 5^6=390 625`$ 种试验仅仅产生一类函数，此类函数不能通过任何自顶向下加自底向上的链用 6 步计算。这个以不完全对称函数 $`(\langle x_1x_2x_3\rangle\vee x_4)\oplus(x_1\wedge x_2\wedge x_3)`$ 为代表的缺少 $`C(f)`$ 的函数类，通过恰当的指定上面所属的前 5 种链种的任何一种链，可以用 6 步达到。例如，对应于第一种特别链的一个方式是
 ```math
 x_5=x_1\wedge x_2, x_6=x_1\vee x_2, x_7=x_3\oplus x_5, \\
-x_8=x_4\wedge\overline x_5, x_9=x_6\wedge x_7, x_10=x_8\vee x_9 \qquad(18)
+x_8=x_4\wedge\overline x_5, x_9=x_6\wedge x_7, x_10=x_8\vee x_9 \qquad(19)
 ```
 由于所有其他函数有 $`L(f)\leq 7`$，因而这些试验计算确定了所有情况的真实最小代价。
+
+_历史注记_: 对首次联合尝试以最优方式求值所有布尔函数 f(w,x,y,z) 的报道，霍华德艾肯的研究人员提出了他们所能构造的最佳开关电路的一些试探方法和大量的数据表。他们的代价量度 V(f) 不同于我们考虑的代价 C(f)。因为它是建立在真空管的 “控制栅极” 基础上的。他们有 4 种类型的门电路：NOT(f)、NAND(f,g)、$`OR(f_1,\cdots,f_k)`$ 和  $`AND(f_1,\cdots,f_k)`$，其代价分别为1,2, k 和 0. NOT、NAND、OR 的每个输入可能是一个变量，可能是一个变量的补，或者是前面的门的输出; AND 的每个输入必须或者是 NOT 尚未在别处使用的 NAND 的输出。
+
+使用代价准则，一个函数可能不具有如其补一样的代价。例如，可以把 $`x\wedge y`$ 作为 $`AND(NOT(\overline x), NOT(\overline y))`$ 以代价 2 求值;但是，$`\overline x\vee(\overline y\wedge\overline z)=NAND(x, OR(y,z))`$ 的代价是 4，而它的补 $`x\wedge(y\vee z)=AND(\overline x, NAND(\overline y,\overline z))`$ 的代价仅为 3。所以，哈佛大学的研究人员需要考虑 402 种而不是 222 种实际上不同的 4 变量函数类。在那个年代，它们自然主要用手工计算。除了与 $`S_{0,1}(w,x,y,z)\vee (S_2(w,x,y)\wedge z)`$ 等价的 64 个函数，它们求出了在所有情况下 V(f) < 20，其时他们用 20 个控制栅极求值如下：
+```math
+g_1 = AND(NOT(\overline w), NOT(\overline x)), g_2 = NAND(\overline y, \overline z) \\
+g_3 = AND(NOT(w), NOT(x));
+f = AND(NAND(g_1,g_2),NAND(g_3,AND(NOT(\overline y),NOT(\overline z))), \\
+NOT(AND(NOT(g_3),NOT(\overline y),NOT(Z))),\\
+NOT(AND(NOT(g_1),NOT(g_2),NOT(g_3)))) \qquad(20)
+```
+求可严重的最优电路的第一个计算机程序由利奥赫勒曼编写，他对任何给定函数 f(x,y,z) 的求值确定了所需的最少 NOR 门。他要求每个门的每个输入或者是不带补的变量，或者是前一个门的输出；限制了扇入和扇出最多为 3。当两个电路就有同等数量的门时，他宁愿采用具有最小输入和的电路。例如，他计算出 $`\overline x=NOR(x)`$ 的代价是 1； $`x\vee y\vee z=NOR(NOR(x,y,z))`$ 的代价是 2； < xyz > = NOR(NOR(x,y),NOR(x,z),NOR(y,z)) 的代价是 4； $`S_1(x,y,z)=NOR(NOR(x,y,z),<xyz>)`$ 的代价是 6；等等。由于了限制了扇出为 3，因而他发现每个 3 变量的函数可以用 7 或者更小的代价求值，只有奇偶性函数 $`x\oplus y\oplus z=(x\equiv y)\equiv z`$，其中 $`x\equiv y`$ 的代价是4，因为它是 NOR(NOR(x,NOR(x,y)),NOR(y,NOR(x,y)))。
+
+电气工程师们对于其他代价标准进行了不断的探索，但是，直到富兰克林梁在1977年建立表1种所示的 C(f) 值之前，4 变量函数看来没有取得进展。富兰克林梁没有发表的推导，建立在不能用自底向上结构简化的所有链的研究基础之上。
+
+
+__n == 5的情况__
 
 
 

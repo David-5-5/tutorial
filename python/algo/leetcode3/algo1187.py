@@ -22,8 +22,8 @@ class Solution:
             inx = bisect_right(arr2, prev)
             if inx < m:
                 res = min(res, dfs(i+1, arr2[inx])+1)
-            elif prev >= arr1[i]:
-                return inf
+            # elif prev >= arr1[i]:
+            #     return inf
 
             return res
 

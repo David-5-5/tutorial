@@ -4,6 +4,7 @@ from functools import lru_cache
 # 例如 score(3 -> 1 -> 0 -> 4 -> 2) = score(1 -> 0 -> 4 -> 2 -> 3) = score(0 -> 4 -> 2 -> 3 -> 1)
 # dfs 求出最小值
 # print_ans 与 dfs 的结构一致，打印出最终结果，套路
+# 双周赛 397
 class Solution:
     def findPermutation(self, nums: List[int]) -> List[int]:
         n = len(nums)

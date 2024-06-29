@@ -15,7 +15,6 @@ class Solution:
             graph[v].append((u, w))
 
         def dijkstra(s:int, graph)->List[int]:
-            n = len(graph)
             dist = [inf] * n
             visited = [False] * n
 
@@ -36,7 +35,7 @@ class Solution:
 
 
         d0 = dijkstra(source, graph)
-        print(d0)
+        
 
         if d0[destination] > target:
             return []
@@ -44,7 +43,6 @@ class Solution:
         delta = target - d0[destination]
 
         def dijkstra1(s:int, graph)->List[int]:
-            n = len(graph)
             dist = [inf] * n
             visited = [False] * n
 
@@ -66,6 +64,7 @@ class Solution:
             return dist
         
         d1 = dijkstra1(source, graph)
+        print(d1)
         if d1[destination] != target:
             return []
 
@@ -82,4 +81,5 @@ class Solution:
 if __name__ == "__main__":
     sol = Solution()
     n, edges, source, destination, target = 5, [[4,1,-1],[2,0,-1],[0,3,-1],[4,3,-1]], 0, 1, 5
+    n, edges, source, destination, target = 4, [[0,1,-1],[1,2,-1],[3,1,-1],[3,0,2],[0,2,5]], 2, 3, 8
     print(sol.modifiedGraphEdges(n, edges, source, destination, target))

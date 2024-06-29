@@ -22,8 +22,9 @@ class Solution:
             
             # 动态规划 选或不选
             return min(dfs(i-1, j-1), dfs(i-1, j+time[i]) + cost[i])
-        
-        return dfs(n-1, 0)
+        ans = dfs(n-1, 0)
+        # dfs.cache_clear()
+        return ans
     
     
     # 装换成 0-1背包，使用 c++ 实现

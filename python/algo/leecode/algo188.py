@@ -1,4 +1,4 @@
-from functools import lru_cache
+from functools import cache
 def profit(k:int ,prices, inx: int, visited) -> int:
     if k == 0: return 0
     if (k, inx) in visited.keys(): return visited[(k, inx)]
@@ -30,7 +30,7 @@ class Solution:
     def maxProfit(self, k: int, prices) -> int:
         visited = {}
 
-        @lru_cache(maxsize = None)
+        @cache
         def profit(k:int, inx: int) -> int:
             if k == 0: return 0
             if (k, inx) in visited.keys(): return visited[(k, inx)]
@@ -136,7 +136,7 @@ class Solution:
     def maxProfit3(self, k: int, prices: List[int]) -> int:
         n = len(prices)
 
-        @lru_cache(maxsize = None)
+        @cache
         def dfs(i:int,j:int, hold:bool):
             if j < 0: return -float("inf")
             if i < 0:
@@ -156,5 +156,8 @@ if __name__ == "__main__":
     from datetime import datetime
     begin = datetime.now()
     print(sol.maxProfit2(k, prices))
+    print((datetime.now()- begin).total_seconds())
+    begin = datetime.now()
+    print(sol.maxProfit3(k, prices))
     print((datetime.now()- begin).total_seconds())
 

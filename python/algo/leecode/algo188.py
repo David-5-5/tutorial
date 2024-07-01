@@ -1,3 +1,4 @@
+from math import inf
 from functools import cache
 def profit(k:int ,prices, inx: int, visited) -> int:
     if k == 0: return 0
@@ -138,9 +139,9 @@ class Solution:
 
         @cache
         def dfs(i:int,j:int, hold:bool):
-            if j < 0: return -float("inf")
+            if j < 0: return -inf
             if i < 0:
-                return -float("inf") if hold else 0
+                return -inf if hold else 0
             if hold:
                 return max(dfs(i-1,j,True), dfs(i-1, j, False)-prices[i])
             return max(dfs(i-1, j, False), dfs(i-1, j-1, True) + prices[i])

@@ -10,6 +10,7 @@ for i in range(2, isqrt(N)+1):
         for j in range(i*i, N+1, i):
             min_prime_factor[j] = i
 
+# Similiar to leetcode 952
 class Solution:
     def canTraverseAllPairs(self, nums: List[int]) -> int:
         n = len(nums)

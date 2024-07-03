@@ -25,4 +25,4 @@ class Solution:
 
 if __name__ == "__main__":
     sol = Solution()
-    print(sol.countOperationsToEmptyArray([1,2,4,3]))
+    print(sol.countOperationsToEmptyArray([1,3,2,4]))

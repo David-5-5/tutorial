@@ -2,11 +2,11 @@ from typing import List
 
 
 class TreeArray:
-    
+    __slots__ =('nums', 'tree')
 
     def __init__(self, nums:List[int]) -> None:
-        self.n = len(nums)
-        self.tree = [0] * (self.n+1)
+        self.nums = [0] * len(nums)
+        self.tree = [0] * (len(nums) + 1)
         for i, num in enumerate(nums):
             self.update(i, num)
 
@@ -19,17 +19,20 @@ class TreeArray:
                 low += 1
             return 2 ** low
         
-        self.tree[i+1] += num
-        next = (i+1) + lowbit((i+1))
-        while next < self.n:
-            self.tree[next] += num
-            next = next + lowbit(next)
+        delta = num - self.nums[i]
+        ti = i + 1
+        self.tree[ti] += delta
+        ti = (ti) + lowbit((ti))
+        while ti < len(self.tree):
+            self.tree[ti] += delta
+            ti = ti + lowbit(ti)
     
     def _query(self, end:int):
         sinx = list(bin(end)[2:])
         inx = res = 0
         for i, v in enumerate(sinx):
-            inx += 2 ** (len(sinx)-1-i) if v else 0
+            if v == '0': continue
+            inx += 2 ** (len(sinx)-1-i)
             res += self.tree[inx]
         return res
 
@@ -39,5 +42,5 @@ class TreeArray:
 
 if __name__ == "__main__":
     ta = TreeArray([i+1 for i in range(16)])
-    print(ta.query(1,16))
+    print(ta.query(3,15))
     

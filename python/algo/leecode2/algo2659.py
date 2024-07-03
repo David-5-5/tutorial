@@ -22,3 +22,7 @@ class Solution:
                 ans += n - k
 
         return ans
+
+if __name__ == "__main__":
+    sol = Solution()
+    print(sol.countOperationsToEmptyArray([1,2,4,3]))

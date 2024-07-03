@@ -1,0 +1,10 @@
+Mango;32.3
+Warsaw;-5.4
+Kuwait City;27.5
+Fresno;17.8
+Cotonou;27.9
+Virginia Beach;28.6
+Upington;35.0
+Karonga;18.5
+Andorra la Vella;-15.6
+Juba;3.3

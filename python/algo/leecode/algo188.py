@@ -1,4 +1,5 @@
-from functools import lru_cache
+from math import inf
+from functools import cache
 def profit(k:int ,prices, inx: int, visited) -> int:
     if k == 0: return 0
     if (k, inx) in visited.keys(): return visited[(k, inx)]
@@ -30,7 +31,7 @@ class Solution:
     def maxProfit(self, k: int, prices) -> int:
         visited = {}
 
-        @lru_cache(maxsize = None)
+        @cache
         def profit(k:int, inx: int) -> int:
             if k == 0: return 0
             if (k, inx) in visited.keys(): return visited[(k, inx)]
@@ -126,6 +127,26 @@ class Solution:
             ret += (trade[1] - trade[0])
         return ret
 
+    from typing import List
+    # From algo 122, add condition, tranactions <= k
+    # 状态转移方程增加 一个状态 j 不超过 k
+    # dfs(i, j, False) = max(dfs(i-1, j, False),                不变化
+    #                        dfs(i-1, j-1 True) + prices[i])    卖掉股票
+    # dfs(i, j, True) = max(dfs(i-1, j, True),                  不变化
+    #                       dfs(i-1, j, False) - prices[i])     买入股票
+    def maxProfit3(self, k: int, prices: List[int]) -> int:
+        n = len(prices)
+
+        @cache
+        def dfs(i:int,j:int, hold:bool):
+            if j < 0: return -inf
+            if i < 0:
+                return -inf if hold else 0
+            if hold:
+                return max(dfs(i-1,j,True), dfs(i-1, j, False)-prices[i])
+            return max(dfs(i-1, j, False), dfs(i-1, j-1, True) + prices[i])
+
+        return dfs(n-1, k, False)
 
 if __name__ == "__main__":
     sol = Solution()
@@ -136,5 +157,8 @@ if __name__ == "__main__":
     from datetime import datetime
     begin = datetime.now()
     print(sol.maxProfit2(k, prices))
+    print((datetime.now()- begin).total_seconds())
+    begin = datetime.now()
+    print(sol.maxProfit3(k, prices))
     print((datetime.now()- begin).total_seconds())
 

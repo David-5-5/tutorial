@@ -61,7 +61,35 @@ class Solution:
         return sum_dis
 
 
+    # refer to https://leetcode.cn/problems/sum-of-distances-in-tree/solutions/2345592/tu-jie-yi-zhang-tu-miao-dong-huan-gen-dp-6bgb/
+    def sumOfDistancesInTree2(self, n: int, edges) :
+        graph = [[] for _ in range(n)]
+        for edge in edges:
+            graph[edge[0]].append(edge[1])
+            graph[edge[1]].append(edge[0])
+
+        size = [1] * n
+        ans = [0] * n
+        def dfs(i:int, fa:int, depth:int) :
+            ans[0] += depth
+            for v in graph[i]:
+                if v != fa:
+                    dfs(v, i, depth+1)
+                    size[i] += size[v]
+
+        dfs(0, -1, 0)
+        
+        def reroot(i:int, fa:int): 
+            for v in graph[i]:
+                if v != fa:
+                    ans[v] = ans[i] + n - 2 * size[v]
+                    reroot(v, i)
+                    
+        reroot(0, -1)            
+        return ans
+        
 if __name__ == "__main__":
     sol = Solution()
     n, edges = 6, [[0,1],[0,2],[2,3],[2,4],[2,5]]
     print(sol.sumOfDistancesInTree(n, edges))
+    print(sol.sumOfDistancesInTree2(n, edges))

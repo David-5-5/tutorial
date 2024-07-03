@@ -35,8 +35,47 @@ class Solution:
         
         return dp[m-1][n-1]
 
+    def longestCommonSubsequence2(self, text1: str, text2: str) -> int:
+        n = len(text1)
+        m = len(text2)
+        '''
+        思路同上, 避免i,j小于零的情况, 增加一行，一列
+        '''
+        dp = [[0] * (n+1) for _ in range(m+1)]
+
+        for i in range(m):
+            for j in range(n):
+                if text2[i] == text1[j]:
+                    dp[i+1][j+1] = dp[i][j] + 1
+                else:
+                    dp[i+1][j+1] = max(dp[i+1][j], dp[i][j+1])
+        
+        return dp[m][n]
+
+    def longestCommonSubsequence3(self, text1: str, text2: str) -> int:
+        n = len(text1)
+        m = len(text2)
+        '''
+        思路同上, 避免i,j小于零的情况, 增加一行，一列
+        '''
+        dp = [0] * (n+1)
+        prev = 0
+        # 仅使用一维数组, 提升空间复杂度
+        for i in range(m):
+            prev = dp[0]
+            for j in range(n):
+                tmp = dp[j+1]
+                if text2[i] == text1[j]:
+                    dp[j+1] = prev + 1
+                else:
+                    dp[j+1] = max(dp[j+1], dp[j])
+                prev = tmp
+        
+        return dp[m]
+    
 if __name__ == "__main__":
     sol = Solution()
     text1, text2 = "abcde", "ace" 
-    text1, text2  = "bl", "yby"
+    text1, text2  = "abc", "ab"
     print(sol.longestCommonSubsequence(text1, text2))
+    print(sol.longestCommonSubsequence3(text1, text2))

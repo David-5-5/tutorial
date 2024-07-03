@@ -28,7 +28,47 @@ class Solution:
             elif int(strn[i]) > 1:
                 cnt += (10 ** (lenn-i-1))
         return cnt
-    
+
+    # 支持二进制计算
+    def countDigitOne2(self, n: int) -> int:
+        strn = bin(n)[2:]
+
+        lenn = len(strn)
+
+        def toint(begin: int, end:int):
+            if begin >= end:
+                return 0
+            else:
+                return int(strn[begin:end],2)
+        cnt = 0
+        for i in range(lenn):
+            prec = toint(0,i) + 1
+            subc = toint(i+1, lenn) + 1
+            cnt += (prec - 1) * (2 ** (lenn-i-1))
+            if int(strn[i]) == 1:
+                cnt += subc
+            elif int(strn[i]) > 1:
+                cnt += (2 ** (lenn-i-1))
+        return cnt
+
+    # 灵茶山 数位DP
+    def countDigitOne3(self, n: int) -> int:
+        s = bin(n)[2:]
+        from functools import lru_cache
+        @lru_cache(maxsize = None)
+        def f(i: int, cnt1: int, is_limit: bool) -> int:
+            if i == len(s):
+                return cnt1
+            res = 0
+            up = int(s[i]) if is_limit else 1
+            for d in range(up + 1):  # 枚举要填入的数字 d
+                res += f(i + 1, cnt1 + (d == 1), is_limit and d == up)
+            return res
+        return f(0, 0, True)
+
+
 if __name__ == "__main__":
     sol = Solution()
-    print(sol.countDigitOne(0))
+    print(sol.countDigitOne(6))
+    print(sol.countDigitOne2(444))
+    print(sol.countDigitOne3(444))

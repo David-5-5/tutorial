@@ -1,6 +1,29 @@
 class Solution:
     def countPalindromes(self, s: str) -> int:
-        n = len(s)
+        suf = [0]  * 10
+        suf2 = [0] * 100
+        for d in reversed(s):
+            for d2 in range(10):
+                suf2[d2*10 + int(d)] += suf[d2]
+            suf[int(d)] += 1
+
+        pre = [0]  * 10
+        pre2 = [0] * 100
+        ans = 0
+        for d in s:
+            suf[int(d)] -= 1
+            for d2 in range(10):
+                suf2[d2*10+int(d)] -= suf[d2]
+
+            for i in range(100):
+                ans += pre2[i] * suf2[i]
+
+            for d2 in range(10):
+                pre2[d2*10 + int(d)] += pre[d2]
+            pre[int(d)] += 1
+        
+        return ans % (10**9 + 7)
+
 
     # dynamic programing, but the Time Complexity is not satisfied
     def countPalindromes2(self, s: str) -> int:
@@ -25,7 +48,9 @@ class Solution:
         return dp5[0][n-1] % (10 ** 9 + 7)
 
 
+
 if __name__ == "__main__":
     sol = Solution()
     s = "000000" 
     print(sol.countPalindromes(s))
+    print(sol.countPalindromes2(s))

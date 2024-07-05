@@ -63,3 +63,43 @@ class Solution:
 
         return calculate(0, False)
     
+    def minimumTotalPrice2(self, n: int, edges: List[List[int]], price: List[int], trips: List[List[int]]) -> int:
+        # 参考双周赛视频题解
+        graph = [[] for _ in range(n)]
+        for u, v in edges:
+            graph[u].append(v)
+            graph[v].append(u)
+
+        p_sum = [0] * n
+        for start, end in trips:
+            # x: current node
+            # fa: father node, replace the visited array
+            def dfs(x:int, fa:int)->bool:
+                if x == end:
+                    p_sum[x] += 1
+                    return True
+                for v in graph[x]:
+                    if v != fa and dfs(v, x):
+                        p_sum[x] += 1
+                        return True
+                return False
+            dfs(start, -1)
+
+
+        def calculate(x:int, fa:int)-> List[int]: 
+            full = p_sum[x] * price[x]
+            half = full // 2
+            for v in graph[x]:
+                if v == fa: continue
+                f, h = calculate(v,x)
+                full += min(f, h)
+                half += f
+            return [full, half]
+
+        return min(calculate(0, -1))
+
+if __name__ == "__main__":
+    sol = Solution()
+    n, edges, price, trips = 4, [[0,1],[1,2],[1,3]], [2,2,10,6], [[0,3],[2,1],[2,3]]
+    print(sol.minimumTotalPrice(n, edges, price, trips))
+    print(sol.minimumTotalPrice2(n, edges, price, trips))

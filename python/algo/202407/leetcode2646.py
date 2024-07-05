@@ -39,10 +39,10 @@ class Solution:
         visited = [False] * n
         visited[0] = True
         @cache
-        def calculate(x:int, father:bool) -> int:
+        def calculate(x:int, is_half:bool) -> int:
             '''
             x: 当前访问的节点
-            father: x 的父节点是否半价 True 表示半价, False 表示原价
+            is_half: x 的父节点是否半价 True 表示半价, False 表示原价
             
             因此当 x 的父节点是半价时, x 的价格只能为全价
             当 x 的父节点是原价时, x 的价格可以为全价 或 半价
@@ -54,15 +54,12 @@ class Solution:
 
                 visited[v] = True
                 res += calculate(v, False)
-                if not father:
+                if not is_half:
                     res2 += calculate(v, True)
                 visited[v] = False
 
-            if father:
-                return res
-            else:
-                return min(res, res2)
-
+            if is_half: return res
+            else: return min(res, res2)
 
         return calculate(0, False)
     

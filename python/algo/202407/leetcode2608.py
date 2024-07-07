@@ -2,6 +2,7 @@ from collections import deque
 from math import inf
 from typing import List
 
+# 检测图中是否存在环路
 
 class Solution:
     def findShortestCycle(self, n: int, edges: List[List[int]]) -> int:

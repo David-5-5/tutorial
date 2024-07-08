@@ -48,9 +48,10 @@ class Solution:
                                 q.append((u,v))
                 time += 1
             return False
+        
+        # 使用开区间 (left, right) 进行二分搜索
         right = m * n + 1
         left = -1
-
         while left + 1 < right:  # 区间不为空
 
             mid = (left + right) // 2

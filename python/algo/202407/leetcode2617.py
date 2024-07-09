@@ -14,6 +14,7 @@ class Solution:
             right = len(st)
             while left + 1 < right:
                 mid = (left + right) // 2
+                # st 是递减的
                 if st[mid][1] <= i:
                     right = mid
                 else:

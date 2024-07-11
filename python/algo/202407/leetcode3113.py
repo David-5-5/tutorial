@@ -1,5 +1,5 @@
 from typing import List
-
+# 自行解答，专题单调栈
 class Solution:
     def numberOfSubarrays(self, nums: List[int]) -> int:
         ans = len(nums)

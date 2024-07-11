@@ -1,6 +1,7 @@
 from collections import defaultdict
 from typing import List
 
+# 使用换根DP / reroot dp
 class Solution:
     def rootCount(self, edges: List[List[int]], guesses: List[List[int]], k: int) -> int:
         n = len(edges) + 1

@@ -12,6 +12,13 @@ class Solution:
             if 1 << i not in s:
                 return 1<<i
 
+    def minImpossibleOR2(self, nums: List[int]) -> int:
+        mask = 0
+        for num in nums:
+            if num&(num-1)==0 :
+                mask |= num
+        mask = ~mask
+        return mask & (-mask)
                         
 if __name__ == "__main__":
     sol = Solution()

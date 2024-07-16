@@ -2,7 +2,7 @@ from bisect import bisect_left, bisect_right
 from collections import defaultdict
 from typing import List
 
-
+# refer to https://www.bilibili.com/video/BV1bP411c7oJ/
 class Solution:
     def threeSum(self, nums: List[int]) -> List[List[int]]:
 
@@ -17,8 +17,7 @@ class Solution:
             # two pruning 
             if nums[i] + nums[i+1] + nums[i+2] > 0:break
             
-            if nums[i] + nums[-1] + nums[-2] < 0:
-                continue
+            if nums[i] + nums[-1] + nums[-2] < 0: continue
 
             j = i + 1
             k = n -1

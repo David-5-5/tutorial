@@ -2,6 +2,7 @@ from functools import cache
 from typing import List
 
 # 典型的多重背包问题
+# 二进制优化多重背包问题不适用于方案数
 class Solution:
     def waysToReachTarget(self, target: int, types: List[List[int]]) -> int:
         # 标准多重背包
@@ -85,15 +86,17 @@ class Solution:
 
         f = [0] * (target + 1)
         f[0] = 1
-        for i in range(n):
+        for count, marks in types:
             for j in range(target, 0, -1):
             # for j in range(target, 0, -1): 这样执行也是通过的
-                count, marks = types[i]
                 for k in range(1, min(count, j//marks)+1): # 从 1 开始
                     f[j] += f[j-k*marks]
         return f[-1] % MOD
+
+
 
 if __name__ == "__main__":
     sol = Solution()        
     target, types = 6, [[6,1],[3,2],[2,3]]
     print(sol.waysToReachTarget4(target, types))
+    print(sol.waysToReachTarget6(target, types))

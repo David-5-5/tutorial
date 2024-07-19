@@ -1,3 +1,4 @@
+from cmath import inf
 from typing import List
 
 class Solution:
@@ -42,10 +43,31 @@ class Solution:
             return len(st)
         else:
             return -1
+        
 
+    def minTaps3(self, n: int, ranges: List[int]) -> int:
+        # 参考题解，动态规划 时间复杂度 O(n*(logn + max(ranges)))
+        # 注： 本题中 n <= 10 ^ 4, ranges[i] <= 100
+        #     当 max(range) 接近 n 时，时间复杂度为 O(n^2)，应会超时
+        intervals = []
+        for i, v in enumerate(ranges):
+            start = max(0, i-v)
+            end = min(n, i+v)
+            intervals.append((start, end))
+        intervals.sort()
+
+        dp = [inf] * (n+1)
+        dp[0] = 0
+        for start, end in intervals:
+            if dp[start] == inf:
+                return -1
+            for i in range(start, end+1):
+                dp[i] = min(dp[i], dp[start]+1)
+        return dp[n]
+
+        
 if __name__ == "__main__":
     sol = Solution()
     n, ranges = 5, [3,4,1,1,0,0]
-    n, ranges = 202, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 1, 1, 1, 1]
     print(sol.minTaps(n, ranges))
-    print(sol.minTaps2(n, ranges))
+    print(sol.minTaps3(n, ranges))

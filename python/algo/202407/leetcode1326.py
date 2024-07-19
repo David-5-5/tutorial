@@ -70,11 +70,27 @@ class Solution:
         return dp[n]
 
         
+    def minTaps4(self, n: int, ranges: List[int]) -> int:
+        # 参考题解，rightMost
+        rightMost = [0] * (n+1)
+        for i, r in enumerate(ranges):
+            l = max(0, i-r)
+            rightMost[l] = max(rightMost[l], i + r)
 
+        ans, cur_right, next_right = 0, 0, 0
+        for i in range(n):
+            next_right = max(next_right, rightMost[i])
+            if i == cur_right: # i < 当前已达到的右端点时忽略
+                if i == next_right: return -1
+                
+                cur_right = next_right
+                ans += 1
+        return ans
 
 
 if __name__ == "__main__":
     sol = Solution()
     n, ranges = 5, [3,4,1,1,0,0]
+    n, ranges = 202, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 1, 1, 1, 1]
     print(sol.minTaps(n, ranges))
-    print(sol.minTaps3(n, ranges))
+    print(sol.minTaps4(n, ranges))

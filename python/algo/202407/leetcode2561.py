@@ -1,7 +1,33 @@
 from typing import Counter, List
 
+# 周赛 331
 class Solution:
+    def minCost(self, basket1: List[int], basket2: List[int]) -> int:
+        # 参考题解，优化 minCost2 的两种情况
+        cnt = Counter()
+        min_k = min(min(basket1),min(basket2))
 
+        for x, y in zip(basket1, basket2):
+            cnt[x] += 1
+            cnt[y] -= 1
+        
+        pos = [] # basket1 多出的部分，需要转移到 basket2
+        neg = [] # basket2 多出的部分， 需要转移到 basket1
+
+        for k, c in cnt.items():
+            if c % 2 : return -1 # 奇数，不能分配平均分配
+            if c > 0:
+                pos.extend([k] * (c // 2))
+            elif c < 0:
+                neg.extend([k] * (-c // 2))
+        pos.sort()             # 从小到大排序    
+        neg.sort(reverse=True) # 从大到小排序，最小化交换代价
+
+        ans = 0
+        for k1, k2 in zip(pos,neg):
+            ans += min(min(k1,k2), 2 * min_k)
+
+        return ans
 
 
     def minCost2(self, basket1: List[int], basket2: List[int]) -> int:
@@ -9,7 +35,7 @@ class Solution:
         # 相关要点都已发现，但是转换代码的能力还欠缺 
         cnt1, cnt2 = Counter(basket1), Counter(basket2)
         key1, key2 = sorted(cnt1.keys()), sorted(cnt2.keys())
-        mink = min(min(basket1),min(basket2)) * 2
+        mink = min(min(basket1),min(basket2))
         pos = []
         neg = []
 

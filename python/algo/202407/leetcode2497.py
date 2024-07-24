@@ -1,7 +1,7 @@
 from heapq import nlargest
 from typing import List
 
-
+# 双周赛 93
 class Solution:
     def maxStarSum(self, vals: List[int], edges: List[List[int]], k: int) -> int:
         g = [[] for _ in range(len(vals))]

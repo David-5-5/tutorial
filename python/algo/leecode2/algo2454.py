@@ -1,4 +1,7 @@
+from bisect import bisect_right
 from typing import List
+
+from sortedcontainers import SortedList
 class Solution:
     def secondGreaterElement(self, nums: List[int]) -> List[int]:
         ''' 如果使用一个栈，当栈非空且栈顶元素小于当前元素，则找到当前元素的更大元素
@@ -23,7 +26,32 @@ class Solution:
             st1.append(i)
         return ans
 
+    def secondGreaterElement2(self, nums: List[int], k: int) -> List[int]:
+        ''' 通用方法
+        '''
+        # s, n = [], len(nums)
+        # ans = [-1] * n
+        # for i, _ in sorted(enumerate(nums), key=lambda x: -x[1]):
+        #     j = bisect_right(s, i) + k - 1
+        #     if j < len(s): ans[i] = nums[s[j]]
+        #     s.insert(j+1-k, i)
+
+        # return ans
+        
+        ''' 使用 SortedList
+        '''
+        s, n = SortedList(), len(nums)
+        ans = [-1] * n
+        for i, _ in sorted(enumerate(nums), key=lambda x: -x[1]):
+            j = s.bisect_right(i) + k - 1
+            if j < len(s): ans[i] = nums[s[j]]
+            s.add(i)
+
+        return ans
+        
+
 if __name__ == "__main__":
     sol = Solution()
     nums = [2,4,0,9,6]
     print(sol.secondGreaterElement(nums))
+    print(sol.secondGreaterElement2(nums, 2))

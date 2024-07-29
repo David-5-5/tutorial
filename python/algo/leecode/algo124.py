@@ -1,3 +1,4 @@
+from math import inf
 from common import TreeNode
 from typing import Optional
 # Definition for a binary tree node.
@@ -6,7 +7,7 @@ from typing import Optional
 #         self.val = val
 #         self.left = left
 #         self.right = right
-class Solution:
+class Solution: 
     maxPath = 0
     def maxPathSum(self, root: Optional[TreeNode]) -> int:
         stack = [root]
@@ -25,3 +26,19 @@ class Solution:
         right = self.maxChild(node.right)
         self.maxPath = max(self.maxPath, node.val, node.val+left, node.val+right, node.val + left + right)
         return max(0, node.val, node.val+left, node.val+right)
+
+    # 参考算法精讲23 及 543
+    def maxPathSum(self, root: Optional[TreeNode]) -> int:
+        ans = -inf
+
+        def dfs(node: TreeNode):
+            nonlocal ans
+            if node is None:return 0
+            l = dfs(node.left)
+            r = dfs(node.right)
+            l, r = max(l, 0), max(r, 0)
+            if l + r + node.val > ans: ans = l + r + node.val
+            return max(l, r) + node.val
+        
+        dfs(root)
+        return ans

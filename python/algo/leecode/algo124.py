@@ -36,9 +36,9 @@ class Solution:
             if node is None:return 0
             l = dfs(node.left)
             r = dfs(node.right)
-            l, r = max(l, 0), max(r, 0)
+
             if l + r + node.val > ans: ans = l + r + node.val
-            return max(l, r) + node.val
+            return max(max(l, r) + node.val, 0)
         
         dfs(root)
         return ans

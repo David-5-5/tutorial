@@ -9,45 +9,24 @@ class Solution:
             graph[edge[0]].append(edge[1])
             graph[edge[1]].append(edge[0])
 
-        dp = [0] * n
+
         ans = 0
-        # def dfs(u:int, fa:int):
-        #     nonlocal ans
-        #     for v in graph[u]:
-        #         if v == fa:continue
-        #         dfs(v, u)
-        #         ans = max(ans, dp[u] + dp[v] + price[v])
-        #         dp[u] = max(dp[u], dp[v] + price[v])
-        # dfs(3, -1)
-
-        def dfs(u:int, fa:int):
+        def dfs(u:int, fa:int) :
             nonlocal ans
-            for v in graph[u]:
-                if v == fa:continue
-                dp[v] = dp[u] + price[v]
-                if dp[v] > dp[ans] : ans = v
-                dfs(v, u)
-        dp[0] = price[0]
-        dfs(0, -1)
-        ans1 = ans
-        dp[ans] = price[ans]
-        dfs(ans, -1)
-
-        minp = price[ans]
-        def dfsm(u:int, fa:int) -> bool:
-            nonlocal minp
-            if u == ans1:
-                return True
+            mf = mno  = 0
             for v in graph[u]:
                 if v == fa: continue
-                if dfsm(v, u):
-                    if minp > price[v]:
-                        minp = price[v]
-                    return True
-            return False
-
-        dfsm(ans, -1)
-        return dp[ans] - minp
+                full, notail = dfs(v, u)
+                if mf == 0:
+                    ans = max(ans, full, notail + price[u])
+                else:
+                    ans = max(ans, full + mno + price[u], notail + mf + price[u])
+                if full > mf : mf = full
+                if notail > mno : mno = notail
+            
+            return mf + price[u], mno + (price[u] if mf else 0)
+        dfs(0, -1)
+        return ans
     
 
 if __name__ == "__main__":

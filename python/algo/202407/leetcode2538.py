@@ -1,7 +1,7 @@
 from math import inf
 from typing import List
 
-
+# 周赛328 
 class Solution:
     def maxOutput(self, n: int, edges: List[List[int]], price: List[int]) -> int:
         graph = [[] for _ in range(n)]
@@ -11,20 +11,35 @@ class Solution:
 
 
         ans = 0
+        # def dfs(u:int, fa:int) :
+        #     nonlocal ans
+        #     mx_f = mx_h  = 0
+        #     for v in graph[u]:
+        #         if v == fa: continue
+        #         f, h = dfs(v, u) # f, 带叶子节点的最大输出，不包含叶子节点的最大输出
+        #         if mx_f == 0:
+        #             ans = max(ans, f, h + price[u]) # 第一个节点 f不包含当前节点
+        #         else:
+        #             ans = max(ans, f + mx_h + price[u], h + mx_f + price[u])
+        #         if f > mx_f : mx_f = f
+        #         if h > mx_h : mx_h = h
+            
+        #     return mx_f + price[u], mx_h + (price[u] if mx_f else 0)
+
+        # 另一种写法
         def dfs(u:int, fa:int) :
             nonlocal ans
-            mf = mno  = 0
+            mx_f = p = price[u]
+            mx_h  = 0
             for v in graph[u]:
                 if v == fa: continue
-                full, notail = dfs(v, u)
-                if mf == 0:
-                    ans = max(ans, full, notail + price[u])
-                else:
-                    ans = max(ans, full + mno + price[u], notail + mf + price[u])
-                if full > mf : mf = full
-                if notail > mno : mno = notail
+                f, h = dfs(v, u)
+                ans = max(ans, f + mx_h, h + mx_f)
+                if f + p > mx_f : mx_f = f+p
+                if h + p > mx_h : mx_h = h+p
             
-            return mf + price[u], mno + (price[u] if mf else 0)
+            return mx_f, mx_h
+
         dfs(0, -1)
         return ans
     

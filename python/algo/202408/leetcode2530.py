@@ -12,3 +12,8 @@ class Solution:
         for _ in range(k):
             ans -= heapq.heapreplace(nums, nums[0] // 3)
         return ans
+
+if __name__ == "__main__":
+    sol = Solution()
+    nums, k = [10,10,10,10,10], 5
+    print(sol.maxKelements(nums, k))

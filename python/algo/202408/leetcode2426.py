@@ -47,21 +47,19 @@ class Solution:
         a = [x-y for x, y in zip(nums1, nums2)]
 
         def mergeSort(nums: List[int]) -> int:
-            if len(nums) == 1:
+            if len(nums) <= 1:
                 return 0
 
             mid = len(nums) // 2
             l = nums[:mid]
             r = nums[mid:]
-
-            i = cnt = 0
+            cnt = mergeSort(l) + mergeSort(r)
+            i = 0
             for x in r:
                 while i < len(l) and l[i] <= x + diff:
                     i += 1
                 cnt += i
-
-            mergeSort(l)
-            mergeSort(r)
+                
             inx1 = inx2 = inx = 0
             while True:
                 if inx1 == len(l):

@@ -41,8 +41,50 @@ class Solution:
             t.add(bisect_left(b, x)+1, 1)
         
         return ans
+
+    # 方法二: 合并排序
+    def numberOfPairs2(self, nums1: List[int], nums2: List[int], diff: int) -> int:
+        a = [x-y for x, y in zip(nums1, nums2)]
+
+        def mergeSort(nums: List[int]) -> int:
+            if len(nums) == 1:
+                return 0
+
+            mid = len(nums) // 2
+            l = nums[:mid]
+            r = nums[mid:]
+
+            i = cnt = 0
+            for x in r:
+                while i < len(l) and l[i] <= x + diff:
+                    i += 1
+                cnt += i
+
+            mergeSort(l)
+            mergeSort(r)
+            inx1 = inx2 = inx = 0
+            while True:
+                if inx1 == len(l):
+                    nums[inx:] = r[inx2:]
+                    break
+                if inx2 == len(r):
+                    nums[inx:] = l[inx1:]
+                    break
+                if l[inx1] <= r[inx2]:
+                    nums[inx] = l[inx1]
+                    inx += 1
+                    inx1 += 1
+                else:
+                    nums[inx] = r[inx2]
+                    inx += 1
+                    inx2 += 1
+            return cnt
+
+        return mergeSort(a)
+
     
 if __name__ == "__main__":
     sol = Solution()
     nums1, nums2, diff = [3,2,5], [2,2,1], 1
     print(sol.numberOfPairs(nums1, nums2, diff))
+    print(sol.numberOfPairs2(nums1, nums2, diff))    

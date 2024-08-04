@@ -49,6 +49,25 @@ class Solution:
             if mn != -1:  ans[i] = mn-i+1
 
         return ans
+    
+
+    def smallestSubarrays3(self, nums: List[int]) -> List[int]:
+        # 参考题解， 方法一
+        ans = [1] * len(nums)
+
+        for i, v in enumerate(nums):
+            for j in range(i-1, -1, -1):
+                if nums[j] | v == nums[j]:
+                    break
+                nums[j] |= v
+                ans[j] = i -j + 1
+        return ans
+
+    def smallestSubarrays4(self, nums: List[int]) -> List[int]:
+        # 参考题解，方法二：模板题
+        pass 
+        # todo
+
 
 if __name__ == "__main__":
     sol = Solution()

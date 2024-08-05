@@ -24,9 +24,9 @@ class Solution:
         # while left + 1 < right:
         #     mid = (left + right) // 2
         #     if check(mid):
-        #         left = mid
-        #     else:
         #         right = mid
+        #     else:
+        #         left = mid
         # return right    
 
 if __name__ == "__main__":

@@ -29,7 +29,36 @@ class Solution:
         #         left = mid
         # return right    
 
+    def maximumTastiness2(self, price: List[int], k: int) -> int:
+        # 进一步理解 Left：true, right：False
+        # 目标 k/target 越大, 取值 mid 越小
+        price.sort()
+        right = price[-1] - price[0]
+        
+        def check(step: int) -> int:
+            inx, cnt = 0, 0
+            while inx < len(price):
+                cnt += 1
+                inx = bisect_left(price, price[inx] + step)
+            
+            return cnt
+            
+        left, right = -1, price[-1] - price[0] + 1  # 开区间 (left, right)
+        while left + 1 < right:  # 区间不为空
+            mid = (left + right) // 2
+            # 循环不变量：
+            # nums[left] < target
+            # nums[right] >= target
+            if check(mid) < k:
+                right = mid  # left = mid 范围缩小到 (left, mid)
+            else:
+                left = mid  # right = mid 范围缩小到 (mid, right)
+        return left # right
+
+
+
 if __name__ == "__main__":
     sol = Solution()
     price, k = [13,5,1,8,21,2], 3
     print(sol.maximumTastiness(price, k))
+    print(sol.maximumTastiness2(price, k))

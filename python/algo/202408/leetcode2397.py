@@ -28,11 +28,22 @@ class Solution:
 
     def maximumRows3(self, matrix: List[List[int]], numSelect: int) -> int:
         # Gosper's hack
+        mask = [sum(v << j for j, v in enumerate(row)) for row in matrix]
         x = (1 << numSelect) - 1
-        
+        ans = 0
+        while x < (1 << len(matrix[0])):
+            ans = max(ans, sum(x | row == x for row in mask))
+            lb = x & -x
+            x = (x + lb) | ((x^(x+lb)) // lb) >> 2
+        return ans
+
+
+   
 
 if __name__ == "__main__":
     sol = Solution()
-    matrix, numSelect =[[0,0,0],[1,0,1],[0,1,1],[0,0,1]], 2
+    matrix, numSelect = [[0,0,1],[1,0,0],[0,0,0]], 2
+    matrix, numSelect = [[1,0,0,0,0,0,0],[0,1,0,1,1,1,1],[0,0,0,1,0,0,1]], 5
     print(sol.maximumRows(matrix, numSelect))
     print(sol.maximumRows2(matrix, numSelect))
+    print(sol.maximumRows3(matrix, numSelect))

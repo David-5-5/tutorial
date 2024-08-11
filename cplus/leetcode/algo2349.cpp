@@ -1,8 +1,10 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-class NumberContainers {
+// 力扣 双周赛 83
 // 平衡树 set
+class NumberContainers {
+
     unordered_map<int, int> i2n;
     unordered_map<int, set<int>> n2i;
 public:
@@ -27,19 +29,21 @@ public:
     }
 };
 
-class NumberContainers2 {
 // 懒惰堆
+class NumberContainers2 {
+    unordered_map<int, int> i2n;
+    unordered_map<int, priority_queue<int, vector<int>, greater<int>>> n2i;
 public:
-    NumberContainers() {
 
-    }
-    
     void change(int index, int number) {
-
+        i2n[index] = number;
+        n2i[number].push(index);
     }
     
     int find(int number) {
-
+        while (!n2i[number].empty() and i2n[n2i[number].top()] != number)
+            n2i[number].pop();
+        return n2i[number].empty() ? -1 : n2i[number].top();
     }
 };
 

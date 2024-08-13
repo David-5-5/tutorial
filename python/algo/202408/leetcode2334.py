@@ -24,6 +24,25 @@ class Solution:
                 return sz[j]-1
         return -1
 
+    def validSubarraySize2(self, nums: List[int], threshold: int) -> int:
+        # 单调栈
+        n = len(nums)
+        left,st = [-1] * n, []
+        for i, num in enumerate(nums):
+            while st and nums[st[-1]] >= num: st.pop()
+            if st: left[i]=st[-1]
+            st.append(i)
+        
+        right, st = [n] * n, []
+        for i in range(n-1,-1,-1):
+            while st and nums[st[-1]] >= nums[i]: st.pop()
+            if st: right[i]=st[-1]
+            st.append(i)
+
+        for num, l, r in zip(nums,left, right):
+            if num > threshold / (r - l - 1):
+                return r - l - 1
+        return -1
 
 if __name__ == "__main__":
     sol = Solution()

@@ -1,7 +1,9 @@
 from collections import defaultdict
+from math import lcm
 from typing import List
 
 # 周赛 321 
+# 参考 周赛316 最大公约数
 class Solution:
     def subarrayLCM(self, nums: List[int], k: int) -> int:
         # 自行解答，速度快，但是代码比较乱
@@ -52,6 +54,21 @@ class Solution:
                 ans += count(l, r-1)
                 l = r + 1
         return ans
+
+
+    def subarrayLCM2(self, nums: List[int], k: int) -> int:
+        # 参考题解 暴力，代码特清晰
+        # 本来想自行实现暴力，脑子不转了，觉得两重循环仅两两比较
+        n, ans = len(nums), 0
+        for i in range(n):
+            LCM = 1
+            for j in range(i, n):
+                LCM = lcm(LCM, nums[j])
+                if k % LCM:break
+                if k == LCM:ans += 1
+
+        return ans
+
 
 if __name__ == "__main__":
     sol = Solution()

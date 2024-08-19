@@ -2,7 +2,7 @@ from cmath import inf
 from functools import lru_cache
 import heapq
 
-
+# 周赛 318
 class Solution:
     def minimumTotalDistance(self, robot, factory) -> int:
         factory.sort(key=lambda f: f[0])

@@ -1,5 +1,6 @@
 from typing import List
 
+# 双周赛 106
 # https://leetcode.cn/problems/find-a-good-subset-of-the-matrix/solutions/2305490/xiang-xi-fen-xi-wei-shi-yao-zhi-duo-kao-mbl6a/?envType=daily-question&envId=2024-06-25
 class Solution:
     def goodSubsetofBinaryMatrix(self, grid: List[List[int]]) -> List[int]:

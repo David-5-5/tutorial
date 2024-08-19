@@ -1,5 +1,8 @@
 from typing import List
 from itertools import pairwise
+
+# 双周赛 103
+
 class Solution:
     def countOperationsToEmptyArray(self, nums: List[int]) -> int:
         '''n(删除次数) + 移动次数

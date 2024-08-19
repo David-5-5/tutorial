@@ -1,6 +1,8 @@
 from itertools import accumulate
 from typing import List
 
+# 双周赛 104
+
 # 将 nums 排序后从 1 到 n，增量计算英雄值
 # hero[1] = nums[1]^3
 # hero[2] = nums[1]^3 + nums[2]^3 + nums[1] * nums[2]^2

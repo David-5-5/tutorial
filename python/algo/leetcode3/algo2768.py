@@ -1,6 +1,6 @@
 from typing import Counter, List
 
-
+# 双周赛 108
 class Solution:
     def countBlackBlocks(self, m: int, n: int, coordinates: List[List[int]]) -> List[int]:
         # 思维题，遍历每个黑格子，黑格子会出现在哪4个左上角(x,y)的 2*2的矩阵内

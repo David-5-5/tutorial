@@ -1,6 +1,6 @@
 from functools import lru_cache
 
-
+# 双周赛 111
 class Solution:
     def numberOfBeautifulIntegers(self, low: int, high: int, k: int) -> int:
 

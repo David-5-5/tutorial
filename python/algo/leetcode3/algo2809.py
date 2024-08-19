@@ -1,4 +1,7 @@
 from typing import List
+
+# 双周赛 110
+
 class Solution:
     def minimumTime(self, nums1: List[int], nums2: List[int], x: int) -> int:
         n = len(nums1)

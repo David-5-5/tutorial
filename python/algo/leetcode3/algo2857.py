@@ -1,6 +1,7 @@
-
 from collections import Counter
 from typing import List
+
+# 双周赛 113
 
 class Solution:
     def countPairs(self, coordinates: List[List[int]], k: int) -> int:

@@ -1,5 +1,7 @@
 from math import inf
 
+# 双周赛 108
+
 matches = [bin(5**i)[2:] for i in range(7)]
 class Solution:
     def minimumBeautifulSubstrings(self, s: str) -> int:

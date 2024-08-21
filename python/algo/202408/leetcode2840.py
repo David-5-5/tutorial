@@ -1,3 +1,4 @@
+# 双周赛 122
 class Solution:
     def checkStrings(self, s1: str, s2: str) -> bool:
         s1_1 = sorted(s1[::2])

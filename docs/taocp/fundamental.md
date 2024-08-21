@@ -1,11 +1,11 @@
-# Fundamental Algorithms
+<font size=10>Fundamental Algorithms</font>
 [TOC]
 
-## 1.基本概念
+# 1.基本概念
  
-### 1.1 算法
+## 1.1 算法
 
-### 1.2 数学准备
+## 1.2 数学准备
 
 ### 1.2.5 排列与阶乘
 

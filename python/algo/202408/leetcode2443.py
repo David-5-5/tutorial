@@ -1,3 +1,4 @@
+# 周赛 315
 class Solution:
     def sumOfNumberAndReverse(self, num: int) -> bool:
         # return any(num == c + int(str(c)[::-1]) for c in range(num+1))

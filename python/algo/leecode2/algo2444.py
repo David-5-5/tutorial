@@ -1,6 +1,9 @@
 from typing import List
+
+# 周赛 315
 class Solution:
     def countSubarrays(self, nums: List[int], minK: int, maxK: int) -> int:
+        # 自行解答 2024-2
         n = len(nums)
         begin, lastMin, lastMax = 0, -1, -1
         # 记录最小上下界区间(i,j), 其中nums[i]= minK/maxK, nums[j]=maxK/minK
@@ -51,11 +54,24 @@ class Solution:
         
         return ans
 
+    def countSubarrays2(self, nums: List[int], minK: int, maxK: int) -> int:    
+        # 参考题解，双指针，代码更清晰
+        ans = 0
+        b = min_i = max_i = -1 # b 最近的超出 [minK, maxK]的值的下标，初始为 -1
+        for i, c in enumerate(nums):
+            if c < minK or c > maxK: b = min_i = max_i = i
+            if c == minK: min_i = i
+            if c == maxK: max_i = i
+            ans += min(min_i, max_i) - b # 若下界/下界未找到，其值等于b
+        return ans
+
+
 if __name__ == "__main__":
     sol = Solution()
-    nums, minK, maxK = [1,3,5,2,7,5], 1, 5
+    # nums, minK, maxK = [1,3,5,2,7,5], 1, 5
     # nums, minK, maxK = [1,3,5,2,1,5], 1, 5
     # nums, minK, maxK = [1,1,1,1], 1, 1
-    # nums, minK, maxK = [1,1,5,2,1,5], 1, 5
+    nums, minK, maxK = [1,1,5,2,1,5], 1, 5
     # nums, minK, maxK = [1,1,5,2,5,1], 1, 5
     print(sol.countSubarrays(nums, minK, maxK))
+    print(sol.countSubarrays2(nums, minK, maxK))

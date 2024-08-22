@@ -10,6 +10,6 @@ class Solution:
             x = 0
             while c:
                 x = x*10 + c % 10
-                c // 10
+                c = c // 10
             s.add(x)
         return len(s)

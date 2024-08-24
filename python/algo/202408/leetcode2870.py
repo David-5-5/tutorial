@@ -12,3 +12,8 @@ class Solution:
             ans += v // 3
             if v % 3: ans += 1
         return ans
+
+if __name__ == "__main__":
+    sol = Solution()    
+    nums = [2,3,3,2,2,4,2,3,4]
+    print(sol.minOperations(nums))

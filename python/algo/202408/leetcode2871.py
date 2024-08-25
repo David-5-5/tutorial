@@ -4,6 +4,7 @@ from typing import List
 # AND　运算的特征
 #   AND 运算的数越多，结果越小
 class Solution:
+    # 参考题解
     def maxSubarrays(self, nums: List[int]) -> int:
         ans, a = 0, -1 # -1 的位全为 1
         for x in nums:

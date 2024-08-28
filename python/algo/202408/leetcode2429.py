@@ -1,3 +1,4 @@
+# 周赛 313
 class Solution:
     def minimizeXor(self, num1: int, num2: int) -> int:
         m = num1.bit_count()

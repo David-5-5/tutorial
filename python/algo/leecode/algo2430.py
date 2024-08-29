@@ -11,14 +11,15 @@ class Solution:
             for j in range((n-i)//2):
                 if s[i:i+j+1] == s[i+j+1:i+2*(j+1)]:
                     dp[i] = max(dp[i], 1 + dp[i+j+1])
-                    # !!!! Overtime if without as following statement
+                    # Optimize
                     if dp[i] == (n - i): break
 
         return dp[0]
 
     def deleteString1(self, s: str) -> int:
         '''
-        RecursionError: maximum recursion depth exceeded
+        RecursionError: maximum recursion depth exceeded on local
+        !!!! OVERTIME !!!!
         '''    
         @lru_cache(maxsize = None)
         def deleteStr(s) -> int:
@@ -32,6 +33,25 @@ class Solution:
             return maxStep
         
         return deleteStr(s)
+
+    def deleteString2(self, s: str) -> int:
+        '''
+        Optimize from deleteString1
+        Modify TYPE of parameter from str to int of recursive method
+        执行通过
+        '''    
+        n = len(s)
+        @lru_cache(maxsize = None)
+        def deleteStr(inx:int) -> int: # change substring to inx
+            maxStep = 1
+            if inx == n-1: return 1
+            for l in range(1, (n - inx)// 2+1):
+                if s[inx:inx+l] == s[inx+l:inx+2*l]:
+                    maxStep = max(maxStep, 1 + deleteStr(inx+l))
+            
+            return maxStep
+        
+        return deleteStr(0)
 
 if __name__ == "__main__":
     sol = Solution()

@@ -18,6 +18,11 @@ venv
 
 **/target
 
+
+# c middle file
+*.o
+*.s
+
 # 忽略所有隐藏目录
 .*/
 

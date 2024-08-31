@@ -49,3 +49,42 @@ class Solution:
         dfs(root, 0)
 
         return root
+
+    def reverseOddLevels2(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
+        # 参考题解，方法一 :BFS
+        q, level = [root], 0
+        while q:
+            cur = q
+            q = []
+            if level % 2 == 1:
+                n = len(cur)
+                for i in range(n // 2):
+                    cur[i].val, cur[n-1-i].val = cur[n-1-i].val, cur[i].val
+            
+            while cur:
+                node = cur.pop(0)
+                if node.left:
+                    q.append(node.left)
+                    q.append(node.right)
+            
+            level ^= 1
+
+        return root
+    
+
+    def reverseOddLevels3(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
+        # 参考题解，方法二: DFS
+        # refer to leetcode 101 对称二叉树
+        
+        def dfs(node1: TreeNode, node2: TreeNode, is_odd: bool) :
+            if not node1: return
+            if is_odd: node1.val, node2.val = node2.val, node1.val
+            
+            dfs(node1.left, node2.right, not is_odd)
+            dfs(node1.right, node2.left, not is_odd)
+
+            
+        dfs(root.left, root.right, True)
+
+        return root    
+    

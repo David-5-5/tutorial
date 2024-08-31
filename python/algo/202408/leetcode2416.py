@@ -19,7 +19,7 @@ class Trie:
 # 周赛 311
 class Solution:
     def sumPrefixScores(self, words: List[str]) -> List[int]:
-
+        # 参考题解
         root = Trie()
         for i, word in enumerate(words):
             root.insert(i, word)

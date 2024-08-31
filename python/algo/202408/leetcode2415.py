@@ -12,6 +12,7 @@ class TreeNode:
 # 周赛 311
 class Solution:
     def reverseOddLevels(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
+        # 自行解答
         vals = []
         
         def bfs(node: Optional[TreeNode]) :

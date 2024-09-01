@@ -37,8 +37,8 @@ string solution(string s)
             // Bad performance
             // l,r  = i - k, i + k;
             // Good performance
-            l = i- k;
-            r = i + k;
+            l = i- k, r = i + k;
+            // r = i + k;
         }
     }
     for (int i = 0, l = 0, r = -1; i < n; i++)

@@ -12,18 +12,18 @@ class Solution:
         meetings.sort() # 按照 start 排序
         # The element is pr2 is (end, room) 表示会议结束时间，占用的会议室
         for s, e in meetings:
-            while pr2 and pr2[0][0] <= s:       # 会议结束
+            while pr2 and pr2[0][0] <= s:       # 已有会议结束
                 _, room = heapq.heappop(pr2)    # 结束会议
                 heapq.heappush(pr1, room)       # 释放会议室
             
             if pr1:                             # 有空余会议室
-                room = heapq.heappop(pr1)
-                heapq.heappush(pr2, (e, room))
+                room = heapq.heappop(pr1)       # 取编号最小的空余会议室
+                heapq.heappush(pr2, (e, room))  # 开始新会议
                 res[room] += 1                  # 会议室使用计数增加 1
             else:                               # 无空余会议室，等待最近的end 会议结束
-                end, room = heapq.heappop(pr2)
-                heapq.heappush(pr2, (e+end-s, room))
-                res[room] += 1
+                end, room = heapq.heappop(pr2)  # 等待最近的会议结束
+                heapq.heappush(pr2, (e+end-s, room))    # 开始新会议 end-s 为等待时间
+                res[room] += 1                  # 会议室使用计数增加 1
 
         ans = 0
         for i in range(1, n):

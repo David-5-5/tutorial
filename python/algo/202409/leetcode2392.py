@@ -16,8 +16,6 @@ class Solution:
                 if v - 1 in g[u-1]:continue
                 g[u-1].append(v-1)
                 deg[v-1] += 1
-                if deg[u-1] == 0:
-                    tops.add(u-1)
                 tops -= set([v-1])
 
             inx = 0

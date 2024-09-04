@@ -1,3 +1,4 @@
+from bisect import bisect_left
 import heapq
 from typing import List
 
@@ -20,8 +21,26 @@ class Solution:
         
         return q[0][0]
 
+    def smallestDistancePair2(self, nums: List[int], k: int) -> int:
+        # 方法一不行，
+        # 方法二：二分
+        # 理解上有些难度
+        nums.sort()
+
+        def count(mid) -> int:
+            cnt = 0
+            for j, v in enumerate(nums):
+                i = bisect_left(nums, v-mid, 0, j)
+                cnt += j-i
+            
+            return cnt
+
+        return bisect_left(range(nums[-1]-nums[0]), k, key=count)
+
+
 if __name__ == "__main__":
     sol = Solution()
     nums, k = [1,3,1], 1
     nums, k = [9,10,7,10,6,1,5,4,9,8], 18
     print(sol.smallestDistancePair(nums, k))
+    print(sol.smallestDistancePair2(nums, k))

@@ -3,6 +3,7 @@ from typing import List
 # 周赛 306
 class Solution:
     def edgeScore(self, edges: List[int]) -> int:
+        # 自行解答
         n = len(edges)
         s, inx = -1, n+1
         score = [0] * n

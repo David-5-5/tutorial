@@ -97,13 +97,24 @@ class Solution:
 
     def minimumCoins6(self, prices: List[int]) -> int:
         # 滑动窗口
-
+        n, q = len(prices), []
+        q.append((n+1, 0))
+        for i in range(n, 0, -1):
+            # while i < q[0][0] // 2: # 仅需保留 2*i + 1
+            while q[0][0] > 2 * i + 1: # 完全符合题意，更加清晰
+                q.pop(0)
+            
+            v = prices[i-1] + q[0][1]
+            while v <= q[-1][1]:
+                q.pop(-1)
+            
+            q.append((i, v))    
         
-        return 
+        return q[-1][1]
 
 
 if __name__ == "__main__":
     sol = Solution()
-    prices = [3,1,2]
+    prices = [1,10,1,1]
     print(sol.minimumCoins(prices))
-    print(sol.minimumCoins5(prices)) 
+    print(sol.minimumCoins6(prices)) 

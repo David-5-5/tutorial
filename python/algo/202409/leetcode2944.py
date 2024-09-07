@@ -55,8 +55,55 @@ class Solution:
 
         return dp[0]
 
+    # 以下参考题解 从记忆化搜索->递推->单调栈优化
+    def minimumCoins4(self, prices: List[int]) -> int:
+        # 自行解答 记忆化搜索
+        n = len(prices)
+
+        # 表示购买 i 后及其后面所有水果的最小值
+        @cache
+        def dfs(i:int) -> int:
+            # if i > n: return 0
+            if i*2 >=n : return prices[i-1] # 边界优化
+            
+            res = inf
+            # [i,i*2] 可以是免费的，从 i*2+1 是不免费的
+            for j in range(i+1, i*2+2):
+                res = min(res, dfs(j)) # 逻辑[i,i*2]有更小的值，可以替换 i*2+1
+            return res + prices[i-1]
+        
+        # 从 1 开始
+        return dfs(1)
+
+        # 自行解答 记忆化搜索
+        
+
+    def minimumCoins5(self, prices: List[int]) -> int:
+        n = len(prices)
+        # 递推  倒序
+        dp = [prices[i-1] if i * 2 >= n else inf for i in range(n+1)]
+
+        for i in range(n, 0, -1):
+            if i*2 >=n:
+                dp[i] = prices[i-1]
+            else:
+                # for j in range(i+1, min(i*2+2,n+1))
+                #     dp[i] = min(dp[i], dp[j]) 
+                dp[i] = prices[i-1] + min(dp[i+1:2*i+2])
+        
+        # 从 1 开始
+        return dp[1]
+
+
+    def minimumCoins6(self, prices: List[int]) -> int:
+        # 滑动窗口
+
+        
+        return 
+
+
 if __name__ == "__main__":
     sol = Solution()
     prices = [3,1,2]
     print(sol.minimumCoins(prices))
-    print(sol.minimumCoins3(prices)) 
+    print(sol.minimumCoins5(prices)) 

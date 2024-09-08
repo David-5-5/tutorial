@@ -1,7 +1,7 @@
 from collections import defaultdict
 from typing import List
 
-
+# 周赛 305
 class Solution:
     def arithmeticTriplets(self, nums: List[int], diff: int) -> int:
         cnt = defaultdict(int)

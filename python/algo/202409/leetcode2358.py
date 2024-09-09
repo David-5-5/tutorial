@@ -2,6 +2,7 @@
 from bisect import bisect_right
 from typing import List
 
+# 周赛 304
 MAX = 10 ** 5
 
 q = []

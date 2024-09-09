@@ -1,4 +1,5 @@
-# 模板题，使用 Dijkstra/Folyd 算法 
+# 模板题，使用 Dijkstra/Floyd 算法 
+# 最短路径
 from collections import defaultdict
 import heapq
 from typing import List
@@ -33,7 +34,7 @@ class Graph:
         return -1 if dist[node2] == float('inf') else dist[node2]
 
 class Graph2:
-    # Folyd algorithm
+    # Floyd algorithm
     def __init__(self, n: int, edges: List[List[int]]):
         self.n = n
         self.dp = [[0 if i==j else float("inf") for i in range(self.n)] for j in range(self.n)]

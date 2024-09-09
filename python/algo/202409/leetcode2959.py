@@ -21,6 +21,7 @@ class Solution:
                     for y in range(n):
                         if bs>>y & 1 == 0  or f[y][k] == inf: continue
                         f[x][y] = min(f[x][y], f[x][k] + f[k][y])
+                        
 
             return 1 if max(max(row) for row in f) <= maxDistance else 0
         
@@ -45,8 +46,8 @@ class Solution:
                     if bs>>x & 1 == 0 or f[x][k] == inf: continue
                     for y in range(n):
                         if bs>>y & 1 == 0  or f[y][k] == inf: continue
-                        f[x][y] = min(f[x][y], f[x][k] + f[k][y])
-
+                        # f[x][y] = min(f[x][y], f[x][k] + f[k][y])
+                        if f[x][y] > f[x][k] + f[k][y]:f[x][y] = f[x][k] + f[k][y]
             for x in range(n):
                 if bs>>x & 1 == 0: continue
                 for y in range(n):

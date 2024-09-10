@@ -28,8 +28,33 @@ class Solution:
                 minl = mxl
                 res = i
         return res
+    
+    def closestMeetingNode2(self, edges: List[int], node1: int, node2: int) -> int:
+        # 改为非递归
+        n = len(edges)
+        
+        def calculate(u:int) -> List[int]:
+            res = [inf] * n
+            l = 0
+            while u != -1 and res[u] == inf:
+                res[u] = l
+                u = edges[u]
+                l += 1
+            return res
+        
+        level1 = calculate(node1)
+        level2 = calculate(node2)
+
+        res, minl = -1, inf
+        for i in range(n):
+            mxl = max(level1[i], level2[i])
+            if mxl < minl:
+                minl = mxl
+                res = i
+        return res
 
 if __name__ == "__main__":
     sol = Solution()
     edges, node1, node2 = [2,2,3,-1], 0, 1
     print(sol.closestMeetingNode(edges, node1, node2))
+    print(sol.closestMeetingNode2(edges, node1, node2))

@@ -4,6 +4,7 @@ from typing import List
 # 周赛 304
 class Solution:
     def closestMeetingNode(self, edges: List[int], node1: int, node2: int) -> int:
+        # 自行解答 基环树
         n = len(edges)
         level = [[inf] * 2 for _ in range(n)]
         

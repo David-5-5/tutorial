@@ -77,6 +77,54 @@ class Solution:
         
         return res
     
+    
+    def longestCycle3(self, edges: List[int]) -> int:
+        # 非递归-自行解答-超时
+        # n = len(edges)
+        # gv = set([i for i in range(n)])
+        # res = -1
+        # while gv:
+        #     sg = set()
+        #     level = {}
+        #     u = min(gv) # 起点
+        #     l = 0
+        #     while u != -1:
+
+        #         if u not in gv:
+        #             break
+        #         if u in sg: # cycle
+        #             res = max(res, l - level[u])
+        #             break
+        #         else:
+        #             # count += 1
+        #             sg.add(u)
+        #             level[u] = l
+        #         l += 1
+        #         u = edges[u]
+        #     for i in sg: gv.remove(i) # 集合的操作太慢
+        # return res
+    
+        # 参考题解使用时间戳及设置每次循环的start时间，避免子集操作以及正确判断环
+        n = len(edges)
+        time = [0] * n
+        clock = 1
+        res = -1
+        for i in range(n):
+            if time[i]: continue
+            # time[i] 不为零的节点 其值大于等于 start 表明是本次循环第二次访问的节点，是一个环，
+            # 否则是以前循环的点，退出循环即可
+            start = clock
+            while i != -1:
+                if time[i]:
+                    if time[i] >= start: # 判断是否为环
+                        res = max(res, clock-time[i])
+                    break # 退出本次循环
+                else:
+                    time[i] = clock
+                    clock += 1
+                    i = edges[i]
+        return res
+
 
 if __name__ == "__main__":
     sol = Solution()

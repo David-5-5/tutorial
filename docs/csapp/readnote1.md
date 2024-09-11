@@ -2,6 +2,13 @@
 
 # 信息的表示和处理
 
+## 信息的存储
+
+### 寻址和字节顺序
+
+排列表示一个对象的字节有两个通用的规则。最低有效位在最前面的方式，称为小端法 (little-endian)。大多数 intel 兼容机都采用这种规则。最高有效位在最前面的方式，称为大端法 (big-endian)。许多比较新的微处理器使用双端法 (bi-endian)，也就是说可以把它们配置成作为大端或小端的机器运行。
+
+
 ## 整数的表示
 
 ### 无符号数的编码
@@ -297,9 +304,12 @@ ATT 和 intel 使用不同的汇编格式，默认情况下，使用 ATT 的汇�
 
 - 最后两个数据传输操作可以将数据压入程序栈中，以及从程序栈中弹出数据。
 
+在 IA32 中程序栈存放在存储器中某个区域，栈向下增长，这样栈顶元素的地址是所有栈中元素地址中 __最低__ 的。根据惯例，栈是倒过来画的，栈"顶"在图的底部。栈指针保存这栈顶元素的地址。
+- 所以压栈 push 指令是减小栈指针 (寄存器 %esp) 的值，并将数据存放在存储器中，
+- 而出栈 pop 指令是从存储器中读，并增加栈指针的值。
+
 
 ### 数据传送示例
-
 
 ```c
 int exchange(int *xp, int y) {
@@ -325,8 +335,68 @@ movl %ecx, (%edx)     // Store y at xp
 
 这些操作被分为四组：加载有效地址、一元操作、二元操作及移位
 
+
+指令| 效果 | 描述 
+|---|---|---|
+leal S,D | $D \leftarrow \&S$ | 加载有效地址
+||
+INC D | $D \leftarrow D + 1$ | 加 1
+DEC D | $D \leftarrow D - 1$ | 减 1
+INC D | $D \leftarrow - D$ | 取负
+INC D | $D \leftarrow \~D$ | 取补
+||
+ADD S, D | $D \leftarrow D + S$ | 加
+SUB S, D | $D \leftarrow D - S$ | 减
+IMUL S, D | $D \leftarrow D * S$ | 乘
+XOR S, D | $D \leftarrow D ^ S$ | 异或
+OR S, D | $D \leftarrow D \| S$ | 或
+AND S, D | $D \leftarrow D \& S$ | 与
+||
+SAL k，D | $D \leftarrow D << k$ | 左移
+SHL k，D | $D \leftarrow D << k$ | 左移 等同于 SAL
+SAR k，D | $D \leftarrow D >>_A k$ | 算术右移
+SHR k，D | $D \leftarrow D >>_L k$ | 逻辑右移
+
+注 imull 指令为双操作数乘法指令，它从两个 32 位操作数产生一个 32 位乘积。
+
 ### 加载有效地址
 
+__加载有效地址__ (load effective address) 指令实际上是 movl 指令的变形。它的形式是从存储器读数据到寄存器，但实际上它根本没有引用存储器。目的操作数必须是一个寄存器
+
+加载有效地址 (leal) 指令通常用来执行简单的算术操作。
+
+
+### 一元操作和二元操作
+
+一元操作，它只有一个操作数，即是源又是目的。这个操作数可以是一个寄存器，也可以是一个存储器位置。
+
+二元操作，其中第二个操作数即是源又是目的。第一个操作数可以是立即数、寄存器或是存储器位置。第二个操作数可以是寄存器或是存储器位置。同 movl 指令一样，两个操作数不能同时是存储器位置。
+
+
+### 移位操作
+
+先给出移位量，然后第二项给出的要移位的数值。可以进行算术或逻辑右移。移位量用单个字节编码，因为只允许进行 0 到 31 位的移位。移位量可以是立即数，或者放在单字节寄存器元素 %cl 中。移位操作的目的操作数可以是一个寄存器或是一个存储器位置。
+
+
+### 特殊的算术操作
+
+相比较于上节所述的 imull 双操作数实现 32 位乘法指令，IA32 还提供了两个不同的单操作数指令，以计算两个 32 位值的全 64 位乘积。指令都要求一个参数必须在寄存器 %eax 中，而另一个作为指令的源操作数给出，然后乘积存放在寄存器 %edx (高32位) 和 %eax (低32位) 中。
+
+指令| 效果 | 描述 
+|---|---|---|
+imull S | R[%edx]:R[%eax] $\leftarrow$ S $\times$ R[%eax] | 有符号全 64 位乘法
+mull S | R[%edx]:R[%eax] $\leftarrow$ S $\times$ R[%eax] | 无符号全 64 位乘法
+||
+cltd | R[%edx]:R[%eax] $\leftarrow$ SignExtend(R[%eax]) | 转为四字
+||
+idivl S | R[%edx] $\leftarrow$ R[%edx]:R[%eax] mod R[%eax] <br> R[%eax] $\leftarrow$ R[%edx]:R[%eax] $\div$ R[%eax]  | 有符号除法
+||
+divl S | R[%edx] $\leftarrow$ R[%edx]:R[%eax] mod R[%eax] <br> R[%eax] $\leftarrow$ R[%edx]:R[%eax] $\div$ R[%eax]  | 无符号除法
+
+注：一对寄存器 %edx 和 %eax 组成一个 64 位的四字
+
+
+## 控制
 
 
 

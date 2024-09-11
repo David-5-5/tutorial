@@ -2,7 +2,7 @@ from bisect import bisect_left
 from collections import defaultdict
 from typing import List
 
-
+# 周赛 303
 class FoodRatings:
 
     def __init__(self, foods: List[str], cuisines: List[str], ratings: List[int]):

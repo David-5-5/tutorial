@@ -26,6 +26,9 @@ class Solution:
         return f(0, -1)
     
     def idealArrays2(self, n: int, maxValue: int) -> int:
+        # 参考题解 质因子分解 排列组合
+        MOD = 10 ** 9 + 7
+
         def decompose(val: int) -> List[int] :
             factors = []
             p = 2
@@ -46,8 +49,6 @@ class Solution:
                 mul *= math.comb(b+v-1,b-1)
             return mul
         
-        MOD = 10 ** 9 + 7
-        # 参考题解 质因子分解 排列组合
         res = 0
         for i in range(1, maxValue+1):
             f = decompose(i)

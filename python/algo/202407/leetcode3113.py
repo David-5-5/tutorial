@@ -7,12 +7,12 @@ class Solution:
         for v in nums:
             while st and st[-1][0] < v:
                 _, cnt = st.pop()
-                ans += (cnt+1) * (cnt-1) - (cnt+2) * (cnt-1) // 2 
+                ans += cnt * (cnt-1) // 2 # (n-1) + (n-2) + ... + 1
             if not st or st[-1][0] > v: st.append([v,1])
             else: st[-1][1] += 1
         
         for _, cnt in st:
-            ans += (cnt+1) * (cnt-1) - (cnt+2) * (cnt-1) // 2 
+            ans += cnt * (cnt-1) // 2 
 
         return ans
 

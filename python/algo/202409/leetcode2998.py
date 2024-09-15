@@ -10,10 +10,11 @@ class Solution:
             if cur < y: return y - cur # 加 1
 
             res = cur - y # 减 1
-            res = min(res, cur % 5 + 1 + check(cur//5)) # - (cur % 11) 除 11
-            res = min(res, (5 - cur % 5) + 1 +  check(cur//5 + 1)) # + 11 - (cur % 11) 除 11
-            res = min(res, cur % 11 + 1 + check(cur//11)) # - (cur % 11) 除 11
-            res = min(res, (11 - cur % 11) + 1 + check(cur//11 + 1)) # + 11 - (cur % 11) 除 11
+            if cur%5 < (5 - cur % 5): res = min(res, cur % 5 + 1 + check(cur//5)) # - (cur % 11) 除 11
+            else: res = min(res, (5 - cur % 5) + 1 +  check(cur//5 + 1)) # + 11 - (cur % 11) 除 11
+            
+            if cur%11 < (11 - cur % 11):res = min(res, cur % 11 + 1 + check(cur//11)) # - (cur % 11) 除 11
+            else: res = min(res, (11 - cur % 11) + 1 + check(cur//11 + 1)) # + 11 - (cur % 11) 除 11
 
             return res
 

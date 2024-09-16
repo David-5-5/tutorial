@@ -31,7 +31,7 @@ class Solution:
         if n == 0: return 0
         m = len(matrix[0])
 
-        left = [[0] * m for _ in range(n)]
+        left = [[0] * m for _ in range(n+1)]
 
         for i in range(n):
             for j in range(m):
@@ -43,7 +43,7 @@ class Solution:
         maxRect = 0
         for j in range(m):
             stack = []
-            for i in range(n):
+            for i in range(n+1):
 
                 lens = 0
                 while stack and stack[-1][0] > left[i][j]:
@@ -53,11 +53,11 @@ class Solution:
                 if left[i][j] > 0:
                     stack.append((left[i][j], lens + 1))
 
-            lens = 0
-            while stack:
-                height, broad = stack.pop(-1)
-                lens += broad
-                maxRect = max(maxRect, height * lens)
+            # lens = 0
+            # while stack:
+            #     height, broad = stack.pop(-1)
+            #     lens += broad
+            #     maxRect = max(maxRect, height * lens)
 
         return maxRect
 

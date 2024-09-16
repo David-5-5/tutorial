@@ -3,6 +3,8 @@ class Solution:
     # 题目变更为 LCR 039
     # 简化
     def largestRectangleArea(self, heights) -> int:
+        heights.append(0) # 哨兵
+
         n  = len(heights)
         if n == 1: return heights[0]
         maxArea = 0
@@ -17,11 +19,11 @@ class Solution:
             if heights[i] > 0:
                 stack.append((heights[i], lens + 1))
 
-        lens = 0
-        while stack:
-            height, broad = stack.pop(-1)
-            lens += broad
-            maxArea = max(maxArea, height * lens)
+        # lens = 0
+        # while stack:
+        #     height, broad = stack.pop(-1)
+        #     lens += broad
+        #     maxArea = max(maxArea, height * lens)
 
         return maxArea
 

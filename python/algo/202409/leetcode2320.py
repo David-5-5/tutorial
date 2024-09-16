@@ -18,7 +18,7 @@ class Solution:
         return  res * res % MOD
 
     def countHousePlacements(self, n: int) -> int:
-        # 自行解答 记忆化搜索 选或不选
+        # 自行解答 递推 动态规划
         MOD = 10 ** 9 + 7
         
         dp = [[0, 0] for _ in range(n+1)]

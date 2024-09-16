@@ -1,3 +1,4 @@
+# 主站 85
 class Solution:
     # 题目变更为 LCR 040. 最大矩形
     def maximalRectangle(self, matrix) -> int:
@@ -43,17 +44,14 @@ class Solution:
         for j in range(m):
             stack = []
             for i in range(n):
-                if len(stack) == 0 or stack[-1][0] <= left[i][j]:
-                    if left[i][j] > 0:
-                        stack.append((left[i][j], 1))
-                else:
-                    lens = 0
-                    while stack and stack[-1][0] > left[i][j]:
-                        height, broad = stack.pop(-1)
-                        lens += broad
-                        maxRect = max(maxRect, height * lens)
-                    if left[i][j] > 0:
-                        stack.append((left[i][j], lens + 1))
+
+                lens = 0
+                while stack and stack[-1][0] > left[i][j]:
+                    height, broad = stack.pop(-1)
+                    lens += broad
+                    maxRect = max(maxRect, height * lens)
+                if left[i][j] > 0:
+                    stack.append((left[i][j], lens + 1))
 
             lens = 0
             while stack:

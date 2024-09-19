@@ -5,6 +5,7 @@ from typing import List
 # 周赛 297
 class Solution:
     def minPathCost(self, grid: List[List[int]], moveCost: List[List[int]]) -> int:
+        # 自行解答
         m, n = len(grid), len(grid[0])
 
         # @cache

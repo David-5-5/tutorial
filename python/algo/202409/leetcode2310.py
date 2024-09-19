@@ -9,3 +9,8 @@ class Solution:
                 return i
 
         return -1
+
+
+if __name__ == "__main__":
+    sol = Solution()
+    print(sol.minimumNumbers(58, 9))

@@ -1,3 +1,6 @@
+from functools import cache
+
+
 class Solution:
     def sellingWood(self, m: int, n: int, prices) -> int:
         def sellingWood(m:int, n:int):
@@ -27,8 +30,36 @@ class Solution:
             dp[0][0] = 0
 
         return sellingWood(m, n)
+    
+    def sellingWood2(self, m: int, n: int, prices) -> int:
+
+        @cache
+        def dfs(h:int, w:int) -> int:
+            if h == 1 and w == 1:
+                return pr[h][w]
+
+            res = pr[h][w]
+
+            for k in range(1, w):
+                cur = dfs(h, k) + dfs(h, w-k)
+                if cur > res: res = cur
+            
+            for k in range(1, h):
+                cur = dfs(k, w) + dfs(h-k, w)
+                if cur > res: res = cur
+
+            return res
+
+        pr = [[0] * (n+1) for _ in range(m+1)]
+        for h, w, p in prices:
+            pr[h][w] = p
+
+        return dfs(m, n)
+
 
 if __name__ == "__main__":
     sol = Solution()
-    prices = [[1,1,10]]
-    print(sol.sellingWood(1, 1 ,prices))
+    m, n, prices = 3, 5, [[1,4,2],[2,2,7],[2,1,3]]
+    m, n, prices = 8, 2, [[5,2,9],[6,1,30]]
+    print(sol.sellingWood(m, n, prices))
+    print(sol.sellingWood2(m, n, prices))

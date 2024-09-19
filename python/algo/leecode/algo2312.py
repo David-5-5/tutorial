@@ -1,6 +1,6 @@
 from functools import cache
 
-# 周赛 299
+# 周赛 298
 class Solution:
     def sellingWood(self, m: int, n: int, prices) -> int:
         def sellingWood(m:int, n:int):

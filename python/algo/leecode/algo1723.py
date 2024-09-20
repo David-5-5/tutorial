@@ -1,8 +1,14 @@
-import heapq
+subsets = [[] for _ in range(1 << 12)]
+for i in range(1 << 12):
+    s = i
+    while s:
+        subsets[i].append(s)
+        s = (s - 1) & i
+
 class Solution:
     def minimumTimeRequired(self, jobs, k):
         '''
-        
+        二分查找 + 回溯
         '''
         def check(jobs, k, limit):
             workloads = [0] * k
@@ -33,6 +39,7 @@ class Solution:
         return l
 
     def minimumTimeRequired2(self, jobs, k: int) -> int:
+        # 状态压缩dp，超时
         n = len(jobs)
         sum = [0] * (1 << n)
         for i in range(1, 1 << n):
@@ -56,16 +63,30 @@ class Solution:
         return dp[k - 1][(1 << n) - 1]
 
 
-    def minimumTimeRequiredApproximate(self, jobs, k: int) -> int:
-        works = []
-        for i in range(k):
-            heapq.heappush(works, 0)
-        jobs.sort(reverse=True)
-        for job in jobs:
-            _job = heapq.heappop(works) + job
-            heapq.heappush(works, _job)
-        
-        return max(works)
+    def minimumTimeRequired3(self, jobs, k: int) -> int:
+        # 状态压缩dp，优化，可以通过
+        # 不用 min, max 函数        8878
+        # 预先处理 j 的子集          6534
+        n = len(jobs)
+        sum = [0] * (1 << n)
+        for i in range(1, 1 << n):
+            x = bin(i)[::-1].index('1')
+            y = i - (1 << x)
+            sum[i] = sum[y] + jobs[x]
+
+        dp = [[0] * (1 << n) for _ in range(k)]
+        dp[0] = sum
+
+        for i in range(1, k):
+            for j in range(1 << n):
+                minn = float('inf')
+                for x in subsets[j]:
+                    res = sum[x]
+                    if dp[i - 1][j^x] > res: res = dp[i - 1][j^x] # 由于x是j子集 j-x 等同于 j^x
+                    if res < minn: minn = res
+                dp[i][j] = minn
+
+        return dp[k - 1][(1 << n) - 1]       
 
 if __name__ == '__main__':
     sol = Solution()

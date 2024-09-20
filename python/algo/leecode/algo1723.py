@@ -78,7 +78,7 @@ class Solution:
         dp = sum.copy()
 
         for i in range(1, k):
-            for j in range(1 << n-1,0,-1):
+            for j in range((1 << n)-1,0,-1):
                 minn = float('inf')
                 for x in subsets[j]:
                     res = sum[x]
@@ -86,11 +86,11 @@ class Solution:
                     if res < minn: minn = res
                 dp[j] = minn
 
-        return dp[(1 << n) - 1]       
+        return dp[(1 << n) - 1]
 
 if __name__ == '__main__':
     sol = Solution()
     jobs, k = [3,2,3], 3
-    jobs, k = [331,769,967,535,243,239,529,102,250,469,261,283,280,280,280,331,769,967,535,243,239,529,102,250,469], 10
-    print(sol.minimumTimeRequired2(jobs, k))
+    jobs, k = [331,769,967,535,243,239,529,102,250,469,245,344], 10
+    print(sol.minimumTimeRequired(jobs, k))
     print(sol.minimumTimeRequired3(jobs, k))

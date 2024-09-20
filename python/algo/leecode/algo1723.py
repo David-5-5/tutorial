@@ -67,6 +67,7 @@ class Solution:
         # 状态压缩dp，优化，可以通过
         # 不用 min, max 函数        8878
         # 预先处理 j 的子集          6534
+        # 优化一维                  4666
         n = len(jobs)
         sum = [0] * (1 << n)
         for i in range(1, 1 << n):
@@ -74,34 +75,22 @@ class Solution:
             y = i - (1 << x)
             sum[i] = sum[y] + jobs[x]
 
-        dp = [[0] * (1 << n) for _ in range(k)]
-        dp[0] = sum
+        dp = sum.copy()
 
         for i in range(1, k):
-            for j in range(1 << n):
+            for j in range(1 << n-1,0,-1):
                 minn = float('inf')
                 for x in subsets[j]:
                     res = sum[x]
-                    if dp[i - 1][j^x] > res: res = dp[i - 1][j^x] # 由于x是j子集 j-x 等同于 j^x
+                    if dp[j^x] > res: res = dp[j^x] # 由于x是j子集 j-x 等同于 j^x
                     if res < minn: minn = res
-                dp[i][j] = minn
+                dp[j] = minn
 
-        return dp[k - 1][(1 << n) - 1]       
+        return dp[(1 << n) - 1]       
 
 if __name__ == '__main__':
     sol = Solution()
-    jobs = [331,769,967,535,243,239,529,102,250,469,261,283,280,280,280]
-    # jobs = [331,769,967,535,243,239,529,102,250,469,261,283,280,280,280,331,769,967,535,243,239,529,102,250,469]
-    k = 10
-    from datetime import datetime
-    begin = datetime.now()
-    print(sol.minimumTimeRequired(jobs, k))
-    print((datetime.now()- begin).total_seconds())
-
-    # begin = datetime.now()
-    # print(sol.minimumTimeRequired2(jobs, k))
-    # print((datetime.now()- begin).total_seconds())
-
-    begin = datetime.now()
-    print(sol.minimumTimeRequiredApproximate(jobs, k))
-    print((datetime.now()- begin).total_seconds())
+    jobs, k = [3,2,3], 3
+    jobs, k = [331,769,967,535,243,239,529,102,250,469,261,283,280,280,280,331,769,967,535,243,239,529,102,250,469], 10
+    print(sol.minimumTimeRequired2(jobs, k))
+    print(sol.minimumTimeRequired3(jobs, k))

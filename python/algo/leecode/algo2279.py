@@ -28,14 +28,13 @@ class Solution:
         to_fill  = sorted([x-y for x,y in zip(capacity, rocks)])
 
         for f in to_fill:
-            if additionalRocks == 0:break
-            if additionalRocks < f:
-                additionalRocks = 0
+            if additionalRocks < f: break
             else:
                 additionalRocks -= f
                 fullCount += 1
 
-        return fullCount    
+        return fullCount
+    
 if __name__ == "__main__":
     sol = Solution()
     capacity, rocks, additionalRocks = [2,3,4,5], [1,2,4,4], 2

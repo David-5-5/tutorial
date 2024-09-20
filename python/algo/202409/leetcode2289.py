@@ -1,7 +1,7 @@
 from cmath import inf
 from typing import List
 
-
+# 周赛 295
 class Solution:
     # 自行解答, 思维要求高
     def totalSteps(self, nums: List[int]) -> int:

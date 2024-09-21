@@ -13,6 +13,7 @@ class Solution:
             if mx == cnt:
                 ans += chr(ord('a')+i)
         return ans
+
 if __name__ == "__main__":
     sol = Solution()
     s = "aabcbbca"

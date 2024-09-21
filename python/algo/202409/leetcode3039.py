@@ -1,3 +1,4 @@
+# 双周赛 124
 class Solution:
     def lastNonEmptyString(self, s: str) -> str:
         lett = [[-1,0] for _ in range(26)]

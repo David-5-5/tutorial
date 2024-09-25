@@ -5,6 +5,7 @@ from typing import List
 # 周赛 334
 class Solution:
     def minimumTime(self, grid: List[List[int]]) -> int:
+        # 参考题解
         m, n = len(grid), len(grid[0])
 
         if grid[0][1]>1 and grid[1][0]>1 : return -1

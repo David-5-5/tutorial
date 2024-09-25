@@ -4,6 +4,7 @@ from typing import List
 # 周赛 337
 class Solution:
     def findSmallestInteger(self, nums: List[int], value: int) -> int:
+        # 自行解答
         cnt = defaultdict(int)
         for v in nums:
             cnt[v%value] += 1

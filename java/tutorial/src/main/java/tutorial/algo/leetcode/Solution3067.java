@@ -9,7 +9,7 @@ public class Solution3067 {
     List<int[]>[] g;
 
     private int dfs(int u, int fa, int w) {
-        int res = w % signalSpeed == 0 ? 1 : 0 ;
+        int res = w % signalSpeed== 0 ? 1 : 0 ;
 
         for (int[] v : g[u]) {
             if (v[0] != fa)
@@ -21,6 +21,7 @@ public class Solution3067 {
 
     public int[] countPairsOfConnectableServers(int[][] edges, int signalSpeed) {
         int n = edges.length + 1;
+        this.signalSpeed = signalSpeed;
         g = new ArrayList[n];
         Arrays.setAll(g, e -> new ArrayList<>());
         for (int[] e : edges) {
@@ -43,5 +44,12 @@ public class Solution3067 {
 
         return ans;
 
+    }
+
+    public static void main(String[] args ) {
+        int[][] nums = new int[][]{{0,1,1},{1,2,5},{2,3,13},{3,4,9},{4,5,2}};
+        int[] ans  = new Solution3067().countPairsOfConnectableServers(nums, 1);
+        for (int a : ans) System.out.print(a + ",");
+        System.out.println("");
     }
 }

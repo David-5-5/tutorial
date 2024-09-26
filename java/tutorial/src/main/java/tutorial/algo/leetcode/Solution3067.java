@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+// 双周赛 125
 public class Solution3067 {
     private int signalSpeed;
     List<int[]>[] g;

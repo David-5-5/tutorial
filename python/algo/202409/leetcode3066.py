@@ -1,4 +1,5 @@
 from bisect import bisect_left
+import heapq
 from typing import List
 
 # 双周赛 125
@@ -17,7 +18,7 @@ class Solution:
 
         return ans
     
-    def minOperations(self, nums: List[int], k: int) -> int:
+    def minOperations2(self, nums: List[int], k: int) -> int:
         # 自行进行剪枝优化，运行时间 4090 ms 
         nums.sort()
         inx = bisect_left(nums,k)
@@ -33,6 +34,20 @@ class Solution:
             ans += 1
         if nums: ans += 1
         return ans
+    
+    def minOperations3(self, nums: List[int], k: int) -> int:
+        # 参考题解，用堆，多明显，怎么就短路了呢！！！！
+        heapq.heapify(nums)
+        ans = 0
+        while nums[0] < k:
+            a = heapq.heappop(nums)
+            b = heapq.heappop(nums)
+            nw = a * 2 + b
+            heapq.heappush(nums, nw)
+            ans += 1            
+
+        return ans
+
 
 if __name__ == "__main__":
     sol = Solution()

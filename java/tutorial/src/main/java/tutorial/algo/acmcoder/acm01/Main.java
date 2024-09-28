@@ -1,7 +1,7 @@
-package tutorial.algo.acmcoder;
+package tutorial.algo.acmcoder.acm01;
 
 import java.util.Scanner;
-
+// https://acmcoder.com/ojques.html?id=5fd6e255c8dc726ead59925f
 public class Main {
     public static void main(String[] args) {
         int ans = 0;

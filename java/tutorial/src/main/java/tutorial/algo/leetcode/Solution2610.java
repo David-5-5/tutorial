@@ -27,4 +27,25 @@ public class Solution2610 {
 
         return ans;
     }
+
+    public List<List<Integer>> findMatrix2(int[] nums) {
+        HashMap<Integer, Integer> cnt = new HashMap<>();
+        for (int x:nums) cnt.merge(x, 1, Integer::sum);
+
+        List<List<Integer>> ans = new ArrayList<>();
+        while (!cnt.isEmpty()) {
+            List<Integer> row = new ArrayList<>();
+            for (Integer k : cnt.keySet()) {
+                row.add(k);
+            }
+            ans.add(row);
+
+            for (Integer k :row) {
+                if (cnt.get(k) > 1) cnt.put(k, cnt.get(k)-1);
+                else cnt.remove(k);
+            }
+        }
+
+        return ans;
+    }    
 }

@@ -1,7 +1,7 @@
 from bisect import bisect_left
 from typing import List
 
-
+# 周赛 339
 class Solution:
     def minReverseOperations(self, n: int, p: int, banned: List[int], k: int) -> List[int]:
         ban = set(banned) | {p}

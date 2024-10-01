@@ -25,3 +25,8 @@ class Solution:
             return  (m + (n//m)*m) * (n//m) // 2
             # return m * (1 + (n//m)) * (n//m) // 2
         return s(3) + s(5) + s(7) - s(15) - s(21) - s(35) + s(105)
+
+if __name__ == "__main__":
+    sol = Solution()
+    print(sol.sumOfMultiples(100))
+    print(sol.sumOfMultiples2(100))

@@ -27,6 +27,7 @@ class Solution:
             cur, next = next, []
             ans += 1
 
-
-                
-            
+if __name__ == "__main__":
+    sol = Solution()
+    nums = [2,6,3,4]
+    print(sol.minOperations(nums))

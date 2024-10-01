@@ -1,3 +1,4 @@
+# 周赛 341
 class Solution:
     def addMinimum(self, word: str) -> int:
         exp, exi = "abc", 0

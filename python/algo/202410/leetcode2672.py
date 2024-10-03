@@ -3,7 +3,7 @@ from typing import List
 # 周赛 344
 class Solution:
     def colorTheArray(self, n: int, queries: List[List[int]]) -> List[int]:
-        # 自行解答，模拟过程即可
+        # 自行解答，枚举方法模拟过程即可
         color = [0] * n
         cur = 0
         ans = []
@@ -16,7 +16,7 @@ class Solution:
             after = 0 # 更改前 i 相邻元素计数
             if i>0 and color[i]!=0 and color[i-1] == color[i]:after += 1
             if i+1<n and color[i]!=0 and color[i] == color[i+1]:after += 1
-            
+
             cur += after - before
         
             ans.append(cur)

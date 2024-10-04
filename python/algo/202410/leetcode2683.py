@@ -1,3 +1,5 @@
+from functools import reduce
+from operator import xor
 from typing import List
 
 # 周赛 344
@@ -8,4 +10,4 @@ class Solution:
         # = original[0] ^ original[1] ^ original[1] ^ original[2] ... ^ original[n-2] ^ original[n-1] ^ original[n-1] ^ original[0]
         # = (original[0] ^ original[0]) ^ (original[1] ^ original[1]) ... ^ (original[n-1] ^ original[n-1])
         # = 0
-        return 
+        return reduce(xor, derived) == 0

@@ -41,7 +41,7 @@ class Solution:
             if (x, y) == (tx, ty): return path[(tx,ty)]
             vis.append((x,y))
             for u, v, c in g[(x,y)]:
-                if path[(u,v)] > path[(x,y)]+c:
+                if (u,v) not in vis and path[(u,v)] > path[(x,y)]+c: # 增加 (u,v) not in vis 判断，反而慢了
                     path[(u,v)] = path[(x,y)]+c
                     heapq.heappush(pg, (path[(u,v)], u, v))
         # return  path[(tx,ty)]

@@ -11,3 +11,9 @@ class Solution:
         # = (original[0] ^ original[0]) ^ (original[1] ^ original[1]) ... ^ (original[n-1] ^ original[n-1])
         # = 0
         return reduce(xor, derived) == 0
+
+
+if __name__ == "__main__":
+    sol = Solution()
+    derived = [1,1,0]
+    print(sol.doesValidArrayExist(derived))

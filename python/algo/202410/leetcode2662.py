@@ -37,13 +37,15 @@ class Solution:
         while pg:
             _, x, y = heapq.heappop(pg)
             if (x, y) in vis: continue
+            # 优化, 剪枝。直接返回，代替循环结束后返回
+            if (x, y) == (tx, ty): return path[(tx,ty)]
             vis.append((x,y))
             for u, v, c in g[(x,y)]:
                 if path[(u,v)] > path[(x,y)]+c:
                     path[(u,v)] = path[(x,y)]+c
                     heapq.heappush(pg, (path[(u,v)], u, v))
-        return  path[(tx,ty)]
-    
+        # return  path[(tx,ty)]
+
 if __name__ == "__main__":
     sol = Solution()
     start, target, specialRoads = [1,1], [4,5], [[1,2,3,3,2],[3,4,4,5,1]]

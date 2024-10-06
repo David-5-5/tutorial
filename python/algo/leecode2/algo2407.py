@@ -74,7 +74,9 @@ class Solution:
             return maxv
 
         for num in nums:
-            r = num - 2
+            # r 表示查询小于 num 的区间, 因此 r=num-1, 
+            # 同时，nums取值从1开始,线段树区间从0开始，因此最终 r = num-2
+            r = num - 2 
             l = max(0, r - k + 1)
             val = 0 if num == 1 else query(l, r, 0, maxN-1, 0)
             update(num - 1, val, 0, maxN-1, 0)

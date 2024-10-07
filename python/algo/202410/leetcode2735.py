@@ -4,7 +4,7 @@ from typing import List
 class Solution:
     def minCost(self, nums: List[int], x: int) -> int:
         # 参考题解
-        
+
         # 1, 不操作 总成本是多少？ sum(nums)
         # 2, 最多操作多少次? 最多操作 n-1 次
         # 3, 操作一次的总成本 -> 连续子数组最小值
@@ -26,6 +26,7 @@ class Solution:
             for j in range(n):
                 mx_cur[j] = min(mx_prev[j], nums[(j+i)%n])
             ans = min(ans, sum(mx_cur) + x*i)
+            # if sum(mx_cur) + x*i < ans: ans = sum(mx_cur) + x*i
             mx_prev, mx_cur = mx_cur, [0] * n
         
         return ans

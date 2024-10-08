@@ -16,6 +16,8 @@ class Solution:
             # cnt0 使用 0 的数量
             # cnt1 使用 1 的数量
             # 第 cnt0 + cnt1 位 填写 cur , where cur ∈ {0,1}
+            # 边界情况:
+            # 如果 cnt0 为 0，那么当 cur 为 1 或者 cnt1 大于 limit 时，不存在这样的稳定数组，返回 0，否则返回 1。
             if cnt0 == 0:
                 return 1 if cur == 1 and cnt1 <= limit else 0
             if cnt1 == 0:

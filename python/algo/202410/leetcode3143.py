@@ -6,8 +6,8 @@ from typing import List
 class Solution:
     def maxPointsInsideSquare(self, points: List[List[int]], s: str) -> int:
         # 自行解答，枚举
-        pd = defaultdict(lambda:inf)
-        mx = inf
+        pd = defaultdict(lambda:inf) # 每类标签的最小半径
+        mx = inf # 存储出现重复标签的最小值，包含的类型的最小半径必须小于 mx
         for i, (x, y) in enumerate(points):
             edge = 2 * max(abs(x),abs(y))
             if pd[s[i]] > edge:
@@ -15,6 +15,7 @@ class Solution:
                 pd[s[i]] = edge
             else:
                 mx = min(mx, edge)
+            if mx == 0: return 0 # 剪枝
 
         ans = 0
         for k in pd.keys():

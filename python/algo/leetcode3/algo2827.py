@@ -1,6 +1,7 @@
 from functools import lru_cache
 
 # 双周赛 111
+# 数位 DP low high
 class Solution:
     def numberOfBeautifulIntegers(self, low: int, high: int, k: int) -> int:
 

@@ -1,7 +1,7 @@
 from collections import defaultdict
 from typing import List
 
-# 周赛 353
+# 周赛 356
 class Solution:
     def countCompleteSubarrays(self, nums: List[int]) -> int:
         ans, l, dc, cnt, win = 0, 0, len(set(nums)), defaultdict(int), set()

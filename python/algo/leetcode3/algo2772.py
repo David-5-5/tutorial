@@ -1,8 +1,10 @@
 from itertools import pairwise
 from typing import List
 
+# 周赛 353
 class Solution:
     def checkArray(self, nums: List[int], k: int) -> bool:
+        # 差分数组
         n = len(nums)
         diff = [0] * n
         diff[0] = nums[0]

@@ -30,7 +30,7 @@ class Solution:
 
         return maxArea
 
-    def largestRectangleArea(self, heights: List[int]) -> int:
+    def largestRectangleArea2(self, heights: List[int]) -> int:
         heights.append(0) # 哨兵
 
         n  = len(heights)

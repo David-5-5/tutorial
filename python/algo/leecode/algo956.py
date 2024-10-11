@@ -5,13 +5,21 @@ class Solution:
         官方题解，方法一动态规划
         '''
         @lru_cache(None)
+        # 自行解答，多一维超时
+        # def dp(i, s1, s2):
+        #     if i == len(rods):
+        #         return s2 if s1 == s2 else 0
+        #     return max(dp(i + 1, s1, s2),
+        #                dp(i + 1, s1 + rods[i], s2),
+        #                dp(i + 1, s1, s2 + rods[i]))
+        # return dp(0,0,0)
         def dp(i, s):
             if i == len(rods):
-                return 0 if s == 0 else float('-inf')
+                return 0 if s == 0 else float('-inf') # s == 0 表示找到两组相等的钢管
             return max(dp(i + 1, s),
-                       dp(i + 1, s - rods[i]),
-                       dp(i + 1, s + rods[i]) + rods[i])
-
+                       dp(i + 1, s - rods[i]), 
+                       dp(i + 1, s + rods[i]) + rods[i]) # 优化，少一维
+ 
         return dp(0, 0)
 
 
@@ -65,12 +73,13 @@ class Solution:
 
 if __name__ == "__main__":
     sol = Solution()
-    import random
+    # import random
     from datetime import datetime
-    nums = [random.randint(1, 200) for _ in range(32)]
+    # nums = [random.randint(1, 200) for _ in range(32)]
+    # begin = datetime.now()
+    # print(f'The first result is {sol.tallestBillboard(nums)} and duration is {datetime.now()-begin}')
+    # begin = datetime.now()
+    # print(f'The second result is {sol.tallestBillboard2(nums)} and duration is {datetime.now()-begin}')
     begin = datetime.now()
-    print(f'The first result is {sol.tallestBillboard(nums)} and duration is {datetime.now()-begin}')
-    begin = datetime.now()
-    print(f'The second result is {sol.tallestBillboard2(nums)} and duration is {datetime.now()-begin}')
-    begin = datetime.now()
+    nums = [1,2,3]
     print(f'The third result is {sol.tallestBillboard3(nums)} and duration is {datetime.now()-begin}')

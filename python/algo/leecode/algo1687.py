@@ -1,3 +1,8 @@
+# 2024.10 复习总结
+# 从 状态转移方程出发，dp(i) <- f(i, dp(j)），找出转移方程 f 中关联 j 的单调性，维护满足区间的单调值
+# 1, 求最大值，队列单调递减，即队首是满足条件的最大值；反之当求最小值，队列单调递增
+# 2, 队首出队列，不满足题目的限制条件
+# 3, 队尾出队列，不满足队列的单调性
 class Solution:
     def boxDelivering(self, boxes, portsCount: int, maxBoxes: int, maxWeight: int) -> int:
         n = len(boxes)

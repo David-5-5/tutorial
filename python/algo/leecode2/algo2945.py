@@ -57,6 +57,25 @@ class Solution:
             q.append(i)
 
         return dp[n]
+    
+    def findMaximumLength3(self, nums: List[int]) -> int:
+        n = len(nums)
+        q = deque()
+        q.append((0,0,0))
+        presum = list(accumulate(nums, initial=0))
+        for i in range(1, n+1):
+            while len(q) > 1 and presum[q[1][2]] + q[1][1] <= presum[i]:
+                q.popleft()
+            
+            cnt ,last = q[0][0]+1, presum[i]-presum[q[0][2]]
+
+            while q and presum[q[-1][2]] + q[-1][1] >= presum[i] + last:
+                 q.pop()
+
+            q.append((cnt ,last, i))
+        
+        return q[-1][0]
+
 if __name__ == "__main__":
     sol = Solution()
     nums = [279,641,864,511,317,169,848,277]

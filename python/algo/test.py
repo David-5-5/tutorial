@@ -23,6 +23,37 @@ class Solution:
         
         return q[-1][0]
 
+    def count(self, s:str) -> int:
+        mod = 72
+        cur = defaultdict(int)
+        next = defaultdict(int)
+        ans = 0
+        for ch in s:
+            d = int(ch)
+            
+            if d == 0: ans += 1
+            else: next[d] += 1
+            
+            for key, value in cur.items():
+                new_k = (key * 10 + d) % mod
+                if new_k == 0: ans += value
+                next[new_k] += value
+            
+            cur = next
+            next = defaultdict(int)
+        return ans
+        
+    def count2(self, s:str) -> int:
+        mod = 72
+        n = len(s)
+        ans = s.count('0')
+        for i in range(n-1):
+            if s[i] == '0':continue
+            for j in range(i+1, n+1):
+                if int(s[i:j]) % mod == 0: 
+                    ans += 1
+        return ans
+
 if __name__ == '__main__':
     sol = Solution()
     
@@ -30,3 +61,5 @@ if __name__ == '__main__':
     # nums = [5,2,2,2,4,9,10]
     # nums = [1,2,3,4]
     print(sol.findMaximumLength(nums))
+    print(sol.count("74444444444440000000000000000000044444333333333000000000000000000000000000003333333333332222222222222222222999999999999999999988888888888888"))
+    print(sol.count2("74444444444440000000000000000000044444333333333000000000000000000000000000003333333333332222222222222222222999999999999999999988888888888888"))

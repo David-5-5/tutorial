@@ -63,3 +63,31 @@ if __name__ == '__main__':
     print(sol.findMaximumLength(nums))
     print(sol.count("74444444444440000000000000000000044444333333333000000000000000000000000000003333333333332222222222222222222999999999999999999988888888888888"))
     print(sol.count2("74444444444440000000000000000000044444333333333000000000000000000000000000003333333333332222222222222222222999999999999999999988888888888888"))
+
+
+
+def count(s:str, target:int) -> int:
+    mod = 1000000007
+    cur = defaultdict(int)
+    next = defaultdict(int)
+    ans = 0
+    for ch in s:
+        d = int(ch)
+        
+        if d == target: ans += 1
+        next[d] += 1
+        
+        for key, value in cur.items():
+            new_k = (key * 10 + d) % mod
+            if new_k == target: ans += value
+            next[new_k] += value
+        
+        cur = next
+        next = defaultdict(int)
+    return ans
+
+s = input().strip()
+cnt = int(input().strip())
+for _ in range(cnt):
+    t = int(input().strip())
+    print(count(s, t))

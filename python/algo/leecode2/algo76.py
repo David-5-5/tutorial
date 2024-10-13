@@ -1,4 +1,4 @@
-from collections import deque
+from collections import Counter, deque
 class Solution:
     def minWindow(self, s: str, t: str) -> str:
         # Handle the target str
@@ -44,7 +44,36 @@ class Solution:
         return s[minw[0]:minw[1]+1] if kcount == 0 else ""
 
 
+    def minWindow2(self, s: str, t: str) -> str:
+        # 滑动窗口
+        td = Counter(t)
+        sd = Counter()
+
+        def contain() -> bool:
+            for k in td.keys():
+                if sd[k] < td[k]: return False
+
+            return True
+
+        l = start = 0
+        end = len(s)
+        found = False
+        for r, v in enumerate(s):
+            sd[v] += 1
+            if not contain(): continue
+
+            found = True
+            while contain():
+                sd[s[l]] -= 1
+                l += 1
+            if r - l + 2 < end - start: 
+                start = l - 1 # l-1 就是满足条件的第一个字符位置
+                end = start + r - l + 2
+                
+        return s[start:end] if found else ""
+
 if __name__ == "__main__":
     sol = Solution()
-    s, t = "ADOBECODEBANC", "ABBC"
+    s, t = "ADOBECODEBANC", "ABC"
     print(sol.minWindow(s, t))
+    print(sol.minWindow2(s, t))

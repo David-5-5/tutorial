@@ -134,6 +134,7 @@ class Solution:
     #                        dfs(i-1, j-1 True) + prices[i])    卖掉股票
     # dfs(i, j, True) = max(dfs(i-1, j, True),                  不变化
     #                       dfs(i-1, j, False) - prices[i])     买入股票
+    # 注：状态转移，等号左边是后一个状态，右边是前一个状态
     def maxProfit3(self, k: int, prices: List[int]) -> int:
         n = len(prices)
 

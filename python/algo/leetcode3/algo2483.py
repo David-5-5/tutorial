@@ -1,3 +1,4 @@
+# 双周赛 92
 class Solution:
     def bestClosingTime(self, customers: str) -> int:
         ans = 0

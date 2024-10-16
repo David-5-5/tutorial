@@ -25,15 +25,16 @@ class Solution:
         return -1
 
     def validSubarraySize2(self, nums: List[int], threshold: int) -> int:
+        # 求子数组中 每个值作为最小值的左右区间
         # 单调栈
         n = len(nums)
-        left,st = [-1] * n, []
+        left,st = [-1] * n, [] # 栈为空即为最小left值 -1
         for i, num in enumerate(nums):
             while st and nums[st[-1]] >= num: st.pop()
             if st: left[i]=st[-1]
             st.append(i)
         
-        right, st = [n] * n, []
+        right, st = [n] * n, [] # 栈为空即为最大right值 n
         for i in range(n-1,-1,-1):
             while st and nums[st[-1]] >= nums[i]: st.pop()
             if st: right[i]=st[-1]

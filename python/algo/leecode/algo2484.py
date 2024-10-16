@@ -1,5 +1,7 @@
+# 双周赛 92
 class Solution:
     def countPalindromes(self, s: str) -> int:
+        # 参考题解，前后缀分解
         suf = [0]  * 10
         suf2 = [0] * 100
         for d in reversed(s):
@@ -16,6 +18,7 @@ class Solution:
                 suf2[d2*10+int(d)] -= suf[d2]
 
             for i in range(100):
+                #前后缀的 i 值是相同的，后缀倒序生成，正好形成回文
                 ans += pre2[i] * suf2[i]
 
             for d2 in range(10):

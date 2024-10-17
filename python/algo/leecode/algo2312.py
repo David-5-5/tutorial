@@ -39,12 +39,12 @@ class Solution:
                 return pr[h][w]
 
             res = pr[h][w]
-
-            for k in range(1, w):
+            # 优化 range(1, w) -> range(1, w//2 + 1)
+            for k in range(1, w//2 + 1):
                 cur = dfs(h, k) + dfs(h, w-k)
                 if cur > res: res = cur
-            
-            for k in range(1, h):
+            # 优化 range(1, h) -> range(1, h//2 + 1)
+            for k in range(1, h//2 + 1):
                 cur = dfs(k, w) + dfs(h-k, w)
                 if cur > res: res = cur
 
@@ -57,9 +57,25 @@ class Solution:
         return dfs(m, n)
 
 
+    def sellingWood3(self, m: int, n: int, prices) -> int:
+        # 递归 -> 递推
+        dp = [[0] * (n+1) for _ in range(m+1)]
+        for h, w, p in prices:
+            dp[h][w] = p
+        
+        for i in range(1, m+1):
+            for j in range(1, n+1):
+                # 优化 range(1, j) - > range(1, j//2 +1) 
+                dp[i][j] = max([dp[i][j]]+[dp[i][k] + dp[i][j-k] for k in range(1, j//2 +1)])
+                # 优化 range(1, i) - > range(1, i//2 +1)
+                dp[i][j] = max([dp[i][j]]+[dp[k][j] + dp[i-k][j] for k in range(1, i//2 +1)])
+        return dp[m][n]
+    
 if __name__ == "__main__":
     sol = Solution()
     m, n, prices = 3, 5, [[1,4,2],[2,2,7],[2,1,3]]
     m, n, prices = 8, 2, [[5,2,9],[6,1,30]]
     print(sol.sellingWood(m, n, prices))
     print(sol.sellingWood2(m, n, prices))
+    print(sol.sellingWood3(m, n, prices))
+

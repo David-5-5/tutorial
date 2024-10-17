@@ -3,7 +3,7 @@ class Solution:
         m, n = len(s), len(p)
         dp = [[False] * (n + 1) for _ in range(m + 1)]
         dp[0][0] = True
-        for i in range(1, n + 1):
+        for i in range(1, n + 1): # 匹配空字符串
             if p[i - 1] == '*':
                 dp[0][i] = True
             else:

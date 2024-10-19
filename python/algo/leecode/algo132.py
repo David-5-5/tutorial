@@ -1,4 +1,5 @@
 from cmath import inf
+from functools import cache
 
 
 class Solution:
@@ -28,20 +29,21 @@ class Solution:
 
     def minCut2(self, s: str) -> int:
         n = len(s)
-        
+        @cache
         def dfs(i:int) -> int:
             if i == n:
-                return 1
+                return -1
 
-            res = 0
-            for j in range(i+1, n):
+            res = inf
+            for j in range(i,n):
                 t = s[i:j+1]
                 if t == t[::-1]:
                     res = min(res, 1+dfs(j+1))
             return res
-
+        return dfs(0)
 
 if __name__ == "__main__":
     sol = Solution()
     s = "aab"
     print(sol.minCut(s))
+    print(sol.minCut2(s))

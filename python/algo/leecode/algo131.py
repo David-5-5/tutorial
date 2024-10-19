@@ -1,3 +1,6 @@
+from functools import cache
+
+
 class Solution:
     def partition(self, s: str) :
         n = len(s)
@@ -33,7 +36,7 @@ class Solution:
         ans = []
         path = []
         n = len(s)
-
+        
         def dfs(pre:str, i:int):
             if i+1 == n:
                 if pre == pre[::-1]:
@@ -59,7 +62,7 @@ class Solution:
         ans = []
         path = []
         n = len(s)
-
+        # 不能 cache ！！！
         def dfs(i):
             if i == n:
                 ans.append(path.copy())

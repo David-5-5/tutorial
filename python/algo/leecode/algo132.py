@@ -1,3 +1,6 @@
+from cmath import inf
+
+
 class Solution:
     def minCut(self, s: str) -> int:
         n = len(s)
@@ -22,6 +25,21 @@ class Solution:
             if (len(cuts) > 0):
                 f[i] = min(cuts)
         return f[n-1]
+
+    def minCut2(self, s: str) -> int:
+        n = len(s)
+        
+        def dfs(i:int) -> int:
+            if i == n:
+                return 1
+
+            res = 0
+            for j in range(i+1, n):
+                t = s[i:j+1]
+                if t == t[::-1]:
+                    res = min(res, 1+dfs(j+1))
+            return res
+
 
 if __name__ == "__main__":
     sol = Solution()

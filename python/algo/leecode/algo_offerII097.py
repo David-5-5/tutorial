@@ -24,24 +24,39 @@ class Solution:
               其中dp[1][4], 前babgb包含ba的次数为1, dp[0][4]为3, babgb包含b次数为3,
               s[5]=t[1],即s[5]和前面三个b组合, 匹配t[0]t[1]=ba三次, 因此总次数为4次
         '''
-        n = len(s)
-        m = len(t)
-        if m > n: return 0
-        dp = [[0] * n for _ in range(m)]
+        # n = len(s)
+        # m = len(t)
+        # if m > n: return 0
+        # dp = [[0] * n for _ in range(m)]
 
+        # for i in range(m):
+        #     for j in range(i,n):
+        #         if s[j] == t[i]:
+        #             if i == 0 and j == 0:
+        #                 dp[i][j] = 1
+        #             elif i == 0:
+        #                 dp[i][j] = dp[i][j-1] + 1
+        #             elif dp[i-1][j-1] > 0:
+        #                 dp[i][j] = dp[i-1][j-1] + dp[i][j-1]
+        #             # else 为初始值，忽略
+        #         else:
+        #             if j > 0: dp[i][j] = dp[i][j-1]
+        # return dp[m-1][n-1]
+        
+        # 简化边界检查
+        n,m  = len(s), len(t)
+        if m > n: return 0
+        dp = [[0] * (n+1) for _ in range(m+1)]
+        for j in range(n):
+            dp[0][j] = 1
+            
         for i in range(m):
             for j in range(i,n):
                 if s[j] == t[i]:
-                    if i == 0 and j == 0:
-                        dp[i][j] = 1
-                    elif i == 0:
-                        dp[i][j] = dp[i][j-1] + 1
-                    elif dp[i-1][j-1] > 0:
-                        dp[i][j] = dp[i-1][j-1] + dp[i][j-1]
-                    # else 为初始值，忽略
+                    dp[i+1][j+1] = dp[i][j] + dp[i+1][j]
                 else:
-                    if j > 0: dp[i][j] = dp[i][j-1]
-        return dp[m-1][n-1]
+                    dp[i+1][j+1] = dp[i+1][j]
+        return dp[m][n]
 
 if __name__ == "__main__":
     sol = Solution()

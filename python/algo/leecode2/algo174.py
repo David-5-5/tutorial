@@ -56,9 +56,24 @@ class Solution:
 
         return dp[0][0]
     
+    def calculateMinimumHP_official_2(self, dungeon) -> int:
+        '''
+        official solution
+        利用滚动数组优化一维存储空间
+        '''
+        n, m = len(dungeon), len(dungeon[0])
+        dp = [10 ** 9]*(m+1)
+        
+        dp[m-1] = max(1, 1-dungeon[n-1][m-1])
+        for i in range(n-1, -1, -1):
+            for j in range(m-1, -1, -1):
+                if i == n-1 and j == m-1: continue
+                dp[j] = max(1, min(dp[j], dp[j+1])-dungeon[i][j])
+
+        return dp[0]
 
 if __name__ == "__main__":
     sol = Solution()
     dungeon = [[-2,-3,3],[-5,-10,1],[10,30,-5]]
     print(sol.calculateMinimumHP(dungeon))
-    print(sol.calculateMinimumHP_official(dungeon))
+    print(sol.calculateMinimumHP_official_2(dungeon))

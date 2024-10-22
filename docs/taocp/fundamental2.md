@@ -313,7 +313,7 @@ R(n) = \frac{n!e^n}{n^n}(\frac{\Gamma(n,n)}{(n-1)!})  \qquad (9)
 置
 ```math
 I_1 = \int_x^\infty e^{-t}t^{x}dt, \\
-I_1 = \int_x^{x+y} e^{-t}t^{x}dt, \\
+I_1 = \int_x^{x+y} e^{-t}t^{x}dt
 ```
 依次考察这两个积分。
 

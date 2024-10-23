@@ -2,8 +2,10 @@ from bisect import bisect_left
 from itertools import accumulate
 from typing import List
 
+# 双周赛 95
 class Solution:
     def maxPower(self, stations: List[int], r: int, k: int) -> int:
+        # 综合题 二分 前缀和 差分
         n = len(stations)
         presum = list(accumulate(stations, initial=0))
         st = [0] * n
@@ -34,6 +36,7 @@ class Solution:
         # return left
 
         # Use bisect_left
+        # 二分 bisect_left 反向
         def check(min_power:int) -> bool:
             min_power += 1 # Left true, right False
             diff = [0] * n

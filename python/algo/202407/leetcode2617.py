@@ -1,10 +1,17 @@
 from math import inf
 from typing import List
 
-
+# 周赛 340
 class Solution:
     def minimumVisitedCells(self, grid: List[List[int]]) -> int:
-        
+        # 参考题解 单调栈优化 DP
+        # 动态规划转移方程为
+        # f[i][j] = min{f[i][k] k in [j+1,j+g[i][j]]
+        #               f[k][j] k in [i+1,i+g[i][j]]
+        # 时间复杂度 O(mn(m+n)) 超时， 因此优化
+        # 倒序递推 对于f[i][j] <= f[i][k] f[k][j] 的对于后续的转移是不必要的
+        # 因此在行及列上定义单调栈，移动次数单调递增
+        # 在程序实现上，有许多技巧需要掌握
         m, n = len(grid), len(grid[0])
 
         col_st_l = [[] for _ in range(n)]
@@ -31,7 +38,7 @@ class Solution:
                 
                 if i == m-1 and j == n-1:
                     mn = 0
-                elif g:
+                elif g: # g 大于 0 才能移动
                     # 按列求最小值
                     k = i + g
                     k = search(col_st, k)

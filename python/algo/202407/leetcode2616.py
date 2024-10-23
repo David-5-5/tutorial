@@ -2,6 +2,7 @@ from bisect import bisect_left
 from itertools import pairwise
 from typing import List
 
+# 周赛 340
 class Solution:
     def minimizeMax(self, nums: List[int], p: int) -> int:
         nums.sort()
@@ -10,6 +11,7 @@ class Solution:
             cnt = i = 0
             
             while i < len(nums) - 1:
+                # 尽量多的选下标对
                 if nums[i+1] - nums[i] <= mx:
                     cnt += 1
                     i += 2

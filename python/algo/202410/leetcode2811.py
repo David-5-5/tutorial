@@ -1,5 +1,5 @@
 from functools import cache
-from itertools import accumulate
+from itertools import accumulate, pairwise
 from typing import List
 
 # 周赛 357
@@ -20,7 +20,12 @@ class Solution:
             return False
         
         return dfs(0, len(nums))
-    
+
+    def canSplitArray(self, nums: List[int], m: int) -> bool:
+        # 参考题解 脑筋急转弯
+        return len(nums) <= 2 or any(x + y >= m for x, y in pairwise(nums))
+
+
 if __name__ == "__main__":
     sol = Solution()
     nums, m = [2,2,1], 4

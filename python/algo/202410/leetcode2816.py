@@ -79,14 +79,14 @@ class Solution:
             node.val = value % 10
             return value // 10            
 
-        tail = head = reverse(head)
-        bit = double(tail)
-        while tail.next:
-            tail = tail.next
-            bit = double(tail, bit)
+        cur = head = reverse(head)
+        bit = double(cur)
+        while cur.next:
+            cur = cur.next
+            bit = double(cur, bit)
         
         if bit:
             node = ListNode(1)
-            tail.next = node
+            cur.next = node
 
         return reverse(head)

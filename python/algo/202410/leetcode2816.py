@@ -42,7 +42,7 @@ class Solution:
         #     cur = cur.next
         # return head
 
-    def doubleIt(self, head: Optional[ListNode]) -> Optional[ListNode]:
+    def doubleIt2(self, head: Optional[ListNode]) -> Optional[ListNode]:
         # 递归
 
         def double(node: Optional[ListNode])->int:
@@ -59,3 +59,34 @@ class Solution:
         carry = double(head)
 
         return ListNode(carry, head) if carry==1 else head
+
+    def doubleIt3(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        # 递归
+        # 列表 反转
+        def reverse(head: Optional[ListNode]) -> Optional[ListNode]:
+            prev, cur = None, head
+
+            while cur:
+                next = cur.next
+                cur.next = prev
+                prev = cur
+                cur = next
+
+            return prev
+
+        def double(node : Optional[ListNode], bit=0)-> int:
+            value = node.val * 2  + bit
+            node.val = value % 10
+            return value // 10            
+
+        tail = head = reverse(head)
+        bit = double(tail)
+        while tail.next:
+            tail = tail.next
+            bit = double(tail, bit)
+        
+        if bit:
+            node = ListNode(1)
+            tail.next = node
+
+        return reverse(head)

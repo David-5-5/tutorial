@@ -63,14 +63,65 @@ class Solution:
         return l
         # return bisect_left(range(r), True, key=check) # 不通过??
     
+    def maximumSafenessFactor2(self, grid: List[List[int]]) -> int:
+        # 同 maximumSafenessFactor，第二步使用并查集
 
+        n, q = len(grid), []
+        # 初始化
+        dis = [[-1] * n for _ in range(n)]
+        for r in range(n):
+            for c in range(n):
+                if grid[r][c] == 1:
+                    dis[r][c] = 0
+                    q.append((r,c))
+        
+        # BFS 生成各单元格的最长安全距离
+        cnt, cur = {}, 0
+        cnt[cur] = q
+        while q:
+            tmp = q
+            cur += 1
+            q = []
+            for r, c in tmp:
+                for nr, nc in [(r+1,c), (r-1,c), (r,c+1), (r,c-1)]:
+                    if 0 <= nr < n and 0 <= nc < n and dis[nr][nc] == -1:
+                        dis[nr][nc] = cur
+                        q.append((nr, nc))
+            if q: cnt[cur] = q
+
+        adt = [-1] * (n*n)
+        def find(x:int) -> int:
+            if adt[x] < 0:
+                return x
+            else:
+                adt[x] = find(adt[x])
+                return adt[x]
+        
+        def union(x:int, y:int) -> int:
+            root1 = find(x)
+            root2 = find(y)
+            if root1 == root2:
+                return -adt[root1]
+            adt[root2] = root1
+
+            return -adt[root1]
+
+
+        for mx in sorted(cnt.keys(), reverse=True):
+            len_s = len(cnt[mx])
+            for i in range(len_s):
+                r, c = cnt[mx][i]
+                for nr, nc in [(r+1,c), (r-1,c), (r,c+1), (r,c-1)]:
+                    if 0 <= nr < n and 0 <= nc < n and dis[nr][nc] >= mx:
+                        union(r*n+c, nr*n+nc)
+
+            if find(0) == find(n*n-1): return mx
+        return 0
 
 if __name__ == "__main__":
     sol = Solution()
-    grid = [[1,0,0],[0,0,0],[0,0,1]]
+    grid = [[0,0,1],[0,0,0],[0,0,0]]
+    grid = [[0,0,0,1],[0,0,0,0],[0,0,0,0],[1,0,0,0]]
     print(sol.maximumSafenessFactor(grid))
+    print(sol.maximumSafenessFactor2(grid))
 
-
-
-        
-    

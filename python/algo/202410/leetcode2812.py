@@ -32,6 +32,7 @@ class Solution:
             cur += 1
         
         vis = [[0] * n for _ in range(n)]
+        # 使用 clock 时间戳 只需要复用一个 vis 数组
         clock = 0
         
         def check(mx:int) -> bool:
@@ -52,7 +53,7 @@ class Solution:
             
             return dfs(0, 0)
         
-        l , r = -1, 2 * n - 1
+        l , r = -1, cur # 使用 cur 代替 2n-2 
         while l + 1 < r:
             mid = (l+r) // 2
             if check(mid):

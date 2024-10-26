@@ -41,3 +41,21 @@ class Solution:
         #         cur.val += 1
         #     cur = cur.next
         # return head
+
+    def doubleIt(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        # 递归
+
+        def double(node: Optional[ListNode])->int:
+            if node.next is None:
+                value = node.val * 2
+                node.val = value % 10
+                return value // 10
+        
+            bit = double(node.next)
+            value = node.val * 2 + bit
+            node.val = value % 10
+            return value // 10
+
+        carry = double(head)
+
+        return ListNode(carry, head) if carry==1 else head

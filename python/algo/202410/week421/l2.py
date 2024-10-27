@@ -4,38 +4,40 @@ from typing import Counter
 
 class Solution:
     def lengthAfterTransformations(self, s: str, t: int) -> int:
-        cnt = Counter(s)
-        cnt2 = Counter()
+        cnt = [0] * 26
+        for ch in s:
+            cnt[ord(ch)-ord('a')] += 1
+        cnt2 = [0] * 26
         MOD = 10 ** 9 + 7
-        expo = t // 26
-        for _ in range(expo):
-            for ch in ascii_lowercase:
-                if ch == 'z':
-                    # cnt2['z'] += cnt['z']
-                    cnt2['a'] = (cnt['a'] + cnt[ch]) % MOD
-                    cnt2['b'] = (cnt['b'] + cnt[ch]) % MOD
-                else:
-                    nx = chr(ord(ch)+1)
-                    cnt2[nx] = (cnt[nx] + cnt[ch]) % MOD
-            cnt = cnt2
-            cnt2 = Counter()
-        
-        rem = t % 26
-        for _ in range(rem):
-            for ch in ascii_lowercase:
-                if ch == 'z':
-                    cnt2['a'] += cnt['z'] 
-                    cnt2['b'] += cnt['z']
-                else:
-                    nx = chr(ord(ch)+1)
-                    cnt2[nx] = cnt[ch] % MOD
-            cnt = cnt2
-            cnt2 = Counter()
-        
-        return sum(i for i in cnt.values()) % MOD       
 
+        for _ in range(t):
+            for ch in range(26):
+                if ch == 25:
+                    cnt2[0] = cnt[25] 
+                    cnt2[1] += cnt[25]
+                else:
+                    cnt2[ch+1] = cnt[ch] % MOD
+            cnt = cnt2
+            cnt2 = [0] * 26
+        
+        return sum(cnt) % MOD       
+
+    def lengthAfterTransformations2(self, s: str, t: int) -> int:
+        cnt = [0] * 26
+        for ch in s:
+            cnt[ord(ch)-ord('a')] += 1
+        MOD = 10 ** 9 + 7
+        
+        z = 25
+        for i in range(t):
+            cnt[(z+1-i%26)%26]  = (cnt[(z+1-i%26)%26] + cnt[(z-i%26)%26])% MOD
+        
+        return sum(cnt) % MOD
+    
 if __name__ == "__main__":
     sol = Solution()
     s, t = "abcyy", 2
-    s, t = "jqktcurgdvlibczdsvnsg", 52
+    s, t = "jqktcurgdvlibczdsvnsg", 7517
+    # s, t = "abcdefghijklmnopqrstuvwxyz", 1
     print(sol.lengthAfterTransformations(s, t))
+    print(sol.lengthAfterTransformations2(s, t))

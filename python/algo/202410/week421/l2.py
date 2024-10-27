@@ -4,6 +4,7 @@ from typing import Counter
 
 class Solution:
     def lengthAfterTransformations(self, s: str, t: int) -> int:
+        # 使用 List 代替 Dict 就能通过性能测试
         cnt = [0] * 26
         for ch in s:
             cnt[ord(ch)-ord('a')] += 1
@@ -23,6 +24,7 @@ class Solution:
         return sum(cnt) % MOD       
 
     def lengthAfterTransformations2(self, s: str, t: int) -> int:
+        # 每次变更移动 b 的位置，因此仅将上轮的 z 的数量增加到变更后的 b 中
         cnt = [0] * 26
         for ch in s:
             cnt[ord(ch)-ord('a')] += 1
@@ -30,7 +32,7 @@ class Solution:
         
         z = 25
         for i in range(t):
-            cnt[(z+1-i%26)%26]  = (cnt[(z+1-i%26)%26] + cnt[(z-i%26)%26])% MOD
+            cnt[(z+1-i)%26]  += cnt[(z-i)%26] # 每次仅需要变更一个元素
         
         return sum(cnt) % MOD
     

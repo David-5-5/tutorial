@@ -1,10 +1,8 @@
-from itertools import pairwise
 from math import inf
 from typing import List
-
 from sortedcontainers import SortedList
 
-
+# 周赛 358
 class Solution:
     def minAbsoluteDifference(self, nums: List[int], x: int) -> int:
         # 参考题解 双指针 前一个指针遍历数据排序，

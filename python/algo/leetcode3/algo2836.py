@@ -1,7 +1,9 @@
 from typing import List
 
+# 周赛 360
 class Solution:
     def getMaxFunctionValue(self, receiver: List[int], k: int) -> int:
+        # 参考题解 树上倍增
         n = len(receiver)
 
         lg = k.bit_length()

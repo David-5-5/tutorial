@@ -7,7 +7,7 @@ from typing import List
 # a[i] <= a[j] + diff
 # 转化为求逆序对
 
-# 现状数组
+# 树状数组
 class BIT:
     # 数组从零开始
     def __init__ (self, n:int) -> None:
@@ -26,7 +26,7 @@ class BIT:
         return res
 
 class Solution:
-    # 方法一: 数状数组
+    # 方法一: 树状数组
     def numberOfPairs(self, nums1: List[int], nums2: List[int], diff: int) -> int:
         a = [x-y for x, y in zip(nums1, nums2)]
         b = a.copy() # 离散化，将数值对应到下标

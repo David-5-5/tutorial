@@ -35,7 +35,19 @@ class Solution:
             return res
         
         return dfs(0, -1)
-    
+
+    def minimumOperations2(self, num: str) -> int:
+        # 参考题解，找尾部匹配字符
+        n = len(num)
+
+        def find(tail:str) -> int:
+            i = num.rfind(tail[1])
+            if i <= 0: return n
+            i = num.rfind(tail[0], 0, i)
+            return n if i < 0 else n - i - 2
+        return min(n-('0' in num), find("00"), find("25"), find("75"), find("50"))
+
 if __name__ == "__main__":
     sol = Solution()
-    print(sol.minimumOperations("10"))
+    print(sol.minimumOperations("2245047"))
+    print(sol.minimumOperations2("2245047"))

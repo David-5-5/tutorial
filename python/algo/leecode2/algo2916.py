@@ -1,5 +1,7 @@
 from typing import List
 import math
+
+# 双周赛 116 线段数 懒更新 lazy update
 class Solution:
     def sumCounts(self, nums: List[int]) -> int:
         n = len(nums)

@@ -1,3 +1,4 @@
+# 周赛 362
 class Solution:
     def isReachableAtTime(self, sx: int, sy: int, fx: int, fy: int, t: int) -> bool:
         if t == 1:

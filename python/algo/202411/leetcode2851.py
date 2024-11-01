@@ -3,8 +3,12 @@ from typing import List
 # 周赛 362
 class Solution:
     def numberOfWays(self, s: str, t: str, k: int) -> int:
-        # 参考题解 矩阵快速幂优化DP
+        # 参考题解：
+        # 1、通过 KMP 找出匹配的次数，并给出状态转移方程 
+        # 2、矩阵快速幂优化DP
         MOD = 10 ** 9 + 7
+        
+        # 求 模式匹配次数
         def kmp(s:str, p:str):
             m, n = len(s), len(p)
             p_pi = [0] * n
@@ -34,6 +38,17 @@ class Solution:
             
             return ans
         
+
+        # 以下是题目相关代码，其他是模板
+        n = len(s)
+        c = kmp(s+s[0:n-1], t)
+        # 初始状态
+        f0 = [[1 if s == t else 0],[0 if s == t else 1]]
+        # 状态转移方程的矩阵表达式
+        trans = [[c-1, c], [n-c, n-c-1]]
+        # 以上是题目相关代码，其他是模板
+
+        # 矩阵快速幂 模板
         def pow(a:List[List[int]], b:List[List[int]]) -> List[List[int]]:
             r, m, c = len(a), len(a[0]), len(b[0])
             res = [[0] * c for _ in range(r)]
@@ -42,13 +57,7 @@ class Solution:
                     for k in range(m):
                         res[i][j] = (res[i][j] + a[i][k] * b[k][j]) % MOD
             return res
-
-        n = len(s)
-        c = kmp(s+s[0:n-1], t)
-
-        f0 = [[1 if s == t else 0],[0 if s == t else 1]] 
         ans = [[1 if i==j else 0 for i in range(2)] for j in range(2)]
-        trans = [[c-1, c], [n-c, n-c-1]]
         while k:
             if k & 1 == 1:
                 ans = pow(trans, ans)

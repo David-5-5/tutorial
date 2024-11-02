@@ -23,5 +23,7 @@ class Solution:
             if ans > cur:ans = cur
         return ans
 
-        
-                
+if __name__ == "__main__":
+    sol = Solution()    
+    grid = [[1,1,0],[1,1,1],[1,2,1]]
+    print(sol.minimumMoves(grid))

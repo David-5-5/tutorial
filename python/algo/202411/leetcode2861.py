@@ -1,10 +1,9 @@
 from bisect import bisect_left
 from typing import List
 
-# 周赛 362
+# 周赛 363
 class Solution:
     def maxNumberOfAlloys(self, n: int, k: int, budget: int, composition: List[List[int]], stock: List[int], cost: List[int]) -> int:
-        
 
         # 第 i 台机器制造合金数量
         def check(i:int, cnt:int) -> bool:

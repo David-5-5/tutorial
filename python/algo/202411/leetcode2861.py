@@ -18,7 +18,7 @@ class Solution:
         
         ans = []
         for i in range(k):
-            l, r = -1, budget + max(stock) + 1
+            l, r = -1, budget + min(stock) + 1
             while l + 1 < r:
                 mid = (l+r) // 2
                 if check(i, mid):

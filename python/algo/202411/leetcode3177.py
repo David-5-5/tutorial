@@ -11,7 +11,7 @@ class Solution:
         # 递归 -> 递推 -> DP 优化
         # 更改为递推的 DP 状态转移方称为
         # dp[x][j] = max(dp[x][j] + 1, dp[y][j-1] + 1 for y in set) 
-        #   其中 x ! = y x = nums[i]
+        #   其中 x ! = y , x = nums[i]
         # 优化后的 DP 状态转移方程为：
         # dp[x][j] = max(dp[x][j] + 1, mx[j-1]) 
         # 维护 mx[j-1] 的数组 记录 dp[y][j-1] 的最大值

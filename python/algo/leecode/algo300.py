@@ -1,3 +1,4 @@
+from functools import cache
 from typing import List
 from bisect import bisect_left, bisect_right
 class Solution:
@@ -75,16 +76,38 @@ class Solution:
 
         return len(dp)
 
+    def lengthOfLIS3(self, nums: List[int]) -> int:
+        '''The final solution, time complex is O(NlogN)
+        '''
+        n = len(nums)
+        # dp 固定最小连续序列的长度，其值为该序列长度的最小值。索引从0开始，长度序列从1开始，因此长度=索引+1
+        # 最后返回的结果为len(dp)
+        dp = []
+
+        for i in range(n):
+            inx = bisect_left(dp, nums[i])
+            if (inx) < len(dp):
+                dp[inx] = min(dp[inx], nums[i])
+            else:
+                dp.append(nums[i])
+
+        return len(dp)
+
+    def lengthOfLIS4(self, nums: List[int]) -> int:
+        # 优化前的标准实现，放在这里比较，更加深刻的理解动态规划的优化
+        # 最最重要的是优化的思路，分析问题和解决问题的能力
+        @cache
+        def dfs(i:int) -> int:
+            if i == 0: return 1
+            
+            res = 1
+            for j in range(i):
+                if nums[j] < nums[i] : res = max(res, dfs(j)+1)
+            return res
+        return max(dfs(i) for i in range(len(nums)))
+    
 if __name__ == "__main__":
     sol = Solution()
     nums = [10,9,2,5,3,7,101,18]
     print(sol.lengthOfLIS3(nums))
-
-    # performance compare with lengthOfLIS and lengthOfLIS
-    import random
-    from datetime import datetime
-    # nums = [random.randint(-100000, 100000) for _ in  range(12500)]
-    begin = datetime.now()
-    print(sol.lengthOfLIS(nums))
-    print((datetime.now()- begin).total_seconds())
-
+    print(sol.lengthOfLIS4(nums))

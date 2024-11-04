@@ -25,6 +25,22 @@
 
 ### Y86 指令
 
+Y86 指令基本上是 IA32 指令集的一个子集。它只包括四字节整数操作。指令包括：
+字节 | 0 | 1 | 2 | 3 | 4 | 5 
+|---|---|---|---|---|---|---|
+halt | 0 1 | | | | |
+nop  | 1 0 | | | | |
+rrmovl rA, rB | 2 0 | rA rB | | | |
+irmovl V, rB | 3 0 | F rB | V | V | V | V |
+rmmovl rA, D(rB) | 4 0 | rA rB | D | D | D | D |
+mrmovl D(rB), rA | 5 0 | rA rB | D | D | D | D |
+OP1 rA, rB | 6 fn | rA rB |
+jXX Dest | 7 fn | D | D | D | D |
+cmovXX rA, rB | 2 fn | rA rB | | | |
+call Dest | 8 0 | D | D | D | D |
+ret  | 9 0 | | | | |
+pushl rA  | A 0 | rA F | | | |
+popl rA  | B 0 | rA F | | | |
 
 
 ### 指令编码
@@ -75,6 +91,118 @@
 
 
 ### 字级的组合电路和 HCL 整数表达式
+
+通过将逻辑门组合成大的网，可以构造出能计算更加复杂函数的组合电路。通常设计能对数据字 (word) 进行操作的电路。例如字的大小有 4 位和 32 位，代表整数、地址、指令代码、和寄存器标识符。
+
+处理器中会用到很多种多路复用器。使得能根据某些控制条件，从许多源中选出一个字。在 HCL 中，多路复用函数是用情况表达式 (case expression) 来描述的。其通用格式如下：
+
+```
+[
+    select_1 : expr_1
+    select_2 : expr_2
+    ...
+    select_k : expr_k
+]
+```
+这个表达式包含一系列情况，每种情况 i 都有一个布尔表达式 $select_i$ 和一个整数表达式 $expr_i$
+
+一个思路复用器，这个电路根据控制信号 S1 和 S0, 从 4 个输入字 A, B, C, D 中选择一个，将控制信号看作一个两位的二进制数用布尔表达式描述控制位模式的不同组合：
+```
+int Out4 = [
+    !s1 && !s0 : A # 00
+    !s1        : B # 01
+    !s0        : C # 10
+    !s1        : D # 11
+]
+```
+
+组合逻辑电路可以设计成在字级数据上执行许多不同类型的操作。算术逻辑单元 (ALU) 是一种很重要的组合电路。这个电路有三个输入，标号为 A 和 B 的两个数据输入，以及一个控制输入。
+
+
+### 集合关系
+
+一个信号与许多可能的匹配的信号做比较，以此来检测正在处理的某个指令代码是否属于某一类指令代码。例如从一个两位信号 code 中选择高位和低位来为思路复用器产生 S1 和 S0
+```
+bool s1 = code == 2 || code == 3;
+bool s0 = code == 1 || code == 3;
+```
+
+还有一种更简洁的方式来表示这样的属性
+```
+bool s1 = code in {2, 3};
+bool s0 = code in {1, 3};
+```
+
+
+### 存储器和时钟
+
+组合电路从本质上讲，不存储任何信息。它只是根据输入信号，产生等于输入的某个函数输出。为了产生时序电路 (sequentail circuit)，须引入按位存储信息的设备。考虑两类存储设备：
+- 时钟寄存器，存储单个位或字。时钟信号控制寄存器加载输入值
+- 随机访问存储器，存储多个字，用地址来选择读/写哪个字。包括处理器的虚拟存储器系统和寄存器文件
+
+> 注：在硬件和机器级编程时，“寄存器”这个词有细微的差别。在硬件中，寄存器直接将他的输入输出连接到电路的其他部分。在机器级编程中，寄存器代表CPU 中为数不多的可寻址的字，这里的地址是寄存器的ID。避免歧义，分别称为“硬件寄存器” 和 "程序寄存器"
+
+寄存器文件有两个读端口和一个写端口，这样一个多端口随机访问存储器允许同时进行多个读和写操作。如果试图同时读写同一个寄存器会发生什么？答案简单明了，读端口用同一个寄存器，会看到一个从旧值到新值的变化。读端口有个延迟，写端口由时钟信号控制，每次时钟上升时，值写入程序寄存器中。
+
+随机访问存储器和寄存器文件一样，在输入端口和输出控制
+
+
+## Y86 的顺序实现
+
+SEQ 处理器。每个时钟周期上，SEQ 执行一条完整指令所需的所有步骤。不过这需要一个很长的时钟周期，因此时钟周期频率会低到不可接受。
+
+
+### 将处理组织成阶段
+
+处理一条指令包括很多操作。将它们组织成某个特殊的阶段序列，即使指令的动作差异很大，但所有指令都遵循唯一的序列。
+
+指令的各阶段及各阶段执行操作：
+- 取指 (fetch)
+  取指阶段存储器读取指令字节，地址为程序计数器 (PC) 的值
+- 译码 (decode)
+  译码从寄存器文件读入最多两个操作数
+- 执行 (execute)
+  在执行阶段，ACL 要么执行指令指明的操作，计算存储器引用的有效地址；要么增加或减少栈指针。
+- 访存 (memory)
+  在访存阶段可以将数据写入存储器，或者从存储器读出数据。
+- 写回 (write back)
+  写回阶段最多可以写两个结果到寄存器文件
+- 更新 PC (PC update)
+  将 PC 设置为下一条指令的地址
+
+处理器无限循环，执行这些阶段。在设计硬件时，一个非常简单而一致的结构非常重要。降低复杂度的一种方法是让不同的指令共享尽量多的硬件。
+
+
+__跟踪 subl 指令的执行__
+
+阶段 | 通用<br>OP1 rA, rB | 具体<br>subl %edx， %ebx
+|---|---|---|
+取指 | $icode:ifun\leftarrow M_1[PC]$<br>$rA:rB\leftarrow M_1[PC+1]$<br><br>$valP\leftarrow PC+2$ | $icode:ifun\leftarrow M_1[0x00c]=6:1$<br>$rA:rB\leftarrow M_1[0x00d]=2:3$<br><br>$valP\leftarrow 0x00c+2=0x00e$
+译码 |$valA\leftarrow R[rA]$<br>$valB\leftarrow R[rB]$|$valA\leftarrow R[\%edx]=9$<br>$valB\leftarrow R[\%ebx]=21$
+执行 |$valE\leftarrow valA\quad OP\quad valB$<br>Set CC|$valE\leftarrow 21-9=12$<br>$ZF\leftarrow 0,SF\leftarrow 0,OF\leftarrow 0$
+访存 | | 
+写回 |$R[rB]\leftarrow valE$ | $R[\%ebx]\leftarrow valE=12$ 
+更新 PC | $PC\leftarrow valP$ | $PC\leftarrow valP=0x00e$ 
+
+> %edx 和 %ebx 初始化成 9 和 21。指令位于地址 0x00c，由两个字节组成，值分别为 0x61 和 0x23
+
+
+__跟踪 rmmovl 指令的执行__
+
+阶段 | 通用<br>rmmovl rA, D(rB) | 具体<br>rmmovl %esp, 100(%ebx)
+|---|---|---|
+取指 | $icode:ifun\leftarrow M_1[PC]$<br>$rA:rB\leftarrow M_1[PC+1]$<br>$valC\leftarrow M_4[PC+2]$<br>$valP\leftarrow PC+6$ | $icode:ifun\leftarrow M_1[0x014]=4:0$<br>$rA:rB\leftarrow M_1[0x015]=4:3$<br>$valC\leftarrow M_4[0x016]=100$<br>$valP\leftarrow 0x014+6=0x01a$
+译码 |$valA\leftarrow R[rA]$<br>$valB\leftarrow R[rB]$|$valA\leftarrow R[\%esp]=128$<br>$valB\leftarrow R[\%ebx]=12$
+执行 |$valE\leftarrow valB+valC$<br>|$valE\leftarrow 12+100=112$<br>
+访存 |$M_4[valE]\leftarrow valA$| $M_4[112]\leftarrow 128$
+写回 | | 
+更新 PC | $PC\leftarrow valP$ | $PC\leftarrow valP=0x01a$ 
+
+
+> %esp 初始化为 128, %ebx 仍然是 subl 指令算出来的结果 12。指令位于地址 0x014，由 6 个字节组成，前两个值分别为 0x40 和 0x43，后四个是数字 0X00000064 (十进制数 100) 按字节反过来得到的数。
+
+
+### SEQ 硬件结构
 
 
 

@@ -10,6 +10,7 @@ for i in range(2, isqrt(N)+1):
         for j in range(i*i, N+1, i):
             min_prime_factor[j] = i
 
+# 周赛 363
 class Solution:
     def maximumSum(self, nums: List[int]) -> int:
         # 自行解答 埃氏筛 并查集

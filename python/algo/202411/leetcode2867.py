@@ -32,7 +32,7 @@ class Solution:
 
             left = 0
             for y in g[x]:
-                if is_prime[y]: continue
+                if is_prime[y]: continue  # 非质数，忽略
                 if count[y] == -1:
                     nodes.clear()
                     dfs(y, -1)

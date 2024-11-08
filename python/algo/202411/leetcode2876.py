@@ -1,52 +1,28 @@
+from collections import deque
 from typing import List
 
 # 周赛 365
 class Solution:
     def countVisitedNodes(self, edges: List[int]) -> List[int]:
+        # 基环树 参考题解
         n = len(edges)
-        # g = [[] for _ in range(n)]
+        rg = [[] for _ in range(n)] # 反图
         deg = [0] * n
 
-        for _, v in enumerate(edges):
-            # g[u].append[v]
+        for u, v in enumerate(edges):
+            rg[v].append[u]
             deg[v] += 1
 
-        # 查找第一个入度为零的节点
-        zero_d_f = -1
-        for i, d in enumerate(deg):
-            if d == 0:
-                zero_d_f = i
-                break
+
+        # 拓扑排序 剪掉 g 上的所有树枝
+        # 拓扑排序后，deg 值为 1 的点必定在基环上，为 0 的点必定在树枝上
+        q = deque(i for i, d in enumerate(deg) if d == 0) # 初始化 deg = 0 的点
+        while q:
+            u = q.popleft()
+            v = edges[u]
+            deg[v] -= 1
+            if deg[v] == 0: q.append(v)
         
-        if zero_d_f == -1: return [n] * n # 所有节点都在环里
-
-        # 从找到的入度为 0 的节点开始，查找环
-        clocks = [0] * n
-        c = 0
-        def find_cycle(i:int) -> int:
-            nonlocal c
-            c += 1
-            if clocks[i] != 0: return clocks[i]
-            clocks[i] = c
-            return find_cycle(edges[i])
-
-        ans = [0] * n
-        start = find_cycle(zero_d_f)
-        v_cycle = set()
-        for i, v in enumerate(clocks):
-            if v >= start:
-                v_cycle.add(i)
-                ans[i] = c - start
-
-        def dfs(i:int) -> int:
-            if i in v_cycle: return ans[i]
-            ans[i] = 1 + dfs(edges[i])
-            return ans[i]
-        
-        for i, v in enumerate(ans):
-            if v != 0:continue
-            dfs(i)
-        return ans
 
 if __name__ == "__main__":
     sol = Solution()

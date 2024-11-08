@@ -10,7 +10,7 @@ class Solution:
         deg = [0] * n
 
         for u, v in enumerate(edges):
-            rg[v].append[u]
+            rg[v].append(u)
             deg[v] += 1
 
 
@@ -23,6 +23,25 @@ class Solution:
             deg[v] -= 1
             if deg[v] == 0: q.append(v)
         
+        ans = [0] * n
+        # 在反图上遍历树枝
+        def rdfs(u:int, depth:int) -> None:
+            ans[u] = depth
+            for v in rg[u]:
+                if deg[v] == 0: rdfs(v, depth+1)
+        
+        # 基环树上找环
+        for i, d in enumerate(deg):
+            if d<=0: continue
+            ring = []
+            u = i
+            while True:
+                deg[u] = -1 # 避免重复访问
+                ring.append(u)
+                u = edges[u]
+                if u == i: break # 找到环
+            for u in ring: rdfs(u, len(ring))
+        return ans
 
 if __name__ == "__main__":
     sol = Solution()

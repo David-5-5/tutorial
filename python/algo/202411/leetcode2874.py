@@ -21,3 +21,17 @@ class Solution:
             ans = max(ans, (per_max[i-1]-nums[i])*suf_max[i+1])
         
         return ans
+
+    def maximumTripletValue2(self, nums: List[int]) -> int:
+        # 参考题解 max(nums[i]-nums[j])，遍历 k
+        n = len(nums)
+        pre_max ,m_diff = nums[0], nums[0] - nums[1]
+        
+        ans = 0
+        # 遍历 k
+        for k in range(2, n):
+            ans = max(ans, m_diff*nums[k])
+            if nums[k-1] > pre_max: pre_max = nums[k-1]
+            if pre_max - nums[k] > m_diff: m_diff = pre_max - nums[k]
+        
+        return ans

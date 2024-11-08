@@ -35,3 +35,9 @@ class Solution:
             if pre_max - nums[k] > m_diff: m_diff = pre_max - nums[k]
         
         return ans
+
+
+if __name__ == "__main__":
+    sol = Solution()
+    nums = [12,6,1,2,7]
+    print(sol.maximumTripletValue(nums))

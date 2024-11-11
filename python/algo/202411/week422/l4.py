@@ -1,7 +1,5 @@
-from collections import defaultdict
 from functools import cache
 from math import perm
-from typing import List
 
 """
 参考题解，解题思路

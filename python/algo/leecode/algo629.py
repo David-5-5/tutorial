@@ -42,17 +42,24 @@ class Solution:
 
     def kInversePairs2(self, n: int, k: int) -> int:
         # 参考 3193 题解
-
+        # 最好理解的方式递归
+        # 状态转移方程 dp(i, j) += dp(i-1, j-k)
+        # 其中  1: dp(i, j) 表示前 i 个数字包含 j 个逆序对的数量
+        #       2: i 从 i - 1转移过来，增加了 k 个逆序对
+        # 但是时间复杂度 O(n^2k)
         @cache
         def dfs(i:int, j:int) -> int:
             if i == 0:
                 if j == 0: return 1
                 else: return 0
-            
+            if j < 0: return 0 # 剪枝
             return sum(dfs(i-1,j-t) for t in range(min(i,j)+1)) % (10 ** 9 + 7)
         
         return dfs(n-1, k)
 
+    def kInversePairs3(self, n: int, k: int) -> int:
+        # 从 kInversePairs2，递归修改为递推再进行优化
+        # 即是 kInversePairs 方法
 
 if __name__ == "__main__":
     sol = Solution()

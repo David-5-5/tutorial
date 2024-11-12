@@ -58,8 +58,9 @@ class Solution:
         return dfs(n-1, k)
 
     def kInversePairs3(self, n: int, k: int) -> int:
-        # 从 kInversePairs2，递归修改为递推再进行优化
+        # 从 kInversePairs2，递归修改为递推再进行优化，时间复杂度从O(n^2k)优化到O(nk)
         # 即是 kInversePairs 方法
+        pass
 
 if __name__ == "__main__":
     sol = Solution()

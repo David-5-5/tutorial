@@ -1,3 +1,6 @@
+from functools import cache
+
+
 class Solution:
     def kInversePairs(self, n: int, k: int) -> int:
         '''
@@ -36,6 +39,22 @@ class Solution:
 
         return dp[n-1][k]
 
+
+    def kInversePairs2(self, n: int, k: int) -> int:
+        # 参考 3193 题解
+
+        @cache
+        def dfs(i:int, j:int) -> int:
+            if i == 0:
+                if j == 0: return 1
+                else: return 0
+            
+            return sum(dfs(i-1,j-t) for t in range(min(i,j)+1)) % (10 ** 9 + 7)
+        
+        return dfs(n-1, k)
+
+
 if __name__ == "__main__":
     sol = Solution()
     print(sol.kInversePairs(300,400))
+    print(sol.kInversePairs2(300,400))

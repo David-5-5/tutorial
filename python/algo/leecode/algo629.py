@@ -34,7 +34,9 @@ class Solution:
             cum = 0
             for j in range(k+1):
                 cum += dp[i-1][j]
-                if j-i>0 : cum -= dp[i-1][j-i-1] # 计算技巧
+                # 第 i 数 会产生 0～i-1个数，因此dp[i][j] 从j-i-1～j个逆序对转移而来
+                # 产生 0  个逆序对取 i 个数中最小值，产生 i-1 个逆序对取 i 个数中最大值
+                if j-i>0 : cum -= dp[i-1][j-i-1] # 前缀和 j-i-1~j
                 dp[i][j] = cum % (10 ** 9 + 7)
 
         return dp[n-1][k]

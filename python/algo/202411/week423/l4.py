@@ -1,6 +1,6 @@
 from functools import cache
 
-
+# Codeforces 914C
 class Solution:
     def countKReducibleNumbers(self, s: str, k: int) -> int:
         # 参考题解
@@ -20,11 +20,12 @@ class Solution:
             return res % MOD
 
         ans = 0
-        f = [0] * n
+        f = [0] * n # dp 计算 1 ～ n 之间数的约减次数
         for i in range(1, n):
-            f[i] = f[i.bit_count()] + 1 if i > 1 else 0
-            if f[i] < k:
+            f[i] = f[i.bit_count()] + 1
+            if f[i] <= k:
                 ans = (ans + dfs(0, i, True)) % MOD
+        # 清理缓存，避免存储溢出
         dfs.cache_clear()
         return ans
         

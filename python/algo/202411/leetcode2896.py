@@ -14,7 +14,8 @@ class Solution:
             if i == len(s1): return 0
             res = inf
             # 字符相同，不需要反转
-            if (s1[i] == s2[i] and not pre_rev) or (s1[i] != s2[i] and pre_rev):
+            # if (s1[i] == s2[i] and not pre_rev) or (s1[i] != s2[i] and pre_rev):
+            if (s1[i]==s2[i]) == (not pre_rev): # 条件优化
                 return dfs(i+1, j, False)
             
             # 字符不相同，需要反转

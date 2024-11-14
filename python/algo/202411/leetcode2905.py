@@ -43,7 +43,29 @@ class Solution:
              
         return [-1,-1]
 
+    def findIndices2(self, nums: List[int], indexDifference: int, valueDifference: int) -> List[int]:
+        # 参考题解，不需要后缀最大，最小队列
+        pre_mx = pre_mn = 0 # 前缀最大值，前缀最小值的下标
 
+        n = len(nums)
+        inx_d = indexDifference
+        for i in range(inx_d, n):
+            pre_i = i - inx_d
+            # 更新前缀最大值下标
+            if nums[pre_i] > nums[pre_mx]:
+                pre_mx = pre_i
+            # 更新前缀最大值下标
+            if nums[pre_i] < nums[pre_mn]:
+                pre_mn = pre_i
+
+            # 比较前缀最小值和后缀最大值的差
+            if abs(nums[pre_mn] - nums[i]) >=valueDifference:
+                return [pre_mn, i]
+             
+            if abs(nums[pre_mx] - nums[i]) >=valueDifference:
+                return [pre_mx, i]
+            
+        return [-1,-1]
     
 if __name__ == "__main__":
     sol = Solution()

@@ -18,8 +18,21 @@ class Solution:
             if abs(x - target) < mn:
                 mn = abs(x - target)
         return mn
-    
+
+    def closestToTarget2(self, arr: List[int], target: int) -> int:
+        # logTrick 专题 同 3165
+        ans = inf
+        for i, v in enumerate(arr):
+            ans = min(ans, abs(target-arr[i]))
+            for j in range(i-1, -1, -1):
+                if arr[j] == arr[j] | v:
+                    break
+                arr[j] |= v
+                ans = min(ans, abs(target-arr[j]))
+        return ans    
+
 if __name__ == "__main__":
     sol = Solution()
     arr, ta = [9,12,3,7,15], 5
     print(sol.closestToTarget(arr, ta))
+    print(sol.closestToTarget2(arr, ta))

@@ -20,7 +20,7 @@ class Solution:
         return mn
 
     def closestToTarget2(self, arr: List[int], target: int) -> int:
-        # logTrick 专题 同 3165
+        # logTrick 专题 同 3171
         ans = inf
         for i, v in enumerate(arr):
             ans = min(ans, abs(target-arr[i]))

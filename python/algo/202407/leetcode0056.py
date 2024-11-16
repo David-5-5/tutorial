@@ -17,3 +17,9 @@ class Solution:
         ans.append([left, right])
 
         return ans
+
+
+if __name__ == "__main__":
+    sol = Solution()
+    intervals = [[1,4],[4,5]]
+    print(sol.merge(intervals))

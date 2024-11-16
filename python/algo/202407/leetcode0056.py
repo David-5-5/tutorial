@@ -1,5 +1,6 @@
 from typing import List
 
+# 区间合并 模板
 class Solution:
     def merge(self, intervals: List[List[int]]) -> List[List[int]]:
         # 类似于 3169 排序后合并区间，瓶颈在排序

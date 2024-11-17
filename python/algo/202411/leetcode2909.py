@@ -19,3 +19,8 @@ class Solution:
             # 更新前缀最小值
             if pre_mx > nums[i]: pre_mx = nums[i]
         return ans if ans < inf else -1
+
+if __name__ == "__main__":
+    sol = Solution()
+    nums = [5,4,8,7,10,2]
+    print(sol.minimumSum(nums))

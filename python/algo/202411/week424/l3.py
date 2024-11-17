@@ -5,12 +5,13 @@ from typing import List
 
 class Solution:
     def isZeroArray(self, nums: List[int], queries: List[List[int]]) -> bool:
-        n = len(queries)
+        # 自行解答 差分数组 + 二分
+        n, m = len(queries), len(nums)
         def check(k:int):
-            diff = [0] * len(nums)
+            diff = [0] * m
             for l, r, v in queries[0:k]:
                 diff[l] += v
-                if r + 1 < len(nums): diff[r+1] -= v
+                if r + 1 < m: diff[r+1] -= v
             pres = list(accumulate(diff))
             return all(ori<=qu for ori, qu in zip(nums, pres))
 

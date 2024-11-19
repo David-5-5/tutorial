@@ -1,8 +1,8 @@
-# 判断半回文
 from functools import cache
 from math import inf
 
 
+# 判断半回文 - 本题不用
 def isHalfPalindrome(tt:str) -> bool:
     if len(tt) < 2: return False
     l, max_d = len(tt), len(tt) // 2
@@ -24,39 +24,73 @@ for i in range(1, MX):
     for j in range(i * 2, MX, i):
         divisors[j].append(i)
 
-# 半回文串的最少修改次数
-def getModifyCnt(tt:str) -> int:
-    if len(tt) < 1: return 0
 
-    l = mx_cnt = len(tt)
-    for d in divisors[l]:
-        cnt = 0
-        for off in range(d):
-            t = tt[off::d]
-            for i in range(len(t)//2):
-                if t[i] != t[-i-1]: cnt += 1
-        mx_cnt = min(mx_cnt, cnt)
-    return mx_cnt
 
 class Solution:
     def minimumChanges(self, s: str, k: int) -> int:
         n = len(s)
+
+        # 半回文串的最少修改次数，也需要cache
         @cache
-        def dfs(i:int, j:int) -> int:
-            if (j == 0 and i < n) or i == n-1:
+        def getModifyCnt(i:int, j:int) -> int:
+            tt = s[i:j]
+            if len(tt) < 1: return 0
+
+            l = mx_cnt = len(tt)
+            for d in divisors[l]:
+                cnt = 0
+                for off in range(d):
+                    t = tt[off::d]
+                    for i in range(len(t)//2):
+                        if t[i] != t[-i-1]: cnt += 1
+                mx_cnt = min(mx_cnt, cnt)
+            return mx_cnt
+
+        @cache
+        def dfs(i:int, left:int) -> int:
+            if (left == 0 and i < n) or i == n-1:
                 return inf
-            if i == n and j == 0:
+            if i == n and left == 0:
                 return 0
             
             res = inf
-            for nxt in range(i+2, n+1):
-                res = min(res, getModifyCnt(s[i:nxt]) + dfs(nxt, j-1))
+            for j in range(i+2, n+1):
+                res = min(res, getModifyCnt(i,j) + dfs(j, left-1))
             return res
         return dfs(0, k)
 
+    def minimumChanges2(self, s: str, k: int) -> int:
+        # 反向递归，getModifyCnt 改为 modify array
+        n = len(s)
+
+        # 半回文串的最少修改次数，也需要cache
+        @cache
+        def getModifyCnt(begin:int, end:int) -> int:
+            tt = s[begin:end+1]
+            if len(tt) < 1: return 0
+
+            l = mx_cnt = len(tt)
+            for d in divisors[l]:
+                cnt = 0
+                for off in range(d):
+                    t = tt[off::d]
+                    for begin in range(len(t)//2):
+                        if t[begin] != t[-begin-1]: cnt += 1
+                mx_cnt = min(mx_cnt, cnt)
+            return mx_cnt
+
+        @cache
+        def dfs(i:int, left:int) -> int:
+            if left == 0: return getModifyCnt(0, i)
+            res = inf
+            for j in range(left*2, i):
+                res = min(res, getModifyCnt(j,i) + dfs(j-1, left-1))
+            return res
+        return dfs(n-1, k-1)
+
 if __name__ == "__main__":
     sol = Solution()
-    s, k = "aaaaacabbb", 1
-    print(getModifyCnt("aaaaacabbb"))
+    s, k = "abcdef", 2
     print(sol.minimumChanges(s, k))
+    print(sol.minimumChanges2(s, k))
 

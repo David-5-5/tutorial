@@ -28,3 +28,19 @@ class Solution:
                 if j < 2:
                     dp[i+1][j] = min(dp[i+1][j], dp[i][j+1])
         return dp[n][0]
+
+    def minIncrementOperations3(self, nums: List[int], k: int) -> int:
+        # 递推 空间优化
+
+        f0 = f1 = f2 = 0
+        for x in nums:
+            inc = f0 + max(k-x, 0)
+            f0 = min(inc, f1)
+            f1 = min(inc, f2)
+            f2 = inc
+        return f0
+
+if __name__ == "__main__":
+    sol = Solution()
+    nums, k = [2,3,0,0,2], 4
+    print(sol.minIncrementOperations3(nums,k))

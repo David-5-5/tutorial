@@ -25,7 +25,7 @@ for i in range(1, MX):
         divisors[j].append(i)
 
 
-
+# 周赛 368
 class Solution:
     def minimumChanges(self, s: str, k: int) -> int:
         n = len(s)

@@ -32,8 +32,8 @@ class Solution:
 
         # 半回文串的最少修改次数，也需要cache
         @cache
-        def getModifyCnt(i:int, j:int) -> int:
-            tt = s[i:j]
+        def getModifyCnt(begin:int, end:int) -> int:
+            tt = s[begin:end]
             if len(tt) < 1: return 0
 
             l = mx_cnt = len(tt)
@@ -41,21 +41,28 @@ class Solution:
                 cnt = 0
                 for off in range(d):
                     t = tt[off::d]
-                    for i in range(len(t)//2):
-                        if t[i] != t[-i-1]: cnt += 1
+                    for begin in range(len(t)//2):
+                        if t[begin] != t[-begin-1]: cnt += 1
                 mx_cnt = min(mx_cnt, cnt)
             return mx_cnt
 
         @cache
         def dfs(i:int, left:int) -> int:
-            if (left == 0 and i < n) or i == n-1:
-                return inf
-            if i == n and left == 0:
-                return 0
+            # if (left == 0 and i < n) or i == n-1:
+            #     return inf
+            # if i == n and left == 0:
+            #     return 0
             
+            # res = inf
+            # for j in range(i+2, n+1):
+            #     res = min(res, getModifyCnt(i,j) + dfs(j, left-1))
+            # return res
+
+            # 优化后的状态转移(避免无效的状态)，性能和上段代码相差 10 倍
+            if left == 1: return getModifyCnt(i, n) # 仅一个子串
             res = inf
-            for j in range(i+2, n+1):
-                res = min(res, getModifyCnt(i,j) + dfs(j, left-1))
+            for j in range(i+1, n-2*(left-1)):
+                res = min(res, getModifyCnt(i,j+1) + dfs(j+1, left-1))
             return res
         return dfs(0, k)
 

@@ -12,7 +12,19 @@ class Solution:
             if i < 0: return 0
             res = dfs(i-1, 0) + max(0, k-nums[i]) # 选择
             if nums[i] < k and j < 2:
-                res = min(res, dfs(i-1,j+1))      # 补选
+                res = min(res, dfs(i-1,j+1))      # 不选
 
             return res
         return dfs(len(nums)-1, 0)
+
+    def minIncrementOperations2(self, nums: List[int], k: int) -> int:
+        # 递归 -> 递推
+        n = len(nums)
+
+        dp = [[0] * 3 for i in range(n+1)]
+        for i in range(n):
+            for j in range(3):
+                dp[i+1][j] = dp[i][0] + max(0, k-nums[i])
+                if j < 2:
+                    dp[i+1][j] = min(dp[i+1][j], dp[i][j+1])
+        return dp[n][0]

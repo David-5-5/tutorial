@@ -7,6 +7,7 @@ class Solution:
         # 特殊情况
         if dividend == INT_MN:
             if divisor == -1: return INT_MX # 不能溢出
+            if divisor == 1: return INT_MN
         
         neg = False
         if dividend > 0 and divisor < 0 or dividend <0 and divisor > 0:
@@ -60,8 +61,36 @@ class Solution:
         ans = bisect_left(range(INT_MX), True, key=quickAdd)
 
         return -ans if neg else ans
+
+
+    def divide2(self, dividend: int, divisor: int) -> int:
+        # 特殊情况
+        if dividend == INT_MN:
+            if divisor == -1: return INT_MX # 不能溢出
+            if divisor == 1: return INT_MN
         
+        neg = False
+        if dividend > 0 and divisor < 0 or dividend <0 and divisor > 0:
+            neg = True
+
+        if dividend < 0: dividend = -dividend
+        if divisor < 0: divisor = -divisor
+
+        que, x = [divisor], divisor
+
+        while x <= dividend-x:
+            x += x
+            que.append(x)
+        
+        ans = 0
+        for i in range(len(que)-1, -1, -1):
+            if que[i] <= dividend:
+                ans += (1<<i)
+                dividend -= que[i]
+        
+        return -ans if neg else ans
 
 if __name__ == "__main__":
     sol = Solution()
     print(sol.divide(10, 3))
+    print(sol.divide3(10, 3))

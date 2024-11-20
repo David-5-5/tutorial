@@ -23,20 +23,43 @@ class Solution:
         # X = i 修改次数 = n//2 - cnt[2] + presum[i], 其中 presum[i] 为 cnt2 的前缀和
 
         n = len(nums)
-        diff = [abs(nums[i]-nums[n-i-1]) for i in range(n//2)]
+        cnt = Counter([abs(nums[i]-nums[n-i-1]) for i in range(n//2)])
         mx = [0] * (k+1)
         for i in range(n//2):
-            p, q = min(nums[i],nums[n-1-i]), max(nums[i],nums[n-1-i])
+            p, q = nums[i],nums[n-1-i]
+            if p > q:
+                p, q = q, p
             mx[max(q, k-p)] += 1
-        sum2 = list(accumulate(mx, initial=0))
-        cnt = Counter(diff)
-
+        
+        sum2 = 0
         ans = inf
         for x in range(k+1):
-            ans = min(ans, n // 2 - cnt[x] + sum2[x])
+            ans = min(ans, n // 2 - cnt[x] + sum2)
+            sum2 += mx[x]
         return ans
+
+    def minChanges2(self, nums: List[int], k: int) -> int:
+        n = len(nums)
+        diff = [0] * (k+2)
+        for i in range(n//2):
+            p, q = nums[i],nums[n-1-i]
+            if p > q:
+                p, q = q, p
+            x = q - p
+            mx = max(q, k-p)
+            # [0,x-1]   : +1
+            diff[0] += 1
+            diff[x] -= 1 # x == 0 时抵消了
+            # [x+1, mx] : +1
+            diff[x+1] += 1
+            # diff[mx+1] -= 1
+
+            # [mx+1, k] : +2
+            diff[mx+1] += 1 # 抵消上一条
+        return min(accumulate(diff))
 
 if __name__ == "__main__":
     sol = Solution()
     nums, k = [0,1,2,3,3,6,5,4], 6
     print(sol.minChanges(nums, k))
+    print(sol.minChanges2(nums, k))

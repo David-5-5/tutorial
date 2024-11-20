@@ -18,31 +18,46 @@ class Solution:
         # x * q < y False
         # x * q >= y True
         # q is quotient 商数
+        # def quickAdd(q:int) -> bool:
+        #     x, y = divisor, dividend
+        #     ans = 0
+        #     while q:
+        #         if q & 1:
+        #             ans += x
+        #             if y<ans:return False # 找更小值
+        #         x += x
+        #         q >>= 1
+        #     if y<ans: return False
+        #     else: return True # 找更大值
+        
+        # left, right, ans = 1, INT_MX, 0
+        # while left <= right:
+        #     # 注意溢出，并且不能使用除法
+        #     mid = left + ((right - left) >> 1)
+        #     check = quickAdd(mid)
+        #     if check:
+        #         ans = mid
+        #         # 注意溢出
+        #         if mid == INT_MX:
+        #             break
+        #         left = mid + 1
+        #     else:
+        #         right = mid - 1
+        
+        # bisect_left 写法
         def quickAdd(q:int) -> bool:
+            q += 1 # Left true, right False
             x, y = divisor, dividend
             ans = 0
             while q:
                 if q & 1:
                     ans += x
-                    if y<ans:return False # 找更小值
+                    if y<ans:return True # 找更小值
                 x += x
                 q >>= 1
-            if y<ans: return False
-            else: return True # 找更大值
-        
-        left, right, ans = 1, INT_MX, 0
-        while left <= right:
-            # 注意溢出，并且不能使用除法
-            mid = left + ((right - left) >> 1)
-            check = quickAdd(mid)
-            if check:
-                ans = mid
-                # 注意溢出
-                if mid == INT_MX:
-                    break
-                left = mid + 1
-            else:
-                right = mid - 1
+            if y<ans: return True
+            else: return False # 找更大值
+        ans = bisect_left(range(INT_MX), True, key=quickAdd)
 
         return -ans if neg else ans
         

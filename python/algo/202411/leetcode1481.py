@@ -8,6 +8,8 @@ class Solution:
         cnt = Counter(arr)
 
         ans = len(cnt)
+        # 按出现次数从小到大排序，尽量减去出现次数小的数字
+        # 这样剩下的不同整数的数目最少
         for _, v in sorted(cnt.items(), key=lambda p:p[1]):
             if k >= v:
                 k -= v

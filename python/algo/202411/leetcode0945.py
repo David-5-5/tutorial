@@ -10,3 +10,8 @@ class Solution:
             if v < cur: ans += cur - v
             cur = max(v, cur) + 1
         return ans
+
+if __name__ == "__main__":
+    sol = Solution()
+    nums = [3,2,1,2,1,7]
+    print(sol.minIncrementForUnique(nums))

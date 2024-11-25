@@ -33,23 +33,20 @@ class Solution:
     def bagOfTokensScore2(self, tokens: List[int], power: int) -> int:
         # 自行解答 贪心 O(N)
         tokens.sort()
-        tot = sum(tokens)
 
         ans = l = score = 0
         r = len(tokens) - 1
         while l <= r:
             if power >= tokens[l]: # 能获取分数尽量获取分数
                 power -= tokens[l]
-                tot -= tokens[l]
                 score += 1
                 ans = max(ans, score)
                 l += 1
             elif score: # 分数>0时，当前power小于最下的token时，获取最大能量
                 power += tokens[r]
-                tot -= tokens[r]
                 score -= 1
                 r -= 1
-            else: return 0
+            else: return ans
         return ans
 
 if __name__ == "__main__":

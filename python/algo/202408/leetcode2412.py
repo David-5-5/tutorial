@@ -18,6 +18,7 @@ class Solution:
     def minimumMoney2(self, transactions: List[List[int]]) -> int:
         # 先亏损，累积亏损值
         # 最后增加 亏损交易 cashback 和 盈利交易的 cost
+        # 参考题解
         total_lose = mx = 0
         for c, b in transactions:
             if c > b:

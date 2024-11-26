@@ -5,6 +5,7 @@ class Solution:
     # Refer to https://leetcode.cn/circle/discuss/CaOJ45/
     # https://leetcode.cn/problems/minimum-operations-to-form-subsequence-with-target-sum/solutions/2413344/tan-xin-by-endlesscheng-immn/
     def minOperations(self, nums: List[int], target: int) -> int:
+        # 参考题解
         if sum(nums) < target:return -1
 
         cnt = Counter(nums)
@@ -23,6 +24,35 @@ class Solution:
 
         return ans
 
+
+    def minOperations2(self, nums: List[int], target: int) -> int:
+        # 自行解答
+        if sum(nums) < target: return -1
+
+        cnt = Counter(nums)
+        
+        ans = 0
+        for i in range(31):
+            if target >> i & 1:
+                found = False
+                if cnt[1<<i]:
+                    cnt[1<<i] -= 1
+                    found = True
+                else:
+                    for j in range(i, 31):
+                        if cnt[1<<j]:
+                            cnt[1<<j] -= 1
+                            ans += j - i
+                            found = True
+                            break
+                        else: cnt[1<<j] += 1
+                if not found: return -1
+            acc = cnt[1<<i] // 2
+            cnt[1<<i] -= acc * 2
+            cnt[1<<(i+1)] += acc
+        return ans
+
 if __name__ == "__main__":
     sol = Solution()
     print(sol.minOperations([1,32,1,2],12))
+    print(sol.minOperations2([1,32,1,2],12))

@@ -39,16 +39,18 @@ class Solution:
                     cnt[1<<i] -= 1
                     found = True
                 else:
+                    # 找最近的值分解
                     for j in range(i, 31):
                         if cnt[1<<j]:
                             cnt[1<<j] -= 1
-                            ans += j - i
+                            ans += j - i # 需要分解的次数
                             found = True
                             break
-                        else: cnt[1<<j] += 1
+                        else: cnt[1<<j] += 1 # 过程中路过的每个值加1
+                        # cnt[1<<i] 实际上是2,需要用掉一个
                 if not found: return -1
+            # 将当前未用掉的值合并到高位
             acc = cnt[1<<i] // 2
-            cnt[1<<i] -= acc * 2
             cnt[1<<(i+1)] += acc
         return ans
 

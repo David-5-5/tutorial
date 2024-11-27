@@ -1,6 +1,7 @@
 from typing import Counter, List
 
 # 周赛 331
+# 归属贪心专题 双序列配对
 class Solution:
     def minCost(self, basket1: List[int], basket2: List[int]) -> int:
         # 参考题解

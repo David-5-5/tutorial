@@ -54,7 +54,28 @@ class Solution:
         if res != -1: ans = min(ans, res)
         return -1 if ans == inf else ans
 
+    def minDominoRotations2(self, tops: List[int], bottoms: List[int]) -> int:
+        # 基于上述方法优化, 抽象出公共方法
+        def check(fst:int, one: List[int], other:List[int]):
+            res = 0
+            for t, b in zip(one, other):
+                if fst == t:
+                    continue
+                elif fst == b: res += 1
+                else:
+                    return inf
+            return res
+        
+        ans = inf
+        ans = min(ans, check(tops[0], tops[1:], bottoms[1:]))
+        ans = min(ans, check(tops[0], bottoms[1:], tops[1:])+1)
+        ans = min(ans, check(bottoms[0], tops[1:], bottoms[1:])+1)
+        ans = min(ans, check(bottoms[0], bottoms[1:], tops[1:]))
+        
+        return -1 if ans == inf else ans
+    
 if __name__ == "__main__":
     sol = Solution()
     tops, bottoms =[2,1,1,3,2,1,2,2,1], [3,2,3,1,3,2,3,3,2]
     print(sol.minDominoRotations(tops, bottoms))
+    print(sol.minDominoRotations2(tops, bottoms))

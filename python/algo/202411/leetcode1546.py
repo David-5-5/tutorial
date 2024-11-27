@@ -4,19 +4,22 @@ from typing import List
 # 贪心专题
 class Solution:
     def maxNonOverlapping(self, nums: List[int], target: int) -> int:
+        # 自行解答
         pre_sum = defaultdict(int)
-
+        pre_sum[0] = 1
+        pres = 0
+        
         ans = 0
         for v in nums:
-            if v == target or pre_sum[target-v]:
+            pres += v
+            if pre_sum[pres-target]:
                 pre_sum.clear()
+                pre_sum[0] = 1
+                pres = 0
+
                 ans += 1
             else:
-                tmp = defaultdict(int)
-                for k in pre_sum.keys():
-                    tmp[k+v] = 1
-                tmp[v] = 1
-                pre_sum = tmp
+                pre_sum[pres] += 1
         return ans
 
 

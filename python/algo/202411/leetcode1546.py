@@ -21,7 +21,3 @@ class Solution:
             else:
                 pre_sum[pres] += 1
         return ans
-
-
-
-                

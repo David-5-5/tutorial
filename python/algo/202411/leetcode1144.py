@@ -15,3 +15,8 @@ class Solution:
             res2 += nums[i] - min(nums[i], min(nums[i-1] if i>0 else inf, nums[i+1] if i+1<n else inf)-1)
         
         return min(res1, res2)
+
+if __name__ == "__main__":
+    sol = Solution()
+    nums = [9,6,1,6,2]
+    print(sol.movesToMakeZigzag(nums))

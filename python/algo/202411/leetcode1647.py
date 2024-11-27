@@ -18,4 +18,7 @@ class Solution:
                 prev = f
         return ans
 
-
+if __name__ == "__main__":
+    sol = Solution()
+    s = "ceabaacb"
+    print(sol.minDeletions(s))

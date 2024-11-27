@@ -1,3 +1,9 @@
+from collections import defaultdict
+from itertools import accumulate
+from math import inf
+from typing import List
+
+# 贪心专题 双序列配对
 class Solution:
     def minWastedSpace(self, packages, boxes) -> int:
         '''
@@ -72,9 +78,47 @@ class Solution:
         
         return -1 if ans == float("inf") else ans % mod
 
+
+    def minWastedSpace3(self, packages: List[int], boxes: List[List[int]]) -> int:
+        # 2024.11.27 重新自行解答 
+        packages.sort()
+        mod = 10**9 + 7
+        n, m = len(packages), len(boxes)
+
+        # 每个供应商装包裹的数量以及浪费的空间
+        sup = [[0, 0] for _ in range(m)]
+
+        # 同一个尺寸的箱子的所有供应商列表
+        bsize_sup = defaultdict(list)
+
+        for i in range(m):
+            for j in range(len(boxes[i])):
+                bsize_sup[boxes[i][j]].append(i)
+
+        presum = list(accumulate(packages, initial=0))
+
+        # 按箱子从小到大遍历
+        l = 0
+        for size in sorted(bsize_sup.keys()):
+            # 找到箱子可以容纳的包裹
+            while l < n and packages[l] <= size:
+                l += 1
+            # 按供应商计算浪费的空间及设置当前容纳的包裹数量
+            for s in bsize_sup[size]:
+                prev = sup[s][0] # 前一个尺寸的箱子容纳的包裹数量
+                # 计算浪费的空间
+                sup[s][1] += size * (l - prev) - (presum[l] - presum[prev])
+                sup[s][0] = l
+
+        ans = inf
+        for c, w in sup:
+            if c == n and w < ans: # 容纳所有包裹才合法
+                ans = w
+        return -1 if ans == inf else ans % mod
         
 if __name__ == "__main__":
     sol = Solution()
     packages = [3,5,8,10,11,12]
     boxes = [[12],[11,9],[10,5,14]]
     print(sol.minWastedSpace2(packages, boxes))        
+    print(sol.minWastedSpace3(packages, boxes))   

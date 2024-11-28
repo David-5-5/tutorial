@@ -18,3 +18,8 @@ class Solution:
             res += v # 清空当前数量
 
         return ans
+    
+if __name__ == "__main__":
+    sol = Solution()
+    beans = [2,10,3,2]
+    print(sol.minimumRemoval(beans))

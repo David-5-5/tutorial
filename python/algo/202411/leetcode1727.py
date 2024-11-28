@@ -25,7 +25,7 @@ class Solution:
     
     def largestSubmatrix2(self, matrix: List[List[int]]) -> int:
         # 参考题解，进行预处理
-        # 1，每列累计出现 1 的次数 (原地修改)
+        # 1，每列累计出现 1 的次数 (原地修改) 累计后，后续计算类似 2171
         # 2, 每行按次数排序，从小(高小宽大）到大(高大宽小）计算举行面积
         rows, cols = len(matrix), len(matrix[0])
 

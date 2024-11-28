@@ -1,7 +1,7 @@
 from math import inf
 from typing import List
 
-# 贪心专题
+# 贪心专题 先枚举，再贪心
 class Solution:
     def minDominoRotations(self, tops: List[int], bottoms: List[int]) -> int:
         # 自行解答，第一个元素分别和后面元素比较，四种情况：

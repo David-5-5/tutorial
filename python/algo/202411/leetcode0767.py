@@ -1,8 +1,6 @@
-
-# 贪心专题 相邻不同 证明/构造方案
 from typing import Counter
 
-
+# 贪心专题 相邻不同 证明/构造方案
 class Solution:
     def reorganizeString(self, s: str) -> str:
         # 参考题解

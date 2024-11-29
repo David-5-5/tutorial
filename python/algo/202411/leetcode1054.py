@@ -5,6 +5,7 @@ from typing import List
 class Solution:
     def rearrangeBarcodes(self, barcodes: List[int]) -> List[int]:
         # 自行解答 同 767
+        # 模板题 不相邻排序 保证存在答案
         n = len(barcodes)
         ans = [0] * n
         cnt = Counter(barcodes)

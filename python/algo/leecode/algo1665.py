@@ -1,4 +1,5 @@
 import heapq
+from typing import List
 class Solution:
     def minimumEffort(self, tasks) -> int:
         n = len(tasks)
@@ -36,7 +37,20 @@ class Solution:
     
         return effort
 
+    def minimumEffort3(self, tasks: List[List[int]]) -> int:
+        # 2024.11.29
+        # 贪心专题  交换论证法
+        sum_act = sum(a for a, _ in tasks) # actual求和
+        left, sup = sum_act, 0
+        # 按照 minimum - actual 从大到小排序
+        for act, mn in sorted(tasks, key=lambda p:p[0]-p[1]):
+            sup = max(sup, mn - left) # 检查需要补偿的最大的数
+            left -= act
+
+        return sum_act + sup
+
 if __name__ == '__main__':
     sol = Solution()
     tasks = [[1,1],[1,4],[1,4]]
-    print(sol.minimumEffort(tasks))
+    # tasks = [[1,7],[2,8],[3,9],[4,10],[5,11],[6,12]]
+    print(sol.minimumEffort3(tasks))

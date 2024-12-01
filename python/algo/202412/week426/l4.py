@@ -4,6 +4,7 @@ from typing import List
 
 class Solution:
     def maxTargetNodes(self, edges1: List[List[int]], edges2: List[List[int]]) -> List[int]:
+        # 自行解答 比赛时，时间不够。赛后提交通过
         n, m = len(edges1) + 1, len(edges2) + 1
         
         g1, g2 = [[] for _ in range(n)], [[] for _ in range(m)]
@@ -42,17 +43,13 @@ class Solution:
         mx_odd, _ = ans2[0]
         def reroot2(u:int, fa:int):
             nonlocal mx_odd
-            # if fa == -1: return
-
-            # ans2[u][0] += ans2[fa][1]
-            # ans2[u][1] += ans2[fa][0]
             if fa != -1:
-                # fa_odd = ans2[fa][0] - ans2[u][1]
+                fa_odd = ans2[fa][0] - ans2[u][1]
                 fa_even = ans2[fa][1] - ans2[u][0]
-                # new_even = ans2[u][1] + fa_odd
-                new_odd = ans2[u][1] + fa_even
-                if new_odd > mx_odd: mx_odd = new_odd
-            # if ans2[u][1] > mx_even : mx_even = ans2[u][1]
+
+                ans2[u][0] = ans2[u][0] + fa_even
+                ans2[u][1] = ans2[u][1] + fa_odd
+                if ans2[u][1] > mx_odd : mx_odd =  ans2[u][1]
 
             for v in g2[u]:
                 if v == fa: continue
@@ -60,28 +57,24 @@ class Solution:
 
         reroot2(0, -1)
         
-        ans = [0] * n
         def reroot1(u:int, fa:int):
-            if fa == -1:
-                ans[u] = ans1[u][1] #+ mx_odd
-            else:
-                ans1[u][0] = ans1[fa][0] - ans1[u][1]
-                ans1[u][0] = ans1[fa][0] - ans1[u][1]
-                # fa_even = ans1[fa][1] - ans1[u][0]
-                ans[u] = ans1[u][1] + fa_odd #+ mx_odd
-            # ans1[u][0] += ans1[fa][1]
-            # ans1[u][1] += ans1[fa][0]
+            if fa != -1:
+                fa_odd = ans1[fa][0] - ans1[u][1]
+                fa_even = ans1[fa][1] - ans1[u][0]
+
+                ans1[u][0] = ans1[u][0] + fa_even
+                ans1[u][1] = ans1[u][1] + fa_odd 
             
             for v in g1[u]:
                 if v == fa: continue
                 reroot1(v, u)
         
         reroot1(0, -1)
-        # return [even+mx_odd for _,even in ans1 ]
-        return ans
-
+        return [even + mx_odd for _,even in ans1]
 
 if __name__ == "__main__":
     sol = Solution()
     edges1, edges2 = [[0,1],[0,2],[2,3],[2,4]], [[0,1],[0,2],[0,3],[2,7],[1,4],[4,5],[4,6]]
+    edges1, edges2 = [[0,1],[0,2],[0,3],[0,4]], [[0,1],[1,2],[2,3]]
+
     print(sol.maxTargetNodes(edges1, edges2))

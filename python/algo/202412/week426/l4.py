@@ -16,6 +16,16 @@ class Solution:
             g2[u].append(v)
             g2[v].append(u)
 
+        # 第一次遍历 0 为根节点的各节点包含的所有子节点的距离为奇数、偶数的节点数
+        # 第二次遍历，以各节点为根节点的包含所有字节的距离为奇数、偶数的节点数
+        #   对于 u 和 fa, fa 为 u 根，当 u 为根节点时，fa 为 u 的子节点，其距离的变化公式为：
+        #   1, 从 fa 减去以 u 为子节点的 距离分别为奇偶的数量，即
+        #           new_fa_odd = ans[fa][0] - ans[u][1]
+        #           new_fa_even = ans[fa][1] - ans[u][0]
+        #   2, 节点 u 加上以 fa 为子节点后的距离为奇数、偶数的节点数
+        #           ans[u][0] = ans[u][0] + new_fa_even
+        #           ans[u][1] = ans[u][1] + new_fa_odd
+        #  注，需要用临时变量，ans[u] 变化
         ans1 = [[0,0] for _ in range(n)]
         ans2 = [[0,0] for _ in range(m)]
 

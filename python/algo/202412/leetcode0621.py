@@ -8,16 +8,18 @@ class Solution:
 
         m = len(tasks)
 
-        if m < max(cnt.values()) * (n+1):
-            m = max(cnt.values()) * (n+1)
+        mx_cnt = max(cnt.values())
+        if m >= mx_cnt * (n + 1): return m
 
-        ans = i = begin = 0
-
-        for _, cnt in sorted(cnt.items(), key=lambda p:-p[1]):
-            for _ in range(cnt):
-                ans = max(ans, i)
-                i += (n+1)
-                if i > m:
-                    begin += 1
-                    i = begin
-        return ans
+        ans = (mx_cnt - 1) * (n+1)
+        s_cnt = sorted(cnt.values(), reverse=True)
+        for cnt in s_cnt[0:n]:
+            if cnt == mx_cnt: ans += 1
+        
+        return max(ans, m)
+    
+if __name__ == "__main__":
+    sol = Solution()
+    tasks, n = ["A","A","A","B","B","B"], 2
+    tasks, n = ["A","B","C","D","A","B","V"], 3
+    print(sol.leastInterval(tasks, n))

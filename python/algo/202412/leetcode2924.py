@@ -1,6 +1,6 @@
 from typing import List
 
-
+# 周赛 370
 class Solution:
     def findChampion(self, n: int, edges: List[List[int]]) -> int:
         # 自行解答，拓扑排序

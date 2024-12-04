@@ -1,3 +1,4 @@
+# 贪心专题 相邻不同 证明/构造方案
 class Solution:
     def strWithout3a3b(self, a: int, b: int) -> str:
         # 自行解答，构造

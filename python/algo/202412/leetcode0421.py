@@ -10,11 +10,11 @@ class Solution:
         for i in range(high, -1, -1):
             target <<= 1
             newval = target + 1 # 尽量找当前位为 1
-            h = {}
+            h = set() # replace dict
             for v in nums:
                 v >>= i
                 if v ^ newval in h:
                     target = newval # 找到当前位为1的XOR
                     break
-                h[v] = 1
+                h.add(v)
         return target

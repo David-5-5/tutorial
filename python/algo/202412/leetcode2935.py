@@ -7,7 +7,7 @@ class Solution:
         nums.sort() # 排序，前面遍历的小于后面的
 
         target = 0
-        high = max(nums).bit_length() - 1
+        high = nums[-1].bit_length() - 1
 
         for i in range(high, -1, -1):
             target <<= 1
@@ -19,5 +19,5 @@ class Solution:
                 if v_mask ^ newval in h and h[v_mask ^ newval]*2>=v:
                     target = newval # 找到当前位为1的XOR
                     break
-                h[v_mask] = v
+                h[v_mask] = v # 如果有v_mask一样的，可以直接覆盖, 为什么？
         return target

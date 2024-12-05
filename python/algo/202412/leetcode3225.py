@@ -34,4 +34,8 @@ class Solution:
             ndp2[n] = fmax(ndp2[n], ndp1[n])
             dp1, dp2 = ndp1, ndp2
         return max(max(dp1), max(dp2))
-        
+
+if __name__ == "__main__":
+    sol = Solution()
+    grid = [[0,0,0,0,0],[0,0,3,0,0],[0,1,0,0,0],[5,0,0,3,0],[0,0,0,0,2]]
+    print(sol.maximumScore(grid))        

@@ -18,3 +18,8 @@ class Solution:
             if n1 <= last1 and n2 <= last2: continue
             if n1 <= last2 and n2 <= last1: res2 += 1
         return min(res1, res2)
+
+if __name__ == "__main__":
+    sol = Solution()
+    nums1, nums2 = [1,2,7], [4,5,3]
+    print(sol.minOperations(nums1, nums2))

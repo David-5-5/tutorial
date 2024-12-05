@@ -1,5 +1,18 @@
 from typing import List
 
+
+# The Trie class
+class Trie:
+    
+    def __init__(self):
+        self.children = [None, None]
+        self.cnt = 0
+    
+    def insert(self, word):
+        cur = self
+        for c in word:
+            cur = cur.children[c]
+            cur.cnt += 1
 # 周赛 371
 class Solution:
     def maximumStrongPairXor(self, nums: List[int]) -> int:

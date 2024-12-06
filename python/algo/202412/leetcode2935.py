@@ -72,6 +72,7 @@ class Solution:
         trie = Trie(nums[-1].bit_length() - 1)
 
         ans = l = 0
+        # 滑动窗口 满足 |x-y| <= min(x,y) 导出 2x >= y
         for v in nums:
             while nums[l] * 2 < v:
                 trie.remove(nums[l])

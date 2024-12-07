@@ -81,3 +81,9 @@ class Solution:
             ans = max(ans, trie.max_xor(v))
         
         return ans
+
+if __name__ == "__main__":
+    sol = Solution()
+    nums = [500,520,2500,3000]
+    print(sol.maximumStrongPairXor(nums))
+    print(sol.maximumStrongPairXor2(nums))

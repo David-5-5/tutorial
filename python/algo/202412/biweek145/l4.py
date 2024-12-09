@@ -1,8 +1,11 @@
-from bisect import bisect_right
 from typing import List
 
-
 class Solution:
+    # 参考题解 最小公倍数 求连通块的套路 t = threshold
+    # lcm(x,y) = x*y // gcd(x,y) < t => x*y // gcd(x,y)*t
+    # 枚举 g = gcd [1, t]
+    # 找到 g 的最小乘积 x ，枚举 y [x+2, g*t//x + 1] 
+    # 最终时间复杂度 t (t/1 + t/2 + t/3 + ... + ) = t * ln(t)
     def countComponents(self, nums: List[int], threshold: int) -> int:
         ans = n = len(nums)
         adt = [-1] * (n + 1)

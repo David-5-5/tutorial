@@ -1,6 +1,5 @@
-
-
 from cmath import inf
+from functools import cache
 from itertools import permutations
 from typing import List
 
@@ -40,9 +39,25 @@ class Solution:
         dfs(0, 0)
         return time
 
+    def findMinimumTime3(self, strength: List[int], K: int) -> int:
+        # 参考题解，状压 DP
+        n = len(strength)
 
+        @cache
+        def dfs(i:int) -> None:
+            if i == 0:
+                return 0
+            X = 1 + K * (n-i.bit_count())
+            res = inf
+            for j in range(n):
+                if i >> j & 1:
+                    res = min(res, dfs(i-(1<<j)) + (strength[j]-1)//X + 1)
+            return res
+        
+        return dfs((1 << n) - 1)
 
 if __name__ == "__main__":
     sol = Solution()
     strength, K = [21,22,40,12,43,21], 3
     print(sol.findMinimumTime(strength, K))
+    print(sol.findMinimumTime3(strength, K))

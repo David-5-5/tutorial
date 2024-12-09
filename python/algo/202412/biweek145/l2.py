@@ -20,7 +20,28 @@ class Solution:
         return time
 
 
-    
+    def findMinimumTime2(self, strength: List[int], K: int) -> int:
+        # 参考题解，全排列 + 剪枝
+        n = len(strength)
+        time = inf
+        done = [False] * n
+        def dfs(i:int, t:int) -> None:
+            nonlocal time
+            # if t>=time: return # 剪枝
+            if i == n:
+                if time > t: time = t        
+            X = 1 + i * K
+            for j, v in enumerate(strength):
+                if not done[j]:
+                    done[j] = True
+                    dfs(i+1, t + (v-1)//X + 1)
+                    done[j] = False
+
+        dfs(0, 0)
+        return time
+
+
+
 if __name__ == "__main__":
     sol = Solution()
     strength, K = [21,22,40,12,43,21], 3

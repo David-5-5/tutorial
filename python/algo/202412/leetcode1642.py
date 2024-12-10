@@ -1,7 +1,7 @@
 import heapq
 from typing import List
 
-
+# 贪心专题 - 反悔贪心
 class Solution:
     def furthestBuilding(self, heights: List[int], bricks: int, ladders: int) -> int:
         # 自行解答

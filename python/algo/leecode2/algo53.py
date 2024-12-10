@@ -12,3 +12,16 @@ class Solution:
                 cul += nums[i]
         if res < cul: res = cul
         return res
+    
+    def maxSubArray2(self, nums: List[int]) -> int:
+        # 前缀和及前缀和最小值
+        res = nums[0]
+        pre_mn = pre = 0
+        
+        for v in nums:
+            pre += v
+            if pre - pre_mn > res:
+                res = pre - pre_mn
+            if pre < pre_mn: pre_mn = pre
+
+        return res

@@ -1,5 +1,7 @@
 from typing import List
 from sortedcontainers import SortedDict, SortedList
+
+# 周赛 372
 class Solution:
     def leftmostBuildingQueries(self, heights: List[int], queries: List[List[int]]) -> List[int]:
         n = len(queries)

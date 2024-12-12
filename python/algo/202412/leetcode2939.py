@@ -1,4 +1,4 @@
-
+# 周赛 372
 class Solution:
     def maximumXorProduct(self, a: int, b: int, n: int) -> int:
         # 自行解答，位运算

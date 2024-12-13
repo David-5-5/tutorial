@@ -19,3 +19,6 @@ class Solution:
                 path.pop()
         dfs(0)
         return ans
+
+if __name__ == "__main__":
+    sol = Solution()

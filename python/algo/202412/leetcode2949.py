@@ -1,7 +1,7 @@
 from collections import defaultdict
 from itertools import accumulate
 
-
+# 周赛 373
 class Solution:
     def beautifulSubstrings(self, s: str, k: int) -> int:
         # 参考题意，自行解答

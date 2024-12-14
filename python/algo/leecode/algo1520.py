@@ -1,3 +1,6 @@
+from typing import List
+
+
 class Seg:
     def __init__(self, left=-1, right=-1):
         self.left = left
@@ -7,7 +10,6 @@ class Seg:
         return self.left > rhs.left if self.right == rhs.right else self.right < rhs.right
 
 # 贪心专题 - 不相交区间
-# 复习 2024.12
 class Solution:
     def maxNumOfSubstrings(self, s: str):
         sectDict = {}
@@ -17,6 +19,7 @@ class Solution:
             if left != -1:
                 sectDict[chr(c)] = ((left, right))
         
+        # 合并交叉包含的字母
         for ch in sectDict.keys():
             l, r = sectDict[ch]
             inx = l + 1
@@ -56,6 +59,7 @@ class Solution:
 
 
     def maxNumOfSubstrings2(self, s: str) :
+        # 官方题解
         seg = [Seg() for _ in range(26)]
         # 预处理左右端点
         for i in range(len(s)):
@@ -93,7 +97,52 @@ class Solution:
         return ans
 
 
+    def maxNumOfSubstrings3(self, s: str) -> List[str]:
+        # 复习 2024.12
+        intervals = []
+        ch_dist = [[-1,-1] for _ in range(26)]
+
+        for i, ch in enumerate(s):
+            ch_dist[ord(ch)-ord('a')][1] = i
+            if ch_dist[ord(ch)-ord('a')][0] == -1:
+                ch_dist[ord(ch)-ord('a')][0] = i
+        
+        # 同 maxNumOfSubstrings 合并相互包含的字母
+        for i in range(26):
+            l, r = ch_dist[i]
+            inx = l + 1
+            end = r
+            while inx < end:
+                ch = s[inx]
+                if l <= ch_dist[ord(ch)-ord('a')][0] and r >= ch_dist[ord(ch)-ord('a')][1]:
+                    pass
+                else:
+                    l = min(l, ch_dist[ord(ch)-ord('a')][0])
+                    r = max(r, ch_dist[ord(ch)-ord('a')][1])
+                    # 有点递归的意思，暴力检查
+                    inx, end = l, r
+                inx += 1
+            ch_dist[i] = [l,r]
+                
+        intervals = [[l,r] for l, r in ch_dist if l!= -1]
+        intervals.sort(reverse=True)
+
+        # 同 435 移除区间的最少数量，使剩余的居间互不重叠
+        left = intervals[0][0]
+        to_del = set()
+        for i, (l, r) in enumerate(intervals[1:]):
+            if r > left: to_del.add(i+1)
+            else: left = l
+        
+        ans = []
+        for i, (l,r) in enumerate(intervals):
+            if i in to_del:continue
+            ans.insert(0, s[l:r+1])
+        return ans
+
 if __name__ == "__main__":
     sol = Solution()
     s = "cbbcaabbac"
+    s = "ababa"
     print(sol.maxNumOfSubstrings(s))
+    print(sol.maxNumOfSubstrings3(s))

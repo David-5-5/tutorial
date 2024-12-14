@@ -6,6 +6,8 @@ class Seg:
     def __lt__(self, rhs):
         return self.left > rhs.left if self.right == rhs.right else self.right < rhs.right
 
+# 贪心专题 - 不相交区间
+# 复习 2024.12
 class Solution:
     def maxNumOfSubstrings(self, s: str):
         sectDict = {}

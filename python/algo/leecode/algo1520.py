@@ -125,20 +125,38 @@ class Solution:
             ch_dist[i] = [l,r]
                 
         intervals = [[l,r] for l, r in ch_dist if l!= -1]
-        intervals.sort(reverse=True)
 
-        # 同 435 移除区间的最少数量，使剩余的居间互不重叠
-        left = intervals[0][0]
-        to_del = set()
-        for i, (l, r) in enumerate(intervals[1:]):
-            if r > left: to_del.add(i+1)
-            else: left = l
+        # 以下代码二选一
         
+        # 方法一
+        # 同 435 移除区间的最少数量，使剩余的居间互不重叠
+        # intervals.sort(reverse=True)
+        # left = intervals[0][0]
+        # to_del = set()
+        # for i, (l, r) in enumerate(intervals[1:]):
+        #     if r > left: to_del.add(i+1)
+        #     else: left = l
+        
+        # ans = []
+        # for i, (l,r) in enumerate(intervals):
+        #     if i in to_del:continue
+        #     ans.insert(0, s[l:r+1])
+        # return ans
+
+        # 方法二 
+        # 同 646 构造最长的区间长度
         ans = []
-        for i, (l,r) in enumerate(intervals):
-            if i in to_del:continue
-            ans.insert(0, s[l:r+1])
+        intervals.sort(key=lambda p:p[1]) # 按右端点排序
+        # 因为右端点尽量小，才能有 后续的pair 的左端点 > 当前的右端点
+
+        right = intervals[0][1]
+        ans.append(s[intervals[0][0]:intervals[0][1]+1])
+        for l, r in intervals[1:]:
+            if l > right:
+                ans.append(s[l:r+1])
+                right = r
         return ans
+    
 
 if __name__ == "__main__":
     sol = Solution()

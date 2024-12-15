@@ -3,6 +3,7 @@ from typing import List
 # 双周赛 137
 class Solution:
     def resultsArray(self, nums: List[int], k: int) -> List[int]:
+        # 自行解答
         if k == 1: return nums
         
         n, ones, ans = len(nums), 0, []

@@ -7,24 +7,34 @@ class Solution:
     def maximumValueSum(self, board: List[List[int]]) -> int:
         rows, cols = len(board), len(board[0])
 
-        # suf_mn = [[(-inf,-1)(-inf,-1)(-inf, -1)] for _ in range(cols)]
-        # for c in range(cols-1, 1, -1):
-        #     for r in range(rows):
-        #         if board[c]
-
-
+        suf_mn = [[(-inf,-1),(-inf,-1),(-inf, -1)] for _ in range(cols)]
+        for c in range(cols-1, 1, -1):
+            if c + 1 < cols: suf_mn[c] = suf_mn[c+1]
+            for r in range(rows):
+                if r in [r for _, r in suf_mn[c]]:
+                    for i in range(3):
+                        if suf_mn[c][i][1] == r and suf_mn[c][i][0] < board[r][c]:
+                            suf_mn[c][i] = (board[r][c], r)
+                            suf_mn[c].sort()
+                else:
+                    if board[r][c] > suf_mn[c][0]:
+                        suf_mn[c].insert(0, (board[r][c], r))
+                    elif board[r][c] > suf_mn[c][1]:
+                        suf_mn[c].insert(1, (board[r][c], r))
+                    elif board[r][c] > suf_mn[c][1]:
+                        suf_mn[c].insert(2, (board[r][c], r))
+                    del suf_mn[3:]
+                    
         @cache
         def dfs(c:int, r1:int, r2:int):
             if c == cols: return -inf
 
             if r1 != -1 and r2 != -1:
-                maxv = -inf
-                for i in range(rows):
-                    for j in range(c, cols):
-                        if i in (r1, r2):continue
-                        if board[i][j] > maxv: maxv = board[i][j]
-                return maxv
-            
+                for i in range(3):
+                    if suf_mn[c][i][1] not in (r1,r2):
+                        return suf_mn[c][i][0]
+                
+
             res = -inf
             res = max(res, dfs(c+1, r1, r2)) # 不选
             if r1 == -1:

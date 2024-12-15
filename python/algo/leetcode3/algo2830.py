@@ -8,7 +8,7 @@ class Solution:
     def maximizeTheProfit(self, n: int, offers: List[List[int]]) -> int:
         # 2024.12 复习
         # 贪心不相交区间 和 DP不相交区间的差异点：
-        # 1, 贪心会按照左、右端点排序，DP 分组 (必须还是可选？)
+        # 1, 贪心会按照左、右端点排序，DP 分组 (也可以排序， 参见 leetcode 1235)
         # 2, ...
 
         # 本题的状态转移方程 dp[i] = max(dp[i],dp[k_s]+k_g)

@@ -1,3 +1,4 @@
+from bisect import bisect_right
 from typing import List
 
 # DP专题 - 不相交区间； 与贪心不相交区间对比练习
@@ -7,7 +8,7 @@ class Solution:
         # 2830 和 2008 差别在于 端点的包含关系不同
         # 2830 [0,1][1,2] 编号为房子单元，因此 1 两个区间内，因此区间重叠
         # 2830 [0,1][1,2] 编号为起始的点，因此是两个区间的交界点，区间不重叠
-        
+
         group = [[] for _ in range(n)] # 按照end 分组
 
         for st, end, tip in rides:
@@ -20,3 +21,18 @@ class Solution:
                 dp[end] = max(dp[end], dp[st] + end - st + t)
                 
         return dp[n-1]
+
+
+    def maxTaxiEarnings2(self, n: int, rides: List[List[int]]) -> int:
+        # 用参考 leetcode 1235 的方法, 
+        m = len(rides)
+        dp = [0] * (m+1)
+
+        rides.sort(key=lambda p:p[1]) # 按照 end 排序
+        end = [r for _, r, _ in rides]
+        
+        for i, (l, r, t) in enumerate(rides):
+            prev = bisect_right(end, l)
+            dp[i+1] = max(dp[i], dp[prev] + r - l + t)
+
+        return dp[m]

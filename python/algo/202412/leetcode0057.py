@@ -48,20 +48,3 @@ class Solution:
 
         return ans
 
-    def insert2(self, intervals: List[List[int]], newInterval: List[int]) -> List[List[int]]:
-        # 参考 0056 代码清晰，可读性强
-        ans = []
-        
-        inx = bisect_right(intervals, newInterval)
-        intervals.insert(inx, newInterval)
-
-        left, right = intervals[0]
-        for l, r in intervals[1:]:
-            if l > right:
-                ans.append([left, right])
-                left, right = l, r
-            else:
-                if r > right : right = r
-        ans.append([left, right])
-
-        return ans

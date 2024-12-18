@@ -1,7 +1,7 @@
 import string
 from typing import List
 
-
+# 贪心专题 - 合并区间
 class Solution:
     def partitionLabels(self, s: str) -> List[int]:
         intervals = []

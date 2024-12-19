@@ -1,6 +1,7 @@
 from typing import List
 
 # 贪心专题 - 合并区间
+# 周赛 375
 class Solution:
     def numberOfGoodPartitions(self, nums: List[int]) -> int:
         int_h = {}

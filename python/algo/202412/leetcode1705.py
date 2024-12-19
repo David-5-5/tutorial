@@ -21,7 +21,6 @@ class Solution:
                 ans += 1 # 吃到苹果
             i += 1
         return ans
-
         
 
 

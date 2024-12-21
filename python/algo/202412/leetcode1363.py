@@ -27,7 +27,8 @@ class Solution:
                         if n - 2 == len(digits):
                             break
             
-        return "0" if len(digits) and sum(digits) == 0 else "".join(str(i) for i in digits)
+        return "0" if len(digits) and sum(digits) == 0 \
+                else "".join(str(i) for i in digits)
 
             
 

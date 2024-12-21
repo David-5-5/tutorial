@@ -1,6 +1,6 @@
 from typing import List
 
-# 
+# 贪心专题 - 字典序最小/最大
 class Solution:
     def largestMultipleOfThree(self, digits: List[int]) -> str:
         # 自行解答

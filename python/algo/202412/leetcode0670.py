@@ -1,3 +1,4 @@
+# 贪心专题 - 字典序最小/最大
 class Solution:
     def maximumSwap(self, num: int) -> int:
         # 自行解答，后缀最大值, 两次遍历

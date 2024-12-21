@@ -1,6 +1,8 @@
 class Solution:
     def maximumSwap(self, num: int) -> int:
-        # 自行解答，后缀最大值
+        # 自行解答，后缀最大值, 两次遍历
+        # 官方题解 暴力 O(n^2)
+        # 其他题解 一次遍历
         sl = list(str(num))
         suf_mx = [-1] * len(sl)
         suf_mx[-1] = len(sl)-1

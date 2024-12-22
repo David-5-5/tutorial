@@ -4,7 +4,7 @@ from typing import List
 class Solution:
     def lexicographicallySmallestArray(self, nums: List[int], limit: int) -> List[int]:
         # 自行解答
-        # 从小到da排序后分组，将相隔不超过 limit 的数及下标分在一组，
+        # 从小到大排序后分组，将相隔不超过 limit 的数及下标分在一组，
         # 然后按照分组所在的下标从小到大写入结果数组中
         n = len(nums)
         ans = [0] * n

@@ -1,7 +1,7 @@
 from collections import Counter, defaultdict
 from math import factorial, perm
 
-
+# 双周赛 138
 class Solution:
     def countGoodIntegers(self, n: int, k: int) -> int:
         # 枚举半回文，检查全回文是否整除 k

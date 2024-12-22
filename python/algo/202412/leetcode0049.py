@@ -7,8 +7,8 @@ class Solution:
         # 自行解答，可以用于 3272 题中，避免重复计算
         h = defaultdict(list)
 
-        for str in strs:
-            key = "".join(sorted(str))
-            h[key].append(str)
+        for s in strs:
+            key = "".join(sorted(s))
+            h[key].append(s)
         return list(h.values())    
 

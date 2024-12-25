@@ -46,6 +46,19 @@ class Solution:
 
         return ans 
     
+    def minimumCost2(self, nums: List[int]) -> int:
+        n = len(nums)
+        nums.sort()
+
+        def cost(i:int) -> int:
+            target = pal[i]
+            return sum(abs(v-target) for v in nums)
+
+        inx = bisect_left(pal, nums[n//2])
+        if pal[inx] <= nums[n//2]:
+            return cost(i)
+        return min(cost(i-1), cost(i))
+
 
 if __name__ == "__main__":
     sol = Solution()

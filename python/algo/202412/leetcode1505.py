@@ -68,12 +68,12 @@ class Solution:
         for i in range(1, n+1):
             for j in range(10):
                 if pos[j]:
-                    behind = bit.query(n) - bit.query(pos[j][-1])
+                    behind = bit.query(n) - bit.query(pos[j][-1]) # ?
                     inv = pos[j][-1] + behind - i
                     if inv <= k:
                         ans += str(j)
                         inx = pos[j].pop()
-                        bit.add(inx)
+                        bit.add(inx) # ?
                         k -= inv
                         break
         return ans

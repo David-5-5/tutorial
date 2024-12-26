@@ -30,9 +30,6 @@ class Solution:
         for x, y in zip(xCoord, yCoord):
             x_h[x].append(y)
             y_h[y].append(x)
-        
-        # for k in x_h.keys(): x_h[k].sort()
-        # for k in y_h.keys(): y_h[k].sort()
 
         # 预处理每个点的正下方的点
         below = {}

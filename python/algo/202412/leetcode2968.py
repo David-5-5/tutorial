@@ -27,3 +27,19 @@ class Solution:
             ans = max(ans, r - l + 1)
 
         return ans
+    
+    def maxFrequencyScore(self, nums: List[int], k: int) -> int:
+        # 方法二，通过中位数计算离中位数的距离公式
+        n = len(nums)
+        nums.sort()
+        
+        ans = l = s = 0 # 增加 s 维护当前子数组离中位数的距离
+        for r in range(n):
+            s += nums[r] - nums[(r+l)//2]
+            while s > k:
+                s -= nums[(r+l+1)//2] - nums[l]
+                l += 1
+            ans = max(ans, r - l + 1)
+
+        return ans
+

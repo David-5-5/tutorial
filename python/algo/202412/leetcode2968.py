@@ -13,10 +13,11 @@ class Solution:
         
         def distance_sum(l:int, r:int) -> int:
             mid = (l + r) // 2
-            res = nums[mid] * (mid-l) - (pres[mid] - pres[l])
-            res += pres[r+1]-pres[mid+1] - nums[mid] * (r-mid)
-
-            return res    
+            # res = nums[mid] * (mid-l) - (pres[mid] - pres[l])
+            # res += pres[r+1]-pres[mid+1] - nums[mid] * (r-mid)
+            # return res
+            # 合并上述上诉两式
+            return pres[r+1] + pres[l] - pres[mid+1] - pres[mid] + nums[mid] * (2*mid-l-r)
         
         ans = l = 0
         for r in range(n):

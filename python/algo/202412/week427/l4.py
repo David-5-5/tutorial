@@ -18,7 +18,6 @@ class BIT:
     def query(self, i:int) ->int:
         res = 0
         while i > 0:
-            print(i)
             res += self.nums[i]
             i -= i & -i # i &= i - 1
         return res

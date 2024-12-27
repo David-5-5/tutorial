@@ -40,6 +40,7 @@ class Solution:
         h_set = f(hFences, m)
         v_set = f(vFences, n)
 
-        mx = max(h_set.intersection(v_set), default=-1)
+        # mx = max(h_set.intersection(v_set), default=-1)
+        mx = max(h_set & v_set, default=-1)
 
         return -1 if mx < 0 else pow(mx, 2, 10 ** 9 + 7)

@@ -7,7 +7,7 @@ class Solution:
     def findTheCity(self, n: int, edges: List[List[int]], distanceThreshold: int) -> int:
         # 参考题解 - 记忆化搜索
         
-        # Begin Floyd 模板
+        # Begin Floyd 记忆化搜索 模板
         w = [[0 if i == j else inf for j in range(n)] for i in range(n)]
         for u, v, wt in edges:
             w[u][v] = w[v][u] = wt
@@ -34,7 +34,7 @@ class Solution:
     def findTheCity2(self, n: int, edges: List[List[int]], distanceThreshold: int) -> int:
         # 参考题解 - 递推
         
-        # Begin Floyd 模板
+        # Begin Floyd 递推 模板
         w = [[0 if i == j else inf for j in range(n)] for i in range(n)]
         for u, v, wt in edges:
             w[u][v] = w[v][u] = wt
@@ -64,7 +64,7 @@ class Solution:
     def findTheCity3(self, n: int, edges: List[List[int]], distanceThreshold: int) -> int:
         # 参考题解 - 递推 + 降维
         
-        # Begin Floyd 模板
+        # Begin Floyd 递推 + 降维 模板 
         w = [[0 if i == j else inf for j in range(n)] for i in range(n)]
         for u, v, wt in edges:
             w[u][v] = w[v][u] = wt

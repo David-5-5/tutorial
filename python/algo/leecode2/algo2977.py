@@ -1,5 +1,7 @@
+from collections import defaultdict
+from math import inf
 from typing import List
-from functools import lru_cache
+from functools import cache, lru_cache
 import bisect
 import heapq
 class Solution:
@@ -84,9 +86,65 @@ class Solution:
         return -1 if ans == float("inf") else ans
 
 
+    def minimumCost2(self, source: str, target: str, original: List[str], changed: List[str], cost: List[int]) -> int:
+        # original + changed 字符串 -> id
+        # vectex[len]["xxx"] = 0,
+        # original[0] changed[0] "abc" -> "cdc"
+        # vectex[3]["abc"] = 0 vectex[3]["cdc"] = 1
+        # w[3][0][1] = cost[0] 其中 3 字符长度, 0:"abc", 1:"cdc"
+        vectex = {}
+        for ch in original + changed:
+            lt = len(ch)
+            if lt not in vectex:
+                vectex[lt] = {}
+                vectex[lt][ch] = 0
+            else:
+                if ch not in vectex[lt]:
+                    vectex[lt][ch] = len(vectex[lt])
+        
+        # Begin Floyd 递推 + 降维 模板 
+        # 按照 original changed 字符长度 分组
+        w = [[[0 if i == j else inf for j in range(len(vectex[lt]))] for i in range(len(vectex[lt]))] for lt in vectex.keys()]
+        for u, v, wt in zip(original, changed, cost):
+            lt = list(vectex.keys()).index(len(u))
+            u, v = vectex[len(u)][u], vectex[len(v)][v]
+            if wt < w[lt][u][v] : w[lt][u][v] = wt
+        
+        for lt_grp in vectex.keys():
+            lt = list(vectex.keys()).index(lt_grp)
+            n = len(vectex[lt_grp])
+            for k in range(n):
+                for i in range(n):
+                    for j in range(n):
+                        w[lt][i][j] = min(w[lt][i][j], w[lt][i][k]+w[lt][k][j])
+        # End Floyd 模板
+
+        @cache
+        def dfs(i:int): # i表示剩余字符长度，i-1为最后字符
+            if i == 0: 
+                return 0
+            res = inf
+            if source[i-1] == target[i-1]:
+                res = dfs(i-1)
+            
+            for lt_grp in vectex.keys():
+                if lt_grp > i:continue # 长度超出
+                lt = list(vectex.keys()).index(lt_grp)
+
+                if source[i-lt_grp:i] in vectex[lt_grp] and target[i-lt_grp:i] in vectex[lt_grp]:
+                    u, v = vectex[lt_grp][source[i-lt_grp:i]], vectex[lt_grp][target[i-lt_grp:i]]
+                    res = min(res, w[lt][u][v] + dfs(i-lt_grp))
+
+            return res
+        
+        ans = dfs(len(source))
+        return ans if ans < inf else -1
+
+
 if __name__ == "__main__":
     sol = Solution()
     source, target, original, changed, cost = "abcd", "acbe", ["a","b","c","c","e","d"], ["b","c","b","e","b","e"], [2,5,5,1,2,20]
     source, target, original, changed, cost = "abcdefgh", "acdeeghh", ["bcd","fgh","thh"], ["cde","thh","ghh"],[1,3,5]
-    source, target, original, changed, cost = "abcdefgh", "addddddd", ["bcd","defgh"], ["ddd","ddddd"], [100,1578]
+    # source, target, original, changed, cost = "abcdefgh", "addddddd", ["bcd","defgh"], ["ddd","ddddd"], [100,1578]
     print(sol.minimumCost(source, target, original, changed, cost))
+    print(sol.minimumCost2(source, target, original, changed, cost))

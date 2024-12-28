@@ -2,6 +2,7 @@
 # 最短路径
 from collections import defaultdict
 import heapq
+from math import inf
 from typing import List
 
 
@@ -31,13 +32,13 @@ class Graph:
                 if d + w < dist[v]:
                     dist[v] = d + w
                     heapq.heappush(pq, (dist[v], v))
-        return -1 if dist[node2] == float('inf') else dist[node2]
+        return -1 if dist[node2] == inf else dist[node2]
 
 class Graph2:
     # Floyd algorithm
     def __init__(self, n: int, edges: List[List[int]]):
         self.n = n
-        self.dp = [[0 if i==j else float("inf") for i in range(self.n)] for j in range(self.n)]
+        self.dp = [[0 if i==j else inf for i in range(self.n)] for j in range(self.n)]
 
         g = self.dp
         for u, v, w in edges:

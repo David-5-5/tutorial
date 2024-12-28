@@ -104,15 +104,17 @@ class Solution:
         
         # Begin Floyd 递推 + 降维 模板 
         # 按照 original changed 字符长度 分组
-        w = [[[0 if i == j else inf for j in range(len(vectex[lt]))] for i in range(len(vectex[lt]))] for lt in vectex.keys()]
+        w = {}
+        for lt in vectex.keys():
+            w[lt] = [[0 if i == j else inf for j in range(len(vectex[lt]))] for i in range(len(vectex[lt]))]
+        
         for u, v, wt in zip(original, changed, cost):
-            lt = list(vectex.keys()).index(len(u))
-            u, v = vectex[len(u)][u], vectex[len(v)][v]
+            lt = len(u)
+            u, v = vectex[lt][u], vectex[lt][v]
             if wt < w[lt][u][v] : w[lt][u][v] = wt
         
-        for lt_grp in vectex.keys():
-            lt = list(vectex.keys()).index(lt_grp)
-            n = len(vectex[lt_grp])
+        for lt in vectex.keys():
+            n = len(vectex[lt])
             for k in range(n):
                 for i in range(n):
                     for j in range(n):
@@ -127,13 +129,12 @@ class Solution:
             if source[i-1] == target[i-1]:
                 res = dfs(i-1)
             
-            for lt_grp in vectex.keys():
-                if lt_grp > i:continue # 长度超出
-                lt = list(vectex.keys()).index(lt_grp)
+            for lt in vectex.keys():
+                if lt > i:continue # 长度超出
 
-                if source[i-lt_grp:i] in vectex[lt_grp] and target[i-lt_grp:i] in vectex[lt_grp]:
-                    u, v = vectex[lt_grp][source[i-lt_grp:i]], vectex[lt_grp][target[i-lt_grp:i]]
-                    res = min(res, w[lt][u][v] + dfs(i-lt_grp))
+                if source[i-lt:i] in vectex[lt] and target[i-lt:i] in vectex[lt]:
+                    u, v = vectex[lt][source[i-lt:i]], vectex[lt][target[i-lt:i]]
+                    res = min(res, w[lt][u][v] + dfs(i-lt))
 
             return res
         

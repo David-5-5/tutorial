@@ -52,7 +52,8 @@ class Solution:
         for u, v, wt in zip(original, changed, cost):
             u, v = ord(u)-ord('a'), ord(v)-ord('a')
             # w[u][v] = w[v][u] = wt
-            if wt < w[u][v] : w[u][v] = wt # 有向图
+            # 有向图, 存在多个大小不一样的同一个边
+            if wt < w[u][v] : w[u][v] = wt 
         # k 范围[0,n]
 
         for k in range(26):

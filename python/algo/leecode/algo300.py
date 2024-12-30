@@ -82,6 +82,7 @@ class Solution:
         n = len(nums)
         # dp 固定最小连续序列的长度，其值为该序列长度的最小值。索引从0开始，长度序列从1开始，因此长度=索引+1
         # 最后返回的结果为len(dp)
+        # 最短子序列 模板
         dp = []
 
         for i in range(n):

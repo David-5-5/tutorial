@@ -1,7 +1,7 @@
 from bisect import bisect_left
 from typing import List
 
-# 双周赛
+# 双周赛 139
 class Solution:
     def maxPathLength(self, coordinates: List[List[int]], k: int) -> int:
         # 参考题解，最长子序列

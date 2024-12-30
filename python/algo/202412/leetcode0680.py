@@ -1,7 +1,6 @@
-# 贪心专题 - 回文串贪心
 from functools import cache
 
-
+# 贪心专题 - 回文串贪心
 class Solution:
     def validPalindrome(self, s: str) -> bool:
         can_del = True

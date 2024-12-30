@@ -4,9 +4,7 @@ from functools import cache
 
 class Solution:
     def validPalindrome(self, s: str) -> bool:
-        
         can_del = True
-
         @cache
         def check(i:int, j:int) -> bool:
             nonlocal can_del
@@ -17,8 +15,27 @@ class Solution:
                 return check(i+1, j-1)
             elif can_del:
                 can_del = False
-                res1 = check(i+1,j-2) if s[i] == s[j-1] else False
-                res2 = check(i+2, j-1) if s[i+1] == s[j] else False
-                return res1 or res2
+                return check(i+1,j) or check(i,j-1)
+            else:
+                return False
         return check(0, len(s)-1)
 
+    def validPalindrome2(self, s: str) -> bool:
+        # 不用递归，判断回文写两遍
+        def check(i:int, j:int) -> bool:
+            while i < j:
+                if s[i] != s[j]:
+                    return False
+                else:
+                    i += 1
+                    j -= 1
+            return True
+
+        low, high = 0, len(s)-1
+        while low < high:
+            if s[low] != s[high]:
+                return check(low+1, high) or check(low,high-1)
+            else:
+                low += 1
+                high -= 1
+        return True

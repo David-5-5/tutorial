@@ -32,17 +32,19 @@ class Solution:
             return s1
 
         def check(l1:int, r1:int, l2:int, r2:int, pre1:List[List[int]], pre2:List[List[int]]) -> bool:
+            # l1 <= l2 调用时确保 pre1 对应 [l1,r1],pre2 对应 [l2,r2]
             if pres_d[l1] > 0 or pres_d[n//2] - pres_d[max(r1,r2)+1] > 0: # 检查区间的两边是否全等
                 return False
             if r2 <= r1: # 区间包含
                 return count(l1,r1,pre1) == count(l1,r1,pre2)
-            elif r1 < l2: # 两个不相交区间
+            elif r1 < l2: # 两个不相交区间, r1 == l2 时是区间是相交的
                 return pres_d[l2] - pres_d[r1+1] == 0 and \
                         count(l1,r1,pre1) == count(l1,r1,pre2) and \
                         count(l2,r2,pre1) == count(l2,r2,pre2)
             else: # l2 < r1
-                s1 = substract(count(l1,r1,pre1), count(l1,l2-1,pre2))
-                s2 = substract(count(l2,r2, pre2), count(r1+1,r2,pre1))
+                # [l2, r1] 为 公共区间
+                s1 = substract(count(l1,r1,pre1), count(l1,l2-1,pre2)) # l2 - 1
+                s2 = substract(count(l2,r2, pre2), count(r1+1,r2,pre1)) # r1 + 1
                 return s1 and s2 and s1 == s2
     
         ans = [False] * len(queries)

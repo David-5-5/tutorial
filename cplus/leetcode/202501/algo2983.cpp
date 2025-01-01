@@ -5,8 +5,10 @@ using namespace std;
 class Solution {
 public:
     vector<bool> canMakePalindromeQueries(string s, vector<vector<int>>& queries) {
-        int n, half = s.length(), s.length() >> 1;
-        string t = s.substr(half, half).reserve();
+        int n = s.length();
+        int half = n >> 1;
+        string t = s.substr(half, half);
+        t.reserve();
         s = s.substr(0, half);
 
         vector<vector<int>> pres_s;
@@ -19,24 +21,24 @@ public:
         // 初始化 pres_s
         for (int i=0; i<half; i++) {
             for (int j= 0; j<26; j++) {
-                pres_s[i+1][j] = pres_s[i][j] + (int(s[i]) == int('a') + j)
+                pres_s[i+1][j] = pres_s[i][j] + (int(s[i]) == int('a') + j);
             }
         }
 
         // 初始化 pres_t
         for (int i=0; i<half; i++) {
             for (int j= 0; j<26; j++) {
-                pres_t[i+1][j] = pres_t[i][j] + (int(t[i]) == int('a') + j)
+                pres_t[i+1][j] = pres_t[i][j] + (int(t[i]) == int('a') + j);
             }
         }
 
         // 初始化 pres_d
         for (int i=0; i<half; i++) {
-            pres_d[i+1] = pres[i] + (s[i]!=t[i])
+            pres_d[i+1] = pres_d[i] + (s[i]!=t[i]);
         }
 
         vector<bool> ans(queries.size());
-        
 
+        return ans;
     }
 };

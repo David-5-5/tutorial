@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-// 周赛 
+// 周赛 378
 class Solution {
 public:
     vector<bool> canMakePalindromeQueries(string s, vector<vector<int>>& queries) {
@@ -91,9 +91,9 @@ int main() {
     vector<vector<int>> queries = {{1,1,3,5},{0,2,5,5}};
     vector<bool> result = solution.canMakePalindromeQueries("abcabc", queries);
     cout << "[";
+    cout << boolalpha; // Enable boolalpha
     for (const bool& expr : result) {
-        string out = expr ? " true ":" false ";
-        cout << out ;
+        cout << expr << ", ";
     }
     cout << "]" << endl;
     return 0;

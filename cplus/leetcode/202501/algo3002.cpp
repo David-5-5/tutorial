@@ -8,6 +8,7 @@ public:
         // 自行解答，练习 set 使用
         int n = nums1.size();
 
+        // compare to unordered_set
         set<int> s1(nums1.begin(), nums1.end());
         set<int> s2(nums2.begin(), nums2.end());
 
@@ -18,6 +19,7 @@ public:
         }
 
         set<int> diff;
+        // it is wrong for {1,2} - {1} for unordered_set
         set_difference(s1.begin(), s1.end(), s2.begin(), s2.end(), 
             inserter(diff, diff.begin()));
 

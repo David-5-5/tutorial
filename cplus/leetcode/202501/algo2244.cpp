@@ -2,7 +2,8 @@ class Solution {
 public:
     int minimumRounds(vector<int>& tasks) {
         // 自行解答
-        map<int, int> cnt;
+        // unordered_map is priority to map
+        unordered_map<int, int> cnt; 
         for (int t : tasks)
             cnt[t] += 1;
         

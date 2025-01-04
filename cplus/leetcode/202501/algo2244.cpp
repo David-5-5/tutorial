@@ -15,4 +15,21 @@ public:
 
         return ans;
     }
+
+    int minimumRounds2(vector<int>& tasks) {
+        // 参考题解
+        // unordered_map is priority to map
+        unordered_map<int, int> cnt; 
+        for (int t : tasks)
+            cnt[t] += 1;
+        
+        int ans = 0;
+        // 另一种遍历 map 的写法
+        for (auto& [_, c]: cnt) {
+            if (c==1) return -1;
+            ans += (c+2) / 3;   // 上取整
+        }
+
+        return ans;
+    }
 };

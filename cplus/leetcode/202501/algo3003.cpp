@@ -39,4 +39,53 @@ public:
         return dfs(0,0,false);    
 
     }
+
+    int maxPartitionsAfterOperations2(string s, int k) {
+        // 前后缀分解
+        int n = s.length();
+        int suf[n+1][2]; // suf[i] 包含 段数，当前段的集合(long states)
+        suf[n][0] = 1, suf[n][1] = 0;
+
+        for (int i=n-1; i>=0; i--) {
+            int bit = s[i] - 'a';
+            int newMask = suf[i+1][1] | 1 << bit;
+            if (__builtin_popcount(newMask) > k) {
+                suf[i][0] = suf[i+1][0] + 1;
+                suf[i][1] = 1 << bit;
+            } else {
+                suf[i][0] = suf[i+1][0];
+                suf[i][1] = newMask;
+            }
+        }
+        int ans = 0;
+        int pre[n+1][0];
+        pre[0][0] =1, pre[0][1] = 0;
+        for (int i=0; i++; i<n) {
+            int unionSize = pre[i][1] | suf[i+1][1];
+            if (__builtin_popcount(unionSize) < k){
+                ans = max(ans, pre[i][0] + pre[i+1][0] - 1);
+            } else if (__builtin_popcount(unionSize) < 26 
+                &&__builtin_popcount(pre[i][1]) == k 
+                && __builtin_popcount(suf[i+1][1]) == k ) {
+                ans = max(ans, pre[i][0] + pre[i+1][0] + 1);
+            } else {
+                ans = max(ans, pre[i][0] + pre[i+1][0]);
+            }
+
+            int bit = s[i] - 'a';
+            int newMask = pre[i][1] | 1 << bit;
+            if (__builtin_popcount(newMask) > k) {
+                pre[i+1][0] = pre[i][0] + 1;
+                pre[i+1][1] = 1 << bit;
+            } else {
+                pre[i+1][0] = pre[i][0];
+                pre[i+1][1] = newMask;
+            }
+            
+        }
+
+        return ans;
+
+    }
+
 };

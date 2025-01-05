@@ -91,9 +91,9 @@ public:
     int maxPartitionsAfterOperations3(string s, int k) {
         // 前后缀分解
         if (k == 26) return 1;
-        int n = s.length();
-        int suf[10001][2] = {0}; // suf[i] 包含 段数，当前段的集合(long states)
-        suf[n][0] = 1, suf[n][1] = 0;
+        int ans = 0,  n = s.length();
+        int suf[n + 1][2], pre[n + 1][2]; // suf[i] 包含 段数，当前段的集合(long states)
+        suf[n][0] = 1, suf[n][1] = 0, pre[0][0] =1, pre[0][1] = 0;;
 
         // 抽象出通用方法，用于前后缀分解
         auto update = [&](int* src, int * dest, int bit, int newMask) {
@@ -111,9 +111,7 @@ public:
             int newMask = suf[i+1][1] | 1 << bit;
             update(suf[i+1],suf[i],bit, newMask);
         }
-        int ans = 0;
-        int pre[10001][2];
-        pre[0][0] =1, pre[0][1] = 0;
+        
         for (int i=0; i<n; i++) {
             int unionSize = pre[i][1] | suf[i+1][1];
             if (__builtin_popcount(unionSize) < k){

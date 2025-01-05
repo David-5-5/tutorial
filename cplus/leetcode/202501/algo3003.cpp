@@ -5,6 +5,7 @@ using namespace std;
 class Solution {
 public:
     int maxPartitionsAfterOperations(string s, int k) {
+        // c++ 自定义记忆化搜索比 python 慢
         if (k == 26) return 1;
         unordered_map<long long, int> memo;
 

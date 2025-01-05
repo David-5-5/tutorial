@@ -16,6 +16,8 @@ class Solution:
             if changed: return res
             for j in range(26):
                 if j == bit: continue
+                # 犯了弱智错误， "=" 写成 "=="
+                # newmask == mask | 1 << j 引以为戒
                 if (mask | 1 << j).bit_count() > k:
                     res = max(res, dfs(i+1, 1 << j, True) + 1)
                 else: res = max(res, dfs(i+1, mask | 1 << j, True))

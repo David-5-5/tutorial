@@ -10,6 +10,7 @@ public:
         unordered_map<long long, int> memo;
 
         function<int(int, int, bool)> dfs = [&](int i, int mask, bool changed) -> int {
+        // auto dfs = [&](this auto&& dfs, int i, int mask, bool changed) -> int { // C++ 23
             if (i == s.size()) return 1;
 
             long long argMask = (long long) i << 32 | mask << 1 | changed;
@@ -36,7 +37,7 @@ public:
             return memo[argMask] = res;
         };
 
-        return dfs(0,0,false);    
+        return dfs(0,0,false);
 
     }
 

@@ -12,24 +12,24 @@ public:
         int n = nums.size();
         sort(nums.begin(), nums.end());
 
-        int diff[n];
-        memset(diff, 0, sizeof(diff));
+        int count[n];
+        memset(count, 0, sizeof(count));
 
-        // 差分
+        // 先差分
         for (auto req : requests) {
-            diff[req[0]] += 1;
-            if (req[1]+1 < n) diff[req[1]+1] -= 1;
+            count[req[0]] += 1;
+            if (req[1]+1 < n) count[req[1]+1] -= 1;
         }
 
         // 求前缀和
         for (int i=1;i<n;i++) {
-            diff[i] += diff[i-1];
+            count[i] += count[i-1];
         }
-        sort(diff, diff+n);
+        sort(count, count+n);
 
         long ans = 0;
         for (int i=0; i<n; i++) {
-            ans = (ans + (long)nums[i] * diff[i]) % MOD;
+            ans = (ans + (long)nums[i] * count[i]) % MOD;
         }
 
         return ans;

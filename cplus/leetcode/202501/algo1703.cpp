@@ -26,6 +26,7 @@ public:
         int ans = INT_MAX;
         for (int i=0; i<p_v.size()-k+1; i++) {
             int mid = i + k / 2;
+            // 化简 sum |(pj-j) - (q-i)| 遍历 i 通过前缀和找出移动的最小值
             ans = min(ans, p_v[mid]*(1-k%2)+pres[k+i]-pres[mid+1]-(pres[mid]-pres[i]));
         }
         return ans;

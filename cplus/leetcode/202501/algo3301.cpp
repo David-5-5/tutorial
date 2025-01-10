@@ -22,7 +22,7 @@ public:
     }
 
 
-    long long maximumTotalSum(vector<int>& maximumHeight) {
+    long long maximumTotalSum2(vector<int>& maximumHeight) {
         // 参考题解，focus on c++ usage
         ranges::sort(maximumHeight, greater());
 

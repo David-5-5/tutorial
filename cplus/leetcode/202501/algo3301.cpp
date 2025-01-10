@@ -5,6 +5,7 @@ using namespace std;
 class Solution {
 public:
     long long maximumTotalSum(vector<int>& maximumHeight) {
+        // 自行解答
         sort(maximumHeight.begin(), maximumHeight.end());
         reverse(maximumHeight.begin(), maximumHeight.end());
         long long ans = 0;
@@ -18,5 +19,18 @@ public:
         }
         
         return ans;   
+    }
+
+
+    long long maximumTotalSum(vector<int>& maximumHeight) {
+        // 参考题解，focus on c++ usage
+        ranges::sort(maximumHeight, greater());
+
+        for (int i=1; i<maximumHeight.size(); i++) {
+            maximumHeight[i] = min(maximumHeight[i-1]-1, maximumHeight[i]);
+            if (maximumHeight[i] <= 0) return -1;
+        }
+        
+        return reduce(maximumHeight.begin(), maximumHeight.end(), 0LL);   
     }
 };

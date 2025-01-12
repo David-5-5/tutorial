@@ -1,7 +1,7 @@
 from math import inf
 from typing import List
 
-
+# 3357
 class Solution:
     def minDifference(self, nums: List[int]) -> int:
         # 参考题解，区间贪心

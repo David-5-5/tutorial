@@ -8,7 +8,7 @@ public:
         // 自行解答 - 计算 gcd 比较耗时
 
         // 自定义 gcd
-        // function<int(int,int)> gcd = [&](int a, int b)  {
+        // function<int(int,int)> gcd = [&](int a, int b) -> int {
         //     return b == 0 ? a : gcd(b, a % b);
         // };
         

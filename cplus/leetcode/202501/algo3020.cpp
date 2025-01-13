@@ -15,10 +15,10 @@ public:
         for (auto &[num, _] : cnt) { 
             int cur = 0;
             long long x = num;
-            for (; cnt.contains(x) && cnt[x] > 1; x *= x) {
+            for (; cnt.count(x) && cnt[x] > 1; x *= x) { // use count replace of contains
                 cur += 2;
             }
-            cur += cnt.contains(x) ?1:-1;
+            cur += cnt.count(x) ?1:-1;
             ans = max(ans, cur);
         }  
         

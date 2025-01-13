@@ -29,6 +29,6 @@ public:
 
 
 int main() {
-    vector<int> nums = {[1,3,2,4]};
+    vector<int> nums = {1,3,2,4};
     cout << Solution().maximumLength(nums);
 }

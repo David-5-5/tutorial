@@ -13,4 +13,11 @@ public:
         }
         return ans;
     }
+
+    long long flowerGame(int n, int m) {
+        // 自行解答 公式，n偶数数量 * m奇数数量 + n奇数数量 * m偶数数量
+        long long n_odd = (n + 1) / 2, m_odd = (m+1) / 2;
+        long long n_even = n - n_odd, m_even = m - m_odd;
+        return (long long)  n_odd * m_even + n_even * m_odd;
+    }
 };

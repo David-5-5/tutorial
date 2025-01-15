@@ -30,4 +30,24 @@ public:
 
         return ans;
     }
+
+    int countCollisions2(string directions) {
+        // 简化
+        int l = 0, r = 0, s = 0, ans = 0;
+        for (auto ch : directions) {
+            if (ch == 'S') {
+                ans += r, r=0, s = 1;
+            } else if (ch == 'L') {
+                if (r > 0) {
+                    ans += r + 1, r = 0, s= 1; 
+                } else if (s > 0) {
+                    ans += 1;
+                } else l += 1;
+            } else {
+                r += 1;
+            }
+        }
+
+        return ans;
+    }
 };

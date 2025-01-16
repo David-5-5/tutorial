@@ -4,6 +4,7 @@ using namespace std;
 // 周赛 379
 class Solution {
 public:
+
     int maxPartitionsAfterOperations(string s, int k) {
         // c++ 自定义记忆化搜索比 python 慢
         if (k == 26) return 1;
@@ -40,8 +41,49 @@ public:
         return dfs(0,0,false);
 
     }
+    
+    // 记忆化搜索 定义为类的方法，可以通过测试
+    string s;
+    int k;
+    unordered_map<long long, int> memo2;
+    int dfs2(int i, int mask, bool changed) {
+        if (i == s.size()) return 1;
+
+        long long argMask = (long long) i << 32 | mask << 1 | changed;
+        // 两种写法
+        // if (memo.count(argMask)) return memo[argMask];
+        auto it = memo2.find(argMask);
+        if (it != memo2.end()) return it->second;
+        
+        int res = 0;
+        // don't change i 
+        if (__builtin_popcount(mask | 1 << (s[i]-'a')) > k) 
+            res = dfs2(i+1, 1 << (s[i]-'a'), changed) + 1;
+        else res = dfs2(i+1, mask | 1 << (s[i]-'a'), changed);
+
+        // change i
+        if (!changed) {
+            for (int ch=0; ch<26; ch++) {
+                if (__builtin_popcount(mask | 1 << ch) > k) 
+                    res = max(res, dfs2(i+1, 1 << ch, true) + 1);
+                else res = max(res, dfs2(i+1, mask | 1 << ch, true));
+            }
+        }
+        
+        return memo2[argMask] = res;
+    };
 
     int maxPartitionsAfterOperations2(string s, int k) {
+        // c++ 自定义记忆化搜索比 python 慢
+        if (k == 26) return 1;
+        this->s = s;
+        this->k = k;
+        return dfs2(0,0,false);
+
+    }
+
+
+    int maxPartitionsAfterOperations3(string s, int k) {
         if (k == 26) return 1;
         int n = s.length();
         int suf[10001][2] = {0}; // suf[i] 包含 段数，当前段的集合(long states)
@@ -89,7 +131,7 @@ public:
 
     } 
 
-    int maxPartitionsAfterOperations3(string s, int k) {
+    int maxPartitionsAfterOperations4(string s, int k) {
         // 前后缀分解
         if (k == 26) return 1;
         int ans = 0,  n = s.length();

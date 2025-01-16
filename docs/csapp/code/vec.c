@@ -41,9 +41,8 @@ long int vec_length(vec_ptr v) {
 }
 
 void combine1(vec_ptr v, data_t *dest) {
-    long int i;
     *dest = INDET;
-    for (i = 0; i< vec_length(v); i++) {
+    for (long int i = 0; i< vec_length(v); i++) {
         data_t val;
         get_vec_element(v, i, &val);
         *dest = *dest OP val;
@@ -52,14 +51,29 @@ void combine1(vec_ptr v, data_t *dest) {
 
 
 void combine2(vec_ptr v, data_t *dest) {
-    long int i;
     long int length = vec_length(v);
 
     *dest = INDET;
-    for (i = 0; i< length; i++) {
+    for (long int i = 0; i< length; i++) {
         data_t val;
         get_vec_element(v, i, &val);
         *dest = *dest OP val;
+    }
+}
+
+
+data_t *get_vec_start(vec_ptr v) {
+    return v->data;
+}
+
+void combine3(vec_ptr v, data_t *dest) {
+    long int length = vec_length(v);
+    data_t *data = get_vec_start(v);
+
+    *dest = INDET;
+    for (long int i = 0; i< length; i++) {
+        data_t val;
+        *dest = *dest OP data[i];
     }
 }
 
@@ -74,5 +88,8 @@ int main() {
     printf("result <%d>\n", *result);
 
     combine2(v, result);
+    printf("result <%d>\n", *result);
+
+    combine3(v, result);
     printf("result <%d>\n", *result);
 }

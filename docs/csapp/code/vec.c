@@ -77,6 +77,21 @@ void combine3(vec_ptr v, data_t *dest) {
     }
 }
 
+/**
+ * Accumulate result in local variable
+ */
+void combine4(vec_ptr v, data_t *dest) {
+    long int length = vec_length(v);
+    data_t *data = get_vec_start(v);
+
+    data_t acc = INDET;
+    for (long int i = 0; i< length; i++) {
+        data_t val;
+        acc = acc OP data[i];
+    }
+    *dest = acc;
+}
+
 int main() {
     vec_ptr v = new_vec(100);
     data_t* result;
@@ -91,5 +106,8 @@ int main() {
     printf("result <%d>\n", *result);
 
     combine3(v, result);
+    printf("result <%d>\n", *result);
+
+    combine4(v, result);
     printf("result <%d>\n", *result);
 }

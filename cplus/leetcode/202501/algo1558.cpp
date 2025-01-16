@@ -16,8 +16,21 @@ public:
                 bit = i;
                 break;
             }
+
         ans += bit;
         return ans;
         
+    }
+    
+    int minOperations2(vector<int>& nums) {
+        int mx = ranges::max(nums), ans = 0;
+        for (auto v:nums)
+            ans += __builtin_popcount(v);
+        // 使用 while
+        while (mx>1) 
+            ans ++, mx >>= 1;
+
+        return ans;
+                
     }
 };

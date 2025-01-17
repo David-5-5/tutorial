@@ -19,7 +19,7 @@ class Solution:
             for i in range(26):
                 if mask >> i & 1 == 0:      # 后缀的首字母不包含 i
                     for j in range(26):
-                        if mask >> j & 1:
+                        if mask >> j & 1:   # 当前 idea 包含的 j 可以和(后续的) i 进行交换
                             cnt[i][j] += 1
                 else:                       # 后缀的首字母包含 i
                     for j in range(26):

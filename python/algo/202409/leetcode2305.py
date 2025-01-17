@@ -1,10 +1,11 @@
 from bisect import bisect_left
+from math import inf
 from typing import List
 
 # 周赛 297
 class Solution:
     def distributeCookies(self, cookies: List[int], k: int) -> int:
-        # 同 1723
+        # 同 1723 2025.1 复习，二分 + 回溯比较容易理解
         def check(limit):
             workloads = [0] * k
             return backtrack(workloads, 0, limit)
@@ -38,10 +39,10 @@ class Solution:
         return bisect_left(range(l, r), True, key=check) + l
 
     def distributeCookies2(self, cookies: List[int], k: int) -> int:
-        # 状态压缩
+        # 状态压缩 2025.1 复习
         n = len(cookies)
         sum = [0] * (1 << n)
-        for i in range(1, 1 << n):
+        for i in range(1, 1 << n):      # 需要位运算技巧
             x = bin(i)[::-1].index('1')
             y = i - (1 << x)
             sum[i] = sum[y] + cookies[x]
@@ -51,14 +52,14 @@ class Solution:
 
         for i in range(1, k):
             for j in range(1 << n):
-                minn = float('inf')
+                minn = inf
                 x = j # 式 1 
                 while x:
                     minn = min(minn, max(dp[i - 1][j - x], sum[x]))
                     x = (x - 1) & j # 式 2 结合式 1, 遍历集合中
                 dp[i][j] = minn
 
-        return dp[k - 1][(1 << n) - 1]
+        return dp[k - 1][(1 << n) - 1]  # k从0开始，范围[0,k-1]
 
 if __name__ == "__main__":
     sol = Solution()

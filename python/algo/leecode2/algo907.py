@@ -29,6 +29,7 @@ class Solution:
         MOD = 10 ** 9 + 7
         n = len(arr)
         left, right, st = [-1] * n, [n]* n, []
+        # 简化版本，一次遍历 计算 单调栈计算 最小值/最大值的左右区间
         for i, v in enumerate(arr):
             while st and arr[st[-1]] >= v: right[st.pop()] = i
             if st: left[i] = st[-1]

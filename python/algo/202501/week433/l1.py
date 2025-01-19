@@ -1,6 +1,7 @@
 from itertools import accumulate
 from typing import List
 
+# 3427
 class Solution:
     def subarraySum(self, nums: List[int]) -> int:
         pres = list(accumulate(nums, initial=0))

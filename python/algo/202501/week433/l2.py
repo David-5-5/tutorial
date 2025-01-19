@@ -26,10 +26,22 @@ class Solution:
         
         nums.sort()
         n, ans = len(nums), 0
-        
+
         for i, v in enumerate(nums):
             cnt = sum(comb(n-i-1, j) for j in range(k) if n-i-1 >= j) % MOD
-            ans = (ans + (cnt * (v+nums[n-i-1]))) % MOD
+            ans += (cnt * (v+nums[n-i-1]))
+        return ans % MOD
+
+    def minMaxSums2(self, nums: List[int], k: int) -> int:
+        # 优化后的组合求和的递推式
+        nums.sort()
+        n, ans = len(nums), 0
+        # \sum_{i=0}^{k-1} c_{n+1}^i = 2 * \sum_{i=0}^{k-1} c_n^i - c_n^{k-1}
+        s = 1
+        for i, v in enumerate(nums):
+            ans += s * (v + nums[n-i-1])
+            s = (s*2 - (comb(i, k-1) if i>=k-1 else 0)) % MOD
+
         return ans % MOD
 
 if __name__ == "__main__":

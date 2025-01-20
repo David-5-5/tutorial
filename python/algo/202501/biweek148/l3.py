@@ -1,7 +1,7 @@
 from math import inf
 from typing import List
 
-
+# 3425
 class Solution:
     def longestSpecialPath(self, edges: List[List[int]], nums: List[int]) -> List[int]:
         # dfs 参考题解，数据结构综合技巧

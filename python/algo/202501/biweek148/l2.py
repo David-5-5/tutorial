@@ -1,6 +1,6 @@
 from typing import List
 
-
+# 3424
 class Solution:
     def minCost(self, arr: List[int], brr: List[int], k: int) -> int:
         ans1 = ans2 = 0

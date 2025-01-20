@@ -4,53 +4,41 @@ from typing import List
 
 class Solution:
     def longestSpecialPath(self, edges: List[List[int]], nums: List[int]) -> List[int]:
-        # dfs
-        n = len(nums)
-        mx_len = 0
-        mn_cnt = inf
-
-        vets = set()
-
-        
-        g = [[] for _ in range(n)]
+        # dfs 参考题解，数据结构综合技巧
+        g = [[] for _ in nums]
         for u, v, l in edges:
             g[u].append((v, l))
             g[v].append((u, l))
 
-
-        def dfs(u:int, fa:int) -> tuple[int, int]:
-            vets.add(nums[u])
-            res = 0
-            cnt = inf
+        ans = (-1, 0)
+        depths = {}
+        dis = [0] # 从根节点开始遍历，路径长度，类似前缀和
+        def dfs(u:int, fa:int, top_depth) -> tuple[int, int]:
+            color = nums[u]
+            old_depth = depths.get(color, 0)
+            
+            # top_depth 不包含重复元素的最远节点
+            # 随着重复元素的发现，top_depth 逐渐增加
+            top_depth = max(old_depth, top_depth) 
+            nonlocal ans
+            ans = max(ans, (dis[-1]-dis[top_depth], top_depth - len(dis)))
+            
+            depths[color] = len(dis)
             for v, l in g[u]:
                 if v == fa: continue
-                if nums[v] not in vets:
-                    r, c = dfs(v, u)
-                    if l + r > res:
-                        res = l + r
-                        cnt = 1 + c
-                    elif l+r == res:
-                        cnt = min(cnt, 1+c)
-                    vets.remove(nums[v])
-                else:que.append((v, u)) # 重新遍历
-            
-            if cnt == inf:cnt = 1
-            return res, cnt
+                dis.append(l + dis[-1])
 
-        que = [(0,-1)]
-        while que:
-            u, fa = que.pop(0)
-            r, c = dfs(u, fa)
-            vets.clear()
-            if r > mx_len:
-                mx_len = r
-                mn_cnt = c
-            elif r == mx_len: mn_cnt = min(mn_cnt, c)
-
-        return [mx_len, mn_cnt]
+                dfs(v, u, top_depth)
+                dis.pop()  # 恢复现场
+            depths[color] = old_depth
         
+        dfs(0,-1,0)
+        return [ans[0], -ans[1]]
+
+            
 if __name__ == "__main__":
     sol = Solution()
-    edges = [[1,0,2],[0,2,10]]
-    nums = [2,4,4]
+    edges = [[1,0,7],[1,2,4]]
+    nums = [1,1,3]
     print(sol.longestSpecialPath(edges, nums))
+    print(sol.longestSpecialPath2(edges, nums))

@@ -1,3 +1,4 @@
+from functools import cache
 from typing import List
 
 # 周赛 300
@@ -23,6 +24,24 @@ class Solution:
                 ans += dfs(i,j)
         return ans % MOD
 
+    def countPaths2(self, grid: List[List[int]]) -> int:
+        # 2025.1 复习，用 @cache 修饰器
+        MOD = 10 ** 9 + 7
+        m , n = len(grid), len(grid[0])
+        
+        @cache
+        def dfs(x:int, y:int):
+            res = 1
+            for u, v in [(0,1),(0,-1),(-1,0),(1,0)]:
+                if 0 <= x + u < m and 0 <= y + v < n and grid[x][y] < grid[x+u][y+v]:
+                    res += dfs(x+u,y+v)
+            return res % MOD
+
+        ans = 0
+        for i in range(m):
+            for j in range(n):
+                ans += dfs(i,j)
+        return ans % MOD
 
 if __name__ == "__main__":
     sol = Solution()

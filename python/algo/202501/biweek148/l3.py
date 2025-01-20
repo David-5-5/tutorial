@@ -41,4 +41,3 @@ if __name__ == "__main__":
     edges = [[1,0,7],[1,2,4]]
     nums = [1,1,3]
     print(sol.longestSpecialPath(edges, nums))
-    print(sol.longestSpecialPath2(edges, nums))

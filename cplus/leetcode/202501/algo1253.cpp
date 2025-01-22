@@ -18,7 +18,8 @@ public:
                     ans[0][i] = 1, upper --;
                 else ans[1][i] = 1, lower --;
             }
-            if (upper < 0 || lower < 0) return {};
+            // Removing the statement is better
+            // if (upper < 0 || lower < 0) return {};
         }
         if(upper!=0 || lower!= 0) return {};
         return ans;

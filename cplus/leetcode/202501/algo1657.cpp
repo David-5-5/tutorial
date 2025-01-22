@@ -40,4 +40,22 @@ public:
 
         return cnt1 == cnt2;    
     }    
+
+    bool closeStrings(string word1, string word2) {
+        // 参考题解，用 int 的后26位代表字符
+        if (word1.size() != word2.size()) return false;
+        
+        vector<int> cnt1(26), cnt2(26);
+        int mask1 = 0, mask2 = 0;
+        for (int i=0; i < word1.size(); i++) {
+            int inx1 = word1[i] - 'a', inx2 = word2[i] - 'a';
+            cnt1[inx1] ++, cnt2[inx2] ++;
+            mask1 |= 1 << inx1, mask2 |= 1 << inx2;
+        }
+
+        sort(cnt1.begin(), cnt1.end()), sort(cnt2.begin(), cnt2.end());
+        
+
+        return cnt1 == cnt2 && mask1 == mask2;    
+    }       
 };

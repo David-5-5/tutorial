@@ -43,16 +43,16 @@ public:
         set<int> indice(targetIndices.begin(), targetIndices.end());
 
 
-        vector<vector<int>> memo(n, vector<int>(m + 1, -1));
+        vector<vector<int>> memo(n, vector<int>(m + 1, -1)); // 
         int k = targetIndices.size();
         function<int(int, int)> dfs = [&](int i, int j) -> int{
-            if (i < j) return INT_MIN;
+            if (i < j) return INT_MIN;  // !! 边界条件
             if (i < 0) return 0;
             
-            int&  res= memo[i][j+1];
-            if (res!=-1) return res;
+            int&  res= memo[i][j+1]; // 当 j == -1 表示 pattern 全匹配
+            if (res != -1) return res;
             
-            res = dfs(i-1, j) + indice.count(i);
+            res = dfs(i-1, j) + indice.count(i); // 后续的 i+1 个 source中的的字符都可以删除了
             if (j >= 0 && source[i] == pattern[j]) res = max(res, dfs(i-1,j-1));
 
             return res;

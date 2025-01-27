@@ -13,8 +13,19 @@ public:
         int mid = a;
         if (b != mn && b!=mx) mid = b;
         else if (c!=mn && c!= mx) mid = c;
+
         // 非连续的情况最小值为有两个连续或仅一个空的情况下为 1，其他为2
         // 最大值，[mn..mx]之间的不包括 mid 的所用空位 
+        return {max(1, min(2, min(mid-mn-1, mx-mid-1))), mx-mn-2};    
+    }
+
+    vector<int> numMovesStones2(int a, int b, int c) {
+        // 参考题解，学习 c++ 语法
+        int arr[] = {a, b, c}; sort(arr, arr+3);
+        
+        int mn = arr[0], mid = arr[1], mx = arr[2];
+
+        if (mn + 2 == mx) return {0, 0};
         return {max(1, min(2, min(mid-mn-1, mx-mid-1))), mx-mn-2};    
     }
 };

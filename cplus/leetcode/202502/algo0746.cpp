@@ -15,4 +15,14 @@ public:
         
         return dp[cost.size()-1];
     }
+
+    int minCostClimbingStairs(vector<int>& cost) {
+        // 参考题解
+        vector<int> dp(cost.size()+1);
+
+        for (int i=2; i<=cost.size(); i++) 
+            dp[i] = min(dp[i-1]+cost[i-1], dp[i-2]+cost[i-2]);
+        
+        return dp[cost.size()];
+    }
 };

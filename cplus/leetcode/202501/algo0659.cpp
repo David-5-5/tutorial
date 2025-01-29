@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-// 贪心专题 - 构造题
+// 贪心专题 - 其他
 class Solution {
 public:
     bool isPossible(vector<int>& nums) {

@@ -28,4 +28,20 @@ public:
         }
         return f[n+1];
     }
+
+
+    int rob3(vector<int>& nums) {
+        // 记忆化搜索
+        int n = nums.size();
+        vector<int> memo(n, -1);
+
+        function<int(int)> dfs = [&](int i) -> int {
+            if (i < 0) return 0;
+            if (memo[i] != -1)  return memo[i];
+
+            return memo[i] = max(dfs(i-1), dfs(i-2)+nums[i]);
+        };
+
+        return dfs(n-1);
+    }
 };

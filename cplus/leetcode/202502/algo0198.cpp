@@ -17,4 +17,15 @@ public:
 
         return max(f.back()[0], f.back()[1]);    
     }
+
+
+    int rob2(vector<int>& nums) {
+        // 参考题解 1 维 dp
+        int n = nums.size();
+        vector<int> f(n+2);
+        for (int i=0; i<n; i++) {
+            f[i+2] = max(f[i]+nums[i], f[i+1]);
+        }
+        return f[n+1];
+    }
 };

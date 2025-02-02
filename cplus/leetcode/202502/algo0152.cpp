@@ -18,4 +18,4 @@ public:
 
         return *max_element(maxF.begin(), maxF.end());   
     }
-}
+};

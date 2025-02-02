@@ -2,7 +2,7 @@
 using namespace std;
 
 
-// 动态规划 - 最大子数组和
+// 动态规划 - 网格图 DP - 基础
 class Solution {
 public:
     int minPathSum(vector<vector<int>>& grid) {

@@ -5,6 +5,7 @@ using namespace std;
 class Solution {
 public:
     int maxSubarraySumCircular(vector<int>& nums) {
+        // 参考题解
         int n = nums.size();
         int tot = accumulate(nums.begin(), nums.end(), 0);
 

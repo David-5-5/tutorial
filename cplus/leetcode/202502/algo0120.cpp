@@ -6,6 +6,7 @@ using namespace std;
 class Solution {
 public:
     int minimumTotal(vector<vector<int>>& triangle) {
+        // 自行解答
         vector<int> cur = {triangle[0][0]};
         int rows = triangle.size();
         for (int i=1; i<rows; i++) {

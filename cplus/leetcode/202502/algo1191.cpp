@@ -5,6 +5,7 @@ using namespace std;
 class Solution {
 public:
     int kConcatenationMaxSum(vector<int>& arr, int k) {
+        // 自行解答 参考 918
         int mod = 1e9 + 7;
         int n = arr.size();
         int tot = accumulate(arr.begin(), arr.end(), 0);

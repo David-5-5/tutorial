@@ -27,9 +27,35 @@ public:
             return memo[i][j][p] = (res % mod);
         };
 
-        return dfs(0,0,0);     
-
+        return dfs(0,0,0); 
     }
+
+    int countPathsWithXorValue2(vector<vector<int>>& grid, int k) {
+        // 优化实现，网格DP 记忆化模板 三维
+        int mod = 1e9 + 7;
+        int m = grid.size(), n = grid[0].size();
+        vector<vector<vector<int>>> memo(m, vector<vector<int>>(n, vector<int>(17, -1)));
+
+        function<int(int,int, int)> dfs = [&](int i, int j, int p) -> int {
+        // auto dfs = [&](this auto&& dfs, int i, int j, int p) -> int {
+            if (i >= m || j >= n) return 0;
+            int x = grid[i][j];
+            if (i==m-1 && j==n-1) {
+                if ((p ^ x) == k) return 1; // 优先级 == 大于 ^
+                else return 0;
+            }
+            
+            int& res = memo[i][j][p];
+            if (res != -1) return res;
+            res = (dfs(i+1, j, p ^ x) + dfs(i, j+1, p ^ x)) % mod;
+
+            return res;
+        };
+
+        return dfs(0,0,0);   
+    }    
+
+    
 };
 
 int main() {

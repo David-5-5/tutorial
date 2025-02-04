@@ -5,6 +5,7 @@ using namespace std;
 class Solution {
 public:
     int countGoodStrings(int low, int high, int zero, int one) {
+        // 自行解答
         int mod = 1e9 + 7;
         vector<int> f(high+1);
         f[0] = 1;

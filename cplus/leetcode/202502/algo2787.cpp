@@ -18,6 +18,14 @@ public:
             }
         }
 
+        // int mx = ceil(pow(n, 1.0/x));
+        // for (int i=1; i<=mx; i++) {
+        //     int y = int(pow(i, x));
+        //     for(int j=n; j>=y; j--){
+        //         dp[j] = (dp[j] + dp[j-y]) % mod;
+        //     }
+        // }
+
         return dp.back();        
     }
 };

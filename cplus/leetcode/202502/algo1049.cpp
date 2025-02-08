@@ -15,12 +15,17 @@ public:
         vector<int> dp(sum/2 + 1);
         dp[0] = true;
         for (auto& w:stones) 
-            for (int k=sum; k>=w; k--)
-                dp[k] |= dp[k-w]
+            for (int k=sum/2; k>=w; k--)
+                dp[k] |= dp[k-w];
         
-        for (int k=sum; k>=0; k--) 
+        for (int k=sum/2; k>=0; k--) 
             if (dp[k]) return sum - 2 * k;
 
         return -1; // 为 leetcode 编译要求
     }
 };
+
+int main() {
+    vector stones = {2,7,4,1,8,1};
+    cout << Solution().lastStoneWeightII(stones) << endl;
+}

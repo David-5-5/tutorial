@@ -41,5 +41,30 @@ public:
         return res;
         
     }
-    
+
+    int closestCost2(vector<int>& baseCosts, vector<int>& toppingCosts, int target) {
+        // 参考题解 回溯
+        int res = *min_element(baseCosts.begin(), baseCosts.end()); // base 必选
+        
+        function<void(int,int)> dfs = [&](int i, int curCost){
+            if (abs(res-target) < curCost - target) return; // curCost 超过 target
+            else if (abs(res-target) >= abs(curCost - target)) {
+                if (abs(res - target) > abs(curCost - target)) {
+                    res = curCost;
+                } else {
+                    res = min(res, curCost); // abs(res-target) == abs(curCost - target)
+                }
+            }
+
+            if (i == toppingCosts.size()) return;
+            dfs(i+1, curCost + toppingCosts[i]*2);     // 选 2 次
+            dfs(i+1, curCost + toppingCosts[i]);       // 选 1 次
+            dfs(i+1, curCost);                       // 选 0 次
+
+        };
+        for (auto& b : baseCosts) {
+            dfs(0, b);
+        }
+        return res;
+    }
 };

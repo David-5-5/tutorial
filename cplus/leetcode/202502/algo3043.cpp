@@ -16,11 +16,11 @@ public:
         
         for (auto& v:arr1) {
             auto str = to_string(v);
-            Node cur = root;
+            auto cur = root;
             for (auto ch:str){
                 int c = ch - '0';
                 if (cur->son[c] == nullptr) {
-                    cur->son[c] == new Node();
+                    cur->son[c] = new Node();
                     cur->son[c]->depth = cur->depth + 1;
                 }
                 cur = cur->son[c];
@@ -30,15 +30,13 @@ public:
         int ans = 0;
         for (auto& v:arr2) {
             auto str = to_string(v);
-            Node cur = root;
+            auto cur = root;
             for (auto ch:str) {
                 int c = ch - '0';
                 if (cur->son[c] != nullptr) cur = cur->son[c];
-                else {
-                    ans = max(ans, cur->depth);
-                    break;
-                }
+                else break;
             }
+            ans = max(ans, cur->depth);
         }
 
         return ans;

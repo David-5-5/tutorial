@@ -46,7 +46,7 @@ public:
                     ans += cur->cnt;
                 }
             }
-            cur->cnt++;
+            cur->cnt++; // 完整的str1
         }
 
         return ans;

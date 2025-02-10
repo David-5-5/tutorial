@@ -4,6 +4,7 @@ from typing import Counter, List
 # 周赛 385
 class Solution:
     def mostFrequentPrime(self, mat: List[List[int]]) -> int:
+        # 参考题解 题目本身不算难，但是要快速清晰的写出代码着实不太容易
         def is_prime(n: int) -> bool:
             return all(n % i for i in range(2, isqrt(n) + 1))
 

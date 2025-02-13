@@ -11,7 +11,7 @@ public:
         dp[0] = 0;
         for (auto& x : coins) {
             for (int k=x; k<=amount; k++) {
-                if (dp[k-x] == -1) continue;    // dp[k-x] is invalid
+                if (dp[k-x] == -1) continue;          // dp[k-x] is invalid
                 if (dp[k] == -1) dp[k] = dp[k-x] + 1; // initial dp[k]
                 else dp[k] = min(dp[k], dp[k-x]+1);   // set the minimize
             }
@@ -23,6 +23,9 @@ public:
 
     int coinChange2(vector<int>& coins, int amount) {
         // 自行解答 完全背包 非降维写法
+        // 超时 仅作为参考
+        // 0-1 背包的状态方程为 dp[i][j] = max(dp[i-1][j], dp[i-1][j-wi] + vi)
+        // 完全背包的状态转移方程  dp[i][j] = max_k=0~+(dp[i-1][j], dp[i-1][j-wi] + vi)
         int n = coins.size();
         vector<vector<int>> dp(n+1, vector<int>(amount+1, -1));
         dp[0][0] = 0;

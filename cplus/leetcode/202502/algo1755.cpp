@@ -31,11 +31,17 @@ public:
 
         f(0, v1); f(n, v2);
 
-        for (int i=0; i<v1.size(); i++) {
-            // 二分查找 ranges::lower_bound 
-            int k = ranges::lower_bound(v2, goal-v1[i]) - v2.begin();
-            if (k<v2.size()) ans = min(ans, abs(goal- v1[i] - v2[k]));
-            if (k>0) ans = min(ans, abs(goal-v1[i]-v2[k-1]));
+        // for (int i=0; i<v1.size(); i++) {
+        //     // 二分查找 ranges::lower_bound 
+        //     int k = ranges::lower_bound(v2, goal-v1[i]) - v2.begin();
+        //     if (k<v2.size()) ans = min(ans, abs(goal- v1[i] - v2[k]));
+        //     if (k>0) ans = min(ans, abs(goal-v1[i]-v2[k-1]));
+        // }
+        for (int i=0, k=v2.size()-1; i<v1.size(); i++) {
+            // 双指针
+            while (k>=0 && v2[k]+v1[i] > goal) k--;
+            if (k+1<v2.size()) ans = min(ans, abs(goal- v1[i] - v2[k+1]));
+            if (k>=0)ans = min(ans, abs(goal-v1[i]-v2[k]));
         }
 
         return ans;

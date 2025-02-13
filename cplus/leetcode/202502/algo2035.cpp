@@ -47,14 +47,23 @@ public:
          * 或二分的方法求出对于 v1[i] 中的每个数 v1[i][j]，满足 k 最小且 v1[i][j] + v2[n - i][k] >= 0
          * 的 k，那么只有 abs(v2[n - i][k - 1]) 和 abs(v2[n - i][k]) 才有可能成为答案。
          */
+        // for (int i=0; i<=n; i++) {
+        //     for (int j=0; j<v1[i].size(); j++) {
+        //         // 二分实现
+        //         int k = ranges::lower_bound(v2[n-i], -v1[i][j]) - v2[n-i].begin();
+        //         if (k< v2[n-i].size()) ans = min(ans, abs(v1[i][j]+v2[n-i][k]));
+        //         if (k > 0) ans = min(ans, abs(v1[i][j]+v2[n-i][k-1]));
+        //     }
+        // }
+
         for (int i=0; i<=n; i++) {
-            for (int j=0; j<v1[i].size(); j++) {
-                int k = ranges::lower_bound(v2[n-i], -v1[i][j]) - v2[n-i].begin();
+            for (int j=v1[i].size()-1, k=0; j>=0; j--) {
+                // 双指针
+                while (k<v2[n-i].size() && v1[i][j]+v2[n-i][k]<0) k++;
                 if (k< v2[n-i].size()) ans = min(ans, abs(v1[i][j]+v2[n-i][k]));
                 if (k > 0) ans = min(ans, abs(v1[i][j]+v2[n-i][k-1]));
             }
         }
-
         return ans;
     }
 };

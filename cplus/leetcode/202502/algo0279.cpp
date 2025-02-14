@@ -5,11 +5,13 @@ using namespace std;
 class Solution {
 public:
     int numSquares(int n) {
+        // 将平方数加入数组
         vector<int> squares;
         for (int i=1; i<=sqrt(n); i++) {
             squares.push_back(i*i);
         }
 
+        // 同 322
         vector<int> dp(n+1, -1);
         dp[0] = 0;
         for (auto& x : squares) {

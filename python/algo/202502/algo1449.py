@@ -22,8 +22,9 @@ class Solution:
 
         return "".join([str(i) for i in reversed(dp[target])])
 
-    def largestNumber(self, cost: List[int], target: int) -> str:
+    def largestNumber2(self, cost: List[int], target: int) -> str:
         # 参考题解 首先求解出最大次数，然后根据最大次数计算使用的数字
+        # 次数及其具体方案的 模板 套路
         dp = [-inf] * (target + 1) # 列表存储最大长度的方案选择的字符
         dp[0] = 0
         for k in cost:

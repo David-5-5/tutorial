@@ -28,7 +28,7 @@ class Solution:
         # 无需对 k 进行遍历，修改上面方案如下
         MOD = 10 ** 9 + 7
         cnt = Counter(nums)
-        # n = len(cnt)
+
         n = len(cnt) - (0 in cnt)
         dp = [[0]* (r+1) for _ in range(n+1)]
         dp[0][0] = cnt[0] + 1

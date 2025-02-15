@@ -19,15 +19,17 @@ public:
         // 分组背包
         vector<vector<bool>> dp(m+1, vector<bool>(target+1, false));
         dp[0][0] = true;
-        int large = INT_MAX;
-        for (int g=0; g < m; g++) {
-            int next_large = INT_MAX;
-            for (int x=0; x<=target; x++){
-                for (int j=0; j<n; j++) {
+        int large = INT_MAX;                        // 超出 target 的最小值， 比 1774 复杂一些
+        for (int g=0; g < m; g++) {                 // 循环每一组, 每行一组
+            int next_large = INT_MAX;           
+            for (int x=0; x<=target; x++){          // 循环背包容量
+                for (int j=0; j<n; j++) {           // 每组的物品
                     int y = mat[g][j];
+                    // 计算超出 target 的最小值
                     if (dp[g][x] && x + y > target) next_large = min(next_large, x+y);
-                    if (x >= y) dp[g+1][x] = dp[g+1][x] || dp[g][x-y];
                     if (large != INT_MAX) next_large = min(next_large, large + y);
+
+                    if (x >= y) dp[g+1][x] = dp[g+1][x] || dp[g][x-y];
                 }
             }
             large = next_large;

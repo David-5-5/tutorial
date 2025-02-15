@@ -23,6 +23,33 @@ public:
         }
 
         return dp[k];
+    }
 
+    int maxValueOfCoins2(vector<vector<int>>& piles, int k) {
+        // 记忆化搜索，选或不选
+        int m = piles.size();
+
+        vector<vector<int>> memo(m, vector<int>(k+1, -1));
+
+        function<int(int,int)> dfs = [&](int i, int left)->int {
+            if (i<0) {
+                if (left == 0) return 0;
+                else return INT_MIN;
+            }
+
+            auto& res = memo[i][left];
+            if (res!=-1) return res;
+
+            res = dfs(i-1, left); // 不选
+            int value = 0;
+            for (int j=0; j<min((int)piles[i].size(),left); j++) {
+                value += piles[i][j];
+                res = max(res, value+dfs(i-1, left-j-1));
+            }
+
+            return res;
+        };
+
+        return dfs(m-1, k);
     }
 };

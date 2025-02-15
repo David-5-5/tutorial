@@ -32,8 +32,8 @@ class Solution:
         n = len(cnt) - (0 in cnt)
         dp = [[0]* (r+1) for _ in range(n+1)]
         dp[0][0] = cnt[0] + 1
-        cnt[0] + 1
-        # del cnt[0]
+
+        del cnt[0] # 删除 0，是由于当 val = 0 时，转移方程无效
 
         for i, val in enumerate(cnt):
             for j in range(0, r+1):
@@ -43,23 +43,6 @@ class Solution:
 
         return sum(dp[-1][l:]) % MOD
 
-    def countSubMultisets3(self, nums: List[int], l: int, r: int) -> int:
-        # 经典多重背包算法，超时
-        MOD = 10 ** 9 + 7
-        iter = Counter(nums)
-        n = len(iter) - (0 in iter)
-        dp = [[0]* (r+1) for _ in range(n+1)]
-        dp[0][0] = iter[0] + 1
-        
-        # 删除 0，是由于当 val = 0 时，转移方程无效
-        del iter[0]
-        for i, val in enumerate(iter):
-            for j in range(0, r+1):
-                dp[i+1][j] = ((dp[i+1][j-val] if j>=val else 0) +\
-                              dp[i][j] -
-                              (dp[i][j-val*(iter[val]+1)] if j-val*(iter[val]+1)>=0 else 0)) % MOD
-        
-        return sum(dp[-1][l:]) % MOD
     
 if __name__ == "__main__":
     sol = Solution()

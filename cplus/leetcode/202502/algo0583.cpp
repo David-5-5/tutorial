@@ -8,6 +8,8 @@ public:
         
         int m = word1.size(), n = word2.size();
 
+        // LCS 模板 记忆化搜索 时间复杂度 O(mn)/O(n^2)
+        // compare word1, word2
         vector<vector<int>> memo(m, vector<int>(n, -1));
         function<int(int, int)> dfs = [&](int i, int j) ->int {
             if (i < 0 || j < 0) return 0;
@@ -15,6 +17,7 @@ public:
             auto& res = memo[i][j];
             if (res != -1) return res;
 
+            // word1, word2 外部变量，需要根据需求变更
             if (word1[i] == word2[j]) return res = dfs(i-1, j-1) + 1;
             else return res = max(dfs(i-1, j), dfs(i, j-1));
 

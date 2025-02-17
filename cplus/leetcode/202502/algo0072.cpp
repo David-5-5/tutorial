@@ -5,6 +5,7 @@ using namespace std;
 class Solution {
 public:
     int minDistance(string word1, string word2) {
+        // 自行解答 
         int m = word1.size(), n = word2.size();
 
         // LCS 模板 记忆化搜索 时间复杂度 O(mn)/O(n^2)
@@ -23,4 +24,24 @@ public:
         };
         return dfs(m-1, n-1);
     }
+
+    int minDistance2(string word1, string word2) {
+        // 递归改为递推迭代
+        int m = word1.size(), n = word2.size();
+
+        vector<vector<int>> dp(m+1, vector<int>(n+1, 0));
+        for (int i=1; i<=m; i++) dp[i][0] = i;  // 设置边界条件
+        for (int i=1; i<=n; i++) dp[0][i] = i;  // 设置边界条件
+
+        for (int i=0; i<m; i++) {
+            for (int j=0; j<n; j++) {
+                if (word1[i] == word2[j]) dp[i+1][j+1] = dp[i][j];
+                else dp[i+1][j+1] = min(dp[i][j+1], min(dp[i+1][j], dp[i][j])) + 1;
+            }
+        }
+
+        return dp[m][n];
+    }
+
+
 };

@@ -1,9 +1,10 @@
 from bisect import bisect_left
 from typing import List
 
+# 双周赛 89
 class Solution:
     def minimizeArrayValue(self, nums: List[int]) -> int:
-
+        # 参考题解 二分查找
         def check(limit: int) -> bool:
             inc = 0
             for v in reversed(nums):

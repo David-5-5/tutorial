@@ -47,7 +47,7 @@ class Solution:
         2025.2.19 补充
         状态转移方程:
         dp(i,j) = dp(i-1,j) + dp(i-1,j-1)   当 s[i] == s[j]
-        dp(i,j) = dp(i-1, j)                当 s[i] != s[j]\
+        dp(i,j) = dp(i-1, j)                当 s[i] != s[j]
         边界条件:
         dp(i, -1) = 1
         dp(i, j) = 0 i < j

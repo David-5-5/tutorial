@@ -1,7 +1,7 @@
 from itertools import accumulate
 from typing import List
 
-
+# 双周赛 89
 class Solution:
 
     def productQueries(self, n: int, queries: List[List[int]]) -> List[int]:

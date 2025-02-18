@@ -1,8 +1,9 @@
 from typing import List
 
-
+# 双周赛 89
 class Solution:
     def componentValue(self, nums: List[int], edges: List[List[int]]) -> int:
+        # 参考题解 树上 DP
         n = len(nums)
         g = [[] for _ in range(n)]
 

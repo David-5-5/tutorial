@@ -11,6 +11,7 @@ public:
         vector<vector<int>> memo(m, vector<int>(n, INT_MIN));
 
         function<int(int, int)> dfs = [&] (int i, int j) -> int {
+        // auto dfs = [&](this auto&& dfs, int i, int j) -> int {
             if (i < 0 || j < 0) 
                 return INT_MIN / 2;
 

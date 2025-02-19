@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-// 动态规划 - 最长公共子序列（LCS）
+// 动态规划 - 最长公共子序列 (LCS)
 class Solution {
 public:
     int maxUncrossedLines(vector<int>& nums1, vector<int>& nums2) {

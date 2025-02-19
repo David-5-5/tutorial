@@ -5,6 +5,7 @@ using namespace std;
 class Solution {
 public:
     string shortestCommonSupersequence(string str1, string str2) {
+        // 自行解答
         int m = str1.size(), n = str2.size();
 
         vector<vector<int>> memo(m, vector<int>(n, INT_MAX));
@@ -45,6 +46,43 @@ public:
     }
 
     string shortestCommonSupersequence2(string str1, string str2) {
+        // 优化 print_ans
+        int m = str1.size(), n = str2.size();
+
+        vector<vector<int>> memo(m, vector<int>(n, INT_MAX));
+        auto dfs = [&](this auto&& dfs, int i, int j) -> int {
+            if (i < 0) return j + 1;
+            if (j < 0) return i + 1;
+
+            auto& res = memo[i][j];
+            if (res != INT_MAX) return res;
+            
+            if (str1[i] == str2[j]) res = min(res, 1 + dfs(i-1, j-1));
+            else res = min(res, 1 + min(dfs(i-1, j), dfs(i, j-1)));
+            return res;
+        };
+        
+        dfs(m-1, n-1);
+        
+        // 不支持多个auto function
+        function<string(int,int)> print_ans = [&](int i, int j) -> string { 
+            if(i < 0) return str2.substr(0, j+1);
+            if(j < 0) return str1.substr(0, i+1);
+
+            if (str1[i] == str2[j]) 
+                return print_ans(i-1, j-1) + str1[i];
+            else 
+                if (dfs(i-1, j) < dfs(i, j-1)) 
+                    return print_ans(i-1,j) + str1[i];
+                else
+                    return print_ans(i,j-1) + str2[j];
+            
+        };
+        return print_ans(m-1, n-1);
+    }    
+
+
+    string shortestCommonSupersequence3(string str1, string str2) {
         // 参考题解，爆内存
         int m = str1.size(), n = str2.size();
 

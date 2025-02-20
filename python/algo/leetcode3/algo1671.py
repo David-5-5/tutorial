@@ -35,7 +35,7 @@ class Solution:
 
     def minimumMountainRemovals2(self, nums: List[int]) -> int:
         
-        # 提出公共方法
+        # 提出公共方法 复用 300 LIS
         def lengthOfLIS3(nums: List[int]) -> List[int]:
             '''The final solution, time complex is O(NlogN)
             '''

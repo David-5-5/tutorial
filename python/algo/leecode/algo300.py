@@ -65,10 +65,12 @@ class Solution:
         n = len(nums)
         # dp 固定最小连续序列的长度，其值为该序列长度的最小值。索引从0开始，长度序列从1开始，因此长度=索引+1
         # 最后返回的结果为len(dp)
+        # 
         dp = []
 
         for i in range(n):
-            inx = bisect_left(dp, nums[i])
+            inx = bisect_left(dp, nums[i])  # 严格递增
+            # inx = bisect_right(dp, nums[i])  # 非严格递增
             if (inx) < len(dp):
                 dp[inx] = min(dp[inx], nums[i])
             else:
@@ -76,23 +78,6 @@ class Solution:
 
         return len(dp)
 
-    def lengthOfLIS3(self, nums: List[int]) -> int:
-        '''The final solution, time complex is O(NlogN)
-        '''
-        n = len(nums)
-        # dp 固定最小连续序列的长度，其值为该序列长度的最小值。索引从0开始，长度序列从1开始，因此长度=索引+1
-        # 最后返回的结果为len(dp)
-        # 最短子序列 模板
-        dp = []
-
-        for i in range(n):
-            inx = bisect_left(dp, nums[i])
-            if (inx) < len(dp):
-                dp[inx] = min(dp[inx], nums[i])
-            else:
-                dp.append(nums[i])
-
-        return len(dp)
 
     def lengthOfLIS4(self, nums: List[int]) -> int:
         # 优化前的标准实现，放在这里比较，更加深刻的理解动态规划的优化

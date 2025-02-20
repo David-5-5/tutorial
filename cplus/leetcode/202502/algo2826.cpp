@@ -16,5 +16,15 @@ public:
         return nums.size() - dp.size();
     }
 
-
+    int minimumOperations2(vector<int>& nums) {
+        // 状态机 DP f(i+1, j) 表示 把 nums[0] 到 nums[i] 变成非递减
+        //                    nums[i] == j 的最小修改次数
+        int f[4]{};
+        for (auto& x : nums) {
+            for (int k=3; k; k--) {
+                f[k] = *min_element(f+1, f+k+1) + (x != k);
+            }
+        }
+        return min(f);
+    }
 };

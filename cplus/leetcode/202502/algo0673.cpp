@@ -9,6 +9,8 @@ public:
         vector<int> dp;
         vector<map<int, int>> cnt;
 
+        // 计算次数等于 i-1， 值小于 x 出现的次数
+        // 其值存储于 vector<map<int, int>> cnt 中
         auto f = [&](int i, int x) -> int {
             int res = 0;
             if (i-1 < 0)  return 1;
@@ -20,7 +22,7 @@ public:
         };  
 
         for (auto& x : nums) {
-            auto it = ranges::lower_bound(dp, x);
+            auto it = ranges::lower_bound(dp, x);       // 严格递增
             if (it != dp.end()) {
                 *it = x,                // c++ iterator usage
                 cnt[it-dp.begin()][x] += f(it-dp.begin(), x);

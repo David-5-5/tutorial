@@ -19,7 +19,7 @@ public:
             if (res > INT_MIN) return res;
 
             int v = nums1[i] * nums2[j];
-            res = max({v, v+dfs(i-1,j-1), dfs(i, j-1), dfs(i-1, j)}); // 必须有一个写法
+            res = max(max(v, v+dfs(i-1,j-1)), max(dfs(i, j-1), dfs(i-1, j))); // 必须有一个写法
             return res;
 
         };

@@ -25,7 +25,7 @@ public:
             int& res = memo[i][j][p]; // 注意这里是引用
             res = max(dfs(i, j+1, p), dfs(i+1, j, p)) + coins[i][j];
             if (coins[i][j] < 0 && p<2) {
-                res = max({res, dfs(i, j+1, p+1), dfs(i+1, j, p+1)});
+                res = max(max(res, dfs(i, j+1, p+1)), dfs(i+1, j, p+1));
             } 
 
             return res;

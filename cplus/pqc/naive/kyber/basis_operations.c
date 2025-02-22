@@ -1,7 +1,7 @@
 /* Code to generate zetas and zetas_inv used in the number-theoretic transform:*/
 #include <stdint.h>
 #include <stdio.h>
-
+#include <inttypes.h> 
 
 #define MONT -1044 // 2^16 mod q
 #define KYBER_Q 3329
@@ -59,4 +59,9 @@ int main() {
   for (int i=0; i<128; i++) {
     printf("%d, ", zetas[i]);
   }
+  for (int i=0; i<128; i++) {
+    // printf("0x%04x, ", (uint16_t)zetas[i]);
+    printf("0x%" PRIx16 ", ", (uint16_t)zetas[i]);
+  }
+
 }

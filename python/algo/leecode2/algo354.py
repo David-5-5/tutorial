@@ -1,5 +1,5 @@
 from sortedcontainers import SortedDict
-from bisect import bisect_right
+from bisect import bisect_left, bisect_right
 class Solution:
     def maxEnvelopes(self, envelopes) -> int:
         '''
@@ -32,6 +32,25 @@ class Solution:
         
         return len(cache)
         
+
+    def maxEnvelopes2(self, envelopes) -> int:
+        # 2025.2 复习，参考题解
+        # 二维LIS 一维排序从低到高，
+        # 另一维从高到低排序， 这是算法精妙的地方，按照要求，信封相套必须大于，
+        # 而不是大于等于，第一维相同的情况下只会选择一个，这样在不需要重新比较第一维数据的情况下
+        # 按照第二维 LIS 算法得到结果
+        envelopes.sort(key = lambda p:(p[0],-p[1]))
+
+        # 以下同 300
+        dp = []
+        for _, h in envelopes:
+            if not dp or h > dp[-1]: dp.append(h)
+            else:
+                inx = bisect_left(dp, h)
+                dp[inx] = min(h, dp[inx])
+        
+        return len(dp)
+
 
 
 if __name__ == "__main__":

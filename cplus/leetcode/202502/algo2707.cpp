@@ -5,7 +5,7 @@ using namespace std;
 class Solution {
 public:
     int minExtraChar(string s, vector<string>& dictionary) {
-        
+        // 自行解答，类似于 139 字符串划分
         int n = s.size();
 
         vector<int> memo(n, -1);

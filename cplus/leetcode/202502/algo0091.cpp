@@ -5,6 +5,7 @@ using namespace std;
 class Solution {
 public:
     int numDecodings(string s) {
+        // 自行解答，动态规范，记忆化搜索实现        
         int n = s.size();
 
         vector<int> memo(n, -1);

@@ -9,12 +9,14 @@ public:
         int n = s.size();
         int mod = 1e9 + 7;
 
-        // 计算 cnt 比较繁琐
+        // 计算 cnt 比较繁琐 
+        // 不过，官方题解也类似这样
         auto cnt = [&] (int i, int j) -> int {
             if (j == 1 && s[i] == '*') {
                 return 9;
             } else if (j == 2) {
-                if (s[i] == '*' && s[i+1] == '*') return 15; // 11~19,21~26
+                // * 代表 1 ~ 9 ，两位的时候 不包括 10, 20
+                if (s[i] == '*' && s[i+1] == '*') return 15; // 11~19,21~26 
                 else if (s[i] == '*' && s[i+1]-'0' <=6) return 2;
                 else if (s[i+1] == '*' && s[i] == '1') return 9;
                 else if (s[i+1] == '*' && s[i] == '2') return 6;

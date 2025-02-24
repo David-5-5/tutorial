@@ -5,9 +5,11 @@ using namespace std;
 class Solution {
 public:
     int numDecodings(string s) {
+        // 自行解答
         int n = s.size();
         int mod = 1e9 + 7;
 
+        // 计算 cnt 比较繁琐
         auto cnt = [&] (int i, int j) -> int {
             if (j == 1 && s[i] == '*') {
                 return 9;

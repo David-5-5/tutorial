@@ -5,6 +5,7 @@ using namespace std;
 class Solution {
 public:
     int maxSumAfterPartitioning(vector<int>& arr, int k) {
+        // 自行解答
         int n = arr.size();
 
         vector<int> memo(n, -1);
@@ -16,7 +17,7 @@ public:
             
             res = 0;
             int mx = 0;
-            for (int j = 0; j<k && j+i < n; j++) {
+            for (int j = 0; j<k && j+i < n; j++) {  // 不能超过 arr 长度
                 mx = max(mx, arr[i+j]);
                 res = max(res, mx * (j+1) + dfs(i+j+1));  
             }

@@ -19,10 +19,10 @@ public:
             int thick = 0, height = 0;
             for (int j = i; j<n; j++) {
                 thick += books[j][0];
-                height = max(height, books[j][1]);
+                height = max(height, books[j][1]);  // 至少会选择一本书
                 if (thick <= shelfWidth) {
                     res = min(res, height + dfs(j+1));
-                } else break;
+                } else break;   // 书厚度超出 shelfWidth， 循环终止
             }
             
             return res;

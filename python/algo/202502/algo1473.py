@@ -6,8 +6,6 @@ from typing import List
 class Solution:
     def minCost(self, houses: List[int], cost: List[List[int]], m: int, n: int, target: int) -> int:
         # 自行解答
-        m = len(houses)
-
         @cache
         def dfs(i:int, prev:int, left:int) -> int:
             if left < 0: return inf

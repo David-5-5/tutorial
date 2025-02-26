@@ -5,10 +5,11 @@ using namespace std;
 class Solution {
 public:
     int minDifficulty(vector<int>& jobDifficulty, int d) {
+        // 自行解答
         int n = jobDifficulty.size();
 
         if (n < d) return -1;
-
+        // jobDifficulty[l, r-1] 区间的最大值
         auto mx = [&](int l, int r) -> int {
             return *max_element(jobDifficulty.begin()+l, jobDifficulty.begin()+r);
         };

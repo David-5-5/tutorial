@@ -3,11 +3,15 @@
 #include <stdio.h>
 #include <inttypes.h> 
 
-#define MONT -1044 // 2^16 mod q
-#define KYBER_Q 3329
-#define QINV -3327 // q^-1 mod 2^16
+// refer to https://zhuanlan.zhihu.com/p/566394562
+// 蒙哥马利算法中, it is R, A * R % q - > A', 将 A 变换到蒙哥马利域上，即 A'
+#define MONT -1044      // 2^16 mod q, R(mod N) 模 N 下的 R
+#define KYBER_Q 3329    // N
+#define QINV -3327      // q^-1 mod 2^16   // 对应 Montgomery 算法中的 k' = -N^-1 mod R
 
-#define KYBER_ROOT_OF_UNITY 17
+#define KYBER_ROOT_OF_UNITY 17  // 17 ^128 = -1 mod 3329; 256-th root of unity; 
+                                // zeta^128 = -1, thus (X^256 + 1) = (X^256 - zeta^128),
+                                // and X^k + zeta^r = X^k - zeta^(r+128)
 
 static const uint8_t tree[128] = {
   0, 64, 32, 96, 16, 80, 48, 112, 8, 72, 40, 104, 24, 88, 56, 120,
@@ -29,7 +33,7 @@ int16_t montgomery_reduce(int32_t a)
   return t;
 }
 
-static int16_t fqmul(int16_t a, int16_t b) {
+static int16_t fqmul(int16_t a, int16_t b) {  // Finite Field Multiplication
   return montgomery_reduce((int32_t)a*b); // 蒙哥马利模乘
 }
 
@@ -39,8 +43,9 @@ void init_ntt() {
   unsigned int i;
   int16_t tmp[128];
 
-  tmp[0] = MONT;
+  tmp[0] = MONT;        // in montgomery field
   for(i=1;i<128;i++)
+    // 
     tmp[i] = fqmul(tmp[i-1],MONT*KYBER_ROOT_OF_UNITY % KYBER_Q);
 
   for(i=0;i<128;i++) {
@@ -59,9 +64,9 @@ int main() {
   for (int i=0; i<128; i++) {
     printf("%d, ", zetas[i]);
   }
-  for (int i=0; i<128; i++) {
-    // printf("0x%04x, ", (uint16_t)zetas[i]);
-    printf("0x%" PRIx16 ", ", (uint16_t)zetas[i]);
-  }
+  // for (int i=0; i<128; i++) {
+  //   // printf("0x%04x, ", (uint16_t)zetas[i]);
+  //   printf("0x%" PRIx16 ", ", (uint16_t)zetas[i]);
+  // }
 
 }

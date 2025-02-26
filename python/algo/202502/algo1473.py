@@ -5,6 +5,7 @@ from typing import List
 # 动态规划 - 约束划分个数
 class Solution:
     def minCost(self, houses: List[int], cost: List[List[int]], m: int, n: int, target: int) -> int:
+        # 自行解答
         m = len(houses)
 
         @cache
@@ -23,4 +24,3 @@ class Solution:
         
         ans = dfs(m-1, 0, target)
         return -1 if ans == inf else ans
-            

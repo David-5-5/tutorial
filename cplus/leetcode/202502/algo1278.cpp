@@ -5,8 +5,10 @@ using namespace std;
 class Solution {
 public:
     int palindromePartition(string s, int k) {
+        // 自行解答
         int n = s.size();
 
+        // s[l, r-1] 区间为回文串需要修改的字符数量
         auto count = [&](int l, int r) -> int {
             int h = (r-l) / 2, cnt = 0;
             for (int i=0; i<h; i++) {
@@ -22,7 +24,7 @@ public:
             if (j < 0) return INT_MAX/2;
             if (i == n)
                 if (j == 0) return 0;
-                else return INT_MAX/2;
+                else return INT_MAX/2;      // 使用 INT_MAX 做加法越界
 
             auto& res = memo[i][j];
             if (res != -1) return res;

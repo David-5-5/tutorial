@@ -3,7 +3,7 @@ from itertools import accumulate
 from math import inf
 from typing import List
 
-
+# 动态规划 - 约束划分个数
 class Solution:
     def minSpaceWastedKResizing(self, nums: List[int], k: int) -> int:
         # 参考题解，实质上就是将 nums 划分为 k + 1 段
@@ -11,13 +11,12 @@ class Solution:
         n = len(nums)
         
         pres = list(accumulate(nums, initial=0))
-        mx_dis = [[0] * n for _ in range(n)]
+        mx_dis = [[0] * n for _ in range(n)]    # 区间最大值
         for i in range(n):
             for j in range(i, n):
                 if i == j: mx_dis[i][j] = nums[j]
                 else: mx_dis[i][j] = max(mx_dis[i][j-1], nums[j])
         
-
         @cache
         def dfs(l:int, j:int) -> int:
             if j < 0: return inf

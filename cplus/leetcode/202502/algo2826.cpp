@@ -25,6 +25,6 @@ public:
                 f[k] = *min_element(f+1, f+k+1) + (x != k);
             }
         }
-        return min(f);
+        return *min_element(f+1, f+4);
     }
 };

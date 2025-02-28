@@ -5,16 +5,17 @@ using namespace std;
 class Solution {
 public:
     double largestSumOfAverages(vector<int>& nums, int k) {
-        
+        // 自行解答
         int n = nums.size();
 
         vector<int> pre_s(n+1, 0);
         for (int i=0; i<n; i++) pre_s[i+1] = pre_s[i] + nums[i];
 
-        auto avg = [&](int l, int r) -> double {
+        auto avg = [&](int l, int r) -> double {    
             return (pre_s[r] - pre_s[l]) * 1.0 / (r - l);
         };
 
+        // 返回值 double
         vector<vector<double>> memo(n, vector<double>(k+1, -1.0));
         auto dfs = [&] (this auto&& dfs, int i, int j) ->double {
             if (i == n) return 0;

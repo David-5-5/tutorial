@@ -13,7 +13,7 @@
                                 // zeta^128 = -1, thus (X^256 + 1) = (X^256 - zeta^128),
                                 // and X^k + zeta^r = X^k - zeta^(r+128)
 
-static const uint8_t tree[128] = {
+static const uint8_t tree[128] = {  // prepared for bit reverse
   0, 64, 32, 96, 16, 80, 48, 112, 8, 72, 40, 104, 24, 88, 56, 120,
   4, 68, 36, 100, 20, 84, 52, 116, 12, 76, 44, 108, 28, 92, 60, 124,
   2, 66, 34, 98, 18, 82, 50, 114, 10, 74, 42, 106, 26, 90, 58, 122,
@@ -37,36 +37,119 @@ static int16_t fqmul(int16_t a, int16_t b) {  // Finite Field Multiplication
   return montgomery_reduce((int32_t)a*b); // 蒙哥马利模乘
 }
 
-int16_t zetas[128];
+const int16_t zetas[128] = {
+  -1044,  -758,  -359, -1517,  1493,  1422,   287,   202,
+   -171,   622,  1577,   182,   962, -1202, -1474,  1468,
+    573, -1325,   264,   383,  -829,  1458, -1602,  -130,
+   -681,  1017,   732,   608, -1542,   411,  -205, -1571,
+   1223,   652,  -552,  1015, -1293,  1491,  -282, -1544,
+    516,    -8,  -320,  -666, -1618, -1162,   126,  1469,
+   -853,   -90,  -271,   830,   107, -1421,  -247,  -951,
+   -398,   961, -1508,  -725,   448, -1065,   677, -1275,
+  -1103,   430,   555,   843, -1251,   871,  1550,   105,
+    422,   587,   177,  -235,  -291,  -460,  1574,  1653,
+   -246,   778,  1159,  -147,  -777,  1483,  -602,  1119,
+  -1590,   644,  -872,   349,   418,   329,  -156,   -75,
+    817,  1097,   603,   610,  1322, -1285, -1465,   384,
+  -1215,  -136,  1218, -1335,  -874,   220, -1187, -1659,
+  -1185, -1530, -1278,   794, -1510,  -854,  -870,   478,
+   -108,  -308,   996,   991,   958, -1460,  1522,  1628
+};
+
+// the zeta for test the generation methods
+int16_t _zetas[128];
+
+// bit reverse
+void _br(int16_t* tmp) {
+  for(int i=0;i<128;i++) {
+    _zetas[i] = tmp[tree[i]];  // bit reverse
+    if(_zetas[i] > KYBER_Q/2)
+      _zetas[i] -= KYBER_Q;
+    if(_zetas[i] < -KYBER_Q/2)
+      _zetas[i] += KYBER_Q;
+  }
+}
 
 void init_ntt() {
   unsigned int i;
   int16_t tmp[128];
-
+  
   tmp[0] = MONT;        // in montgomery field
   for(i=1;i<128;i++)
-    // 
+    // equals to tmp[i-1] * KYBER_ROOT_OF_UNITY % KYBER_Q;
     tmp[i] = fqmul(tmp[i-1],MONT*KYBER_ROOT_OF_UNITY % KYBER_Q);
 
-  for(i=0;i<128;i++) {
-    zetas[i] = tmp[tree[i]];
-    if(zetas[i] > KYBER_Q/2)
-      zetas[i] -= KYBER_Q;
-    if(zetas[i] < -KYBER_Q/2)
-      zetas[i] += KYBER_Q;
-  }
+  _br(tmp);
+
 }
 
 
+void init_ntt_naive() {
+  unsigned int i;
+  int16_t tmp[128];
+  
+  tmp[0] = MONT;        // in montgomery field
+  for(i=1;i<128;i++)
+    // 
+    tmp[i] = tmp[i-1] * KYBER_ROOT_OF_UNITY % KYBER_Q;
+
+  _br(tmp);
+}
+
+/*************************************************
+* Name:        ntt
+*
+* Description: Inplace number-theoretic transform (NTT) in Rq.
+*              input is in standard order, output is in bitreversed order
+*
+* Arguments:   - int16_t r[256]: pointer to input/output vector of elements of Zq
+**************************************************/
+void ntt(int16_t r[256]) {
+  unsigned int len, start, j, k;
+  int16_t t, zeta;
+
+  k = 1;
+  for(len = 128; len >= 2; len >>= 1) {
+    for(start = 0; start < 256; start = j + len) {
+      zeta = zetas[k++];
+      for(j = start; j < start + len; j++) {
+        t = fqmul(zeta, r[j + len]);
+        r[j + len] = r[j] - t;
+        r[j] = r[j] + t;
+      }
+    }
+  }
+}
 
 int main() {
+
+  init_ntt_naive();
+  for (int i=0; i<128; i++) {
+    printf("%d, ", zetas[i]);
+    if ((i+1)%8==0) printf("\n");
+  }
+  printf("\n");
+
   init_ntt();
   for (int i=0; i<128; i++) {
     printf("%d, ", zetas[i]);
+    if ((i+1)%8==0) printf("\n");
   }
+
+
   // for (int i=0; i<128; i++) {
   //   // printf("0x%04x, ", (uint16_t)zetas[i]);
   //   printf("0x%" PRIx16 ", ", (uint16_t)zetas[i]);
   // }
+
+  // int16_t b = MONT*KYBER_ROOT_OF_UNITY % KYBER_Q;
+  // printf("MONT*KYBER_ROOT_OF_UNITY mod KYBER_Q = %d\n", b);
+
+  // int32_t c = (int32_t)MONT * b;
+
+  // printf("result of a*b = %d\n", c);
+
+  // printf("c mod 3329 = %d\n", c % KYBER_Q);
+  // printf("montgomery_reduce(c)= %d\n", montgomery_reduce(c));
 
 }

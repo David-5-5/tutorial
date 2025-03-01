@@ -9,7 +9,9 @@ public:
         int n = prices.size();
 
         vector<vector<int>> memo(n, vector<int>(2, INT_MIN/2));
-
+        // i : index of prices
+        // h : 0, no stock, 
+        //     1, hold stock
         auto dfs = [&](this auto&& dfs, int i, int h) -> int{
             if (i == n-1) 
                 if (h)

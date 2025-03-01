@@ -5,11 +5,14 @@ using namespace std;
 class Solution {
 public:
     long long maxEnergyBoost(vector<int>& energyDrinkA, vector<int>& energyDrinkB) {
+        // 自行解答
         int n = energyDrinkA.size();
 
         vector<vector<vector<long long>>> memo(n, vector<vector<long long>>(2, vector<long long>(2, -1)));
 
-
+        // i 表示 当前可以获得的能量索引，
+        // p 表示 上一个 A=0/B=1
+        // t 表示 0, 上一个是p，t =1 表示 停顿一次，可以切换
         auto dfs = [&](this auto&& dfs, int i, int p, int t) -> long long{
             if (i < 0) return 0;
 

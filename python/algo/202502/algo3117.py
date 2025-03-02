@@ -7,6 +7,7 @@ class Solution:
     def minimumValueSum(self, nums: List[int], andValues: List[int]) -> int:
         n, m = len(nums), len(andValues)
 
+        # 时间复杂度 O(n^2m) !!!overtime!!!
         @cache
         def dfs(i:int, j:int) -> int:
             if i == n and j == m:return 0
@@ -31,8 +32,9 @@ class Solution:
         # 参考题解，基于 minimumValueSum 把 and_ 放入递归参数进行累积
         n, m = len(nums), len(andValues)
 
+        # 时间复杂度 O(mnlogU) logU = 30
         @cache
-        def dfs(i:int, j:int, and_: int) -> int:
+        def dfs(i:int, j:int, and_: int) -> int:    # and_ 值为 logU
             if i == n and j == m:return 0
             if n-i < m-j or i == n or j == m:return inf
             

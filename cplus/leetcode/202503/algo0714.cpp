@@ -24,9 +24,9 @@ public:
             res = dfs(i+1, h); // 不操作
 
             if (h) {
-                res = max(res, prices[i]-fee + dfs(i+1, 0));
+                res = max(res, prices[i]-fee + dfs(i+1, 0));    // 买出股票
             } else {
-                res = max(res, -prices[i] + dfs(i+1, 1));
+                res = max(res, -prices[i] + dfs(i+1, 1));       // 卖入股票
             }
             return res;
         };

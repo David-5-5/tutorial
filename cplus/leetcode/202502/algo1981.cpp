@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-// 动态规划 -  分组背包
+// 动态规划 - 分组背包
 class Solution {
 public:
     int minimizeTheDifference(vector<vector<int>>& mat, int target) {

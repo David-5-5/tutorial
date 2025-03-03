@@ -2,6 +2,7 @@
 using namespace std;
 
 // 贪心专题 - 数学贪心 - 乘积贪心
+// 动态规划 - 状态机 DP - 基础
 class Solution {
 public:
     int getMaxLen(vector<int>& nums) {

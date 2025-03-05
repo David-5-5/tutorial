@@ -5,6 +5,7 @@ using namespace std;
 class Solution {
 public:
     int maxSumDivThree(vector<int>& nums) {
+        // 自行解答
         int n = nums.size();
 
         vector<int> dp(3, -1);  // -1 表示未初始化，不存在有效值

@@ -5,8 +5,10 @@ using namespace std;
 class Solution {
 public:
     int knightDialer(int n) {
+        // 自行解答
         const int mod = 1e9 + 7;
-        vector<int> move[10];
+
+        vector<int> move[10];   // 定义数据的下一步
         move[0] = {4, 6};
         move[1] = {6, 8};
         move[2] = {7, 9};
@@ -24,7 +26,7 @@ public:
             auto& res = memo[i][j];
             if (res != -1) return res;
             res = 0;
-            for (auto& x:move[i]) {
+            for (auto& x:move[i]) {     // 遍历下一个数字
                 res = (res + dfs(x, j-1))% mod;
             }
 

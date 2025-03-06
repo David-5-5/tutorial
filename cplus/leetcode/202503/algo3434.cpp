@@ -12,10 +12,10 @@ public:
         int ans = 0;
         for (auto& target:st) {
             int f0 = 0, f1 = 0, f2 = 0;
-            for (auto& x : nums)  {
-                f2 = max(f2, f1) + (x==k);          // 在子数组右边，做中右
-                f1 = max(f1, f0) + (x == target);   // 在子数组中
-                f0 += (x == k);                     // 在子数组做
+            for (auto& x : nums)  {                 // 状态转移方程
+                f2 = max(f2, f1) + (x==k);          // 在子数组右，左+中+右
+                f1 = max(f1, f0) + (x == target);   // 在子数组中，左+中
+                f0 += (x == k);                     // 在子数组左，左
             }
             ans = max({ans, f1, f2});
         }

@@ -5,10 +5,12 @@ using namespace std;
 class Solution {
 public:
     int minSwap(vector<int>& nums1, vector<int>& nums2) {
+        // 自行解答
         int n = nums1.size();
 
         vector<vector<int>> memo(n, vector<int>(2,-1));
 
+        // 检查是否 nums[i] > nums[i - 1]
         auto check = [&](int i, int j) -> bool {
             if (j == 1 && nums1[i] > nums2[i-1] && nums2[i] > nums1[i-1] || 
                 j == 0  && nums1[i] > nums1[i-1] && nums2[i] > nums2[i-1])
@@ -24,7 +26,7 @@ public:
 
             if (check(i, j)) {
                 res = dfs(i+1, 0);
-                if (check(i, j^1))
+                if (check(i, j^1))  // 变更 i 是否满足 nums[i] > nums[i - 1]
                     res = min(res, dfs(i+1, 1) + 1);
             }
             else res = 1 + dfs(i+1, 1);

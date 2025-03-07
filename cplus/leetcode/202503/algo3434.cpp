@@ -23,4 +23,36 @@ public:
         return ans;
 
     }
+
+    int maxFrequency2(vector<int>& nums, int k) {
+        // 参考题解 贪心 
+        int n = nums.size();
+        
+        // nums 等于 k 的前缀和
+        int f[n+1];
+        f[0] = 0;
+        for (int i=0; i<n; i++) {
+            f[i+1] = f[i];
+            if (nums[i] == k) f[i+1] ++;
+        }
+
+        // 记录每种 k - x 的下标
+        unordered_map<int, vector<int>> pos;
+        for (int i=1; i<=n; i++) {
+            int d = k - nums[i-1];
+            pos[d].push_back(i);
+        }
+
+        int ans = 0;
+        for (auto& x : pos) {
+            auto& p = x.second;
+            int mx = -1e9;
+            for (int i=0; i<p.size(); i++) {
+                mx = max(mx, f[p[i]-1] - i + 1);
+                ans = max(ans, f[n] - f[p[i]] + i + mx);
+            }
+        }
+
+        return ans;
+    }    
 };

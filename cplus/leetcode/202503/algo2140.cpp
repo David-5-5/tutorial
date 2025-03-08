@@ -5,6 +5,7 @@ using namespace std;
 class Solution {
 public:
     long long mostPoints(vector<vector<int>>& questions) {
+        // 自行解答
         int n = questions.size();
         
         vector<long> memo(n, -1);
@@ -14,10 +15,11 @@ public:
             auto& res = memo[i];
             if (res != -1) return res;
 
-            return res = max(dfs(i+1), questions[i][0] + dfs(i+1+questions[i][1]));
+            auto& x = questions[i];
+            return res = max(dfs(i+1), x[0] + dfs(i+1+x[1]));
         };
 
-        return dfs(0);        
+        return dfs(0); 
 
     }
 };

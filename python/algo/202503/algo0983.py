@@ -4,6 +4,7 @@ from typing import List
 
 class Solution:
     def mincostTickets(self, days: List[int], costs: List[int]) -> int:
+        # 自行解答
         n = len(days)
         
         @cache

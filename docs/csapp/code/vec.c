@@ -92,6 +92,29 @@ void combine4(vec_ptr v, data_t *dest) {
     *dest = acc;
 }
 
+/**
+ * Accumulate result in local variable
+ */
+void combine5(vec_ptr v, data_t *dest) {
+    long int i;
+    long int length = vec_length(v);
+    long int limit = length - 1;
+    data_t *data = get_vec_start(v);
+    data_t acc = INDET;
+
+    // Combine 2 elements at a time
+    for (int i=0; i < limit; i+=2) {
+        acc = (acc OP data[i]) OP data[i+1];
+    }
+
+    for (; i<length; i++) {
+        acc = acc OP data[i];
+    }
+    *dest = acc;
+
+}
+
+
 int main() {
     vec_ptr v = new_vec(100);
     data_t* result;
@@ -100,14 +123,17 @@ int main() {
     }
 
     combine1(v, result);
-    printf("result <%d>\n", *result);
+    printf("result of combine1: %d\n", *result);
 
     combine2(v, result);
-    printf("result <%d>\n", *result);
+    printf("result of combine2: %d\n", *result);
 
     combine3(v, result);
-    printf("result <%d>\n", *result);
+    printf("result of combine3: %d\n", *result);
 
     combine4(v, result);
-    printf("result <%d>\n", *result);
+    printf("result of combine4: %d\n", *result);
+
+    combine5(v, result);
+    printf("result of combine5: %d\n", *result);
 }

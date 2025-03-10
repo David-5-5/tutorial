@@ -38,5 +38,28 @@ public:
         return ans;
     }
 
+    int largestVariance2(string s) {
+        // 优化 建立 f0[26][26], f1[26][26] 数组
+        // 一次遍历 s f0[i][j] i 为出现最多的字母，j 为出现最少的字母
+        int f0[26][26]{}, f1[26][26];
+        memset(f1, -0x3f, sizeof(f1));  // 初始化
 
+        int ans = 0;
+        for (auto& ch : s) {
+            int a = ch - 'a';
+            for (int b=0; b<26; b++) {
+                if (a == b) continue; // a != b
+
+                // a b 假设出现次数最多的字母 a
+                f0[a][b] = max(f0[a][b], 0) + 1;
+                f1[a][b] ++;
+                ans = max(ans, f1[a][b]);
+                // b a 假设出现次数最少的字母 a
+                f0[b][a] = f1[b][a] = max(f0[b][a], 0) - 1;
+                ans = max(ans, f1[b][a]);
+            }
+        }
+
+        return ans;
+    }
 };

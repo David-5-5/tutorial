@@ -15,3 +15,15 @@ class Solution:
                 if dp[(d,x)] > ans: ans = dp[(d,x)]
         
         return ans
+
+    def longestArithSeqLength2(self, nums: List[int]) -> int:
+        ans = 2
+        mx, mn = max(nums), min(nums)
+
+        for d in range((mn-mx)//2, (mx-mn)//2+1):  # 枚举方差
+            dp = [0] * (mx + 1)
+            for x in nums:  # 数组代替map，时间复杂度一样，性能极大提升
+                dp[x] = dp[x-d] + 1 if 0 <= x - d <= mx else 1
+                if dp[x] > ans: ans = dp[x]
+        
+        return ans

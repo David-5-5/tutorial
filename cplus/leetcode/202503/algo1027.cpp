@@ -12,7 +12,7 @@ public:
 
         for (auto& x: nums) {
             for (int d=(mn-mx)/2; d<=(mx-mn)/2; d++) {
-                long mask = (long) d << 32 | x;
+                long mask = (long) d << 32 | x;     // 双关键字 d 和 x
                 long prev = (long) d << 32 | x - d;
                 dp[mask] = dp[prev] + 1;
                 ans = max(ans, dp[mask]);

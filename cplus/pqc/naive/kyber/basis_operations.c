@@ -89,6 +89,7 @@ void init_ntt_naive() {
   int16_t tmp[128];
   
   tmp[0] = MONT;        // in montgomery field
+  // tmp[0] = 1;           // direct multiple of modulo
   for(i=1;i<128;i++)
     // 
     tmp[i] = tmp[i-1] * KYBER_ROOT_OF_UNITY % KYBER_Q;
@@ -121,18 +122,43 @@ void ntt(int16_t r[256]) {
   }
 }
 
+
+void invntt(int16_t r[256]) {
+  unsigned int start, len, j, k;
+  int16_t t, zeta;
+  const int16_t f = 1441; // mont^2/128
+
+  k = 127;
+  for(len = 2; len <= 128; len <<= 1) {
+    for(start = 0; start < 256; start = j + len) {
+      zeta = zetas[k--];
+      for(j = start; j < start + len; j++) {
+        t = r[j];
+        r[j] = barrett_reduce(t + r[j + len]); // 巴雷特约减
+        r[j + len] = r[j + len] - t;
+        r[j + len] = fqmul(zeta, r[j + len]);
+      }
+    }
+  }
+
+  for(j = 0; j < 256; j++)
+    r[j] = fqmul(r[j], f);
+}
+
+
+
 int main() {
 
   init_ntt_naive();
   for (int i=0; i<128; i++) {
-    printf("%d, ", zetas[i]);
+    printf("%d, ", _zetas[i]);      // _zeats by generating
     if ((i+1)%8==0) printf("\n");
   }
   printf("\n");
 
   init_ntt();
   for (int i=0; i<128; i++) {
-    printf("%d, ", zetas[i]);
+    printf("%d, ", _zetas[i]);      // _zeats by generating
     if ((i+1)%8==0) printf("\n");
   }
 

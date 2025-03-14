@@ -25,6 +25,11 @@ public:
                 if (indices.count(slice)) { // 查找 words[i] 的前身
                     dp[i] = max(dp[i], dp[indices[slice]]);
                 }
+                // 使用 find 比上面写速度快
+                // auto it = indices.find(slice);
+                // if (it!=indices.end()) { // 查找 words[i] 的前身
+                //     dp[i] = max(dp[i], dp[it->second]);
+                // }
             }
             dp[i] ++;
             ans = max(ans, dp[i]);

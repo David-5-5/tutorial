@@ -115,7 +115,7 @@ void combine5(vec_ptr v, data_t *dest) {
 }
 
 /**
- * Accumulate result in local variable
+ * Unroll loop by 2, 2-way parallelism
  */
 void combine6(vec_ptr v, data_t *dest) {
     long int i;
@@ -135,6 +135,28 @@ void combine6(vec_ptr v, data_t *dest) {
         acc0 = acc0 OP data[i];
     }
     *dest = acc0 OP acc1;
+
+}
+
+/**
+ * Change associativity of combining operation
+ */
+void combine7(vec_ptr v, data_t *dest) {
+    long int i;
+    long int length = vec_length(v);
+    long int limit = length - 1;
+    data_t *data = get_vec_start(v);
+    data_t acc = INDET;
+
+    // Combine 2 elements at a time
+    for (int i=0; i < limit; i+=2) {
+        acc = acc OP (data[i] OP data[i+1]);
+    }
+
+    for (; i<length; i++) {
+        acc = acc OP data[i];
+    }
+    *dest = acc;
 
 }
 
@@ -162,4 +184,7 @@ int main() {
 
     combine6(v, result);
     printf("result of combine6: %d\n", *result);
+
+    combine7(v, result);
+    printf("result of combine7: %d\n", *result);
 }

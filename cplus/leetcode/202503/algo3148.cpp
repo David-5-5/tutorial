@@ -5,10 +5,11 @@ using namespace std;
 class Solution {
 public:
     int maxScore(vector<vector<int>>& grid) {
+        // 自行解答
         int m = grid.size(), n = grid[0].size();
 
+        // mx[i][j] 为 (i, j) 为左上角顶点 (m-1, n-1)为右下角 的矩阵的元素的最大值
         vector<vector<int>> mx(m, vector<int>(n));
-
         for (int r=m-1; r>=0; r--) {
             for (int c=n-1; c>=0; c--) {
                 int prev = max((r+1<m)?mx[r+1][c]:0, (c+1<n)?mx[r][c+1]:0);
@@ -24,6 +25,6 @@ public:
             }
         }
 
-        return ans; 
+        return ans;
     }
 };

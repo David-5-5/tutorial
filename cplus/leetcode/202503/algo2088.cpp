@@ -5,6 +5,14 @@ using namespace std;
 class Solution {
 public:
     int countPyramids(vector<vector<int>>& grid) {
+        // 参考题解 
+        // f[i][j] 为金子塔的顶端
+        // f[i][j] = -1 grid[i][j] = 0
+        // f[i][j] = 0  grid[i][j] = 1 f[i+1][j-1],f[i+1][j],f[i+1][j+1]有等于 -1 的情况
+        // f[i][j] = x = min(f[i+1][j-1],f[i+1][j],f[i+1][j+1]) + 1 是 高度为 x+1 的金字塔，有 x 个
+        // 因此 i 从 最后一行开始计算，
+        // 倒金字塔从第一行开会计算，状态转移方程为：
+        // f[i][j] = x = min(f[i-1][j-1],f[i-1][j],f[i-1][j+1]) + 1
         int n = grid.size(), m = grid[0].size();
         
         int ans = 0;

@@ -18,6 +18,20 @@ class Solution:
 
         return max(dfs(0, j) for j in range(n))
 
+    def maxScore2(self, n: int, k: int, stayScore: List[List[int]], travelScore: List[List[int]]) -> int:
+        
+        @cache
+        def dfs(i:int, j:int) -> int:
+            if i == k: return 0
+
+            res1 = dfs(i+1, j) + stayScore[i][j]
+
+            # it is better than for loop
+            res2 = max(dfs(i+1, s) + t for s, t in enumerate(travelScore[j])) 
+            return max(res1, res2)
+
+        return max(dfs(0, j) for j in range(n))
+    
 
 if __name__ == "__main__":
     sol = Solution()

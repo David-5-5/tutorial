@@ -5,9 +5,9 @@ using namespace std;
 class Solution {
 public:
     int numWays(int steps, int arrLen) {
-        
+        // 自行解答
         const int mod = 1e9 + 7;
-        int right = min(steps/2+1, arrLen);
+        int right = min(steps/2+1, arrLen); // 向左最大不能超过 steps / 2 + 1
 
         vector<vector<int>> memo(steps+1, vector<int>(right, -1));
 
@@ -16,7 +16,7 @@ public:
 
             auto& res = memo[i][j];
             if (res != -1) return res;
-
+            // 分别对应停留远地点，向左，向右
             return res = ((long)dfs(i-1, j) + (j>0?dfs(i-1,j-1):0) + (j+1<right?dfs(i-1,j+1):0))%mod;
         };
 

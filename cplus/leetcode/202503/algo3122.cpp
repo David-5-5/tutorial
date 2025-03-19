@@ -35,5 +35,34 @@ public:
         
     }
 
+    int minimumOperations2(vector<vector<int>>& grid) {
+        // 自行解答 - 记忆化 -> 递推
+        int n = grid.size(), m = grid[0].size();
+
+        // 统计每列 0~9 的数量
+        vector<vector<int>> cnt(m, vector<int>(10));
+        for (int i=0; i<n; i++) {
+            for (int j=0; j<m; j++) {
+                cnt[j][grid[i][j]] += 1;
+            }
+        }
+        
+        vector<vector<int>> dp(m+1, vector<int>(11, INT_MAX/2));
+        for (int i=0; i<11; i++) dp[0][i] = 0;
+        for (int i=0; i<m; i++){
+            for (int v=0; v<11; v++) {
+                dp[i+1][10] = min(dp[i+1][10], dp[i][v] + n); 
+                for (int nv=0; nv<10; nv++) {
+                    if (nv == v) continue;  // 与前一列相同，跳过
+                    // i 列都改为 nv，需要修改的数量为 n - cnt[i][nv]
+                    dp[i+1][nv] = min(dp[i+1][nv], n - cnt[i][nv] + dp[i][v]);
+                }
+            }
+        }
+
+        return *min_element(dp[m].begin(), dp[m].end());   
+        
+    }
+
     
 };

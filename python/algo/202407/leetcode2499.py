@@ -3,6 +3,7 @@ from typing import List
 # 双周赛 93
 class Solution:
     def minimumTotalCost(self, nums1: List[int], nums2: List[int]) -> int:
+        # 参考题解 分类讨论
         # mode_cnt 众数的计数， mode_val 众数的值
         ans = same_cnt = mode_cnt = mode_val = 0
         cnt = [0] * (len(nums1) + 1)

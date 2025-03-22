@@ -40,7 +40,7 @@ public:
     int countOfPairs2(vector<int>& nums) {
         // 自行解答  降低一维，但时间复杂度未变，优化存储空间
         const int mod = 1e9 + 7;
-        int n = nums.size(), mx = ranges::max(nums)i
+        int n = nums.size(), mx = ranges::max(nums);
         
         vector<vector<int>> memo(n+1, vector<int>(mx+1, -1));
         // i index of nums

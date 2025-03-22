@@ -47,7 +47,6 @@ public:
         // s previous value of arr1
         auto dfs = [&](this auto&& dfs, int i, int s) -> int {
             if (i == n) return 1;
-            // cout << i << ", " << s << endl;
             auto& res = memo[i][s];
             
             if (res != -1) return res;
@@ -63,4 +62,34 @@ public:
 
         return dfs(0, 0);
     }    
+
+    int countOfPairs3(vector<int>& nums) {
+        const int mod = 1e9 + 7;
+        int n = nums.size(), mx = ranges::max(nums);
+
+        vector<vector<int>> dp(n, vector<int>(mx+1));
+        for (int j=0; j<=nums[0]; j++) dp[0][j] = 1; // 初始值
+
+        for (int i=1; i<n; i++) {
+            for (int j=0; j<=nums[i]; j++) {
+                int t = nums[i-1]-j;
+                for (int n_s=max(j,nums[i]-t); n_s<=nums[i]; n_s++) {  // s 递增 n_s next s
+                    dp[i][n_s] = (dp[i][n_s] + dp[i-1][j]) % mod;
+                }            
+            }
+        };
+
+
+        // for (auto& r:dp) {
+        //     for (auto& v:r) cout << v << ", ";
+        //     cout << endl;
+        // }
+        int ans = 0;
+        for (auto v:dp[n-1]) ans = (ans + v) % mod;
+        return ans;    
+
+    }
+
+
+
 };

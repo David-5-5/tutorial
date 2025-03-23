@@ -3,6 +3,7 @@ from functools import cache
 # 动态规划 -  多维 DP
 class Solution:
     def countWinningSequences(self, s: str) -> int:
+        # 自行解答
         mod = 10 ** 9 + 7
         n = len(s)
         game = "FWE"

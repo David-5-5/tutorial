@@ -1,7 +1,7 @@
 from functools import cache
 from typing import List
 
-
+# 动态规划 - 一维 DP
 class Solution:
     def mincostTickets(self, days: List[int], costs: List[int]) -> int:
         # 自行解答

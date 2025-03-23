@@ -1,7 +1,7 @@
 from functools import cache
 from typing import List
 
-
+#  动态规划 -  状态机 DP - 基础
 class Solution:
     def wiggleMaxLength(self, nums: List[int]) -> int:
         n = len(nums)

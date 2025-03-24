@@ -5,6 +5,7 @@ using namespace std;
 class Solution {
 public:
     vector<int> maxPoints(vector<vector<int>>& grid, vector<int>& queries) {
+        // 参考题解，学习 c++ 写法
         const int dirs[4][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
 
         // union set
@@ -37,8 +38,9 @@ public:
         }
         sort(a, a + mn);
 
+        // c++ 按照元素大小排序并保留序号/下标
         int k = queries.size(), id[k];
-        iota(id, id + k, 0);        // 给容器中元素赋予连续递增的值
+        iota(id, id + k, 0);                    // 给容器中元素赋予连续递增的值
         sort(id, id + k, [&](int i, int j) {
             return queries[i] < queries[j];     // id 按照 queries 元素大小排序
         });

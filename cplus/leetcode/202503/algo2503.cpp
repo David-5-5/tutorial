@@ -12,6 +12,7 @@ public:
         int m = grid.size(), n = grid[0].size();
         int mn = m * n;     // number of elements in grid
         
+        // TEMPLATE BEGIN 并查集模板 负数表示并差集的代表元，-fa(x) 代表元中元素的数量
         vector<int> fa(mn, -1);    // negative imply the count of set
         auto find = [&](this auto&& find, int x) -> int {
             if (fa[x] < 0) return x;
@@ -26,9 +27,11 @@ public:
                 fa[fy] += fa[fx];
                 fa[fx] = y;
             }
-            return -fa[fy];
+            return -fa[fy];     // fy 为代表元的元素数量
         };
-        
+        // TEMPLATE END
+
+
         // Sorted element in grid
         array<int, 3> a[mn];
         for (int i=0; i<m; i++) {

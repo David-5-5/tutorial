@@ -16,20 +16,18 @@ public:
         //            f[i+1][1] = f[i][1]    , s[i] != a, b
         // 初始值 f[0][0] = 0, f[0][1] = INT_MIN
         // 代码实现时，f 的第一个维度可以去掉，用两个变量 f0, f1 分别表示 f[i][0] 和 f[i][1]
-        int f0 = 1, f1 = INT_MIN;
         int ans = 0;
         for (auto& ch : s) {
             for (int a=0; a<26; a++) {
+                int f0 = 1, f1 = INT_MIN;
                 for (int b=0; b<26; b++) {
                     if (a == b) continue; // a != b
-
-                    if (ch - 'a' == a) {
-                        f0 = max(f0, 0) + 1;
-                        f1 ++;
-                    } else if (ch - 'a' == b) {
-                        v = -1;
-                        f1 = f0 = max(f0, 0) - 1;   // 这样看比较清楚，已经减去 -1了，至少包含一个元素
-                    }
+                    int v = 0;
+                    if (ch - 'a' == a) v = 1;
+                    else if (ch - 'a' == b) v = -1; // 至少包含一个元素
+                    f0 = max(f0, 0) + v;
+                    if (ch - 'a' == a) f1 = f1 + 1;
+                    else if (ch - 'a' == b) f1 = f0;
                     ans = max(ans, f1);
                 }
             }

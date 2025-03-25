@@ -28,4 +28,35 @@ public:
         return dfs(0, 0, k);
 
     }
+
+    int numOfArrays2(int n, int m, int k) {
+        // 递归 -> 递推
+        const int mod = 1e9 + 7;
+
+        int dp[n][m+1][k+1];
+        memset(dp, 0, sizeof(dp));
+
+        for (int j=1; j<=m; j++) {
+            dp[0][j][1] = 1;        // 第 0 个 值为 j 使用 cost 计数 1
+        }
+        
+        for (int i=1; i<n; i++) {
+            for (int l = 1; l<=k && l<=i+1; l++) {
+                for (int j=1; j<=m; j++) {
+                    dp[i][j][l] = (long) dp[i-1][j][l] * j % mod;    // j 为最大值
+                    for (int j0=1; j0 < j; j0++) {            // j0 is prevoius
+                        dp[i][j][l] = (dp[i][j][l] + dp[i-1][j0][l-1]) % mod;
+                    }
+                }
+            }
+        }
+
+        int ans = 0;
+        for (int j=1; j<=m; j++)
+            ans = (ans + dp[n-1][j][k]) % mod;
+
+        return ans;
+    }
+
+
 };

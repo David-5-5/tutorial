@@ -178,4 +178,8 @@ int main() {
   // printf("c mod 3329 = %d\n", c % KYBER_Q);
   // printf("montgomery_reduce(c)= %d\n", montgomery_reduce(c));
 
+  int ring1[256], ring2[256];
+  
+  memset(ring2, 0, sizeof(ring1));
+
 }

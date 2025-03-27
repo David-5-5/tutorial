@@ -27,4 +27,27 @@ public:
         return dfs(k, 0);   
         
     }
+
+    int rearrangeSticks2(int n, int k) {
+        // 自行解答，优化
+
+        const int mod = 1e9 + 7;
+
+        vector<vector<int>> memo(n+1, vector<int>(k, -1));
+        auto dfs = [&](this auto&& dfs, int i, int j) -> int {
+            if (i < j || j <0) return 0;
+            if (i == 0) return 1;
+
+            // cout << i << "," << x << "," << j << endl;
+            auto& res = memo[i][j];
+
+            if (res != -1) return res;
+
+            return res = ((long)dfs(i-1, j-1) + ((long)dfs(i-1, j) * (n-i)) % mod) % mod;
+            
+        };
+
+        return dfs(n-1, k-1);
+
+    }
 };

@@ -18,3 +18,17 @@ class Solution:
         ans = dfs(1, n, 2)
         dfs.cache_clear()
         return ans
+
+
+    def twoEggDrop(self, n: int) -> int:
+        # 自行解答 - 优化
+        @cache
+        def dfs(i: int) -> int:
+            if i == 1: return 1
+
+            res = inf
+            for t in range(1, i):
+                res = min(res, max(1+dfs(i-t), t))
+            return res
+        ans = dfs(n)
+        return ans

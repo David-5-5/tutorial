@@ -1,6 +1,7 @@
 /* Code to generate zetas and zetas_inv used in the number-theoretic transform:*/
 #include <stdint.h>
 #include <stdio.h>
+#include <string.h>
 #include <inttypes.h> 
 
 // refer to https://zhuanlan.zhihu.com/p/566394562
@@ -24,6 +25,18 @@ static const uint8_t tree[128] = {  // prepared for bit reverse
   7, 71, 39, 103, 23, 87, 55, 119, 15, 79, 47, 111, 31, 95, 63, 127
 };
 
+
+/*************************************************
+* Name:        montgomery_reduce
+*
+* Description: Montgomery reduction; given a 32-bit integer a, computes
+*              16-bit integer congruent to a * R^-1 mod q, where R=2^16
+*
+* Arguments:   - int32_t a: input integer to be reduced;
+*                           has to be in {-q2^15,...,q2^15-1}
+*
+* Returns:     integer in {-q+1,...,q-1} congruent to a * R^-1 modulo q.
+**************************************************/
 int16_t montgomery_reduce(int32_t a)
 {
   int16_t t;
@@ -31,6 +44,25 @@ int16_t montgomery_reduce(int32_t a)
   t = (int16_t)a*QINV;
   t = (a - (int32_t)t*KYBER_Q) >> 16;
   return t;
+}
+
+/*************************************************
+* Name:        barrett_reduce
+*
+* Description: Barrett reduction; given a 16-bit integer a, computes
+*              centered representative congruent to a mod q in {-(q-1)/2,...,(q-1)/2}
+*
+* Arguments:   - int16_t a: input integer to be reduced
+*
+* Returns:     integer in {-(q-1)/2,...,(q-1)/2} congruent to a modulo q.
+**************************************************/
+int16_t barrett_reduce(int16_t a) {
+  int16_t t;
+  const int16_t v = ((1<<26) + KYBER_Q/2)/KYBER_Q;
+
+  t  = ((int32_t)v*a + (1<<25)) >> 26;
+  t *= KYBER_Q;
+  return a - t;
 }
 
 static int16_t fqmul(int16_t a, int16_t b) {  // Finite Field Multiplication
@@ -180,6 +212,8 @@ int main() {
 
   int ring1[256], ring2[256];
   
-  memset(ring2, 0, sizeof(ring1));
+  memset(ring1, 0, sizeof(ring1));
+  memset(ring2, 0, sizeof(ring2));
+  
 
 }

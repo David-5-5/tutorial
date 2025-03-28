@@ -89,20 +89,21 @@ const int16_t zetas[128] = {
 };
 
 // the zeta for test the generation methods
-int16_t _zetas[128];
 
 // bit reverse
-void _br(int16_t* tmp) {
-  for(int i=0;i<128;i++) {
-    _zetas[i] = tmp[tree[i]];  // bit reverse
-    if(_zetas[i] > KYBER_Q/2)
-      _zetas[i] -= KYBER_Q;
-    if(_zetas[i] < -KYBER_Q/2)
-      _zetas[i] += KYBER_Q;
+void _br(int16_t* tmp, int16_t zetas[128]) {
+  
+  for(int i=0; i<128; i++) {
+    zetas[i] = tmp[tree[i]];  // bit reverse
+    if(zetas[i] > KYBER_Q/2)
+      zetas[i] -= KYBER_Q;
+    if(zetas[i] < -KYBER_Q/2)
+      zetas[i] += KYBER_Q;
   }
+
 }
 
-void init_ntt() {
+void init_ntt(int16_t zetas[128]) {
   unsigned int i;
   int16_t tmp[128];
   
@@ -111,22 +112,20 @@ void init_ntt() {
     // equals to tmp[i-1] * KYBER_ROOT_OF_UNITY % KYBER_Q;
     tmp[i] = fqmul(tmp[i-1],MONT*KYBER_ROOT_OF_UNITY % KYBER_Q);
 
-  _br(tmp);
-
+  return _br(tmp, zetas);
 }
 
 
-void init_ntt_naive() {
+void init_ntt_naive(int16_t zetas[128]) {
   unsigned int i;
   int16_t tmp[128];
   
   tmp[0] = MONT;        // in montgomery field
   // tmp[0] = 1;           // direct multiple of modulo
   for(i=1;i<128;i++)
-    // 
     tmp[i] = tmp[i-1] * KYBER_ROOT_OF_UNITY % KYBER_Q;
 
-  _br(tmp);
+  return _br(tmp, zetas);
 }
 
 /*************************************************
@@ -178,42 +177,39 @@ void invntt(int16_t r[256]) {
 }
 
 
+void print(int16_t* res,int len, int itemsPerLn) {
 
-int main() {
-
-  init_ntt_naive();
-  for (int i=0; i<128; i++) {
-    printf("%d, ", _zetas[i]);      // _zeats by generating
-    if ((i+1)%8==0) printf("\n");
+  for (int i=0; i<len; i++) {
+    printf("%d, ", res[i]);      // _zeats by generating
+    if ((i+1)%itemsPerLn==0) printf("\n");
   }
   printf("\n");
 
-  init_ntt();
-  for (int i=0; i<128; i++) {
-    printf("%d, ", _zetas[i]);      // _zeats by generating
-    if ((i+1)%8==0) printf("\n");
-  }
+}
 
+int main() {
+  int16_t res[128];
+  init_ntt_naive(res);
+  print(res, 128, 16);
 
-  // for (int i=0; i<128; i++) {
-  //   // printf("0x%04x, ", (uint16_t)zetas[i]);
-  //   printf("0x%" PRIx16 ", ", (uint16_t)zetas[i]);
-  // }
+  init_ntt(res);
+  print(res, 128, 16);
 
-  // int16_t b = MONT*KYBER_ROOT_OF_UNITY % KYBER_Q;
-  // printf("MONT*KYBER_ROOT_OF_UNITY mod KYBER_Q = %d\n", b);
-
-  // int32_t c = (int32_t)MONT * b;
-
-  // printf("result of a*b = %d\n", c);
-
-  // printf("c mod 3329 = %d\n", c % KYBER_Q);
-  // printf("montgomery_reduce(c)= %d\n", montgomery_reduce(c));
-
-  int ring1[256], ring2[256];
+  int16_t ring1[256], ring2[256];
   
   memset(ring1, 0, sizeof(ring1));
   memset(ring2, 0, sizeof(ring2));
   
+  for (int i = 0; i<256; i++) {
+    ring1[i] = i * i % KYBER_Q;
+  }
+  print(ring1, 256, 16);
+  
+  ntt(ring1);
+  print(ring1, 256, 16);
+
+  invntt(ring1);            // In mont field
+  
+  print(ring1, 256, 16);
 
 }

@@ -1,8 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-// 动态规划 -  多维 DP
-
 // Beging prepare for numTilePossibilities2
 const int MX = 8;
 int c[MX][MX];
@@ -17,6 +15,7 @@ int init = [] () {
 }();
 // End
 
+// 动态规划 -  多维 DP
 class Solution {
 public:
     int numTilePossibilities(string tiles) {

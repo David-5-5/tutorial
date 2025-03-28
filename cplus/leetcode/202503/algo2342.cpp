@@ -5,6 +5,7 @@ using namespace std;
 class Solution {
 public:
     int maximumSum(vector<int>& nums) {
+        // 自行解答 hash
         unordered_map<int, int> mx;
 
         int ans = -1;

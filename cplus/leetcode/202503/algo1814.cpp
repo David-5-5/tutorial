@@ -5,6 +5,10 @@ using namespace std;
 class Solution {
 public:
     int countNicePairs(vector<int>& nums) {
+        // 自行解答
+        // nums[i] + rev[nums[j]] = nums[j] + rev[nums[i]]
+        // nums[i] - rev(nums[i]) = nums[j] - rev(nums[j])
+        // 使用 hash 记录 nums[i] - rev(nums[i]) 出现的次数
         const int mod = 1e9 + 7;
 
         auto rev = [](int v) -> int {

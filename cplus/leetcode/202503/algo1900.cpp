@@ -37,4 +37,43 @@ public:
         return dfs(arr);
 
     }
+
+    vector<int> earliestAndLatest2(int n, int firstPlayer, int secondPlayer) {
+        // 自行解答，优化，状态压缩，但性能排序较低，仍有很大优化空间
+        vector<int> memo(1<<n, -1);
+        auto dfs = [&](this auto&& dfs, int mask) -> int {
+            auto& res = memo[mask];
+            if (res != -1) return res;
+            vector<int> arr;
+            for (int i=0; i<28; i++) {
+                if ((mask>>i) & 1) arr.push_back(i+1);
+            }
+            int m = arr.size();
+            if (m == 2) return res = 101;
+            int mx = 0, mn = INT_MAX;
+            
+            int cnt = 1 << (m/2);
+            for (int i=0; i<cnt; i++) {
+                int nxt_mask = 0;
+                for (int j=0; j<m/2; j++) {
+                    
+                    if (arr[j] == firstPlayer && arr[m-j-1] == secondPlayer) return res = 101;
+                    if (arr[j] == firstPlayer || arr[m-j-1] == firstPlayer ) nxt_mask |= 1 << (firstPlayer-1);
+                    else if (arr[j] == secondPlayer ||arr[m-j-1] == secondPlayer) nxt_mask |= 1 << (secondPlayer-1);
+                    else if (i>>j & 1) nxt_mask |= 1 << (arr[m-j-1]-1);
+                    else nxt_mask |= 1 << (arr[j]-1);
+                }
+                if (m%2) nxt_mask |= 1 <<(arr[m/2]-1);
+                
+                int val = memo[nxt_mask]!=-1?memo[nxt_mask]:dfs(nxt_mask);
+                mx = max(mx, 1 + val % 100);
+                mn = min(mn, 1 + val / 100);
+            }
+            return res = mn * 100 + mx;
+        };
+
+        int val = dfs((1<<n) - 1);
+        return {val/100, val%100}; 
+    }    
+  
 };

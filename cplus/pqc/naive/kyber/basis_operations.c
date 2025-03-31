@@ -69,6 +69,28 @@ static int16_t fqmul(int16_t a, int16_t b) {  // Finite Field Multiplication
   return montgomery_reduce((int32_t)a*b); // 蒙哥马利模乘
 }
 
+
+// FIPS 203 (ML-KEM) Standard zetas array (Table 3 in the document)
+// 256th roots of unity modulo q=3329, in bit-reversed order
+// const int16_t zetas[128] = {
+//     1,    1729, 2580, 3289, 2642, 630,  1897, 848,
+//     1062, 1919, 193,  797,  2786, 3260, 569,  1746,
+//     296,  2447, 1339, 1476, 3046, 56,   2240, 1333,
+//     1426, 2094, 535,  2882, 2393, 2879, 1974, 821,
+//     289,  331,  3253, 1756, 1197, 2304, 2277, 2055,
+//     650,  1977, 2513, 632,  2865, 33,   1320, 1915,
+//     2319, 1435, 807,  452,  1438, 2868, 1534, 2402,
+//     2647, 2617, 1481, 648,  2474, 3110, 1227, 910,
+//     17,   2761, 583,  2649, 1637, 723,  2288, 1100,
+//     1409, 2662, 3281, 233,  756,  2156, 3015, 3050,
+//     1703, 1651, 2789, 1789, 1847, 952,  1461, 2687,
+//     939,  2308, 2437, 2388, 733,  2337, 268,  641,
+//     1584, 2298, 2037, 3220, 375,  2549, 2090, 1645,
+//     1063, 319,  2773, 757,  2099, 561,  2466, 2594,
+//     2804, 1092, 403,  1026, 1143, 2150, 2775, 886,
+//     1722, 1212, 1874, 1029, 2110, 2935, 885,  2154
+// };
+
 const int16_t zetas[128] = {
   -1044,  -758,  -359, -1517,  1493,  1422,   287,   202,
    -171,   622,  1577,   182,   962, -1202, -1474,  1468,
@@ -172,8 +194,12 @@ void invntt(int16_t r[256]) {
     }
   }
 
-  for(j = 0; j < 256; j++)
-    r[j] = fqmul(r[j], f);
+  const int16_t inv_mont2 = 3303; // 169^-1 mod 3329
+  for(j = 0; j < 256; j++) {
+    r[j] = fqmul(r[j], 1441);    // 1/256
+    r[j] = fqmul(r[j], inv_mont2); // 消除Montgomery因子
+    r[j] = barrett_reduce(r[j]);  // 确保范围正确
+  }
 }
 
 
@@ -203,6 +229,9 @@ int main() {
   for (int i = 0; i<256; i++) {
     ring1[i] = i * i % KYBER_Q;
   }
+  // for(int i=0; i<256; i++) {
+  //   ring1[i] = fqmul(ring1[i], MONT); 
+  // }
   print(ring1, 256, 16);
   
   ntt(ring1);
@@ -212,4 +241,18 @@ int main() {
   
   print(ring1, 256, 16);
 
+  // const int16_t f = (1ULL << 32) % KYBER_Q;
+  // printf("f = %d\n", f);   
+  // for (int i=0; i<256; i++) {
+  //   ring1[i] = montgomery_reduce((int32_t) ring1[i]* 1441);
+  // }
+  // print(ring1, 256, 16);
+  // const int16_t inv_mont2 = 3303;
+  // for (int i = 0; i < 256; i++) {
+  //     ring1[i] = fqmul(ring1[i], inv_mont2);  // 最终 r = a_original mod q
+  //     ring1[i] = barrett_reduce(ring1[i]);    // 确保系数在 [0, q)
+  // }
+  // print(ring1, 256, 16);
+
+  printf("%d\n ", fqmul(1, MONT));
 }

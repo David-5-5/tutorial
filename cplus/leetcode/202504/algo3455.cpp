@@ -49,7 +49,7 @@ public:
         if (pml) {
             mid = kmp(s, pm);
             if (mid.size() == 0) return -1;
-        }
+        }   //  !! i<=s.length() !! 仅匹配前缀的情况且前缀为 s 的末尾 m - ppl
         else for (int i=0; i<=s.length(); i++) mid.push_back(i);
 
         vector<int> suf;
@@ -58,13 +58,11 @@ public:
             if (suf.size() == 0) return -1;
         }
 
-
         for (auto& m:mid) {
             int begin = -1;             
             if (ppl == 0) begin = m;        // 前缀长度为零, 匹配后缀
             else {
                 int p_inx = m - ppl;        // pp 匹配的最大的开始字符
-                // if (p_inx < 0) continue;    // 不满足条件，继续
                 int i_pre = ranges::upper_bound(pre, p_inx) - pre.begin();
                 if (i_pre) begin = pre[i_pre-1];
                 else continue;
@@ -82,7 +80,6 @@ public:
         }
         
         return ans < s.length()+1 ? ans : -1;    
-
     }
 };
 

@@ -5,8 +5,10 @@ using namespace std;
 class Solution {
 public:
     int maxSumTwoNoOverlap(vector<int>& nums, int firstLen, int secondLen) {
+        // 自行解答 2000分
         int n = nums.size();
         
+        // 前后缀分解前缀为长度为 f 的子数组的最大值，后缀为长度为 s 的子数组最大值
         auto cal = [&] (int f, int s) -> int {
             int i = 0;
             vector<int> suf(n-s+1);
@@ -30,6 +32,7 @@ public:
             return ans;
         };
 
+        // 计算前后缀的最大和，前后缀的长度交替为 firstLen, secondLen
         return max(cal(firstLen, secondLen), cal(secondLen, firstLen));
     }
 };

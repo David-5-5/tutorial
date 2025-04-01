@@ -26,4 +26,30 @@ public:
         }
         return ans;   
     }
+
+    
+    vector<int> platesBetweenCandles(string s, vector<vector<int>>& queries) {
+        // 自行解答 使用 set
+        // 学习 set lower_bound upper_bound usage
+        int n = s.length();
+        vector<int> pres(n+1);
+        set<int> pos;
+        for (int i=0; i<n; i++) {
+            pres[i+1] = pres[i] + (s[i] == '*' ? 1 : 0);
+            if (s[i] == '|') pos.insert(i);
+        }
+
+        if (pos.size() == 0) return vector<int>(queries.size(), 0);
+
+        vector<int> ans;
+        for (auto & q : queries) {
+            auto l = pos.lower_bound(q[0]);
+            auto r = pos.upper_bound(q[1]);
+            // r 是指针 r++ , r-- 在元素之间!!循环!!左移或右移，
+            if (r == pos.end() || (r!=pos.begin() && *r>q[1])) r--;
+            if (*l < *r) ans.push_back(pres[*r]-pres[*l]);
+            else ans.push_back(0);
+        }
+        return ans;     
+    }
 };

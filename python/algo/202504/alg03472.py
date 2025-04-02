@@ -3,6 +3,7 @@ from functools import cache
 #  动态规划 -  区间 DP
 class Solution:
     def longestPalindromicSubsequence(self, s: str, k: int) -> int:
+        # 自行解答  记忆化搜索
         n = len(s)
 
         @cache

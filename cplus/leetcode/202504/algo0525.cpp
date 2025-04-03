@@ -13,6 +13,8 @@ public:
         unordered_map<int, int> pos;
         int ans = 0;
         for (int i=0; i<=n; i++) {
+            // 0：-1， 1：1， 0和1 的数量相等，则和为零
+            // pres[i] - pres[pos[pres[i]]] = 0 
             if (pos.count(pres[i])) ans = max(ans, i - pos[pres[i]]);
 
             if (!pos.count(pres[i]))  pos[pres[i]] = i; // 记录最靠左值为 pres[i] 下标

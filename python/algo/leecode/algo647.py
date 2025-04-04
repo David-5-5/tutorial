@@ -1,5 +1,6 @@
 class Solution:
     def countSubstrings(self, s: str) -> int:
+        # 2022.11 第一次，动态规划
         n = len(s)
         dp = [[0] * n for _ in range(n)]
         dp2 = [[False] * n for _ in range(n)]

@@ -23,6 +23,12 @@ public:
 
     int numSubarraysWithSum2(vector<int>& nums, int goal) {
         // 自行解答，滑动窗口
+        // 思维比较高，如何找到 l1 和 l2 ? 自己写不出来
+        // 0    0  1  0  1  0  0  1
+        // l1,2    r   
+        // l1      l2    r
+        // l1      l2       r
+        //         l1    l2        r
         int n = nums.size(), ans = 0;
 
         int l1 = 0, l2 = 0, r = 0, sum1 = 0, sum2 = 0;

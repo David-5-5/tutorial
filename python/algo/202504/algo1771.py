@@ -38,3 +38,17 @@ class Solution:
         dfs.cache_clear()
         return ans
             
+    def longestPalindrome(self, word1: str, word2: str) -> int:
+        # 优化，from 516
+        s = word1 + word2
+        n, ans = len(s), 0
+        dp = [[0] * n for _ in range(n)]
+        for i in range(n-1,-1,-1):
+            dp[i][i] = 1
+            for j in range(i+1, n):
+                if s[i] == s[j]:
+                    dp[i][j] = dp[i+1][j-1] + 2
+                    if i<len(word1) and j>=word1 and dp[i][j] > ans: ans = dp[i][j]
+                else:
+                    dp[i][j] = max(dp[i+1][j], dp[i][j-1])
+        return ans

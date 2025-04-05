@@ -5,7 +5,7 @@ using namespace std;
 class Solution {
 public:
     int minSkips(vector<int>& dist, int speed, int hoursBefore) {
-        // 参考题解
+        // 参考题解 !!!代码很短，思维很难!!!
         int sum = accumulate(dist.begin(), dist.end(), 0);
 
         if ((sum+speed-1)/speed > hoursBefore) return -1;
@@ -20,6 +20,7 @@ public:
             if (res != -1) { // 之前计算过
                 return res;
             }
+            // 核心代码，也就两行
             // + speed - 1 上取整
             res = (dfs(i, j - 1) + dist[j] + speed - 1) / speed * speed;    // 不跳过
             if (i) res = min(res, dfs(i - 1, j - 1) + dist[j]);             // 跳过

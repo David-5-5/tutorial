@@ -5,7 +5,7 @@ using namespace std;
 class Solution {
 public:
     int mctFromLeafValues(vector<int>& arr) {\
-        // 参考题解 - 动态规划
+        // 参考题解 - 动态规划 O(n^3)
         int n = arr.size();
 
         vector<vector<int>> dp(n, vector<int>(n, INT_MAX/4)), mval(n, vector<int>(n));
@@ -21,4 +21,30 @@ public:
         }
         return dp[0][n-1];
     }
+
+    int mctFromLeafValues2(vector<int>& arr) {\
+        // 参考题解 - 单调栈 O(n) !!!
+        int ans = 0;
+        stack<int> st;
+        for (int v: arr) {
+            while (!st.empty() && st.top() <= v) {
+                int u = st.top();
+                st.pop();
+                if (st.empty() || st.top() > v) {
+                    ans += u * v;
+                } else {
+                    ans += st.top() * u;
+                }
+            }
+            st.push(v);
+        }
+
+        while (st.size() >= 2) {
+            int v = st.top();
+            st.pop();
+            ans += v * st.top();
+        }
+        return ans;
+        
+    }    
 };

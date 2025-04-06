@@ -33,4 +33,32 @@ public:
 
         return ans < INT_MAX/2 ? ans : -1;     
     }
+
+    int minSumOfLengths2(vector<int>& arr, int target) {
+        // 参考题解，前缀和 + 前后缀分解 + 二分查找
+        // 两个不相交子数组 -> 前后缀分解
+        int n = arr.size();
+        vector<int> pres(n+1);
+        for (int i=0; i<n; i++) pres[i+1] = pres[i] + arr[i];
+        
+        vector<int> suf(n, INT_MAX/2);
+
+        for (int i=n-1; i>=0; i--) {
+            int inx = ranges::lower_bound(pres, pres[i]+target)-pres.begin();
+            if (inx<=n && pres[inx] == pres[i]+target)
+                suf[i] = min(inx-i, i+1<n?suf[i+1]:INT_MAX/2);
+        }
+        
+
+        int ans = INT_MAX/2, pre = INT_MAX/2;
+        for (int i=1; i<n; i++) {
+            int inx = ranges::lower_bound(pres, pres[i]-target)-pres.begin();
+            if (inx<=n && pres[inx] == pres[i]-target)
+                pre = min(pre, i-inx);
+            
+            ans = min(ans, pre + suf[i]);
+        }
+
+        return ans < INT_MAX/2 ? ans : -1;     
+    }    
 };

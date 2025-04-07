@@ -63,5 +63,22 @@ public:
         return ans;
     }
 
-
+    int countTriplets4(vector<int>& arr) {
+        // 参考题解 - 时间复杂度 O(n)
+        // 进一步优化
+        int n = arr.size();
+        
+        int ans = 0, prex = 0;
+        unordered_map<int, int> cnt, total;
+        // 遍历 k 
+        for (int k=0; k<n; k++) {
+            if (cnt.count(prex ^ arr[k]))
+                ans += cnt[prex ^ arr[k]] * k - total[prex ^ arr[k]];
+            
+            ++ cnt[prex];
+            total[prex] += k;
+            prex ^= arr[k];
+        }
+        return ans;
+    }
 };

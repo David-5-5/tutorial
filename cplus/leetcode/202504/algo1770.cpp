@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-// 动态规划 -  区间 DP
+// 动态规划 -  8.2其他区间 DP
 class Solution {
 public:
     int maximumScore(vector<int>& nums, vector<int>& multipliers) {

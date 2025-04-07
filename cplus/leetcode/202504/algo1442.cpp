@@ -25,4 +25,23 @@ public:
         return ans;
     }
 
+    int countTriplets2(vector<int>& arr) {
+        // 参考题解 - 时间复杂度 O(n^2)
+        // 计算前缀异或和
+        int n = arr.size();
+        vector<int> prex(n+1);
+        for (int i=0; i<n; i++) prex[i+1] = prex[i] ^ arr[i]; 
+        
+        int ans = 0;
+        // 遍历 i 和 k， 当 Si == Sk+1 时，[i+1, k] 范围内 j 都是符合要求的
+        for (int i=0; i<n; i++) {
+            for (int k=i+1; k<n; k++) {
+                if (prex[i] == prex[k+1])
+                    ans += k - i;
+            }
+        }
+        return ans;
+    }
+
+
 };

@@ -43,5 +43,25 @@ public:
         return ans;
     }
 
+    int countTriplets3(vector<int>& arr) {
+        // 参考题解 - 时间复杂度 O(n)
+        // 计算前缀异或和
+        int n = arr.size();
+        vector<int> prex(n+1);
+        for (int i=0; i<n; i++) prex[i+1] = prex[i] ^ arr[i]; 
+        
+        int ans = 0;
+        unordered_map<int, int> cnt, total;
+        // 遍历 k 
+        for (int k=0; k<n; k++) {
+            if (cnt.count(prex[k+1]))
+                ans += cnt[prex[k+1]] * k - total[prex[k+1]];
+            
+            ++ cnt[prex[k]];
+            total[prex[k]] += k;
+        }
+        return ans;
+    }
+
 
 };

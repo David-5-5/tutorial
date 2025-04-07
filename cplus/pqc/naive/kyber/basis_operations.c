@@ -142,8 +142,8 @@ void init_ntt_naive(int16_t zetas[128]) {
   unsigned int i;
   int16_t tmp[128];
   
-  tmp[0] = MONT;        // in montgomery field
-  // tmp[0] = 1;           // direct multiple of modulo
+  tmp[0] = MONT;            // in montgomery field
+  // tmp[0] = 1;            // direct multiple of modulo
   for(i=1;i<128;i++)
     tmp[i] = tmp[i-1] * KYBER_ROOT_OF_UNITY % KYBER_Q;
 
@@ -202,44 +202,51 @@ void invntt(int16_t r[256]) {
   }
 }
 
-
-void print(int16_t* res,int len, int itemsPerLn) {
-
-  for (int i=0; i<len; i++) {
-    printf("%d, ", res[i]);      // _zeats by generating
-    if ((i+1)%itemsPerLn==0) printf("\n");
-  }
-  printf("\n");
-
-}
-
-int main() {
+void validate_init() {
+  printf("Validate initial zetas...\n");
   int16_t res[128];
   init_ntt_naive(res);
-  print(res, 128, 16);
+  // print(res, 128, 16);
+  for (int i=0; i<128; ++i) 
+    if (res[i]!=zetas[i]) {
+      printf("Wrong.\n\n");
+      break;
+    }
 
   init_ntt(res);
-  print(res, 128, 16);
+  for (int i=0; i<128; ++i) 
+    if (res[i]!=zetas[i]) {
+      printf("Wrong.\n\n");
+      break;
+    }
+  printf("Ok.\n\n");
+  // print(res, 128, 16);
+}
 
-  int16_t ring1[256], ring2[256];
+// Validate ntt && invntt
+// check if the initial vector is equals to v == invntt(ntt(v))
+void validate_ntt() {
+  printf("Validate ntt and invntt functions...\n");
+  int16_t ring1[256], cp[256];
   
   memset(ring1, 0, sizeof(ring1));
-  memset(ring2, 0, sizeof(ring2));
+  memset(cp, 0, sizeof(cp));
   
   for (int i = 0; i<256; i++) {
     ring1[i] = i * i % KYBER_Q;
   }
-  // for(int i=0; i<256; i++) {
-  //   ring1[i] = fqmul(ring1[i], MONT); 
-  // }
-  print(ring1, 256, 16);
-  
+  // print the ring for debug
+  // print(ring1, 256, 16);
   ntt(ring1);
-  print(ring1, 256, 16);
-
   invntt(ring1);            // In mont field
-  
-  print(ring1, 256, 16);
+
+  for (int i=0; i<256; i++) {
+    if (ring1[i] != cp[i]) {
+      printf("Wrong.\n\n");
+      return;
+    }
+  }
+  printf("Ok.\n\n");
 
   // const int16_t f = (1ULL << 32) % KYBER_Q;
   // printf("f = %d\n", f);   
@@ -253,6 +260,23 @@ int main() {
   //     ring1[i] = barrett_reduce(ring1[i]);    // 确保系数在 [0, q)
   // }
   // print(ring1, 256, 16);
+}
 
-  printf("%d\n ", fqmul(1, MONT));
+
+void print(int16_t* res,int len, int itemsPerLn) {
+
+  for (int i=0; i<len; i++) {
+    printf("%d, ", res[i]);      // _zeats by generating
+    if ((i+1)%itemsPerLn==0) printf("\n");
+  }
+  printf("\n");
+
+}
+
+int main() {
+  validate_init();
+
+  // Validate ntt && invntt
+  validate_ntt();
+
 }

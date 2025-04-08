@@ -5,7 +5,28 @@ using namespace std;
 class Solution {
 public:
     long long minimumMoves(vector<int>& nums, int k, int maxChanges) {
+        // 自行思考
+        // 思路，实质上就是距离和，枚举以每个索引为 aliceIndex, 
+        // 在应 O(1) 时间计算出所需行动次数的最小值
+        // 1. 区间的 1 数量应该为 k - maxChange <= x <= k
+        // 2. 区间中 j nums[j] = 1, |j - aliceIndex|为操作次数
+        // 3. 所有满足条件的 j 的最小的操作次数之和的最小值
+        // 4. 使用 maxChange 的得到 1 的次数固定为 2, 对于|j - aliceIndex|>2的，
+        //    可优先使用maxChange，越大于 2
+        // 确定 边界的情况下 j_b <= aliceIndex <= j_e
+        // 最短的距离为：
+        // pred[je+1] + pred[jb] - (pred[aliceIndex] - pred[aliceIndex+1])
+        // + i(pres[i]+pres[i+1]-pres[jb]-pres[je+1])
+        // pres 为 nums[i] 的前缀和，统计区间内的 1 的数量
+        // pred 为 nums[j] * j 的前缀和，统计区间内的距离和
 
+        // 参考题解：
+        // 1，如何确定 jb 及 je，二分查找最小的 d 满足 [aliceIndex-d, aliceIndex+d] 
+        //    区间内的1的数量为 k - maxChanges
+        // 2, 当 sum(nums[aliceIndex-1] .. nums[aliceIndex+1]) < k 时不使用 maxChanges
+        //    否则优先使用 maxChanges，res += 2 * t
+        //    其中 t = min(maxChanges, sum(nums[aliceIndex-1] .. nums[aliceIndex+1])-k)
+        
         int n = nums.size();
         vector<long> pres(n+1), predis(n+1);
 

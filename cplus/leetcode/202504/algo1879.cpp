@@ -18,8 +18,8 @@ public:
             // 计算包含一个的个数，减少一个递归参数
             int i = n - __builtin_popcount(state);  
             for (int j=0; j<n; j++) if ((state >> j) & 1) 
-                    // 按题解计算数组异或
-                    res = min(res, (nums1[i] ^ nums2[j]) + dfs(state - (1 << j))) ;
+                // 按题解计算数组异或
+                res = min(res, (nums1[i] ^ nums2[j]) + dfs(state - (1 << j))) ;
 
             return res;
         };

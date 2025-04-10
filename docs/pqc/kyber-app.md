@@ -88,7 +88,7 @@ $$
 
 #### 2.1.2.3. 生成公钥矩阵 A
 $$
-\mathbf{A} = \begin{bmatrix} 
+\mathbf{A} = \begin{bmatrix}
 A_{11} = 11x^3 + 6x^2 + 15x + 8 & A_{12} = 5x^3 + 13x^2 + 9x + 2 \\
 A_{21} = 7x^3 + 4x^2 + 12x + 1 & A_{22} = 14x^3 + 3x^2 + 10x + 16 
 \end{bmatrix}
@@ -101,34 +101,35 @@ $$
 \mathbf{e} = \begin{bmatrix} x^2 - x \\ 0 \end{bmatrix} = \begin{bmatrix} [0,1,-1,0] \\ [0,0,0,0] \end{bmatrix}
 $$
 
-#### 2.1.2.4. 计算 t = As + e
+#### 2.1.2.5. 计算 t = As + e
 
-##### 2.1.2.4.1 计算 t' = As
+##### 2.1.2.5.1 计算 $\mathbf{t}_{\text{noiseless}} = \mathbf{As}$
 
-- **第一分量 t₁**
+首先计算第一分量 $t_1$
 $$
 \begin{aligned}
 &(11x^3+6x^2+15x+8)(7x^3+2x^2-x+3) \\
 &+ (5x^3+13x^2+9x+2)(4x^3-2x^2+5x-1) \\
-&= \textcolor{blue}{77x^6 + 22x^5 - 11x^4 + 33x^3} \\
-&\quad + \textcolor{green}{42x^5 + 12x^4 - 6x^3 + 18x^2} \\
-&\quad + \textcolor{red}{105x^4 + 30x^3 - 15x^2 + 45x} \\
-&\quad + \textcolor{purple}{56x^3 + 16x^2 - 8x + 24} \\
-&+ \textcolor{orange}{20x^6 - 10x^5 + 25x^4 - 5x^3} \\
-&\quad + \textcolor{brown}{52x^5 - 26x^4 + 65x^3 - 13x^2} \\
-&\quad + \textcolor{cyan}{36x^4 - 18x^3 + 45x^2 - 9x} \\
-&\quad + \textcolor{magenta}{8x^3 - 4x^2 + 10x - 2} \\
-&\equiv 97x^6 + 106x^5 + 141x^4 + 163x^3 + 47x^2 + 38x + 22\\
-&\equiv (-97)x^2 + (-106)x + (-141) + 163x^3 + 47x^2 + 38x + 22\\
+&= 77x^6 + 22x^5 - 11x^4 + 33x^3 \\
+&\quad + 42x^5 + 12x^4 - 6x^3 + 18x^2 \\
+&\quad + 105x^4 + 30x^3 - 15x^2 + 45x \\
+&\quad + 56x^3 + 16x^2 - 8x + 24 \\
+&+ 20x^6 - 10x^5 + 25x^4 - 5x^3 \\
+&\quad + 52x^5 - 26x^4 + 65x^3 - 13x^2 \\
+&\quad + 36x^4 - 18x^3 + 45x^2 - 9x \\
+&\quad + 8x^3 - 4x^2 + 10x - 2 \\
+&\equiv \textcolor{magenta}{97x^6} + \textcolor{magenta}{106x^5} + \textcolor{magenta}{141x^4} + 163x^3 + 47x^2 + 38x + 22\\
+&\equiv \textcolor{green}{(-97)x^2} + \textcolor{green}{(-106)x} + \textcolor{green}{(-141)} + 163x^3 + 47x^2 + 38x + 22\\
 &\equiv 163x^3 -50x^2 - 68x - 119\\
 &\equiv 10x^3 + 1x^2 + 0x + 0 \quad (\text{mod } x^4+1, \text{mod }17)
 \end{aligned}
 $$
 
+多项式环包含**两个模操作**：
+- 系数模操作，例如 $163 \equiv 10 \bmod 17$, $-50 \equiv 1 \bmod 17$
+- 次数模操作，例如 $96x^4 \equiv 96x^2(x^4+1) -96x^2 \bmod x^4+1 \equiv -96x^2 \bmod x^4+1$
 
-- **第二分量 t₂**
-
-同第一分量计算，过程略
+第二分量 $t_2$ 同第一分量计算过程，得到 $t_2$：
 $$
 \begin{aligned}
 &(7x^3+4x^2+12x+1)(7x^3+2x^2-x+3) \\
@@ -137,7 +138,7 @@ $$
 \end{aligned}
 $$
 
-- **无噪声结果**
+得到无噪声结果结果 $\mathbf{t}_{\text{noiseless}}$
 $$
 \mathbf{t}_{\text{noiseless}} = \begin{bmatrix}
 10x^3 + 1x^2 + 0x + 0 \\
@@ -145,16 +146,16 @@ $$
 \end{bmatrix}
 $$
 
-##### 2.1.2.4.12 计算 t = t' + e
+##### 2.1.2.5.2 计算 t = $\mathbf{t}_{\text{noiseless}}$ + e
 
-- **计算步骤**
+通过下列的公式，计算
 $$
-\mathbf{t}_{\text{noisy}} = \mathbf{A} \cdot \mathbf{s} + \mathbf{e} = \mathbf{t}_{\text{noiseless}} + \begin{bmatrix} x^2 - x \\ 0 \end{bmatrix}
+\mathbf{t} = \mathbf{A} \cdot \mathbf{s} + \mathbf{e} = \mathbf{t}_{\text{noiseless}} + \begin{bmatrix} x^2 - x \\ 0 \end{bmatrix}
 $$
 
-- **含噪声结果，得到最终的公钥 t**
+得到最终的公钥 t
 $$
-\mathbf{t}_{\text{noisy}} = \begin{bmatrix}
+\mathbf{t} = \begin{bmatrix}
 10x^3 + x^2 + 2x + 1 \\
 8x^3 + 14x^2 + 11x + 3
 \end{bmatrix}
@@ -166,7 +167,7 @@ $$
 #### 2.1.3.1. 明文编码
 $$
 m = 1x^3 + 0x^2 + 1x + 1 = [1,1,0,1] \\
-\text{放大：} \lfloor 17/2 \rfloor \cdot m = 9x^3 + 9x + 9
+\text{放大：} \lfloor 17/2 \rceil \cdot m = 9x^3 + 9x + 9
 $$
 
 #### 2.1.3.2. 加密计算

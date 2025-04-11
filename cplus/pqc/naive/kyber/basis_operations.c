@@ -150,6 +150,18 @@ void init_ntt_naive(int16_t zetas[128]) {
   return _br(tmp, zetas);
 }
 
+
+void print(int16_t* res,int len, int itemsPerLn) {
+
+  for (int i=0; i<len; i++) {
+    printf("%d, ", res[i]);      // _zeats by generating
+    if ((i+1)%itemsPerLn==0) printf("\n");
+  }
+  printf("\n");
+
+}
+
+
 /*************************************************
 * Name:        ntt
 *
@@ -236,7 +248,7 @@ void validate_ntt() {
     ring1[i] = i * i % KYBER_Q;
   }
   // print the ring for debug
-  // print(ring1, 256, 16);
+  print(ring1, 256, 16);
   ntt(ring1);
   invntt(ring1);            // In mont field
 
@@ -263,15 +275,6 @@ void validate_ntt() {
 }
 
 
-void print(int16_t* res,int len, int itemsPerLn) {
-
-  for (int i=0; i<len; i++) {
-    printf("%d, ", res[i]);      // _zeats by generating
-    if ((i+1)%itemsPerLn==0) printf("\n");
-  }
-  printf("\n");
-
-}
 
 int main() {
   validate_init();

@@ -24,7 +24,7 @@ public:
         vector<int> next(n+1, -1);
         vector<vector<int>> memo(1<<n, vector<int>(n+1, mx));
         auto dfs = [&] (this auto&& dfs, int state, int i) ->int {
-            if (state == 0) return 0;
+            if (state == 0) return memo[0][i] = 0;
 
             auto& res = memo[state][i];
             if (res != mx) return res;
@@ -42,8 +42,22 @@ public:
         };
         int ans = dfs((1<<n)-1, n);
 
-
-        return to_string(ans);
+        // print result
+        int state = (1<<n)-1, i = n, len = ans;
+        string result = "";
+        while (state) {
+            for (int j=0; j<n; ++j) {
+                if (state>>j & 1) {
+                    int hhead = (i!=n?eq[i][j]:0), head = (int)words[j].size()-hhead;
+                    if (len == head + memo[state - (1<<j)][j]) {
+                        i = j, len -= head, state -= (1<<j);
+                        result += words[j].substr(hhead);
+                        break;
+                    }
+                }
+            }
+        }
+        return result;
 
     }
 

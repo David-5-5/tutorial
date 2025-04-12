@@ -13,7 +13,10 @@ public:
             return used+tasks[i] > sessionTime;
         };
         
-
+        // 这个状态码的定义太漂亮了
+        // vector 元素包含两个内容，
+        // 前16位表示当前的时间段，从 1 开始
+        // 后16位表示当前时间段已使用的时间，从 0 开始
         vector<int> dp(1<<n, INT_MAX/2);
         dp[0] = 1<<16 | 0;
         for (int mask=0; mask<(1<<n); ++mask) {

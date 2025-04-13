@@ -5,6 +5,7 @@ using namespace std;
 class Solution {
 public:
     bool canDistribute(vector<int>& nums, vector<int>& quantity) {
+        // 自行解答
         unordered_map<int, int> cnt_map;
         for (auto& v : nums) cnt_map[v] ++;
         vector<int> cnt;
@@ -24,12 +25,12 @@ public:
 
         for (int i=0; i<n; ++i) for (int mask=0; mask<m; ++mask) {
             if (dp[i][mask]==false) continue;
-            dp[i+1][mask] = true;  
-            int exclusive = m - 1 - mask;
+            dp[i+1][mask] = true;  // 关键一步
+            int exclusive = m - 1 - mask;   // mask 补集的子集遍历
             int sub = exclusive;
             while (sub) {
                 if (cnt[i] >= comb[sub]) dp[i+1][mask|sub] = true;
-                sub = (sub-1) & exclusive;
+                sub = (sub-1) & exclusive;  // 子集遍历
             }
         }
 

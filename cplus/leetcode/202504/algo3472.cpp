@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-// 动态规划 -  区间 DP
+// 动态规划 - 最长回文子序列
 class Solution {
 public:
     int longestPalindromicSubsequence(string s, int k) {

@@ -5,6 +5,7 @@ using namespace std;
 class Solution {
 public:
     int maxTrailingZeros(vector<vector<int>>& grid) {
+        // 自行解答
         int m = grid.size(), n = grid[0].size();
 
         vector<vector<int>> pre_row_2(m, vector<int>(n+1));

@@ -5,7 +5,7 @@ using namespace std;
 class Solution {
 public:
     vector<bool> canMakePaliQueries(string s, vector<vector<int>>& queries) {
-        
+        // 自行解答
         int n = s.length();
         vector<int> prex(n+1);
         for (int i=0; i<n; i++) prex[i+1] = prex[i] ^ (1 << (s[i]-'a'));

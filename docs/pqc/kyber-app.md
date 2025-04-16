@@ -300,16 +300,15 @@ m' &= 7x^3 + 11x^2 + x + 16 - (16x^3 + 12x^2 + 8x + 8) \\
 \end{aligned}
 $$
 
-
-
-
 #### 2.1.4.2. 解码
+系数距离 $\lfloor q/2 \rceil$ 或 $0/q$ 更近，$q=17$ 的情况下，系数在 [5, 12]之间为 1， 其他区间为 0
+
 | 系数项 | 计算值 | $\lfloor \text{值}/9 \rfloor$ | 解码bit |
 |--------|--------|-------------------------------|---------|
-| $x^3$  | 9      | 1                             | 1       |
-| $x^2$  | 0      | 0                             | 0       |
-| $x$    | 9      | 1                             | 1       |
-| 常数项 | 9      | 1                             | 1       |
+| $x^3$  | 6      | 1                             | 1       |
+| $x^2$  | 16      | 0                             | 0       |
+| $x$    | 8      | 1                             | 1       |
+| 常数项 | 8      | 1                             | 1       |
 
 **最终明文**：`1011` 解密成功
 
@@ -425,3 +424,74 @@ e可能值 = { -1,0,1 }⁴ → 3⁴=81种/多项式
 
 
 #### 2.2.2.2 噪声及解密正确性
+
+复习一下上述出现的计算公式：
+计算公钥 $\mathbf{t} = \mathbf{As} + \mathbf{e} (1)$
+
+加密计算：
+- $\mathbf{u} = \mathbf{A^Tr} + \mathbf{e_1}$
+- $v = \mathbf{t^Tr} + e_2 + m$
+
+解密计算 $m'  = v - \mathbf{s^Tu}$
+
+正确性证明：将 $v$ 和 $\mathbf{u}$ 带入解密公式：
+$$
+\begin{aligned} 
+m' &= \mathbf{t^Tr} + e_2 + m - \mathbf{s^T(A^Tr + e_1)} \\
+  & = \mathbf{t^Tr} + e_2 + m - \mathbf{s^TA^Tr - s^Te_1}\\
+  &= \mathbf{(As + e)^Tr} + e_2 + m - \mathbf{(As)^Tr - s^Te_1} \\
+  &= \mathbf{(As)^Tr} + \mathbf{e^Tr} + e2 + m -\mathbf{(As)^Tr - s^Te_1} \\
+  &= m + \underline{\mathbf{e^Tr} + e_2 - \mathbf{s^Te_1}}
+\end{aligned} 
+$$
+
+上式中带下划线的部分称为“噪声”，kyber 通过中心二项分布的随机采样保证噪声在可控范围内不影响解密的正确性，保证噪声的系数小于 $\frac{q}{4}$, $q=17$ 的情况下噪声绝对值小于 4。
+
+用上面的 $\mathbf{e, r, e_1}, e2$ 计算 $noise = \mathbf{e^Tr} + e_2 - \mathbf{s^Te_1}$
+
+其中
+$$
+\begin{aligned} 
+\mathbf{e^Tr} & = (x^2-x)(-x^3+x^2) + (0)(x^3+x^2+1) \\
+ & = -x^5 + x^4 + x^4 - x^3 \\
+ & = -x^5 + 2x^4 - x^3 \\
+ & = x - 2 - x^3 = -x^3 + x - 2  
+\end{aligned} 
+$$
+
+$$
+\begin{aligned} 
+\mathbf{s^Te_1} & = (x^2-x+1)(x^2+x) + (-x^3+x)x^2 \\
+ & = x4 + x - x^5 + x^3 \\
+ & = -1 + x + x + x^3 \\
+ & = x^3 + 2x - 1  
+\end{aligned} 
+$$
+
+$$
+\begin{aligned} 
+noise & = \mathbf{e^Tr} + e_2 - \mathbf{s^Te_1}\\
+ & = (-x^3 + x - 2) + (-x^3 - x^2) - ( x^3 + 2x - 1 ) \\
+ & = -3x^3 - x^2 - x - 1
+\end{aligned} 
+$$
+得到最终的噪声 $-3x^3 - x^2 - x - 1$，其系数的绝对值小于 $\frac{q}{4}$，不影响解密的正确性。
+
+回顾一下 m = {1,0,1,1} 转换为多项式为
+$$
+\begin{aligned} 
+m \cdot \lfloor\frac{q}{2}\rceil & = (x^3 + 0x^2 + x^1 + 1) \cdot 9 \\
+ & = 9x^3 + 9^x + 9
+\end{aligned} 
+$$
+
+$$
+\begin{aligned} 
+m + noise & = (9x^3 + 9^x + 9) + (-3x^3 - x^2 - x - 1) \\
+  & = 6^x - x^2 + 8x + 8 \\
+  & = 6^x + 16x^2 + 8x + 8 
+\end{aligned} 
+$$
+恰好为 2.1.4节 解密结果
+
+

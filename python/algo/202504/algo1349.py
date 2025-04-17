@@ -4,6 +4,7 @@ from typing import List
 
 class Solution:
     def maxStudents(self, seats: List[List[str]]) -> int:
+        # 自行解答
         m, n = len(seats), len(seats[0])
 
         def check(top:int, left, pos:int) -> bool:

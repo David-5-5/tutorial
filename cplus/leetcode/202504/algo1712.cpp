@@ -5,7 +5,7 @@ using namespace std;
 class Solution {
 public:
     int waysToSplit(vector<int>& nums) {
-        
+        // 自行解答，勉强通过，这个边界情况，搞得头大
         const int mod = 1e9 + 7;
 
         int n = nums.size();

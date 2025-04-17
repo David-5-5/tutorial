@@ -22,7 +22,7 @@ class Solution:
             # top 表示上一行学生座位的状态压缩
             # left 表示当前行学生座位的状态压缩，在当前座位的左边
             # pos 当前座位的位置
-            # 时间复杂度
+            # 时间复杂度O(mn2^(2n)) 
 
             if pos == m * n: return 0
             

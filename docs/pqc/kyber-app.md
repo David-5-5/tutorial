@@ -641,6 +641,7 @@ uint16_t mont_reduce(uint32_t x) {
     uint32_t u = (x * QINV) & 0xFFFF;
     return (x + u * KYBER_Q) >> 16; 
 }
+```
 关键优势有三：
 
 - 速度：比Barrett约减快2倍，比传统模除快8-10倍
@@ -685,3 +686,15 @@ q_inv的预计算（初始化时一次性完成）可能需要除法，但运行
 密码学需求：避免条件分支，实现恒定时间防御侧信道攻击
 
 一句话：Montgomery的第一步骤是伪装成取模的位运算，和除法彻底无关。
+
+# Montgomery模乘 vs Montgomery约减：深度解析
+
+## 1. 概念关系图解
+```mermaid
+graph LR
+A[Montgomery模乘] --> B[包含]
+B --> C[Montgomery约减]
+B --> D[域转换]
+B --> E[常规乘法]
+```
+

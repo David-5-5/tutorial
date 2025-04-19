@@ -5,6 +5,7 @@ using namespace std;
 class Solution {
 public:
     int minSubarray(vector<int>& nums, int p) {
+        // 自行解答
         int n = nums.size();
         vector<long> pres(n+1);
 

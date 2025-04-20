@@ -44,5 +44,24 @@ public:
         return ans;
     }
 
+    int findTheLongestSubstring3(string s) {
+        // 一次遍历
+        int n = s.length();
 
+        int ans = 0, prex = 0;
+        unordered_map<int, int> pos;
+        pos[prex] = -1;
+        for (int i=0; i<n; i++) {
+            if (s[i]=='a') prex ^= 1 << 0;
+            else if (s[i]=='e') prex ^= 1 << 1;
+            else if (s[i]=='i') prex ^= 1 << 2;
+            else if (s[i]=='o') prex ^= 1 << 3;
+            else if (s[i]=='u') prex ^= 1 << 4;
+
+            if (pos.count(prex)) ans = max(ans, i-pos[prex]);
+            if (!pos.count(prex)) pos[prex] = i;
+            
+        }
+        return ans;
+    }
 };

@@ -587,11 +587,12 @@ D[效率] -->|降低噪声| E(更高的失败率)
 
 # 4. 必须掌握的优化技巧
 
-## 4.1 Montgomery约减
+## 4.1 Montgomery模乘
 
 给模运算装上"速算齿轮"
 
-### 核心原理
+
+### 4.1.1 Montgomery模乘介绍
 $$\text{Mont}(x) = \frac{x - q\cdot\lfloor x\cdot q_\text{inv}/R \rfloor}{R} \ \text{mod}\ q$$
 
 

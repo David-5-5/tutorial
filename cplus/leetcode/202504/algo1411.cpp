@@ -19,4 +19,49 @@ public:
 
         return ((long)col2 + col3) % mod;
     }
+
+    int numOfWays2(int n) {
+        // 参考题意 记忆化搜索
+        const int mod = 1e9 + 7;
+        vector<int> types;
+        for (int i=0; i<3; ++i)for (int j=0; j<3; ++j)for (int k=0; k<3; ++k) {
+            if (i != j && j != k) {
+                types.push_back(i*9 + j*3 + k); // 三进制数
+            }
+        }
+        
+        auto relate = [](int i, int j) -> bool {
+            if (i == 0 || j == 0) return true;
+            // correct
+            if (i / 9 == j / 9) return false;
+            if ((i / 3 % 3) == (j / 3 % 3)) return false;
+            if (i % 3 == j % 3) return false;
+            
+            // if (i / 9 == j / 9) return false;
+            // i %= 9, j %= 9;
+            // if (i / 3 == j / 3) return false;
+            // i %= 3, j %= 3;
+            // if (i == j) return false;
+            return true;
+        };
+
+        vector<vector<int>> memo(n, vector<int>(27, -1));
+        auto dfs = [&](this auto&& dfs, int i, int prev) -> int {
+            if (i == n) return 1;
+
+            auto& res = memo[i][prev];
+            if (res != -1) return res;
+            
+            res = 0;
+            for (auto& v: types) 
+                if (relate(v, prev)) res = ((long)res + dfs(i+1, v)) % mod;
+            return res;
+        };
+
+        return dfs(0, 0);
+        
+    } 
+
+
+
 };

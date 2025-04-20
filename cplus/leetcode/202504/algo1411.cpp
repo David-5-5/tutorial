@@ -62,6 +62,38 @@ public:
         
     } 
 
+    int numOfWays3(int n) {
+        // 类似于 numOfWays2, 数组代替函数
+        const int mod = 1e9 + 7;
+        vector<int> types;
+        for (int i=0; i<3; ++i)for (int j=0; j<3; ++j)for (int k=0; k<3; ++k) {
+            if (i != j && j != k) {
+                types.push_back(i*9 + j*3 + k); // 三进制数
+            }
+        }
+        
+        vector<vector<int>> relate(27, vector<int>(27));
+        for (int i=0; i<12; ++i) for (int j=0;j<12; ++j) {
+            int u = types[i], v = types[j];
+            if ((u / 9 != v / 9) && (u / 3 % 3 != v / 3 % 3) && (u % 3 != v % 3)) 
+                relate[u][v] = 1;
+        }
 
+        vector<vector<int>> memo(n, vector<int>(27, -1));
+        auto dfs = [&](this auto&& dfs, int i, int prev) -> int {
+            if (i == n) return 1;
+
+            auto& res = memo[i][prev];
+            if (res != -1) return res;
+            
+            res = 0;
+            for (auto& v: types) 
+                if (prev == 0 || relate[prev][v]) res = ((long)res + dfs(i+1, v)) % mod;
+            
+            return res;
+        };
+
+        return dfs(0, 0);
+    }    
 
 };

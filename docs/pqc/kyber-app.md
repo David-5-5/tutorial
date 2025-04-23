@@ -587,12 +587,12 @@ D[效率] -->|降低噪声| E(更高的失败率)
 
 # 4. 必须掌握的优化技巧
 
-## 4.1 Montgomery模乘
+## 4.1 Montgomery 模乘
 
-Montgomery模乘算法是一种高效的大数模乘计算方法，由Peter L. Montgomery在1985年提出。它通过将数字转换到Montgomery域中，避免了模运算中耗时的除法操作，特别适合硬件实现和密码学应用。
+Montgomery模乘算法是一种高效的大数模乘计算方法，由Peter L. Montgomery在1985年提出。它通过将数字转换到 Montgomery 域中，避免了模运算中耗时的除法操作，特别适合硬件实现和密码学应用。
 
 
-### 4.1.1 Montgomery模乘介绍
+### 4.1.1 Montgomery 模乘介绍
 现代CPU下，加减法及位操作的时钟周期需要1～3时钟周期，乘法需要3～10个时钟周期，而除法需要30+时钟周期。传统的模运算需要进行除法运算，获取余数。
 ```c++
 // 常规模乘计算
@@ -606,7 +606,7 @@ Montgomery模乘可以分为 3 个步骤：
 2. 计算 Montgomery 约减
 3. 转换回常规域（可选）
 
-因此，首先定义Montgomery域，相对于模数 q，选择 $R=2^n > q, R 	\bot q $，则对于常规域 $x \in \Z_q$，其对应的 Montgomery 域下的数 $\tilde{x}$
+因此，首先定义Montgomery域，相对于模数 q，选择 $R=2^n > q, R \bot q $，则对于常规域 $x \in \Z_q$，其对应的 Montgomery 域下的数 $\tilde{x}$
 $$
 \tilde{x} = xR \bmod q
 $$
@@ -618,22 +618,68 @@ Montgomery域与普通域关键操作对比
 | 减法 | $(a - b) \bmod q$ | $(\tilde{a}  + \tilde{b}) \bmod q$  | 完全一致，直接模减 |
 | 标量乘 | $(ka) \bmod q$ | $(k\tilde{a}) \bmod q$  | 完全一致，直接模减 |
 | 乘法 | $(a × b) \bmod q$ | $montmul(\tilde{a}, \tilde{b}) = (\tilde{a}×\tilde{b}×R^{-1}) \bmod q$  | Montgomery核心优化：<br>1. 用乘法和移位代替除法<br>2. 需预计算$q'=-q^{-1} \bmod R$ |
-| 转换 | - | $\tilde{a} = montmul(a, R^2 \bmod q)$| 进入Montgomery域的代价                                              |
+| 转换 | - | $\tilde{a} = montmul(a, R^2)$| 进入Montgomery域的代价                                              |
 | 逆转换 | - | $a = montmul(\tilde{a}, 1)$ | 退出Montgomery域的代价                                              |
 
 说明：
+- Montgomery域上的加法，减法以及标量乘法后，操作的结果仍在 Montgomery 域中，因此直接进行操作即可。由于加法、减法或标量乘操作可能超出模 q 的范围，其处理有如下三种方式：
+  1. 暂时溢出，待执行Montgomery域乘法时进行约简，这种方法称为 *惰性约简*
+  2. 进行加法操作后，可以执行以下语句：
+     ```c
+     if (result>=q) result -= q;
+     ```
+  3. 必须严格模N的情况，采用[4.2Barrett约减]()等无除法算法
+
+- 由于 $\tilde{a}\times \tilde{b} = abR^2$, 因此结果已经不在Montgomery 域中，因此需要乘以 $R^{-1}modq$，将结果重新映射到 Montgomery 域中。因此方法 $montmul$ 执行Montgomery域上乘法，又称为[4.1.2Montgomery约简]()，是Montgomery模乘的核心。
+
 
 ### 4.1.2 Montgomery约减
 
 
-```c++
-// 转入Montgomery域
-uint16_t to_mont(uint16_t x) {
-    return (x * R) % q;  // 实际实现用移位优化
-}
+### 4.1.3 Kyber中的Montgomery模乘
 
-// 转出Montgomery域
-uint16_t from_mont(uint16_t x_mont) {
-    return montgomery_mul(x_mont, 1, q, n);
+kyber中的Montgomery模乘是上面模乘的一个实例化。以下分段列出涉及到的代码
+
+ref/reduce.h 文件中，定义 Montgomery 域相关的预处理值。
+```c
+#define MONT -1044 // 2^16 mod q
+#define QINV -3327 // q^-1 mod 2^16
+```
+
+ref/reduce.c 文件中，定义了montgomery约简方法 montgomery_reduce，其：
+- 输入是两个 montgomery 域上数的乘积，已不在 montgomery 域上。
+- 输出是一个montgomery 域上乘积转换。
+```c
+int16_t montgomery_reduce(int32_t a)
+{
+  int16_t t;
+
+  t = (int16_t)a*QINV;
+  t = (a - (int32_t)t*KYBER_Q) >> 16;
+  return t;
 }
 ```
+
+ref/poly.c 文件中，将多项式上的系数从常规域转换到 montgomery 域。
+```c
+void poly_tomont(poly *r)
+{
+  unsigned int i;
+  const int16_t f = (1ULL << 32) % KYBER_Q;
+  for(i=0;i<KYBER_N;i++)
+    r->coeffs[i] = montgomery_reduce((int32_t)r->coeffs[i]*f);
+}
+```
+其中 $f$ 即是上节介绍的 $R^2$
+
+ref/ntt.c 文件中，定义了montgomery 模乘方法，其关键调用了 montgomery_reduce
+```c
+static int16_t fqmul(int16_t a, int16_t b) {
+  return montgomery_reduce((int32_t)a*b);
+}
+```
+
+
+## 4.2 Montgomery 模乘
+
+

@@ -5,9 +5,10 @@ using namespace std;
 class Solution {
 public:
     int maxProduct(string s) {
+        // 自行解答 状态压缩 + 位子集遍历
         int n = s.length();
         
-        vector<int> memo(1<<n, -1);
+        vector<int> memo(1<<n, -1);     // 记忆化
         auto is_pal = [&](int mask) -> bool {
             if (memo[mask]!=-1) return memo[mask];
 

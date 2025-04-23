@@ -589,16 +589,11 @@ D[效率] -->|降低噪声| E(更高的失败率)
 
 ## 4.1 Montgomery模乘
 
-给模运算装上"速算齿轮"
+Montgomery模乘算法是一种高效的大数模乘计算方法，由Peter L. Montgomery在1985年提出。它通过将数字转换到Montgomery域中，避免了模运算中耗时的除法操作，特别适合硬件实现和密码学应用。
 
 
 ### 4.1.1 Montgomery模乘介绍
-$$\text{Mont}(x) = \frac{x - q\cdot\lfloor x\cdot q_\text{inv}/R \rfloor}{R} \ \text{mod}\ q$$
-
-
-#### 4.1.1.1 为什么需要Montgomery？
-
-### 传统模运算的痛点
+现代CPU下，加减法及位操作的时钟周期需要1～3时钟周期，乘法需要3～10个时钟周期，而除法需要30+时钟周期。传统的模运算需要进行除法运算，获取余数。
 ```c++
 // 常规模乘计算
 int naive_modmul(int a, int b, int q) {
@@ -606,13 +601,30 @@ int naive_modmul(int a, int b, int q) {
 }
 ```
 
-硬件除法需要30+时钟周期，在多项式环运算中成为性能瓶颈
+Montgomery模乘可以分为 3 个步骤：
+1. 转换输入到Montgomery域
+2. 计算 Montgomery 约减
+3. 转换回常规域（可选）
 
-#### 4.1.1.2 数学基础
+因此，首先定义Montgomery域，相对于模数 q，选择 $R=2^n > q, R 	\bot q $，则对于常规域 $x \in \Z_q$，其对应的 Montgomery 域下的数 $\tilde{x}$
+$$
+\tilde{x} = xR \bmod q
+$$
 
-定义Montgomery域，对于模数 q，选择 $R=2^n > q, R 	\bot q $
-- 常规域 $x \in \Z_q$
-- Montgomery域: $\tilde{x} = xR \bmod q$
+Montgomery域与普通域关键操作对比
+| 操作类型 | 普通域运算  | Montgomery域运算 | 说明 |
+|---|---|---|---|
+| 加法 | $(a + b) \bmod q$ | $(\tilde{a}  + \tilde{b} ) \bmod q$  | 完全一致，直接模加|
+| 减法 | $(a - b) \bmod q$ | $(\tilde{a}  + \tilde{b}) \bmod q$  | 完全一致，直接模减 |
+| 标量乘 | $(ka) \bmod q$ | $(k\tilde{a}) \bmod q$  | 完全一致，直接模减 |
+| 乘法 | $(a × b) \bmod q$ | $montmul(\tilde{a}, \tilde{b}) = (\tilde{a}×\tilde{b}×R^{-1}) \bmod q$  | Montgomery核心优化：<br>1. 用乘法和移位代替除法<br>2. 需预计算$q'=-q^{-1} \bmod R$ |
+| 转换 | - | $\tilde{a} = montmul(a, R^2 \bmod q)$| 进入Montgomery域的代价                                              |
+| 逆转换 | - | $a = montmul(\tilde{a}, 1)$ | 退出Montgomery域的代价                                              |
+
+说明：
+
+### 4.1.2 Montgomery约减
+
 
 ```c++
 // 转入Montgomery域
@@ -625,13 +637,3 @@ uint16_t from_mont(uint16_t x_mont) {
     return montgomery_mul(x_mont, 1, q, n);
 }
 ```
-
-$$
-u = \frac{a + m \cdot q}{R}, \quad \text{其中 } m = a \cdot q^{-1} \mod R
-$$
-
-
-$$
-3329 \times 62209 \equiv -1 \mod 65536 \\
-3329 \times (-3327) \equiv 1 \mod 65536
-$$

@@ -634,6 +634,11 @@ Montgomery域与普通域关键操作对比
 
 
 ### 4.1.2 Montgomery约减
+方法 $\tilde{a}$，$\tilde{a}$
+输入 $ $
+
+$montmul(\tilde{a}, \tilde{b}) = (\tilde{a}×\tilde{b}×R^{-1}) \bmod q$
+
 
 
 ### 4.1.3 Kyber中的Montgomery模乘
@@ -680,6 +685,6 @@ static int16_t fqmul(int16_t a, int16_t b) {
 ```
 
 
-## 4.2 Montgomery 模乘
+## 4.2 Barrett 约减
 
 

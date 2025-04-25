@@ -63,5 +63,32 @@ public:
         return dfs(0, 0);
     }    
 
-    
+    int numberWays3(vector<vector<int>>& hats) {
+        // 自行解答 -  递归 -> 递推
+        const int mod = 1e9 + 7;
+        int n = hats.size(), mx = 0;
+        vector<vector<int>> persons(40, vector<int>());
+        for (int i=0; i<n; i++) {
+            for (auto& v : hats[i]) {
+                persons[v-1].push_back(i);
+                mx = max(v, mx);
+            }
+        }
+        
+        vector<vector<int>> dp(mx+1, vector<int>(1<<n));
+        dp[0][0] = 1;
+        for (int i=0; i<mx; i++) {
+            for (int s=0; s<(1<<n); s++) {
+                dp[i+1][s] = dp[i][s];
+                for (auto& v : persons[i]) {
+                    if (s>>v & 1) {
+                        dp[i+1][s] += dp[i][s^(1<<v)];
+                        dp[i+1][s] %= mod;
+                    } 
+                }
+
+            }
+        }
+        return dp[mx][(1<<n)-1];
+    }        
 };

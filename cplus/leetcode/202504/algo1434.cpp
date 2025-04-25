@@ -41,25 +41,27 @@ public:
             }
         }
         
-        unordered_map<int, int> memo;
+        vector<vector<long>> memo(mx, vector<long>(1<<n, -1));
         // 将 帽子戴 n 个人头上，s 第 i 个人是否戴帽子
         auto dfs = [&](this auto&& dfs, int i, int s) -> int {
             int j = __builtin_popcount(s);
             if (j == n) return 1;
             if (n-j > mx-i) return 0; // 剩下的帽子不够了
             
-            int mask = i << 10 | s;
-            if (memo.count(mask)) return memo[mask];
+            auto& res = memo[i][s];
+            if (res != -1) return res;
 
-            long res = dfs(i+1, s);     // 不选
+            res = dfs(i+1, s);     // 不选
             for (auto& v : persons[i]) {
                 if ((s>>v & 1) == 0) {
                     res += dfs(i+1, s|1<<v);
                 }
             }
-            return memo[mask] = (res % mod);
+            return res %= mod;
         };
 
         return dfs(0, 0);
     }    
+
+    
 };

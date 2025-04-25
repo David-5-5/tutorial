@@ -9,6 +9,7 @@ public:
         // dp[i][j] = min(dp[i-1][j], dp[i-1][j-1]. dp[i][j-1]) + 1, matrix[i][j] = 1
         //            1, i == 0 or j == 0
         // dp[i][j] = 0 , matrix[i][j] = 0
+        // 时间复杂度 O(nm)
         int n = matrix.size(), m = matrix[0].size();
         int ans = 0;
         vector<vector<int>> dp(n, vector<int>(m, 0));
@@ -24,4 +25,22 @@ public:
         }
         return ans * ans;
     }
+
+    int maximalSquare2(vector<vector<char>>& matrix) {
+        // 2025.04 前缀和 时间复杂度 O(min(m,n)nm)
+        int m = matrix.size(), n = matrix[0].size();
+
+        vector<vector<int>> pres(m+1, vector<int>(n+1));
+        int ans = 0;
+        for (int i=0; i<m; ++i) for (int j=0; j<n; ++j) {
+            pres[i+1][j+1] = (matrix[i][j]-'0') + pres[i][j+1] + pres[i+1][j] - pres[i][j];
+
+            for (int k=0; k<=i&&k<=j; ++k) {
+                if (pres[i+1][j+1] + pres[i-k][j-k] - pres[i+1][j-k] - pres[i-k][j+1] == (k+1)*(k+1))
+                    ans = max(ans, (k+1)*(k+1));
+                else break;
+            }
+        }
+        return ans;
+    }    
 };

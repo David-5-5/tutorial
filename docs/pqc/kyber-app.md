@@ -591,22 +591,31 @@ D[效率] -->|降低噪声| E(更高的失败率)
 
 Montgomery模乘算法是一种高效的大数模乘计算方法，由Peter L. Montgomery在1985年提出。它通过将数字转换到 Montgomery 域中，避免了模运算中耗时的除法操作，特别适合硬件实现和密码学应用。
 
-
-### 4.1.1 Montgomery 模乘介绍
-现代CPU下，加减法及位操作的时钟周期需要1～3时钟周期，乘法需要3～10个时钟周期，而除法需要30+时钟周期。传统的模运算需要进行除法运算，获取余数。
+### 4.1.1 普通模乘
+在普通计算模q时，利用的是带余除法。
 ```c++
 // 常规模乘计算
 int naive_modmul(int a, int b, int q) {
     return (a * b) % q  // 需要昂贵的除法
 }
 ```
+除法运算需要太多次乘法，计算复杂度较高。现代CPU下，加减法及位操作的时钟周期需要1～3时钟周期，乘法需要3～10个时钟周期，而除法需要30+时钟周期。
+
+
+### 4.1.2 Montgomery 模乘介绍
+
+参数定义，相对于普通模乘的模数 q 之外，需要定义：
+- 基数 $R = 2^k > q, R \bot q $
+- 预计算常数 $q' \equiv q \bmod R $
+
+基数 R 通常是 2 的幂，幂为 k，也就是说 k 是 q 的位宽。
 
 Montgomery模乘可以分为 3 个步骤：
 1. 转换输入到Montgomery域
 2. 计算 Montgomery 约减
 3. 转换回常规域（可选）
 
-因此，首先定义Montgomery域，相对于模数 q，选择 $R=2^n > q, R \bot q $，则对于常规域 $x \in \Z_q$，其对应的 Montgomery 域下的数 $\tilde{x}$
+则对于常规域 $x \in \Z_q$，x 对应的 Montgomery 域下的数 $\tilde{x}$ 的计算方法如下：
 $$
 \tilde{x} = xR \bmod q
 $$
@@ -633,15 +642,26 @@ Montgomery域与普通域关键操作对比
 - 由于 $\tilde{a}\times \tilde{b} = abR^2$, 因此结果已经不在Montgomery 域中，因此需要乘以 $R^{-1}modq$，将结果重新映射到 Montgomery 域中。因此方法 $montmul$ 执行Montgomery域上乘法，又称为[4.1.2Montgomery约简]()，是Montgomery模乘的核心。
 
 
-### 4.1.2 Montgomery约减
-方法 $\tilde{a}$，$\tilde{a}$
-输入 $ $
+### 4.1.3 Montgomery约减
 
-$montmul(\tilde{a}, \tilde{b}) = (\tilde{a}×\tilde{b}×R^{-1}) \bmod q$
+Montgomery 域中两数直接相乘后，$\tilde{a}\times\tilde{b}\equiv (ab)R^2\bmod q$，其目标是 $\tilde{a}\times\tilde{b}\equiv (ab)R\bmod q$，因此需要除以 R 或乘以 $R^{-1}$.即：
+
+$$
+montmul(\tilde{a}, \tilde{b}) = (\tilde{a}\times\tilde{b}\times R^{-1}) \bmod q
+$$
+
+具体的实现步骤：
+1. 计算未约减的中间结果
+$$
+T = \tilde{a}\times\tilde{b}, 其中 0\leq T < q^2
+$$
+
+2. 构造约减因子 m
+求解 m 使得 T + mN 能被 R 整除
 
 
 
-### 4.1.3 Kyber中的Montgomery模乘
+### 4.1.4 Montgomery在kyber中应用
 
 kyber中的Montgomery模乘是上面模乘的一个实例化。以下分段列出涉及到的代码
 

@@ -77,9 +77,14 @@ public:
         
         vector<vector<int>> dp(mx+1, vector<int>(1<<n));
         dp[0][0] = 1;
+        // 状态转移：dp[i+1][s] = dp[i][s]              不选
+        //          dp[i+1][s] += dp[i][s^(1<<v)]      选 s 中当前选择的内容
+        // 这种写法不支持 dp[i+1][s|1<<v] += dp[i][s]
+        //         与 dp[i+1][s] = dp[i][s] 相互冲突覆盖
+        // 因此第一种状态转移方程不重不漏
         for (int i=0; i<mx; i++) {
             for (int s=0; s<(1<<n); s++) {
-                dp[i+1][s] = dp[i][s];
+                dp[i+1][s] = dp[i][s]; 
                 for (auto& v : persons[i]) {
                     if (s>>v & 1) {
                         dp[i+1][s] += dp[i][s^(1<<v)];

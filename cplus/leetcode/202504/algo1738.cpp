@@ -5,16 +5,17 @@ using namespace std;
 class Solution {
 public:
     int kthLargestValue(vector<vector<int>>& matrix, int k) {
+        // 自行解答
         int m = matrix.size(), n = matrix[0].size();
 
         vector<vector<int>> prex(m+1, vector<int>(n+1));
-        priority_queue<int, vector<int>, less<int>> max_heap;
+        priority_queue<int, vector<int>, less<int>> max_heap;   // 优先队列排序
         for (int i=0; i<m; ++i) for (int j=0; j<n; ++j) {
             prex[i+1][j+1] = matrix[i][j] ^ prex[i][j+1] ^ prex[i+1][j] ^ prex[i][j];
             max_heap.push(prex[i+1][j+1]);
         }
 
-        for (int i=0; i<k-1; i++) {
+        for (int i=0; i<k-1; i++) { // 弹出前 k-1 个值
             max_heap.pop();
         }
 

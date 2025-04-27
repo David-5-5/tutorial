@@ -606,7 +606,20 @@ int naive_modmul(int a, int b, int q) {
 
 参数定义，相对于普通模乘的模数 q 之外，需要定义：
 - 基数 $R = 2^k > q, R \bot q $
-- 预计算常数 $q' \equiv q \bmod R $
+- 预计算常数 $qinv \equiv q^{-1} \bmod R $
+
+> **逆元**
+在模运算中，给定整数 a 和模数 m，如果存在整数使得： $a⋅x \equiv 1(\bmod m)$ 则称 x 是 a 在模 m 下的逆元（或模逆元），记作 $a^{-1}$
+> $q^{-1}$ 是 q 在模 R 下的逆元。即 $q^{-1}q \equiv 1 \bmod R $
+python 语句支持逆元的计算
+```python
+q = 3329
+R = 65536      # 2 ** 16
+# qinv = pow(q, q-2, R) # 欧拉定理/费马小定理
+qinv = pow(q, -1, R)  # q = 62209 = -3327 mod R
+qinv * q % R          # 结果为 1
+```
+
 
 基数 R 通常是 2 的幂，幂为 k，也就是说 k 是 q 的位宽。
 

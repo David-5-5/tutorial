@@ -26,4 +26,35 @@ public:
         return mx_cnt;
     }
 
+    int countLargestGroup2(int n) {
+        // 复习 数位DP
+        string s = to_string(n);
+        int m = s.length();
+        // 参考题解 数位 DP
+        vector<vector<int>> memo(m, vector<int>(9*m+1, -1));
+
+        auto f = [&] (this auto&& f, int i, int target, bool limit) -> int {
+            if (target<0) return 0;
+            if (i == m) return target==0;
+
+            if (!limit && memo[i][target]!= -1) return memo[i][target];
+
+            int res = 0;
+            int up = limit?s[i]-'0':9;
+            for (int d=0; d<=up; ++d) {
+                res += f(i+1, target-d,limit && d==up);
+            }
+            if (!limit) memo[i][target]=res;
+            return res;
+        };
+
+        int mx_cnt = 0, ans = 0;
+        for (int t=1; t<=9*m; t++) {
+            int cnt = f(0, t, true);
+            if (cnt > mx_cnt) {
+                mx_cnt = cnt, ans = 1;
+            } else if (cnt == mx_cnt) ans ++;
+        }
+        return ans;
+    }
 };

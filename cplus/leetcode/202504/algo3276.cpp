@@ -15,7 +15,7 @@ public:
         vector<vector<int>> f(mx+1, vector<int>(1<<n));
 
         vector<vector<int>> memo(mx+1, vector<int>(1 << n, -1));
-        // 关键点：不好已选择行的数值，将可选数进行状态转移
+        // 关键点：不好记录已选择行的数值，将可选数进行状态转移
         // 记忆化搜索还是比较好写
         auto dfs = [&] (this auto&& dfs, int i, int s)->int {
             if (i == 0 || s == (1<<n) - 1) return 0;

@@ -609,9 +609,10 @@ int naive_modmul(int a, int b, int q) {
 - 预计算常数 $qinv \equiv q^{-1} \bmod R $
 
 > **逆元**
-在模运算中，给定整数 a 和模数 m，如果存在整数使得： $a⋅x \equiv 1(\bmod m)$ 则称 x 是 a 在模 m 下的逆元（或模逆元），记作 $a^{-1}$
+在模运算中，给定整数 a 和模数 m，如果存在整数使得： $a\cdot x \equiv 1(\bmod m)$； 则称 x 是 a 在模 m 下的逆元（或模逆元），记作 $a^{-1}$
 > $q^{-1}$ 是 q 在模 R 下的逆元。即 $q^{-1}q \equiv 1 \bmod R $
-python 语句支持逆元的计算
+
+python 内置函数逆元的计算，示例如下：
 ```python
 q = 3329
 R = 65536      # 2 ** 16
@@ -619,6 +620,7 @@ R = 65536      # 2 ** 16
 qinv = pow(q, -1, R)  # q = 62209 = -3327 mod R
 qinv * q % R          # 结果为 1
 ```
+> 其他语言需要通过扩展欧几里德算法或快速幂计算逆元
 
 
 基数 R 通常是 2 的幂，幂为 k，也就是说 k 是 q 的位宽。
@@ -670,11 +672,73 @@ T = \tilde{a}\times\tilde{b}, 其中 0\leq T < q^2
 $$
 
 2. 构造约减因子 m
-求解 m 使得 T + mN 能被 R 整除
+求解 m 使得 $T - m\times q$ 能被 R 整除
+$$
+\begin{aligned} 
+m &\equiv  T\cdot qinv (\bmod R) \\
+m &\equiv (T \bmod R) \times qinv (\bmod R)
+\end{aligned} 
+$$
 
 
+3. 约减运算
+通过加法和移位消除低位：
+$$
+\frac{T - m\times q}{R}\equiv T\cdot R^{-1} (\bmod q), where: T -m\times q \equiv 0 (\bmod R)
+$$
 
-### 4.1.4 Montgomery在kyber中应用
+
+**正确性证明**
+将 2 代入 $T - m\times q$ 得到：
+$$
+T - m\times q \equiv T - [(T \bmod R)\cdot qinv]\cdot q (mod R)
+$$
+因为 $qinv\cdot q\equiv 1 (bmod R)$ 代入上式:
+$$
+\begin{aligned} 
+T - m\times q &\equiv T - (T \bmod R)\cdot (qinv\cdot q) (mod R) \\
+&\equiv T - (T \bmod R) (\bmod R)
+\end{aligned} 
+$$
+T 可以表示为 $(T\div R)\cdot R + (T \bmod R), 其中 (T\div R) 是整数除法的商， (T\bmod R) 是余数，代入上式 $
+$$
+\begin{aligned} 
+T - m\times q &\equiv (T\div R)\cdot R + (T \bmod R) - (T \bmod R) (mod R) \\
+&\equiv (T\div R)\cdot R (\bmod R) \equiv 0 (\bmod R)
+\end{aligned} 
+$$
+
+由于 $T - m\times q$ 能被 R 整除，因此最终除以 R 即可。
+
+**性能优化**
+第 2, 3 步会对 R 进行取模和除法操作，相比较于对 q 进行取模和除法操作（30个时钟周期），对于特殊取值的 R（2的幂）的取模和除法操作，可通过移位和异或操作完成，仅需要1~3个时钟周期。以下是实际的实现代码：
+```c
+// 例如 R = 2 ^ 16, 
+// 等价于 a % R
+int mod(int a) {
+   return a ^ ((1<<16) - 1);
+}
+
+// 等价于 a / R
+int div(int a) {
+   return a >> 16;
+}
+```
+
+更加直观的理解，对于十进制数 123456 除以/模 123, 需要大量的除法计算。但是如果 123456 除以/模 1000, 一眼就可以算出结果，商为 123, 余数为 456。二机制下 R 取 2的幂，原理是一致的。
+
+
+### 4.1.4 Montgomery 应用场景
+
+Montgomery模乘算法的核心优势在于其计算效率。该算法通过预计算参数将模约减操作转化为移位运算，显著提升了模乘运算速度，特别适用于硬件实现。其运算时间恒定，能够有效抵御侧信道攻击，在需要连续模乘运算的密码学应用中表现优异。
+
+该算法的主要局限性在于初始化成本较高。每次更换模数都需要重新计算相关参数，导致其在动态模数环境下的适用性受限。同时，数据在普通域和Montgomery域之间的转换增加了实现复杂度，对于资源受限的嵌入式系统或单次运算场景可能不够理想。
+
+综合来看，Montgomery算法是处理固定模数、在montgomery域下进行高频率模乘运算的理想选择，但在动态模数或低频率运算场景中，其优势可能无法体现。
+
+而[4.2Barrett]()约减通过预计算和算术技巧显著提升模运算效率，适合单次约减。
+
+### 4.1.5 Montgomery在kyber中应用
 
 kyber中的Montgomery模乘是上面模乘的一个实例化。以下分段列出涉及到的代码
 

@@ -610,7 +610,8 @@ int naive_modmul(int a, int b, int q) {
 
 > **逆元**
 在模运算中，给定整数 a 和模数 m，如果存在整数使得： $a\cdot x \equiv 1(\bmod m)$； 则称 x 是 a 在模 m 下的逆元（或模逆元），记作 $a^{-1}$
-> $q^{-1}$ 是 q 在模 R 下的逆元。即 $q^{-1}q \equiv 1 \bmod R $
+
+$q^{-1}$ 是 q 在模 R 下的逆元。即 $q^{-1}q \equiv 1 \bmod R $
 
 python 内置函数逆元的计算，示例如下：
 ```python
@@ -725,7 +726,7 @@ int div(int a) {
 }
 ```
 
-更加直观的理解，对于十进制数 123456 除以/模 123, 需要大量的除法计算。但是如果 123456 除以/模 1000, 一眼就可以算出结果，商为 123, 余数为 456。二机制下 R 取 2的幂，原理是一致的。
+更加直观的理解，对于十进制数 123456 除以/模 56, 需要大量的除法计算。但是如果 123456 除以/模 1000, 一眼就可以算出结果，商为 123, 余数为 456。二机制下 R 取 2的幂，原理是一致的。
 
 
 ### 4.1.4 Montgomery 应用场景
@@ -784,4 +785,38 @@ static int16_t fqmul(int16_t a, int16_t b) {
 
 ## 4.2 Barrett 约减
 
+Barrett约减（Barrett Reduction）是一种用于大整数模运算的快速算法，由Paul Barrett在1986年提出。它通过预计算一个与模数相关的常数，将耗时的除法操作转化为乘法和移位运算，从而提升模约减的效率，尤其适用于重复对同一模数取模的场景（如密码学中的模幂运算）。
 
+### 4.1.1 Barrett 介绍
+
+参数定义，对于对于固定的模数 q，预先计算常数 $\mu = \lfloor\frac{2^{2k}}{q}\rfloor$，其中 k 是 q 的二进制位数。
+
+约减阶段，对于任意整数 $x < q^2$，通过以下步骤计算 通过以下步骤计算 $x\bmod q$:
+- 近似商计算: $m \leftarrow \lfloor\frac{x\cdot\mu}{2^{2k}}\rfloor$
+- 精确化余数： $r \leftarrow x - m\cdot q$
+- 调整结果：若 $r \geq q$，则 $r \leftarrow r - q$
+
+
+**正确性证明**
+根据上面的计算公式，需要证明正式商 $m_{true}$ 与上面计算的近似商 m 的误差不超过 1。
+定义真实商：
+$$
+m_{\text{true}} = \left\lfloor \frac{x}{q} \right\rfloor
+$$
+由 $\mu$ 的定义：
+$$
+\frac{2^{2k}}{q} - 1 < \mu \leq \frac{2^{2k}}{q} 
+$$
+因此，不等式两端同乘以 $\frac{x}{2^{2k}}$ 可以得到下式：
+$$
+\frac{x \cdot \mu}{2^{2k}} \leq \frac{x\cdot\frac{2^{2k}}{q}}{2^{2k}} =\frac{x}{q} \qquad and \\
+\frac{x \cdot \mu}{2^{2k}} \gt \frac{x(\frac{2^{2k}}{q}-1)}{x^{2k}} = \frac{x}{m} - \frac{x}{2^{2k}}
+$$
+由于 $x < m^2 < 2^{2k}$，有 $\frac{x}{2^{2k}} < 1$，得到
+$$
+\frac{x}{q}-1 < \frac{x\cdot u}{2^{2k}} \leq \frac{x}{q}
+$$
+取整后得到：
+$$
+\lfloor\frac{x}{q}\rfloor-1 < \frac{x\cdot u}{2^{2k}} \leq \lfloor\frac{x}{q}\rfloor
+$$

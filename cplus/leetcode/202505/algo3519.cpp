@@ -5,6 +5,7 @@ using namespace std;
 class Solution {
 public:
     int countNumbers(string l, string r, int b) {
+        // 参考题解 转 b 进制 没有思路，其实很简单，要是用 python 就更简单
         const int mod = 1e9 + 7;
         auto trans = [&](string s) -> vector<int> {
             vector<int> digits;

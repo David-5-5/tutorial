@@ -9,6 +9,10 @@ class Solution:
         ss = str(low).rjust(len(sf), '0')
 
         @lru_cache(maxsize=None)
+        # 数位 DP 模板 template
+        # low_limit 数字的下限
+        # upper_limit 数字的下限
+        # is_num ： 前导 0
         def f(i:int, low_limit:bool, up_limit:bool, even:int, odd:int, remain:int, is_num:bool):
             if i == len(sf):
                 return 1 if even == odd and remain == 0 and is_num else 0

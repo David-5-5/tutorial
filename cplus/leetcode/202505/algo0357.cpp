@@ -9,7 +9,8 @@ public:
         string s = to_string(int(pow(10, n))-1);
         
         unordered_map<int, int> memo;
-        // 数位 DP 模板 上限:limit 下限:is_num
+        // 数位 DP 模板
+        // 上限:limit 前导 0 :is_num
         auto f = [&] (this auto&& f, int state, int i, bool is_num, bool limit) -> int {
             if (i == n) return 1;   // 允许 0
             

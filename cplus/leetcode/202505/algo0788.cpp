@@ -64,4 +64,26 @@ public:
         return f(0, false, false, true); // limit = true
     }
 
+    int rotatedDigits3(int n) {
+        string s = to_string(n);
+        int m = s.length();
+        const set<int> illegal = {3, 4, 7};
+        const set<int> legal = {2, 5, 6, 9};
+
+        // included 至少需要包含 2， 5， 6， 9 中的一个
+        auto f = [&] (this auto&& f, int i, bool included, bool limit) -> int {
+            if (i == m) return included;
+            int res = 0;
+
+            int up = limit? s[i] - '0': 9;
+            for (int d=0; d<=up; ++d) {
+                if (illegal.find(d)!= illegal.end()) continue;
+                res += f(i+1, included|legal.find(d)!=legal.end(), limit&&d==up);
+            }            
+            return res;
+        };
+
+        return f(0, false, true); // limit = true    
+    }    
+
 };

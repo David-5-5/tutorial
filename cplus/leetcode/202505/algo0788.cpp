@@ -11,7 +11,7 @@ public:
         string s = to_string(n);
         int m = s.length();
         const set<int> illegal = {3, 4, 7};
-        const set<int> legal = {2,5,6,9};
+        const set<int> legal = {2, 5, 6, 9};
 
         unordered_map<int, int> memo;
         // included 至少需要包含 2， 5， 6， 9 中的一个
@@ -36,5 +36,32 @@ public:
 
         return f(0, false, false, true); // limit = true
     }
-    
+
+    int rotatedDigits2(int n) {
+        // 无记忆化搜索 - 由于N比较小，无记忆化搜索也可以通过
+        string s = to_string(n);
+        int m = s.length();
+        const set<int> illegal = {3, 4, 7};
+        const set<int> legal = {2, 5, 6, 9};
+
+        // included 至少需要包含 2， 5， 6， 9 中的一个
+        auto f = [&] (this auto&& f, int i, bool included, bool is_num, bool limit) -> int {
+            if (i == m) return included;
+                        
+            int res = 0;
+            // 是否前导 0
+            if (!is_num) res = f(i + 1, included, false, false); // limit = false
+
+            int low = is_num?0 : 1;
+            int up = limit? s[i] - '0': 9;
+            for (int d=low; d<=up; ++d) {
+                if (illegal.find(d)!= illegal.end()) continue;
+                res += f(i+1, included|legal.find(d)!=legal.end(), true, limit&&d==up);
+            }            
+            return res;
+        };
+
+        return f(0, false, false, true); // limit = true
+    }
+
 };

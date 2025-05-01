@@ -65,25 +65,30 @@ public:
     }
 
     int rotatedDigits3(int n) {
+        // 实际上不需要 is_num
         string s = to_string(n);
         int m = s.length();
-        const set<int> illegal = {3, 4, 7};
-        const set<int> legal = {2, 5, 6, 9};
+        const set<int> illegal = {3,4,7};
+        const set<int> legal = {2,5,6,9};
 
+        unordered_map<int, int> memo;
         // included 至少需要包含 2， 5， 6， 9 中的一个
         auto f = [&] (this auto&& f, int i, bool included, bool limit) -> int {
             if (i == m) return included;
+            
+            int mask = i << 2 | included << 1 | limit;  // included < 1 写错了
+            if (memo.count(mask)) return memo[mask];
             int res = 0;
-
-            int up = limit? s[i] - '0': 9;
+            int up = limit?s[i]-'0':9;
             for (int d=0; d<=up; ++d) {
                 if (illegal.find(d)!= illegal.end()) continue;
                 res += f(i+1, included|legal.find(d)!=legal.end(), limit&&d==up);
             }            
-            return res;
+            return memo[mask] = res;
+            // return res;
         };
 
-        return f(0, false, true); // limit = true    
+        return f(0, false, true);
     }    
 
 };

@@ -5,12 +5,13 @@ using namespace std;
 class Solution {
 public:
     int countNumbersWithUniqueDigits(int n) {
+        // 自行解答 数位 + 状态压缩
         string s = to_string(int(pow(10, n))-1);
         
         unordered_map<int, int> memo;
-        // included 至少需要包含 2， 5， 6， 9 中的一个
+        // 数位 DP 模板 上限:limit 下限:is_num
         auto f = [&] (this auto&& f, int state, int i, bool is_num, bool limit) -> int {
-            if (i == n) return 1;
+            if (i == n) return 1;   // 允许 0
             
             int mask  = state << 6 | i << 2 | is_num << 1 | limit;
             if (memo.count(mask)) return memo[mask];

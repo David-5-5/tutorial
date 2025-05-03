@@ -5,27 +5,29 @@ using namespace std;
 class Solution {
 public:
     int bestRotation(vector<int>& nums) {
-        unordered_map<int, int> cnt;
-        int score = 0, k = 0, n = nums.size();
         
-        for (int i=0; i<n; ++i) {
-            if (i>=nums[i]) score += 1;
-            cnt.count(i-nums[i])?cnt[i-nums[i]] ++:cnt[i-nums[i]] = 1;
+        int n = nums.size();
+        int diff[n];
+        memset(diff, 0, sizeof(diff));
+        for (int i = 0; i < n; ++i)
+        {
+            ++diff[(i+1)%n];
+            --diff[(n+i+1-nums[i])%n];
         }
 
-        int res = score;
-        for (int i=0; i<n; ++i) {
-            if (i-nums[i] < 0 && n - 1 -nums[i] > 0) res += 1;
-            cnt[i-nums[i]] --;
-            res -= cnt[i];
-            cnt.count((n - 1 -nums[i]))?cnt[n - 1 -nums[i]] ++:cnt[n - 1 -nums[i]] = 1;
-
-            if (res > score) {
-                score = res;
-                k = i;
+        int res = 0;
+        int currScore = 0;
+        int maxScore = INT_MIN;
+        for (int i = 0; i < n; ++i)
+        {
+            currScore += diff[i];
+            if (currScore > maxScore)
+            {
+                maxScore = currScore;
+                res = i;
             }
         }
 
-        return k;
+        return res;
     }
 };

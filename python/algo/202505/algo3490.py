@@ -3,7 +3,7 @@ from functools import cache
 # 动态规划 - 数位 DP
 class Solution:
     def beautifulNumbers(self, l: int, r: int) -> int:
-        
+        # 自行解答
         sl, sr = str(l), str(r)
         n = len(sr)
         diff = n - len(sl)

@@ -5,6 +5,7 @@ using namespace std;
 class Solution {
 public:
     vector<int> fullBloomFlowers(vector<vector<int>>& flowers, vector<int>& people) {
+        // 自行解答
         unordered_map<int, int> diff_m;
 
         for (auto& f: flowers) {

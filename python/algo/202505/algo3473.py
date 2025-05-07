@@ -22,3 +22,16 @@ class Solution:
             return res
         return dfs(0, k)
 
+    def maxSum2(self, nums: List[int], k: int, m: int) -> int:
+        # 参考题解，题解很清晰，还需要多训练，不用记忆化还是不熟练
+        pres = list(accumulate(nums, initial = 0))
+        n = len(nums)
+
+        dp = [[0] * (n+1) for _ in range(k+1)]
+        for i in range(1, k+1):
+            dp[i][i * m - 1] = mx = -inf
+            for j in range(i*m, n-(k-i)*m +1):
+                mx = max(mx, dp[i - 1][j - m] - pres[j - m])
+                dp[i][j] = max(dp[i][j-1], mx + pres[j])
+        
+        return dp[k][n]

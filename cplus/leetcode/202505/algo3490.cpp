@@ -5,10 +5,15 @@ using namespace std;
 class Solution {
 public:
     int beautifulNumbers(int l, int r) {
+        // 自行解答
         string sl = to_string(l), sr = to_string(r);
         int n = sr.length(), diff = n - sl.length();
 
         unordered_map<long, int> memo;
+        // 数位 DP模板 包括：
+        // is_low   下限
+        // is_high  上限
+        // is_num   有效数字
         auto f = [&](this auto&& f, int mul, int sum, int i, 
                 bool is_low, bool is_high, bool is_num) ->int {
             

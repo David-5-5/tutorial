@@ -39,5 +39,21 @@ public:
         return pres[n-1] % mod;
     } 
 
- 
+    int firstDayBeenInAllRooms3(vector<int>& nextVisit) {
+        // 基于 firstDayBeenInAllRooms2 优化
+        const int mod = 1e9 + 7;
+        int ans = 0, cur=0, n = nextVisit.size(), left = n;
+        vector<int> cnt(n), pres(n+1);
+        for (int i=0; i<n; ++i) {
+            if (i == n-1) break;    // 到达最后一个房间
+            // 根据 firstDayBeenInAllRooms2 合并冗余代码
+            // 2 表示至少两次从 i-1 -> i, nextVisit[i] 到 i - 1 的天数
+            // + mod 避免负数
+            cnt[i] = (2 + (long)pres[i] - pres[nextVisit[i]] + mod) % mod;
+            pres[i+1] = (pres[i] + cnt[i]) % mod;   // 更新前缀和
+            
+        }
+        // 天数从 0 开始，正好是0 到 n-2 房间的前缀和数量
+        return pres[n-1] % mod;
+    }    
 };

@@ -7,6 +7,8 @@ public:
     int countNumbers(string l, string r, int b) {
         // 参考题解 转 b 进制 没有思路，其实很简单，要是用 python 就更简单
         const int mod = 1e9 + 7;
+        
+        // BEGIN -- 转 b 进制 模板 template
         auto trans = [&](string s) -> vector<int> {
             vector<int> digits;
             for (auto& c:s) c -= '0';   // 变为不可见字符
@@ -28,6 +30,8 @@ public:
             ranges::reverse(digits);
             return digits;
         };
+        // END -- 转 b 进制 模板 template
+
         vector<int> low = trans(l);
         vector<int> high = trans(r);
         int n = high.size(), diff = n - low.size();

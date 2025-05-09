@@ -21,6 +21,27 @@ class Solution:
         return dfs(0, 0)
 
 
+    def numberOfCombinations2(self, num: str) -> int:
+        # 自行解答 - 递归 -> 递推
+        if num[0] == '0': return 0
+        mod = 10 ** 9 + 7
+        n = len(num)
+
+        dp = [[0] * (n) for _ in range(n+1)]
+        for i in range(n): dp[n][i] = 1
+
+        for i in range(n-1, -1, -1):
+            if num[i] == '0':
+                for j in range(n): dp[i][j] = 0
+                continue
+            for j in range(max(0,2*i-n), i+1):
+                for k in range(max(i-j,1), n-i+1):
+                    if (k == i-j and num[i:i+k]<num[j:i]):continue
+                    dp[i][j] += dp[i+k][i]
+
+        return dp[0][0] % mod
+
+
 
 if __name__ == "__main__":
     sol = Solution()

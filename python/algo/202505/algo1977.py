@@ -41,7 +41,30 @@ class Solution:
 
         return dp[0][0] % mod
 
+    def numberOfCombinations3(self, num: str) -> int:
+        # 自行解答 - 前缀和优化
+        if num[0] == '0': return 0
+        mod = 10 ** 9 + 7
+        n = len(num)
 
+        dp = [[0] * (n) for _ in range(n+1)]
+        for i in range(n): dp[n][i] = 1
+
+        for i in range(n-1, -1, -1):
+            if num[i] == '0':
+                for j in range(n): dp[i][j] = 0
+                continue
+            sum = 0
+            
+            for k in range(i+1, n-i+1): sum += dp[i+k][i]
+            for j in range(max(0,2*i-n), i+1):
+                if (num[i:i+i-j]>=num[j:i]):
+                    sum += dp[i+i-j][i]
+                dp[i][j] += sum
+                if (num[i:i+i-j]<num[j:i]):
+                    sum += dp[i+i-j][i]
+
+        return dp[0][0] % mod
 
 if __name__ == "__main__":
     sol = Solution()

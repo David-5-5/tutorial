@@ -5,14 +5,20 @@ using namespace std;
 class Solution {
 public:
     double new21Game(int n, int k, int maxPts) {
-        int begin = 0;
-        double ans;
-
+        // 参考题意解答，超时版本
+        vector<double> dp(k+maxPts);   // k-1 + maxPts 为取的最大值
         
-        auto dfs = [&](int i, double p) -> double {
+        for (int i = min(n,k+maxPts-1); i>=k; --i) dp[i] = 1.0;
 
-        };
-
-        return dfs(0, 1);
+        for (int i=k-1; i>=0; --i) {
+            double res = 0;
+            for (int j=maxPts; j; --j) {
+                res += dp[i+j];
+            }
+            dp[i] = res / maxPts;
+        }
+        return dp[0];  
     }
+
+
 };

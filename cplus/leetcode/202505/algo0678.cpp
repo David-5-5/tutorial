@@ -26,4 +26,33 @@ public:
 
         return dp[0][n-1];    
     }   
+
+    bool checkValidString(string s) {
+        // 自行解答 - 栈 - 大体思路和题解一致
+        int n = s.length();
+        vector<int> left, asterisk;
+
+        for (int i=0; i<n; ++i) {
+            if (s[i] == '(') {
+                left.push_back(i);
+            } else if (s[i] == '*') {
+                asterisk.push_back(i);
+            } else {
+                if (left.size()) left.pop_back();
+                else if (asterisk.size()) asterisk.pop_back();
+                else return false;
+            }
+        }
+        
+        // 剩余的左括号和星号比较,最初按照队列进行比较, 逻辑是不对的
+        // 按照栈比较即可
+        while (left.size() && asterisk.size()) {
+            if (left.back() < asterisk.back())
+                left.pop_back(), asterisk.pop_back();
+            else return false;
+        }
+
+        return left.size() == 0;            
+
+    }       
 };

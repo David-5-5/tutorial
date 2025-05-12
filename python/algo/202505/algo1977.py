@@ -58,10 +58,11 @@ class Solution:
             
             for k in range(i+1, n-i+1): sum += dp[i+k][i]
             for j in range(max(0,2*i-n), i+1):
-                if (num[i:i+i-j]>=num[j:i]):
+                is_large = num[i:i+i-j]>=num[j:i]
+                if (is_large):
                     sum += dp[i+i-j][i]
                 dp[i][j] += sum
-                if (num[i:i+i-j]<num[j:i]):
+                if (not is_large):
                     sum += dp[i+i-j][i]
 
         return dp[0][0] % mod

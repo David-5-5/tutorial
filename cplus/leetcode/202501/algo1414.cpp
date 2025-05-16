@@ -1,6 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+// c++ 全局变量
 const int N = 1e9;
 vector<int> fib;
 int init = [] {

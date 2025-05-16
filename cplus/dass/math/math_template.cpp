@@ -1,4 +1,4 @@
-#include <iostream>
+#include <bits/stdc++.h>
 using namespace std;
 
 /**
@@ -65,7 +65,31 @@ long long comb(int n, int m) {
     return (fact[n] * i_fact[m] % MOD) * i_fact[n-m] % MOD;
 }
 
+/**
+ * 计算欧拉函数及欧拉函数求和
+ * 其中 φ(n) 小于等于n，与 n 互质的数的个数 
+ *     Φ(n) = φ(1) + φ(1) + ... + φ(n)
+ * 举例 φ(0) = 0, φ(1) = 1, φ(2) = 1, φ(7) = 6,
+ *     φ(10) = 4, φ(100) = 40
+ */
+const int N = 400005;
+long long theta[N];         // φ 数组，预计算
+long long Theta[N+1]{0};    // Φ 数组，预计算
 
+auto init = []() {
+    iota(theta, theta+N, 0);
+
+    for (int i=2; i<=N; ++i) {
+        if (theta[i] == i) {
+            for (int j=i; j<N; j+=i)
+                theta[j] = theta[j]*(i-1)/i ;
+        }
+    }
+    // 使用前缀和 Theta(n+1) = theta(1) + theta(2) + ... + theta(n)
+    for (int i=1; i<N; i++) Theta[i+1] = theta[i] + Theta[i];
+
+    return 0;
+}();
 
 
 int main()

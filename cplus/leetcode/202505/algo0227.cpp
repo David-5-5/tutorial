@@ -5,6 +5,7 @@ using namespace std;
 class Solution {
 public:
     int calculate(string s) {
+        // 自行解答
         int begin = 0;
         vector<int> operand;
         vector<char> operation;
@@ -25,7 +26,6 @@ public:
             else if (operation.back() == '-') operand.back() -= op1;
             else if (operation.back() == '*') operand.back() *= op1;
             else operand.back() /= op1;
-            // cout << operand.back() << endl;
             operation.pop_back();
         };
 
@@ -47,4 +47,46 @@ public:
 
         return operand[0];     
     }
+
+    int calculate2(string s) {
+        // 优化 加哨兵
+        int begin = 0;
+        vector<int> operand;
+        vector<char> operation;
+        const set<char> ops= {'*', '/', '+', '-', '?'};
+        
+        s += "?";
+        auto compare = [&](char op) -> bool {
+            if (operation.size() == 0) return false;
+            else if (op == '?') return true;
+            else if ((operation.back() == '-' || operation.back() == '+') &&
+                (op == '*' || op == '/')) return false;
+
+            return true;
+        };
+
+        auto cal = [&]() {
+            int op1 = operand.back();
+            operand.pop_back();
+            if (operation.back() == '+') operand.back() += op1;
+            else if (operation.back() == '-') operand.back() -= op1;
+            else if (operation.back() == '*') operand.back() *= op1;
+            else operand.back() /= op1;
+            operation.pop_back();
+        };
+
+        for (int i = 0; i<s.length(); ++i) {
+            if (ops.count(s[i])) {
+                operand.push_back(stoi(s.substr(begin, i-begin)));
+                while (compare(s[i])) {
+                    cal();
+                }
+                operation.push_back(s[i]);
+                begin = i + 1;
+            }
+        }
+
+        return operand[0];
+    }
+
 };

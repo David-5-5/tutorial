@@ -25,14 +25,14 @@ public:
             else if (operation.back() == '-') operand.back() -= op1;
             else if (operation.back() == '*') operand.back() *= op1;
             else operand.back() /= op1;
-
+            // cout << operand.back() << endl;
             operation.pop_back();
         };
 
         for (int i = 0; i<s.length(); ++i) {
             if (ops.count(s[i])) {
                 operand.push_back(stoi(s.substr(begin, i-begin)));
-                if (compare(s[i])) {
+                while (compare(s[i])) {
                     cal();
                 }
                 operation.push_back(s[i]);
@@ -40,10 +40,11 @@ public:
             }
         }
         operand.push_back(stoi(s.substr(begin, s.length()-begin)));
+
         while (operation.size()) {
             cal();
         }
 
-        return operand[0];   
+        return operand[0];     
     }
 };

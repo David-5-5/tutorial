@@ -31,5 +31,19 @@ public:
             
     }
 
+    vector<int> replaceNonCoprimes(vector<int>& nums) {
+        // 自行解答 直接用栈
+        int n = nums.size();
+        vector<int> ans;
+
+        for (auto& v : nums) {
+            while (ans.size() && gcd(ans.back(), v)>1) {
+                v = lcm(v, ans.back());
+                ans.pop_back();
+            }
+            ans.push_back(v);
+        }
+        return ans;
+    }
 
 };

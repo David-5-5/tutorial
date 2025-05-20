@@ -36,4 +36,46 @@ public:
         }
         return ans;     
     }
+
+    vector<int> countSubgraphsForEachDiameter2(int n, vector<vector<int>>& edges) {
+        // 参考题解 - Floyd - 枚举任意两点的直径
+        vector<vector<int>> g(n);
+        vector<vector<int>> dist(n, vector<int>(n, INT_MAX));
+        for (auto e: edges) {
+            int u = e[0]-1, v = e[1] - 1;
+            g[u].emplace_back(v), g[v].emplace_back(u);      
+            dist[u][v] = 1, dist[v][u] = 1;
+        }
+
+        for (int i = 0; i < n; i++) {
+            dist[i][i] = 0;
+        }
+
+        // Floyd algo 
+        for (int i = 0; i < n; i++) for (int j = 0; j < n; j++) for (int k = 0; k < n; k++) {
+            if (dist[j][i] != INT_MAX && dist[i][k] != INT_MAX) 
+                dist[j][k] = min(dist[j][k], dist[j][i] + dist[i][k]);    
+        }
+
+        // 检查 u 是否可以加入 x，y 为直径的子树中
+        auto dfs = [&](this auto&& dfs, int u, int fa, int x, int y) -> int {
+            if (dist[u][x] > dist[x][y] || dist[u][y] > dist[x][y]) return 1;
+            if ((dist[u][y] == dist[x][y] && u < x) || (dist[u][x] == dist[x][y] && u < y)) return 1;
+            
+            int res = 1;
+            for (auto v: g[u]) {
+                if (v == fa) continue;
+                res *= dfs(v, u, x, y);
+            }
+            if (dist[u][x] + dist[u][y] > dist[x][y]) res ++;
+
+            return res;
+        };
+
+        vector<int> ans(n-1);
+        for (int i = 0; i < n-1; ++i) for (int j = i+1; j < n; ++j) {
+            ans[dist[i][j] - 1] += dfs(i, -1, i, j);
+        }
+        return ans; 
+    }    
 };

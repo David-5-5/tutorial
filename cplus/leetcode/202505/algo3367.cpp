@@ -26,12 +26,16 @@ public:
             for (auto& [y, w] : g[x]) {
                 if (y == fa) continue;
                 auto [nc, c] = dfs(y, x);
-                not_choose += nc;       // 先都不选
-                int d = c + w - nc; 
-                if (d > 0) inc.push_back(d);
+                not_choose += nc;       // 先都不选 不选 w
+                int d = c + w - nc;     // d 为选择和 x 的，需要删除 y 与子节点的一条边
+                if (d > 0) inc.push_back(d);    // 增量小于 0 不需要选择，放弃 w
             }
-
-            ranges::sort(inc, greater());   // 从大到小排序
+            
+            // 核心在这里，代码很简单，不太好理解
+            // 对于节点 x，
+            //   不选择与父节点有边，则选择与其子节点 y 选择增量最大的 k 条边
+            //   选择与父节点有边,   则选择与其子节点 y 选择增量最大的 k - 1条边
+            ranges::sort(inc, greater());   // 从大到小排序 
             for (int i=0; i<min((int)inc.size(), k-1); ++i) not_choose += inc[i];
             long choose = not_choose;
             if (inc.size() >= k)  not_choose += inc[k - 1];

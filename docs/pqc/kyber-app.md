@@ -1011,7 +1011,13 @@ $$
 
 因此，仅需要 $\log 256 = 8$ 次递归，时间复杂度为 $\Theta(n\log n)$
 
-在 FFT 的递归实现中，通过不断乘以主单位根 $\omega_n=e^{-2\pi i/n}$ 可以间接代入多项式在不同单位根处的值，在递归计算
+在 FFT 的递归实现中，通过不断乘以主单位根 $\omega_n=e^{-2\pi i/n}$ 可以间接代入多项式在不同单位根处的值，在递归计算 $A^{[0]}(x^2)$ 和 $A^{[1]}(x^2)$ 时，需要计算： 
+$$
+(x_k) = A^{[0]}(x_k^2) + x_k\cdot A^{[1]}(x_k^2)
+$$
+其中 $A(x_k) = \omega_n^k$ 是第 k 个单位根。关键在于通过主单位根 $\omega_n^1$ 的幂次生成所有单位根： $(\omega_n^k) = (\omega_n^1)^k$
+
+每次递归时，子问题的规模减半，从 n 点变为 n/2 点，同时主单位根的定义也相应变化，原问题是 n 个单位根的 fft，主单位根为 $\omega_n^1$；子问题变为  n/2 个单位根的 fft，主单位根为 $\omega_n^2 = \omega_{n/2}^{2/2} = \omega_{n/2}^1$。递归展开(回归)时，当问题规模为 n=1 时，直接返回系数；当 n>1 时，计算 $A^{[0]}(x^2)$ 和 $A^{[1]}(x^2)$ 在 n/2 个单位根 $\omega_{n/2}^0, \omega_{n/2}^1, \cdots, \omega_{n/2}^{n/2-1}$，并使用 $\omega_n^k$ 调节 $A^{[1]}$ 的贡献。
 
 以下是递归树的图示(n=4)
 ```mermaid
@@ -1032,8 +1038,8 @@ graph TD
    G --> K
 ```
 
-递归的fft实现的参考代码
-```python
+递归的 fft 实现的参考代码
+```python {.line-numbers}
 import numpy as np
 
 def fft(a):
@@ -1041,18 +1047,47 @@ def fft(a):
     if n == 1:
         return a
     omega = np.exp(2j * np.pi / n)
-    even = fft(a[::2])
-    odd = fft(a[1::2])
+    y_0 = fft(a[::2])
+    y_1 = fft(a[1::2])
     y = np.zeros(n, dtype=complex)
     for k in range(n//2):
-        y[k] = even[k] + omega**k * odd[k]
-        y[k + n//2] = even[k] - omega**k * odd[k]
+        y[k] = y_0[k] + omega**k * y_1[k]
+        y[k + n//2] = y_0[k] - omega**k * y_1[k]
     return y
 
 a = np.array([1, 2, 3, 4, 5, 6, 7, 8], dtype=complex)
 y = fft(a)
-print("FFT 结果 y_k:\n", [f"{val:.1f}" for val in y])
+
 ```
+上述代码的执行过程如下：
+- 第 4～5 行代表递归的基础；一个元素的 FFT 就是该元素自身，因为在这种情形下 $y_0 = a_0\cdot\omega_1^0 = a_0\cdot 1 = a_0$
+
+- 第 8～9 行中的 a[::2]，a[1::2] 定义多项式$A^{[0]}(x^2)$ 和 $A^{[1]}(x^2)$ 的系数向量。同时这两行执行递归计算 $DFT_{n/2}$，对于 $k = 0, 1,\cdots, n/2-1$，$y_k^{[0]}=A^{[0]}(\omega_{n/2}^k)$，$y_k^{[1]}=A^{[1]}(\omega_{n/2}^k)$，
+  根据消去定理，有 $\omega_{n/2}^k=\omega_n^{2k}$,于是 $y_k^{[0]}=A^{[0]}(\omega_n^{2k})$，$y_k^{[1]}=A^{[1]}(\omega_n^{2k})$
+
+- 第 12～13 行综合了递归 $DFT_{n/2}$ 的计算结果。对 $y_0, y_1, \cdots, y_{n/2-1}$，其中第 12 行推出：
+  $$
+  \begin{aligned} 
+  y_k &= y_k^{[0]} + \omega_n^k y_k^{[1]} \\
+      &= A^{[0]}(\omega_n^{2k}) + \omega_n^k A^{[1]}(\omega_n^{2k}) \\
+      &= A(\omega_n^k)
+  \end{aligned} 
+  $$
+  对 $y_{n/2}, y_{n/2+1}, \cdots, y_{n-1}$，其中第 13 行推出：
+  $$
+  \begin{aligned}
+  y_{k+n/2} &= y_k^{[0]} - \omega_n^k y_k^{[1]} \\
+      &= y_k^{[0]} + \omega_n^{k+n/2} y_k^{[1]} \\
+      &= A^{[0]}(\omega_n^{2k}) + \omega_n^{k+n/2} A^{[1]}(\omega_n^{2k}) \\
+      &= A^{[0]}(\omega_n^{2k+n}) + \omega_n^{k+n/2} A^{[1]}(\omega_n^{2k+n}) \\
+      &= A(\omega_n^{k+n/2})
+  \end{aligned} 
+  $$
+  因此，由 fft 返回的向量 y 确实是输入向量 a 的 DFT。
+
+- 在第 12～13 行对 $y_0, y_1, \cdots, y_{n/2-1}$，每个值 $y_k^{[1]}$ 乘以 $\omega_n^k$。在第 12 行，这个乘积加到了 $y_k^{[0]}$ 上，然后第 13 行又减去它。因为应用了每个因子 $\omega_n^k$ 的正数形式和负数形式，因此把因子 $\omega_n^k$ 称为旋转因子(twiddle factor)。
+
+
 
 ## 6.2 分圆多项式：为NTT搭建舞台
 

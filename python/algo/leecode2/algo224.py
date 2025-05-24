@@ -60,8 +60,49 @@ class Solution:
 
         return stack_opd[0]
 
+    def calculate2(self, s: str) -> int:
+        # 2025.5 复习，用栈简化实现，不需要递归
+        # st 存储操作数, op 存储操作符
+        # - 作为一元运算 和 二元运算
+        s = s.replace(' ', '')
+        if s[0] == '-': s = "0" + s
+        elif s[0] == '(': s = "0+" + s
+        st, op = [], []
+
+        s = s.replace('(-', '(0-')
+        val, depth = None, 1
+        def push():
+            nonlocal val
+            if val is not None: st.append(val)
+            while len(st) > depth:
+                opr = op.pop()
+                op1 = st.pop()
+                if opr == '+':
+                    st[-1]  += op1
+                else: st[-1] -= op1
+
+        for ch in s:
+            if ch.isdigit():
+                if val is None:val = 0
+                val = val * 10 + int(ch)
+            else:
+                if ch in ('+', '-'):
+                    push()
+                    op.append(ch)
+                elif ch == '(':
+                    depth += 1
+                elif ch == ')':
+                    depth -= 1
+                    push()
+                val = None     
+
+        if val is not None or len(st) > 1:push()
+        return st[0]
+    
+    
 if __name__ == "__main__":
     sol = Solution()
-    s = "1 + 1"
-    s = "(1+(4+5+2)-3)+(6+8)"
+    s = "0"
+    # s = "(1+(4+5+2)-3)+(6+8)"
     print(sol.calculate(s))
+    print(sol.calculate2(s))

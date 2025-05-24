@@ -1088,6 +1088,37 @@ y = fft(a)
 - 在第 12～13 行对 $y_0, y_1, \cdots, y_{n/2-1}$，每个值 $y_k^{[1]}$ 乘以 $\omega_n^k$。在第 12 行，这个乘积加到了 $y_k^{[0]}$ 上，然后第 13 行又减去它。因为应用了每个因子 $\omega_n^k$ 的正数形式和负数形式，因此把因子 $\omega_n^k$ 称为旋转因子(twiddle factor)。
 
 
+**在单位复数根处插值**
+现在要在单位复数根处插值来完成多项式乘法方案，使得把一个多项式从点值表示转换回系数表示。把 DFT 写成一个矩阵方程 $y=V_na$，其中 $V_n$ 是一个由 $\omega_n$ 适当幂次填充成的**范德蒙德矩阵**:
+
+```math
+\begin{bmatrix}
+y_0 \\ 
+y_1 \\ 
+y_2 \\ 
+\vdots \\ 
+y_{n-1}
+\end{bmatrix}
+=
+\begin{bmatrix}
+1 & 1 & 1 & \cdots & 1 \\
+1 & \omega_n & \omega_n^2 & \cdots & \omega_n^{n-1} \\
+1 & \omega_n^2 & \omega_n^4 & \cdots & \omega_n^{2(n-1)} \\
+\vdots & \vdots & \vdots & \ddots & \vdots \\
+1 & \omega_n^{n-1} & \omega_n^{2(n-1)} & \cdots & \omega_n^{(n-1)^2}
+\end{bmatrix}
+\begin{bmatrix}
+a_0 \\ 
+a_1 \\ 
+a_2 \\ 
+\vdots \\ 
+a_{n-1}
+\end{bmatrix}
+```
+对 $j, k = 0, 1, \cdots, n-1, V_n$ 的 (k, j) 处元素为 $\omega_n^{kj}$。
+
+
+
 
 ## 6.2 分圆多项式：为NTT搭建舞台
 

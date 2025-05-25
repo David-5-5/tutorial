@@ -1115,7 +1115,14 @@ a_2 \\
 a_{n-1}
 \end{bmatrix}
 ```
-对 $j, k = 0, 1, \cdots, n-1, V_n$ 的 (k, j) 处元素为 $\omega_n^{kj}$。
+对 $j, k = 0, 1, \cdots, n-1, V_n$ 的 (k, j) 处元素为 $\omega_n^{kj}$。 $V_n$ 中元素的指数组成一张乘法表。对于逆运算 $a = DFT_n^{-1}(y)$，把 y 乘以 $V_n$ 的逆矩阵 $V_n{-1}$ 来进行处理。
+
+**定理** 对 $j, k = 0, 1, \cdots, n-1, V_n$ 的 (k, j) 处元素为 $\omega_n^{-kj}/n$。
+**证明** 根据定义逆矩阵定义，$V_n{-1}V_n = I_n$，其中 $I_n$ 为 $n\times n$ 的单位矩阵。考虑 $V_n{-1}V_n$ 中 $(j, j')$ 处的元素：
+$$
+[V_n{-1}V_n]_{jj'} = \sum_{k=0}^{n-1}(\omega_n^{-kj}/n)(\omega_n^{kj'}) = 
+$$
+
 
 
 

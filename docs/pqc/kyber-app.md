@@ -866,8 +866,8 @@ Kyber算法的核心运算依赖于高效的多项式乘法。对于256次多项
 
 次数界为 n 的**多项式系数表示法**
 $$
-A(x) = \sum_{i=0}^{n-1} a_i x^i = a_0 + a_1x + \cdots + a_{n-1} x^{n-1} \quad \text{其中} \ a_i \in \mathbb{Z}_{q} \\
-B(x) = \sum_{i=0}^{n-1} b_i x^i = b_0 + b_1x + \cdots + b_{n-1} x^{n-1} \quad \text{其中} \ b_i \in \mathbb{Z}_{q}
+A(x) = \sum_{i=0}^{n-1} a_i x^i = a_0 + a_1x + \cdots + a_{n-1} x^{n-1} \quad \text{其中} \ a_i \in \mathbb{Z}_{q} \qquad (6.1) \\
+B(x) = \sum_{i=0}^{n-1} b_i x^i = b_0 + b_1x + \cdots + b_{n-1} x^{n-1} \quad \text{其中} \ b_i \in \mathbb{Z}_{q} \qquad (6.2)
 $$
 其中：
 - $n$ 为多项式次数界（Kyber中 $n=256$）
@@ -876,13 +876,13 @@ $$
 **普通多项式乘法及环 $R_q$ 中的模约简**
 未取模时的乘积为 $2n-2$ 次多项式：
 $$
-A(x) \cdot B(x) = \sum_{k=0}^{2n-2} c_k x^k \quad \text{其中} \ c_k = \sum_{i+j=k} a_i b_j
+A(x) \cdot B(x) = \sum_{k=0}^{2n-2} c_k x^k \quad \text{其中} \ c_k = \sum_{i+j=k} a_i b_j  \qquad (6.3)
 $$
 
 进一步，在商环 $R_q = \mathbb{Z}_q[x]/(x^n + 1)$ 中，利用 $x^n \equiv -1$ 的性质：
 
 $$
-C(x) = A(x) \otimes B(x) = \sum_{k=0}^{n-1} \left( \sum_{i=0}^{n-1} a_i b_{(k-i) \bmod n} \cdot (-1)^{\left\lfloor \frac{k-i}{n} \right\rfloor} \right) x^k
+C(x) = A(x) \otimes B(x) = \sum_{k=0}^{n-1} \left( \sum_{i=0}^{n-1} a_i b_{(k-i) \bmod n} \cdot (-1)^{\left\lfloor \frac{k-i}{n} \right\rfloor} \right) x^k \qquad (6.4)
 $$
 
 举例说明，当 n = 4, k = 2 的情况下：
@@ -950,7 +950,7 @@ Kyber 选择以系数表示法为主，仅在关键乘法步骤使用 NTT 加速
 ### 6.1.2 单位复数根
 n 个单位复数根是满足 $\omega^n = 1$ 的复数 $\omega$。 n 次单位复数根恰好有 n 个：对于 $k = 1, 2, \cdots, n-1$, 这些根为
 $$
-\omega_n^k = e^{2\pi i/n \cdot k} = cos(2k\pi/n) + i \cdot sin(2k\pi/n)
+\omega_n^k = (e^{2\pi i/n})^k = e^{2\pi i/n \cdot k} = cos(2k\pi/n) + i \cdot sin(2k\pi/n)   \qquad (6.5)
 $$
 值 $\omega_n = e^{2\pi i/n}$ 称为 **主 n 次单位根**，所有其他 n 次单位复数根都是 $\omega_n$ 的幂次。均匀的分别在以复平面的原点为圆心的单位半径的圆周上。
 
@@ -960,9 +960,28 @@ $$
 
 复数单位根的性质及定理
 
-**消去引理** 对于任何整数 $n \leq 0, k \leq 0, d > 0, \omega_{dn}^{dk} = \omega_n^k$
+**定理6.1 消去引理** 对于任何整数 $n \leq 0, k \leq 0, d > 0, \omega_{dn}^{dk} = \omega_n^k  \qquad (6.7)$
+**证明** 根据 $\omega$ 定义：
+$$
+\omega_{dn}^{dk} = (e^{2\pi i/dn})^{dk} = (e^{2\pi i/n})^k \omega_n^k \qquad \blacksquare
+$$
 
-**折半引理** 如果 n > 0 为偶数，那么 n 个 n 次单位复数根的平方的结合就是 n/2 个 n/2次 单位复数根的集合。正是折半定理才使得多项式的二分递归可以进行下去，直到最后的递归边界 $\omega_1^0$
+
+**定理6.2 折半引理** 如果 n > 0 为偶数，那么 n 个 n 次单位复数根的平方的结合就是 n/2 个 n/2次 单位复数根的集合。
+**证明** 根据消去引理定义，对于任意飞赴整数 k，都有 $(\omega_n^k)^2 = \omega_{n/2}^{k}$。
+$$
+(\omega_n^{k+n/2})^2 = \omega_n^{2k+n} = \omega_n^{2k}\omega_n^{n} = \omega_n^{2k} = (\omega_n^k)^2
+$$
+因此 $\omega_n^{k+n/2}$ 和 $\omega_n^k$ 平方相同，因此平方后的集合减半 $\qquad \blacksquare$。
+
+折半定理对于用分治策略来对多项式的系数与点值表达进行相互转换是非常重要的，因为它保证递归子问题的规模只是递归调用前的一般，使得多项式的二分递归可以进行下去，直到最后的递归边界 $\omega_1^0$
+
+**定理6.3 求和引理** 对于任意整数 $n\leq 1$ 和不能被 n 整除的非负整数 k，有 $\sum_j^{n-1}(\omega_n^k)^j = 0$
+**证明** 几何级数的求和公式 $\sum_{k=0}^nx^k=1+x+x^2+\cdots+x^n=\frac{x^{n+1-1}}{x-1}, x\neq 1$ 同样适合于复数，因此
+$$
+\sum_j^{n-1}(\omega_n^k)^j = \frac{(\omega_n^k)^n-1}{\omega_n^k-1} = \frac{(\omega_n^n)^k-1}{\omega_n^k-1} = \frac{(1)^k-1}{\omega_n^k-1} = 0
+$$
+定理的条件 k 不能被 n 整除，$\omega_n^k\neq 1$，分母不为 0，证毕。 $\blacksquare$
 
 同时单位复数根还满足如下性质：
 **性质** 对于 $\forall i\neq j, \omega_n^i \neq \omega_n^j$，即可满足取 n 个单位根使得取 n 个不同的点。
@@ -970,14 +989,14 @@ $$
 **性质** $\omega_n^{k+\frac{n}{2}} = -\omega_n^k$，相当于一个向量旋转了 180 度， x、 y坐标都乘以了一个负号。
 
 
-### 6.1.3 快速傅里叶变换
+### 6.1.3 离散傅里叶变换
 回顾一下，希望计算次数界为 n 的多项式 
 $$
 A(x)= \sum_{j=0}^{n-1}a_jx^j
 $$
 在 $\omega_n^0, \omega_n^1, \omega_n^2, \cdots, \omega_n^{n-1}$ 处的值。假设 A 以系数形式给出 $ a = (a_0, a_1, \cdots, a_{n-1})$，接下来对 $k = 1, 2, \cdots, n-1$, 定义结果 $y_k$ 为：
 $$
-y_k = A(\omega_n^k) = \sum_{j=0}^{n-1}a_j\omega_n^{kj}
+y_k = A(\omega_n^k) = \sum_{j=0}^{n-1}a_j\omega_n^{kj}   \qquad (6.8)
 $$
 向量 $ y = (y_0, y_1, \cdots, y_{n-1})$ 即是系数向量 $ a = (a_0, a_1, \cdots, a_{n-1})$ 的 **离散傅里叶变换(DFT)**，记为 $y=DFT_n(a)$
 
@@ -998,57 +1017,18 @@ $$
 1. 求次数界为 n/2 的多项式 $A^{[0]}(x)$ 和 $A^{[1]}(x)$ 在点 $(\omega_n^0)^2, (\omega_n^1)^2, \cdots, (\omega_n^{n-1})^2 (式-6.1)$ 的取值。
 2. 根据折半引理，式-6.1 并不是由 n 个不同的值组成，而是由 n/2 个 n/2 次单位复数根所组成，每个根正好出现两次，因此递归的对次数界 n/2 的多项式 $A^{[0]}(x)$ 和 $A^{[1]}(x)$ 在 n/2 个 n/2 次单位复数根处求值。这些子问题与原始问题形式相同，但规模变为一半。现在已成功的把一个 n 个单元的 $DFT_n$ 计算划分为两个规模为 n/2 个元素的 $DFT_{n/2}$ 计算。
 
-举例说明，当 n = 256 时，
-- 初始计算 A(x) 计算, 其中 x 在 $\omega_{256}^0, \omega_{256}^1, \omega_{256}^2, \cdots, \omega_{256}^{255} $ 256 个单位复数根
-
-- 第 1 次递归计算 $A^{[0]}(x)$ 和 $A^{[1]}(x)$ 2 个式子，其中 x 在 $\omega_{128}^0, \omega_{128}^1, \omega_{128}^2, \cdots, \omega_{128}^{127} $ 共计 128 个单位根；例如 $(\omega_{256}^1)^2 = (\omega_{256}^{129})^2 = \omega_{128}^1$
-
-- 第 i 次递归计算需要计算 $\omega_{256/2^i}^0, \omega_{256/2^i}^1, \omega_{256/2^i}^2, \cdots, \omega_{256/2^i}^{{256/2^i}-1} $ 共计 ${256/2^i}-1$ 个单位根，$2^i$ 个式子
-
-- 第 i+1 次递归计算需要计算 $\omega_{256/2^{i+1}}^0, \omega_{256/2^{i+1}}^1, \omega_{256/2^{i+1}}^2, =\cdots, \omega_{256/2^{i+1}}^{{2^{i+1}}-1}$ 共计 ${256/2^{i+1}}-1$ 个单位根，$2^{i+1}$ 个式子
-
-- 第 8 次递归计算需要计算 $\omega_{1}^0$ 共计 1 个单位根，256 个式子，
-
-因此，仅需要 $\log 256 = 8$ 次递归，时间复杂度为 $\Theta(n\log n)$
-
-在 FFT 的递归实现中，通过不断乘以主单位根 $\omega_n=e^{-2\pi i/n}$ 可以间接代入多项式在不同单位根处的值，在递归计算 $A^{[0]}(x^2)$ 和 $A^{[1]}(x^2)$ 时，需要计算： 
-$$
-(x_k) = A^{[0]}(x_k^2) + x_k\cdot A^{[1]}(x_k^2)
-$$
-其中 $A(x_k) = \omega_n^k$ 是第 k 个单位根。关键在于通过主单位根 $\omega_n^1$ 的幂次生成所有单位根： $(\omega_n^k) = (\omega_n^1)^k$
-
-每次递归时，子问题的规模减半，从 n 点变为 n/2 点，同时主单位根的定义也相应变化，原问题是 n 个单位根的 fft，主单位根为 $\omega_n^1$；子问题变为  n/2 个单位根的 fft，主单位根为 $\omega_n^2 = \omega_{n/2}^{2/2} = \omega_{n/2}^1$。递归展开(回归)时，当问题规模为 n=1 时，直接返回系数；当 n>1 时，计算 $A^{[0]}(x^2)$ 和 $A^{[1]}(x^2)$ 在 n/2 个单位根 $\omega_{n/2}^0, \omega_{n/2}^1, \cdots, \omega_{n/2}^{n/2-1}$，并使用 $\omega_n^k$ 调节 $A^{[1]}$ 的贡献。
-
-以下是递归树的图示(n=4)
-```mermaid
-graph TD
-   A["A(x) at ω₄⁰, ω₄¹, ω₄², ω₄³"] --> B["A₀(x²) at ω₂⁰, ω₂¹"]
-   A --> C["x A₁(x²) at ω₂⁰, ω₂¹"]
-   B --> D["A₀(ω₂⁰) = a₀ + a₂"]
-   B --> E["A₀(ω₂¹) = a₀ - a₂"]
-   C --> F["A₁(ω₂⁰) = a₁ + a₃"]
-   C --> G["A₁(ω₂¹) = a₁ - a₃"]
-   D --> H["y₀ = (a₀+a₂) + (a₁+a₃)"]
-   F --> H
-   E --> I["y₁ = (a₀-a₂) + i(a₁-a₃)"]
-   G --> I
-   D --> J["y₂ = (a₀+a₂) - (a₁+a₃)"]
-   F --> J
-   E --> K["y₃ = (a₀-a₂) - i(a₁-a₃)"]
-   G --> K
-```
 
 递归的 fft 实现的参考代码
 ```python {.line-numbers}
 import numpy as np
 
-def fft(a):
+def recursive-fft(a):
     n = len(a)
     if n == 1:
         return a
     omega = np.exp(2j * np.pi / n)
-    y_0 = fft(a[::2])
-    y_1 = fft(a[1::2])
+    y_0 = recursive-fft(a[::2])
+    y_1 = recursive-fft(a[1::2])
     y = np.zeros(n, dtype=complex)
     for k in range(n//2):
         y[k] = y_0[k] + omega**k * y_1[k]
@@ -1056,7 +1036,7 @@ def fft(a):
     return y
 
 a = np.array([1, 2, 3, 4, 5, 6, 7, 8], dtype=complex)
-y = fft(a)
+y = recursive-fft(a)
 
 ```
 上述代码的执行过程如下：
@@ -1115,7 +1095,84 @@ a_2 \\
 a_{n-1}
 \end{bmatrix}
 ```
-对 $j, k = 0, 1, \cdots, n-1, V_n$ 的 (k, j) 处元素为 $\omega_n^{kj}$。
+对 $j, k = 0, 1, \cdots, n-1, V_n$ 的 (k, j) 处元素为 $\omega_n^{kj}$。 $V_n$ 中元素的指数组成一张乘法表。对于逆运算 $a = DFT_n^{-1}(y)$，把 y 乘以 $V_n$ 的逆矩阵 $V_n{-1}$ 来进行处理。
+
+**定理6.4** 对 $j, k = 0, 1, \cdots, n-1, V_n$ 的 (k, j) 处元素为 $\omega_n^{-kj}/n$。
+**证明** 需要验证 $V_n{-1}V_n = I_n$，其中 $I_n$ 为 $n\times n$ 的单位矩阵，即可完成证明。
+考虑 $V_n{-1}V_n$ 中 $(j, j')$ 处的元素：
+$$
+\begin{aligned}
+[V_n{-1}V_n]_{jj'} &= \sum_{k=0}^{n-1}(\omega_n^{-kj}/n)(\omega_n^{kj'}) = \frac{1}{n}\sum_{k=0}^{n-1}\omega_n^{k(j'-j)} \\
+&= 
+\begin{cases}
+\frac{1}{n}\sum_{k=0}^{n-1}\omega_n^0 = \frac{1}{n} \sum_{k=0}^{n-1}1 = 1 & j = j' \\
+\\
+\frac{1}{n}\sum_{k=0}^{n-1}\omega_n^{km} = 0 & j\neq j', m=j'-j \quad 6.3 求和引理 \\
+\end{cases}
+\end{aligned}
+$$
+因此 $V_n{-1}V_n = I_n$，证毕。 $\blacksquare$
+
+给定逆矩阵 $V_n{-1}$，可以推导出 $DFT_n^{-1}(y)$
+$$
+a_j = \frac{1}{n}\sum_{k=0}^{n-1}y_k\omega_n^{-kj}    \qquad (6.9)
+$$
+其中 $j=0, 1,\cdots, n-1$。通过比较式(6.8)和式(6.9)，可以看到，对FFT算法进行如下修改就可以计算出逆 DFT：
+- 把 a 与 y 互换
+- 用 $\omega_n^{-1}$ 替换 $\omega_n$
+- 并将计算结果除以 n
+因此也可以在 $\Theta(n\lg n)$ 时间内计算出 $DFT_n^{-1}$。
+
+**定理3.8 卷积定理** 对任意两个长度为 n 的向量 a 和 b，其中 n 是 2 的幂，
+$$
+a \otimes b = DFT_{2n}^{-1}(DFT_{2n}(a)\cdot DFT_{2n}(b))
+$$
+其中向量 a 和 b 用 0 填充，使其长度达到 2n，并用 "." 表示 2 个 2n 个元素组成的向量的点乘。
+
+
+举例说明，当 n = 256 时，
+- 初始计算 A(x) 计算, 其中 x 在 $\omega_{256}^0, \omega_{256}^1, \omega_{256}^2, \cdots, \omega_{256}^{255} $ 256 个单位复数根
+
+- 第 1 次递归计算 $A^{[0]}(x)$ 和 $A^{[1]}(x)$ 2 个式子，其中 x 在 $\omega_{128}^0, \omega_{128}^1, \omega_{128}^2, \cdots, \omega_{128}^{127} $ 共计 128 个单位根；例如 $(\omega_{256}^1)^2 = (\omega_{256}^{129})^2 = \omega_{128}^1$
+
+- 第 i 次递归计算需要计算 $\omega_{256/2^i}^0, \omega_{256/2^i}^1, \omega_{256/2^i}^2, \cdots, \omega_{256/2^i}^{{256/2^i}-1} $ 共计 ${256/2^i}-1$ 个单位根，$2^i$ 个式子
+
+- 第 i+1 次递归计算需要计算 $\omega_{256/2^{i+1}}^0, \omega_{256/2^{i+1}}^1, \omega_{256/2^{i+1}}^2, =\cdots, \omega_{256/2^{i+1}}^{{2^{i+1}}-1}$ 共计 ${256/2^{i+1}}-1$ 个单位根，$2^{i+1}$ 个式子
+
+- 第 8 次递归计算需要计算 $\omega_{1}^0$ 共计 1 个单位根，256 个式子，
+
+因此，仅需要 $\log 256 = 8$ 次递归，时间复杂度为 $\Theta(n\log n)$
+
+在 FFT 的递归实现中，通过不断乘以主单位根 $\omega_n=e^{2\pi i/n}$ 可以间接代入多项式在不同单位根处的值，在递归计算 $A^{[0]}(x^2)$ 和 $A^{[1]}(x^2)$ 时，需要计算： 
+$$
+(x_k) = A^{[0]}(x_k^2) + x_k\cdot A^{[1]}(x_k^2)
+$$
+其中 $A(x_k) = \omega_n^k$ 是第 k 个单位根。关键在于通过主单位根 $\omega_n^1$ 的幂次生成所有单位根： $(\omega_n^k) = (\omega_n^1)^k$
+
+每次递归时，子问题的规模减半，从 n 点变为 n/2 点，同时主单位根的定义也相应变化，原问题是 n 个单位根的 fft，主单位根为 $\omega_n^1$；子问题变为  n/2 个单位根的 fft，主单位根为 $\omega_n^2 = \omega_{n/2}^{2/2} = \omega_{n/2}^1$。递归展开(回归)时，当问题规模为 n=1 时，直接返回系数；当 n>1 时，计算 $A^{[0]}(x^2)$ 和 $A^{[1]}(x^2)$ 在 n/2 个单位根 $\omega_{n/2}^0, \omega_{n/2}^1, \cdots, \omega_{n/2}^{n/2-1}$，并使用 $\omega_n^k$ 调节 $A^{[1]}$ 的贡献。
+
+以下是递归树的图示(n=4)
+```mermaid
+graph TD
+   A["A(x) at ω₄⁰, ω₄¹, ω₄², ω₄³"] --> B["A₀(x²) at ω₂⁰, ω₂¹"]
+   A --> C["x A₁(x²) at ω₂⁰, ω₂¹"]
+   B --> D["A₀(ω₂⁰) = a₀ + a₂"]
+   B --> E["A₀(ω₂¹) = a₀ - a₂"]
+   C --> F["A₁(ω₂⁰) = a₁ + a₃"]
+   C --> G["A₁(ω₂¹) = a₁ - a₃"]
+   D --> H["y₀ = (a₀+a₂) + (a₁+a₃)"]
+   F --> H
+   E --> I["y₁ = (a₀-a₂) + i(a₁-a₃)"]
+   G --> I
+   D --> J["y₂ = (a₀+a₂) - (a₁+a₃)"]
+   F --> J
+   E --> K["y₃ = (a₀-a₂) - i(a₁-a₃)"]
+   G --> K
+```
+
+
+### 6.1.4 高效实现傅里叶变换
+
 
 
 

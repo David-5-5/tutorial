@@ -950,7 +950,7 @@ Kyber 选择以系数表示法为主，仅在关键乘法步骤使用 NTT 加速
 ### 6.1.2 单位复数根
 n 个单位复数根是满足 $\omega^n = 1$ 的复数 $\omega$。 n 次单位复数根恰好有 n 个：对于 $k = 1, 2, \cdots, n-1$, 这些根为
 $$
-\omega_n^k = e^{2\pi i/n \cdot k} = cos(2k\pi/n) + i \cdot sin(2k\pi/n)
+\omega_n^k = (e^{2\pi i/n})^k = e^{2\pi i/n \cdot k} = cos(2k\pi/n) + i \cdot sin(2k\pi/n)
 $$
 值 $\omega_n = e^{2\pi i/n}$ 称为 **主 n 次单位根**，所有其他 n 次单位复数根都是 $\omega_n$ 的幂次。均匀的分别在以复平面的原点为圆心的单位半径的圆周上。
 
@@ -960,9 +960,28 @@ $$
 
 复数单位根的性质及定理
 
-**消去引理** 对于任何整数 $n \leq 0, k \leq 0, d > 0, \omega_{dn}^{dk} = \omega_n^k$
+**定理6.1 消去引理** 对于任何整数 $n \leq 0, k \leq 0, d > 0, \omega_{dn}^{dk} = \omega_n^k$
+**证明** 根据 $\omega$ 定义：
+$$
+\omega_{dn}^{dk} = (e^{2\pi i/dn})^{dk} = (e^{2\pi i/n})^k \omega_n^k \qquad \blacksquare
+$$
 
-**折半引理** 如果 n > 0 为偶数，那么 n 个 n 次单位复数根的平方的结合就是 n/2 个 n/2次 单位复数根的集合。正是折半定理才使得多项式的二分递归可以进行下去，直到最后的递归边界 $\omega_1^0$
+
+**定理6.2 折半引理** 如果 n > 0 为偶数，那么 n 个 n 次单位复数根的平方的结合就是 n/2 个 n/2次 单位复数根的集合。
+**证明** 根据消去引理定义，对于任意飞赴整数 k，都有 $(\omega_n^k)^2 = \omega_{n/2}^{k}$。
+$$
+(\omega_n^{k+n/2})^2 = \omega_n^{2k+n} = \omega_n^{2k}\omega_n^{n} = \omega_n^{2k} = (\omega_n^k)^2
+$$
+因此 $\omega_n^{k+n/2}$ 和 $\omega_n^k$ 平方相同，因此平方后的集合减半 $\qquad \blacksquare$。
+
+折半定理对于用分治策略来对多项式的系数与点值表达进行相互转换是非常重要的，因为它保证递归子问题的规模只是递归调用前的一般，使得多项式的二分递归可以进行下去，直到最后的递归边界 $\omega_1^0$
+
+**定理6.3 求和引理** 对于任意整数 $n\leq 1$ 和不能被 n 整除的非负整数 k，有 $\sum_j^{n-1}(\omega_n^k)^j = 0$
+**证明** 几何级数的求和公式 $\sum_{k=0}^nx^k=1+x+x^2+\cdots+x^n=\frac{x^{n+1-1}}{x-1}, x\neq 1$ 同样适合于复数，因此
+$$
+\sum_j^{n-1}(\omega_n^k)^j = \frac{(\omega_n^k)^n-1}{\omega_n^k-1} = \frac{(\omega_n^n)^k-1}{\omega_n^k-1} = \frac{(1)^k-1}{\omega_n^k-1} = 0
+$$
+定理的条件 k 不能被 n 整除，$\omega_n^k\neq 1$，分母不为 0，证毕。 $\blacksquare$
 
 同时单位复数根还满足如下性质：
 **性质** 对于 $\forall i\neq j, \omega_n^i \neq \omega_n^j$，即可满足取 n 个单位根使得取 n 个不同的点。
@@ -1011,7 +1030,7 @@ $$
 
 因此，仅需要 $\log 256 = 8$ 次递归，时间复杂度为 $\Theta(n\log n)$
 
-在 FFT 的递归实现中，通过不断乘以主单位根 $\omega_n=e^{-2\pi i/n}$ 可以间接代入多项式在不同单位根处的值，在递归计算 $A^{[0]}(x^2)$ 和 $A^{[1]}(x^2)$ 时，需要计算： 
+在 FFT 的递归实现中，通过不断乘以主单位根 $\omega_n=e^{2\pi i/n}$ 可以间接代入多项式在不同单位根处的值，在递归计算 $A^{[0]}(x^2)$ 和 $A^{[1]}(x^2)$ 时，需要计算： 
 $$
 (x_k) = A^{[0]}(x_k^2) + x_k\cdot A^{[1]}(x_k^2)
 $$
@@ -1117,12 +1136,21 @@ a_{n-1}
 ```
 对 $j, k = 0, 1, \cdots, n-1, V_n$ 的 (k, j) 处元素为 $\omega_n^{kj}$。 $V_n$ 中元素的指数组成一张乘法表。对于逆运算 $a = DFT_n^{-1}(y)$，把 y 乘以 $V_n$ 的逆矩阵 $V_n{-1}$ 来进行处理。
 
-**定理** 对 $j, k = 0, 1, \cdots, n-1, V_n$ 的 (k, j) 处元素为 $\omega_n^{-kj}/n$。
-**证明** 根据定义逆矩阵定义，$V_n{-1}V_n = I_n$，其中 $I_n$ 为 $n\times n$ 的单位矩阵。考虑 $V_n{-1}V_n$ 中 $(j, j')$ 处的元素：
+**定理6.4** 对 $j, k = 0, 1, \cdots, n-1, V_n$ 的 (k, j) 处元素为 $\omega_n^{-kj}/n$。
+**证明** 需要验证 $V_n{-1}V_n = I_n$，其中 $I_n$ 为 $n\times n$ 的单位矩阵，即可完成证明。
+考虑 $V_n{-1}V_n$ 中 $(j, j')$ 处的元素：
 $$
-[V_n{-1}V_n]_{jj'} = \sum_{k=0}^{n-1}(\omega_n^{-kj}/n)(\omega_n^{kj'}) = 
+\begin{aligned}
+[V_n{-1}V_n]_{jj'} &= \sum_{k=0}^{n-1}(\omega_n^{-kj}/n)(\omega_n^{kj'}) = \frac{1}{n}\sum_{k=0}^{n-1}\omega_n^{k(j'-j)} \\
+&= 
+\begin{cases}
+\frac{1}{n}\sum_{k=0}^{n-1}\omega_n^0 = \frac{1}{n} \sum_{k=0}^{n-1}1 = 1 & j = j' \\
+\\
+\frac{1}{n}\sum_{k=0}^{n-1}\omega_n^{km} = 0 & j\neq j', m=j'-j \quad 6.3 求和引理 \\
+\end{cases}
+\end{aligned}
 $$
-
+因此 $V_n{-1}V_n = I_n$，证毕。 $\blacksquare$
 
 
 

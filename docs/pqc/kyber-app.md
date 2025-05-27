@@ -1022,13 +1022,13 @@ $$
 ```python {.line-numbers}
 import numpy as np
 
-def recursive-fft(a):
+def recursive_fft(a):
     n = len(a)
     if n == 1:
         return a
     omega = np.exp(2j * np.pi / n)
-    y_0 = recursive-fft(a[::2])
-    y_1 = recursive-fft(a[1::2])
+    y_0 = recursive_fft(a[::2])
+    y_1 = recursive_fft(a[1::2])
     y = np.zeros(n, dtype=complex)
     for k in range(n//2):
         y[k] = y_0[k] + omega**k * y_1[k]
@@ -1036,7 +1036,7 @@ def recursive-fft(a):
     return y
 
 a = np.array([1, 2, 3, 4, 5, 6, 7, 8], dtype=complex)
-y = recursive-fft(a)
+y = recursive_fft(a)
 
 ```
 上述代码的执行过程如下：
@@ -1169,12 +1169,59 @@ graph TD
    E --> K["y₃ = (a₀-a₂) - i(a₁-a₃)"]
    G --> K
 ```
-
+**图 6-1**
 
 ### 6.1.4 高效实现傅里叶变换
+首先在 `recursive_fft` 中，第 12～13 行的 for 循环中包含了 $\omega_n^ky_k^{[1]}$ 即 `omega**k * y_1[k]`。该值为公共子表达式，可以改变循环，使其仅计算一次，并将其存储在临时变量 `t` 中。在这个循环中，把旋转因子 $\omega=\omega_n^k$ 乘以 $y_k^{[1]}$，把所得乘积存入 `t` 中，然后从 $y_k^{[0]}$ 中增加或减去 `t`，这一系列操作称为一个蝴蝶操作(bufferfly operation)。
+
+现在来说明如何使 FFT 算法采用迭代结构而不是递归结构。在递归程序中，把输入向量安排在一次 `recursive_fft` 调用相关的各次递归中，将输入向量安排成树形结构，其中初始调用时有 n=8。树中的每一个节点对应每次递归调用，由相应的输入向量标记。每次 `recursive_fft` 调用产生两个递归调用，形成如下图的结构：
+
+```mermaid
+graph TD
+   A["(a₀,a₁,a₂,a₃,a₄,a₅,a₆,a₇)"] --> B1["(a₀,a₂,a₄,a₆)"]
+   A --> B2["(a₁,a₃,a₅,a₇)"]
+   B1 --> C1["(a₀,a₄)"]
+   B1 --> C2["a₂,a₆"]
+   B2 --> C3["(a₁,a₅)"]
+   B2 --> C4["(a₃,a₇)"]
+   C1 --> D1["(a₀)"]
+   C1 --> D2["(a₄)"]
+   C2 --> D3["(a₂)"]
+   C2 --> D4["(a₆)"]
+   C3 --> D5["(a₁)"]
+   C3 --> D6["(a₅)"]
+   C4 --> D7["(a₃)"]
+   C4 --> D8["(a₇)"]
+```
+**图 6-2**
+
+观察此树，如果把初始向量 a 中的元素按其在叶中出现的次序排列，就可以对 `recursive_fft` 的执行进行追踪，不过是自底向上而不是自顶向下。首先成对取出元素，利用一次蝴蝶操作计算出，每对的 DFT，然后用其 DFT 取代这对元素。这样向量中包含了 n/2 个二元素的 DFT。下一步，按对取出这 n/2 个 DFT，通过两次蝴蝶操作计算出具有四个元素向量的 DFT，并用一个具有四个元素的 DFT 取代对应的两个二元素的 DFT。于是向量中包含 n/4 个 四元素的 DFT。继续这一过程，直至向量包含两个具有 n/2 个元素的 DFT。
+
+实现自底向上方法的代码，采用了一个数组 A[0..n-1]，初始时该数组包含初始输入向量 a 中的元素，其顺序为它们在图6-2中树叶出现的顺序。因为需要在树的每一层进行组合，于是引入一个变量 s 以计算树的层次，取值范围从 1 到 $\lg n$ 层。
 
 
+迭代的 fft 实现的参考代码
+```python {.line-numbers}
+import numpy as np
 
+def iterative_fft(a):
+    bit_reverse(a)
+    n = len(a)
+    if n == 1:
+        return a
+    omega = np.exp(2j * np.pi / n)
+    y_0 = iterative_fft(a[::2])
+    y_1 = iterative_fft(a[1::2])
+    y = np.zeros(n, dtype=complex)
+    for k in range(n//2):
+        y[k] = y_0[k] + omega**k * y_1[k]
+        y[k + n//2] = y_0[k] - omega**k * y_1[k]
+    return y
+
+a = np.array([1, 2, 3, 4, 5, 6, 7, 8], dtype=complex)
+y = recursive_fft(a)
+
+```
 
 
 ## 6.2 分圆多项式：为NTT搭建舞台

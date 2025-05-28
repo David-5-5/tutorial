@@ -35,4 +35,28 @@ public:
         }
         return ans-1;
     }
+
+
+    int beautifulSubsets2(vector<int>& nums, int k) {
+        // 复习，递归 -> 迭代
+        unordered_map<int, map<int, int>> group;
+        for (auto& v: nums) {
+            group[v%k][v] ++;
+        }
+
+        int ans = 1;
+        for (auto& [_, cnt] : group) {
+            int m = cnt.size();
+            vector<int> f(m+1);
+            f[0] = 1;
+            auto it = cnt.begin();
+            for (int i=1; i<=m; i++, it++) {
+                f[i] = f[i-1];
+                f[i] += ((int)pow(2, it->second)-1) * ((it == cnt.begin() || it->first-prev(it)->first!=k)?f[i-1]:f[i-2]);
+            };
+            
+            ans *= f[m];
+        }
+        return ans-1;
+    }
 };

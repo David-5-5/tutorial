@@ -51,17 +51,35 @@ class Solution:
             n = len(g)
             @cache
             def dfs(i:int):
-                if i < 0:
+                if i == 0:
                     return 1
 
                 # 不选
                 res = dfs(i-1)
-                res += (2 ** g[i][1] - 1 ) * (dfs(i-1) if i == 0 or g[i][0]-g[i-1][0] != k else dfs(i-2))
+                res += (2 ** g[i-1][1] - 1 ) * (dfs(i-1) if i == 1 or g[i-1][0]-g[i-2][0] != k else dfs(i-2))
                 return res
-            ans *= dfs(n-1)
+            ans *= dfs(n)
         return ans - 1
 
+    def beautifulSubsets3(self, nums: List[int], k: int) -> int:
+        # 按余数分组 递归 - 迭代
+        rem = defaultdict(Counter)
+        for num in nums:
+            rem[num % k][num] += 1
 
+        ans = 1
+
+        for cv in rem.values():
+            g = sorted([[k, v] for k, v in cv.items()], key=lambda p:p[0])
+            n = len(g)
+            f = [0] * (n + 1)
+            f[0] = 1
+
+            for i in range(1, n+1):
+                f[i] = f[i-1]
+                f[i] += (2 ** g[i-1][1] - 1 ) * (f[i-1] if i == 1 or g[i-1][0]-g[i-2][0] != k else f[i-2])
+            ans *= f[n]
+        return ans - 1
 if __name__ == "__main__":
     sol = Solution()
     nums, k = [2,4,6], 2

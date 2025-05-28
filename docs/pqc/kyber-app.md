@@ -1203,23 +1203,38 @@ graph TD
 迭代的 fft 实现的参考代码
 ```python {.line-numbers}
 import numpy as np
+import math
+
+def bit_reverse(a):
+    n = len(a)
+    rev = [0] * n
+    bits = int(math.log2(n))
+    for i in range(n):
+        rev[i] = (rev[i>>1] >> 1) | (i & 1) << (bits-1)
+    for i in range(n//2):
+        if i < rev[i]:
+            a[i], a[rev[i]] = a[rev[i]], a[i]
+
 
 def iterative_fft(a):
     bit_reverse(a)
     n = len(a)
-    if n == 1:
-        return a
-    omega = np.exp(2j * np.pi / n)
-    y_0 = iterative_fft(a[::2])
-    y_1 = iterative_fft(a[1::2])
-    y = np.zeros(n, dtype=complex)
-    for k in range(n//2):
-        y[k] = y_0[k] + omega**k * y_1[k]
-        y[k + n//2] = y_0[k] - omega**k * y_1[k]
-    return y
+    expo = int(math.log2(n))
+    for i in range(1, expo+1):
+        m = 1 << i
+        omega = np.exp(2j * np.pi / m)    #
+        for k in range(0, n, m):
+            w = 1
+            for j in range(m//2):
+                t = w * a[k + j + m//2]
+                u = a[k+j]
+                a[k+j] = u + t
+                a[k+j+m//2] = u-t
+                w *= omega
+
 
 a = np.array([1, 2, 3, 4, 5, 6, 7, 8], dtype=complex)
-y = recursive_fft(a)
+iterative_fft(a)
 
 ```
 

@@ -1231,11 +1231,38 @@ def iterative_fft(a):
                 a[k+j] = u + t
                 a[k+j+m//2] = u-t
                 w *= omega
-
+      
 
 a = np.array([1, 2, 3, 4, 5, 6, 7, 8], dtype=complex)
 iterative_fft(a)
 
+```
+
+迭代的 inv_fft 实现的参考代码
+
+```python {.line-numbers}
+import numpy as np
+import math
+
+def inv_fft(a):
+    n = len(a)
+    bit_reverse(a)
+    expo = int(math.log2(n))
+    for i in range(1, expo+1):
+        m = 1 << i
+        omega = np.exp(-2j * np.pi / m)    #
+        for k in range(0, n, m):
+            w = 1
+            for j in range(m//2):
+                t = w * a[k + j + m//2]
+                u = a[k+j]
+                a[k+j] = u + t
+                a[k+j+m//2] = u-t
+                w *= omega
+    
+    for i in range(n): a[i] /= n
+
+inv_fft(a)
 ```
 
 

@@ -19,6 +19,7 @@ public:
         // BEGIN TEMPLATE Dijkstra
         // 构建邻接表和算法相关，邻接表元素为(v, w), v 为邻接顶点，w 为 u->v 的权重
         vector<int> dist(n, INT_MAX);
+        // vector<bool> visited(n, false);
         int start = n - 1;        // 单源起点，这里为 n-1 多数情况下为 0 
         dist[start] = 0;
 
@@ -30,6 +31,8 @@ public:
         while (!pq.empty()) {
             auto [d, u] = pq.top();
             pq.pop();
+            // if (visited[u]) continue;
+            // visited[u] = true;
             for (const auto& [v, w] : g[u]) {
                 if (dist[v] > dist[u] + w) {
                     dist[v] = dist[u] + w;
@@ -56,6 +59,6 @@ public:
             return memo[u] = res;
         };
 
-        return dfs(0);        
+        return dfs(0);  
     }
 };

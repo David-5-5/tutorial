@@ -924,6 +924,9 @@ $$ y_i = f(x_i), \quad i = 0, 1, \ldots, n $$
 
 n 个点的求值运算与插值运算是定义的完备的互逆运算，它们将多项式的系数表达和点值表达相互转换。
 
+
+
+
 **表6-1 多项式系数表示和点值表示的比较**
 场景 | 系数表示 | 点值表示
 |---|---|---|
@@ -1201,7 +1204,7 @@ graph TD
 
 
 迭代的 fft 实现的参考代码
-```python {.line-numbers}
+```python
 import numpy as np
 import math
 
@@ -1219,18 +1222,20 @@ def bit_reverse(a):
 def iterative_fft(a):
     bit_reverse(a)
     n = len(a)
-    expo = int(math.log2(n))
-    for i in range(1, expo+1):
-        m = 1 << i
-        omega = np.exp(2j * np.pi / m)    #
-        for k in range(0, n, m):
+    # expo = int(math.log2(n))
+    m = 1
+    while m < n:
+        # m = 1 << i
+        omega = np.exp(1j * np.pi / m)    #
+        for k in range(0, n, m*2):
             w = 1
-            for j in range(m//2):
-                t = w * a[k + j + m//2]
+            for j in range(m):
+                t = w * a[k + j + m]
                 u = a[k+j]
                 a[k+j] = u + t
-                a[k+j+m//2] = u-t
+                a[k+j+m] = u-t
                 w *= omega
+        m <<= 1
       
 
 a = np.array([1, 2, 3, 4, 5, 6, 7, 8], dtype=complex)
@@ -1240,26 +1245,25 @@ iterative_fft(a)
 
 迭代的 inv_fft 实现的参考代码
 
-```python {.line-numbers}
+```python 
 import numpy as np
 import math
 
 def inv_fft(a):
     n = len(a)
     bit_reverse(a)
-    expo = int(math.log2(n))
-    for i in range(1, expo+1):
-        m = 1 << i
-        omega = np.exp(-2j * np.pi / m)    #
-        for k in range(0, n, m):
+    m = 1
+    while m < n:        
+        omega = np.exp(-1j * np.pi / m)    #
+        for k in range(0, n, m*2):
             w = 1
-            for j in range(m//2):
-                t = w * a[k + j + m//2]
+            for j in range(m):
+                t = w * a[k + j + m]
                 u = a[k+j]
                 a[k+j] = u + t
-                a[k+j+m//2] = u-t
+                a[k+j+m] = u-t
                 w *= omega
-    
+        m <<= 1
     for i in range(n): a[i] /= n
 
 inv_fft(a)
@@ -1268,6 +1272,64 @@ inv_fft(a)
 ### 6.1.5 从 FFT 到 NTT
 快速傅里叶变换（FFT）利用复数单位根实现高效的分治计算，但其依赖复数运算的特性带来了显著缺陷：不仅需要额外的存储和计算开销，浮点运算引入的舍入误差更使其无法满足密码学对整数精确性的严格要求。正是这些局限性催生了数论变换（NTT）的发展——作为有限域上的FFT，NTT通过采用模数运算体系彻底规避了浮点误差，同时完美契合格密码的代数结构。这种变革不仅解决了精度问题，更通过优化模约减算法将运算效率提升至新的高度，使其成为后量子密码标准化的核心计算工具。
 
+NTT 的基本原理是在有限域 $\Bbb Z_q$ (q为质数) 中模拟 FFT，使用模质数的本原单位根替代复数单位根。其中质数 q 满足 $q = k\cdot n + 1$，n 是变换长度且是 2 的幂，同时存在模 q 的 n次本原单位根 g，满足 $g^n \equiv 1 \bmod q$ 且 $g^k \not\equiv 1 \bmod p, 0 < k < n$
+
+从抽象代数的视角看，NTT与FFT的关联本质上是基于代数结构的同态性--当有限域 $\Bbb F_q$ 满足 $q\equiv 1\bmod 2^n$ 时，其乘法子群与复数域的单位圆群存在同态映射，使得复数单位根 $e^{2\pi i/n}$ 的运算性质可由数论单位根 $\gamma\in\Bbb F_q, \gamma^n\equiv 1\bmod q$ 严格对应。这种同态性将FFT的复数域框架"移植"到整数模运算体系，形成了NTT的理论基础。 NTT将这一同态关系转化为实际计算，完全基于整数运算，从根本上避免了浮点数计算带来的精度误差，特别适合密码学中要求严格精确计算的场景。作为离散傅里叶变换（DFT）在有限域上的对应形式，NTT天然支持模运算，利用数论版本的卷积定理，不仅保证了计算结果的数学精确性，还显著提升了运算效率。
+
+**表6-2** FFT 与 NTT 对应关系
+| 特性 | FFT | NTT 
+|---|:--|:--|
+运算域 | 复数域 | 整数域
+单位根 | $\omega=e^{2\pi i/n}$ | 模 q 的 n 次本原单位根 $\gamma$
+单位根性质 | $\omega^n=1, \omega^{n/2}=-1 $| $\gamma^n\equiv 1\bmod q, \gamma^{n/2}\equiv -1\bmod q$
+使用场景 | 信号处理，浮点数运算 | 密码学、精确整数计算
+
+因此将 FFT 转换为 NTT，需要完成一下几步即可：
+1. 选择合适的质数 q，例如计算长度 n = 8 的 NTT，可选 q = 17, 17 = 8 * 2 + 1
+2. 找到模 q 的 n 次本原单位根 $\gamma$，例如对于 $n = 8, q = 17, \gamma = 2$ 满足 $2^8\equiv 256 \equiv 1 \bmod 17$，$2^4\equiv 16 \equiv -1 \bmod 17$ 
+3. 将 FFT 中的复数运算替换为模运算，在模运算中，除以 x 转换为乘以 x的逆 $x^{-1}$
+
+迭代的 ntt 实现的参考代码
+```python {.line-numbers}
+import math
+
+n = 8
+q = 17
+def iterative_ntt(a:List[int], g:int):
+    bit_reverse(a)
+    n = len(a)
+    m = 1
+    while m < n:
+        root = pow(g, n // 2 // m, q)  # 计算m次本原单位根
+
+        for k in range(0, n, m*2):
+            w = 1
+            for j in range(m):
+                t = w * a[k + j + m] % q
+                u = a[k+j]
+                a[k+j] = (u + t) % q
+                a[k+j+m] = (u-t) % q
+                w = w * root % q
+        m <<= 1
+
+
+def inv_ntt(a:List[int], g:int):
+    g_inv = pow(g, q-2, q)  # g的逆元
+    iterative_ntt(a, g_inv)
+    n_inv = pow(n, q-2, q)
+    for i in range(n):
+        a[i] = a[i] * n_inv % q
+
+
+a = [i+1 for i in range(8)]
+
+iterative_ntt(a, 2)
+inv_ntt(a, 2)
+```
+上述方法从 `iterative_fft` 及 `inv_fft` 根据要求转换而来，关键点说明如下：
+- fft 中每次迭代的 `omega = np.exp(-2j * np.pi / m)` 等价转换为 `root = pow(g, n // 2 // m, q)`
+- `inv_ntt` 中对应 $\omega^{-1}$，需要求解 $\gamma^{-1}$，在模运算下，根据费马小定理，$\gamma^{-1} = g^{q-2}\bmod q$，即代码中的 `g_inv = pow(g, q-2, q)`。
+- `inv_ntt` 中结果的归一化，乘以 $n^{-1} = n^{q-2}\bmod q$，代替除法。相应的代码转换为 `n_inv = pow(n, q-2, q)` 及 `a[i] = a[i] * n_inv % q`
 
 
 

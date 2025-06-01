@@ -6,6 +6,7 @@ class Solution {
 public:
     int maxWeight(int n, vector<vector<int>>& edges, int k, int t) {
         // 参考题解 畏难了，这题应该会的，动态规划暴力就可以
+        if (n <= k) return -1;      // 剪枝
         vector<vector<pair<int, int>>> g(n);
         for (auto e : edges) {
             g[e[0]].emplace_back(e[1], e[2]);   // 有向图
@@ -29,4 +30,44 @@ public:
 
         return ans;
     }
+
+    int maxWeight2(int n, vector<vector<int>>& edges, int k, int t) {
+        if (n <= k) return -1;
+        vector<vector<pair<int, int>>> g(n);
+        vector<int> deg(n);
+        for (auto e : edges) {
+            g[e[0]].emplace_back(e[1], e[2]);   // 有向图
+            deg[e[1]] ++;
+        }
+        vector f(n, vector<unordered_set<int>>(k+1));
+        queue<int> q;
+        for (int i=0; i<n; ++i) if (deg[i] == 0) q.push(i);
+
+        int ans = -1;
+        while (!q.empty()) {
+            int u = q.front();
+            q.pop();
+            f[u][0].insert(0);     // x
+            for (auto s : f[u][k]) {
+                ans = max(ans, s);
+            }
+
+            for (auto& [v, w]: g[u]) {
+                for (int i=0; i<k; ++i) { 
+                    for (auto s: f[u][i]) {
+                        if (s + w < t)
+                            f[v][i+1].insert(s + w);
+                    }
+                }
+
+                if (--deg[v] == 0) {
+                    q.push(v);
+                }
+            }
+            
+        }
+        return ans;
+    }
+
+    
 };

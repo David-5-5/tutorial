@@ -24,21 +24,21 @@ public:
                 ans = max(f[i][colors[i]-'a'], ans);
             }
 
-        while (!q.empty()) {
+        while (!q.empty()) {    // toplogy sort
             int u = q.front();
             q.pop();
-            if (visited[u]) return -1;
-            else visited[u] = true;
+            visited[u] = true;
             
             for (auto v : g[u]) {
                 for (int i=0; i<26; ++i){
                     f[v][i] = max(f[v][i], f[u][i]+ (colors[v]-'a'==i?1:0));
                     ans = max(ans, f[v][i]);
                 }
-                if (--deg[v] == 0) q.push(v);
+                if (--deg[v] == 0) q.push(v); 
             }
         }
 
+        // 若无环，每个节点都访问一次， 所有节点 visited = true
         if (!all_of(visited.begin(), visited.end(), [](bool vis){return vis;})){
             return -1;
         }

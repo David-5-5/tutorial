@@ -1,3 +1,6 @@
+from typing import Counter
+
+
 class Solution:
     def removeDuplicateLetters(self, s: str) -> str:
         ret = []
@@ -61,6 +64,24 @@ class Solution:
             ret.append(s[i])
         return ''.join(ret)
 
+    def removeDuplicateLetters4(self, s: str) -> str:
+        '''
+        Using counter instead of find
+        '''
+        left = Counter(s)       # 剩余次数
+        ret = []
+        
+        for c in s:
+            left[c] -= 1
+            if ret and c in ret:
+                continue
+            while ret and ret[-1] > c:
+                if left[ret[-1]]:
+                    ret.pop(-1)
+                else:
+                    break
+            ret.append(c)
+        return ''.join(ret)
 
 if __name__ == "__main__":
     sol = Solution()

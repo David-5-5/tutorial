@@ -20,4 +20,24 @@ public:
         return ans<INT_MAX/2? ans: -1;
         
     }
+
+    int findCheapestPrice2(int n, vector<vector<int>>& flights, int src, int dst, int k) {
+        // 二维 DP - 优化 - 空间一维
+        vector<int> dp(n, INT_MAX/2);
+        dp[src] = 0;
+        int ans = INT_MAX/2;
+        for (int t=1; t<=k+1; t++) {
+            vector<int> g(n, INT_MAX/2);
+            for (auto& f: flights) {
+                int i = f[0], j = f[1], c = f[2];
+                g[j] = min(g[j], dp[i] + c);
+            }
+            dp = move(g);
+            ans = min(ans, dp[dst]);
+        }
+
+
+        return ans<INT_MAX/2? ans: -1;
+        
+    }    
 };

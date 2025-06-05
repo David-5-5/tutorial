@@ -109,5 +109,27 @@ public:
         return ans;
     }
 
+    int maxWeight4(int n, vector<vector<int>>& edges, int k, int t) {
+        // 所有图，包括有环图
+        if (n <= k) return -1;
 
+        // 使用 bitset 代替 unordered_set
+        vector f(k+1, vector<bitset<600>>(n));
+        queue<int> q;
+        for (int i=0; i<n; ++i) f[0][i].set(0);
+
+        int ans = -1;
+        for (int i=0; i<k; ++i) for (auto e : edges) {
+            int u = e[0], v= e[1], w = e[2];
+            f[i+1][v] |= f[i][u] << w;
+        }
+
+        for (auto& bs : f[k]) for (int s = t-1; s>=0; --s) {
+            if (bs.test(s)) {
+                ans = max(ans, s);
+                break;
+            }
+        }
+        return ans;
+    }    
 };

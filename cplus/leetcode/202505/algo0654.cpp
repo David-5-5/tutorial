@@ -36,4 +36,37 @@ public:
 
         return dfs(0, nums.size()-1);  
     }
+
+    TreeNode* constructMaximumBinaryTree2(vector<int>& nums) {
+        // 栈 - 自行解答
+        stack<TreeNode*> st;
+        for (auto& v : nums) {
+            TreeNode* cur = new TreeNode(v);
+
+            TreeNode* left = nullptr;       // 这是关键
+            while (st.size() && st.top()->val < v) {
+                st.top()->right = left;     // 这是关键
+                left = st.top();
+                st.pop();
+            }
+            // st  栈底 node_n .. node3 node2 node1  栈顶
+            //             cur
+            //           /  left
+            //      node3 
+            //          \ right
+            //         node2
+            //              \   right
+            //            node1
+            cur->left = left;               // cur-> left 
+            st.push(cur);
+        }
+        while (st.size() > 1) {
+            TreeNode* right = st.top();
+            st.pop();
+            st.top()->right = right;
+        }
+
+        return st.top(); 
+
+    }
 };

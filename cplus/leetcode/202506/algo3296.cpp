@@ -26,4 +26,21 @@ public:
         }
         return ans;
     }
+
+    long long minNumberOfSeconds(int mountainHeight, vector<int>& workerTimes) {
+        // 参考题解，简化实现
+        int n = workerTimes.size();
+
+        long ans = 0;
+        priority_queue<tuple<long, long, int>, vector<tuple<long, long, int>>, greater<>> pq;
+        for (auto t: workerTimes) pq.emplace(t, t, t);  // nxt, current, base
+
+        while (mountainHeight) {
+            mountainHeight --;
+            auto [nxt, cur, base] = pq.top(); pq.pop(); 
+            ans = nxt;
+            pq.emplace(ans+cur+base, cur+base, base);
+        }
+        return ans;
+    }    
 };

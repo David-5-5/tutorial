@@ -5,7 +5,7 @@ using namespace std;
 class Solution {
 public:
     vector<long long> findMaxSum(vector<int>& nums1, vector<int>& nums2, int k) {
-        // 多个数组按照 nums1 排序模板
+        // 自行解答 多个数组按照 nums1 排序模板
         int n = nums1.size(), idx[n];
         iota(idx, idx+n, 0);
         sort(idx, idx + n, [&](int i, int j) {
@@ -38,4 +38,33 @@ public:
 
         return ans;  
     }
+
+    vector<long long> findMaxSum(vector<int>& nums1, vector<int>& nums2, int k) {
+        // 参考题解 - 简化
+        int n = nums1.size(), idx[n];
+        iota(idx, idx+n, 0);
+        sort(idx, idx + n, [&](int i, int j) {
+            return nums1[i] < nums1[j];
+        });
+
+        vector<long long> ans(n);
+        long sum = 0;
+        priority_queue<int, vector<int>, greater<>> pq;    //存储最大的k个数
+
+        for (int i=0; i<n; ++i) {
+            int x = idx[i];
+            ans[x] = i>0 && nums1[x] == nums1[idx[i-1]]?ans[idx[i-1]]:sum;
+
+            sum += nums2[x];
+            pq.emplace(nums2[x]);
+            if (pq.size() > k) {
+                sum += - pq.top();
+                pq.pop(); ;
+            }
+        }
+
+        return ans;
+    } 
+
+
 };

@@ -39,7 +39,7 @@ public:
         return ans;  
     }
 
-    vector<long long> findMaxSum(vector<int>& nums1, vector<int>& nums2, int k) {
+    vector<long long> findMaxSum2(vector<int>& nums1, vector<int>& nums2, int k) {
         // 参考题解 - 简化
         int n = nums1.size(), idx[n];
         iota(idx, idx+n, 0);
@@ -66,5 +66,36 @@ public:
         return ans;
     } 
 
+    vector<long long> findMaxSum3(vector<int>& nums1, vector<int>& nums2, int k) {
+        // 参考题解 - 分组循环 - 通用
+        int n = nums1.size(), idx[n];
+        iota(idx, idx+n, 0);
+        sort(idx, idx + n, [&](int i, int j) {
+            return nums1[i] < nums1[j];
+        });
 
+        vector<long long> ans(n);
+        long sum = 0;
+        priority_queue<int, vector<int>, greater<>> pq;    //存储最大的k个数
+
+        // 存在值相等情况，分组循环
+        for (int i=0; i<n;) {
+            int start = i;
+            // 找到所有相同的 nums1[i], 这些数的答案是一样的
+            while (i<n && nums1[idx[start]] == nums1[idx[i]]) {
+                ans[idx[i]] = sum;
+                i++;
+            }
+            for (int j=start; j<i; ++j) {
+                sum += nums2[idx[j]];
+                pq.emplace(nums2[idx[j]]);
+                if (pq.size() > k) {
+                    sum += - pq.top();
+                    pq.pop(); ;
+                }
+            }
+        }
+
+        return ans;
+    }    
 };

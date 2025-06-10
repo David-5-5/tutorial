@@ -34,4 +34,31 @@ public:
         }
         return ans;
     }
-};;
+
+    vector<int> shortestDistanceAfterQueries2(int n, vector<vector<int>>& queries) {
+        // 参考题解，DP, 每个节点记录prev[i]
+        // dp[i]  = min(dp[j]+1), where j ∈ prev[i]
+        vector<int> dp(n);
+        iota(dp.begin(), dp.end(), 0);
+        vector<vector<int>> prev(n);
+        // for (int i=0; i<n-1; i++) prev[i+1].push_back(i);    
+        
+        cout << dp[n-1] << endl;
+        int m = queries.size();
+        vector<int> ans(m);
+
+        for (int i=0; i<m; ++i) {
+            auto& q = queries[i];
+
+            prev[q[1]].push_back(q[0]);
+            for (int r=q[1]; r<n; ++r) {
+                dp[r] = min(dp[r], dp[r - 1] + 1);  // 和上面注释行 2 选 1
+                for (auto& l: prev[r])
+                    dp[r] = min(dp[r], dp[l]+1);
+            }
+            ans[i] = dp[n-1];
+        }
+
+        return ans;
+    }
+};

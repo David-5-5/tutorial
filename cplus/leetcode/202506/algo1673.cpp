@@ -30,4 +30,20 @@ public:
 
         return ans;
     }
+
+    vector<int> mostCompetitive2(vector<int>& nums, int k) {
+        // 参考题解
+        vector<int> ans; // 遍历 nums 过程中保持单调递增
+        int n = nums.size();
+
+        for (int i=0; i<n; ++i) {
+            // 仅需判断后续的元素个数 > k 就可以出栈了，即 ans.size() + n - i > k
+            while (ans.size() && ans.back() > nums[i] && ans.size() + n - i > k) {
+                ans.pop_back();
+            }
+            if (ans.size() < k) ans.push_back(nums[i]);
+        }
+
+        return ans;
+    }
 };

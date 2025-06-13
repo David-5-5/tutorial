@@ -46,7 +46,48 @@ public:
     }
 };
 
+class MyCircularQueue {
+private:
+    int capacity, head=0, tail=0;
+    vector<int> que;
 
+public:
+    MyCircularQueue(int k) {
+        this->capacity = k+1;
+        que.assign(k+1, -1);    // 多一个元素更通用
+    }
+    
+    bool enQueue(int value) {
+        if (isFull()) return false;
+        que[tail] = value;
+        tail = (tail + 1) % capacity;
+        return true;
+    }
+    
+    bool deQueue() {
+        if (isEmpty()) return false;
+        head = (head + 1) % capacity;
+        return true;
+    }
+    
+    int Front() {
+        if (isEmpty()) return -1;
+        return que[head];
+    }
+    
+    int Rear() {
+        if (isEmpty()) return -1;
+        return que[(tail+capacity-1)%capacity];
+    }
+    
+    bool isEmpty() {
+        return tail == head;
+    }
+    
+    bool isFull() {
+        return (tail+1)%capacity == head;
+    }
+};
 
 /**
  * Your MyCircularQueue object will be instantiated and called as such:

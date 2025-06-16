@@ -24,23 +24,25 @@ public:
         //     }
         //     return true;
         // };
-        // 参考题解
+        // 参考题解 - 最小化最大值 - 二分
         auto check = [&](int m) -> bool {
             int cnt = 0;
-            if (m == 1) {
-                // 改成 0101...
+            if (m == 1) {   // 需要特判
+                // 0110 改成 0101...
                 for (int i = 0; i < n; i++) {
                     // 如果 s[i] 和 i 的奇偶性不同，cnt 加一
                     cnt += (s[i] ^ i) & 1;
                 }
                 // n-cnt 表示改成 1010...
-                cnt = min(cnt, n - cnt);
+                cnt = min(cnt, n - cnt);    // 取最小值
             } else {
                 int k = 0;
                 for (int i = 0; i < n; i++) {
                     k++;
                     // 到达连续相同子串的末尾
                     if (i == n - 1 || s[i] != s[i + 1]) {
+                        // 对于连续的长度 k 需要分割的次数，
+                        // 可以通过举例发现满足规律，符合下式
                         cnt += k / (m + 1);
                         k = 0;
                     }

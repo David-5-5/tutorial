@@ -35,22 +35,6 @@ def eratosthenes2(n:int) -> List[int]:
 
     return primes
 
-def eratosthenes2(n:int) -> List[int]:
-    # 优化 筛至平方根
-    primes = []
-    is_prime = [True] * (n+1)
-    is_prime[0]  = is_prime[1] = False
-
-    for i in range(2, isqrt(n)+1):
-        if is_prime[i]:
-            for j in range(i*i, n+1, i):
-                is_prime[j] = False
-
-    for i in range(2, n + 1):
-        if is_prime[i]:
-            primes.append(i)
-
-    return primes
 
 # 使用最小质因子代替数组 min_prime_factor[] 代替 is_prime[]
 # 若  min_prime_factor[i] == i, 表示 i 是素数

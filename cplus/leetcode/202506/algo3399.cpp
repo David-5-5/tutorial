@@ -4,6 +4,7 @@ using namespace std;
 // 常用数据结构 - 5.2 堆 - 进阶
 class Solution {
 public:
+
     int minLength(string s, int numOps) {
         int n = s.length();
 
@@ -56,5 +57,29 @@ public:
 
         return right;
     }
-    
+
+    int minLength2(string s, int numOps) {
+        // 参考题解
+        int cnt = 0, n = s.length();
+        for (int i=0; i<n; ++i) {
+            cnt += (s[i] ^ i) & 1;
+        }
+        if (min(cnt, n-cnt) <= numOps) return 1;
+        priority_queue<tuple<int, int, int>> pq;
+        int k = 0;
+        for (int i=0; i<n; ++i) {
+            k++;
+            if (i == n-1 || s[i] != s[i+1]) {
+                pq.emplace(k,k,1);
+                k = 0;
+            }
+        }
+        while (numOps-- && get<0>(pq.top()) > 2) {
+            auto [_, k, seg] = pq.top(); pq.pop();
+            pq.emplace(k/(seg+1), k, seg+1); // 重新分割
+        }
+
+        return get<0>(pq.top());  
+    }
+
 };

@@ -61,12 +61,15 @@ public:
     }
 
     int minLength2(string s, int numOps) {
-        // 参考题解
+        // 参考题解 - 最大堆
         int cnt = 0, n = s.length();
+        // 与二分方法相同，仍需要特判最大长度为 1 的情况
         for (int i=0; i<n; ++i) {
             cnt += (s[i] ^ i) & 1;
         }
         if (min(cnt, n-cnt) <= numOps) return 1;
+
+        // 最大堆的元素分别为 子串操作后的(最长子段长度，原始子段长度，段数)
         priority_queue<tuple<int, int, int>> pq;
         int k = 0;
         for (int i=0; i<n; ++i) {
@@ -76,6 +79,8 @@ public:
                 k = 0;
             }
         }
+        // 堆顶长度等于 2，即是答案
+        // 将原始子串重新分割， floor(k/(seg+1)) k 是原始长度，seg 当前分段数
         while (numOps-- && get<0>(pq.top()) > 2) {
             auto [_, k, seg] = pq.top(); pq.pop();
             pq.emplace(k/(seg+1), k, seg+1); // 重新分割

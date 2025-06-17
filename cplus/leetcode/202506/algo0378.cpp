@@ -5,6 +5,7 @@ using namespace std;
 class Solution {
 public:
     int kthSmallest(vector<vector<int>>& matrix, int k) {
+        // 自行解答
         int n = matrix.size(), m = matrix[0].size();
         vector vis(n, vector<bool>(m));
         
@@ -28,5 +29,24 @@ public:
 
     }
 
-    
+    int kthSmallest2(vector<vector<int>>& matrix, int k) {
+        // 自行解答
+        int n = matrix.size(), m = matrix[0].size();
+        if (n == 1) return matrix[0][k-1];
+        if (m == 1) return matrix[k-1][0];
+        
+        priority_queue<tuple<int,int,int>, vector<tuple<int,int,int>>, greater<>> pq;
+
+        for (int i=0; i<n; i++)
+            pq.emplace(matrix[i][0], i, 0);
+
+        for (int _=0; _<k-1; ++_) {
+            auto [_, r, c] = pq.top(); pq.pop();
+            
+            if (c+1<m) 
+                pq.emplace(matrix[r][c+1], r, c+1);
+        }
+
+        return get<0>(pq.top());
+    }    
 };

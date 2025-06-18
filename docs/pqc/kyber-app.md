@@ -1386,6 +1386,8 @@ $x^6-1= \Phi_1(x)\Phi_2(x)\Phi_3(x)\Phi_6(x) = (x-1)(x + 1)(x^2 + x + 1)(x^2 - x
 
 
 ## 6.3 Kyber 数论变换应用
+
+### 6.3.1 数学基础
 Kyber 中引入的多项式环。多项式和多项式环的乘法在采用NTT（数论变换）时的核心区别在于运算目标和约束条件。其中多项式乘法(定义参见公式 6.3)，特点是无模运算，结果多项式次数是两者次数之和，属于线性卷积。多项式环乘法(定义参见公式 6.4)是圆周卷积，结果多项式次数被限制为 $< n$。
 
 多项式和多项式环乘法的共同点如下：
@@ -1407,11 +1409,36 @@ Kyber 中引入的多项式环。多项式和多项式环的乘法在采用NTT�
 
 
 
+
+### 6.3.2 Kyber 的NTT
+Kyber 分圆环为 $R_q = \Bbb Z_q[X]/f(X)$，其中 $f(X) = \Phi_{2d}(X) = X^d + 1, n = 2d = 256$，即 $f(X) = X^{128} + 1$。因此存在 $d = 2^k$ 个 2d 次本原单位根，恰好是 $X^d + 1$ 的所有零点；若即这当中最小的本原单位根为，或 $X^d + 1$ 的零点，为 $\zeta$，具有如下**性质**：
+1. $\zeta^{2d} = 1，对于 \forall k\in \Bbb Z^+, k<2d, \zeta^k \neq 1$
+  Kyber 中 $\zeta = 17, n=256, q = 3329， 17^{256} \equiv 1 \bmod 3329 $
+  $17^k \bmod 3329 \neq 1, k<256 $
+
+2. $f(\zeta) = \zeta^d + 1 = 0, \zeta^d = -1 $
+  Kyber 中 $17^{128} \equiv 3328 \equiv -1 \bmod 3329 $
+
+3. $\zeta, \zeta^3, \zeta^5, \cdots, \zeta^{2^{k+1}-1}$，即 $\zeta$ 的小于 $n = 2d$ 的奇数次幂构成 f(X) 的全部零点
+  Kyber 中 $17^{128} \equiv 17^{3* 128} \equiv 17^{5 *128} \equiv \cdots \equiv 17^{255 *128} \equiv 3328 \equiv -1 \bmod 3329$
+
+$$
+\begin{aligned}
+f(X) &= X^d + 1 = X^d + \zeta^{2d} \quad 性质1 \\
+     &= X^d + \zeta^d \cdot \zeta^d = X^d - \zeta^d \quad 性质2 \\
+     &= (X^{d/2} - \zeta^{d/2})(X^{d/2} + \zeta^{d/2})
+
+\end{aligned}
+$$
+
+
+
+
 # 7. 安全性的根基：MLWE问题
 
 ## 7.1 MLWE问题的数学基础
 ### 7.1.1 从LWE到MLWE的演进
-LWE（Learning With Errors）问题定义为：给定矩阵A ∈ ℤq^{m×n}和向量b = A·s + e mod q，其中e为小误差，要求恢复秘密向量s ∈ ℤq^n。其局限性在于密钥尺寸大（O(n²)），计算效率低。
+LWE（Learning With Errors）问题定义为：给定矩阵$A \in \Bbb Z_q^{m×n}$ 和向量 $b = A\cdot s + e \bmod q$，其中 $e$ 为小误差，要求恢复秘密向量 $s\in \Bbb Z_q^n$。其局限性在于密钥尺寸大，计算效率低。
 
 MLWE（Module-LWE）将LWE推广到分圆环上的模结构：
 Rq = ℤq[x]/(x^n + 1)

@@ -1351,8 +1351,6 @@ inv_ntt(a, 2)
 **分圆多项式**（Cyclotomic Polynomial）分圆多项式是数论和代数中一类重要的多项式，与单位根密切相关，在数论、代数数论、群论等领域有广泛应用。分圆多项式为 NTT 提供了理论基石，其核心作用在于构造满足特定条件的单位根，使得 NTT 能够在模运算下高效完成卷积等运算。分圆多项式为 NTT 提供了理论基石，其核心作用在于构造满足特定条件的单位根，使得 NTT 能够在模运算下高效完成卷积等运算。将从分圆多项式的定义出发，逐步揭示其性质及用法。
 
 
-
-
 **定义** 分圆多项式 $\Phi_n(x)$ 以所有本原 n 次单位根为根的首一多项式，记作 $\Phi_n(x)$。其表达式为：$\Phi_n(x) = \prod_{1\leq k\leq n, gcd(k,n)=1} (x-e^{2\pi ik/n})$
 
 例如：
@@ -1386,6 +1384,7 @@ $x^6-1= \Phi_1(x)\Phi_2(x)\Phi_3(x)\Phi_6(x) = (x-1)(x + 1)(x^2 + x + 1)(x^2 - x
 
 
 ## 6.3 Kyber 数论变换应用
+数论变换（NTT）可视为离散傅里叶变换的专用精确版本。在 Kyber 中，NTT 用于提高环 $R_q$ 中乘法的效率。环 $R_q$ 与另一个环 $T_q$ 同构，$T_q$ 是 $\Bbb Z_q$ 的二次域扩张的直和。NTT 是这两个环之间的计算高效同构。当输入多项式 $f\in R_q$，NTT 输出元素 $\hat f:=NTT(f)\in T_q$, $\hat f$ 称为 $f$ 的NTT表示。NTT 被视为 ML-KEM 的组成部分，而不仅仅是优化。
 
 ### 6.3.1 数学基础
 Kyber 中引入的多项式环。多项式和多项式环的乘法在采用NTT（数论变换）时的核心区别在于运算目标和约束条件。其中多项式乘法(定义参见公式 6.3)，特点是无模运算，结果多项式次数是两者次数之和，属于线性卷积。多项式环乘法(定义参见公式 6.4)是圆周卷积，结果多项式次数被限制为 $< n$。
@@ -1408,30 +1407,58 @@ Kyber 中引入的多项式环。多项式和多项式环的乘法在采用NTT�
 
 
 
-
-
 ### 6.3.2 Kyber 的NTT
-Kyber 分圆环为 $R_q = \Bbb Z_q[X]/f(X)$，其中 $f(X) = \Phi_{2d}(X) = X^d + 1, n = 2d = 256$，即 $f(X) = X^{128} + 1$。因此存在 $d = 2^k$ 个 2d 次本原单位根，恰好是 $X^d + 1$ 的所有零点；若即这当中最小的本原单位根为，或 $X^d + 1$ 的零点，为 $\zeta$，具有如下**性质**：
-1. $\zeta^{2d} = 1，对于 \forall k\in \Bbb Z^+, k<2d, \zeta^k \neq 1$
-  Kyber 中 $\zeta = 17, n=256, q = 3329， 17^{256} \equiv 1 \bmod 3329 $
-  $17^k \bmod 3329 \neq 1, k<256 $
+Kyber形成的 NIST 标准 FIPS203 ML-KEM 中批准的参数：
+|  | n | q | k | $\eta_1$ | $\eta_2$ | $d_u$ | $d_v$ | RBG |
+|---|:--|:--|:--|:--|:--|:--|:--|:--|
+ML-KEM-512 | 256 | 3229 | 2 | 3 | 2 | 10 | 4 | 128
+ML-KEM-512 | 256 | 3229 | 3 | 2 | 2 | 10 | 4 | 192
+ML-KEM-512 | 256 | 3229 | 4 | 2 | 2 | 11 | 5 | 256
 
-2. $f(\zeta) = \zeta^d + 1 = 0, \zeta^d = -1 $
-  Kyber 中 $17^{128} \equiv 3328 \equiv -1 \bmod 3329 $
+根据 n = 256, q = 3329, 分圆环的最小零点值 $\zeta = 17$
 
-3. $\zeta, \zeta^3, \zeta^5, \cdots, \zeta^{2^{k+1}-1}$，即 $\zeta$ 的小于 $n = 2d$ 的奇数次幂构成 f(X) 的全部零点
-  Kyber 中 $17^{128} \equiv 17^{3* 128} \equiv 17^{5 *128} \equiv \cdots \equiv 17^{255 *128} \equiv 3328 \equiv -1 \bmod 3329$
+
+Kyber 分圆环为 $R_q = \Bbb Z_q[X]/f(X)$，其中 $f(X) = \Phi_{512}(X) = X^{256} + 1$，即 $f(X) = X^{256} + 1$。因此存在 $2^7 = 128$ 个 256 次本原单位根，恰好是 $X^{256} + 1$ 的所有零点；最小的本原单位根 $\zeta$，具有如下**性质**：
+1. $\zeta^n = \zeta^{256} = 1，对于 \forall k\in \Bbb Z^+, k<256, \zeta^k \neq 1$
+   $17^{256} \equiv 1 \bmod 3329 $
+   $17^k \bmod 3329 \neq 1, k<256 $
+
+2. $f(\zeta) = \zeta^{n/2} + 1  = \zeta^{128} + 1 = 0,  \zeta^{n/2} = \zeta^{128} = -1 $
+   $17^{128} \equiv 3328 \equiv -1 \bmod 3329 $
+
+3. $\zeta, \zeta^3, \zeta^5, \cdots, \zeta^{255}$，即 $\zeta$ 的小于 $n = 2^8$ 的奇数次幂构成 f(X) 的全部零点
+   $17^{128} \equiv 17^{3* 128} \equiv 17^{5 *128} \equiv \cdots \equiv 17^{255 *128} \equiv 3328 \equiv -1 \bmod 3329$
 
 $$
 \begin{aligned}
-f(X) &= X^d + 1 = X^d + \zeta^{2d} \quad 性质1 \\
-     &= X^d + \zeta^d \cdot \zeta^d = X^d - \zeta^d \quad 性质2 \\
-     &= (X^{d/2} - \zeta^{d/2})(X^{d/2} + \zeta^{d/2})
-
+f(X) &= X^n + 1 = X^n + \zeta^{n} &\quad 性质1 \\
+     &= X^n + \zeta^{n/2} \cdot \zeta^{n/2} = X^n - \zeta^{n/2} &\quad 性质2 \\
+     &= (X^{n/2} - \zeta^{n/4})(X^{n/2} + \zeta^{n/4})  &\quad
 \end{aligned}
 $$
 
+运用中国剩余扩展定理，即分圆环上的中国剩余定理。
+$$
+\Bbb Z_q[X]/(X^n + 1) = \Bbb Z_q[X]/(X^n - \zeta^{n/2}) = \Bbb Z_q[X]/(X^{n/2} - \zeta^{n/4}) \times \Bbb Z_q[X]/(X^{n/2} + \zeta^{n/4})
+$$
 
+由于 $n = 2^k$，若 $n/2 \neq 1$，左半部分也就自然可以继续递归降阶；
+至于右半部分，则有可以利用 $\zeta^{n}=1, \zeta^{n/2}=-1$ 的性质，对右式进行转换
+$$
+\Bbb Z_q[X]/(X^{n/2} + \zeta^{n/4}) = \Bbb Z_q[X]/(X^{n/2} + \zeta^{n}\zeta^{n/4}) = \Bbb Z_q[X]/(X^{n/2} - \zeta^{n/2}\zeta^{n/4})= \Bbb Z_q[X]/(X^{n/2} - \zeta^{3n/4})
+$$
+完成上式的转换后，右式同样可以继续递归降阶；于是便有了类比标准 FFT/NTT 算法的全部条件。
+
+递归展开式示意如下：
+$$
+\begin{aligned}
+  f(X) &= X^n - \zeta^{n/2}     & \qquad 0-Level  \\
+       &= (X^{n/2} - \zeta^{n/4}),(X^{n/2} - \zeta^{3n/4}) & \qquad 1-Level \\
+       &= (X^{n/4} - \zeta^{n/8}),(X^{n/4} - \zeta^{5n/8}) ,(X^{n/4} - \zeta^{3n/8}),(X^{n/4} - \zeta^{7n/8}) & \qquad 2-Level\\
+ & \cdots & \\
+   &= (X^2 - \zeta),(X^2 - \zeta^{2brv(1)+1}) ,(X^2 - \zeta^{2brv(2)+1}), \cdots, (X^2 - \zeta^{2brv(2^{d-1}-1)+1}) & \qquad 7-Level \\
+\end{aligned}
+$$
 
 
 # 7. 安全性的根基：MLWE问题

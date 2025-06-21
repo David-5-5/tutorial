@@ -17,6 +17,10 @@ public:
             if (memo.count(pos)) return memo[pos];
             long res = (long) pos * inc;    // 全部步行的时间
             for (int i=0; i<n; ++i) {
+                // 计算商 及 余数，商为公交的上一站，余数为步行的站数
+                // pos = 13 jump = 5，得到 prev = 2，rem = 3  
+                // 走法一 2*5 + 3 = 13
+                // 走法二 3*5 - 2 = 15
                 int prev = pos / jump[i], rem = pos % jump[i];  
                 res = min(res, dfs(prev) + cost[i] + (long)rem * inc);
                 if (rem) res = min(res, dfs(prev+1) + cost[i] + (long)(jump[i]-rem)*dec);

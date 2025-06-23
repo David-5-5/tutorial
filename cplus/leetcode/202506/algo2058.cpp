@@ -25,7 +25,6 @@ public:
 
         while (cur->next !=nullptr) {
             inx ++;
-            cout << inx << endl;
             if ((cur->val > prev && cur->val > cur->next->val)||
                     (cur->val < prev && cur->val < cur->next->val)) {
                 // 极大值
@@ -35,7 +34,6 @@ public:
                 }
                 if (first == -1) first = inx;
                 last = inx;
-                cout << first << ", " << last << endl;
             }
             prev = cur->val; cur = cur->next;
         }
@@ -43,4 +41,32 @@ public:
         if (mx == 0) return {-1,-1};
         else return {mn, mx};         
     }
+
+    vector<int> nodesBetweenCriticalPoints2(ListNode* head) {
+        // 参考题解后，修改上述代码
+        int first = -1, last = -1;
+        int mn = INT_MAX, mx = 0;
+
+        int inx=0;
+        ListNode* cur = head;
+
+        while (cur->next->next) {   // 一键三连
+            inx ++;
+            if ((cur->next->val > cur->val && cur->next->val > cur->next->next->val)||
+                   (cur->next->val < cur->val && cur->next->val < cur->next->next->val)) {
+                // 极大值
+                if (last != -1) {
+                    mn = min(mn, inx - last);
+                    mx = max(mx, inx - first);
+                }
+                if (first == -1) first = inx;
+                last = inx;
+            }
+            cur = cur->next;
+        }
+
+        if (mx == 0) return {-1,-1};
+        else return {mn, mx};     
+
+    }    
 };

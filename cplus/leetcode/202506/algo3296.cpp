@@ -10,7 +10,8 @@ public:
 
         vector<long> times(n);
         long ans = 0;
-        auto cmp = [&](const std::pair<long, int>& a, const std::pair<long, int>& b) {
+        // 自定义 优先队列 的比较函数
+        auto cmp = [&](const pair<long, int>& a, const pair<long, int>& b) {
             return a.first + times[a.second] > b.first + times[b.second];       // 实际上就是下一个最小的值
         };
 
@@ -27,7 +28,7 @@ public:
         return ans;
     }
 
-    long long minNumberOfSeconds(int mountainHeight, vector<int>& workerTimes) {
+    long long minNumberOfSeconds2(int mountainHeight, vector<int>& workerTimes) {
         // 参考题解，简化实现
         int n = workerTimes.size();
 
@@ -42,5 +43,33 @@ public:
             pq.emplace(ans+cur+base, cur+base, base);
         }
         return ans;
-    }    
+    } 
+
+    long long minNumberOfSeconds3(int mountainHeight, vector<int>& workerTimes) {
+        // 有单调性，二分答案 n(n-1) = x => n = (1 + sqrt(1+4x)) / 2
+        auto check = [&](long mid) -> bool {
+            long res = 0;
+            for (auto& v:workerTimes) {
+                double x =  2.0 * mid / v;
+                res += ((int)sqrt(1 + 4.0 * x)-1) / 2;
+            }
+            return res >= mountainHeight;
+        };
+
+        long left = 0, right = (long)ranges::max(workerTimes) * (mountainHeight) * (mountainHeight+1) / 2;
+
+        while (left + 1 < right) {
+            long mid = left + (right-left)/2;
+            
+            (check(mid)? right : left) = mid;
+        }
+
+        return right;
+    }   
 };
+
+int main() {
+    vector<int> workTimes = {2,1,1};
+    cout << Solution().minNumberOfSeconds3(4, workTimes) << endl;
+
+}

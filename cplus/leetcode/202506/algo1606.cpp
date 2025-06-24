@@ -36,5 +36,35 @@ public:
         return ans;
     }
 
+    vector<int> busiestServers2(int k, vector<int>& arrival, vector<int>& load) {
+        // 自行解答 有set 代替 vector + ranges::lower_bound
+        set<int> avail;
+        vector<int> cnt(k);
+        priority_queue<pair<int,int>, vector<pair<int,int>>, greater<>> pq; 
+        for (int i=0; i<k; i++) avail.insert(i); // 初始所有服务器都可用
 
+        for (int i=0; i<arrival.size(); i++) {
+            int cur = arrival[i];
+            while (!pq.empty() && pq.top().first <= cur) {
+                avail.insert(pq.top().second); pq.pop();
+            }
+            if (avail.empty()) continue;
+
+            auto it = avail.lower_bound(i%k);
+            if (it == avail.end()) it = avail.begin();
+            cnt[*it] += 1;
+            pq.emplace(cur + load[i], *it); avail.erase(it);
+
+        }
+
+        int mx_cnt = 0;
+        vector<int> ans;
+        for (int i=0; i<k; ++i) {
+            if (cnt[i] == mx_cnt) ans.push_back(i);
+            else if (cnt[i] > mx_cnt) {
+                ans.clear(); mx_cnt = cnt[i]; ans.push_back(i);
+            }
+        }
+        return ans; 
+    }    
 };

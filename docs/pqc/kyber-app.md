@@ -1484,7 +1484,7 @@ $$
 \begin{aligned}
 s_0(X) &= a_0 + a_1X + \cdots + a_{\frac{d}{2}-1}X^{\frac{d}{2}-1} + a_\frac{d}{2}X^\frac{d}{2} + a_{\frac{d}{2}+1}X^{\frac{d}{2}+1} \cdots + a_{d-1}X^{d-1} \\
 &= (a_0 + a_1X + \cdots a_{\frac{d}{2}-1}X^{\frac{d}{2}-1}) + (a_\frac{d}{2}X^\frac{d}{2} + a_{\frac{d}{2}+1}X^{frac{d}{2}+1} + \cdots + a_{d-1}X^{d-1}) \\
-&= (a_0 + a_1X + \cdots a_{\frac{d}{2}-1}X^{\frac{d}{2}-1}) + (a_\frac{d}{2}\zeta^frac{d}{4} + a_{\frac{d}{2}+1}\zeta^\frac{d}{4}X \cdots + a_{d-1}\zeta^\frac{d}{4}X^{\frac{d}{2}-1}) \\
+&= (a_0 + a_1X + \cdots a_{\frac{d}{2}-1}X^{\frac{d}{2}-1}) + (a_\frac{d}{2}\zeta^\frac{d}{4} + a_{\frac{d}{2}+1}\zeta^\frac{d}{4}X \cdots + a_{d-1}\zeta^\frac{d}{4}X^{\frac{d}{2}-1}) \\
 &= (a_0 + a_\frac{d}{2}\zeta^\frac{d}{4}) + (a_1 + a_{\frac{d}{2}+1}\zeta^\frac{d}{4})X + \cdots + (a_{\frac{d}{2}-1} + a_{d-1}\zeta^\frac{d}{4})X^{\frac{d}{2}-1} (\bmod X^\frac{d}{2} - \zeta^\frac{d}{4})
 \end{aligned}
 $$
@@ -1496,6 +1496,28 @@ s_1(X) &= (a_0 - a_\frac{d}{2}\zeta^\frac{d}{4}) + (a_1 - a_{\frac{d}{2}+1}\zeta
 \end{aligned}
 $$
 
+以 $n=16$ 为例说明，$s(X) = \sum_{i=0}^{15} a_iX^i$
+第一次递归 :
+$$
+\begin{aligned}
+s(X) \bmod (X^{16}+1) &= s(X)\bmod (X^{16}-\zeta^8)  \\
+&=  s(X)\bmod(X^8-\zeta^4)(X^8+\zeta^4) \\ 
+&= (s(X)\bmod (X^8-\zeta^4))(s(X)\bmod (X^8+\zeta^4)) \\
+&= s_0(X) \cdot s_1(X) 
+\end{aligned}
+$$
+展开 $s_0(X)=s(X)\bmod (X^8-\zeta^4)$ 和 $s_1(X)=s(X)\bmod (X^8+\zeta^4)$ 分别为：
+$$
+\begin{aligned}
+s_0(X) &= (a_0 + a_8\zeta^4) + (a_1 + a_9\zeta^4)X + (a_2 + a_{10}\zeta^4)X^2 + (a_3 + a_{11}\zeta^4)X^3 \\ 
+       & + (a_4 + a_{12}\zeta^4)X^4 + (a_5 + a_{13}\zeta^4)X^5 + (a_6 + a_{14}\zeta^4)X^6 + (a_7 + a_{15}\zeta^4)X^7 \\
+        \\ 
+s_1(X) &= (a_0 - a_8\zeta^4) + (a_1 - a_9\zeta^4)X + (a_2 - a_{10}\zeta^4)X^2 + (a_3 - a_{11}\zeta^4)X^3 \\ 
+       & + (a_4 - a_{12}\zeta^4)X^4 + (a_5 - a_{13}\zeta^4)X^5 + (a_6 - a_{14}\zeta^4)X^6 + (a_7 - a_{15}\zeta^4)X^7 
+\end{aligned}
+$$
+
+第二次递归
 
 
 # 7. 安全性的根基：MLWE问题

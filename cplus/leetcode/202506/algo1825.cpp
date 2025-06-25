@@ -1,6 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+// 常用数据结构 - 5.7 堆 - 对顶堆（滑动窗口第 K 小/大）
 class MKAverage {
 // 使用 Python SortedList 翻译过来，但是超时，python 可以
 private:

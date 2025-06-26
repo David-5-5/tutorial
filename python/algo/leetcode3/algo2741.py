@@ -45,11 +45,29 @@ class Solution:
                     res += dfs(i ^ (1<<cur),cur)
             return res % MOD
 
-        ans = 0
-        for i in range(n):
-            ans += dfs(((1<<n)-1)^(1<<i), i)
-        return ans % MOD    
+        # 倒序，便于改为递推
+        tot = (1<<n)-1
+        return sum(dfs(tot^(1<<i), i) for i in range(n))% MOD
     
+
+    def specialPerm3(self, nums: List[int]) -> int:
+        # 202506 复习 递归-递推
+        MOD = 10 ** 9 + 7
+        n = len(nums)
+        tot = (1<<n)-1
+        
+        dp = [[0] * n for _ in range(tot)]
+        for i in range(n): dp[0][i] = 1
+
+        for s in range(1, tot):                 # 状压情况下，递推效率不高
+            for i, prev in enumerate(nums):
+                if s >> i & 1: continue
+                for j, x in enumerate(nums):
+                    if s>>j & 1 and (prev % x==0 or x% prev ==0):
+                        dp[s][i] += dp[s^(1<<j)][j]
+
+        return sum(dp[tot^(1<<i)][i] for i in range(n))% MOD
+ 
 if __name__ == "__main__":
     sol = Solution()
     nums  = [1,4,3]

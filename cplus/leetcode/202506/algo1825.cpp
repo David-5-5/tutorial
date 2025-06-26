@@ -1,7 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-// 常用数据结构 - 5.7 堆 - 对顶堆（滑动窗口第 K 小/大）
 class MKAverage {
 // 使用 Python SortedList 翻译过来，但是超时，python 可以
 private:
@@ -144,6 +143,70 @@ public:
     }
 };
 
+
+class MKAverage {
+    // using multiset and uni-element
+private:
+    int m, k;
+    long sum;
+    vector<int> nums;
+    multiset<int> left, mid, right;  // 使用 multiset 维护有序对
+
+public:
+    MKAverage(int m, int k) : m(m), k(k), sum(0) {}
+    
+    void addElement(int num) {
+        nums.push_back(num);
+        right.insert(num);
+        if (nums.size() <= m) {
+            if (right.size() > k) {
+                mid.insert(*right.begin());
+                right.erase(right.begin());
+            }
+            if (mid.size() > m - 2 * k) {
+                left.insert(*mid.begin());
+                mid.erase(mid.begin());
+            }
+            if (nums.size() == m) {
+                for (auto it=mid.begin(); it!=mid.end(); ++it) sum += *it;
+            }
+        } else {
+            int inx = nums.size() - m - 1;
+            if (right.find(nums[inx])!=right.end()) right.erase(right.find(nums[inx]));
+            else if (mid.find(nums[inx])!=mid.end()) {
+                mid.erase(mid.find(nums[inx])); sum -= nums[inx];
+            } else  left.erase(left.find(nums[inx]));
+
+            if (right.size() > k) {
+                sum += *right.begin();
+                mid.insert(*right.begin());
+                right.erase(right.begin());
+            } else if (*right.begin() < *mid.rbegin()) {
+                sum += *right.begin() - *mid.rbegin();
+                mid.insert(*right.begin());
+                right.erase(right.begin());
+                right.insert(*mid.rbegin());
+                mid.erase(prev(mid.end()));
+            }
+            if (mid.size() > m - 2 * k) {
+                sum -= *mid.begin();
+                left.insert(*mid.begin());
+                mid.erase(mid.begin());
+            } else if (*mid.begin() < *left.rbegin()) {
+                sum += *left.rbegin() - *mid.begin();
+                left.insert(*mid.begin());
+                mid.erase(mid.begin());
+                mid.insert(*left.rbegin());
+                left.erase(prev(left.end()));
+            }
+        }
+    }
+    
+    int calculateMKAverage() {
+        if (nums.size() < m) return -1;
+        return sum / (m - 2 * k);        
+    }
+};
 /**
  * Your MKAverage object will be instantiated and called as such:
  * MKAverage* obj = new MKAverage(m, k);

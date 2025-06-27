@@ -7,6 +7,7 @@ class ListNode:
 # 参加 algo 25
 class Solution:
     def reverseBetween(self, head: Optional[ListNode], left: int, right: int) -> Optional[ListNode]:
+        # 翻转列表 模板
         dummy = ListNode(next=head)
         p0 = dummy
 

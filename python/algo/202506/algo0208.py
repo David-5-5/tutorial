@@ -33,3 +33,37 @@ class Trie:
             p = self.nex[p][c]
         return True      
 
+# 实现二 - 参考题解，通用 性能提升
+class Node:
+    __slots__ = 'son', 'end'
+
+    def __init__(self):
+        self.son = {}
+        self.end = False
+
+class Trie:
+    def __init__(self):
+        self.root = Node()
+
+    def insert(self, word:str):  # 插入字符串
+        cur = self.root
+        for c in word:
+            if c not in cur.son:
+                cur.son[c] = Node()
+            cur = cur.son[c]
+        cur.end = True
+
+    def find(self, word:str) -> int:  # 查找字符串
+        cur = self.root
+        for c in word:
+            if c not in cur.son:
+                return 0
+            cur = cur.son[c]
+        return 2 if cur.end else 1
+    
+    def search(self, word:str) -> bool:  # 查找字符串
+        return self.find(word) == 2
+
+    def startsWith(self, prefix: str) -> bool:
+        return self.find(prefix)>0
+

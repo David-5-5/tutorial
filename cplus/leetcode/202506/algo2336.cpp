@@ -22,6 +22,30 @@ public:
     }
 };
 
+
+class SmallestInfiniteSet {
+private:
+    int thres = 1;      // thres 以下默认都在 set 中
+    set<int> sset;
+public:
+    // 参考题解 - 很精妙
+    SmallestInfiniteSet() {
+    }
+    
+    int popSmallest() {
+        if (sset.empty()) return thres++;
+        
+        int val = *sset.begin();
+        sset.erase(sset.begin());
+        return val;
+    }
+    
+    void addBack(int num) {
+        if (num < thres)
+            sset.emplace(num);
+    }
+};
+
 /**
  * Your SmallestInfiniteSet object will be instantiated and called as such:
  * SmallestInfiniteSet* obj = new SmallestInfiniteSet();

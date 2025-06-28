@@ -1489,7 +1489,7 @@ s_0(X) &= a_0 + a_1X + \cdots + a_{\frac{d}{2}-1}X^{\frac{d}{2}-1} + a_\frac{d}{
 \end{aligned}
 $$
 
-相应的右子节点而言，由于在 $(\bmod X^{n/2} + \zeta^{n/4})$ 的意义下，得到 $X^{n/2} = -\zeta^{n/4}$；因此原多项式 $s(X)$ 中任何高于 $d/2$ 阶的 X 项，都能以 $-\zeta^{n/4}$ 代替 $X^{n/2}$：
+相应的右子节点而言，由于在 $\bmod (X^{n/2} + \zeta^{n/4})$ 的意义下，得到 $X^{n/2} = -\zeta^{n/4}$；因此原多项式 $s(X)$ 中任何高于 $d/2$ 阶的 X 项，都能以 $-\zeta^{n/4}$ 代替 $X^{n/2}$：
 $$
 \begin{aligned}
 s_1(X) &= (a_0 - a_\frac{d}{2}\zeta^\frac{d}{4}) + (a_1 - a_{\frac{d}{2}+1}\zeta^\frac{d}{4})X + \cdots + (a_{\frac{d}{2}-1} - a_{d-1}\zeta^\frac{d}{4})X^{\frac{d}{2}-1} (\bmod X^\frac{d}{2} + \zeta^\frac{d}{4})
@@ -1497,7 +1497,7 @@ s_1(X) &= (a_0 - a_\frac{d}{2}\zeta^\frac{d}{4}) + (a_1 - a_{\frac{d}{2}+1}\zeta
 $$
 
 以 $n=16$ 为例说明，$s(X) = \sum_{i=0}^{15} a_iX^i$
-第一次递归 :
+**第一层分解**:
 $$
 \begin{aligned}
 s(X) \bmod (X^{16}+1) &= s(X)\bmod (X^{16}-\zeta^8)  \\
@@ -1517,7 +1517,44 @@ s_1(X) &= (a_0 - a_8\zeta^4) + (a_1 - a_9\zeta^4)X + (a_2 - a_{10}\zeta^4)X^2 + 
 \end{aligned}
 $$
 
-第二次递归
+
+**第二层分解**（以 $s_0(X)$ 为例）:
+$$
+\begin{aligned}
+s_0(X) \bmod (X^{8}+1) &= (s_0(X)\bmod (X^4-\zeta^2))(s_0(X)\bmod (X^4+\zeta^2)) \\
+                       &= s_{00}(X)\cdot s_{01}(X)
+\end{aligned}
+$$
+展开 $s_{00}(X)=s_0(X)\bmod (X^4-\zeta^2)$ 和 $s_{01}(X)=s_0(X)\bmod (X^4+\zeta^2)$ 分别为：
+$$
+\begin{aligned}
+s_{00}(X) &= ((a_0 + a_8\zeta^4) + (a_4 + a_{12}\zeta^4)\zeta^2) + ((a_1 + a_9\zeta^4) + (a_5 + a_{13}\zeta^4)\zeta^2)X \\
+          &+ ((a_2 + a_{10}\zeta^4) + (a_6 + a_{14}\zeta^4)\zeta^2)X^2 + ((a_3 + a_{11}\zeta^4) + (a_7 + a_{15}\zeta^4)\zeta^2)X^3 \\
+        \\ 
+s_{01}(X) &= ((a_0 + a_8\zeta^4) - (a_4 + a_{12}\zeta^4)\zeta^2) + ((a_1 + a_9\zeta^4) - (a_5 + a_{13}\zeta^4)\zeta^2)X \\
+          &+ ((a_2 + a_{10}\zeta^4) - (a_6 + a_{14}\zeta^4)\zeta^2)X^2 + ((a_3 + a_{11}\zeta^4) - (a_7 + a_{15}\zeta^4)\zeta^2)X^3
+\end{aligned}
+$$
+
+
+**第三层分解**（以 $s_{00}(X)$ 为例, Kyber 的最后一层 $\log_216 - 1 = 3$）:
+$$
+\begin{aligned}
+s_{00}(X) \bmod (X^{4}+1) &= (s_{00}(X)\bmod (X^2-\zeta))(s_{00}(X)\bmod (X^2+\zeta)) \\
+                       &= s_{001}(X)\cdot s_{001}(X)
+\end{aligned}
+$$
+展开 $s_{000}(X)=s_{00}(X)\bmod (X^2-\zeta)$ 和 $s_{01}(X)=s_{00}(X)\bmod (X^2+\zeta)$ 分别为：
+$$
+\begin{aligned}
+s_{000}(X) &= (((a_0 + a_8\zeta^4) + (a_4 + a_{12}\zeta^4)\zeta^2) + ((a_2 + a_{10}\zeta^4) + (a_6 + a_{14}\zeta^4)\zeta^2)\zeta) \\
+           &+ (((a_1 + a_9\zeta^4) + (a_5 + a_{13}\zeta^4)\zeta^2) + ((a_3 + a_{11}\zeta^4) + (a_7 + a_{15}\zeta^4)\zeta^2)\zeta) X \\
+        \\ 
+s_{001}(X) &= (((a_0 + a_8\zeta^4) - (a_4 + a_{12}\zeta^4)\zeta^2) + ((a_2 + a_{10}\zeta^4) - (a_6 + a_{14}\zeta^4)\zeta^2)\zeta) \\
+           &+ (((a_1 + a_9\zeta^4) - (a_5 + a_{13}\zeta^4)\zeta^2) + ((a_3 + a_{11}\zeta^4) - (a_7 + a_{15}\zeta^4)\zeta^2)\zeta) X
+\end{aligned}
+$$
+
 
 
 # 7. 安全性的根基：MLWE问题

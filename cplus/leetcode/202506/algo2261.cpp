@@ -70,5 +70,23 @@ public:
 
     }
 
-
+    int countDistinct3(vector<int>& nums, int k, int p) {
+        // 自行解答，hash表; 容易实现
+        unordered_set<string> ans;
+        int n = nums.size();
+        int cnt = 0, r = n-1;
+        for (int l=n-1; l>=0; --l) {
+            if (nums[l] % p == 0) cnt ++;
+            while (cnt > k) {
+                if (nums[r]%p == 0) cnt--;
+                r --;
+            }
+            string ser;
+            for (int r1=l; r1<=r; r1++) {
+                ser.append(to_string(nums[r1])); ser.append("#");
+                ans.insert(ser);
+            };
+        }
+        return ans.size();
+    }   
 };

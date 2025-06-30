@@ -42,4 +42,33 @@ public:
         return dfs(root) - 1;
     }
 
+    int countDistinct2(vector<int>& nums, int k, int p) {
+        // 自行解答，字典树优化
+        int n = nums.size();
+        int cnt = 0, r = n-1, ans = 0;
+        for (int l=n-1; l>=0; --l) {
+            if (nums[l] % p == 0) cnt ++;
+            while (cnt > k) {
+                if (nums[r]%p == 0) cnt--;
+                r --;
+            }
+            auto insert = [&]() {
+                auto node = root;
+                for (int i=l; i<=r; i++) {
+                    int c = nums[i];
+                    if (!node->son.count(c)) {
+                        node->son[c] = new Node();
+                        ans ++;
+                    }
+                    node = node->son[c];
+                }
+            };
+            insert();
+        }
+        
+        return ans;
+
+    }
+
+
 };

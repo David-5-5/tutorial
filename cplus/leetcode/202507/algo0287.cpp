@@ -1,6 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+// 链表 - 1.6 快慢指针
 class Solution {
 public:
     int findDuplicate(vector<int>& nums) {

@@ -41,12 +41,41 @@ public:
             pq.emplace(matrix[i][0], i, 0);
 
         for (int _=0; _<k-1; ++_) {
-            auto [_, r, c] = pq.top(); pq.pop();
+            auto [v, r, c] = pq.top(); pq.pop();
             
             if (c+1<m) 
                 pq.emplace(matrix[r][c+1], r, c+1);
         }
 
         return get<0>(pq.top());
-    }    
+    } 
+
+    int kthSmallest3(vector<vector<int>>& matrix, int k) {
+        // 参考题解
+        // 论文：selection in x + y and matrics with sorted rows and columns
+        int n = matrix.size(), m = matrix[0].size();
+        if (n == 1) return matrix[0][k-1];
+        if (m == 1) return matrix[k-1][0];
+        
+        int left = matrix[0][0]-1, right = matrix[n-1][m-1]+1;
+
+        auto check = [&](int mid) -> bool {
+            int i = 0, j = m-1, nums = 0;
+            while (i<n && j>=0) {
+                if (matrix[i][j] <= mid) {
+                    nums += j + 1; i++;
+                } else {
+                    j--;
+                }
+            }
+            return nums>=k;
+        };
+
+        while (left + 1 < right) {
+            long mid = left + ((right-left) >> 1);
+            (check(mid)? right : left) = mid;
+        }
+
+        return right;
+    }     
 };

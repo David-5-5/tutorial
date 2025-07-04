@@ -52,6 +52,34 @@ public:
         return ans;
     }
 
+    int countPairs2(vector<int>& nums, int low, int high) {
+        // simiar to countPairs
+        int mx = ranges::max(nums);
+        while ((1 << hi)>mx) hi--;
+
+                
+        int ans = 0;
+        for (int i = 1; i<nums.size(); ++i) {
+
+            insert(nums[i-1]);
+            // 根据上下限，按位递归求解 cnt，这样写法比仅设置上限复杂
+            auto dfs = [&] (this auto&& dfs, Node* node, int res, int l) -> int {
+                if (node->son[0] == nullptr && node->son[1] == nullptr) return node->cnt;
+                int v = (nums[i] >> l) & 1, cnt = 0;
+                if (node->son[v^1] != nullptr) 
+                    if (res+(1<<l)>=low && res + (1<<l)*2 -1 <= high) cnt += node->son[v^1]->cnt;
+                    else if (res + (1<<l) <= high) cnt += dfs(node->son[v^1], res+(1<<l), l-1);
+                if (node->son[v] != nullptr) 
+                    if (res>=low && res + (1<<l) - 1 <= high) cnt += node->son[v]->cnt;
+                    else if (res + (1<<l) - 1 >= low)  cnt += dfs(node->son[v], res, l-1);
+                
+                return cnt;
+            };
+            ans += dfs(root, 0, hi);
+        }
+
+        return ans;
+    }
 
 };
 

@@ -1,3 +1,4 @@
+# 常用数据结构 - 6.1 字典树（trie）- 基础
 # 实现一 oi wiki 模板
 class Trie:
     def __init__(self):
@@ -59,6 +60,43 @@ class Trie:
             if c not in cur.son:
                 return 0
             cur = cur.son[c]
+        return 2 if cur.end else 1
+    
+    def search(self, word:str) -> bool:  # 查找字符串
+        return self.find(word) == 2
+
+    def startsWith(self, prefix: str) -> bool:
+        return self.find(prefix)>0
+
+
+# 实现三 - 参考题解，小写字母
+class Node:
+    __slots__ = 'son', 'end'
+
+    def __init__(self):
+        self.son = [None] * 26
+        self.end = False
+
+class Trie:
+    def __init__(self):
+        self.root = Node()
+
+    def insert(self, word:str):  # 插入字符串
+        cur = self.root
+        for c in word:
+            i = ord(c)-ord("a")
+            if not cur.son[i]:
+                cur.son[i] = Node()
+            cur = cur.son[i]
+        cur.end = True
+
+    def find(self, word:str) -> int:  # 查找字符串
+        cur = self.root
+        for c in word:
+            i = ord(c)-ord("a")
+            if not cur.son[i]:
+                return 0
+            cur = cur.son[i]
         return 2 if cur.end else 1
     
     def search(self, word:str) -> bool:  # 查找字符串

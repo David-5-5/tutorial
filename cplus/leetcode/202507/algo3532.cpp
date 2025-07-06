@@ -31,6 +31,7 @@ public:
 class Solution {
 public:
     vector<bool> pathExistenceQueries(int n, vector<int>& nums, int maxDiff, vector<vector<int>>& queries) {
+        // 自行解答，使用 UnionFind 模板
         auto uf = UnionFind(n);
 
         for (int i=1; i<n; ++i) if (nums[i]-nums[i-1]<=maxDiff) uf.merge(i-1, i);
@@ -38,6 +39,19 @@ public:
         vector<bool> ans;
         for (auto& q: queries) {
             int x = q[0], y = q[1]; ans.push_back(uf.is_same(x, y));
+        }
+        return ans;
+    }
+
+    vector<bool> pathExistenceQueries2(int n, vector<int>& nums, int maxDiff, vector<vector<int>>& queries) {
+        // 参考题解，简化版并查集
+        vector<int> idx(n);
+
+        for (int i=1; i<n; ++i) idx[i] = idx[i-1] + (nums[i]-nums[i-1]>maxDiff);
+
+        vector<bool> ans;
+        for (auto& q: queries) {
+            int x = q[0], y = q[1]; ans.push_back(idx[x] == idx[y]);
         }
         return ans;
     }

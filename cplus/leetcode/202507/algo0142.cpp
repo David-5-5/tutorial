@@ -17,7 +17,6 @@ class Solution {
 public:
     ListNode *detectCycle(ListNode *head) {
         // 自行解答，不需要快慢指针
-        ListNode dummy(0, head);
         unordered_set<ListNode*> hash;
         auto cur = head;
         while (cur) {
@@ -28,5 +27,23 @@ public:
         return nullptr;
     }
 
-
+    ListNode *detectCycle2(ListNode *head) {
+        // 参考题解，快慢指针
+        // 不要哑的头节点
+        auto slow = head, quick = head; // 慢的走1步，快的走2步
+        while (quick != nullptr) {
+            slow = slow->next;
+            if (quick->next == nullptr) return nullptr;
+            quick = quick->next->next;
+            if (slow == quick) {
+                ListNode *ptr = head;
+                while (ptr != slow) {
+                    ptr = ptr->next;
+                    slow = slow->next;
+                }
+                return ptr;
+            }
+        }
+        return nullptr;
+    }    
 };

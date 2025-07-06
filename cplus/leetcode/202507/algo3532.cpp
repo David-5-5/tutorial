@@ -55,4 +55,18 @@ public:
         }
         return ans;
     }
+
+    vector<bool> pathExistenceQueries2(int n, vector<int>& nums, int maxDiff, vector<vector<int>>& queries) {
+        // 参考题解，简化版并查集
+        vector<int> idx;
+
+        for (int i=1; i<n; ++i) if (nums[i]-nums[i-1]>maxDiff)
+            idx.push_back(i-1);    //断点, 需要记在i-1上
+
+        vector<bool> ans;
+        for (auto q: queries) {
+            ans.push_back(ranges::lower_bound(idx, q[0]) == ranges::lower_bound(idx, q[1]));
+        }
+        return ans;
+    }    
 };

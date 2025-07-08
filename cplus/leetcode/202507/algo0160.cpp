@@ -16,7 +16,7 @@ struct ListNode {
 class Solution {
 public:
     ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
-        // 参考题解，双指针，遍历两遍
+        // 参考题解，双指针，遍历两遍，空间复杂度O(1)
         if (headA == nullptr || headB == nullptr) {
             return nullptr;
         }
@@ -28,4 +28,18 @@ public:
         return pA;      
     }
 
+    ListNode *getIntersectionNode2(ListNode *headA, ListNode *headB) {
+        // 参考题解，哈希表 容易理解 空间复杂度O(n)
+        unordered_set<ListNode*> vis;
+        auto ptrA = headA;
+        while (ptrA) {
+            vis.emplace(ptrA); ptrA = ptrA->next;
+        }
+        auto ptrB = headB;
+        while (ptrB) {
+            if (vis.count(ptrB)) return ptrB;
+            ptrB = ptrB->next;
+        }
+        return nullptr;      
+    }    
 };

@@ -6,7 +6,7 @@ class Solution:
     def minSwapsCouples(self, row: List[int]) -> int:
         n = len(row) // 2
         conn = [-1] * n
-
+        res = 0
         def find(x:int) -> int:
             if conn[x] < 0:
                 return x
@@ -24,16 +24,16 @@ class Solution:
             count = conn[root1]
             conn[root1] = root2
             conn[root2] += count
-
-            
+            nonlocal res
+            res += 1
+           
         for i in range(n):
             if row[2*i] // 2 != row[2*i+1] // 2:
                 union(row[2*i] // 2, row[2*i+1] // 2)
 
-        res = 0
-        for count in conn:
-            if count < 0:
-                res += abs(count) - 1
+        # for count in conn:
+        #     if count < 0:
+        #         res += abs(count) - 1
 
         return res
 

@@ -1,6 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+// 常用数据结构 - 6.1 字典树（trie）- 基础
 struct oi_trie {
   int nex[100000][26] = {0}, cnt = 0;
   bool exist[100000] = {false};  // 该结点结尾的字符串是否存在
@@ -37,7 +38,6 @@ struct oi_trie {
 
 };
 
-// 常用数据结构 - 6.1 字典树（trie）- 基础
 class Trie {
 private:
     oi_trie trie;
@@ -55,6 +55,47 @@ public:
     
     bool startsWith(string prefix) {
         return trie.findPrefix(prefix.data(), prefix.length());
+    }
+};
+
+// 实现二
+// Trie 模板题
+struct Node {
+    Node* son[26]{};
+    bool end = false;
+};
+
+class Trie {
+private:
+    Node* root =  new Node();
+    int find(string word) {
+        auto node = root;
+        for (auto c: word) {
+            if (node->son[c-'a'] == nullptr) return 0;
+            node = node->son[c-'a'];
+        }
+
+        return node->end?2:1;
+    }
+public:
+    Trie() {
+    }
+    
+    void insert(string word) {
+        auto node = root;
+        for (auto c : word) {
+            if (node->son[c-'a'] == nullptr) node->son[c-'a'] = new Node();
+            node = node->son[c-'a'];
+        }
+        node->end = true;
+    }
+    
+    bool search(string word) {
+        return find(word) == 2;
+    }
+    
+    bool startsWith(string prefix) {
+        return find(prefix);
     }
 };
 

@@ -37,4 +37,12 @@ public:
 
         return ans;
     }
+
+
+    vector<vector<string>> suggestedProducts(vector<string>& products, string searchWord) {
+        // 排序后二分答案
+        int n = searchWord.length(); vector ans(n, vector<string>());
+        
+        return ans;
+    }
 };

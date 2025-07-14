@@ -25,4 +25,18 @@ public:
         };
         return dfs(root);        
     }
+
+    int minDepth2(TreeNode* root) {
+        if (root == nullptr) return 0;
+        int ans = INT_MAX;
+
+        auto dfs = [&](this auto&& dfs, TreeNode* node, int d) -> void {
+            if (!node->left && !node->right) ans = min(ans, d);
+            
+            if (node->left) dfs(node->left, d+1);
+            if (node->right) dfs(node->right, d+1);
+        };
+        dfs(root, 1);
+        return ans;
+    }
 };

@@ -58,6 +58,20 @@ public:
         return ans;   
     }
 
+    int createSortedArray3(vector<int>& instructions) {
+        // 数状数组，由于值域 10^5，不需要离散化
+        const int mod = 1e9 + 7;
+        int ans = 0;
 
+        int mx = ranges::max(instructions); // 10^5
+
+        FenwickTree<int> ft(mx+1); // 10^5
+        for (auto v: instructions) {
+            int left = ft.pre(v-1); // 
+            int right = ft.query(v+1, mx);
+            ans =  (ans + min(left, right)) % mod; ft.update(v, 1);
+        }
+        return ans;
+    }
 
 };

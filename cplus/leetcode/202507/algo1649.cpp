@@ -46,4 +46,18 @@ public:
         return ans;
     }
 
+    int createSortedArray2(vector<int>& instructions) {
+        // 改用 vector ranges::lower_bound ranges::upper_bound，可以通过
+        const int mod = 1e9 + 7;
+        int ans = 0; vector<int> st;
+        for (auto v: instructions) {
+            int left = ranges::lower_bound(st, v) - st.begin(); // 
+            auto right = ranges::upper_bound(st, v);
+            ans =  (ans + min(left, (int)(st.end()-right))) % mod; st.insert(right, v);
+        }
+        return ans;   
+    }
+
+
+
 };

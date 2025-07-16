@@ -61,5 +61,32 @@ public:
         return ans;
     }
 
+    int numTeams2(vector<int>& rating) {
+        // 数状数组，优化 left, right
+        int ans = 0, n = rating.size();
+        auto rating2 = rating;
+        sort(rating2.begin(), rating2.end());
 
+        vector<int> leftSmall(n), leftBig(n), rightSmall(n), rightBig(n);
+        FenwickTree<int> ft1(n+1);
+
+        for (int j = 0; j<n; ++j) {
+            int idx = ranges::lower_bound(rating2, rating[j]) - rating2.begin() + 1;
+            leftSmall[j] = ft1.query(1, idx-1);
+            leftBig[j] = j - leftSmall[j];
+            ft1.update(idx, 1);
+        }
+        FenwickTree<int> ft2(n+1);
+        for (int j = n-1; j>=0; --j) {
+            int idx = ranges::lower_bound(rating2, rating[j]) - rating2.begin() + 1;
+            rightSmall[j] = ft2.query(1, idx-1);
+            rightBig[j] = n - 1 - j - rightSmall[j];
+            ft2.update(idx, 1);
+        }
+        for (int j = 1; j<n-1; ++j) {
+            ans += leftSmall[j] * rightBig[j] + leftBig[j] * rightSmall[j];
+        }
+        
+        return ans;
+    }
 };

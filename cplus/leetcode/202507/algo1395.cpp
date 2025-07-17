@@ -89,4 +89,24 @@ public:
         
         return ans;
     }
+
+    int numTeams3(vector<int>& rating) {
+        // 数状数组，套用 2179 goodTriplets 的方法
+        int ans = 0, n = rating.size();
+        auto rating2 = rating;
+        sort(rating2.begin(), rating2.end());
+
+        FenwickTree<int> ft(n+1);
+
+        for (int j = 0; j<n; ++j) {
+            int idx = ranges::lower_bound(rating2, rating[j]) - rating2.begin();
+            auto leftSmall = ft.query(1, idx);
+            auto leftBig = j - leftSmall;
+            auto rightBig = n - 1 - idx - leftBig, rightSmall = n - 1 - j - rightBig;
+            ans += leftSmall * rightBig + leftBig * rightSmall;
+            ft.update(idx+1, 1);
+        }
+
+        return ans;
+    }
 };

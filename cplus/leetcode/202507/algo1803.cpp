@@ -81,10 +81,41 @@ public:
         return ans;
     }
 
+
+    int countPairs3(vector<int>& nums, int low, int high) {
+        int mx = max(high, ranges::max(nums));
+        while ((1 << hi)>mx) hi--;
+                
+        int ans = 0;
+        for (int i = 1; i<nums.size(); ++i) {
+            insert(nums[i-1]);
+            
+            auto cnt = [&](int val, int limit) -> int {
+                auto cur = root;
+                int sum = 0;
+                for (int i=hi; i>=0; --i) {
+                    int b = (val >> i) & 1;
+                    if ((limit>>i) & 1 ) {  // limit bit = 1
+                        if (cur->son[b] != nullptr) sum += cur->son[b]->cnt;    // 肯定小于 limit 全包括
+                        if (cur->son[b^1] != nullptr) cur = cur->son[b^1];
+                        else return sum;
+                    } else {                // limit bit = 0
+                        if (cur->son[b] == nullptr) return sum;
+                        cur = cur->son[b];
+                    }
+                }
+                sum += cur->cnt;        // 不能忽略
+                return sum;
+            };
+            ans += cnt(nums[i], high) - cnt(nums[i], low-1);
+        }
+
+        return ans;
+    }
 };
 
 
 int main() {
     vector<int> nums = {1,4,2,7};
-    cout << Solution().countPairs(nums, 2, 6) << endl;
+    cout << Solution().countPairs2(nums, 2, 6) << endl;
 }

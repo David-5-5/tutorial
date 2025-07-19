@@ -26,5 +26,14 @@ public:
         return root;     
     }
 
+    TreeNode* invertTree(TreeNode* root) {
+        // 参考题解
+        if (root == nullptr) return root;
+        auto left = invertTree(root->left);
+        auto right = invertTree(root->right);
+        root->left = right;
+        root->right = left;
 
+        return root;     
+    }    
 };

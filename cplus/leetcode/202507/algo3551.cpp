@@ -29,7 +29,7 @@ public:
 class Solution {
 public:
     int minSwaps(vector<int>& nums) {
-
+        // 参考题解 - 并查集
         auto digitsum = [](int val) -> int {
             int res = 0;
             while (val) {
@@ -48,4 +48,27 @@ public:
         for (int i=0; i<n; ++i) uf.merge(i, idx[i]);
         return n - uf.cc;
     }
+
+    int minSwaps(vector<int>& nums) {
+        // 参考题解 - 迭代
+        auto digitsum = [](int val) -> int {
+            int res = 0;
+            while (val) {
+                res += val % 10; val /= 10;
+            }
+            return res;
+        };
+
+        int n = nums.size(), idx[n];
+        iota(idx, idx+n, 0);
+        sort(idx, idx + n, [&](int i, int j) {
+            if (digitsum(nums[i]) == digitsum(nums[j])) return nums[i] < nums[j];
+            return digitsum(nums[i]) < digitsum(nums[j]);
+        });
+        int ans = 0;
+        for (int i=0; i<n; ++i) while (i!=idx[i]) {
+            ans ++; int v = idx[i]; swap(idx[i], idx[v]);
+        };
+        return ans;
+    }    
 };

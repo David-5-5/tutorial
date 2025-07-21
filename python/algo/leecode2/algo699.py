@@ -89,11 +89,11 @@ class Solution:
             tree[p] = max(tree[p*2+1], tree[p*2+2])
         
         def query(l, r, s, t, p):
-            if tp[p]:
-                pushdown(s, t, p)
             # [l, r] 为查询区间, [s, t] 为当前节点包含的区间, p为当前节点的编号
             if l <= s and t <= r:
                 return tree[p]
+            if tp[p]:       # 位置在这里更安全
+                pushdown(s, t, p)
             m = s + ((t - s) >> 1)
             maxv = 0
             if l <= m:

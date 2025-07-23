@@ -42,5 +42,10 @@ public:
         return valid;  
     }
 
-
+    bool isValidBST(TreeNode* root, long left=LONG_MIN, long right=LONG_MAX) {
+        // 参考题解 前序遍历
+        if (!root) return true;
+        auto x = root->val;
+        return x > left && x < right && isValidBST(root->left, left, x) && isValidBST(root->right, x, right);
+    }
 };

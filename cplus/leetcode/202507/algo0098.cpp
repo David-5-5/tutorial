@@ -50,12 +50,32 @@ public:
     }
 
     long pre = LONG_MIN; 
-    bool isValidBST(TreeNode* root, long left=LONG_MIN, long right=LONG_MAX) {
+    bool isValidBST(TreeNode* root) {
         // 参考题解 中序遍历
         if (!root) return true;
         if (!isValidBST(root->left)) return false;
         if (root->val <= pre) return false;
         pre = root->val;
         return isValidBST(root->right);
-    }    
+    } 
+
+    bool isValidBST(TreeNode* root) {
+        // 参考题解，后序遍历，我的解法类似后续，但没有这个优雅
+        auto dfs = [&] (this auto&& dfs, TreeNode* node) ->pair<long, long> {
+            if (node == nullptr) {
+                return {LLONG_MAX, LLONG_MIN};
+            }
+            auto[l_min, l_max] = dfs(node->left);
+            auto[r_min, r_max] = dfs(node->right);
+            long x = node->val;
+            // 也可以在递归完左子树之后立刻判断，如果发现不是二叉搜索树，就不用递归右子树了
+            if (x <= l_max || x >= r_min) {
+                return {LLONG_MIN, LLONG_MAX};
+            }
+            return {min(l_min, x), max(r_max, x)};
+        };
+        return dfs(root).second!=LONG_MAX;
+    }
+
+
 };

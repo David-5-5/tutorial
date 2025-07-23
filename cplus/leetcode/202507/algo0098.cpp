@@ -48,4 +48,14 @@ public:
         auto x = root->val;
         return x > left && x < right && isValidBST(root->left, left, x) && isValidBST(root->right, x, right);
     }
+
+    long pre = LONG_MIN; 
+    bool isValidBST(TreeNode* root, long left=LONG_MIN, long right=LONG_MAX) {
+        // 参考题解 中序遍历
+        if (!root) return true;
+        if (!isValidBST(root->left)) return false;
+        if (root->val <= pre) return false;
+        pre = root->val;
+        return isValidBST(root->right);
+    }    
 };

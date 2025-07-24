@@ -14,7 +14,7 @@ struct TreeNode {
 class Solution {
 public:
     int countPairs(TreeNode* root, int distance) {
-        // 自行解答
+        // 自行解答 - dfs
         int ans = 0;
         auto dfs = [&](this auto&& dfs, TreeNode* node) -> vector<int> {
             if (!node) return {};

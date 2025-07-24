@@ -14,6 +14,7 @@ struct TreeNode {
 class Solution {
 public:
     int kthLargestPerfectSubtree(TreeNode* root, int k) {
+        // 自行解答 - dfs
         int cnt[10] = {};
 
         auto dfs = [&] (this auto&& dfs, TreeNode* node) -> int {

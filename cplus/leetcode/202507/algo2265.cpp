@@ -14,7 +14,7 @@ struct TreeNode {
 class Solution {
 public:
     int averageOfSubtree(TreeNode* root) {
-        // 自行解答
+        // 自行解答 - dfs
         int ans = 0;
         auto dfs = [&](this auto&& dfs, TreeNode* node) -> pair<int, int> {
             if (!node->left && !node->right) {

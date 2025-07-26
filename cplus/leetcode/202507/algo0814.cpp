@@ -35,4 +35,13 @@ public:
         return cnt?root:nullptr;
     }
 
+    TreeNode* pruneTree(TreeNode* root) {
+        // 自行解答 - 简化
+        if (!root) return nullptr;
+        root->left = pruneTree(root->left);
+        root->right = pruneTree(root->right);
+
+        if (!root->left && !root->right && !root->val) return nullptr;
+        else return root;
+    }
 };

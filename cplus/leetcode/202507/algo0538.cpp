@@ -17,7 +17,7 @@ public:
         // 自行解答
 
         auto dfs = [&] (this auto&& dfs, TreeNode* node, int gr) -> int {
-
+            if (!node) return 0;
             // 后序遍历，先右子树，后左子树
             // cur 为当前节点， left right 为左右子树节点之和
             int cur = node->val, right = 0, left = 0;
@@ -32,4 +32,18 @@ public:
         dfs(root, 0);
         return root; 
     }
+    
+    int sum = 0;
+    TreeNode* convertBST(TreeNode* root) {
+        // 参考题解
+        if (root) {
+            convertBST(root->right);
+            sum += root->val;
+            root->val = sum;
+            convertBST(root->left);
+        }
+        
+        return root; 
+    }
+    
 };

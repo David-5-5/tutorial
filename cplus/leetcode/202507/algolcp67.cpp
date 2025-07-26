@@ -14,7 +14,7 @@ struct TreeNode {
 class Solution {
 public:
     TreeNode* expandBinaryTree(TreeNode* root) {
-        // 自行解答
+        // 自行解答 - dfs
         auto dfs = [&](this auto&& dfs, TreeNode* node) -> void {
             if (node->left) {
                 TreeNode* tr = new TreeNode(-1, node->left, nullptr);

@@ -27,5 +27,13 @@ public:
         return cnt?nullptr:root;
     }
 
+    TreeNode* removeLeafNodes(TreeNode* root, int target) {
+        // 参考题解
+        if (!root) return nullptr;
+        root->left = removeLeafNodes(root->left, target);
+        root->right = removeLeafNodes(root->right, target);
 
+        if (!root->left && !root->right && root->val==target) return nullptr;
+        else return root;
+    }    
 };

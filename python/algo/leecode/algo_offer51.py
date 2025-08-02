@@ -1,3 +1,31 @@
+from bisect import bisect_left
+from typing import List
+
+
+class FenwickTree:
+    def __init__(self, n: int):
+        self.tree = [0] * (n + 1)  # 使用下标 1 到 n
+
+    # a[i] 增加 val 1 <= i <= n
+    def update(self, i: int, val: int) -> None:
+        while i < len(self.tree):
+            self.tree[i] += val
+            i += i & -i
+
+    # 计算前缀和 a[1] + ... + a[i] 1 <= i <= n
+    def pre(self, i: int) -> int:
+        res = 0
+        while i > 0:
+            res += self.tree[i]
+            i &= i - 1
+        return res
+    
+    # 计算区间和 a[l] + ... + a[r]  1 <= l <= r <= n
+    def query(self, l: int, r: int) -> int:
+        if r < l:
+            return 0
+        return self.pre(r) - self.pre(l - 1)
+
 class Solution:
     # 题目变更为 LCR 170 
     total = 0
@@ -88,7 +116,21 @@ class Solution:
         for i in range(numElements):
             nums[rightEnd-i] = tmp[rightEnd-i]
 
-       
+
+    def reversePairs(self, record: List[int]) -> int:
+        # 2025.7 复习 使用树状数组
+        discrete = record.copy()
+        discrete.sort()
+
+        ft = FenwickTree(len(record))
+
+        ans = 0
+        for v in record:
+            inx = bisect_left(discrete, v)
+            ans += ft.query(inx+2, len(record))
+            ft.update(inx+1, 1)
+        return ans
+        
 
 if __name__ == "__main__":
     sol = Solution()

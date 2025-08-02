@@ -52,6 +52,32 @@ public:
         return ans;
     }
 
+    int goodTriplets2(vector<int>& nums1, vector<int>& nums2) {
+        // 数状数组，套用 1395 numTeams2 的模板（无需离散化），
+        long long ans = 0, n = nums1.size();
 
+        unordered_map<int, int> pos;
+        for (int i=0; i<n; ++i) pos[nums1[i]]= i;
+        FenwickTree<int> ft1(n+1);
+        vector<int> leftSmall(n), rightBig(n);
+
+        for (int j = 0; j<n; ++j) {
+            auto idx = pos[nums2[j]];
+            leftSmall[j] = ft1.query(1, idx);
+            ft1.update(idx+1, 1);
+        }
+        
+        FenwickTree<int> ft2(n+1);
+        for (int j = n-1; j>=0; --j) {
+            auto idx = pos[nums2[j]];
+            rightBig[j] = ft2.query(idx+2, n);
+            ft2.update(idx+1, 1);
+        }
+        for (int j = 1; j<n-1; ++j) {
+            ans += (long long) leftSmall[j] * rightBig[j];
+        }
+        
+        return ans;
+    }
 };
 

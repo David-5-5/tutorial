@@ -35,6 +35,30 @@ public:
         return dfs(0, nums.size()-1);
     }
 
+    TreeNode* sortedListToBST(ListNode* head) {
+        // 参考题解 快慢节点, 这个容易理解
+        auto getMedian = [&](ListNode* left, ListNode* right) -> ListNode* {
+            auto slow = left, fast = left;
+            while (fast!=right && fast->next!=right) {
+                slow = slow->next;
+                fast = fast->next->next;
+            }
+            return slow;
+        };
+        
+        auto build = [&](this auto&& build, ListNode* left, ListNode* right) -> TreeNode* {
+            if (left == right) return nullptr;
+            ListNode* mid = getMedian(left, right);
+            TreeNode* root = new TreeNode(mid->val);
+            root->left = build(left, mid);
+            mid = mid->next;
+            root->right = build(mid, right);
+            return root;
+        };
+
+        return build(head, nullptr);
+        
+    }
 
 
 };

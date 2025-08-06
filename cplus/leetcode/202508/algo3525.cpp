@@ -5,11 +5,20 @@ using namespace std;
 class Solution {
 public:
     vector<int> resultArray(vector<int>& nums, int k, vector<vector<int>>& queries) {
+        // 分治 确定 l 后区间 [l, r] 的区间积mul[l..] %k 的个数为 r - l + 1 个，分别为 l 到 l,l+1, ... r
+        // 区间的数据结构定义如下 {mul%k, array<int, k>}, 1,区间积模 k, 2,区间内每个值的出现次数， r-l+1 个计数，值域为 0~k-1
+        // left = [l,m], right = [m+1,r]
+        // left {left_mul, array{}}, rigth {right_mul, array{}}
+        // new_val.mul = left_mul * right_mul % k
+        // new_val.array<..> =  left.array<..>
+        // new_val.array[left_mul*i] += right.array[i]; 
+        // right 中的 r-m 个计数不是 右区间m+1,...r 一个个计算，而是乘以 [0,...k-1] 的计数结果
         using T = pair<int, array<int, 5>>;
         int n = nums.size();
         // 参考 oi-wiki 线段树模板
-        vector<pair<int, array<int, 5>>> tree(4*n);
 
+        vector<pair<int, array<int, 5>>> tree(4*n);
+                
         auto merge = [&] (T a, T b) -> T {  
             for (int i=0; i<k; ++i) 
                 a.second[a.first*i%k] += b.second[i];

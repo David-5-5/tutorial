@@ -25,13 +25,40 @@ class Solution:
             sv = sorted(vals)
             vals = [bisect_left(sv, v) for v in vals]
 
-            for i in range(len(vals)):  
+            for i in range(len(vals)):  # 暴力计算交换次数
                 while i != vals[i]:
                     ans += 1
                     v = vals[i] # 交换两个数组的元素，下标要赋临时变量
                     vals[i], vals[v] = vals[v], vals[i]
                     # As following code is WRONG
                     # vals[i], vals[vals[i]] = vals[vals[i]], vals[i]
+
+        return ans
+
+    def minimumOperations2(self, root: Optional[TreeNode]) -> int:
+        ans = 0
+        q = [root]
+        while q:
+            prev = q
+            q, vals = [], []
+
+            for node in prev:
+                vals.append(node.val)
+                if node.left:   q.append(node.left)
+                if node.right:  q.append(node.right)
+            
+            sv = sorted(vals)
+            vals = [bisect_left(sv, v) for v in vals]
+            n = len(vals)
+            vis = [False] * n
+            ans += n
+            # 查找 置换环 的数量
+            for v in vals:  
+                if vis[v]: continue
+                while not vis[v]:
+                    vis[v] = True
+                    v = vals[v]
+                ans -= 1
 
         return ans
 

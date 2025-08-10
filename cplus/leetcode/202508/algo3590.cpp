@@ -1,11 +1,18 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+#include <ext/pb_ds/assoc_container.hpp>
+#include <ext/pb_ds/tree_policy.hpp>
+using namespace __gnu_pbds;
+typedef tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_update> ordered_set;
+
+
 // 常用数据结构 - 8.5 动态开点线段树
 class Solution {
 
 public:
     vector<int> kthSmallest(vector<int>& par, vector<int>& vals, vector<vector<int>>& queries) {
+        // 超时，也觉得没有必要
         unordered_map<int, vector<int>> tree; 
         // 动态开点线段树 - 模板 - 区间集合 - 单点更新
         auto update = [&] (this auto&& update, int l, int val, int start, int end, int p) -> void {
@@ -80,7 +87,60 @@ public:
 
         return ans;        
     }
+
+    vector<int> kthSmallest2(vector<int>& par, vector<int>& vals, vector<vector<int>>& queries) {
+        // 后续遍历树， std::set std::vector 超时
+        int n = par.size();
+        // 构建邻接表表示树
+        vector<vector<int>> g(n);
+        for (int i = 1; i < n; ++i)  g[par[i]].push_back(i);
+        
+        vector<int> x_sum(n);
+        // 深度优先搜索计算x_sum
+        auto dfs = [&](this auto&& dfs, int u, int x) -> void {
+            x_sum[u] = x ^ vals[u];
+            for (int v : g[u]) dfs(v, x_sum[u]);
+        };
+        dfs(0, 0);
+        
+        int m = queries.size();
+        // // 按节点分组存储查询
+        unordered_map<int, vector<pair<int, int>>> qu;
+        for (int i = 0; i < m; ++i) {
+            int u = queries[i][0], k = queries[i][1];
+            qu[u].emplace_back(k, i);
+        }
+        vector<int> ans(m);
+  
+        // 后序遍历处理每个节点的子树
+        auto post = [&](this auto&& post, int u) -> set<int> {
+            set<int> cur;  // 使用set维持有序性和去重
+            cur.insert(x_sum[u]);
+            
+            for (int v : g[u]) {
+                auto child = post(v);
+                // 合并子节点的集合
+                cur.insert(child.begin(), child.end());
+            }
+            
+            // 处理当前节点的所有查询
+            for (auto& [k, i] : qu[u]) {
+                if (cur.size() < k) ans[i] = -1;
+                else {
+                    // 获取第k-1个元素（set是有序的）
+                    auto it = cur.begin(); advance(it, k - 1); ans[i] = *it;
+                }
+            }
+            return cur;
+        };
+        post(0);
+        return ans;
+    }    
+
+
 };
+
+
 
 int main() {
     vector<int> par = {-1,0,1}, vals = {5,2,7};

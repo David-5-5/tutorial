@@ -183,6 +183,55 @@ public:
         return ans;
     }    
 
+    vector<int> kthSmallest4(vector<int>& par, vector<int>& vals, vector<vector<int>>& queries) {
+        // 启发式合并，用 vector<int> 也可以通过
+        int n = par.size();
+        // 构建邻接表表示树
+        vector<vector<int>> g(n);
+        for (int i = 1; i < n; ++i)  g[par[i]].push_back(i);
+        
+        vector<int> x_sum(n);
+        // 深度优先搜索计算x_sum
+        auto dfs = [&](this auto&& dfs, int u, int x) -> void {
+            x_sum[u] = x ^ vals[u];
+            for (int v : g[u]) dfs(v, x_sum[u]);
+        };
+        dfs(0, 0);
+        
+        int m = queries.size();
+        // // 按节点分组存储查询 用数组代替map，性能提升
+        vector<pair<int, int>> qu[n];
+        for (int i = 0; i < m; ++i) {
+            int u = queries[i][0], k = queries[i][1];
+            qu[u].emplace_back(k, i);
+        }
+        vector<int> ans(m);
+
+        // 以下开始代码不一致
+        auto post = [&](this auto&& post, int u) -> vector<int> {
+            vector<int> cur;  // 使用set维持有序性和去重
+            cur.push_back(x_sum[u]);
+            
+            for (int v : g[u]) {
+                auto child = post(v);
+                if (cur.size() < child.size()) swap(cur, child);
+                for (int x : child) {
+                    auto it = ranges::lower_bound(cur, x);
+                    if (it == cur.end() || *it != x)
+                        cur.insert(it, x);
+                } 
+            }
+            
+            // 处理当前节点的所有查询
+            for (auto& [k, i] : qu[u]) {
+                if (cur.size() < k) ans[i] = -1;
+                else ans[i] = cur[k-1];
+            }
+            return cur;
+        };
+        post(0);
+        return ans;
+    }    
 };
 
 

@@ -35,7 +35,7 @@ public:
         return dfs(0, nums.size()-1);
     }
 
-    TreeNode* sortedListToBST(ListNode* head) {
+    TreeNode* sortedListToBST2(ListNode* head) {
         // 参考题解 快慢节点, 这个容易理解
         auto getMedian = [&](ListNode* left, ListNode* right) -> ListNode* {
             auto slow = left, fast = left;
@@ -60,5 +60,26 @@ public:
         
     }
 
+    TreeNode* sortedListToBST3(ListNode* head) {
+        // 参考题解，中序遍历 很高级 还是很迷茫
+        auto len = [] (ListNode* node) -> int {
+            int l = 0;
+            for (; node!=nullptr; node=node->next, ++ l);
+            return l;
+        };
 
+        //  ListNode*& node 指针的引用很关键
+        auto inorder = [&](this auto&& inorder, ListNode*& node, int left, int right) -> TreeNode* {
+            if (left > right) return nullptr;
+            int mid = (left + right + 1) / 2;
+            TreeNode* root = new TreeNode();
+            root->left = inorder(node, left, mid - 1);
+            root->val = node->val;
+            node = node->next;
+            root->right = inorder(node, mid+1, right);
+            return root;
+        };
+
+        return inorder(head, 0, len(head)-1);
+    }
 };

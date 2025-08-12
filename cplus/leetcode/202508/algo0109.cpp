@@ -61,7 +61,7 @@ public:
     }
 
     TreeNode* sortedListToBST3(ListNode* head) {
-        // 参考题解，中序遍历 很高级 还是很迷茫
+        // 参考题解，中序遍历
         auto len = [] (ListNode* node) -> int {
             int l = 0;
             for (; node!=nullptr; node=node->next, ++ l);

@@ -64,3 +64,30 @@ public:
     }
 };
 
+
+// 进阶写法，用栈
+class BSTIterator {
+private:
+    int inx;
+    stack<TreeNode*> st;
+    void push(TreeNode* root) {
+        auto cur = root;
+        while (cur) {
+            st.push(cur); cur = cur->left;
+        }
+    };
+        
+public:
+    BSTIterator(TreeNode* root) {
+        push(root);
+    }
+    
+    int next() {
+        auto cur = st.top(); st.pop(); push(cur->right);
+        return cur->val;
+    }
+    
+    bool hasNext() {
+        return !st.empty();
+    }
+};

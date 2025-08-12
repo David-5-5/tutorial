@@ -35,3 +35,32 @@ public:
     }
 };
 
+// 参考题解的写法
+class BSTIterator {
+private:
+    int inx;
+    vector<int> arr;
+    vector<int> init(TreeNode* root) {
+        vector<int> res;
+        auto dfs = [&](this auto dfs, TreeNode* node) -> void{
+            if (!node) return;
+            dfs(node->left);
+            res.push_back(node->val);
+            dfs(node->right);
+        };
+        dfs(root); return res;
+    };
+        
+public:
+    BSTIterator(TreeNode* root):inx(0), arr(init(root)) {
+    }
+    
+    int next() {
+        return arr[inx++];
+    }
+    
+    bool hasNext() {
+        return (inx < (int) arr.size());
+    }
+};
+

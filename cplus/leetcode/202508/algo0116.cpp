@@ -34,5 +34,21 @@ public:
 
         return root;
     }
- 
+
+    Node* connect(Node* root) {
+        // 参考题解 DFS
+        vector<Node*> heigh;    // 遍历每层的最后一个节点
+        auto dfs = [&] (this auto&& dfs, Node* node, int d) -> void {
+            if (!node) return;
+            if (d == heigh.size()) heigh.push_back(node);
+            else {
+                heigh[d]->next = node;
+                heigh[d] = node;
+            }
+            dfs(node->left,d+1); dfs(node->right, d+1);
+
+        };
+
+        dfs(root, 0); return root;
+    }    
 };

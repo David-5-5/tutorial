@@ -7,7 +7,7 @@ using namespace __gnu_pbds;
 typedef tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_update> ordered_set;
 
 
-// 常用数据结构 - 8.5 动态开点线段树
+// 常用数据结构 - 8.5 动态开点线段树 & 10 莫队算法
 class Solution {
 
 public:

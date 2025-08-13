@@ -16,18 +16,19 @@ public:
         }        
 
         auto dfs = [&](this auto&& dfs, int u) -> int {
+            // 按题意模拟
             long score = 1;
             int rem = n-1;
             for (auto v: g[u]) {
                 int v_cnt = dfs(v);
                 if (v_cnt) score *= v_cnt;
-                rem -= v_cnt;
+                rem -= v_cnt;   // 根节点为 v 的子树数量
             }
             if (rem) score *= rem;
 
             if (score == mx) cnt ++;
             else if (score > mx) {cnt = 1; mx = score;}
-            return n - rem;
+            return n - rem; // 根节点为 u 的子树数量
         };
         dfs(0);
         return cnt;      

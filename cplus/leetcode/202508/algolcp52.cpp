@@ -16,6 +16,7 @@ using namespace std;
 class Solution {
 public:
     int getNumber(TreeNode* root, vector<vector<int>>& ops) {
+        // 自行解答，线段树
         vector<int> nums;
         auto inorder = [&](this auto&& inorder, TreeNode* node) -> void {
             if (!node) return;
@@ -73,4 +74,27 @@ public:
         }
         return tree[0];
     } 
+
+    int getNumber(TreeNode* root, vector<vector<int>>& ops) {
+        // 参考题解
+        set<int> nums;
+        auto inorder = [&](this auto&& inorder, TreeNode* node) -> void {
+            if (!node) return;
+            inorder(node->left);
+            nums.insert(node->val);
+            inorder(node->right);
+        };
+        inorder(root);
+        int ans = 0, m = ops.size();
+        for (int i=m-1; i>=0; --i) {    // 倒序，颜色为其最后一次染色，并删除
+            auto t = ops[i][0], l = ops[i][1], r = ops[i][2];
+            auto it = nums.lower_bound(l);
+            while (it!=nums.end() && *it <= r) {
+                it++;
+                nums.erase(prev(it));
+                if (t) ans ++;
+            }
+        }
+        return ans;
+    }
 };

@@ -11,15 +11,14 @@ public:
             if (manager[i] == -1) continue;
             g[manager[i]].push_back(i);
         }
-        
-        auto dfs = [&](this auto&& dfs, int u, int fa) -> int {
+
+        auto dfs = [&](this auto&& dfs, int u) -> int {
             int cur = 0;
             for (auto& v: g[u] ) {
-                if (v == fa) continue;
-                cur = max(cur, dfs(v, u));
+                cur = max(cur, dfs(v));
             }
             return cur+informTime[u];
         };
-        return dfs(headID, -1);   
+        return dfs(headID);   
     }
 };

@@ -11,6 +11,7 @@ class TreeNode:
 
 class Solution:
     def treeQueries(self, root: Optional[TreeNode], queries: List[int]) -> List[int]:
+        # 参考题解 - 2025.8 复习
         height = defaultdict(int) # ·每棵子树高度 key 为 node
 
         def get_height(node:Optional[TreeNode]):

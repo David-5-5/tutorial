@@ -1,4 +1,4 @@
-from collections import Counter
+from collections import Counter, defaultdict
 from typing import List
 
 # 当子数组异或为 0 时，表示是漂亮子数组
@@ -12,6 +12,18 @@ class Solution:
             ans += h[s]
             h[s] += 1
         return ans
+    
+    def beautifulSubarrays2(self, nums: List[int]) -> int:
+        # defaultdict 性能优于 Counter
+        s = ans = 0
+        h = defaultdict(int)
+        h[0] = 1
+        for x in nums:
+            s ^= x
+            ans += h[s] # 异或前缀和
+            h[s] += 1
+        return ans
+    
 
 if __name__ == "__main__":
     sol = Solution()

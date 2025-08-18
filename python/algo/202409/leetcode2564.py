@@ -28,6 +28,26 @@ class Solution:
             l += 1
         return ans
 
+    def substringXorQueries2(self, s: str, queries: List[List[int]]) -> List[List[int]]:
+        ans = []
+        pos = defaultdict(list)
+        for i in range(len(s)):
+            if s[i] == '0':
+                if 0 not in pos:
+                    pos[0] = [i, i]
+                continue
+            for l in range(30):
+                val = int(s[i:i+l+1], base=2)
+                if val not in pos:
+                    pos[val] = [i, i+l]
+
+        for q in queries:
+            val = q[0] ^ q[1]
+            if val in pos:
+                ans.append(pos[val])
+            else: ans.append([-1, -1])
+
+        return ans
 if __name__ == "__main__":
     sol = Solution()
     s, queries = "101101", [[0,5],[1,2]]

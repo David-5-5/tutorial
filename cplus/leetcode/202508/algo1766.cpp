@@ -14,6 +14,18 @@ int init = [] {
     return 0;
 }();
 
+
+// 预处理 for 自行解答方案二
+const int N = 51;
+vector<int> coprimes[N];
+int init = [] {
+    for (int i=1; i<N; ++i) for (int j=1; j<N; ++j) {
+        if (gcd(i, j) == 1) coprimes[i].push_back(j);
+    }
+    return 0;
+}();
+
+
 // 一般树 - 3.2 自顶向下 DFS
 class Solution {
 public:
@@ -53,4 +65,35 @@ public:
         dfs(0, -1, {}); return ans;
     }
 
+    vector<int> getCoprimes2(vector<int>& nums, vector<vector<int>>& edges) {
+        // 参考题解，相比较自行解答方案
+        // 固定保持50个数值及其最后出现的位置，预处理每个值互质的集合
+        int n = nums.size(); vector<int> ans(n, -1);
+        vector<vector<int>> g(n, vector<int>());
+        for (const auto& edge : edges) {
+            int u = edge[0], v = edge[1];
+            g[u].emplace_back(v);
+            g[v].emplace_back(u);
+        }
+        
+        vector<pair<int, int>> path(51, {-1, -1});
+        auto dfs = [&] (this auto&& dfs, int u, int fa, int depth, vector<pair<int, int>>& path) -> void{
+            int mx_dep = -1;
+            for (auto & p: coprimes[nums[u]]) {
+                if (path[p].first > mx_dep) {
+                    ans[u] = path[p].second; mx_dep = path[p].first;
+                }
+            }
+
+            pair<int, int> tmp = path[nums[u]]; // 保存现场
+            path[nums[u]] = {depth, u};
+            for (auto& v:g[u]) {
+                if (v == fa) continue;
+                dfs(v, u, depth+1, path);
+            }
+            path[nums[u]] = tmp;         // 恢复现场
+        };
+
+        dfs(0, -1, 0, path); return ans;
+    }
 };

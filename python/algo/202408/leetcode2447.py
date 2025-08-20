@@ -2,6 +2,7 @@ from math import gcd
 from typing import List
 
 # 周赛 316
+# 进阶 codeforces 475D
 class Solution:
     def subarrayGCD(self, nums: List[int], k: int) -> int:
         n, ans = len(nums), 0

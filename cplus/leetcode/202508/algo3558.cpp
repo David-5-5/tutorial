@@ -76,5 +76,28 @@ public:
         return ans;
     }
 
+    int assignEdgeWeights2(vector<vector<int>>& edges) {
+        // 参考题解
+        // 排列组合， x 个 1 和 y 个 2 的排列，x 必须为 奇数 x + y = d
+        // 数量比较大 d!/x!*y! % m = d!%m * inv(x!*y!%m)
+        // 数学不会了，上面的排列加起来其实就是 2 ^ (d-1) 不需要comb，直接用pow 就可以了
+        int n = edges.size() + 1; vector<vector<int>> g(n, vector<int>());
+        for (const auto& edge : edges) {
+            int u = edge[0]-1, v = edge[1]-1;
+            g[u].emplace_back(v);
+            g[v].emplace_back(u);
+        }
 
+        auto dfs = [&] (this auto&& dfs, int u, int fa) -> int {
+            int dep = 0;
+            for (auto & v: g[u]) {
+                if (v == fa) continue;
+                dep = max(dep, dfs(v, u));
+            }
+            return dep + 1;
+        };
+
+        int depth = dfs(0, -1) - 1;
+        return pow(2, depth-1, MOD);
+    }    
 };

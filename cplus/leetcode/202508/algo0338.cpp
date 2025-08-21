@@ -16,4 +16,13 @@ public:
         }
         return ans;     
     }
+
+    vector<int> countBits2(int n) {
+        // 动态规划 时间复杂度：O(n) - lowbit
+        vector<int> ans(n+1);
+        for (int i = 1; i <= n; ++i) {
+            ans[i] = ans[i-(i&(~i+1))] + 1; // ~i+1 = -i
+        }
+        return ans;
+    }
 };

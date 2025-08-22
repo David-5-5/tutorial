@@ -16,5 +16,16 @@ public:
         return ans;
     }
 
- 
+    int binaryGap(int n) {
+        // 自行解答
+        int last = -1, ans = 0, i = 0;
+        while (n) {
+            if (n & 1) {   
+                if(last!=-1) ans = max(ans, i-last);
+                last = i;
+            }
+            i++; n>>=1;
+        }
+        return ans;
+    }    
 };

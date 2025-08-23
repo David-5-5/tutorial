@@ -8,6 +8,8 @@ typedef tree<int, null_type, less<int>, rb_tree_tag, tree_order_statistics_node_
 
 
 // 常用数据结构 - 8.5 动态开点线段树 & 10 莫队算法
+// 一般树 3.7 DFS 时间戳
+// 一般树 3.10 树上启发式合并
 class Solution {
 
 public:
@@ -209,7 +211,7 @@ public:
 
         // 以下开始代码不一致
         auto post = [&](this auto&& post, int u) -> vector<int> {
-            vector<int> cur;  // 使用set维持有序性和去重
+            vector<int> cur;  // 使用 vector 通过 ranges::lower_bound 维持有序性和去重
             cur.push_back(x_sum[u]);
             
             for (int v : g[u]) {

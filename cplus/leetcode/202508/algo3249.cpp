@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-// 一般树 - 3.2 自顶向下 DFS
+// 一般树 - 3.3 自底向上 DFS
 class Solution {
 public:
     int countGoodNodes(vector<vector<int>>& edges) {

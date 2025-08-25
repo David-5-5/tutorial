@@ -22,7 +22,7 @@ private:
 
 public:
     vector<int> stringIndices(vector<string>& wordsContainer, vector<string>& wordsQuery) {
-        // 自行解答 - 内存溢出
+        // 自行解答 - 没有 dfs_free 内存会溢出
         auto insert = [&](int i) {
             auto node = root;
             if (wordsContainer[i].length() < wordsContainer[node->result].length()){

@@ -5,9 +5,15 @@ using namespace std;
 class Solution {
 public:
     vector<int> minBitwiseArray(vector<int>& nums) {
-        // nums[i] < 1000 时，数据范围很小，可以暴力
-        // nums[i] < 10 ** 9 时，找到最高位 0 ，并将 下一位的 1 变更为 0 即可
-        // nums[i] == 2  时， ans = -1
+        // 数学方法 x or (x + 1) ，
+        // 如果 x = 101011， x = 101011 | 101100 = 101111
+        // 反过来，将 nums[i] = 101111 的可能 x 的取值
+        // 101111 = 100111 | 101000 
+        // 101111 = 101011 | 101110
+        // 101111 = 101101 | 101110
+        // 101111 = 101110 | 101111
+        // 综上所述，将 nums[i] 最右边的右边的 1 置为 0
+
         vector<int> ans(nums.size());
 
         for (int i=0; i<nums.size(); i++) {

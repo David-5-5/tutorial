@@ -181,15 +181,16 @@ A --> B --> C --> D
     polyvecl_uniform_gamma1(&y, rhoprime, nonce++); // 从较大区间采样 y
     z = y;
     polyvecl_ntt(&z);
-    polyvec_matrix_pointwise_montgomery(&w1, mat, &z); // w = A ◦ y (NTT域)
-    polyveck_reduce(&w1);
-    polyveck_invntt_tomont(&w1);                      // w = A * y (常规域)
-    polyveck_caddq(&w1);
+    polyvec_matrix_pointwise_montgomery(&w1, mat, &z); // w = A·y (NTT域)
+    polyveck_reduce(&w1);                              // 模q约简（确保值在[-q/2, q/2)）
+    polyveck_invntt_tomont(&w1);                      // 逆NTT → 系数域（得到w = A·y）
+    polyveck_caddq(&w1);                              // 调整w1到[0, q)范围（确保分解正确性）
     polyveck_decompose(&w1, &w0, &w1);                // w -> HighBits(w1), LowBits(w0)
     polyveck_pack_w1(sig, &w1);                       // 将 w1 打包到 sig 缓冲区    
     ```
+    - 分布选择：$\psi_{\gamma_1}$ 的范数上限 $\gamma_1$ 远大于私钥的 $\beta$，Dilithium 中 $\gamma_1=192, \beta=3$，确保 y 是中长向量，后续与私钥 $s_1$ 结合时，私钥的短范数特性被隐藏。 
     - nonce 是一个计数器，如果采样被拒绝，它可以确保下次循环使用 ρ‘ 流中的新部分来生成不同的 y。
-    - Decompose 操作将 w 分解为高位 w1（将被发送作为承诺）和低位 w0（暂时保留）。
+    - Decompose 操作将 w 分解为高位 $w_1$（将被发送作为承诺）和低位 $w_0$（暂时保留），$w = w_1 + 2^d\cdot w_0$，其中 $w_1$ 的系数仅含 $\pm 2^d$ 或 0，$w_0$的系数较小 $\left|w_0\right| \leq \gamma_2$。
 
 6. 生成挑战 c，模拟交互协议中 verifier 发送随机挑战 c 的步骤。
     ```c
@@ -201,8 +202,11 @@ A --> B --> C --> D
     poly_challenge(&cp, sig);                            // 将哈希值解释为多项式 c
     poly_ntt(&cp);                                       // 将挑战 c 转换到 NTT 域 
     ```
-    - 这是 Fiat-Shamir 启发式的另一个关键应用：对消息 μ 和承诺 w1 进行哈希，生成一个短多项式 c（其系数为 {-1, 0, 1}）。c 的稀疏性是其安全性的重要组成部分。
-    - 任何对 (m, w1) 的修改都会产生一个完全不同的挑战 c，这使得签名不可伪造。
+    - 传统零知识证明中，“挑战” 由验证方随机生成（交互式）；此处通过 “消息哈希mu+ 中间值w1” 的哈希生成cp（非交互式），即Fiat-Shamir 启发式。这确保：
+      - 挑战与消息、中间值强绑定（篡改任何一项都会导致cp变化）；
+      - 签名者无法提前预测cp（避免伪造证据）。
+    - poly_challenge作用：将哈希值（字节数组）转换为多项式cp，系数通常限制在 $-1, 0, 1$（小范数挑战，确保后续私钥参与计算时范数可控）。
+    - 任何对 (m, w1) 的修改都会产生一个完全不同的挑战 cp，这使得签名不可伪造。
 
 7. 计算响应 z 并检查其安全性（第一次拒绝，计算响应 z，并确保它不会泄露私钥 s1 的信息。
     ```c
@@ -213,10 +217,19 @@ A --> B --> C --> D
     if(polyvecl_chknorm(&z, GAMMA1 - BETA))           // 检查 z 的范数是否过大
         goto rej;  
     ```
-    - 理想的响应是 z = y + c*s1。验证者之后可以计算 A*z - c*t = A*y + c*A*s1 - c*(A*s1 + s2) = A*y - c*s2，并检查其结果是否“很小”。
-    - 拒绝采样：如果 z 的任何一个系数绝对值过大（超过 γ1 - β），它可能会泄露 s1 的信息（因为 y 已知，z - y = c*s1）。为了保护 s1，必须丢弃这个 z 并回到 rej 标签处用新的 y 重试。这是签名过程中可能循环的主要原因。
+    - 理想的响应是 $z = y + c\cdot s_1$，隐含了私钥 $s_1$ 的信息（但范数约束确保不泄露）。验证者之后可以计算 $A\cdot z=c\cdot t + w'$，并检查其结果是否“很小”。
+    $$
+    \begin{aligned}
+    &A\cdot z - c\cdot t  \\
+    &= A\cdot y + c\cdot A\cdot s_1 - c\cdot (A\cdot s1 + s2) \\
+    &= A\cdot y - c\cdot s2 
+    \end{aligned}
+    $$
+    - 拒绝采样：如果 z 的任何一个系数绝对值过大（超过 $\gamma_1 - \beta$），它可能会泄露 $s_1$ 的信息（因为 y 已知，$z - y = c\cdot s1$）。为了保护 $s_1$，必须丢弃这个 z 并回到 rej 标签处用新的 y 重试。这是签名过程中可能循环的主要原因。
 
-8. 计算并检查 w0 的安全性（第二次拒绝），验证在减去 c*s2 后，之前计算的 w0（即 Ay 的低位）是否仍然很小。
+    - 私钥s1的范数 $|s_1| \leq \beta$，挑战cp的范数 $|cp| \leq 1$（系数 ±1），故 $|c·s_1| \leq \beta$；中间向量y的范数 $|y| \leq \gamma_1$，因此 $|z| = |c·s_1 + y| \leq \gamma_1 + \beta$。但为了后续验证安全，需将z的范数压缩到 $\gamma_1 - \beta$（通过拒绝采样排除过大的z），避免攻击者通过 z 反推 y 和 $s_1$。
+
+8. 计算并检查 $w_0$ 的安全性（第二次拒绝），验证在减去 $c\cdot s_2$ 后，之前计算的 $w_0$（即 Ay 的低位）是否仍然很小。
     ```c
     polyveck_pointwise_poly_montgomery(&h, &cp, &s2); // h = c ◦ s2 (NTT域)
     polyveck_invntt_tomont(&h);                       // h = c * s2 (常规域)
@@ -225,9 +238,9 @@ A --> B --> C --> D
     if(polyveck_chknorm(&w0, GAMMA2 - BETA))          // 检查 w0 的范数是否过大
         goto rej;
     ```
-    - 在验证时， verifier 将独立计算 w' = A*z - c*t。由于 t = A*s1 + s2，所以 w' = A*(y + c*s1) - c*(A*s1 + s2) = A*y - c*s2。
-    - A*y 我们之前分解为了 w1*2^d + w0。所以 w' = (w1*2^d + w0) - c*s2。
-    - 为了让 verifier 能从 w' 中正确恢复出 w1（这是验证的核心），w0 - c*s2 这一项必须足够小。如果它的范数太大， verifier 的恢复可能会失败，导致签名无效，因此必须拒绝并重试。
+    - 公钥 $t = A·s_1 + s_2$，代入 $A·y = w = w_1 + 2^d·w_0$，可得 $A·z = A·(c·s_1 + y) = c·(A·s_1) + A·y = c·(t - s_2) + w = c·t + (w - c·s_2)$。展开 w 得 $A·z = c·t + w_1 + 2^d w_0 - c·s_2$，因此 $w_0 - c·s_2$ 是低位关键项。
+
+    - $s_2$ 的范数 $|s_2| \leq \beta$，故 $|c·s2| ≤ \beta$，$w_0$ 的原始范数 $|w_0| \leq \gamma_2$，因此 $|w_0 - c·s_2| ≤ \gamma_2 + \beta$。通过拒绝采样将其压缩到 $\gamma_2 - \beta$，确保后续生成的提示 h 范数可控。
 
 9. 生成提示并检查其大小（第三次拒绝），生成一个“提示” h，帮助 verifier 在不知道 t0 的情况下，从 A*z - c*t1*2^d 中正确恢复出 w1。
     ```c
@@ -237,14 +250,16 @@ A --> B --> C --> D
     if(polyveck_chknorm(&h, GAMMA2))                  // 检查 c*t0 的范数是否过大
         goto rej;
 
-    polyveck_add(&w0, &w0, &h);                       // w0 = (w0 - c*s2) + c*t0
+    polyveck_add(&w0, &w0, &h);                       // w0'' = (w0' - c*s2) + c*t0
     n = polyveck_make_hint(&h, &w0, &w1);             // 生成提示 h，使得 w1 = UseHint(h, w0 + c*t0)
     if(n > OMEGA)                                     // 检查提示 h 中“1”的数量是否过多
         goto rej;
     ```
-    - 因为公钥只包含 t1（t 的高位），而 t = t1*2^d + t0。所以 verifier 实际计算的是 A*z - c*t1*2^d = (A*y - c*s2) + c*t0 = w‘ + c*t0。
-    - make_hint 函数的作用是：生成一个比特向量 h，指示 verifier 在哪个系数上需要进行“四舍五入”校正，才能从 w‘ + c*t0 中得到正确的 w1。
-    - 拒绝采样：如果提示 h 中“1”的数量超过了一个预设的阈值 OMEGA，意味着这个提示太大了，会导致签名尺寸膨胀，因此需要拒绝并重试。
+    - 提示h的作用：验证方已知 $w_1$（从签名中解包），但需要 $w_0''$ 来验证 $A·z$ 的关系。make_hint 生成 h，使得验证方可以通过 h 和 $w_1$ 恢复 $w_0''$（无需存储完整 $w_0''$，减少签名长度）。
+
+    - 双重验证：
+      - $h = c·t_0$ 的范数 $\leq \gamma_2$（ $|t_0| \leq \beta$，故 $|c·t_0| \leq \beta \leq \gamma_2$，拒绝异常值）；
+      - h 的非零元素数量 $\leq \omega$（$\omega$ 是预设阈值，如 Dilithium 中 $\omega=83$），确保签名长度可控（非零元素越多，打包后体积越大）。
 
 10. 打包最终签名，组装最终签名。
     ```c
@@ -257,3 +272,22 @@ A --> B --> C --> D
       - z: 响应，证明签名者知道 s1。
      - h: 提示，帮助验证者校正由于公钥压缩带来的误差。
     - 在计算过程中，sig 缓冲区被临时用来存储 w1 和 c，最后被覆盖为最终的签名数据。
+
+
+小结： 过程就像一场精心设计的魔术，包含三个核心环节：承诺（Commitment）、挑战（Challenge）、响应（Response），即 Sigma 协议。Dilithium 通过 Fiat-Shamir 变换，将这个交互式协议变成了非交互式的签名。
+```mermaid
+flowchart TD
+subgraph SigmaProtocol[Sigma协议原理]
+    P[Prover<br>签名者] -->|“1. 承诺: w₁<br>我藏了个秘密”| V[Verifier<br>验证者]
+    P -->|“3. 响应: z, h<br>这是证据”| V
+    V -->|“2. 挑战: c<br>那我考考你...”| P
+end
+
+subgraph FiatShamir[Fiat-Shamir变换]
+    FS[哈希函数H] --> C
+    M[消息μ] --> FS
+    W1[承诺w₁] --> FS
+end
+
+SigmaProtocol --> FiatShamir
+```

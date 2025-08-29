@@ -49,5 +49,18 @@ public:
         return ans;
     }
 
- 
+    int findMaximumXOR2(vector<int>& nums) {
+        int ans = 0, mask = 0;
+        for (int i = 31; i >= 0; --i) {
+            mask |= 1 << i; unordered_set<int> seen;
+            int expect = ans | 1 << i;      // 期望的最大值
+            for (auto& num: nums) {
+                if (seen.count(expect ^ (num&mask))){
+                    ans = expect; break;    // 按位的两数之后
+                }
+                seen.insert(num&mask);
+            }
+        }
+        return ans;  
+    }    
 };

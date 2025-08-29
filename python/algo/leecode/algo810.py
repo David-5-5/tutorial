@@ -2,7 +2,7 @@ class Solution:
     def xorGame(self, nums) -> bool:
         n = len(nums)
 
-        if n // 2 == 0: return True
+        if n % 2 == 0: return True
 
         result=nums[0]
 

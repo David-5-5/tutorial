@@ -17,4 +17,8 @@ public:
         return true;
     }
 
+    bool makeStringsEqual(string s, string target) {
+        // 参考题解 - 简洁的写法
+        return (s.find('1') == string::npos) == (target.find('1') == string::npos);
+    }
 };

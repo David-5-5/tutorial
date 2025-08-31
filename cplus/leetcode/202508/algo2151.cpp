@@ -48,4 +48,33 @@ public:
         return mx_count;
     }    
 
+    int maximumGood3(vector<vector<int>>& statements) {
+        // 自行解答 广度搜索 没有优化
+        int n = statements.size();
+        set<int> masks; masks.insert((1<<n)-1);
+
+        auto check = [&] (int mask) -> bool {
+            for (int i=0; i<n; ++i) {
+                if (((mask>>i)&1) == 0) continue;
+                for (int j=0; j<n; ++j) {
+                    if (statements[i][j] == 2) continue;
+                    if (statements[i][j] != ((mask>>j)&1)) {
+                        return false;
+                    }
+                }
+            }    
+            return true;        
+        };
+        
+        while (masks.size()) {
+            set<int> nxt;
+            for (auto& m: masks) {
+                if (check(m)) return __builtin_popcount(m);
+                for (int i=0; i<n; ++i) if ((m>>i)&1) nxt.insert(m-(1<<i));
+            }
+            masks = move(nxt);
+        }
+        return 0;
+
+    }    
 };

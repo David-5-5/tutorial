@@ -25,5 +25,27 @@ public:
         return mx_count;
     }
 
+    int maximumGood2(vector<vector<int>>& statements) {
+        // 根据 maximumGood 提取出 function，性能更好
+        int n = statements.size();
+        int mx_count = 0;
+        for (int mask=(1<<n)-1; mask; --mask) {
+            auto check = [&] (int mask) -> bool {
+                for (int i=0; i<n; ++i) {
+                    if (((mask>>i)&1) == 0) continue;
+                    for (int j=0; j<n; ++j) {
+                        if (statements[i][j] == 2) continue;
+                        if (statements[i][j] != ((mask>>j)&1)) {
+                            return false;
+                        }
+                    }
+                }    
+                return true;        
+            };
+            if (check(mask)) mx_count = max(mx_count, __builtin_popcount(mask));
+        }
+
+        return mx_count;
+    }    
 
 };

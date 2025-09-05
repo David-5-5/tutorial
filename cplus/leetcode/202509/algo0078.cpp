@@ -19,5 +19,25 @@ public:
         return ans;
     }
 
+    vector<vector<int>> subsets2(vector<int>& nums) {
+        // 自行解答 递归回溯
+        vector<vector<int>> ans; int n = nums.size();
 
+        auto dfs = [&] (this auto&& dfs, int i, vector<int>& path) -> void  {
+            if (i == n) {
+                ans.push_back(path);
+                return;
+            }
+
+            dfs(i+1, path);               // 不选
+            path.push_back(nums[i]);    // 选
+            dfs(i+1, path);
+            path.pop_back();            // 恢复现场
+        };
+
+        vector<int> path;
+        dfs(0, path);
+        return ans;     
+    }
+    
 };

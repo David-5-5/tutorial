@@ -30,6 +30,7 @@ class Solution:
 
     def minimumValueSum2(self, nums: List[int], andValues: List[int]) -> int:
         # 参考题解，基于 minimumValueSum 把 and_ 放入递归参数进行累积
+        # 2025.9.5 复习 性能未提升
         n, m = len(nums), len(andValues)
 
         # 时间复杂度 O(mnlogU) logU = 30
@@ -39,6 +40,7 @@ class Solution:
             if n-i < m-j or i == n or j == m:return inf
             
             and_ &= nums[i]
+            # if (and_ < andValues[j]): return inf    # 剪枝，性能未提升
             res = dfs(i+1, j, and_)
             if (and_ == andValues[j]):
                 res = min(res, dfs(i+1, j+1, -1) + nums[i])

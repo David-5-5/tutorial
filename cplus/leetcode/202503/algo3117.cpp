@@ -5,6 +5,7 @@ using namespace std;
 class Solution {
 public:
     int minimumValueSum(vector<int>& nums, vector<int>& andValues) {
+        // 2025.9.5 复习
         // 参考题解 记忆化搜索，三个变量压缩到一个变量，使用 map 代替数组，减少存储空间
         // and_ 值的范围很大，值的数量有限 <= logU
         const int INF = INT_MAX / 2; // 除 2 防止下面 + nums[i] 溢出

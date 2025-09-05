@@ -5,10 +5,11 @@ using namespace std;
 class Solution {
 public:
     int minStable(vector<int>& nums, int maxC) {
+        // 自行解答
         int n = nums.size();
 
         auto check = [&](int m) -> bool {
-            int modi = 0;
+            int modi = 0;       // 已修改次数
             vector<pair<int, int>> gcds;
             for (auto num :nums) {
                 int len = 0;
@@ -47,7 +48,6 @@ public:
         int l = -1, r = n+1;
         while (l+1<r) {
             auto mid = (l + r) / 2;
-            // cout << l << ", " << mid << ", " << r << endl;
             if (check(mid))
                 r = mid;
             else

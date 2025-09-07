@@ -51,5 +51,54 @@ public:
         return dfs(0, 0);
     }
 
+    bool isSolvable(vector<string>& words, string result) {
+        // 参考题解, 合并多项式, 优化 check 时间
+        unordered_map<char, int> chars; unordered_set<char> initial;
+        for (auto& w : words) {
+            int pow10 = 1;
+            for (int i=w.length()-1; i>=0; --i) {
+                chars[w[i]] += -pow10 ; pow10 *= 10;
+            }
+        }
+        
+        int pow10 = 1;
+        for (int i=result.length()-1; i>=0; --i) {
+            chars[result[i]] += pow10; pow10 *= 10;
+        }
 
+        if (result.size()>1) 
+            initial.insert(result[0]); 
+        for (auto& w:words) if (w.length()>1) initial.insert(w[0]);
+        
+        int n = chars.size(), m = initial.size();
+        // 虽然只有 10 个字符,但一定避免使用哈希表,!!!要用数组!!!
+        vector<int> coeff;
+        // 不能为 0 的字符放数组的前列，递归时检查不能为 0
+        for (auto it = initial.begin(); it!=initial.end(); ++it) coeff.push_back(chars[*it]);
+        for (auto [k, v]:chars) if (!initial.count(k)) coeff.push_back(v);
+        vector<int> vals(n);
+
+        // 合并多项式检查
+        auto check = [&] ()-> bool {
+            int result = 0;
+            for (int i=0; i<n; ++i) {
+                result += coeff[i] * vals[i];
+            }
+            return result == 0;
+        };
+        auto dfs = [&] (this auto&& dfs, int i, int mask) -> bool {
+            if (i == n) return check();
+
+            for (int k=0; k<10; ++k) {
+                if (i<m && k==0) continue; // 无前导 0
+                if (((mask >> k)&1) == 0) {
+                    vals[i] = k;
+                    if (dfs(i+1, mask|1<<k)) return true;
+                }
+            }
+            return false;
+        };
+
+        return dfs(0, 0);
+    }    
 };

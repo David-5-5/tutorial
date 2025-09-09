@@ -52,6 +52,26 @@ public:
         return ans;
     }
 
+    vector<vector<int>> subsets3(vector<int>& nums) {
+        // 参考 491 选择重复元素的做法
+        sort(nums.begin(), nums.end());
+        vector<vector<int>> ans; int n = nums.size();
 
+        auto dfs = [&] (this auto&& dfs, int i, vector<int>& path) -> void  {
+            if (i == n) {
+                ans.push_back(path);
+                return;
+            }
+
+            if (path.empty() || path.back()!=nums[i])  dfs(i+1, path);    // 不选
+            path.push_back(nums[i]);        // 选
+            dfs(i+1, path);
+            path.pop_back();  // 恢复现场
+        };
+
+        vector<int> path;
+        dfs(0, path);
+        return ans;
+    }
     
 };

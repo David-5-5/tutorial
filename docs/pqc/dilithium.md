@@ -89,7 +89,11 @@ D & F & G & B --> I["打包私钥 sk = (rho, tr, key, t0, s1, s2)"]
     shake256(tr, TRBYTES, pk, CRYPTO_PUBLICKEYBYTES); // tr = H(pk)
     pack_sk(sk, rho, tr, key, &t0, &s1, &s2); // 打包私钥
     ```
-    - tr (跟踪哈希)：是公钥 pk 的哈希值。在签名时，它会和消息一起被哈希，将签名协议绑定到这一对特定的密钥，防止恶意公钥替换攻击。
+    - tr (公钥哈希)：是公钥 pk 的哈希值。在签名时，它会和消息一起被哈希，将签名协议绑定到这一对特定的密钥，防止恶意公钥替换攻击。
+      - tr 是 transcript 的缩写，指代签名过程中生成的哈希摘要链，用于绑定公钥、消息和随机数。
+      - tr 的核心作用是增强签名的抗碰撞性和可验证性，确保签名的每个组件（公钥、消息、随机数）在验证时能被唯一确认。
+      - transcript 是密码学中通用的术语，尤其在基于 Fiat-Shamir 变换的签名方案中常见，Dillithium 延续了这一命名传统，以保持与其他算法的一致性。
+    
     - 私钥 sk 包含:
       - rho: 用于重建矩阵 A。
       - tr: 用于签名。
@@ -329,6 +333,121 @@ if(unpack_sig(c, &z, &h, sig))
 // 若z范数过大，说明签名可能被篡改，返回失败
 if(polyvecl_chknorm(&z, GAMMA1 - BETA))
   return -1;
-
 ```
 前两步是 “格式校验”—— 排除明显无效的签名（如被截断）和公钥；第 4 步是 “范数校验”——z的范数约束是签名生成阶段通过拒绝采样确保的核心安全属性，若不满足，说明签名可能是伪造的（攻击者无法生成符合范数的z）。
+
+2. 重构消息绑定值 $\mu (mu)$：确保签名与消息绑定
+
+```c
+// 1. 先计算公钥pk的哈希（对应签名生成阶段的`tr`，绑定公钥）
+shake256(mu, TRBYTES, pk, CRYPTO_PUBLICKEYBYTES);
+
+// 2. 再计算mu = CRH(tr, pre, m)（与签名生成阶段的mu计算逻辑完全一致）
+shake256_init(&state);
+shake256_absorb(&state, mu, TRBYTES);   // 输入公钥哈希（tr）
+shake256_absorb(&state, pre, prelen);   // 输入前缀pre（上下文信息）
+shake256_absorb(&state, m, mlen);       // 输入待验证消息m（核心：绑定消息）
+shake256_finalize(&state);
+shake256_squeeze(mu, CRHBYTES, &state); // 输出mu
+```
+- $\mu$ 是 “公钥 + 前缀 + 消息” 的哈希，验证方必须完全复现签名生成阶段的 $\mu$ 计算逻辑—— 若消息被篡改、公钥不匹配，$\mu$ 都会不同，后续挑战校验必然失败。
+- 这一步确保了签名 “与特定消息、特定公钥强绑定”（抗消息篡改和公钥替换攻击）。
+
+3. 重构格基关系：验证 $A·z - c·t$  的一致性
+这是验证的核心步骤 —— 通过公钥和签名中的 z/c，重构签名生成阶段的格运算关系 ($A·z = c·t + w$)，并利用提示 h 恢复 $w_1$，确保证据 z 符合格基约束。
+  - 准备挑战多项式与公共矩阵
+  ```c
+  // 1. 将从签名解包的挑战字节数组c，转换为多项式cp（与签名生成阶段的 poly_challenge 一致）
+  poly_challenge(&cp, c);
+
+  // 2. 从rho恢复公共矩阵A（mat），与签名生成阶段的 polyvec_matrix_expand 完全一致
+  polyvec_matrix_expand(mat, rho);
+  ```
+  cp 的转换逻辑、矩阵A的恢复逻辑必须与签名生成阶段完全相同，否则后续运算会出现偏差。
+
+  - 计算 $A·z$（NTT 域高效乘法）
+  ```c
+  // 1. 将证据z转换为NTT域（点值域），与矩阵A同域
+  polyvecl_ntt(&z);
+
+  // 2. 计算w1 = A·z（矩阵A与向量z的乘法，NTT域逐位运算，效率极高）
+  polyvec_matrix_pointwise_montgomery(&w1, mat, &z);  
+  ```
+  这一步对应签名生成阶段的 $A·y$，但此处是 但此处是 $A·z$。计算过程如下：
+  $$
+  \begin{aligned}
+  z &= c·s_1 + y \\
+  A·z &= A·(c·s_1 + y) = c·(A·s_1) + A·y \\
+  t &= A·s_1 + s_2 \Rightarrow A·s_1 = t - s_2 \\
+  A·z &= c·(t - s_2) + A·y = c·t + (A·y - c·s_2) \\
+  A·z - c·t &= A·y - c·s_2
+  \end{aligned}
+  $$
+  这正是后续要验证的核心关系
+
+  - 计算c·t（挑战与公钥的乘法）
+  ```c
+  // 1. 将挑战多项式cp转换为NTT域（与t1同域）
+  poly_ntt(&cp);
+
+  // 2. 公钥t1左移d位（对应签名生成阶段的`2^d t1`，因t = t1 + 2^d t0）
+  polyveck_shiftl(&t1);
+
+  // 3. 将t1转换为NTT域
+  polyveck_ntt(&t1);
+
+  // 4. 计算t1 = c·t（挑战cp与公钥t的NTT域逐位乘法）
+  polyveck_pointwise_poly_montgomery(&t1, &cp, &t1);
+  ```
+  shiftl 的意义:签名生成阶段公钥 t 被分解为 $t = t_1 + 2^d t_0$，此处 $polyveck_shiftl(&t1)$ 等价于 $t_1 = 2^d t_1$，确保与 t 的整体尺度一致。
+  
+  - 计算 $A·z - c·t$ 并转回系数域
+  ```c
+  // 1. 计算w1 = A·z - c·t（NTT域向量减法）
+  polyveck_sub(&w1, &w1, &t1);
+
+  // 2. 模q约简（确保值在[-q/2, q/2)范围内，避免溢出）
+  polyveck_reduce(&w1);
+
+  // 3. 逆NTT转换：将w1从NTT域转回系数域
+  polyveck_invntt_tomont(&w1);
+  ```
+  此时的 $w_1$ 在理想情况下应等于 $A·y - c·s_2$（签名生成阶段的 $w - c·s_2$），后续需通过提示 h 重构其高位分量，验证是否与签名生成阶段的 $w_1$ 一致。
+
+4. 利用提示 h 重构 $w_1$：验证证据的一致性
+  ```c
+  // 1. 调整w1到[0, q)范围（确保分解和重构的正确性）
+  polyveck_caddq(&w1);
+
+  // 2. 利用提示h重构w1的高位分量（核心步骤）
+  // 逻辑：签名生成阶段h记录了w0''与w1的偏差，此处通过h恢复原始w1
+  polyveck_use_hint(&w1, &w1, &h);
+
+  // 3. 将重构后的w1打包为字节数组buf（与签名生成阶段的`polyveck_pack_w1`一致）
+  polyveck_pack_w1(buf, &w1);
+  ```
+  polyveck_use_hint的作用： 签名生成阶段，h 是根据 $w_0''$（$w_0 - c·s_2 + c·t_0$）和 $w_1$ 生成的 “偏差提示”；验证阶段， $w_1$ 是 $A·z - c·t$，通过 h 可以 “修正” $w_1$ ，使其恢复为签名生成阶段的原始 $w_1$（高位分量）。这一步确保 $w_1$ 的一致性。若 z 或 h 被篡改，重构后的 $w_1$ 会与原始值不符。
+
+5. 挑战校验：最终一致性验证
+  ```c
+  // 1. 重新计算挑战c2 = CRH(mu, 打包后的w1)（与签名生成阶段的挑战生成逻辑完全一致）
+  shake256_init(&state);
+  shake256_absorb(&state, mu, CRHBYTES);    // 输入重构的mu（绑定消息）
+  shake256_absorb(&state, buf, K*POLYW1_PACKEDBYTES); // 输入重构并打包的w1
+  shake256_finalize(&state);
+  shake256_squeeze(c2, CTILDEBYTES, &state); // 输出验证方计算的挑战c2
+
+  // 2. 逐字节对比签名中的挑战c与验证方计算的c2：一致则验证通过，否则失败
+  for(i = 0; i < CTILDEBYTES; ++i)
+    if(c[i] != c2[i])
+      return -1;
+
+  // 3. 所有校验通过，返回0（验证成功）
+  return 0;
+  ```
+  - 挑战c是签名生成阶段通过 $\mu+w_1$ 哈希生成的（Fiat-Shamir 范式）；
+  - 验证阶段，若 z 是合法的（由私钥生成），则重构的 $w_1$ 必然与签名生成阶段的 $w_1$ 一致，进而计算出的 $c_2$ 也必然与签名中的 c 一致。
+  - 反之，若攻击者伪造z/h，则重构的 $w_1$ 会偏离原始值，导致 $c_2 != c$，验证失败。
+  - 这一步彻底确保证明的一致性，签名者确实掌握私钥，且签名未被篡改。
+
+

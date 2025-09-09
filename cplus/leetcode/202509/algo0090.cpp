@@ -30,6 +30,28 @@ public:
         return ans;
     }
 
+    vector<vector<int>> subsets2(vector<int>& nums) {
+        // 重复数组的 子集
+        sort(nums.begin(), nums.end());
+        vector<vector<int>> ans; ans.push_back({});
+        int n = nums.size();
+        int i = 0;
+        while (i < n) {
+            vector<vector<int>> ext;
+            auto j = i;
+            while (j<n && nums[j]==nums[i]) j++;
+            for (auto sub: ans) {
+                for (int _=0; _<j-i; ++_) {
+                    sub.push_back(nums[i]); ext.push_back(sub);
+                }
+            }
+            ans.insert(ans.end(), ext.begin(), ext.end());
+            i = j;
+        }
+
+        return ans;
+    }
+
 
     
 };

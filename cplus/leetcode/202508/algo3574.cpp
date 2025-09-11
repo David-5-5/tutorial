@@ -5,6 +5,7 @@ using namespace std;
 class Solution {
 public:
     long long maxGCDScore(vector<int>& nums, int k) {
+        // 自行解答
         int n = nums.size(); 
         // first: gcd value, second:cnt of gcd
         vector<pair<int,int>> gcds;

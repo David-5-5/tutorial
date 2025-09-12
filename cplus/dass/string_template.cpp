@@ -76,9 +76,41 @@ auto zFunc = [](string text) -> vector<int> {
     return z;
 };
 
+
+auto rabinKarp = [](string text, string patten) -> vector<int> {
+    vector<int> result;
+    int n = text.size(), m = patten.size();
+    int mod1 = 1e9 + 7, mod2 = 1e9 + 9;
+    int base1 = 256, base2 = 1024;
+    int bm1 = 1, bm2 = 1;
+
+    // 计算 base 的 m-1 次方
+    for (int _=0; _<m-1; ++_){
+        bm1 = (bm1 * base1) % mod1;
+        bm2 = (bm2 * base2) % mod2;
+    }
+    // 计算第一个匹配字符串和模式串的 hash
+    pair<long long, long long> t = {0, 0}, p = {0, 0};
+    for (int i=0; i<m; ++i) {
+        t.first = (t.first * base1 + text[i]) % mod1;
+        t.second = (t.second * base2 + text[i]) % mod2;
+        p.first = (p.first * base1 + patten[i]) % mod1;
+        p.second = (p.second * base2 + patten[i]) % mod2;
+    }
+    if (t == p) result.push_back(0);
+    for (int i=m; i<n; ++i) {
+        t.first = ((t.first + mod1 - (text[i-m] * bm1)%mod1) * base1 + text[i]) % mod1;
+        t.second = ((t.second + mod2 - (text[i-m] * bm2)%mod2) * base2 + text[i]) % mod2;
+        if (t == p) result.push_back(i-m+1);
+    }
+
+    return result;
+};
+
 int main() {
     // vector<int> ans = zFunc("bacabaababbababa");
-    vector<int> ans = kmp("1021102","102");
-    for (auto v:ans) cout << v;
+    // vector<int> ans = kmp("1021102","102");
+    vector<int> ans = rabinKarp("10211021022102102","102");
+    for (auto v:ans) cout << v << " ";
     cout << endl;
 }

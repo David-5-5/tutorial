@@ -81,7 +81,7 @@ auto rabinKarp = [](string text, string patten) -> vector<int> {
     vector<int> result;
     int n = text.size(), m = patten.size();
     int mod1 = 1e9 + 7, mod2 = 1e9 + 9;
-    int base1 = 256, base2 = 1024;
+    int base1 = 401, base2 = 701;
     int bm1 = 1, bm2 = 1;
 
     // 计算 base 的 m-1 次方

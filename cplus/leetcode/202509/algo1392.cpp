@@ -58,5 +58,20 @@ public:
 
     }
 
+    string longestPrefix3(string s) {
+        // prefix funciton of kmp
+        int m = s.length(); vector<int> pi(m);
 
+        vector<int> p_pi(m);
+        for (int i=1; i < m; i++) {
+            int j = pi[i-1];
+            while (j > 0 && s[j]!=s[i])
+                j = pi[j-1];
+            if (s[j] == s[i])
+                pi[i] = j + 1;
+            else pi[i] = j;
+        }
+
+        return s.substr(0, pi[m-1]);
+    }
 };

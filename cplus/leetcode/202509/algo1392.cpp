@@ -33,5 +33,30 @@ public:
 
     }
 
+    string longestPrefix2(string s) {
+        // Rabin karp 变型 - 单hash
+        int mod = 1e9 + 7; int base = 401; long long bm = 1;
+        int n = s.length();
+
+        auto prefixHash = [&](long long& hash, int i) -> void {
+            hash = (hash * base + s[i]) % mod;
+        };
+
+        auto suffixHash = [&](long long& hash, int i) -> void {
+
+            hash = (bm * s[i]  + hash) % mod;
+            bm = (bm * base) % mod;
+        };
+
+        long long pHash = 0, sHash = 0; int len = -1;
+        for (int i=0; i<n-1; ++i) {
+            prefixHash(pHash, i); suffixHash(sHash, n - i - 1);
+            if (pHash == sHash) len = i;
+        }
+
+        return s.substr(0, len+1);
+
+    }
+
 
 };

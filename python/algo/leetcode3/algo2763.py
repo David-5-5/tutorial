@@ -23,6 +23,24 @@ class Solution:
                     sarr.insert(inx, nums[right])
         return ans
 
+    def sumImbalanceNumbers2(self, nums: List[int]) -> int:
+        # 复习，参考题解 时间复杂度 O(n^2)
+        ans, n = 0, len(nums)
+        vis = [-1] * (n + 2)
+        for i, x in enumerate(nums):
+            
+            vis[x] = i
+            cnt = 0
+            for j in range(i + 1, n):
+                y = nums[j]
+                if vis[y] != i:
+                    cnt += 1 - (vis[y - 1]==i) - (vis[y + 1]==i)
+                    vis[y] = i
+                ans += cnt
+        
+        return ans
+
+
 
 if __name__ == "__main__":
     sol = Solution()

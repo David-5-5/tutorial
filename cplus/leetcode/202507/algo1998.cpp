@@ -2,6 +2,7 @@
 using namespace std;
 
 // 常用数据结构 - 7.3 并查集 - GCD 并查集
+// 数学算法 - 数论 - 1.3 质因数分解
 class UnionFind {
     vector<int> fa;
 public:

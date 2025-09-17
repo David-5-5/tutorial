@@ -1,3 +1,7 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+
 // copy from math_template.cpp
 const int MOD = 1e9 + 7;
 const int MX = 1e5;   // 根据取值范围进行变更

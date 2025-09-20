@@ -11,17 +11,6 @@ int init = [] {
     return 0;
 }();
 
-// 快速幂：计算 (base^exp) % mod
-// long long qpow(long long base, long long exp, long long mod) {
-//     long long res = 1;
-//     base %= mod;
-//     while (exp > 0) {
-//         if (exp & 1) res = (res * base) % mod;
-//         base = (base * base) % mod;
-//         exp >>= 1;
-//     }
-//     return res;
-// }
 long long qpow(long long base, long long exp, long long modulo)
 {
     base %= modulo;
@@ -47,7 +36,6 @@ public:
             if (val == 1) return pres[0];
 
             int e = bit_width((unsigned long long) val) - 1;
-            // cout << val << ", " << e << endl;
             return val - (1L << e) + 1 + count(val - (1L<<e)) + pres[e-1];
         };
 
@@ -67,7 +55,7 @@ public:
             long long res = inner(n_val), diff = cnt - count(n_val); 
 
             for (int _=0; _<(diff); ++_) {
-                int lb = val & -val;
+                long long lb = val & -val;
                 res += bit_width((unsigned long long) lb) - 1;
                 val -= lb;
             }
@@ -95,6 +83,7 @@ public:
             };
             auto start_val = find_val(start-1), end_val = find_val(end);
             auto exponent = mul(end_val, end) - mul(start_val, start-1);
+            cout << start_val << ", " << end_val << ", " << exponent << endl;
             ans.push_back(qpow(2, exponent, mod));
         }
 

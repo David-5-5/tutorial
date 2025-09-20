@@ -83,7 +83,6 @@ public:
             };
             auto start_val = find_val(start-1), end_val = find_val(end);
             auto exponent = mul(end_val, end) - mul(start_val, start-1);
-            cout << start_val << ", " << end_val << ", " << exponent << endl;
             ans.push_back(qpow(2, exponent, mod));
         }
 

@@ -20,5 +20,25 @@ public:
         }
     }
 
-
+    int preimageSizeFZF2(int k) {
+        auto right = 5L * k, left = 4L * k;
+        // 二分查找 开区间
+        while (left+1 < right) {
+            auto mid = (left + right) / 2;
+            int tot = 0;
+            while (mid) {
+                mid /= 5;
+                tot += mid;
+            }
+            if (tot < k) left = (left + right) / 2;
+            else right = (left + right) / 2;    // 二分结果为 right
+        }
+        
+        // 查找确定数的阶乘末尾 0 的数量 leetcode 172  log N的算法
+        int tot = 0;            // 检查 right 包含的 0 是否等于 k
+        while (right) {
+            right /= 5; tot += right;
+        }
+        return tot == k?5:0;
+    }
 };

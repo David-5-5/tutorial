@@ -69,6 +69,29 @@ class Solution:
 
         return ans
 
+    def subarrayLCM3(self, nums: List[int], k: int) -> int:
+        # 2025 9. 26 复习 log trick
+        n, lcms, ans = len(nums), [], 0
+        for val in nums:
+            m = len(lcms)
+            for i in range(m-1, -1, -1):
+                if lcms[i][0] == lcm(lcms[i][0], val):break
+                else:
+                    lcms[i][0] = lcm(lcms[i][0], val)
+
+            lcms.append([val, 1])
+            for i in range(m-1, -1, -1):
+                if lcms[i][0] == lcms[i+1][0]:
+                    lcms[i][1] += lcms[i+1][1]
+                    del lcms[i+1]
+            for i in range(len(lcms)-1, -1, -1):
+                if lcms[i][0] == k: 
+                    ans += lcms[i][1]
+                if lcms[i][0] >= k:
+                    break
+        
+        return ans
+
 
 if __name__ == "__main__":
     sol = Solution()

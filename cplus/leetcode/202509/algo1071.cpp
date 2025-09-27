@@ -21,5 +21,11 @@ public:
         else return "";
     }
 
-
+    string gcdOfStrings2(string str1, string str2) {
+        // 更加精简
+        if (str1 + str2 != str2 + str1) {
+            return "";
+        }
+        return str1.substr(0, gcd((int)str1.size(), (int)str2.size()));
+    }
 };

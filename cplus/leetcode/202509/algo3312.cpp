@@ -58,6 +58,44 @@ public:
         return ans;
     }
 
+    vector<int> gcdValues2(vector<int>& nums, vector<long long>& queries) {
+        // 参考题解
+        // 对于 i 来说 cnt[i] = c*(c-1)/2 - cnt[2i] - cnt[3i] ...
+        int mx = ranges::max(nums);
+        vector<int> num_cnt(mx+1); 
+        vector<long long> gcd_cnt(mx+1);
+        
+        for (auto v: nums) num_cnt[v]++;
+        
+        for (int i = mx; i>0; --i) {
+            int cnt = 0;
+
+            for (int j=i; j<=mx; j+=i) {
+                cnt += num_cnt[j];
+                gcd_cnt[i] -= gcd_cnt[j];
+            }
+            gcd_cnt[i] += 1L * cnt * (cnt-1) / 2;
+        }
+        
+        // set<pair<long long, int>> sort_gcd; long long pres = 0;
+        // for (int i=1; i<=mx; ++i) {
+        //     pres += gcd_cnt[i];
+        //     sort_gcd.emplace(pres, i);
+        // }
+        // vector<int> ans;
+        // for (auto& q:queries) {
+        //     ans.push_back(sort_gcd.upper_bound({q, INT_MAX})->second);
+        // }
+        
+        // 另一种写法
+        partial_sum(gcd_cnt.begin(), gcd_cnt.end(), gcd_cnt.begin());
+
+        vector<int> ans(queries.size());
+        for (int i = 0; i < queries.size(); i++) {
+            ans[i] = ranges::upper_bound(gcd_cnt, queries[i]) - gcd_cnt.begin();
+        }
+        return ans;
+    } 
 
 };
 

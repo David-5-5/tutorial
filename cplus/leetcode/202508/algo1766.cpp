@@ -27,6 +27,7 @@ int init = [] {
 
 
 // 一般树 - 3.2 自顶向下 DFS
+// 数学算法 - 数论 - 1.8 互质
 class Solution {
 public:
     vector<int> getCoprimes(vector<int>& nums, vector<vector<int>>& edges) {

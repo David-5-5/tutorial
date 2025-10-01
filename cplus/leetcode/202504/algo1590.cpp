@@ -2,6 +2,7 @@
 using namespace std;
 
 // 常用数据结构 - 1.2 前缀和与哈希表
+// 数学算法 - 数论 - 1.9 同余
 class Solution {
 public:
     int minSubarray(vector<int>& nums, int p) {
@@ -23,6 +24,6 @@ public:
             }
             left[x] = i;
         }
-        return ans == n ? -1 :ans;   
+        return ans == n ? -1 :ans;
     }
 };

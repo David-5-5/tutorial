@@ -35,8 +35,6 @@ class Solution:
             group[s[0]].add(s[1:])
         ans = 0
         for a, b in combinations(group.values(), 2):
-            print(a) 
-            print(b)
             m = len(a & b)
             ans += (len(a) - m) * (len(b) - m)
         return ans * 2

@@ -1,7 +1,6 @@
-# 数学算法 - 组合数学 - 2.2 组合计数
 from math import comb
 
-
+# 数学算法 - 组合数学 - 2.2 组合计数
 class Solution:
     def valueAfterKSeconds(self, n: int, k: int) -> int:
         # 暴力 O(km)

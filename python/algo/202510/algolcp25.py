@@ -35,4 +35,28 @@ class Solution:
         return fact_n * dp[n] % MOD
 
     def keyboard2(self, k: int, n: int) -> int:
+        # 参考题解，生成函数，按题意完成
+        if n > 26 * k:
+            return 0
+        if n == 0:
+            return 1
         
+        one_coeff = []
+        # 初始化 f(t) 的初始化 0～k 系数
+        for i in range(min(k,n)+1):
+            one_coeff.append(inv_fac[i])
+        
+        coeff = [0] * (n+1)
+        coeff[0] = 1
+        # 计算 f(t)^26
+        for _ in range(26):
+            temp_coeff = [0] * (n+1)
+            for e in range(0, n+1):
+                for i in range(min(e, k)+1):
+                    temp_coeff[e] += (one_coeff[i] * coeff[e-i]) % MOD
+            coeff = temp_coeff.copy()
+        
+        return (fac[n] * coeff[n]) % MOD
+
+if __name__ == "__main__":
+    print(Solution().keyboard2(1, 2))

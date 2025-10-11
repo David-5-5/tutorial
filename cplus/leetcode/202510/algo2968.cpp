@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-// # 滑动窗口与双指针 - 不定长滑动窗口 2.1.2 进阶（选做）
+// 滑动窗口与双指针 - 不定长滑动窗口 2.1.2 进阶（选做）
 class Solution {
 public:
     int maxFrequencyScore(vector<int>& nums, int k) {

@@ -1,7 +1,6 @@
-# 滑动窗口与双指针 - 不定长滑动窗口 2.1.2 进阶（选做）
 from collections import defaultdict
 
-
+# 滑动窗口与双指针 - 不定长滑动窗口 2.1.2 进阶（选做）
 class Solution:
     def longestSubstring(self, s: str, k: int) -> int:
         # 参考题解，递归也考虑到了，担心超时

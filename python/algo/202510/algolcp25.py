@@ -22,6 +22,12 @@ class Solution:
         if n == 0:
             return 1
         
+        # 状态定义: 对于每种字母 i 当前长度 j，枚举第 i 种字母的使用数量 x
+        #          其中x 的范围是 0 到 min(k, j)，即不超过 k 次且不超过当前剩余长度
+        # dp[i][j] = sum(dp[i-1][j-x] * c(j,x)), where x ∈ 0~min(j,k) j ∈ 0~n
+        # 初始条件: dp[0][0] = 1, 使用 0 种字母组成空字符串
+        # dp[i-1][j-x]: 使用前 i-1 种字母组成长度 j-x 的方案数
+        # C(j, x): 组合数，表示从 j 个位置中选 x 个放置第 i 种字母
         for _ in range(26):
             new_dp = [0] * (n + 1)
             for j in range(n + 1):

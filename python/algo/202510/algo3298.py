@@ -25,3 +25,19 @@ class Solution:
         return ans
     
     
+    def validSubstringCount2(self, word1: str, word2: str) -> int:
+        # 自行解答 - 优化
+        cnt2 = Counter(word2)
+        cnt1 = defaultdict(int)
+
+        # 有 match2 的长度代替 contain 函数
+        l = ans = match2 = 0
+        for ch in word1:
+            cnt1[ch] += 1
+            if cnt1[ch] <= cnt2[ch]: match2 += 1
+            while match2 == len(word2):
+                cnt1[word1[l]] -= 1
+                if cnt1[word1[l]] < cnt2[word1[l]]: match2 -= 1
+                l += 1
+            ans += l
+        return ans

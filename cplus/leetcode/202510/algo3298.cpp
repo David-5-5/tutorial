@@ -43,5 +43,42 @@ public:
         return ans;
     }
 
+    long long validSubstringCount2(string word1, string word2) {
+        // translated from python bu doubao 
+        unordered_map<char, int> cnt2;
+        for (char ch : word2) {
+            cnt2[ch]++;
+        }
+        
+        unordered_map<char, int> cnt1;
+        int l = 0;
+        long long ans = 0;
+        int match2 = 0;
+        int len_word2 = word2.size();
+        
+        for (char ch : word1) {
+            cnt1[ch]++;
+            // 只有当当前计数仍小于等于目标计数时，才增加匹配数
+            if (cnt1[ch] <= cnt2[ch]) {
+                match2++;
+            }
+            
+            // 当匹配数达到word2长度时，尝试收缩左边界
+            while (match2 == len_word2) {
+                char left_ch = word1[l];
+                cnt1[left_ch]--;
+                // 如果收缩后计数小于目标，减少匹配数
+                if (cnt1[left_ch] < cnt2[left_ch]) {
+                    match2--;
+                }
+                l++;
+            }
+            
+            // 累加有效子字符串数量
+            ans += l;
+        }
+        
+        return ans;
+    }
 
 };

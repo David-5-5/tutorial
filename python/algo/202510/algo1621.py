@@ -28,3 +28,39 @@ class Solution:
             return res
         return dfs(n-1, k)
 
+    def numberOfSets3(self, n: int, k: int) -> int:
+        # 递归 -> 递推
+        mod = 10 **9 + 7
+        dp = [[0]*(k+1) for _ in range(n)]
+        dp[0][0] = 1
+
+        # 动态规划 超时
+        for i in range(1, n):
+            dp[i][0] = 1 # 设置为 1, j 从 1..k 开始
+            for j in range(1, k+1):
+                dp[i][j] = dp[i-1][j]       # 不选
+                max_k = i-j+2
+                for k_len in range(1, max_k):
+                    dp[i][j] += dp[i-k_len][j-1]
+                dp[i][j] %= mod
+
+        return dp[n-1][k]
+
+    def numberOfSets4(self, n: int, k: int) -> int:
+        # 递归 -> 递推 - 前缀和优化
+        mod = 10 **9 + 7
+        dp = [[0]*(k+1) for _ in range(n)]
+        dp[0][0] = 1
+
+        # 动态规划 - 通过
+        pres = [0] * k      # 按 k 设置前缀和
+        for i in range(1, n):
+            dp[i][0] = 1 # 设置为 1, j 从 1..k 开始
+            for j in range(1, k+1):
+                if i < j: continue
+                dp[i][j] = dp[i-1][j]       # 不选
+                pres[j-1] += dp[i-1][j-1]
+                if j-2>= 0: pres[j-1] -= dp[j-2][j-1]
+                dp[i][j] = (dp[i][j] + pres[j-1]) % mod
+
+        return dp[n-1][k]

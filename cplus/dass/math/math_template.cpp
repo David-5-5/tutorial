@@ -6,7 +6,7 @@ using namespace std;
  * while the calculation of brute force takes the time of O(N).
  * 快速幂
  */
-long long pow(long long base, int exp)
+long long qpow(long long base, int exp)
 {
     long long res = 1;
     while (exp > 0)

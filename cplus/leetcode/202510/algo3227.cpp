@@ -13,5 +13,10 @@ public:
         return cnt > 0;        
     }
 
-
+    bool doesAliceWin2(string s) {
+        // c++ 学习 ranges::any_of
+        return ranges::any_of(s, [](char c) {
+            return c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u';
+        });
+    }    
 };

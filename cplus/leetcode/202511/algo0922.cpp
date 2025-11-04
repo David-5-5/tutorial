@@ -22,5 +22,17 @@ public:
         return nums;     
     }
 
-
+    vector<int> sortArrayByParityII(vector<int>& nums) {
+        // 自行解答，双指针
+        int even = 0, odd = 1, n = nums.size();
+        while (even < n) {
+            while (even < n && nums[even] % 2 == 0) even += 2;
+            if (even >= n) break;
+            while (nums[odd] % 2) odd += 2;            
+            swap(nums[even], nums[odd]);
+            even += 2, odd += 2;
+            
+        }
+        return nums;    
+    }    
 };

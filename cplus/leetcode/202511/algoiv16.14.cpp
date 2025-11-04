@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-// 数学算法 - 计算几何
+// 数学算法 - 计算几何 - 5.1 点、线
 class Solution {
 public:
     vector<int> bestLine(vector<vector<int>>& points) {

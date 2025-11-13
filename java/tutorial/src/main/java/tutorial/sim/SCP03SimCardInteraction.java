@@ -104,12 +104,13 @@ public class SCP03SimCardInteraction {
      * 步骤 1：发送 INITIALIZE UPDATE 命令（密钥协商初始化）
      * 
      * @return 卡随机数（Card Nonce）
-     * @throws NoSuchProviderException 
-     * @throws BadPaddingException 
-     * @throws IllegalBlockSizeException 
-     * @throws NoSuchPaddingException 
+     * @throws NoSuchProviderException
+     * @throws BadPaddingException
+     * @throws IllegalBlockSizeException
+     * @throws NoSuchPaddingException
      */
-    public byte[] initializeUpdate() throws CardException, NoSuchAlgorithmException, InvalidKeyException, NoSuchProviderException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
+    public byte[] initializeUpdate() throws CardException, NoSuchAlgorithmException, InvalidKeyException,
+            NoSuchProviderException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
         // 终端生成 8 字节随机数（Terminal Nonce）
         byte[] terminalNonce = new byte[8];
         new SecureRandom().nextBytes(terminalNonce);
@@ -167,13 +168,15 @@ public class SCP03SimCardInteraction {
 
     /**
      * 步骤 2：发送 EXTERNAL AUTHENTICATE 命令（完成安全通道建立）
-     * @throws NoSuchProviderException 
-     * @throws BadPaddingException 
-     * @throws IllegalBlockSizeException 
-     * @throws NoSuchPaddingException 
+     * 
+     * @throws NoSuchProviderException
+     * @throws BadPaddingException
+     * @throws IllegalBlockSizeException
+     * @throws NoSuchPaddingException
      */
     public void externalAuthenticate(byte[] terminalNonce, byte[] cardNonce)
-            throws CardException, NoSuchAlgorithmException, InvalidKeyException, NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException, NoSuchProviderException {
+            throws CardException, NoSuchAlgorithmException, InvalidKeyException, NoSuchPaddingException,
+            IllegalBlockSizeException, BadPaddingException, NoSuchProviderException {
         // 构建认证数据：用会话 MAC 密钥签名（Card Nonce + Terminal Nonce）
         byte[] signInput = ByteBuffer.allocate(16)
                 .put(cardNonce)
@@ -285,7 +288,8 @@ public class SCP03SimCardInteraction {
     /**
      * 生成 SCP03 会话密钥（KEK/KMAC/KDEK）
      * 密钥派生函数：KDF-HMAC-SHA256（遵循 SCP03 规范）
-     * @throws NoSuchProviderException 
+     * 
+     * @throws NoSuchProviderException
      */
     private void generateSessionKeys(byte[] terminalNonce, byte[] cardNonce)
             throws NoSuchAlgorithmException, InvalidKeyException, NoSuchProviderException {
@@ -313,8 +317,6 @@ public class SCP03SimCardInteraction {
         System.out.println("KMAC: " + bytesToHex(kmac));
         System.out.println("KDEK: " + bytesToHex(kdek));
     }
-
-
 
     /**
      * 【核心缺失】KDF-HMAC-SHA256 密钥导出函数（严格遵循 SCP03 规范 ETSI TS 102 221）

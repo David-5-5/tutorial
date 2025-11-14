@@ -5,7 +5,7 @@ using namespace std;
 class Solution {
 public:
     int expressiveWords(string s, vector<string>& words) {
-        // 自行解答，特别别扭
+        // 自行解答，计算 cnt
         auto freq = [](string word) -> vector<pair<char, int>> {
             vector<pair<char, int>> ret;
             word.push_back('&');
@@ -38,4 +38,31 @@ public:
 
         return ans;     
     }
+
+    int expressiveWords(string s, vector<string>& words) {
+        // 参考题解 使用双指针
+        int n = s.length(), ans = 0;
+
+        auto expand = [&](string word) -> bool {
+            int i = 0, j = 0, m = word.length();
+            while (i < n && j < m) {
+                int cnti = 0 , cntj = 0;
+                if (s[i] == word[j]) {
+                    cnti = 1, cntj = 1;
+                    while (i+1<n && s[i] == s[i+1]) {cnti ++; i++;}
+                    while (j+1<m && word[j] == word[j+1]) {cntj ++; j++;}
+                    if (!(cnti == cntj || (cnti > cntj && cnti > 2))) return false;
+                } else return false;
+                i++; j++;
+            }
+
+            return i == n && j == m;
+        };
+
+        for (auto & word: words) {
+            if (expand(word)) ans ++;
+        }
+
+        return ans;
+    }    
 };

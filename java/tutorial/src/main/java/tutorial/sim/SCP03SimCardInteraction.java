@@ -41,7 +41,8 @@ public class SCP03SimCardInteraction {
     private static final byte P1_INIT_UPDATE = (byte) 0x00; // INIT UPDATE P1（无特殊要求）
     private static final byte P2_INIT_UPDATE = (byte) 0x00; // INIT UPDATE P2（无特殊要求）
     private static final byte LE_INIT_UPDATE = (byte) 0x20; // INIT UPDATE 期望返回长度（32 字节）
-    private static final byte[] AID_ISD = { (byte) 0xA0, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00 }; // SIM 卡默认安全域 AID
+    private static final byte[] AID_ISD = { (byte) 0xD1, 0x56, 0x00, 0x01, 0x01, 0x00, 0x01, 0x60,
+        0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00 }; // SIM 卡默认安全域 AID
 
     // 预共享密钥（PSK）：实际场景建议用 ECDH 动态协商，此处为测试简化
     private static final byte[] PSK = { 0x01, 0x23, 0x45, 0x67, (byte) 0x89, (byte) 0xAB, (byte) 0xCD, (byte) 0xEF,

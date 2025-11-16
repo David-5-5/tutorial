@@ -17,5 +17,15 @@ public:
         return ans;
     }
 
-
+    int longestSubarray2(vector<int>& nums) {
+        // 自行解答 - 存储优化
+        int n = nums.size(), ans = 2;
+        int cnt = 2;
+        for (int i=2; i<n; ++i) {
+            if (nums[i] == nums[i-1] + nums[i-2]) 
+                ans = max(ans, ++cnt);
+            else cnt = 2;
+        }
+        return ans;
+    }    
 };

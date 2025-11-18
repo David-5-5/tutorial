@@ -15,5 +15,16 @@ public:
         return ans;
     }
 
-
+    long long getDescentPeriods(vector<int>& prices) {
+        // 自行解答 - 分组循环 - 高效
+        long long ans = 0; int i = 0, n = prices.size();
+        while(i < n) {
+            int j = i+1;
+            while (j<n && prices[j-1]-1 == prices[j]) j++;
+            ans += 1LL * (j-i+1) * (j-i)/2;
+            i = j;
+        }
+        return ans;
+    }
+    
 };

@@ -15,6 +15,21 @@ public:
         return ans;
     }
 
+    int reductionOperations2(vector<int>& nums) {
+        // 自行解答，使用 分组循环模板
+        map<int, int> cnt;
+        sort(nums.begin(), nums.end());
 
+        int ans = 0, i = 0, g = 0, n = nums.size();
+        while (i < n) {
+            int j = i;
+            while (i<n && nums[j] == nums[i]) {
+                ans += g;
+                i++;
+            }
+            g++;
+        }
+        return ans;
+    }
 
 };

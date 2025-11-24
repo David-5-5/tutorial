@@ -31,6 +31,28 @@ class Solution:
         return ans
 
 
+    def fullJustify2(self, words: List[str], maxWidth: int) -> List[str]:
+        # 2025.11.22 复习 （病后初愈）
+        i, n, ans = 0, len(words), []
+
+        while i < n:
+            st, charLen = i, len(words[i])
+            i += 1
+            while i<n and charLen + len(words[i]) < maxWidth:
+                charLen += len(words[i]) + 1 # 1 为单词间空格
+                i += 1
+            spaces = maxWidth - charLen + (i - st - 1)
+            line = words[st]
+            for j in range(st+1, i):
+                sp = 1 if i == n else (spaces + i-j-1) // (i-j)
+                line += ' ' * sp + words[j]
+                spaces -= sp
+            if spaces: line += ' ' * spaces
+            ans.append(line)
+        return ans
+
+
+
 if __name__ == "__main__":
     sol = Solution()
     words, maxWidth  = ["This", "is", "an", "example", "of", "text", "justification."], 16

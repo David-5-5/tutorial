@@ -6,13 +6,16 @@ from typing import List
 class Solution:
     # 自行解答 随机函数
     def __init__(self, nums: List[int]):
-        self.n = len(nums)
+        # self.n = len(nums)
         self.t_inxs = defaultdict(list)
         for i, v in enumerate(nums): self.t_inxs[v].append(i)
-        random.seed(100)
+        # random.seed(100)
             
 
     def pick(self, target: int) -> int:
         inx = random.randint(0, self.n) % len(self.t_inxs[target])
         return self.t_inxs[target][inx]
+
+    def pick(self, target: int) -> int:
+        return random.choice(self.t_inxs[target])
     

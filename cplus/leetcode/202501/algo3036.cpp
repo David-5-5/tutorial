@@ -12,11 +12,9 @@ public:
             vector<int> p_pi(m);
             for (int i=1; i < m; i++) {
                 int j = p_pi[i-1];
-                while (j > 0 && pat[j]!=pat[i])
-                    j = p_pi[j-1];
-                if (pat[j] == pat[i])
-                    p_pi[i] = j + 1;
-                else p_pi[i] = j;
+                while (j > 0 && pat[j]!=pat[i]) j = p_pi[j-1];
+                if (pat[j] == pat[i]) p_pi[i] = ++j;
+                // else p_pi[i] = j;
             }
 
             int ans = 0;

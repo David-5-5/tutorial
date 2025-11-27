@@ -32,4 +32,29 @@ public:
 };
 
 
+// Fisher-Yates (Knuth Shuffle)
+class Solution {
+private:
+    vector<int> nums;
+public:
+    Solution(vector<int>& nums) {
+        this->nums = nums;
+    }
+    
+    vector<int> reset() {
+        return this->nums;
+    }
+    
+    vector<int> shuffle() {
+        vector<int> ans = this->nums;
+        int n = ans.size();
+        
+
+        for (int i = n-1; i; --i) {
+            int j = rand() % (i+1);
+            swap(ans[i], ans[j]);
+        }
+        return ans;
+    }
+};
 

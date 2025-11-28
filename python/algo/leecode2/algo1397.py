@@ -1,6 +1,7 @@
 from functools import lru_cache
 class Solution:
     def findGoodStrings(self, n: int, s1: str, s2: str, evil: str) -> int:
+        # 自行解答 数位DP + KMP codeforces score 2667
         MOD = 10 ** 9 + 7
 
         p_pi = [0] * len(evil)

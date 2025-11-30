@@ -42,7 +42,7 @@ class Solution:
         return dp[0][0] % mod
 
     def numberOfCombinations3(self, num: str) -> int:
-        # 自行解答 - 前缀和优化
+        # 自行解答 - 前缀和优化 - 自行解答的最高难度分 2917
         if num[0] == '0': return 0
         mod = 10 ** 9 + 7
         n = len(num)

@@ -65,11 +65,8 @@ public:
         vector<int> p_pi(m);
         for (int i=1; i < m; i++) {
             int j = pi[i-1];
-            while (j > 0 && s[j]!=s[i])
-                j = pi[j-1];
-            if (s[j] == s[i])
-                pi[i] = j + 1;
-            else pi[i] = j;
+            while (j > 0 && s[j]!=s[i]) j = pi[j-1];
+            if (s[j] == s[i]) pi[i] = j + 1;
         }
 
         return s.substr(0, pi[m-1]);

@@ -41,3 +41,26 @@ public:
     }
 };
 
+// 参考题解 黑名单映射, [n-m, n) 为黑名单区域
+// 若黑名单在[0, n-m) 则在[n-m, n) 映射一个白名单
+class Solution {
+    int bound;
+    unordered_map<int, int> b2w;
+public:
+    Solution(int n, vector<int>& blacklist) {
+        unordered_set<int> black_set(blacklist.begin(), blacklist.end());
+        int m = blacklist.size();
+        bound = n-m;
+        int w = bound;
+        for (auto b: blacklist) {
+            if (b >= bound) continue; // 在黑名单区域
+            while (black_set.count(w)) w++;
+            b2w[b] = w++;
+        }
+    }
+    
+    int pick() {
+        int x = rand() % bound;
+        return b2w.count(x) ? b2w[x] : x;
+    }
+};

@@ -14,16 +14,16 @@ class Solution:
         while count < n:
             for i in [0, 1]:
                 for left in range(begin, end):
-                        for mid in range(10 if i else 1):
-                            if left:
-                                strl = str(left)
-                                value = int(strl + (str(mid) if i else '') + strl[::-1])
-                            else:
-                                value = mid
-                            if value and isPalindrome(value) :
-                                count += 1
-                                ret += value
-                                if count == n: return ret
+                    for mid in range(10 if i else 1):
+                        if left:
+                            strl = str(left)
+                            value = int(strl + (str(mid) if i else '') + strl[::-1])
+                        else:
+                            value = mid
+                        if value and isPalindrome(value) :
+                            count += 1
+                            ret += value
+                            if count == n: return ret
                         
             begin = end
             end *= 10
@@ -58,7 +58,7 @@ class Solution:
                         cnt += 1
                         ans += combined
             left = right
-
+        return ans
 
 if __name__ == "__main__":
     sol = Solution()

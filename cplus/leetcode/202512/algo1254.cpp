@@ -28,5 +28,25 @@ public:
         return ans;
     }
 
+    int closedIsland(vector<vector<int>>& grid) {
+        // 参考题解， 由外至内
+        int m = grid.size(), n = grid[0].size();
+        auto dfs = [&](this auto&& dfs, int x, int y) -> void {
+            if (x <0 || x >=m || y<0 || y >= n || grid[x][y] == 1) return;
 
+            grid[x][y] = 1;
+            dfs(x+1, y); dfs(x-1, y); dfs(x, y-1); dfs(x, y+1);
+        };
+
+        for (int i=0; i<m; ++i) {dfs(i, 0); dfs(i, n-1);}   
+        for (int j=1; j<n-1; ++j) {dfs(0, j); dfs(m-1, j);}
+
+        int ans = 0;
+        for (int i=1; i<m-1; ++i) for (int j=1; j<n-1; ++j) {
+            if (grid[i][j] == 1) continue;
+            dfs(i, j); ans += 1;
+        }
+
+        return ans;
+    }    
 };

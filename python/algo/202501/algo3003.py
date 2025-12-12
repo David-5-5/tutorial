@@ -1,3 +1,6 @@
+from functools import cache
+
+
 class Solution:
     def maxPartitionsAfterOperations(self, s: str, k: int) -> int:
         @cache
@@ -24,5 +27,3 @@ class Solution:
             return res
         
         return dfs(0, 0, False)
-                
-

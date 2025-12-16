@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-// 常用数据结构 - 8.3 树状数组和线段树 - 线段树（无区间更新）
+// 常用数据结构 - 8.3 树状数组和线段树 - 线段树（无区间更新
 class MajorityChecker {
 private:
     vector<int> arr;
@@ -9,7 +9,7 @@ private:
     unordered_map<int, int> cnt;
 public:
     MajorityChecker(vector<int>& arr): tree(4*arr.size()) {
-        // 自行解答
+        // 自行解答 - 线段树
         int n = arr.size();
         this->arr = arr;
         for (auto& v: arr) {
@@ -70,6 +70,33 @@ public:
     }
 };
 
+
+// 数学算法 - 随机算法 - 6.1 随机数
+class MajorityChecker {
+private:
+    int k = 20;
+    vector<int> arr;
+    unordered_map<int, vector<int>> idx;
+public:
+    MajorityChecker(vector<int>& arr) {
+        // 参考题解，随机化方法
+        int n = arr.size();
+        this->arr = arr;
+        for (int i=0; i<n; ++i) {
+            idx[arr[i]].emplace_back(i);
+        }
+    }
+
+    int query(int left, int right, int threshold) {
+        for (int _=0; _ < k; _++) {
+            int offset = rand() % (right - left + 1);
+            int x = arr[left+offset];
+            int occ = ranges::lower_bound(idx[x], right+1) - ranges::lower_bound(idx[x], left);
+            if (occ >= threshold) return x;
+        }
+        return -1;
+    }
+};
 
 /**
  * Your MajorityChecker object will be instantiated and called as such:

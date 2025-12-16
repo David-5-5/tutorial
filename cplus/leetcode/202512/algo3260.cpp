@@ -43,4 +43,31 @@ public:
 
         return ans;
     }
-};
+
+    string largestPalindrome2(int n, int k) {
+        // 参考题解，通用方法 DP
+        vector<int> pow10(n, 1);
+        for (int i=1; i<n; i++) pow10[i] = pow10[i-1] * 10 % k;
+
+        string ans(n, '0');
+
+        int m = (n + 1) >> 1;
+        vector vis(m+1, vector<bool>(k));
+        auto dfs = [&] (this auto&& dfs, int i, int j) -> bool {
+            if (i == m) return  j == 0;
+            vis[i][j] = true;
+            for (int d=9; d>=0; d--) {
+                int j2 = (j + d * pow10[i]) % k;
+                if (n-1-i != i) j2 = (j2 + d * pow10[n-1-i]) % k;
+                if (!vis[i+1][j2] && dfs(i+1, j2)) {
+                    ans[n-i-1] += d; if (n-1-i != i)ans[i] += d; return true;
+                }
+            }
+            return false;
+
+        };
+
+        dfs(0, 0);
+        return ans;
+    }
+}; 

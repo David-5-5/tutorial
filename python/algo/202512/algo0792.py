@@ -4,6 +4,7 @@ from typing import List
 # 九、子序列自动机
 class Solution:
     def numMatchingSubseq(self, s: str, words: List[str]) -> int:
+        # 参考题解
         pos = [[] for _ in range(26)]
 
         for i, ch in enumerate(s):

@@ -7,7 +7,6 @@ public:
     int minMoves(vector<string>& matrix) {
         // 自行解答
         const int dirs[4][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
-        vector<int> doors(26);
         vector door_coor(26, vector<pair<int, int>>());
 
         int m = matrix.size(), n = matrix[0].length();

@@ -37,5 +37,39 @@ public:
         return cost[m-1][n-1];    
     }
 
+    long long minCost2(int m, int n, vector<vector<int>>& waitCost) {
+        // 自行解答 用 unordered_map 代替 vector
+        int status = 1;
+        unordered_map<long long, long long> q; // i*n+j, c
+        q[0] = 1;
+        while (!q.empty()) {
+            if (q.count(m*n-1)) return q[m*n-1];
+            if (status) {
+                unordered_map<long long, long long> nxt;
+                for (auto [pos, c] : q) {
+                    int i = pos / n, j = pos % n;
+                    if (i + 1 < m) {
+                        int newPos = (i+1) * n + j;
+                        if (!nxt.count(newPos)) nxt[newPos] = c + (i+2)*(j+1);
+                        else nxt[newPos] = min(nxt[newPos], c + (i+2)*(j+1));
+                    }
+                    if (j + 1 < n) {
+                        int newPos = i * n + j + 1;
+                        if (!nxt.count(newPos)) nxt[newPos] = c + (i+1)*(j+2);
+                        else nxt[newPos] = min(nxt[newPos], c + (i+1)*(j+2));
+                    }
+                } 
 
+                q = move(nxt);
+            } else {
+                for (auto& [pos, c] : q) {
+                    int i = pos / n, j = pos % n;
+                    c += waitCost[i][j];
+                }
+            }
+            status ^= 1;
+        }
+
+        return -1;
+    }    
 };

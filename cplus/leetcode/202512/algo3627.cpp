@@ -5,6 +5,7 @@ using namespace std;
 class Solution {
 public:
     long long maximumMedianSum(vector<int>& nums) {
+        // 自行解答
         int i = 0, j = nums.size() - 1; long long ans = 0;
         sort(nums.begin(), nums.end());
 

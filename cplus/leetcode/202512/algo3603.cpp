@@ -6,7 +6,7 @@ using namespace std;
 class Solution {
 public:
     long long minCost(int m, int n, vector<vector<int>>& waitCost) {
-        // 自行解答 
+        // 自行解答 BFS
         constexpr long long MAX_SAFE_INTEGER = (1LL << 53) - 1;
         vector cost(m, vector<long long>(n, MAX_SAFE_INTEGER));
         int status = 1; cost[0][0] = 1;
@@ -71,5 +71,17 @@ public:
         }
 
         return -1;
+    }
+
+    long long minCost3(int m, int n, vector<vector<int>>& waitCost) {
+        // 参考题解 DP
+        // dp[i+1][j+1] = min(dp[i+1][j], dp[i][j+1]) + minCost[i][j] + 1LL * (i+1)(j+1)
+        // waitCost[0][0] waitCost[m-1][n-1] 需要抵消掉
+        vector dp(m+1, vector<long long>(n+1, LLONG_MAX));
+        dp[0][1] = dp[1][0] = 0;  // 也可以初始化为 - waitCost[0][0]
+        for (int i=0; i<m; ++i) for (int j=0; j<n; ++j) {
+            dp[i+1][j+1] = min(dp[i+1][j], dp[i][j+1]) + waitCost[i][j] + 1LL * (i+1) * (j+1);
+        }
+        return dp[m][n] - waitCost[0][0] - waitCost[m-1][n-1];
     }    
 };

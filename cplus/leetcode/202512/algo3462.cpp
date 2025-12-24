@@ -19,5 +19,14 @@ public:
         return accumulate(candidate.begin(), candidate.begin() + k, 0LL);
     }
 
-
+    long long maxSum2(vector<vector<int>>& grid, vector<int>& limits, int k) {
+        // 自行解答
+        vector<int> candidate;
+        for (int i=0; i<grid.size(); ++i) {
+            ranges::sort(grid[i], greater());
+            candidate.insert(candidate.end(), grid[i].begin(), grid[i].begin() + limits[i]);
+        }
+        ranges::sort(candidate, greater());   
+        return reduce(candidate.begin(), candidate.begin() + k, 0LL);   // reduce存在int越界的坑
+    }    
 };

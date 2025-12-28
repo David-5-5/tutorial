@@ -29,3 +29,22 @@ class Solution:
 
         return ans if ans < inf else -1
     
+    def minZeroArray2(self, nums: List[int], queries: List[List[int]]) -> int:
+        # 参考题解 0-1 背包
+        n = len(nums)
+
+        ans = 0
+        for i, capacity in enumerate(nums):
+            if capacity == 0: continue
+            
+            dp = [True] + [False] * capacity
+            for k, (l, r, v) in enumerate(queries):
+                if l > i or i > r: continue # i ∉ [l, r]
+                for j in range(capacity, v-1, -1):  # 容量倒序，降维
+                    dp[j] = dp[j] or dp[j-v]
+                if dp[capacity]:
+                    ans = max(ans, k + 1)
+                    break
+            else: return -1 # 没有 break 返回 -1
+
+        return ans

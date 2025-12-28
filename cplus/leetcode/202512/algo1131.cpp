@@ -28,4 +28,18 @@ public:
         return ans;  
     }
 
+    int maxAbsValExpr2(vector<int>& arr1, vector<int>& arr2) {
+        // 根据 3102 思路优化，计算出最大最小值即可
+        int mn1 = INT_MAX, mn2 = INT_MAX, mn3 = INT_MAX, mn4 = INT_MAX;
+        int mx1 = INT_MIN, mx2 = INT_MIN, mx3 = INT_MIN, mx4 = INT_MIN, n = arr1.size();
+
+        for (int i=0; i<n; ++i) {
+            mn1 = min(mn1, arr1[i] + arr2[i] + i); mx1 = max(mx1, arr1[i] + arr2[i] + i);
+            mn2 = min(mn2, arr1[i] - arr2[i] + i); mx2 = max(mx2, arr1[i] - arr2[i] + i);
+            mn3 = min(mn3, arr2[i] - arr1[i] + i); mx3 = max(mx3, arr2[i] - arr1[i] + i);
+            mn4 = min(mn4, -arr1[i] - arr2[i] + i); mx4 = max(mx4, -arr1[i] - arr2[i] + i);
+        }
+        return max({mx1-mn1, mx2-mn2, mx3-mn3, mx4 -mn4});
+    }
+
 };

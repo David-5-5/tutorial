@@ -1,3 +1,6 @@
+from functools import cache
+
+
 class Solution:
     def countDigitOne(self, n: int) -> int:
         # 计算小于n的每位出现1的次数，假定n由 digits[0..len_n-1]
@@ -54,8 +57,8 @@ class Solution:
     # 灵茶山 数位DP
     def countDigitOne3(self, n: int) -> int:
         s = bin(n)[2:]
-        from functools import lru_cache
-        @lru_cache(maxsize = None)
+
+        @cache
         def f(i: int, cnt1: int, is_limit: bool) -> int:
             if i == len(s):
                 return cnt1

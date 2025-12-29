@@ -56,14 +56,14 @@ class Solution:
 
     # 灵茶山 数位DP
     def countDigitOne3(self, n: int) -> int:
-        s = bin(n)[2:]
+        s = str(n)
 
         @cache
         def f(i: int, cnt1: int, is_limit: bool) -> int:
             if i == len(s):
                 return cnt1
             res = 0
-            up = int(s[i]) if is_limit else 1
+            up = int(s[i]) if is_limit else 9
             for d in range(up + 1):  # 枚举要填入的数字 d
                 res += f(i + 1, cnt1 + (d == 1), is_limit and d == up)
             return res

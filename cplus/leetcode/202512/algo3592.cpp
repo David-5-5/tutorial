@@ -26,6 +26,22 @@ public:
         return ans;
     }
 
+    vector<int> findCoins2(vector<int>& numWays) {
+        // 自行解答 - 优化实现
+        int n = numWays.size(); vector<int> ans, dp(n+1); dp[0] = 1;
+
+        for (int i=1; i<=n; i++) {
+            if (dp[i] == numWays[i-1]) continue;
+
+            for (int k=i; k<=n; k++) {
+                dp[k] += dp[k-i];
+            }
+            if (dp[i] != numWays[i-1]) return {};
+            ans.push_back(i);
+        }
+
+        return ans;
+    }    
 };
 
 int main() {

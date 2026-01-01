@@ -18,6 +18,7 @@ public:
                 p = p * 10 + x % 10; x /= 10;
             }
 
+            // 关键点 x * x >= p 是时间复杂度及正确性的保证
             for (int x=upper; 1LL * x * x >= p; x--) {
                 if (p % x == 0) {
                     return p % 1337;

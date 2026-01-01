@@ -5,6 +5,6 @@ using namespace std;
 class Solution {
 public:
     int bulbSwitch(int n) {
-        return sqrt(n + 0.5);
+        return sqrt(n); // floor(sqrt(n)) sqrt(n+0.5);
     }
 };

@@ -11,7 +11,8 @@ class Solution:
 
         @cache
         def dfs(i: int, c:int, l:int) -> int:
-            if l < 0 : return -inf
+            # if l < 0 : return -inf    
+            if l == 0 : return 0    # l 有两种写法
             if i < 0: return -inf if c else 0
 
             p = prices[i]

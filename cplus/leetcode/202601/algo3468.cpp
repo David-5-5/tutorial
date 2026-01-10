@@ -23,4 +23,17 @@ public:
     }
 
 
+    int countArrays2(vector<int>& original, vector<vector<int>>& bounds) {
+        // 参考题解 简化自行解答步骤，去掉函数调用
+
+        int L = bounds[0][0], R = bounds[0][1]; int n = original.size();
+        for (int i = 1; i<n; ++i) {
+            int diff = original[i] - original[i-1];
+            L = max(L+diff, bounds[i][0]);
+            R = min(R+diff, bounds[i][1]);
+            if (L > R) return 0;
+        }
+
+        return R - L + 1;
+    }    
 };

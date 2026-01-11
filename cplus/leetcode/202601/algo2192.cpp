@@ -30,5 +30,23 @@ public:
         return ans;
     }
 
-
+    vector<vector<int>> getAncestors2(int n, vector<vector<int>>& edges) {
+        // dfs 从 u = 0 ~ n-1 逐一遍历每个点，将点 u 作为祖先节点加入遍历到的每个子节点中
+        vector<vector<int>> g(n);
+        for (auto& e : edges) g[e[0]].emplace_back(e[1]);
+        vector<vector<int>> ans(n); vector<int> vis(n, -1);
+        for (int start=0; start<n; ++start) {
+            auto dfs = [&](this auto&& dfs, int u) -> void {
+                vis[u] = start;
+                for (auto& v: g[u]) {
+                    if (vis[v] == start) continue;
+                    ans[v].push_back(start);
+                    dfs(v);
+                }
+            };
+            dfs(start);
+        }
+        return ans;
+        
+    }
 };

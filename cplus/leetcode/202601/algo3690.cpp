@@ -39,30 +39,34 @@ public:
             int idx = ranges::lower_bound(a, nums1[i]) - a.begin();
             mask1 |= idx << (3 * (n - i - 1));
             idx = ranges::lower_bound(a, nums2[i]) - a.begin();
-            mask2 = idx << (3 * (n - i - 1));
+            mask2 |= idx << (3 * (n - i - 1));
         }
 
         set<int> vis = {mask1};
         vector<int> q = {mask1};
 
-        for (int ans=0; ;ans ++) {
+        for (int ans=0; ; ans++) {
             vector<int> nxt;
             for (auto& a: q) {
-               if (a == mask2) return ans;
+                if (a == mask2) return ans;
                 
-               for (int l=0; l<n; l++) for (int r=l+1; r<=n; r++) {
-                  auto b = a;
-                  auto sub = (b >> ((n-r-1)*3)) & ((1 << ((r-l)*3)) - 1);  
-                  b = (b & ~(1 << (n-r-1)*3-1)) | (b >> (l-r)*3 & (1 << (n-r-1)*3-1));
-                  for (int i=0; i<=n-r+l; i++) { // i pos of insert
-                     auto c = b;        // 需要插入多个位置，保留 b
-                     c = (c<< (r-l)*3) & (1 << (n-i-1)-1)
-                     if (vis.insert(c).second) nxt.emplace_back(c);
-                  }
-            
-               }
+                // 还有更好的位运算写法
+                for (int l=0; l<n; l++) for (int r=l+1; r<=n; r++) {
+                    auto sub = (a >> ((n-r)*3)) & ((1 << ((r-l)*3)) - 1);  
+                    auto b = (a >> (r-l)*3 & ~((1 << (n-r)*3)-1)) | (a & ((1 << (n-r)*3)-1));
+                    for (int i=0; i<=n-r+l; i++) { // i pos of insert
+                        auto c = (b << (r-l)*3 & ~((1 << (n-i)*3)-1)) | (sub << (n-r+l-i)*3) | (b & (1 << (n-r+l-i)*3)-1);
+                        if (vis.insert(c).second) nxt.emplace_back(c);
+                    }
+                }
             }
             q = move(nxt);
         }
     }    
 };
+
+
+int main() {
+    vector<int> nums1={3,1,2}, nums2 = {1,2,3};
+    cout << Solution().minSplitMerge2(nums1, nums2) << endl; 
+}

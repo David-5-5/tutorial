@@ -34,12 +34,12 @@ public:
         // 离散化后用整数标识数组
         auto a = nums1; int n = nums1.size();
         sort(a.begin(), a.end()); a.erase(unique(a.begin(), a.end()), a.end());
-        int mask1 = 0, mask2 = 0;
+        int mask1 = 0, mask2 = 0;   // 离散化后用整数表示数组，n < 6, 因此用 3 bits 表示一个元素
         for (int i=0; i<n; i++) {
             int idx = ranges::lower_bound(a, nums1[i]) - a.begin();
-            mask1 |= idx << (3 * (n - i - 1));
+            mask1 |= idx << (3 * (n - i - 1));          // mask1 表示 nums1
             idx = ranges::lower_bound(a, nums2[i]) - a.begin();
-            mask2 |= idx << (3 * (n - i - 1));
+            mask2 |= idx << (3 * (n - i - 1));          // mask2 表示 nums2
         }
 
         set<int> vis = {mask1};
@@ -47,13 +47,16 @@ public:
 
         for (int ans=0; ; ans++) {
             vector<int> nxt;
-            for (auto& a: q) {
+            for (auto& a: q) {      // 遍历当前的数组
                 if (a == mask2) return ans;
                 
                 // 还有更好的位运算写法
                 for (int l=0; l<n; l++) for (int r=l+1; r<=n; r++) {
-                    auto sub = (a >> ((n-r)*3)) & ((1 << ((r-l)*3)) - 1);  
+                    // sub 从 a 中截取 [l, r) 的元素， r-l 表示sub的元素个数
+                    auto sub = (a >> ((n-r)*3)) & ((1 << ((r-l)*3)) - 1);
+                    // b 为 从 a 中截取 sub 后剩余的元素
                     auto b = (a >> (r-l)*3 & ~((1 << (n-r)*3)-1)) | (a & ((1 << (n-r)*3)-1));
+                    // 将 sub 插入到剩余元素 b 中，插入的位置一次为 [0, n-r+l] n-r+l 表示 b 的元素个数
                     for (int i=0; i<=n-r+l; i++) { // i pos of insert
                         auto c = (b << (r-l)*3 & ~((1 << (n-i)*3)-1)) | (sub << (n-r+l-i)*3) | (b & (1 << (n-r+l-i)*3)-1);
                         if (vis.insert(c).second) nxt.emplace_back(c);
@@ -62,7 +65,7 @@ public:
             }
             q = move(nxt);
         }
-    }    
+    }
 };
 
 

@@ -51,4 +51,40 @@ public:
 
         return ans;
     }
+
+    long long countPrefixSuffixPairs(vector<string>& words) {
+        // 自行解答，使用 hash 表替代 trie
+        unordered_map<string, int> prefix;
+        long long ans = 0;
+        
+        auto zFunc = [&](string& text) -> vector<int>{
+            int t_len = (int)text.length();
+            vector<int> ans(t_len);
+            for (int i = 1, l = 0, r = 0; i < t_len; ++i) {
+                if (i <= r && ans[i - l] < r - i + 1) {
+                    ans[i] = ans[i - l];
+                } else {
+                    ans[i] = max(0, r - i + 1);
+                    while (i + ans[i] < t_len && text[ans[i]] == text[i + ans[i]]) ++ans[i];
+                }
+                if (i + ans[i] - 1 > r) l = i, r = i + ans[i] - 1;
+            }
+            return ans;
+        };
+        
+        for (auto& w: words) {
+            int n = w.length();
+            vector<int> z = zFunc(w); z[0] = n;
+
+            auto word = w;  // 技巧新增字符变量代替w.substr(i)，避免内存溢出     
+            for (int i=0; i<n; i++) {
+                if (z[i] == n-i && prefix.count(word)) ans += prefix[word];
+                word.pop_back(); 
+            }
+            prefix[w] ++;
+        }
+
+        return ans;
+
+    }    
 };

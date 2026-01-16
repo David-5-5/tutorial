@@ -9,6 +9,8 @@ def j(n:int, k:int) -> int :
     if n == 1: return 0
     return (j(n-1, k) + k) % n
 
+print(j(100, 5))
+
 # page 20
 n = int("101101101101011", 2)
 
@@ -17,4 +19,4 @@ def f(n: int, v: int) :
         n = josephus(n)
         print(i+1, "th: ", n, " ", bin(n))
 
-print(j(100, 5))
+f(int("10111110111111111", 2), 32)

@@ -7,8 +7,7 @@ class Solution:
             if k == 1: return ''.join([str(i) for i in ds])
             if k == factorial(len(ds)) : return ''.join([str(i) for i in ds[::-1]])
 
-            # m, rem = k // factorial(len(ds)-1), k % factorial(len(ds)-1)
-            m, rem = divmod(k, factorial(len(ds)-1))
+            m, rem = k // factorial(len(ds)-1), k % factorial(len(ds)-1)
             if rem == 0:
                 head = str(ds.pop(m-1))
                 return head + ''.join([str(i) for i in ds[::-1]])

@@ -79,5 +79,59 @@ C_n = 2(n+1)H_n - 2n \qquad (2.14)
 
 ## 2.3 和的操作
 
+和操作的成功的关键是把一个 $\sum$ 改变成另一个较简单或更接近某个目标的能力。
+设 K 是任何有限的整数集合，可用三哪个简单的规则来变化 K 的元素上的和：
+
+- 分配律 distributive law
+```math
+\sum_{k\in K}ca_k = c\sum_{k\in K}a_k \qquad (2.15)
+```
+
+- 结合律 associative law
+```math
+\sum_{k\in K}(a_k + b_k) = \sum_{k\in K}a_k + \sum_{k\in K}b_k \qquad (2.16)
+```
+
+- 交换律 commutative law
+```math
+\sum_{k\in K}a_k = \sum_{p(k)\in K}a_{p(k)} \qquad (2.17)
+```
+重要的是牢记一般交换律中的函数 (2.17) 中的函数 p(k) 假设为所有整数中的一种排列。换句话说，对于每个整数 n，恰好有就有一个整数 k 使得 p(k) = n。否则交换律不成立。
+
+利用交换律证明一个算术级数的一般形式：
+```math
+S = \sum_{0\le k\le n}(a + bk)
+```
+根据交换律，用 n-k 替代 k，得到
+```math
+S = \sum_{0\le n-k\le n}(a + b(n-k)) = \sum_{0\le k\le n}(a + bn - bk)
+```
+利用交换律可把这两个方程相加：
+```math
+\begin{aligned}
+2S &= \sum_{0\le k\le n}((a + bk)+(a + bn - bk)) = \sum_{0\le k\le n}(2a + bn) \\
+2S &= (2a+bn) \sum_{0\le k\le n} 1 = (2a + bn) (n+1)
+\end{aligned}
+```
+```math
+S = \sum_{k=0}^n(a + bk) = (a+\frac{1}{2}bn)(n+1)
+```
+
+---
+
+艾弗森(Iverson)约定
+```math
+\sum_{k\in K}^na_k + \sum_{k\in K'}^na_k = \sum_{k\in K\cap K'}^na_k + \sum_{k\in K\cup K'}^na_k \qquad (2.20)
+```
+这是根据下列的一般公式
+```math
+\sum_{k\in K}^na_k = \sum_ka_k[k\in K] \qquad (2.21)
+```
+和
+```math
+[k\in K] + [k\in K] = [k\in K\cap K'] +  [k\in K\cup K'] \qquad (2.20)
+```
+得出的。
+
 
 

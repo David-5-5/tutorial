@@ -113,6 +113,8 @@ S = \sum_{0\le n-k\le n}(a + b(n-k)) = \sum_{0\le k\le n}(a + bn - bk)
 2S &= (2a+bn) \sum_{0\le k\le n} 1 = (2a + bn) (n+1)
 \end{aligned}
 ```
+
+两边各除以 2, 证明了：
 ```math
 S = \sum_{k=0}^n(a + bk) = (a+\frac{1}{2}bn)(n+1)
 ```
@@ -129,9 +131,86 @@ S = \sum_{k=0}^n(a + bk) = (a+\frac{1}{2}bn)(n+1)
 ```
 和
 ```math
-[k\in K] + [k\in K] = [k\in K\cap K'] +  [k\in K\cup K'] \qquad (2.20)
+[k\in K] + [k\in K] = [k\in K\cap K'] +  [k\in K\cup K'] \qquad (2.22)
 ```
-得出的。
+
+得出的。典型的把规则 (2.20) 用到结合两个几乎不相交的指标集合，如同：
+```math
+\sum_{k=1}^ma_k + \sum_{k=m}^na_k = a_m + \sum_{k=1}^na_k, for 1\le m\le n;
+```
+
+或者从和中分出一项：
+```math
+\sum_{0\le k\le n}a_k = a_0 + \sum_{1\le k\le n}a_k, for n\ge 0; \qquad (2.23)
+```
+
+此分出一项的操作是摄动法的基础 (perturbation method)，它允许计算一个和为闭形式。想法从一个未知和 $S_n$ 开始，然后以两种方式重写 $S_{n+1}$，通过既分出它的第一项和最后一项：
+
+```math
+\begin{aligned}
+S_n + a_{n+1} &= \sum_{0\le k\le n+1}a_k = a_0 + \sum_{1\le k\le n}a_k \\
+              &= a_0 + \sum_{1\le k+1\le n}a_{k+1} \\
+              &= a_0 + \sum_{0\le k\le n}a_{k+1} \qquad (2.24)
+\end{aligned}
+```
+
+现在在此最后和上处理，且尝试由 $S_n$ 表达它。若成功，则可获得一个方程，它的解是我们所要找的和。例如，用此方法来求出一般几何级数的和，
+```math
+S_n = \sum_{0\le k\le n}ax^k .
+```
+
+式 (2.24) 中的一般摄动方法
+```math
+S_n + ax^{n+1} = ax^0 + \sum_{0\le k\le n}ax^{k+1} .
+```
+
+根据分配律，右边的和是 $x\sum_{0\le k\le n}ax^k = xS_n$，因此 $S_n + ax^{n+1} = a + xS_n$，这样解出 $S_n$ 得到
+```math
+\sum_{k=0}^nax^k = \frac{a-ax^{n+1}}{1-x}, 
+ for\ x\ne 1 \qquad (2.25)
+```
+
+让我们在一个稍困难的和上试用摄动技巧
+```math
+S_n = \sum_{0\le k\le n}k2^k .
+```
+
+按照式 (2.24) 有
+```math
+S_n + (n+1)2^{n+1} = \sum_{0\le k\le n}(k+1)2^{k+1} .
+```
+右边的和借助结合律分为两个和
+```math
+\sum_{0\le k\le n}k2^{k+1} + \sum_{0\le k\le n}2^{k+1} 
+```
+第一个和是 $2S_n$。另一个和是几何级数，根据式 (2.25)，它等于 $(2-2^{n+2})/(1-2) = 2^{n+2} - 2$。所以我门得到 $S_n + (n+1)2^{n+1} = 2S_n + 2^{n+2} - 2$，而代数计算得到：
+```math
+\sum_{0\le k\le n}k2^k = (n-1)2^{n+1} + 2 .
+```
+
+用 x 替换 2,相似推导给出方程
+```math
+S_n + (n+1)x^{n+1} = xS_n + (x - x^{n+2})/ (1 - x) .
+```
+因此我们能推出
+```math
+\sum_{0\le k\le n}kx^k = \frac{x- (n+1)x^{n+1} + nx^{n+2}}{(1-x) ^2} . \qquad (2.26)
+```
+
+我们能以完全不同的方法推导这个闭形式是有趣的，此方法运用了微分的基本技巧。从方程
+```math
+\sum_{k=0}^nx^k = \frac{1-x^{n+1}}{1-x} .
+```
+开始，且两边对 x 求导，得到
+```math
+\sum_{k=0}^nkx^{k-1} = \frac{(1-x)(-(n+1)x^n)+1-x^{n+1}}{(1-x)^2} = \frac{1-(n+1)x^n+nx{n+1}}{(1-x)^2} .
+```
+因为和的求导是它各项求导的和。
+
+
+## 2.4 多重和
+
+
 
 
 

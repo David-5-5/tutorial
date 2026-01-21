@@ -32,7 +32,30 @@ public:
         return -1;
     }
 
- 
+    int minOperations2(string s, int k) {
+        int n = s.size(), z = 0; for (auto& ch:s) if (ch=='0') z++;
+        set<int> vis[2]; 
+        for (int i=0; i<=n; ++i) {
+            if (i==z) continue;
+            vis[i%2].insert(i);
+        }
+        vector<int> q = {z}; int step = 0;
+        while (!q.empty()) {
+            vector<int> nxt;
+            for (auto& u: q) {
+                if (u == 0) return step;
+                int mn = max(0, k+u-n), mx = min(k, u);
+                int z_lower = u + k - 2 * mx, z_upper = u + k - 2 * mn;
+                auto &s = vis[z_lower%2];
+                // 相对于 while, for 循环特别简洁
+                for (auto it = s.lower_bound(z_lower); it!=s.end() && *it<=z_upper; it=s.erase(it))
+                    nxt.emplace_back(*it);
+
+            }
+            q = move(nxt); step ++;
+        } 
+        return -1;
+    }    
 };
 
 int main() {

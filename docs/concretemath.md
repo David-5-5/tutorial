@@ -210,6 +210,150 @@ S_n + (n+1)x^{n+1} = xS_n + (x - x^{n+2})/ (1 - x) .
 
 ## 2.4 多重和
 
+一个和的项可能由两个或多个指标来指定，而不仅仅是一个指标指定。
+```math
+\begin{aligned}
+\sum_{1\le j,k\le 3}a_jb_k &= a_1b_1 + a_1b_2 + a_1b_3\\
+              &+ a_2b_1 + a_2b_2 + a_2b_3 \\
+              &+ a_3b_1 + a_3b_2 + a_3b_3 
+\end{aligned}
+```
+
+对于这样的和，用相同的表示法和方法，就像对一个指标和所做的那样。因此若 P(j,k) 是 j 和 k 的一个性质，则所有项 $a_{j, k}$ 的和使得 P(j,k) 是真能以两种方式写出，一种用艾弗森(Iverson)约定，且在所有整数对 j 和 k 上求和
+```math
+\sum_{P(j,k)}a_jb_k = \sum_{j,k}a_jb_k[P(j,k)].
+```
+虽然求和指标多于一个，仅需一个 $\sum$ 符合。
+
+当讨论到几个和的总和，也有必要用两个 $\sum$，例如：
+```math
+\sum_j\sum_ka_jb_k[P(j,k)] = \sum_j(\sum_ka_jb_k[P(j,k)]) .
+```
+
+交换求和次序的基本定律，它推广了结合律 (2.16)
+```math
+\sum_j\sum_ka_jb_k[P(j,k)] = \sum_{P(j,k)}a_jb_k = \sum_k\sum_ja_jb_k[P(j,k)] \qquad (2.27) .
+```
+我们开始给 9 项和提供了一种处理二重和的好的说明。
+```math
+\begin{aligned}
+\sum_{1\le j,k\le 3}a_jb_k &= \sum_{j,k}a_jb_k[1\le j,k\le 3] \\
+    &= \sum_{j,k}a_jb_k[1\le j\le 3][1\le k\le 3] \\
+    &= \sum_j\sum_ka_jb_k[1\le j\le 3][1\le k\le 3] \\
+    &= \sum_ja_j[1\le j\le 3]\sum_kb_k[1\le k\le 3] \\
+    &= \sum_ja_j[1\le j\le 3](\sum_kb_k[1\le k\le 3]) \\
+    &= (\sum_ja_j[1\le j\le 3])(\sum_kb_k[1\le k\le 3]) \\
+    &= (\sum_{j=1}^3a_j)(\sum_{k=1}^3b_k) 
+\end{aligned}
+```
+
+此推导方法能用来证明一般的分配律
+```math
+\sum_{j\in J,k\in K}a_jb_k = (\sum_{j\in J}a_j)(\sum_{k\in K}b_k)  \qquad (2.28) .
+```
+对所有指标集 J 和 K 成立。
+
+交换求和次序的基本定律式 (2.27) 有许多变形，当要限制的指标的范围而不是在所有的整数 j 和 k 上求和时它就出现。这些变形有两种形式，第一种形式：
+```math
+\sum_{j\in J}\sum_{k\in K}a_{j,k} = \sum_{j\in J, k\in K}a_jb_k = \sum_{k\in K}\sum_{j\in J}a_{j,k}  \qquad (2.29) .
+```
+以另一种形式写出的式 (2.27)，当 j 和 k 的范围彼此独立时应用此定律。
+
+当内层和的范围依赖于外层和的指标变量时应用它：
+```math
+\sum_{j\in J}\sum_{k\in K(j)}a_{j,k} = \sum_{k\in K'}\sum_{j\in J'(k)}a_{j,k}.  \qquad (2.30) 
+```
+
+这里一定要以这样一种方式把集合 J, K(j), K‘ 和 J‘(k) 联系起来，即
+```math
+[j \in J][k\in K(j)] = [k\in K'][j\in J'(k)]
+```
+像这样的因子分解原则上总是可能的。一种特别有用的因子分解：
+```math
+[1\le j\le n][j\le k\le n] = [1\le j\le k\le n] = [1\le k\le n][1\le j\le k]. \qquad (2.31) 
+```
+
+这个艾弗森(Iverson)方程允许写成：
+```math
+\sum_{j=1}^n\sum_{k=j}^na_{j,k} = \sum_{1\le j\le k\le n}a_{j,k}  = \sum_{k=1}^n\sum_{j=1}^ka_{j,k}. \qquad (2.32) 
+```
+
+把这些想法应用到一个有用的例子上去，考虑 $n^2$ 个 $a_ja_k$ 的数组
+```math
+\begin{bmatrix}
+a_1a_1 & a_1a_2 & a_1a_3 & \cdots & a_1a_n \\
+a_2a_1 & a_2a_2 & a_2a_3 & \cdots & a_2a_n \\
+a_3a_1 & a_3a_2 & a_3a_3 & \cdots & a_3a_n \\
+\vdots & \vdots & \vdots &  & \vdots \\
+a_na_1 & a_na_2 & a_na_3 & \cdots & a_na_n \\
+\end{bmatrix}
+```
+我们的目标是求出矩阵的主对角线或主对角线上的所有元素之和
+```math
+S_\triangle = \sum_{1\le j\le k\le n}a_{j,k} =  
+    \sum_{1\le k\le j\le n}a_{k,j} +
+    \sum_{1\le k\le j\le n}a_{j,k} = S_\triangledown, \ a_{j,k} = a_{k,j}
+```
+
+
+我们得到
+```math
+\begin{aligned}
+2S_\triangle &= S_\triangle + S_\triangledown = 
+    \sum_{1\le k, j\le n}a_{k,j} + 
+    \sum_{1\le k=j\le n}a_{j,k} \\
+    &= (\sum_{k=1}^na_k)^2 + \sum_{k=1}^na_k^2
+\end{aligned}
+```
+
+因此得到
+```math
+S_\triangle = \frac{1}{2}((\sum_{k=1}^na_k)^2 + \sum_{k=1}^na_k^2)
+```
+
+另一个二重和，当交换 j 和 k 时，也有对称性:
+```math
+\begin{aligned}
+S &= \sum_{1\le j< k\le n}(a_k-a_j)(b_k-b_j) \\
+  &= \sum_{1\le k< j\le n}(a_j-a_k)(b_j-b_k) = \sum_{1\le k< j\le n}(a_k-a_j)(b_k-b_j)
+\end{aligned}
+```
+
+利用等式
+```math
+[1\le j< k\le n] + [1\le k< j\le n] = [1\le j, k\le n] - [1\le j=k\le n]
+```
+得出：
+```math
+2S= \sum_{1\le j,k\le n}(a_k-a_j)(b_k-b_j) - \sum_{1\le j=k\le n}(a_k-a_j)(b_k-b_j)
+```
+
+上式中，第二项的和为 0；第一项可以分为四个和：
+```math
+\begin{aligned}
+& \sum_{1\le j,k\le n}a_jb_j - \sum_{1\le j,k\le n}a_jb_k - \sum_{1\le j,k\le n}a_kb_j + \sum_{1\le j,k\le n}a_kb_k \\
+&= 2\sum_{1\le j,k\le n}a_kb_k - 2\sum_{1\le j,k\le n}a_jb_k \\
+&= 2n\sum_{1\le k\le n}a_kb_k - 2(\sum_{k=1}^na_k)(\sum_{k=1}^nb_k) \\
+\end{aligned}
+```
+
+回到讨论的地方，式子两边同除以 2:
+```math
+(\sum_{k=1}^na_k)(\sum_{k=1}^nb_k) = n\sum_{1\le k\le n}a_kb_k - \sum_{1\le j< k\le n}(a_k-a_j)(b_k-b_j) \qquad (2.34)
+```
+此等式产生了作为一种特殊情形的切比雪夫单调不等式(Chebyshev's monotonic inequalities):
+
+```math
+(\sum_{k=1}^na_k)(\sum_{k=1}^nb_k) \le n\sum_{1\le k\le n}a_kb_k, if\ a_1\le\cdots\le a_n and b_1\le\cdots\le b_n;
+```
+```math
+(\sum_{k=1}^na_k)(\sum_{k=1}^nb_k) \ge n\sum_{1\le k\le n}a_kb_k, if\ a_1\le\cdots\le a_n and b_1\gt\cdots\gt b_n;
+```
+
+
+
+
+
 
 
 

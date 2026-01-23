@@ -56,6 +56,26 @@ public:
         } 
         return -1;
     }    
+
+    int minOperations3(string s, int k) {
+        // 参考题解 数学方法 隐式应用 Gale-Ryser 定理
+        int n = s.size(), z = 0; for (auto& ch:s) if (ch=='0') z++;
+        if (z == 0) return 0;
+        if (n == k) return (z==n)?1:-1;
+
+        int ans = INT_MAX;
+        if (z % 2 == 0) {   // m 为偶数
+            int m = max((z+k-1)/k, (z+n-k-1)/(n-k));
+            ans = min(ans, m + m % 2);
+        }
+
+        if (z % 2 == k % 2) {   // m 为奇数
+            int m = max((z+k-1)/k, (n-z+n-k-1)/(n-k));
+            ans = min(ans, m + (m % 2==0));
+        }
+
+        return ans < INT_MAX? ans: -1;
+    }
 };
 
 int main() {

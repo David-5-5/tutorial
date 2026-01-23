@@ -66,11 +66,50 @@ public:
             }
             int r = radius(i, rem);
             res += distance(i, max(0, i-r), min(n-1, i+r));
-            // cout << i << ", rem=" << rem << ", r=" << r << ", res=" << res << endl;
             ans = min(ans, res);
         }
 
         return ans;      
         
     }
+
+    long long minimumMoves2(vector<int>& nums, int k, int maxChanges) {
+        // 参考题解 分类讨论
+        // 1 - c + maxmaxChanges <= k
+        // 2 - c + maxmaxChanges > k 滑动窗口 (k - maxChanges) 中位数的货舱选址问题
+
+        vector<int> pos; int n = nums.size();
+        int c = 0;
+        for (int i=0; i<n; ++i) {
+            if (nums[i] == 0) continue;
+            pos.emplace_back(i);
+            // 计算连续的 1，因此 nums[i] == 1
+            if (c < 3) { // 不起眼的地方最大限度节省时间
+                int res = nums[i];
+                if (i-1>=0) res += nums[i-1];
+                if (i+1<n) res += nums[i+1];
+                c = max(c, res);
+            }
+        }
+
+        if (c + maxChanges >= k) {
+            return max(0, min(c, k)-1) + max(0, k-c) * 2;
+        }
+
+        int m = pos.size(); vector<long long> pres(m+1);
+        for (int i=0; i<m; ++i) pres[i+1] = pres[i] + pos[i];
+
+        long long ans = LLONG_MAX;
+        // 中位数进行货舱选址，并通过前缀和计算距离和
+        // 货舱选择算法，正好 aliceIndex = mid 时，距离为 0，即行动次数为 0
+        for (int r=k-maxChanges; r<=m; ++r) {
+            auto l = r - k + maxChanges; // [l, r)
+            auto mid = (r + l) / 2;
+            ans = min(ans, (1LL * pos[mid]*(mid-l+1)-(pres[mid+1]-pres[l])) + 
+                pres[r] - pres[mid] - 1LL * pos[mid]*(r-mid));
+        }
+
+        return ans + 2 * maxChanges; 
+    }
+    
 };

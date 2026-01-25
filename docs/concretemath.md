@@ -203,7 +203,7 @@ S_n + (n+1)x^{n+1} = xS_n + (x - x^{n+2})/ (1 - x) .
 ```
 开始，且两边对 x 求导，得到
 ```math
-\sum_{k=0}^nkx^{k-1} = \frac{(1-x)(-(n+1)x^n)+1-x^{n+1}}{(1-x)^2} = \frac{1-(n+1)x^n+nx{n+1}}{(1-x)^2} .
+\sum_{k=0}^nkx^{k-1} = \frac{(1-x)(-(n+1)x^n)+1-x^{n+1}}{(1-x)^2} = \frac{1-(n+1)x^n+nx^{n+1}}{(1-x)^2} .
 ```
 因为和的求导是它各项求导的和。
 
@@ -432,6 +432,41 @@ S_n &=  \sum_{1\le j < k \le n}\frac{1}{k-j} &\qquad recopying\ the\ given\ sum 
 
 
 ## 2.5 一般的方法
+我们将尝试找前 n 个平方和的一个闭形式，称它为 $\Box_n$
+```math
+\Box_n = \sum_{0\le k\le n}k^2,\ for\ n \ge 0 \qquad (2.37)
+```
+将看到至少有 7 种不同的方法来解这个问题。
+
+```math
+\Box_n = \frac{n(n+1)(2n+1)}{6} ,\ for\ n \ge 0 \qquad (2.38)
+```
+
+- 方法1：猜测解答，用归纳法证明
+
+等价的公式是：
+```math
+\Box_n = \frac{n(n+1)(n+\frac{1}{2})}{3} ,\ for\ n \ge 0 \qquad (2.39)
+```
+
+对于归纳法来说，假设 n > 0,且设当 n-1 替换 n 时，公式 (2.39) 成立，由于
+```math
+\Box_n = \Box_{n-1} + n^2 ,
+```
+
+得到：
+```math
+\begin{aligned}
+3\Box_n &= n(n+1)(n+\frac{1}{2}) + 3n^2  \\
+        &= (n^3 - \frac{3}{2}n^2 + \frac{1}{2}n) + 3n^2 \\
+        &= (n^3 + \frac{3}{2}n^2 + \frac{1}{2}n) \\
+        &= n(n+1)(n+\frac{1}{2})
+\end{aligned}
+```
+所以无疑对所有 $n\ge 0$，公式(2.39) 确实成立。
+
+- 方法2：摄动和
+
 
 
 

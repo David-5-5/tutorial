@@ -365,18 +365,18 @@ f: J\to K
 \sum_{j\in J}a_{f(j)} = \sum_{k\in K}a_k\#f^-(k), \qquad (2.35)
 ```
 
-其中 $\#f^-(k)$ 表明集合：
+其中 #$f^-(k)$ 表明集合：
 ```math
 f^-(k) = \{j|f(j) = k\}
 ```
 中元素的个数，也就是使得 f(j) 等于 k 的 $j\in J$ 的值的个数。
 
-由于 $\sum_{j\in J}[f(j)=k]=\#f^-(k)$，通过交换求和的次序容易证明式 (2.35)
+由于 $\sum_{j\in J}[f(j)=k]=$#$f^-(k)$，通过交换求和的次序容易证明式 (2.35)
 ```math
 \sum_{j\in J}a_{f(j)} = \sum_{j\in J, k\in K}a_k[f(j)=k] = \sum_{k\in K}a_k\sum_{j\in J}[f(j)=k]
 ```
 
-在 f 是 J 和 K 之间的一个 1-1 对应的特殊情形中，对于所有 k 有 $\#f^-(k)=1$，一般公式 (2.35) 化为：
+在 f 是 J 和 K 之间的一个 1-1 对应的特殊情形中，对于所有 k 有 #$f^-(k)=1$，一般公式 (2.35) 化为：
 ```math
 \sum_{j\in J}a_{f(j)} = \sum_{f(j)\in K}a_{f(j)} = \sum_{k\in K}a_k
 ```
@@ -426,7 +426,7 @@ S_n &=  \sum_{1\le j < k \le n}\frac{1}{k-j} &\qquad recopying\ the\ given\ sum 
 ```
 我们找到了 $S_n$。把它和冒失的开端结合起来，作为一个额外的结果：
 ```math
-\sum_{0\le k < n}H_k = nH_n - n. &\qquad (2.36)
+\sum_{0\le k < n}H_k = nH_n - n. \qquad (2.36)
 ```
 
 

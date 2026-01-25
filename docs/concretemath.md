@@ -344,15 +344,94 @@ S &= \sum_{1\le j< k\le n}(a_k-a_j)(b_k-b_j) \\
 此等式产生了作为一种特殊情形的切比雪夫单调不等式(Chebyshev's monotonic inequalities):
 
 ```math
-(\sum_{k=1}^na_k)(\sum_{k=1}^nb_k) \le n\sum_{1\le k\le n}a_kb_k, if\ a_1\le\cdots\le a_n and b_1\le\cdots\le b_n;
+(\sum_{k=1}^na_k)(\sum_{k=1}^nb_k) \le n\sum_{1\le k\le n}a_kb_k, if\ a_1\le\cdots\le a_n\And b_1\le\cdots\le b_n;
 ```
 ```math
-(\sum_{k=1}^na_k)(\sum_{k=1}^nb_k) \ge n\sum_{1\le k\le n}a_kb_k, if\ a_1\le\cdots\le a_n and b_1\gt\cdots\gt b_n;
+(\sum_{k=1}^na_k)(\sum_{k=1}^nb_k) \ge n\sum_{1\le k\le n}a_kb_k, if\ a_1\le\cdots\le a_n\And b_1\gt\cdots\gt b_n;
+```
+
+多重求和于单个和中改变求和的指标的一般操作有一种有趣的连续，如果 p(k) 是整数的任何排列，有交换律知道：
+```math
+\sum_{k\in K}a_k = \sum_{p(k)\in K}a_{p(k)},
+```
+
+若 p(k) 为整数的任意一个排列，那么当我们将 k 替换为 f(j), 其中 f 为任意函数:
+```math
+f: J\to K
+```
+
+取整数 $j\in J$ 映射为整数 $f(j)\in K$，那么此时的情况又将如何？指标替换的通用公式为:
+```math
+\sum_{j\in J}a_{f(j)} = \sum_{k\in K}a_k\#f^-(k), \qquad (2.35)
+```
+
+其中 $\#f^-(k)$ 表明集合：
+```math
+f^-(k) = \{j|f(j) = k\}
+```
+中元素的个数，也就是使得 f(j) 等于 k 的 $j\in J$ 的值的个数。
+
+由于 $\sum_{j\in J}[f(j)=k]=\#f^-(k)$，通过交换求和的次序容易证明式 (2.35)
+```math
+\sum_{j\in J}a_{f(j)} = \sum_{j\in J, k\in K}a_k[f(j)=k] = \sum_{k\in K}a_k\sum_{j\in J}[f(j)=k]
+```
+
+在 f 是 J 和 K 之间的一个 1-1 对应的特殊情形中，对于所有 k 有 $\#f^-(k)=1$，一般公式 (2.35) 化为：
+```math
+\sum_{j\in J}a_{f(j)} = \sum_{f(j)\in K}a_{f(j)} = \sum_{k\in K}a_k
+```
+
+---
+看一看实际数的一个多重和：
+```math
+S_n = \sum_{1\le j < k \le n}\frac{1}{k-j}
+```
+例如  $S_1=0; S_2=1; S_3=\frac{1}{2-1}+\frac{1}{3-1}+\frac{1}{3-2} = \frac{5}{2} $
+
+计算一个双重和的标准方法是先对 j 或先对 k 求和，所有讨论两种选取
+```math
+\begin{aligned}
+S_n &=  \sum_{1\le k \le n}\sum_{1\le j < k}\frac{1}{k-j} &\qquad summing\ first\ on\ j \\
+&=  \sum_{1\le k \le n}\sum_{1\le k-j < k}\frac{1}{j} &\qquad replace\ j\ by\ k - j \\
+&=  \sum_{1\le k \le n}\sum_{0< j\le k-1}\frac{1}{j} &\qquad simplifying\ the\ bounds\ of\ j \\
+&=  \sum_{1\le k \le n}H_{k-1} &\qquad by (2.13) \\
+&=  \sum_{1\le k+1 \le n}H_k &\qquad replace\ k\ by\ k+1 \\
+&=  \sum_{0\le k < n}H_k &\qquad simplifying\ the\ bounds\ of\ k
+\end{aligned}
+```
+
+但是我们不知道如何得到调和数的和的闭形式。若尝试先对 k 求和，则得到：
+```math
+\begin{aligned}
+S_n &=  \sum_{1\le j \le n}\sum_{j< k \le n}\frac{1}{k-j} &\qquad summing\ first\ on\ k \\
+&=  \sum_{1\le j \le n}\sum_{j\le k+j \le n}\frac{1}{k} &\qquad replace\ k\ by\ k + j \\
+&=  \sum_{1\le j \le n}\sum_{0< k\le n-j}\frac{1}{k} &\qquad simplifying\ the\ bounds\ of\ k \\
+&=  \sum_{1\le j \le n}H_{n-j} &\qquad by (2.13) \\
+&=  \sum_{1\le n-j \le n}H_j &\qquad replace\ j\ by\ n-j \\
+&=  \sum_{0\le j < n}H_j &\qquad simplifying\ the\ bounds\ of\ j
+\end{aligned}
+```
+又回到相同的绝境。
+
+但是有另一种方法来处理，若在决定把 $S_n$ 化为和的和之前用 k+j 替换 k：
+```math
+\begin{aligned}
+S_n &=  \sum_{1\le j < k \le n}\frac{1}{k-j} &\qquad recopying\ the\ given\ sum \\
+&=  \sum_{1\le j < k+j \le n}\frac{1}{k} &\qquad replace\ k\ by\ k + j \\
+&=  \sum_{1\le k \le n}\frac{n-k}{k} &\qquad the\ sum\ on\ j\ is\ trivial \\
+&=  \sum_{1\le k \le n}\frac{n}{k} - \sum_{1\le k \le n}1 &\qquad associative\ law \\
+&=  n\sum_{1\le k \le n}\frac{1}{k} - n &\qquad by\ gosh \\
+&=  nH_n - n &\qquad by (2.13) 
+\end{aligned}
+```
+我们找到了 $S_n$。把它和冒失的开端结合起来，作为一个额外的结果：
+```math
+\sum_{0\le k < n}H_k = nH_n - n. &\qquad (2.36)
 ```
 
 
 
-
+## 2.5 一般的方法
 
 
 

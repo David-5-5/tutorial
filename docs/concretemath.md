@@ -465,10 +465,42 @@ S_n &=  \sum_{1\le j < k \le n}\frac{1}{k-j} &\qquad recopying\ the\ given\ sum 
 ```
 所以无疑对所有 $n\ge 0$，公式(2.39) 确实成立。
 
+
+
 - 方法2：摄动和
+按照式 (2.24) 摄动方程：
+```math
+\begin{aligned}
+\Box_n + (n+1)^2 &= \sum_{0\le k\le n}(k+1)^2  \\
+    &= \sum_{0\le k\le n}(k^2+2k+1)\\
+    &= \sum_{0\le k\le n}k^2 + 2\sum_{0\le k\le n}k \sum_{0\le k\le n}1 \\
+    &= \Box_n + 2\sum_{0\le k\le n}k \sum_{0\le k\le n}1
+\end{aligned}
+```
 
+$\Box_n$ 彼此消去了。偶尔摄动法产生像 $\Box_n = \Box_n$ 的结果，我们的工作白费了。另一方面，这个推导的结果并不是一点用没有，它展示了一种方法，把前 n 个整数相加为闭形式，
+```math
+2\sum_{0\le k\le n}k = (n+1)^2 - (n+1) ,
+```
 
+如果从整数立方的和开始，称它为 $\Box^3_n$，能否取的整数平方的一个表达式？让我们试试看。
+```math
+\begin{aligned}
+\Box^3_n+ (n+1)^3 &= \sum_{0\le k\le n}(k+1)^3  \\
+    &= \sum_{0\le k\le n}(k^3+3k^2+3k+1)\\
+    &= \Box^3_n + 3\Box_n + 3\frac{(n+1)n}{2} + (n+1).
+\end{aligned}
+```
+确实被消去，且有足够的资料来确定 $\Box_n$，而不依赖于归纳法：
+```math
+\begin{aligned}
+3\Box_n  &= (n+1)^3 - 3\frac{(n+1)n}{2} - (n+1)  \\
+    &= (n+1)(n^2 + 2n + 1 - \frac{3}{2}n - 1) \\
+    &= (n+1)(n+\frac{1}{2})n.
+\end{aligned}
+```
 
+- 方法3 建立所有组合部分
 
 
 

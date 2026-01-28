@@ -698,7 +698,7 @@ $\sum g(x)\delta x$ 为 $g(x)$ 的不定和，指所有差分等于 $g(x)$ 的�
 
 此时，我们当中可能有些人开始怀疑，这些平行和类比到底能给我们带来什么。嗯，首先，定积分为我们提供了一种简单的方法来计算下降幂的和：基本法则(2.45)、(2.47) 和 (2.48) 推导出了普遍法则:
 ```math
-\sum_{0\le k<n} k^{\underline{m}} = \frac{k^{\underline{m+1}}}{m+1}|_0^n = \frac{n^{\underline{m+1}}}{m+1}, m, n\ge 0. \qquad (2.49)
+\sum_{0\le k<n} k^{\underline{m}} = \frac{k^{\underline{m+1}}}{m+1}|_0^n = \frac{n^{\underline{m+1}}}{m+1}, m, n\ge 0. \qquad (2.50)
 ```
 
 这个公式很容易记住，它与熟悉的公式很类似：
@@ -711,4 +711,40 @@ $\sum g(x)\delta x$ 为 $g(x)$ 的不定和，指所有差分等于 $g(x)$ 的�
 \sum_{0\le k<n} k = \frac{n^2}{2} = n(n-1)/2 .
 ```
 
+定积分方法还让我们隐约意识到，对范围 $0\le k < n$ 求和往往比对  $1\le k\le n$ 求和更简单；前者恰好是 $f(n) − f(0)$，而后者则必须计算为 $f(n + 1) − f(1)$。
+
+如果我们将普通幂首先用下降幂表示，也可以用这种新方法求和。例如，
+```math
+k^2 = k^{\underline{2}} + k^{\underline{1}} .
+```
+
+因此
+```math
+\sum_{0\le k<n} k^2 = \frac{k^{\underline{3}}}{3} + \frac{k^{\underline{2}}}{2} = \frac{1}{3}n(n-1)(n-2+\frac{3}{2}) =  \frac{1}{3}n(n-\frac{1}{2})(n-1).
+```
+将 n 替换为 n + 1，为我们提供了另一种计算我们老朋友 $\Box_n = \sum_{0\le k\le n} k^2$ 的闭式表达的方法。
+
+这可真简单。事实上，它比上一节中那些把这一公式讲得烂熟的无数种方法还要简单。那么，让我们试着再进一步，从平方到立方：一个简单的计算表明
+```math
+k^3 = k^{\underline{3}} + 3k^{\underline{2}} + k^{\underline{1}} .
+```
+
+(通过使用斯特林数，总是可以实现普通幂与阶乘幂之间的转换，我们将在第6章中研究这些数。) 因此
+```math
+\sum_{a\le k<b} k^3 = \frac{k^{\underline{4}}}{4} + k^{\underline{3}} + \frac{k^{\underline{2}}}{2} |_a^b .
+```
+
+因此，下降幂非常适合求和。但它们还有其他可取之处吗？我们是否必须先将熟悉的普通幂转换为下降幂，然后再转回，才能进行其他操作？其实不然，很多时候可以直接处理阶乘幂，因为它们具有额外的性质。例如，正如我们有 $(x + y)^2 = x^2 + 2xy + y^2$ 一样，事实证明 $(x + y)^{\underline{2}} = x^{\underline{2}} + 2x^{\underline{1}}y^{\underline{1}} + y^{\underline{2}}$ ，同样的类比也适用于 $(x + y)^{\underline{m}}$ 和 $(x + y)^{\underline{m}}$。（这一“阶乘二项式定理”在练习5.37中得到证明。）
+
+到目前为止，我们只考虑了具有非负指数的下降幂。为了将与普通幂的类比扩展到负指数，
+
+我们需要一个合适的定义 $x^{\underline{m}}$ ，其中 $m < 0$。查看该序列
+```math
+\begin{aligned}
+x^{\underline{3}} &= x(x-1)(x-2), \\
+x^{\underline{2}} &= x(x-1), \\
+x^{\underline{1}} &= x, \\
+x^{\underline{0}} &= 1
+\end{aligned}
+```
 

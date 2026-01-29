@@ -639,12 +639,12 @@ $\sum g(x)\delta x$ 为 $g(x)$ 的不定和，指所有差分等于 $g(x)$ 的�
 
 接下来我们就要揭晓核心结论了。无限微积分中还定义了定积分：若 $g(x)=Df(x)$，则
 ```math
-\int_a^b g(x)dx = f(x)|_a^b = f(b) - f(a) .
+\int_a^b g(x)dx = f(x)\bigg|_a^b = f(b) - f(a) .
 ```
 
 因此，有限微积分 —— 向来效仿这位更为知名的 “同门兄长”—— 也有定和的概念：若 $g(x)=\Delta f(x)$，则
 ```math
-\sum_a^b g(x)\delta x = f(x)|_a^b = f(b) - f(a) . \qquad (2.47)
+\sum_a^b g(x)\delta x = f(x)\bigg|_a^b = f(b) - f(a) . \qquad (2.47)
 ```
 
 直观上，$\sum_a^b g(x)\delta x$ 究竟代表什么含义？我们对它的定义源于类比，而非实际的必然需求。我们希望这一类比关系能够成立，这样便能轻松记住有限微积分的运算法则；但倘若无法理解其背后的含义，这套记法便毫无实用价值。不妨先从一些特例入手，推导它的具体含义，我们先做出如下假设： $g(x) = \Delta f(x) = f(x+1) - f(x) $, 如果 %b=a%，有：
@@ -652,12 +652,12 @@ $\sum g(x)\delta x$ 为 $g(x)$ 的不定和，指所有差分等于 $g(x)$ 的�
 \sum_a^a g(x)\delta x = f(b) - f(a) = 0. 
 ```
 
-接下来，如果 %b=a+1%，结果是：
+接下来，如果 $b=a+1$，结果是：
 ```math
 \sum_a^{a+1} g(x)\delta x = f(a+1) - f(a) = g(a). 
 ```
 
-更一般地，若b增加 1，则有
+更一般地，若 b 增加 1，则有
 ```math
 \begin{aligned}
 \sum_a^{b+1} g(x)\delta x - \sum_a^{b} g(x)\delta x &= (f(b+1) - f(a)) - (f(b) -f(a)) \\
@@ -698,7 +698,7 @@ $\sum g(x)\delta x$ 为 $g(x)$ 的不定和，指所有差分等于 $g(x)$ 的�
 
 此时，我们当中可能有些人开始怀疑，这些平行和类比到底能给我们带来什么。嗯，首先，定积分为我们提供了一种简单的方法来计算下降幂的和：基本法则(2.45)、(2.47) 和 (2.48) 推导出了普遍法则:
 ```math
-\sum_{0\le k<n} k^{\underline{m}} = \frac{k^{\underline{m+1}}}{m+1}|_0^n = \frac{n^{\underline{m+1}}}{m+1}, m, n\ge 0. \qquad (2.50)
+\sum_{0\le k<n} k^{\underline{m}} = \frac{k^{\underline{m+1}}}{m+1}\bigg|_0^n = \frac{n^{\underline{m+1}}}{m+1}, m, n\ge 0. \qquad (2.50)
 ```
 
 这个公式很容易记住，它与熟悉的公式很类似：
@@ -731,7 +731,7 @@ k^3 = k^{\underline{3}} + 3k^{\underline{2}} + k^{\underline{1}} .
 
 (通过使用斯特林数，总是可以实现普通幂与阶乘幂之间的转换，我们将在第6章中研究这些数。) 因此
 ```math
-\sum_{a\le k<b} k^3 = \frac{k^{\underline{4}}}{4} + k^{\underline{3}} + \frac{k^{\underline{2}}}{2} |_a^b .
+\sum_{a\le k<b} k^3 = \frac{k^{\underline{4}}}{4} + k^{\underline{3}} + \frac{k^{\underline{2}}}{2} \bigg|_a^b .
 ```
 
 因此，下降幂非常适合求和。但它们还有其他可取之处吗？我们是否必须先将熟悉的普通幂转换为下降幂，然后再转回，才能进行其他操作？其实不然，很多时候可以直接处理阶乘幂，因为它们具有额外的性质。例如，正如我们有 $(x + y)^2 = x^2 + 2xy + y^2$ 一样，事实证明 $(x + y)^{\underline{2}} = x^{\underline{2}} + 2x^{\underline{1}}y^{\underline{1}} + y^{\underline{2}}$ ，同样的类比也适用于 $(x + y)^{\underline{m}}$ 和 $(x + y)^{\underline{m}}$。（这一“阶乘二项式定理”在练习5.37中得到证明。）
@@ -747,4 +747,175 @@ x^{\underline{1}} &= x, \\
 x^{\underline{0}} &= 1
 \end{aligned}
 ```
+
+我们注意到，要从 $x^{\underline{3}}$ 到 $x^{\underline{2}}$，再到 $x^{\underline{1}}$，最后到 $x^{\underline{0}}$，我们需要依次除以 $x-2$，然后除以 $x-1$，再除以 $x$。似乎合理（即使不是必须的）的是，接下来我们应该除以 $x+1$，从而将 $x^{\underline{0}}$ 转化为$x^{\underline{-1}}$，进而得到 $x^{\underline{-1}}=1/(x+1)$。继续下去，前几个负指数下降幂是
+```math
+\begin{aligned}
+x^{\underline{-1}} &= \frac{1}{x+1}, \\
+x^{\underline{-2}} &= \frac{1}{(x+1)(x+2)}, \\
+x^{\underline{-3}} &= \frac{1}{(x+1)(x+2)(x+3)},
+\end{aligned}
+```
+
+我们对负下降幂的一般定义是
+```math
+x^{\underline{-m}} = \frac{1}{(x+1)(x+2)\cdots(x+m)}, for\ m>0. \qquad (2.51)
+```
+
+(也可以为实数甚至复数 m定义下降幂，但我们将在第5章之前暂不讨论。)
+有了这个定义，下降幂还具有其他一些优良性质。其中也许最重要的是一个一般的指数法则，类似于该法则
+```math
+x^{m+n} = x^mx^n
+```
+
+对于普通幂。下降幂版本是
+```math
+x^{\underline{m+n}} = x^{\underline{m}}(x-m)^{\underline{n}}. \qquad (2.52)
+```
+
+例如， $x^{\underline{2+3}} = x^{\underline{2}}(x-2)^{\underline{3}}$；对于负的 n，我们有
+```math
+x^{\underline{2-3}} = x^{\underline{2}}(x-2)^{\underline{-3}} = x(x-1)\frac{1}{(x-1)x(x+1)} = \frac{1}{x+1}  = x^{\underline{-1}}. 
+```
+
+如果我们选择将 $x^{\underline{-1}}$ 定义为 $1/x$，而不是定义为 $1/(x+1)$，那么指数法则(2.52)在诸如 $m = −1$ 和 $n = 1$ 的情况下就会失效。事实上，我们完全可以用(2.52)来精确地告诉我们，在负指数的情况下，下降幂究竟应该如何定义，只需设定 $m = −n$ 即可。当一种现有的记号被扩展以涵盖更多情形时，最好总是以这样一种方式来制定定义，使得一般的法则能够继续成立。
+
+现在，让我们确保新定义的下降幂满足关键的差分性质。当 $m<0$ 时，是否 $\Delta x^{\underline{m}} = mx^{\underline{m-1}}？$ 例如，如果 $m = −2$，则差分为
+```math
+\begin{aligned}
+\Delta x^{\underline{-2}} &= \frac{1}{(x+2)x(x+3)} - \frac{1}{(x+1)(x+2)}  \\
+        &= \frac{(x+1)-(x+3)}{(x+1)(x+2)x(x+3)} \\
+        &= -2x^{\underline{-3}}. 
+\end{aligned}
+```
+是的 | 它有效！类似的论证适用于所有 $m < 0$.
+
+因此，求和性质（2.50）对于负下降幂以及正下降幂均成立，只要不出现除以零的情况：
+```math
+\sum_a^bx^{\underline{m}}\delta x = \frac{x^{\underline{m+1}}}{m+1}\bigg|_a^b, for\ m\ne -1.
+```
+
+但是，当 $m = −1$ 时又如何呢？请记住，对于积分，我们使用
+```math
+\int_0^n x^{-1}dx = \ln x\bigg|_a^b.
+```
+
+当 $m = −1$ 时，我们希望得到 $\ln x$ 的有限模拟；换句话说，我们寻找一个函数 $f(x)$，使得
+```math
+x^{\underline{-1}} = \frac{1}{x+1} = \Delta f(x) = f(x+1) - f(x) .
+```
+
+不难看出，
+```math
+f(x) = \frac{1}{1} + \frac{1}{2} + \cdots + \frac{1}{x} .
+```
+
+是一种这样的函数，当 $x$ 为整数时，该量恰好是 (2.13) 的调和数 $H_x$。因此，$H_x$ 是连续对数 $\ln x$ 的离散模拟。（我们将在第6章中定义非整数 $x$ 的 $H_x$，但就目前目的而言，整数值已足够。我们还将在第9章中看到，对于较大的 $x$， $H_x-\ln x$ 的值大约等于 $0.577 + 1/(2x)$。因此， $H_x$ 与 $\ln x$ 不仅具有相似性，它们的值通常相差不到 1。）
+
+我们现在可以完整地描述下降幂的和：
+```math
+\sum_a^bx^{\underline{m}}\delta x = 
+\begin{cases} 
+\frac{x^{\underline{m+1}}}{m+1}\bigg|_a^b, & for\ m\ne -1; \\
+H_x\bigg|_a^b, & for\ m=-1. \qquad (2.53)
+\end{cases} 
+```
+
+这个公式表明，为什么调和数会频繁出现在诸如快速排序分析之类的离散问题的解中，正如所谓的自然对数会自然而然地出现在连续问题的解中一样。
+
+现在我们已经找到了 $\ln x$ 的类比，让我们来看看是否有 $e^x$ 的类比。哪个函数 $f(x)$ 具有性质 $\Delta f(x) = f(x)$，对应于恒等式 $De^x=e^x$？很简单：
+```math
+f(x+1) - f(x) = f(x) \iff f(x+1) = 2f(x) ;
+```
+
+因此，我们处理的是一个简单的递归关系，我们可以将 $f(x) = 2^x$ 视为离散指数函数。
+
+$c^x$ 的差值也相当简单，对于任意 $c$，即
+```math
+\Delta(c^x) = c^{x+1} - c^x = (c-1)c^x.
+```
+
+因此， $c^x$ 的反差分(anti-difference)为 $c^x/(c − 1)$，如果 $c\ne 1$。这一事实，连同基本定律 (2.47) 和 (2.48)，为我们提供了一种简洁的方法来理解等比数列求和的一般公式：
+```math
+\sum_{a\le k<b} c^k = \sum_a^b c^xdx = \frac{c^x}{c-1}\bigg|_a^b = \frac{c^b-c^a}{c-1}, for\ c\ne 1.
+```
+
+每次我们遇到一个可能以封闭形式表示的函数 $f$，我们都可以计算它的差分 $\Delta f = g$；然后我们就得到了一个函数 $g$，其不定和 $\sum g(x) \delta x$ 是已知的。表55是用于求和的差分/反差分对表的开头。
+
+尽管连续数学和离散数学之间存在诸多相似之处，但某些连续概念却并无对应的离散版本。例如，无穷微积分中的链式法则对于复合函数的导数非常方便；然而，在有限微积分中并不存在相应的链式法则，因为 $\Delta f(g(x))$ 并没有一个简洁的表达形式。离散变量替换较为困难，除非在某些特殊情况下，比如用 $c\pm x$ 代替 $x$。
+
+然而， $\Delta(f(x)g(x))$ 具有相当优美的形式，它为我们提供了一种分部求和的规则，这是无穷微积分中称为分部积分的有限版本。让我们回顾一下这个公式
+```math
+D(uv) = uDv + vDu
+```
+
+无穷微积分导致了分部积分法则，
+```math
+\int uDv = uv - \int vDu,
+```
+
+在整合并重新排列各项之后，我们可以在有限微积分中做类似的事情。
+
+我们首先对两个函数的乘积应用差分算子 $u(x)$ 和 $v(x)$:
+```math
+\begin{aligned}
+\Delta (u(x)v(x)) &= u(x+1)v(x+1) - u(x)v(x)  \\
+        &= u(x+1)v(x+1) - u(x)v(x+1)  \\
+        & + u(x)v(x+1) - u(x)v(x)  \\
+        &= u(x)\Delta v(x) + v(x+1)\Delta u(x) . \qquad (2.54)
+\end{aligned}
+```
+
+此公式可利用 *移位运算符* $E$ 以便捷形式表示，该运算符由定义
+```math
+Ef(x) = f(x+1).
+```
+
+将 $Ev(x)$ 替换为 $v(x+1)$，可得到乘积差的紧凑规则：
+```math
+\Delta(uv) = u\Delta v + Ev\Delta u.\qquad (2.55)
+```
+
+(E有点麻烦，但它使等式成立。) 对该等式两边取不定和，并重新排列各项，即可得到所宣传的分部求和法则：
+```math
+\sum u\Delta v = uv - \sum Ev\Delta u.\qquad (2.56)
+```
+
+与无穷微积分一样，可以对所有三个项施加限制，从而使不定和变为定和。
+
+当左侧的求和比右侧更难计算时，这条规则很有用。我们来看一个例子。函数 $\int xe^xdx$ 通常采用分部积分法进行计算；它的离散类似物是 $\sum x2^x\delta x$，我们在本章前面已经遇到过这种形式 $\sum_{k=0}^n k2^k$。为了对这个求和进行分部积分，我们令 $u(x) = x$ 且 $\Delta v(x)=2^x$；因此 $\Delta u(x)=1, v(x)=2^x$，且 $Ev(x)=2{x+1}$。代入(2.56) 得
+```math
+\sum x2^x\delta x = x2^x - \sum x2^{x+1}\delta x = x2^x - 2^{x+1} + C.
+```
+
+我们可以用这个来评估我们之前所做的求和，方法是附加限制：
+```math
+\begin{aligned}
+\sum_{k=0}^n k2^k &= \sum_0^{n+1} x2^x\delta x \\
+    &= x2^x - 2^{x+1}\bigg|_0^{n+1} \\
+    &= ((n+1)2^{n+1} - 2^{n+2}) - (0\cdot 2^0 - 2^1) \\
+    &= (n-1)2^{n+1} + 2.
+\end{aligned}
+```
+
+用这种方法求和比用微扰法更容易，因为我们不用动脑筋。
+
+我们偶然发现了一个公式，用于 $\sum_{0\le k<n} H_k$ 在本章前面，并且自认为很幸运。但如果我们知道分部求和法，本可以更系统地找到我们的公式(2.36)。让我们通过解决一个看似更难的求和问题来证明这一断言： $\sum_{0\le k<n} kH_k$。如果我们以 $\int x\ln xdx$ 为类比，这个解题过程并不困难。我们设 $u(x) = H_x, \Delta v(x) = x = x^{\underline{1}}$，因此 $\Delta u(x) = x^{\underline{-1}}，v(x) = x^{\underline{2}}/2，Ev(x) = (x+1)^{\underline{2}}/2$，于是我们得到
+```math
+\begin{aligned}
+\sum_ xH_x\delta x &= \frac{x^{\underline{2}}}{2}H_x - \sum\frac{(x+1)^{\underline{2}}}{2}x^{\underline{-1}}\delta x \\
+    &= \frac{x^{\underline{2}}}{2}H_x - \frac{1}{2}\sum x^{\underline{1}}\delta x \\
+    &= \frac{x^{\underline{2}}}{2}H_x - \frac{x^{\underline{2}}}{4} + C.
+\end{aligned}
+```
+
+从第一行到第二行，我们利用指数法则(2.52)，将两个下降的幂 $(x+1)^{\underline{2}}x^{\underline{-1}}$ 合并起来，其中 $m=−1$ 且 $n=2$。现在我们可以加上极限，并得出结论
+```math
+\sum_{a\le k<n} kH_k = \sum_0^n xH_x \delta x = \frac{n^{\underline{2}}}{2}(H_n-\frac{1}{2}). \qquad (2.57)
+```
+
+
+
+
+
 

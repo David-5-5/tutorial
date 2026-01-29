@@ -5,7 +5,7 @@ using namespace std;
 class TaskManager {
 private:
     unordered_map<int, pair<int, int>> tasks;
-    priority_queue<pair<int, int>> pq;
+    priority_queue<pair<int, int>, vector<pair<int, int>>, less<>> pq;
 public:
     TaskManager(vector<vector<int>>& tasks) {
         for (auto t: tasks) {

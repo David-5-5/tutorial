@@ -14,6 +14,6 @@ public:
             if (L > R) return 0;
         }
 
-        return R - L + 1;        
+        return R - L + 1; 
     }
 };

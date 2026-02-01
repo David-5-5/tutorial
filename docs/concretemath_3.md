@@ -66,4 +66,12 @@ n\le x \iff n\le\lfloor x\rfloor. (d) \tag{3.7}
 
 如果(3.7)中的四条规则像它们的证明一样容易记住，那就太好了。每个不带向下取整或向上取整的不等式都对应于带有下界或上界的相同不等式；但在决定二者哪个合适之前，我们需要三思。
 
+$x$ 与 $\lfloor x\rfloor$ 之间的差值称为 $x$ 的小数部分，它在应用中出现的频率足够高，值得拥有自己的符号：
+```math
+\{x\} = x-\lfloor x\rfloor. \tag{3.8}
+```
 
+我们有时称 $\lfloor x\rfloor$ 为 $x$ 的整数部分，因为 $x=\lfloor x\rfloor+\{x\}$。如果一个实数 $x$ 可以写成 $x=n+\theta$ 的形式，其中 $n$ 是整数且  $0\le \theta < 1$，那么根据(3.5(a))，我们可以得出 $n=\lfloor x\rfloor$ 且 $\theta=\{x\}$.
+
+
+恒等式(3.6)在 $n$ 为任意实数时并不成立。但我们可以推断，一般情况下， $\lfloor x+y\rfloor$ 只有两种可能：如果我们写 $x=\lfloor x\rfloor+\{x\}$ 且 $y=\lfloor y\rfloor+\{y\}$，则有 $\lfloor x+y\rfloor=\lfloor x\rfloor + \lfloor y\rfloor + \lfloor\{x+y\}\rfloor$。又因为 $0\le \{x\}+\{y\} < 2$，我们发现，有时 $\lfloor x+y\rfloor$ 等于 $\lfloor x\rfloor + \lfloor y\rfloor$，否则它等于 $\lfloor x\rfloor + \lfloor y\rfloor+1$。

@@ -75,3 +75,42 @@ $x$ 与 $\lfloor x\rfloor$ 之间的差值称为 $x$ 的小数部分，它在应
 
 
 恒等式(3.6)在 $n$ 为任意实数时并不成立。但我们可以推断，一般情况下， $\lfloor x+y\rfloor$ 只有两种可能：如果我们写 $x=\lfloor x\rfloor+\{x\}$ 且 $y=\lfloor y\rfloor+\{y\}$，则有 $\lfloor x+y\rfloor=\lfloor x\rfloor + \lfloor y\rfloor + \lfloor\{x+y\}\rfloor$。又因为 $0\le \{x\}+\{y\} < 2$，我们发现，有时 $\lfloor x+y\rfloor$ 等于 $\lfloor x\rfloor + \lfloor y\rfloor$，否则它等于 $\lfloor x\rfloor + \lfloor y\rfloor+1$。
+
+
+## 3.2 FLOOR/CEILING APPLICATIONS
+我们现在已经了解了处理 $floor$ 和 $ceil$ 的基本工具。让我们开始用它们解决一个简单的问题：$\lceil \lg 35\rceil$ 是多少？（根据爱德华·M·莱因戈尔德的建议，我们用 $\lg$ 表示以2为底的对数。）嗯，由于 $2^5<35\le 26$，我们可以取对数得到 $5<\lg 35\le 6$；因此，关系式(3.5(c))告诉我们 $\lceil \lg 35\rceil = 6$.
+
+请注意，数字 $35$ 用基数 $2$ 表示时是 $6$ 位长：$35 = (100011)_2$。那么，是否总是成立 $\lceil \lg n\rceil = 6$ 是 $n$ 用二进制表示时的位数呢？并不完全正确。我们还需要六位来表示 $32 = (100000)_2$。因此，$\lceil \lg n\rceil = 6$ 并不是这个问题的正确答案。（它仅在 $n$ 是 $2$ 的幂时出错，但这种情况有无穷多。）我们可以通过认识到每个数 $n$ 需要 $m$ 位来写，使得 $2^{m−1}\le n < 2^m$；从而（3.5(a)）告诉我们 $m-1 = \lfloor \lg n\rfloor$，所以 $m = \lfloor \lg n\rfloor +1$。也就是说，对于所有 $n > 0$，我们需要 $\lfloor\lg n\rfloor +1$ 位来用二进制表示 $n$。或者，类似的推导也可以得到答案 $\lceil\lg(n+1)\rceil$；如果愿意承认写 $n = 0$ 用二进制表示需要零位，那么这个公式对 n = 0 也成立。
+
+接下来我们来看一下包含多个向上取整或向下取整的表达式。$\lceil\lfloor x\rfloor\rceil$ 是什么？很简单 | 因为 $\lfloor x\rfloor$ 是一个整数， $\lceil\lfloor x\rfloor\rceil$ 就等于 $\lfloor x\rfloor$。因此，任何最内层是 $\lfloor x\rfloor$，并被任意数量的向上取整或向下取整包围的表达式也是如此。
+
+这里有一道难度更高的问题：证明或证伪该断言：
+```math
+\lfloor\sqrt{\lfloor x\rfloor}\rfloor = \lfloor\sqrt{x}\rfloor, real\ x\ge 0 \tag{3.9}
+```
+
+当 $x$ 是整数时，显然等式成立，因为 $x=\lfloor x\rfloor$。在特殊情况下也存在等式： $\pi=3.14159\cdots$， $e=2.71828\cdots$，以及 ($\phi= (1 + \sqrt{5})/2 = 1.61803\cdots$)，因为我们得到 $1 = 1$。我们未能找到反例，这表明等式一般情况下成立，那么让我们试着证明它吧。
+
+顺便说一下，当我们面对“证明或反驳”时，通常最好先尝试用反例来反驳，原因有两点：首先，反驳可能更容易（我们只需要一个反例）；其次，吹毛求疵能激发我们的创造力。即使给定的命题是正确的，我们在寻找反例的过程中往往也会自然而然地找到证明，一旦我们意识到为什么反例不可能存在。此外，保持怀疑态度也是有益健康的。
+
+如果我们试图借助微积分证明 $\lfloor\sqrt{\lfloor x\rfloor}\rfloor = \lfloor\sqrt{x}\rfloor$，我们可能会先将 x分解成整数部分和小数部分： $\lfloor x\rfloor+\{x\}=n+\theta$ ，然后利用二项式定理展开平方根： $(n+\theta)^{1/2} = n^{1/2} + n^{−1/2}\theta/2 − n^{−3/2}\theta^2/8 +\cdots$。但这种方法会变得相当复杂。
+
+使用我们开发的工具要容易得多。这里有一个可能的策略：某种方式下，先去掉外层的 $floor$ 函数和平方根 $\lfloor\sqrt{\lfloor x\rfloor}\rfloor$，再移除内层的 $floor$ 函数，然后把外层的值加回去，得到 $\lfloor\sqrt{x}\rfloor$。好的。我们令 $m=\lfloor\sqrt{\lfloor x\rfloor}\rfloor$，并调用(3.5(a))，得到 $m\le \lfloor\sqrt{x}\rfloor<m+1$。这样就去掉了外层的 $floor$ 括号，且没有丢失任何信息。由于这三个表达式都是非负的，我们对两边同时平方，得到 $m^2\le\sqrt{x}<(m + 1)^2$。这一步消除了平方根。接下来，我们利用(3.7(d))处理左边不等式，用(3.7(a))处理右边不等式，从而去掉 $floor$ 函数： $m^2\le x<(m + 1)^2$。现在，只需简单地反向推导，取平方根即可得到 $m\le \sqrt{x}<m+1$，再调用(3.5(a))，得到 $m=\lfloor\sqrt{x}\rfloor$。因此，$\lfloor\sqrt{\lfloor x\rfloor}\rfloor = m = \lfloor\sqrt{x}\rfloor$；该断言成立。类似地，我们也可以证明
+```math
+\lceil\sqrt{\lceil x\rceil}\rceil = \lceil\sqrt{x}\rceil, real\ x\ge 0
+```
+
+我们刚刚找到的证明并不严重依赖于平方根的性质。仔细观察会发现，我们可以推广这些思路并证明更多内容：设 $f(x)$ 是任意一个连续、单调递增的函数，且具有以下性质
+```math
+f(x) = integer \implies x = integer.
+```
+
+符号 $\implies$ 表示 $implies$。那么我们有
+```math
+\lfloor f(x)\rfloor = \lfloor f(\lfloor x\rfloor)\rfloor, \lceil f(x)\rceil = \lceil f(\lceil x\rceil)\rceil \tag{3.10}
+```
+
+无论何时，当 $f(x), f(\lfloor x\rfloor) , f(\lceil x\rceil)$ 都有定义时，我们来证明这一关于向上取整的一般性质。由于我们之前已经讨论过向下取整，而且向下取整的证明几乎相同，因此我们先证明这一性质。如果 $x = \lceil x\rceil$，则无需证明。否则， $x < \lceil x\rceil$，并且由于 $f$ 是递增的，所以 $f(x) < f(\lceil x\rceil)$。因此， $\lceil f(x)\rceil\le \lceil f(\lceil x\rceil)\rceil$，因为 $\lceil\rceil$ 是非递减的。如果 $\lceil f(x)\rceil< \lceil f(\lceil x\rceil)\rceil$，则必然存在一个数 $y$，使得 $x \le y < \lceil x\rceil$ 且 $f(y) = \lceil f(x)\rceil$，这是因为 $f$ 是连续的。根据 $f$ 的特殊性质，这个 $y$ 必然是整数。然而，$x$ 和 $\lceil x\rceil$ 之间不可能存在严格介于二者之间的整数。这种矛盾表明，我们必须有 $\lceil f(x)\rceil = \lceil f(\lceil x\rceil)\rceil$。
+
+
+

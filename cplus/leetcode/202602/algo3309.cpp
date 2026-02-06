@@ -19,5 +19,18 @@ public:
         return val;
     }
 
+    int maxGoodNumber2(vector<int>& nums) {
+        // 参考题解 __lg vs __builtin_popcount
+        sort(nums.begin(), nums.end(), [](const int & a, const int & b) {
+            int a_bit = __lg(a) + 1, b_bit = __lg(b) + 1;
+            return ((a << b_bit) | b) > ((b << a_bit) | a);
+        });
 
+        int val = 0;
+        for (auto v: nums) {
+            int bits = __lg(v) + 1;
+            val = (val << bits) | v;
+        }
+        return val;   
+    }
 };

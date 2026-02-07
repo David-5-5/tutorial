@@ -330,6 +330,30 @@ c(x\mod y) = c(x-y\lfloor x/y\rfloor) = cx -cy\lfloor cx/cy\rfloor = cx\mod cy,
 
 逐行分配的方案虽不可行，却能帮我们确定每列应分配的行数。若 $n$ 不是 $m$ 的整数倍，通过逐行分配的思路可以清晰看出：较长的列每列应包含 $\lceil n/m\rceil$ 行，较短的列每列应包含 $\lfloor n/m\rfloor$ 行。其中长列的数量恰好为 $n\mod m$
 
+我们来推广术语，用 $things$ 和 $groups$ 来代替 $lines$ 和 $columns$ 进行讨论。我们刚刚已经确定，第一组应当包含 $\lfloor n/m\rfloor$ 个 $things$；因此下面这种顺序分配方案应该是可行的：将 $n$ 个 $things$ 分配到 $m$ 个 $groups$ 中（$m>0$），先把 $\lceil n/m\rceil$ 个 $things$ 放入一个 $group$，然后用同样的方法递归地，把剩余的 $n'=n−\lfloor n/m\rfloor$ 个 $things$ 分配到 $m'=m−1$ 个额外的 $groups$ 中。
 
+例如，当 n=314、m=6 时，分配过程如下所示：
+| remaining things | remaining groups | $\lceil things/groups\rceil$
+| --: | --: | --: |
+314 | 6 | 53
+261 | 5 | 53
+208 | 6 | 52
+156 | 6 | 52
+104 | 6 | 52
+52 | 6 | 52
+
+该方法是有效的。即便除数在不断变化，我们得到的各组（groups）大小仍大致相等。
+
+一般情形下，我们可设 $n=qm+r$，其中 $q=\lfloor n/m\rfloor$，$r=n\mod m$。若 $r=0$，过程十分简单：我们把 $\lfloor n/m\rfloor=q$ 个物品放入第一组，再用 $n'=n−q$ 代替原来的 $n$，此时剩余 $n'=qm'$ 个物品，可分配给剩下的 $m'=m−1$ 个组。若 $r>0$，我们把 $\lceil n/m\rceil=q+1$ 个物品放入第一组，并用 $n'=n−q−1$ 代替原来的 $n$，此时剩余 $n'=qm'+r−1$ 个物品供后续分组使用。新的余数为 $r'=r−1$，但 $q$ 保持不变。由此即可推出：最终会有 $r$ 个组各含 $q+1$ 个物品，紧接着是 $m−$r 个组各含 $q$ 个物品。
+
+第 $k$ 个 $group$ 里有多少个 $things$？我们希望找到一个公式：当 $k\le n\mod m$ 时，结果为 $\lceil n/m\rceil$；其余情况则为 $\lfloor n/m\rfloor$。想要验证这一点并不困难。
+```math
+\lceil\frac{n-k+1}{m} \rceil
+```
+
+该式具备我们想要的性质，因为若按照上一段的写法令 $n=qm+r$（其中 $q=\lfloor n/m\rfloor$），原式可化简为：$q+\lceil (r−k+1​)/m\rceil$。 当 $1\le k\le m$ 且 $0\le r<m$ 时，有 $\lceil (r−k+1​)/m\rceil=[k\le r]$。由此我们可写出一个恒等式，它将 $n$ 划分为 $m$ 个尽可能相等、且按非递增顺序排列的部分:
+```math
+n = \lceil\frac{n}{m}\rceil + \lceil\frac{n-1}{m}\rceil + \cdots + \lceil\frac{n-m+1}{m}\rceil. \tag{3.24}
+```
 
 

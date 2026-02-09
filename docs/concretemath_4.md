@@ -364,7 +364,7 @@ n = \lfloor\frac{n}{m}\rfloor + \lfloor\frac{n-1}{m}\rfloor + \cdots + \lfloor\f
 
 利用式 (3.4) 或习题 12 中的恒等式，即可在式 (3.25) 与式 (3.24) 之间相互转换。
 
-现在，如果我们将 (3.25) 中的 $n$ 替换为 $\lfloormx\rfloor$，并运用规则 (3.11) 消去嵌套在内层的 $floor$ 符号，就能得到一个对所有实数 $x$ 都成立的恒等式：
+现在，如果我们将 (3.25) 中的 $n$ 替换为 $\lfloor mx\rfloor$，并运用规则 (3.11) 消去嵌套在内层的 $floor$ 符号，就能得到一个对所有实数 $x$ 都成立的恒等式：
 ```math
 \lfloor mx\rfloor = \lfloor x\rfloor + \lfloor x+\frac{1}{m}\rfloor + \cdots + \lfloor x+\frac{m-1}{m}\rfloor. \tag{3.26}
 ```
@@ -372,4 +372,39 @@ n = \lfloor\frac{n}{m}\rfloor + \lfloor\frac{n-1}{m}\rfloor + \cdots + \lfloor\f
 这一结论相当令人惊叹，因为下取整函数只是对实数的整数近似，但左侧这单次近似，竟然与右侧一长串近似值的总和完全相等。如果我们假设平均来看 $\lfloor x\rfloor \approx x-\frac{1}{2}$​，那么左侧大致等于 $mx-\frac{1}{2}$​；而右侧则近似为 $(x-\frac{1}{2}) + (x-\frac{1}{2}+\frac{1}{m})+ \cdots + (x-\frac{1}{2}+\frac{m-1}{m}) = x-\frac{1}{2}$；​这些粗略近似值的总和，最终竟然是精确等式！
 
 
+## 3.5 FLOOR/CEILING SUMS
+式 (3.26) 表明，至少对于一类包含"floor" $\lfloor\rfloor$ 的求和式，我们是可以求出闭式的。这样的求和式还有其他吗？当然有。处理这类问题的常用技巧是：通过引入一个新变量，消去 "floor" 或 "ceil" 符号。
+
+例如，我们来看看能否求出这个和式的闭式：
+```math
+\sum_{0\le k<n} \lfloor\sqrt{k}\rfloor
+```
+
+求出其闭式。一种思路是引入变量 $m=\lfloor k\rfloor$；我们可以像处理轮盘赌问题时那样，“mechanically”（机械地）按部就班地操作：
+```math
+\begin{aligned}
+\sum_{0\le k<n} \lfloor\sqrt{k}\rfloor &= \sum_{k,m\ge 0} m[k<n] [m=\lfloor\sqrt{k}\rfloor]                 \\
+&= \sum_{k,m\ge 0} m[k<n][m\le \sqrt{k}<m+1] \\
+&= \sum_{k,m\ge 0} m[k<n][m^2\le k<(m+1)^2] \\
+&= \sum_{k,m\ge 0} m[m^2\le k<(m+1)^2\le n] \\
+&+ \sum_{k,m\ge 0} m[m^2\le k<n<(m+1)^2] 
+\end{aligned} 
+```
+
+边界条件依旧需要小心处理。我们先假设 $n=a^2$ 是一个完全平方数，此时第二个和式为 $0$，而第一个和式可以通过我们惯用的常规方法计算：
+```math
+\begin{aligned} 
+\sum_{k,m\ge 0} & m[m^2\le k<(m+1)^2\le a^2] \\
+& = \sum_{m\ge 0} m((m+1)^2-m^2) [(m+1)\le a] \\
+& = \sum_{m\ge 0} m(2m+1) [m<a] \\
+& = \sum_{m\ge 0} (2m^{\underline{2}}+3m^{\underline{1}})[m<a] \\
+& = \sum_0^a (2m^{\underline{2}}+3m^{\underline{1}})\delta m\\
+& = \frac{2}{3}a(a-1)(a-2) + \frac{3}{2}a(a-1) = \frac{1}{6}(4a+1)a(a-1).
+\end{aligned} 
+```
+
+对于一般情形，我们可令 $a=\lfloor\sqrt{n}\rfloor$；此时只需补上满足 $a^2\le k< n$ 的项，这些项的值均为 $a$，因此它们的和为 $(n-a^2)a$。由此便得到了所求的closed form（闭式）：
+```math
+\sum_{0\le k<n} \lfloor\sqrt{k}\rfloor=na -\frac{1}{3}a^3 -\frac{1}{2}a^2-\frac{1}{6}a, a=\lfloor\sqrt{n}\rfloor \tag{3.27}
+```
 

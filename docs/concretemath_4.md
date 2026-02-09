@@ -413,7 +413,7 @@ n = \lfloor\frac{n}{m}\rfloor + \lfloor\frac{n-1}{m}\rfloor + \cdots + \lfloor\f
 \begin{aligned} 
 \sum_{0\le k<n} \lfloor\sqrt{k}\rfloor &=\sum_{j, k}[1\le j\le sqrt{k}][0\le k\le a^2] \\
 &=\sum_{1\le j<a}\sum_k[j^2\le k< a^2] \\
-&=\sum_{1\le j<a}(a^2-j^2) = a^3-\frac{1}{3}a(a+\frac{1}{2})(a+1) \\
+&=\sum_{1\le j<a}(a^2-j^2) = a^3-\frac{1}{3}a(a+\frac{1}{2})(a+1)
 \end{aligned}
 ```
 
@@ -435,10 +435,52 @@ f_v(x) = [0\le x<v]
 \sum_{0\le k<n} [\{k\alpha\}<v]
 ```
 
-当 $n$ 充分大、且 $x$ 为无理数时，我们来看看这个和式与 *理想* $nv$ 的逼近程度究竟如何。为此，我们定义差异$ D(\alpha, n)$ 为所有 $0\le v\le 1$ 中，总和的最大绝对值
+当 $n$ 充分大、且 $x$ 为无理数时，我们来看看这个和式与 *理想* $nv$ 的逼近程度究竟如何。为此，我们定义差异 $D(\alpha, n)$ 为所有 $0\le v\le 1$ 中，总和的最大绝对值
 ```math
 s(\alpha, n, v) = \sum_{0\le k<n} ([\{k\alpha\}<v] - v) \tag{3.29}
 ```
+
+我们的目标是证明，与 $n$ 相比， $D(\alpha, n)$ 不会太大，方法是证明当 $\alpha$ 为无理数时， $|s(\alpha, n, v)|$ 总是相当小。
+
+首先，我们可以将 $s(\alpha, n, v)$ 重写为更简单的形式，然后引入一个新的索引变量 $j$:
+```math
+\begin{aligned} 
+\sum_{0\le k<n} ([\{k\alpha\}<v] - v) &= \sum_{0\le k<n}(\lfloor k\alpha\rfloor-\lfloor k\alpha-v\rfloor-v) \\
+&= -nv + \sum_{0\le k<n}\sum_j[k\alpha-v<j\le k\alpha] \\
+&= -nv + \sum_{0\le j<\lceil n\alpha\rceil}\sum_{k<n}[j\alpha^{-1}\le k<(j+v)\alpha^{-1}] 
+\end{aligned}
+```
+
+如果运气好的话，我们可以在 $k$ 上进行求和。但我们应该引入一些新的变量，这样公式就不会那么乱了。不失一般性，我们可以假设 $0<\alpha < 1$；让我们写
+```math
+\begin{aligned} 
+a &= \lfloor \alpha^{-1}\rfloor, & \alpha^{-1} = a + \alpha' \\
+b &= \lceil v\alpha^{-1}\rceil, & v\alpha^{-1} = b - v' 
+\end{aligned}
+```
+
+因此 $\alpha' = \{\alpha^{-1}\}$ 是 $\\alpha^{-1}$ 的小数部分，而 $v'$ 是 $v\alpha^{-1}$ 的模糊小数部分。
+
+再次强调，边界条件是我们唯一的烦恼来源。目前，让我们先忽略限制条件 $k < n$，不带它来计算求和：
+```math
+\begin{aligned} 
+\sum_k[k\in [j\alpha^{-1}..(j+v)\alpha^{-1}]] &= \lceil(j+v)(a+\alpha')\rceil - \lceil j(a+\alpha')\rceil \\
+&= b + \lceil j\alpha'-v'\rceil - \lceil j\alpha'\rceil.
+\end{aligned}
+```
+
+好的，这很简单；我们把它插上，然后开始使用：
+```math
+s(\alpha, n, v) = -nv + \lceil n\alpha\rceil b + \sum_{0\le j<\lceil n\alpha\rceil}(\lceil j\alpha'-v'\rceil - \lceil j\alpha'\rceil) - S   \tag{3.30}
+```
+
+其中 S 是对那些我们未能排除的 $k\ge n$ 情况所作的修正。量 $j\alpha'$ 永远不会是整数，因为 $\alpha$（从而 $\alpha'$）是无理数；而且 $j\alpha'-v'$  至多只有一个 $j$ 的值会是整数。因此我们可以把上取整项换成下取整项：
+```math
+s(\alpha, n, v) = -nv + \lceil n\alpha\rceil b + \sum_{0\le j<\lceil n\alpha\rceil}(\lceil j\alpha'\rceil - \lceil j\alpha'-v'\rceil) - S + \{0\ or\ 1\}.
+```
+
+
+
 
 
 

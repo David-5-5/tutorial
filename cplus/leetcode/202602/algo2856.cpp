@@ -14,5 +14,7 @@ public:
         return n - 2 * min(n/2, n-mx);
     }
 
-
+    int minLengthAfterRemovals(vector<int>& nums) {
+        // 时间复杂度 O(logn)
+    }
 };

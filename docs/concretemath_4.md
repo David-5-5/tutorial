@@ -479,6 +479,9 @@ s(\alpha, n, v) = -nv + \lceil n\alpha\rceil b + \sum_{0\le j<\lceil n\alpha\rce
 s(\alpha, n, v) = -nv + \lceil n\alpha\rceil b + \sum_{0\le j<\lceil n\alpha\rceil}(\lceil j\alpha'\rceil - \lceil j\alpha'-v'\rceil) - S + \{0\ or\ 1\}.
 ```
 
+挺有意思的。我们并没有得到闭式，反而得到了一个和式，它看上去和 s(α,n,v) 十分相似，只是参数不同：用 α′ 代替了 α，用 ⌊nα⌋ 代替了 n，用 v′ 代替了 v。这样一来，我们就能得到关于 s(α,n,v) 的一个递推关系，而这（有望）进一步导出偏差 D(α,n) 的递推关系。这意味着我们需要求出
+
+
 
 
 

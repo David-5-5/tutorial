@@ -31,5 +31,23 @@ public:
 
     }
 
+    int maxBalancedSubarray(vector<int>& nums) {
+        unordered_map<long long, int> pres; int n = nums.size();
+        
+        // -n <= pre01 <= n, 0 <= pre01 + n <=2 * n
+        // 因此 pre01 + n 进行偏移，初始 mask = (0 << 32) + 0 + n = n
+        int prex = 0, pre01 = 0, ans = 0; pres[n] = -1; 
 
+        for (int i=0; i<n; i++) {
+            prex ^= nums[i];
+            if ( nums[i]%2) pre01 ++;
+            else pre01--;
+            
+            long long mask = (1LL * prex << 32) + (n + pre01);
+            if (pres.count(mask)) ans = max(ans, i - pres[mask]);
+            else pres[mask] = i;
+        }
+        return ans;
+        
+    }    
 };

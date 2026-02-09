@@ -408,3 +408,37 @@ n = \lfloor\frac{n}{m}\rfloor + \lfloor\frac{n-1}{m}\rfloor + \cdots + \lfloor\f
 \sum_{0\le k<n} \lfloor\sqrt{k}\rfloor=na -\frac{1}{3}a^3 -\frac{1}{2}a^2-\frac{1}{6}a, a=\lfloor\sqrt{n}\rfloor \tag{3.27}
 ```
 
+处理这类和式的另一种方法，是将形如 $\lfloor x\rfloor$ 的表达式替换为 $\sum_j​[1\le j\le x]$；当 $x\ge 0$ 时，这种替换是合法的。为方便起见，不妨设 $n=a^2$，下面演示该方法如何用于 square roots 下取整的求和：
+```math
+\begin{aligned} 
+\sum_{0\le k<n} \lfloor\sqrt{k}\rfloor &=\sum_{j, k}[1\le j\le sqrt{k}][0\le k\le a^2] \\
+&=\sum_{1\le j<a}\sum_k[j^2\le k< a^2] \\
+&=\sum_{1\le j<a}(a^2-j^2) = a^3-\frac{1}{3}a(a+\frac{1}{2})(a+1) \\
+\end{aligned}
+```
+
+这里再举一个变量替换导出变换和式的例子。1909 年前后，三位数学家 ——Bohl [34]、Sierpiński [326]、Weyl [368]—— 各自独立发现了一条著名定理：若 $\alpha$ 是无理数，则当 $n\to\infty$ 时，分数部分 $\{n\alpha\}$ 在区间 $(0,1)$ 上会呈高度均匀分布。该定理的一种表述方式是：
+```math
+\lim_{n\to\infty}\frac{1}{n} \sum_{0\le k<n}f(\{k\alpha\}) = \int_0^1f(x)dx \tag{3.28}
+```
+
+对所有无理数 $\alpha$，以及所有几乎处处连续的函数 $f$，该式均成立。例如，取 $f(x)=x$，即可求出 ${n\alpha}$ 的平均值；我们会得到 $\frac{1}{2}$​.（这正是我们直观预期的结果；但无论 $\alpha$ 是怎样的无理数，这个结论都能被严格证明成立，这一点依然十分美妙。）
+
+Bohl、Sierpiński 和 Weyl 的这条定理，是通过用 *step functions* （阶梯函数）对 $f(x)$ 进行上下逼近来证明的；而阶梯函数是若干简单函数的线性组合。
+```math
+f_v(x) = [0\le x<v]
+```
+
+其中 $0\le v\le 1$。我们这里的目的并非证明这条定理，那是微积分教材的内容。但我们不妨通过考察特殊情形 $f(x)=f_v​(x)$ 下的表现，来探究它成立的核心原因。换句话说，我们来看看这个和式
+需要我帮你把这个特殊情形下的和式完整写出来，并配上直观解释吗？
+```math
+\sum_{0\le k<n} [\{k\alpha\}<v]
+```
+
+当 $n$ 充分大、且 $x$ 为无理数时，我们来看看这个和式与 *理想* $nv$ 的逼近程度究竟如何。为此，我们定义差异$ D(\alpha, n)$ 为所有 $0\le v\le 1$ 中，总和的最大绝对值
+```math
+s(\alpha, n, v) = \sum_{0\le k<n} ([\{k\alpha\}<v] - v) \tag{3.29}
+```
+
+
+

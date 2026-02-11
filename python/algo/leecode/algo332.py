@@ -3,9 +3,6 @@ class Solution:
         '''
         Hierholzer 算法
         '''
-        '''
-        Hierholzer 算法
-        '''
         graph = {}
 
         from bisect import bisect_right

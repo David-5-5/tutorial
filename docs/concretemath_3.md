@@ -110,7 +110,37 @@ f(x) = integer \implies x = integer.
 \lfloor f(x)\rfloor = \lfloor f(\lfloor x\rfloor)\rfloor, \lceil f(x)\rceil = \lceil f(\lceil x\rceil)\rceil \tag{3.10}
 ```
 
-无论何时，当 $f(x), f(\lfloor x\rfloor) , f(\lceil x\rceil)$ 都有定义时，我们来证明这一关于向上取整的一般性质。由于我们之前已经讨论过向下取整，而且向下取整的证明几乎相同，因此我们先证明这一性质。如果 $x = \lceil x\rceil$，则无需证明。否则， $x < \lceil x\rceil$，并且由于 $f$ 是递增的，所以 $f(x) < f(\lceil x\rceil)$。因此， $\lceil f(x)\rceil\le \lceil f(\lceil x\rceil)\rceil$，因为 $\lceil\rceil$ 是非递减的。如果 $\lceil f(x)\rceil< \lceil f(\lceil x\rceil)\rceil$，则必然存在一个数 $y$，使得 $x \le y < \lceil x\rceil$ 且 $f(y) = \lceil f(x)\rceil$，这是因为 $f$ 是连续的。根据 $f$ 的特殊性质，这个 $y$ 必然是整数。然而，$x$ 和 $\lceil x\rceil$ 之间不可能存在严格介于二者之间的整数。这种矛盾表明，我们必须有 $\lceil f(x)\rceil = \lceil f(\lceil x\rceil)\rceil$。
+无论何时，当 $f(x), f(如果 m 和 n 是整数，且分母 n 为正数。例如，令 m = 0；我们有 ⌊⌊bx/10c/10⌋/10⌋ = bx/1000c。连续三次除以 10 并舍弃小数部分，等同于除以 1000 并丢弃余数。) , f(\lceil x\rceil)$ 都有定义时，我们来证明这一关于向上取整的一般性质。由于我们之前已经讨论过向下取整，而且向下取整的证明几乎相同，因此我们先证明这一性质。如果 $x = \lceil x\rceil$，则无需证明。否则， $x < \lceil x\rceil$，并且由于 $f$ 是递增的，所以 $f(x) < f(\lceil x\rceil)$。因此， $\lceil f(x)\rceil\le \lceil f(\lceil x\rceil)\rceil$，因为 $\lceil\rceil$ 是非递减的。如果 $\lceil f(x)\rceil< \lceil f(\lceil x\rceil)\rceil$，则必然存在一个数 $y$，使得 $x \le y < \lceil x\rceil$ 且 $f(y) = \lceil f(x)\rceil$，这是因为 $f$ 是连续的。根据 $f$ 的特殊性质，这个 $y$ 必然是整数。然而，$x$ 和 $\lceil x\rceil$ 之间不可能存在严格介于二者之间的整数。这种矛盾表明，我们必须有 $\lceil f(x)\rceil = \lceil f(\lceil x\rceil)\rceil$。
+
+该定理的一个重要特例值得明确指出：
+```math
+\lfloor\frac{x+m}{n}\rfloor = \lfloor\frac{\lfloor x\rfloor+m}{n}\rfloor, \lceil\frac{x+m}{n}\rceil = \lceil\frac{\lceil x\rceil+m}{n}\rceil \tag{3.11}
+```
+
+如果 $m$ 和 $n$ 是整数，且分母 $n$ 为正数。例如，令 $m=0$；我们有 $\lfloor\lfloor\lfloor x/10 \rfloor/10 \rfloor/10 \rfloor = \lfloor x/1000\rfloor$。连续三次除以 $10$ 并舍弃小数部分，等同于除以 $1000$ 并丢弃余数。
+
+我们现在来尝试证明或证伪另一个命题：
+```math
+\lceil\sqrt{\lfloor x\rfloor}\rceil \stackrel{?}{=} \lceil\sqrt{x}\rceil， real\ x\ge 0.
+```
+
+当 $x = \pi$ 且 $x = e$ 时，此方法有效；但当 $x = \phi$ 时，它会失效；因此我们知道，这在一般情况下并不成立。
+
+在继续之前，让我们稍作离题，讨论一下数学书籍中可能出现的不同层次的问题：
+**Level 1**. 给定一个明确的对象 $x$ 和一个明确的属性 $P(x)$，证明 $P(x)$ 为真。例如，“证明 $\lfloor\pi \rfloor = 3$。” 在这里，问题涉及寻找某个所谓事实的证明。
+
+**Level 2**. 给定一个明确的集合 $X$ 和一个明确的性质 $P(x)$，证明对于所有 $x\in X$，$P(x)$ 都为真。例如，“证明对于所有实数 $x, \lfloor x\rfloor\le x$。” 再次，这个问题涉及寻找一个证明，但这次的证明必须是通用的。我们是在做代数，而不仅仅是算术。
+
+**Level 3**. 给定一个显式集合 $X$ 和一个显式性质 $P(x)$，证明 或者反证，使得 $P(x)$ 对所有 $x\in X$ 成立。例如，“证明或反证：对于所有实数 $x\ge 0, \lceil\sqrt{\lfloor x\rfloor}\rceil=\lceil\sqrt{x}\rceil$。”这里存在额外一层不确定性；结果可能朝任何方向发展。这更贴近数学家日常面对的真实情况：那些被写进书里的断言往往是正确的，但新出现的命题则必须以怀疑的眼光看待。如果该陈述是错误的，我们的任务就是找到一个反例；如果该陈述是正确的，我们就必须像第二级那样找到一个证明。
+
+
+**Level 4**. 给定一个明确的集合 $X$ 和一个明确的性质 $P(x)$，求一个 必要且充分条件 $Q(x)$，使得 $P(x)$ 为真。例如，“找出一个必要且充分的条件，使得 $\lfloor x\rfloor\le \lceil x\rceil$。”这个问题就是要找到 $Q$，使得 $P(x)\iff Q(x)$。当然，总有一个平凡的答案；我们可以取 $Q(x) = P(x)$。但隐含的要求是找到一个尽可能简单的条件。要发现一个简单的、可行的条件，需要一定的创造性。（例如，在本例中，“$\lfloor x\rfloor\le \lceil x\rceil\iff x $ 是整数。”）寻找 $Q(x)$ 所需的额外发现环节使这类问题更加困难，但也更贴近数学家在“现实世界”中所必须面对的情形。最后，当然，必须给出证明，说明 $P(x)$ 为真当且仅当 $Q(x)$ 为真。
+
+**Level 5**. 给定一个明确的集合 $X$，找出其元素的一个有趣性质 $P(x)$。现在我们进入了纯粹研究的可怕领域，学生们可能会认为这里一片混乱。这可是真正的数学。教科书作者很少敢出第5级的问题。
+
+闲话到此结束。但让我们把刚才讨论的最后一个问题从第3级转换到第4级：什么条件是必要且充分的，使得 $\lceil\sqrt{\lfloor x\rfloor}\rceil=\lceil\sqrt{x}\rceil$？我们已经观察到，当 $x = 3.142$时等式成立，但当 $x = 1.618$ 时则不成立；进一步实验表明，当 $x$ 介于 9 和 10 之间时，等式同样不成立。哦哈。没错。我们发现，只要 $m^2 < x < m^{2+1}$，就会出现反例，因为此时左边得到 $m$，而右边则是 $m+1$。在所有其他情况下，即当 $sqrt{x}$ 有定义时——也就是当 $x=0\ or\ m^2+1\le x\le (m+1)^2$ 时，等式都能成立。因此，以下陈述便是等式的必要且充分条件：要么 $x$ 是整数，要么 $sqrt{\lfloor x\rfloor}$ 不是实数。
+
+对于我们的下一个问题，让我们来考虑一种由C. A. R. Hoare和Lyle Ramshaw提出的、用于表示实数轴上区间的新颖便捷的记法： $[\alpha\cdots \beta]$ 表示实数集合 $x$，使得 $\alpha\le x \le\beta$。这个集合被称为*闭区间*，因为它包含了两个端点 $\alpha$ 和 $\beta$。不包含任何端点的区间，用 $(\alpha\cdots \beta)$ 表示，由所有满足 $\alpha< x< \beta$ 的 $x$ 组成；这被称为*开区间*。而区间 $[\alpha\cdots \beta)$ 和 $(\alpha\cdots \beta)$，它们只包含一个端点，定义方式类似，并被称为*半开区间*。
 
 
 

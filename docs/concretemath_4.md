@@ -476,11 +476,26 @@ s(\alpha, n, v) = -nv + \lceil n\alpha\rceil b + \sum_{0\le j<\lceil n\alpha\rce
 
 其中 S 是对那些我们未能排除的 $k\ge n$ 情况所作的修正。量 $j\alpha'$ 永远不会是整数，因为 $\alpha$（从而 $\alpha'$）是无理数；而且 $j\alpha'-v'$  至多只有一个 $j$ 的值会是整数。因此我们可以把上取整项换成下取整项：
 ```math
-s(\alpha, n, v) = -nv + \lceil n\alpha\rceil b + \sum_{0\le j<\lceil n\alpha\rceil}(\lceil j\alpha'\rceil - \lceil j\alpha'-v'\rceil) - S + \{0\ or\ 1\}.
+s(\alpha, n, v) = -nv + \lfloor n\alpha\rfloor b + \sum_{0\le j<\lfloor n\alpha\rfloor}(\lfloor j\alpha'\rfloor - \lfloor j\alpha'-v'\rfloor) - S + \{0\ or\ 1\}.
 ```
 
-挺有意思的。我们并没有得到闭式，反而得到了一个和式，它看上去和 s(α,n,v) 十分相似，只是参数不同：用 α′ 代替了 α，用 ⌊nα⌋ 代替了 n，用 v′ 代替了 v。这样一来，我们就能得到关于 s(α,n,v) 的一个递推关系，而这（有望）进一步导出偏差 D(α,n) 的递推关系。这意味着我们需要求出
+挺有意思的。我们并没有得到闭式，反而得到了一个和式，它看上去和 $s(\alpha, n, v)$ 十分相似，只是参数不同：用 $\alpha'$ 代替了 $\alpha$，用 $\lfloor n\alpha\rfloor$ 代替了 $n$，用 $v'$ 代替了 $v$。这样一来，我们就能得到关于 $s(\alpha, n, v)$ 的一个递推关系，而这（有望）进一步导出偏差 $D(\alpha,n)$ 的递推关系。这就意味着，我们也要亲自上阵
+```math
+s(\alpha', \lceil n\alpha\rceil, v') = \sum_{0\le j<\lceil n\alpha\rceil}(\lfloor j\alpha'\rfloor-\lfloor j\alpha'-v'\rfloor-v').
+```
 
+推导一番了
+```math
+s(\alpha, n, v) =  -nv + \lceil n\alpha\rceil b -\lceil n\alpha\rceil v' - s(\alpha', \lceil n\alpha\rceil, v')- S + \{0\ or\ 1\}.
+```
+
+回想一下 $b−v'=v\alpha^{−1}$，我们会发现，如果把 $\lceil n\alpha\rceil(b−v')$ 替换成 $n\alpha(b−v')=nv$，所有式子都会变得极其简洁：
+```math
+s(\alpha, n, v) =  -s(\alpha', \lceil n\alpha\rceil, v') -S + \epsilon + \{0\ or\ 1\}.
+```
+
+这里 $\epsilon$ 是一个不超过 $v\alpha^{−1}$ 的正误差。习题 18 同样证明了，$S$ 也介于 $0$ 和 $\lceil v\alpha^{−1}\rceil$ 之间。我们还可以从和式中去掉 $j=\lceil n\alpha^{−1}\rceil−1=\lfloor j\alpha'\rfloor$ 对应的项，因为它的贡献要么是 $v'$，要么是 $v'−1$。
+因此，如果对所有 $v$ 取绝对值的最大值，我们就得到：
 
 
 

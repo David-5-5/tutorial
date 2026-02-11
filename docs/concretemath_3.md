@@ -142,5 +142,14 @@ f(x) = integer \implies x = integer.
 
 对于我们的下一个问题，让我们来考虑一种由C. A. R. Hoare和Lyle Ramshaw提出的、用于表示实数轴上区间的新颖便捷的记法： $[\alpha\cdots \beta]$ 表示实数集合 $x$，使得 $\alpha\le x \le\beta$。这个集合被称为*闭区间*，因为它包含了两个端点 $\alpha$ 和 $\beta$。不包含任何端点的区间，用 $(\alpha\cdots \beta)$ 表示，由所有满足 $\alpha< x< \beta$ 的 $x$ 组成；这被称为*开区间*。而区间 $[\alpha\cdots \beta)$ 和 $(\alpha\cdots \beta)$，它们只包含一个端点，定义方式类似，并被称为*半开区间*。
 
+这样的区间里包含多少个整数？半开区间更容易处理，所以我们从它开始。事实上，半开区间几乎总是比开区间或闭区间更 “好用”。例如，它们具有可加性—— 我们可以把半开区间 $[\alpha\cdots \beta)$ 和 $[\beta\cdots \gamma)$ 合并成 $[\alpha\cdots \gamma)$。如果是开区间就行不通，因为点 $\beta$ 会被排除掉；而闭区间也会出问题，因为 $\beta$ 会被算进去两次。
 
+回到我们的问题。如果 $\alpha$ 和 $\beta$ 是整数，那么答案就很简单：此时 $[\alpha . . \beta)$ 包含 $\beta − \alpha$ 个整数 $\alpha, \alpha + 1, . . ., \beta − 1$，前提是 $\alpha\le \beta$。同样地， $(\alpha . . \beta]$ 在这种情况下也包含 $\beta − \alpha$ 个整数。但我们的问题更难，因为 $\alpha$ 和 $\beta$ 是任意实数。不过，我们可以将其转化为更容易解决的问题，因为
+```math
+\begin{aligned}
+\alpha\le n< \beta &\iff \lceil\alpha\rceil\le n < \lceil\beta\rceil, \\
+\alpha< n\le \beta &\iff \lfloor\alpha\rfloor<n\le \lfloor\beta\rfloor, 
+\end{aligned}
+```
 
+当 $n$ 是一个整数时，根据（3.7）。右侧的区间具有整数端点，并且包含与左侧区间相同数量的整数，而左侧区间的端点是实数。因此，区间 $[\alpha\cdots \beta)$ 恰好包含 $\lceil\beta\rceil −\lfloor \alpha\rfloor$ 个整数，而 $(\alpha . . \beta]$  包含 $\lfloor\beta\rfloor -\lceil\alpha\rceil$ 个整数。这种情况正是我们实际上希望引入下取整或上取整符号的时候，而不是将其去除。

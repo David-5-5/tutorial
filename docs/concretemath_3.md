@@ -766,10 +766,67 @@ a\lfloor\frac{x}{a}\rfloor + bn + c,
 
 尤其是，我们能看出 $b$ 是怎么来的。第二列是一个等差数列，它的和我们是知道的 —— 等于首项与末项的平均值，再乘以项数：
 ```math
-frac{1}{2}(0 + frac{(m-1)n}{m})\cdot m = frac{(m-1)n}{2}.
+\frac{1}{2}(0 + frac{(m-1)n}{m})\cdot m = \frac{(m-1)n}{2}.
 ```
 
 于是我们之前猜测的 $b=(m−1)/2$ ​就得到了验证。
 
+第一列和第三列似乎更难；要确定 $a$ 和 $c$，我们必须仔细研究数字序列:
+```math
+0\mod m, n\mod m, 2n\mod m,\cdots, (m-1)n\mod m
+```
+
+假设，例如， $m = 12$ 且 $n = 5$。如果我们把这一序列看作钟表上的时间，那么这些数字就是 $0$ 点（我们把 $12$ 点视为 0$ 点），接着是 $5$ 点、 $10$ 点、 $3$ 点（$= 15$ 点）、 $8$ 点，以此类推。结果发现，我们恰好每个小时都碰上一次。
+
+现在假设 $m = 12$，且 $n = 8$。这些数字分别是 $0$点、 $8$点、$4$点（$= 16$点），但随后 $0, 8, 4$会重复出现。由于 $8, 12$ 都是 $4$ 的倍数，而且这些数字从 $0$ 开始（这也是 $4$ 的倍数），因此根本无法打破这一规律——它们必定都是 $4$ 的倍数。
+
+在上述两种情况下，我们有 $\gcd(12, 5) = 1$ 和 $\gcd(12, 8) = 4$。下一章我们将证明的一般规律是：如果 $d = \gcd(m, n)$，那么我们会按某种顺序得到数字 $0, d, 2d,\cdots, m-d$，接着是 $d − 1$ 的相同序列的更多副本。例如，当 $m = 12$ 且 $n = 8$ 时，模式 $0, 8, 4$ 就会出现四次。
+
+我们求和的第一列现在完全说得通了。它包含 $d$ 个项的副本： $\lfloor x/m\rfloor, \lfloor (x+d)/m\rfloor,\cdots, \lfloor (x+m-d)/m\rfloor$，顺序不一，因此其总和为:
+```math
+\begin{aligned} 
+d(\lfloor\frac{x}{m}\rfloor&+\lfloor\frac{x+d}{m}\rfloor+\cdots+\lfloor\frac{x+m-d}{m}\rfloor) \\
+&=d(\lfloor\frac{x/d}{m/d}\rfloor+\lfloor\frac{x/d+1}{m/d}\rfloor+\cdots+\lfloor\frac{x/d+m/d-1}{m/d}\rfloor) \\
+&=d\lfloor\frac{x}{d}\rfloor
+\end{aligned}
+```
+
+这最后一步是(3.26)的又一应用。我们对 $a$ 的猜测已得到验证：
+```math
+a = d = \gcd(m, n).
+```
+
+而且正如我们猜测的那样，现在也可以算出 $c$ 了，因为第三列已经变得很容易理解。它包含了 $d$ 段等差数列 $0/m, d/m, 2d/m, \cdots, (m−d)/m$，所以它的和是：
+```math
+d(\frac{1}{2}(0+\frac{m-d}{m})\cdot\frac{n}{d}) = \frac{m-d}{2};
+```
+
+事实上，第三列是要减去，而不是加上，因此我们得到：
+```math
+c = \frac{d-m}{2}
+```
+
+谜团解开，探索结束。我们想要的闭式就是：
+```math
+\sum_{0\le<m} \lfloor\frac{nk+x}{m}\rfloor = d\lfloor\frac{x}{d}\rfloor + \frac{m-1}{2}\cdot n + \frac{d-m}{2},
+```
+
+其中 $d=\gcd(m,n)$。作为验证，我们可以用之前已知的特殊情况 $n=0$ 和 $n=1$ 来检验：当 $n=0$ 时，有 $d=\gcd(m,0)=m$；公式中最后两项都为 $0$，因此公式正确给出 $m\lfloor x/m\rfloor$。当 $n=1$ 时，有 $d=\gcd(m,1)=1$；最后两项正好抵消，和式就等于 $\lfloor x\rfloor $。
+
+只要对这个闭式稍作整理，我们就能让它在 $m$ 和 $n$ 之间呈现出对称性：
+```math
+\begin{aligned} 
+\sum_{0\le<m} \lfloor\frac{nk+x}{m}\rfloor &= d\lfloor\frac{x}{d}\rfloor + \frac{m-1}{2}\cdot n + \frac{d-m}{2} \\
+&= d\lfloor\frac{x}{d}\rfloor + \frac{(m-1)(n-1)}{2} + \frac{(m-1)}{2} + \frac{d-m}{2} \\
+&= d\lfloor\frac{x}{d}\rfloor + \frac{(m-1)(n-1)}{2} + \frac{(d-1)}{2}. \tag{3.32}
+\end{aligned}
+```
+
+这结果简直令人惊叹，因为从代数形式上，我们完全没有理由预料到这个和式会具有这样的对称性。我彻底被折服了。没错，我们就此证明了一条互反律。
+```math
+\sum_{0\le<m} \lfloor\frac{nk+x}{m}\rfloor = \sum_{0\le<n} \lfloor\frac{mk+x}{n}\rfloor, integers\ m, n>0.
+```
+
+例如，当 $m=41, n=127$ 时，左边的和只有 $41$ 项，右边的和却有 $127$ 项，但对任意实数 $x$，它们的值仍然完全相等。
 
 

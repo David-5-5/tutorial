@@ -652,9 +652,124 @@ s(\alpha, n, v) =  -s(\alpha', \lceil n\alpha\rceil, v') -S + \epsilon + \{0\ or
 
 这里 $\epsilon$ 是一个不超过 $v\alpha^{−1}$ 的正误差。习题 18 同样证明了，$S$ 也介于 $0$ 和 $\lceil v\alpha^{−1}\rceil$ 之间。我们还可以从和式中去掉 $j=\lceil n\alpha^{−1}\rceil−1=\lfloor j\alpha'\rfloor$ 对应的项，因为它的贡献要么是 $v'$，要么是 $v'−1$。
 因此，如果对所有 $v$ 取绝对值的最大值，我们就得到：
+```math
+D(\alpha, n)\le D(\alpha',\lfloor \alpha n\rfloor) + \alpha^{-1} + 2. \tag{3.31}
+```
 
+在后续章节中我们将学到的方法，可以让我们从这个递推式得出结论：当 $n$ 足够大时，$D(\alpha, n)$ 始终远小于 $n$。因此，定理 (3.28) 不仅成立，还可以加强：它收敛到极限的速度非常快。
 
+这可真是一场对和式、下取整与上取整的花式操作演练。那些不习惯于 **证明误差很小** 的读者，可能很难相信，面对如此怪异的和式，居然有人有勇气一路推导下去。但仔细再看就会发现，整个计算过程中其实贯穿着一条简单清晰的主线。核心思想是：某个包含 $n$ 项的和 $s(\alpha, n, v)$，可以被化简为一个至多只有 $\lfloor \alpha n\rfloor$ 项的同类和式。除了在边界附近会留下一点点微小的余项之外，其他所有项都会相互抵消。
 
+现在让我们深呼吸，再来算一个和式。它并不简单，但相比我们刚才做的那些，它有一个巨大的优点：最终能得到闭式，这样我们就能轻松检验结果对不对。我们现在的目标，是把式 (3.26) 中的和式推广，求出下面这个表达式：
+```math
+\sum_{0\le <m} \bigg\lfloor\frac{nk+x}{m}\bigg\rfloor, integer\ m>0, integer\ n.
+```
+
+求出这个和式的闭式，比我们到目前为止做过的所有题目都更难（也许只比刚才那个偏差问题简单一点）。但它非常有启发性，所以本章剩下的内容，我们就专心把它啃下来。
+
+跟往常一样，尤其是面对难题时，我们先从简单情形入手观察。$n=1$ 的特例就是公式 (3.26)，只是把 x$ 换成了 $x/m$：
+```math
+ \lfloor\frac{x}{m}\rfloor + \lfloor\frac{1+x}{m}\rfloor + \cdots + \lfloor\frac{m-1+x}{m}\rfloor = \lfloor x\rfloor.
+```
+
+就像在第 1 章里那样，我们发现往更简单的方向推广到 $n=0$ 来获取更多数据是很有用的：
+```math
+ \lfloor\frac{x}{m}\rfloor + \lfloor\frac{x}{m}\rfloor + \cdots + \lfloor\frac{x}{m}\rfloor = m\lfloor\frac{x}{m}\rfloor.
+```
+
+我们的问题里有两个参数：$m$ 和 $n$。先来看 $m$ 取小值的情况。当 $m=1$ 时，和式里只有一项，值为 $\lfloor x\rfloor$。当 m=2 时，和式是 $\lfloor x/2\rfloor + \lfloor (x+n)/2\rfloor$。我们可以把 $n$ 从下取整符号里挪出来，以此消除 $x$ 和 $n$ 之间的耦合，但要这么做，必须分偶数和奇数两种情况讨论。如果 $n$ 是偶数，$n/2$ 是整数，于是可以把它从下取整里提出来：
+```math
+\lfloor\frac{x}{2}\rfloor + (\lfloor\frac{x}{2}\rfloor + \frac{n}{2}) = 2\lfloor\frac{x}{2}\rfloor + \frac{n}{2}.
+```
+
+如果 $n$ 是奇数，那么 $(n−1)/2$ 是整数，于是我们得到：
+```math
+\lfloor\frac{x}{2}\rfloor + (\lfloor\frac{x+1}{2}\rfloor + \frac{n-1}{2}) = \lfloor\ x\rfloor + \frac{n-1}{2}.
+```
+最后一步是由公式 (3.26) 取 $m=2$ 得到的。
+
+这些针对偶数和奇数 $n$ 的公式，与 $n=0, 1$ 的情形略有相似，但目前还没有呈现出清晰的规律。所以我们最好继续探索更多小例子。当 $m=3$ 时，和式为：
+```math
+\lfloor\frac{x}{3}\rfloor + \lfloor\frac{x+n}{3}\rfloor + \lfloor\frac{x+ 2n}{3}\rfloor,
+```
+
+我们对 $n$ 分三种情况讨论：它要么是 $3$ 的倍数，要么是 $3$ 的倍数加 $1$，要么是 $3$ 的倍数加 $2$。也就是说，$n\mod 3=0,1,2$。如果 $n\mod 3=0$，那么 $n/3$ 和 $2n/3$ 都是整数，于是这个和为：
+```math
+\lfloor\frac{x}{3}\rfloor + (\lfloor\frac{x}{3}\rfloor+\frac{n}{3}) + (\lfloor\frac{x}{3}\rfloor+\frac{2n}{3})=3\lfloor\frac{x}{3}\rfloor + n.
+```
+
+如果 $n\mod 3=1$，那么 $(n−1)/3$ 和 $(2n−2)/3$ 都是整数，于是我们得到：
+```math
+\lfloor\frac{x}{3}\rfloor + (\lfloor\frac{x+1}{3}\rfloor+\frac{n-1}{3}) + (\lfloor\frac{x+2}{3}\rfloor+\frac{2n-2}{3})=\lfloor x\rfloor + n-1.
+```
+
+最后这一步同样由公式 (3.26) 得出，$m=3$。最后如果 $n\mod 3=2$，那么：
+```math
+\lfloor\frac{x}{3}\rfloor + (\lfloor\frac{x+2}{3}\rfloor+\frac{n-2}{3}) + (\lfloor\frac{x+1}{3}\rfloor+\frac{2n-1}{3})=\lfloor x\rfloor + n-1.
+```
+
+我们大脑的左脑已经搞定了 $m=3$ 的情况，但右脑还是没看出规律，于是我们继续看 $m=4$：
+```math
+\lfloor\frac{x}{4}\rfloor + \lfloor\frac{x+n}{4}\rfloor + \lfloor\frac{x+ 2n}{4}\rfloor + \lfloor\frac{x+ 3n}{4}\rfloor.
+```
+
+至少现在我们已经很清楚，要根据 $n\mod m$ 来分情况讨论。如果 $n\mod 4 = 0$，那么：
+```math
+\lfloor\frac{x}{4}\rfloor + (\lfloor\frac{x}{4}\rfloor+\frac{n}{4}) + (\lfloor\frac{x}{4}\rfloor+\frac{2n}{4}) + (\lfloor\frac{x}{4}\rfloor+\frac{3n}{4})=4\lfloor\frac{x}{4}\rfloor + \frac{3n}{2}.
+```
+
+如果 $n\mod 4 = 1$：
+```math
+\lfloor\frac{x}{4}\rfloor + (\lfloor\frac{x+1}{4}\rfloor+\frac{n-1}{4}) + (\lfloor\frac{x+2}{4}\rfloor+\frac{2n-2}{4}) + (\lfloor\frac{x+3}{4}\rfloor+\frac{3n-3}{4})=\lfloor x\rfloor + \frac{3n}{2}-\frac{3}{2}.
+```
+
+结果发现，$n\mod 4=3$ 的情况也给出相同的结果。最后，在 $n\mod 4=2$ 的情况下，我们得到了一个略有不同的式子，而这恰恰成为了理解整体规律的一条重要线索：
+```math
+\lfloor\frac{x}{4}\rfloor + (\lfloor\frac{x+2}{4}\rfloor+\frac{n-2}{4}) + (\lfloor\frac{x}{4}\rfloor+\frac{2n}{4}) + (\lfloor\frac{x+2}{4}\rfloor+\frac{3n-2}{4}) \\
+=2(\lfloor\frac{x}{4}\rfloor + \lfloor\frac{x+2}{4}\rfloor) + \frac{3n}{2} -1 = 2\lfloor\frac{x}{2}\rfloor+ \frac{3n}{2} -1.
+```
+
+最后这一步化简的是形如 $\lfloor y/2\rfloor + \lfloor (y+1)/2\rfloor$ 的式子，这同样是公式 (3.26) 的一个特例。
+
+总结一下，下面是我们对较小的 $m$ 算出的和式的值：
+| $m$ | $n\mod m = 0$ | $n\mod m = 1$ | $n\mod m = 2$ | $n\mod n = 3$ |
+| :-- | :-- | :-- | :-- | :-- |
+| 1 | $\lfloor x\rfloor$ |  |  |  |
+| 2 | 2$\lfloor\frac{x}{2}\rfloor + \frac{n}{2}$ | $\lfloor x\rfloor + \frac{n}{2} - \frac{1}{2}$|  |  |
+| 3 | 3$\lfloor\frac{x}{3}\rfloor + n$ | $\lfloor x\rfloor + n -1$ | $\lfloor x\rfloor + n -1$ |  |
+| 4 | 4$\lfloor\frac{x}{4}\rfloor + \frac{3n}{2}n$ | $\lfloor x\rfloor + \frac{3n}{2} - \frac{3}{2}$ | 2$\lfloor\frac{x}{2}\rfloor + \frac{3n}{2} -1$ | $\lfloor x\rfloor + \frac{3n}{2} - \frac{3}{2}$ | 
+
+看起来我们得到的结果好像都具有某种形式：
+```math
+a\lfloor\frac{x}{a}\rfloor + bn + c,
+```
+
+其中 $a, b, c$ 以某种方式依赖于 $m$ 和 $n$。就算是眼力不太好的人也能看出，$b$ 很可能就是 $(m−1)/2$​。要找出 $a$ 的表达式则更难一些，但 $n\mod 4=2$ 这个例子给了我们一个提示：$a$ 很可能是 $\gcd(m,n)$，也就是 $m$ 和 $n$ 的最大公约数。这是合理的，因为 $\gcd(m,n)$ 正是我们把分数 $n/m$​ 约分成最简形式时，从 $m$ 和 $n$ 中约去的那个因子，而我们的和式里正好出现了 $n/m$​。（我们会在第 4 章仔细研究最大公约数运算。）$c$ 的值看起来就更神秘了，不过也许等我们证明完 $a$ 和 $b$ 之后，$c$ 自然就清楚了。
+
+在对较小的 $m$ 计算这个和式时，我们实际上已经把和式中的每一项重新写成了：
+```math
+\lfloor\frac{x+kn}{m}\rfloor = \lfloor\frac{x+kn\mod n}{m}\rfloor + \frac{kn}{m} - \frac{kn\mod m}{m},
+```
+
+因为 $(kn−(kn\mod m))/m$ 是一个整数，可以从下取整括号里提出来。于是，原来的和式就可以展开成下面这样的形式：
+```math
+\begin{aligned} 
+\lfloor\frac{x}{m}\rfloor &+ \lfloor\frac{0}{m}\rfloor -& \lfloor\frac{0\mod m}{m}\rfloor \\
++\lfloor\frac{x + n\mod n}{m}\rfloor &+ \lfloor\frac{n}{m}\rfloor -& \lfloor\frac{n\mod m}{m}\rfloor \\
++\lfloor\frac{x + 2n\mod n}{m}\rfloor &+ \lfloor\frac{2n}{m}\rfloor -& \lfloor\frac{2n\mod m}{m}\rfloor \\
+\vdots & \vdots  & \vdots \\
++\lfloor\frac{x + (m-1)n\mod n}{m}\rfloor &+ \lfloor\frac{(n-1)n}{m}\rfloor -& \lfloor\frac{(m-1)n\mod m}{m}\rfloor 
+\end{aligned}
+```
+
+当我们用较小的 $m$ 做试验时，这三列分别对应得到了：$a\lfloor\frac{x}{a}\rfloor, bn, c$。
+
+尤其是，我们能看出 $b$ 是怎么来的。第二列是一个等差数列，它的和我们是知道的 —— 等于首项与末项的平均值，再乘以项数：
+```math
+frac{1}{2}(0 + frac{(m-1)n}{m})\cdot m = frac{(m-1)n}{2}.
+```
+
+于是我们之前猜测的 $b=(m−1)/2$ ​就得到了验证。
 
 
 

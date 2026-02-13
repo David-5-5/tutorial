@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-// 动态规划 - 多重背包
+// 动态规划 - 分组背包
 class Solution {
 public:
     int numRollsToTarget(int n, int k, int target) {

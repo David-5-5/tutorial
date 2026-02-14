@@ -34,6 +34,7 @@ public:
     int minCostConnectPoints(vector<vector<int>>& points) {
         // 自行解答， 未复习最小生成算法，使用 UnionFind 模板结合优先队列，
         // 寻找代价最小的 n - 1 条边。
+        // 与 kruskal 一致
         int n = points.size();
         priority_queue<tuple<int, int, int>, vector<tuple<int, int, int>>, greater<>> pq;
 
@@ -53,4 +54,26 @@ public:
         }
         return ans;
     }
+
+    int minCostConnectPoints2(vector<vector<int>>& points) {
+        // 自行解答 kruskal using vector instead of priority queue
+        int n = points.size();
+        vector<tuple<int, int, int>> edges;
+
+        for (int i=1; i<n; i++) for (int j=0; j<i; j++) {
+            int cost = abs(points[i][0]-points[j][0]) + abs(points[i][1]-points[j][1]);
+            edges.emplace_back(cost, i, j);
+        }
+
+        sort(edges.begin(), edges.end());
+        UnionFind uf(n);
+
+        int ans = 0, used = 0;
+        for (auto &[c, x, y]: edges) {
+            if (used == n-1) break;
+            if (uf.is_same(x, y)) continue;
+            uf.merge(x, y); ans += c; used ++;
+        }
+        return ans;
+    }    
 };

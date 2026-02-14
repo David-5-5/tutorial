@@ -75,5 +75,34 @@ public:
             uf.merge(x, y); ans += c; used ++;
         }
         return ans;
+    } 
+
+    int minCostConnectPoints3(vector<vector<int>>& points) {
+        // PRIM with priority queue
+        int n = points.size();
+        vector<vector<pair<int,int>>> g(n);
+
+        for (int i=1; i<n; i++) for (int j=0; j<i; j++) {
+            int cost = abs(points[i][0]-points[j][0]) + abs(points[i][1]-points[j][1]);
+            g[i].emplace_back(cost, j); g[j].emplace_back(cost, i);
+        }
+
+        vector<int> dis(n, INT_MAX); dis[0] = 0;
+        vector<bool> used(n);
+        priority_queue<pair<int, int>, vector<pair<int, int>>, greater<>> pq;
+        pq.emplace(0, 0);
+
+        int ans = 0, cnt = 0;
+        while (cnt < n) {
+            auto [w, u] = pq.top(); pq.pop();
+            if (used[u]) continue;   // cutting diff from dijstra w > dis[u]
+            ans += w; cnt ++; used[u] = true;
+            for (auto& [w_v, v]: g[u]) if (!used[v]){
+                dis[v] = min(dis[v], w_v);
+                pq.emplace(dis[v], v);
+            }
+        }
+
+        return ans;
     }    
 };

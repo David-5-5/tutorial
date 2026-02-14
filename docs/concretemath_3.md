@@ -95,7 +95,7 @@ $x$ 与 $\lfloor x\rfloor$ 之间的差值称为 $x$ 的小数部分，它在应
 
 如果我们试图借助微积分证明 $\lfloor\sqrt{\lfloor x\rfloor}\rfloor = \lfloor\sqrt{x}\rfloor$，我们可能会先将 x分解成整数部分和小数部分： $\lfloor x\rfloor+\{x\}=n+\theta$ ，然后利用二项式定理展开平方根： $(n+\theta)^{1/2} = n^{1/2} + n^{−1/2}\theta/2 − n^{−3/2}\theta^2/8 +\cdots$。但这种方法会变得相当复杂。
 
-使用我们开发的工具要容易得多。这里有一个可能的策略：某种方式下，先去掉外层的 $floor$ 函数和平方根 $\lfloor\sqrt{\lfloor x\rfloor}\rfloor$，再移除内层的 $floor$ 函数，然后把外层的值加回去，得到 $\lfloor\sqrt{x}\rfloor$。好的。我们令 $m=\lfloor\sqrt{\lfloor x\rfloor}\rfloor$，并调用(3.5(a))，得到 $m\le \lfloor\sqrt{x}\rfloor<m+1$。这样就去掉了外层的 $floor$ 括号，且没有丢失任何信息。由于这三个表达式都是非负的，我们对两边同时平方，得到 $m^2\le\sqrt{x}<(m + 1)^2$。这一步消除了平方根。接下来，我们利用(3.7(d))处理左边不等式，用(3.7(a))处理右边不等式，从而去掉 $floor$ 函数： $m^2\le x<(m + 1)^2$。现在，只需简单地反向推导，取平方根即可得到 $m\le \sqrt{x}<m+1$，再调用(3.5(a))，得到 $m=\lfloor\sqrt{x}\rfloor$。因此，$\lfloor\sqrt{\lfloor x\rfloor}\rfloor = m = \lfloor\sqrt{x}\rfloor$；该断言成立。类似地，我们也可以证明
+使用我们开发的工具要容易得多。这里有一个可能的策略：某种方式下，先去掉外层的 $floor$ 函数和平方根 $\lfloor\sqrt{\lfloor x\rfloor}\rfloor$，再移除内层的 $floor$ 函数，然后把外层的值加回去，得到 $\lfloor\sqrt{x}\rfloor$。好的。我们令 $m=\lfloor\sqrt{\lfloor x\rfloor}\rfloor$，并调用(3.5(a))，得到 $m\le \sqrt{\lfloor x\rfloor}<m+1$。这样就去掉了外层的 $floor$ 括号，且没有丢失任何信息。由于这三个表达式都是非负的，我们对两边同时平方，得到 $m^2\le\sqrt{x}<(m + 1)^2$。这一步消除了平方根。接下来，我们利用(3.7(d))处理左边不等式，用(3.7(a))处理右边不等式，从而去掉 $floor$ 函数： $m^2\le x<(m + 1)^2$。现在，只需简单地反向推导，取平方根即可得到 $m\le \sqrt{x}<m+1$，再调用(3.5(a))，得到 $m=\lfloor\sqrt{x}\rfloor$。因此，$\lfloor\sqrt{\lfloor x\rfloor}\rfloor = m = \lfloor\sqrt{x}\rfloor$；该断言成立。类似地，我们也可以证明
 ```math
 \lceil\sqrt{\lceil x\rceil}\rceil = \lceil\sqrt{x}\rceil, real\ x\ge 0
 ```
@@ -110,7 +110,7 @@ f(x) = integer \implies x = integer.
 \lfloor f(x)\rfloor = \lfloor f(\lfloor x\rfloor)\rfloor, \lceil f(x)\rceil = \lceil f(\lceil x\rceil)\rceil \tag{3.10}
 ```
 
-无论何时，当 $f(x), f(如果 m 和 n 是整数，且分母 n 为正数。例如，令 m = 0；我们有 ⌊⌊bx/10c/10⌋/10⌋ = bx/1000c。连续三次除以 10 并舍弃小数部分，等同于除以 1000 并丢弃余数。) , f(\lceil x\rceil)$ 都有定义时，我们来证明这一关于向上取整的一般性质。由于我们之前已经讨论过向下取整，而且向下取整的证明几乎相同，因此我们先证明这一性质。如果 $x = \lceil x\rceil$，则无需证明。否则， $x < \lceil x\rceil$，并且由于 $f$ 是递增的，所以 $f(x) < f(\lceil x\rceil)$。因此， $\lceil f(x)\rceil\le \lceil f(\lceil x\rceil)\rceil$，因为 $\lceil\rceil$ 是非递减的。如果 $\lceil f(x)\rceil< \lceil f(\lceil x\rceil)\rceil$，则必然存在一个数 $y$，使得 $x \le y < \lceil x\rceil$ 且 $f(y) = \lceil f(x)\rceil$，这是因为 $f$ 是连续的。根据 $f$ 的特殊性质，这个 $y$ 必然是整数。然而，$x$ 和 $\lceil x\rceil$ 之间不可能存在严格介于二者之间的整数。这种矛盾表明，我们必须有 $\lceil f(x)\rceil = \lceil f(\lceil x\rceil)\rceil$。
+无论何时，当 $f(x), f(\lfloor x\rfloor) , f(\lceil x\rceil)$ 都有定义时，我们来证明这一关于向上取整的一般性质。由于我们之前已经讨论过向下取整，而且向下取整的证明几乎相同，因此我们先证明这一性质。如果 $x = \lceil x\rceil$，则无需证明。否则， $x < \lceil x\rceil$，并且由于 $f$ 是递增的，所以 $f(x) < f(\lceil x\rceil)$。因此， $\lceil f(x)\rceil\le \lceil f(\lceil x\rceil)\rceil$，因为 $\lceil\rceil$ 是非递减的。如果 $\lceil f(x)\rceil< \lceil f(\lceil x\rceil)\rceil$，则必然存在一个数 $y$，使得 $x \le y < \lceil x\rceil$ 且 $f(y) = \lceil f(x)\rceil$，这是因为 $f$ 是连续的。根据 $f$ 的特殊性质，这个 $y$ 必然是整数。然而，$x$ 和 $\lceil x\rceil$ 之间不可能存在严格介于二者之间的整数。这种矛盾表明，我们必须有 $\lceil f(x)\rceil = \lceil f(\lceil x\rceil)\rceil$。
 
 该定理的一个重要特例值得明确指出：
 ```math
@@ -302,7 +302,7 @@ frac{1}{\sqrt{2}} + \frac{1}{2 + \sqrt{2}} = 1,
 对于所有 $n> 0$，我们赢了，因为这两个非整数的分数部分相加等于整数 $n + 1$。这便是一个划分。
 
 ## 3.3 FLOOR/CEILING RECURRENCES
-地板和天花板为研究增添了有趣的新维度关于递归关系。让我们首先看看递归
+$floor$ 和 $ceiling$ 为研究增添了有趣的新维度关于递归关系。让我们首先看看递归
 ```math
 \begin{aligned}
 K_0 &= 1; \\

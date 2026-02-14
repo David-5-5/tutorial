@@ -5,19 +5,21 @@ using namespace std;
 class Solution {
 public:
     long long minOperations(vector<vector<int>>& queries) {
+        // 自行解答
         auto count = [](int l, int r) -> long long {
-            long long mx = r / 4 + 1;
-            long long n = r - l + 1;
-            int a = (l+3) / 4, b = r/4 - 1;
-            n += (a * 4 - l) * (a-1);           // Append begin
-            n += (r - (b+1) * 4 + 1) * (b + 1); // Append end
-            n += (a + b) * (b-a+1) * 2;         // Append middle
+            long long mn = floor(log2(l)/2) + 1, mx = floor(log2(r)/2) + 1;
+            long long n = 0;
+            for (int i=mn; i<=mx; i++) {
+                n += 1LL * (min((int)pow(4, i)-1, r) - max((int)pow(4,i-1), l) + 1) * i;
+            }
             return max((n + 1)/2, mx);
         };
 
         long long ans = 0;
         for (auto & q: queries) ans += count(q[0], q[1]);
 
-        return ans;
+        return ans;    
     }
+
+
 };

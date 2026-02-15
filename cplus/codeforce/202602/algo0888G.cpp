@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-const int high = 30;
+const int high = 29;
 struct Node {
     Node* son[2]{};
     int cnt = 0;
@@ -12,7 +12,7 @@ class UnionFind {                   // 并查集模板
     vector<int> fa;
 public:
     UnionFind(int n): fa(n) {
-        ranges::iota(fa, 0);
+        iota(fa.begin(), fa.end(), 0);
     }
 
     int find(int x) {
@@ -99,13 +99,18 @@ public:
             }
 
             // Join the cc
-            for (auto &[x, cost_v]: dis) {
+            for (auto [x, cost_v]: dis) {
                 int y = uf.find(cost_v.second);
-                if (uf.is_same(x, y)) continue;   // 已经在同一连通块内
+                if (!cc.count(x) || uf.is_same(x, y)) continue;   // It's same
                 ans += cost_v.first;  
                 // 启发式合并
-                uf.merge(x, y); cc[y].insert(cc[y].end(), cc[x].begin(), cc[x].end());
-                cc.erase(x);    // 移除连通块 x
+                if (cc[x].size() < cc[y].size()) {
+                    uf.merge(x, y); cc[y].insert(cc[y].end(), cc[x].begin(), cc[x].end());
+                    cc.erase(x);    // 移除连通块 x
+                } else {
+                    uf.merge(y, x); cc[x].insert(cc[x].end(), cc[y].begin(), cc[y].end());
+                    cc.erase(y);    // 移除连通块 x
+                }
             }
         }
         

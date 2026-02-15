@@ -2,11 +2,16 @@
 using namespace std;
 
 const int high = 29;
+
+const int MAX_TRIE_NODE = 30 * 200000 + 10;
+
 struct Node {
-    Node* son[2]{};
+    int son[2];  // int索引代替指针，消除动态内存开销
     int cnt = 0;
-    unordered_set<int> ids;   // id of cc
-};
+    int id = -1;
+    Node() { son[0] = son[1] = -1; }
+} trie[MAX_TRIE_NODE];
+int trie_idx = 0;
 
 class UnionFind {                   // 并查集模板
     vector<int> fa;
@@ -37,41 +42,49 @@ public:
 
 class Solution {
 private:
-    Node* root = new Node();
+    void resetRoot() {
+        trie_idx = 0;
+        trie[trie_idx] = Node();
+    }
     void insert(int val, int id) {
-        auto node = root;
-        node->cnt ++;
+        int node = 0;
+        trie[node].cnt ++;
         for (int i=high; i>=0; --i) {
             int v = (val >> i) & 1;
-            if (node->son[v] == nullptr) node->son[v] = new Node();
-            node = node->son[v]; node->cnt ++;
+            if (trie[node].son[v] == -1) {
+                trie_idx++;
+                trie[trie_idx] = Node();
+                trie[node].son[v] = trie_idx;
+            }
+            node = trie[node].son[v];
+            trie[node].cnt ++;
         }
-        node->ids.insert(id);
+        trie[node].id = id;
     }
 
-    void remove(int val, int id) {
-        auto node = root;
-        node->cnt --;
+    void remove(int val) {
+        int node = 0;
+        trie[node].cnt --;
         for (int i=high; i>=0; --i) {
             int v = (val >> i) & 1;
-            node = node->son[v]; node->cnt --;
-            // if (node->cnt == 0) {delete node; break;}
+            node = trie[node].son[v];
+            trie[node].cnt --;
         }
-        node->ids.erase(id);
     }
 
     pair<int, int> min_xor(int val) {
         int res = 0;
-        auto node = root;
+        int node = 0;
         for (int i=high; i>=0; --i) {
             int v = (val >> i) & 1;
-            if (node->son[v] != nullptr && node->son[v]->cnt) 
-                node = node->son[v];
-            else if (node->son[v^1] != nullptr && node->son[v^1]->cnt){
-                res |= 1 << i; node = node->son[v^1];
-            }else return {-1, -1}; // 仅当字典树中元素为空时
+            if (trie[node].son[v] != -1 && trie[trie[node].son[v]].cnt) 
+                node = trie[node].son[v];
+            else if (trie[node].son[v^1] != -1 && trie[trie[node].son[v^1]].cnt){
+                res |= 1 << i; 
+                node = trie[node].son[v^1];
+            }else return {-1, -1};
         }
-        return {res, *node->ids.begin()};
+        return {res, trie[node].id};
     } 
 
 public:
@@ -79,38 +92,40 @@ public:
         // Boruvka MST
         UnionFind uf(n);
         // key: fa in UnionFind value: vector all x, uf.find(x) == fa
-        unordered_map<int, vector<int>> cc; // Connected Component
-
+        unordered_map<int, list<int>> cc; // Connected Component
+        unordered_map<int, int> w2id;
+        resetRoot(); 
         for (int i=0; i<n; i++) {
-            cc[i].emplace_back(i);  // Each vectex is a cc
-            insert(nums[i], i);
+            if (w2id.count(nums[i])) {
+                auto x = w2id[nums[i]]; // x is id of cc
+                // cc[x].emplace_back(i);  // Each vectex is a cc
+                uf.merge(i, x);
+            } else {
+                w2id[nums[i]] = i; cc[i].emplace_back(i);  // Each vectex is a cc
+                insert(nums[i], i);
+            }
         }
         
         long long ans = 0;
         while (cc.size() > 1) {
             unordered_map<int, pair<int, int>> dis; // Each min dis
             for (auto &[x, vert]: cc) {
-                for (auto &u: vert) remove(nums[u], u); // delete vectices of cc from Trie
+                for (auto &u: vert) remove(nums[u]); // delete vectices of cc from Trie
                 for (auto &u: vert) {                   // Find min weight to other cc
-                    auto cost_v = min_xor(nums[u]);
-                    if (!dis.count(x) || dis[x].first > cost_v.first) dis[x] = cost_v;
+                    auto weight = min_xor(nums[u]);
+                    if (!dis.count(x) || dis[x].first > weight.first) dis[x] = weight;
                 }
                 for (auto &u: vert) insert(nums[u], u); // insert vertices fo cc into Trie
             }
 
             // Join the cc
-            for (auto [x, cost_v]: dis) {
-                int y = uf.find(cost_v.second);
+            for (auto [x, weight]: dis) {
+                int y = uf.find(weight.second);
                 if (!cc.count(x) || uf.is_same(x, y)) continue;   // It's same
-                ans += cost_v.first;  
-                // 启发式合并
-                if (cc[x].size() < cc[y].size()) {
-                    uf.merge(x, y); cc[y].insert(cc[y].end(), cc[x].begin(), cc[x].end());
-                    cc.erase(x);    // 移除连通块 x
-                } else {
-                    uf.merge(y, x); cc[x].insert(cc[x].end(), cc[y].begin(), cc[y].end());
-                    cc.erase(y);    // 移除连通块 x
-                }
+                ans += weight.first;  
+                // Merge
+                uf.merge(x, y); cc[y].splice(cc[y].end(), cc[x]);
+                cc.erase(x);    // 移除连通块 x
             }
         }
         
@@ -120,6 +135,9 @@ public:
 
 
 int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
     int n; cin >> n; vector<int> a(n);
     for (int i=0; i<n; i++) cin>>a[i];
 

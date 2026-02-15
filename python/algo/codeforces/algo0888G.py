@@ -1,130 +1,148 @@
-class Node:
-    def __init__(self):
-        self.son = [None, None]  # 0 和 1 两个子节点
-        self.cnt = 0             # 经过该节点的数字数量
-        self.ids = set()         # 存储连通块的 id
+import sys
+from collections import defaultdict, deque
 
+# 对应C++的high常量
+HIGH = 29
+# 对应C++的MAX_TRIE_NODE（Python用动态结构，无需预分配）
+trie = []
+trie_idx = 0
+
+# 并查集类（完全对齐你的UnionFind）
 class UnionFind:
-    """并查集类，用于维护连通分量"""
     def __init__(self, n):
-        self.fa = list(range(n))  # 父节点数组
+        self.fa = list(range(n))  # iota的Python实现
     
     def find(self, x):
-        """查找x的根节点，并进行路径压缩"""
         if self.fa[x] != x:
-            self.fa[x] = self.find(self.fa[x])
+            self.fa[x] = self.find(self.fa[x])  # 路径压缩
         return self.fa[x]
     
-    def merge(self, from_node, to_node):
-        """合并两个节点所在的集合"""
-        x = self.find(from_node)
-        y = self.find(to_node)
+    def merge(self, from_, to):
+        x = self.find(from_)
+        y = self.find(to)
         if x != y:
             self.fa[x] = y
     
     def is_same(self, x, y):
-        """判断两个节点是否在同一集合"""
         return self.find(x) == self.find(y)
 
+# Solution类（完全对齐你的C++代码）
 class Solution:
-    def __init__(self):
-        self.high = 30  # 数字的最高位（0~30 覆盖 int 范围）
-        self.root = Node()
+    def resetRoot(self):
+        global trie, trie_idx
+        trie_idx = 0
+        # 初始化根节点：[son0, son1, cnt, id]
+        trie = [[-1, -1, 0, -1]]
     
     def insert(self, val, id_):
-        """将数字val（带id_）插入字典树"""
-        node = self.root
-        node.cnt += 1
-        for i in range(self.high, -1, -1):
-            v = (val >> i) & 1  # 获取第i位的二进制值
-            if not node.son[v]:
-                node.son[v] = Node()
-            node = node.son[v]
-            node.cnt += 1
-        node.ids.add(id_)
-    
-    def remove(self, val, id_):
-        """从字典树中移除数字val（带id_）"""
-        node = self.root
-        node.cnt -= 1
-        for i in range(self.high, -1, -1):
+        global trie, trie_idx
+        node = 0
+        trie[node][2] += 1  # cnt++
+        for i in range(HIGH, -1, -1):
             v = (val >> i) & 1
-            node = node.son[v]
-            node.cnt -= 1
-        node.ids.discard(id_)  # discard避免key不存在报错
+            if trie[node][v] == -1:
+                trie_idx += 1
+                trie.append([-1, -1, 0, -1])  # 新建节点
+                trie[node][v] = trie_idx
+            node = trie[node][v]
+            trie[node][2] += 1
+        trie[node][3] = id_  # 设置id
+    
+    def remove(self, val):
+        global trie, trie_idx
+        node = 0
+        trie[node][2] -= 1  # cnt--
+        for i in range(HIGH, -1, -1):
+            v = (val >> i) & 1
+            node = trie[node][v]
+            trie[node][2] -= 1
     
     def min_xor(self, val):
-        """查找与val异或最小的数字，返回(异或值, 对应id)"""
         res = 0
-        node = self.root
-        for i in range(self.high, -1, -1):
+        node = 0
+        for i in range(HIGH, -1, -1):
             v = (val >> i) & 1
-            # 优先走相同位的子节点（异或值更小）
-            if node.son[v] and node.son[v].cnt > 0:
-                node = node.son[v]
-            elif node.son[v ^ 1] and node.son[v ^ 1].cnt > 0:
-                res |= 1 << i  # 异或位为1，累计结果
-                node = node.son[v ^ 1]
+            # 检查son[v]是否存在且cnt>0
+            if trie[node][v] != -1 and trie[trie[node][v]][2] > 0:
+                node = trie[node][v]
+            elif trie[node][v^1] != -1 and trie[trie[node][v^1]][2] > 0:
+                res |= (1 << i)
+                node = trie[node][v^1]
             else:
-                return (-1, -1)  # 字典树为空
-        # 返回异或值和第一个id（set转list取第一个）
-        return (res, next(iter(node.ids)))
+                return (-1, -1)
+        return (res, trie[node][3])
     
     def xorMst(self, n, nums):
-        """计算XOR最小生成树的总权重"""
         uf = UnionFind(n)
-        # 初始化连通分量：每个节点独立为一个连通块
-        cc = {}
+        # 对应C++的unordered_map<int, list<int>> cc
+        cc = defaultdict(deque)  # 用deque模拟list，支持高效拼接
+        w2id = dict()  # 对应C++的unordered_map<int, int> w2id
+        self.resetRoot()
+        
         for i in range(n):
-            cc[i] = [i]
-            self.insert(nums[i], i)
+            if nums[i] in w2id:
+                x = w2id[nums[i]]
+                uf.merge(i, x)
+            else:
+                w2id[nums[i]] = i
+                cc[i].append(i)
+                self.insert(nums[i], i)
         
         ans = 0
-        # 直到所有节点合并为一个连通块
         while len(cc) > 1:
-            dis = {}  # 存储每个连通块的最小异或边 (key: 连通块根, value: (异或值, 目标id))
+            dis = dict()  # 对应C++的unordered_map<int, pair<int, int>>
             # 遍历每个连通块
-            for x in list(cc.keys()):  # 用list避免遍历中字典修改报错
+            for x in list(cc.keys()):  # list(keys())避免遍历中修改字典
                 vert = cc[x]
-                # 临时移除当前连通块的所有节点（避免和自身比较）
+                # 删除当前连通块的所有节点
                 for u in vert:
-                    self.remove(nums[u], u)
-                # 查找当前连通块到其他连通块的最小异或边
+                    self.remove(nums[u])
+                # 找最小异或边
                 for u in vert:
-                    cost_v = self.min_xor(nums[u])
-                    if cost_v[0] == -1:
+                    weight = self.min_xor(nums[u])
+                    if weight[0] == -1:
                         continue
-                    # 更新当前连通块的最小边
-                    if x not in dis or cost_v[0] < dis[x][0]:
-                        dis[x] = cost_v
-                # 恢复当前连通块的节点到字典树
+                    if x not in dis or weight[0] < dis[x][0]:
+                        dis[x] = weight
+                # 插回当前连通块的所有节点
                 for u in vert:
                     self.insert(nums[u], u)
             
             # 合并连通块
-            merged = set()  # 记录已合并的连通块，避免重复处理
+            to_erase = []
             for x in dis:
-                if x in merged:
+                if x not in cc:
                     continue
-                cost, v_id = dis[x]
-                y = uf.find(v_id)
+                weight = dis[x]
+                y = uf.find(weight[1])
                 if uf.is_same(x, y):
                     continue
-                # 累加边权，合并连通块
-                ans += cost
+                ans += weight[0]
+                # 合并连通块（对应C++的splice）
                 uf.merge(x, y)
-                # 合并连通块的节点列表
-                cc[y].extend(cc[x])
-                # 移除被合并的连通块
+                cc[y].extend(cc[x])  # 模拟splice
+                to_erase.append(x)
+            
+            # 移除合并后的连通块
+            for x in to_erase:
                 del cc[x]
-                merged.add(x)
         
         return ans
 
-if __name__ == "__main__":
-    import sys
+# 主函数（对齐你的main）
+def main():
+    # 加速输入（对应C++的ios::sync_with_stdio(false)）
     input = sys.stdin.read().split()
-    n = int(input[0])
-    a = list(map(int, input[1:n+1]))
-    # 每次运行都新建Solution实例（避免字典树残留）
-    print(Solution().xorMst(n, a))
+    ptr = 0
+    n = int(input[ptr])
+    ptr += 1
+    a = []
+    for _ in range(n):
+        a.append(int(input[ptr]))
+        ptr += 1
+    
+    sol = Solution()
+    print(sol.xorMst(n, a))
+
+if __name__ == "__main__":
+    main()

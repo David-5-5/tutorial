@@ -131,16 +131,16 @@ f(x) = integer \implies x = integer.
 
 **Level 2**. 给定一个明确的集合 $X$ 和一个明确的性质 $P(x)$，证明对于所有 $x\in X$，$P(x)$ 都为真。例如，“证明对于所有实数 $x, \lfloor x\rfloor\le x$。” 再次，这个问题涉及寻找一个证明，但这次的证明必须是通用的。我们是在做代数，而不仅仅是算术。
 
-**Level 3**. 给定一个显式集合 $X$ 和一个显式性质 $P(x)$，证明 或者反证，使得 $P(x)$ 对所有 $x\in X$ 成立。例如，“证明或反证：对于所有实数 $x\ge 0, \lceil\sqrt{\lfloor x\rfloor}\rceil=\lceil\sqrt{x}\rceil$。”这里存在额外一层不确定性；结果可能朝任何方向发展。这更贴近数学家日常面对的真实情况：那些被写进书里的断言往往是正确的，但新出现的命题则必须以怀疑的眼光看待。如果该陈述是错误的，我们的任务就是找到一个反例；如果该陈述是正确的，我们就必须像第二级那样找到一个证明。
+**Level 3**. 给定一个显式集合 $X$ 和一个显式性质 $P(x)$，证明 或者反证，使得 $P(x)$ 对所有 $x\in X$ 成立。例如，“证明或反证：对于所有实数 $x\ge 0, \lceil\sqrt{\lfloor x\rfloor}\rceil=\lceil\sqrt{x}\rceil$。”这里存在额外一层不确定性；结果可能朝任何方向发展。这更贴近数学家日常面对的真实情况：那些被写进书里的断言往往是正确的，但新出现的命题则必须以怀疑的眼光看待。如果该陈述是错误的，我们的任务就是找到一个反例；如果该陈述是正确的，我们就必须像第2级那样找到一个证明。
 
 
-**Level 4**. 给定一个明确的集合 $X$ 和一个明确的性质 $P(x)$，求一个 必要且充分条件 $Q(x)$，使得 $P(x)$ 为真。例如，“找出一个必要且充分的条件，使得 $\lfloor x\rfloor\le \lceil x\rceil$。”这个问题就是要找到 $Q$，使得 $P(x)\iff Q(x)$。当然，总有一个平凡的答案；我们可以取 $Q(x) = P(x)$。但隐含的要求是找到一个尽可能简单的条件。要发现一个简单的、可行的条件，需要一定的创造性。（例如，在本例中，“$\lfloor x\rfloor\le \lceil x\rceil\iff x $ 是整数。”）寻找 $Q(x)$ 所需的额外发现环节使这类问题更加困难，但也更贴近数学家在“现实世界”中所必须面对的情形。最后，当然，必须给出证明，说明 $P(x)$ 为真当且仅当 $Q(x)$ 为真。
+**Level 4**. 给定一个明确的集合 $X$ 和一个明确的性质 $P(x)$，求一个充分必要条件 $Q(x)$，使得 $P(x)$ 为真。例如，“找出一个充分必要的条件，使得 $\lfloor x\rfloor\le \lceil x\rceil$。”这个问题就是要找到 $Q$，使得 $P(x)\iff Q(x)$。当然，总有一个平凡的答案；我们可以取 $Q(x) = P(x)$。但隐含的要求是找到一个尽可能简单的条件。要发现一个简单的、可行的条件，需要一定的创造性。（例如，在本例中，“$\lfloor x\rfloor\ge \lceil x\rceil\iff x $ 是整数。”）寻找 $Q(x)$ 所需的额外发现环节使这类问题更加困难，但也更贴近数学家在“现实世界”中所必须面对的情形。最后，当然，必须给出证明，说明 $P(x)$ 为真当且仅当 $Q(x)$ 为真。
 
 **Level 5**. 给定一个明确的集合 $X$，找出其元素的一个有趣性质 $P(x)$。现在我们进入了纯粹研究的可怕领域，学生们可能会认为这里一片混乱。这可是真正的数学。教科书作者很少敢出第5级的问题。
 
-闲话到此结束。但让我们把刚才讨论的最后一个问题从第3级转换到第4级：什么条件是必要且充分的，使得 $\lceil\sqrt{\lfloor x\rfloor}\rceil=\lceil\sqrt{x}\rceil$？我们已经观察到，当 $x = 3.142$时等式成立，但当 $x = 1.618$ 时则不成立；进一步实验表明，当 $x$ 介于 9 和 10 之间时，等式同样不成立。哦哈。没错。我们发现，只要 $m^2 < x < m^{2+1}$，就会出现反例，因为此时左边得到 $m$，而右边则是 $m+1$。在所有其他情况下，即当 $sqrt{x}$ 有定义时——也就是当 $x=0\ or\ m^2+1\le x\le (m+1)^2$ 时，等式都能成立。因此，以下陈述便是等式的必要且充分条件：要么 $x$ 是整数，要么 $sqrt{\lfloor x\rfloor}$ 不是实数。
+闲话到此结束。但让我们把刚才讨论的最后一个问题从第3级转换到第4级：什么条件是必要且充分的，使得 $\lceil\sqrt{\lfloor x\rfloor}\rceil=\lceil\sqrt{x}\rceil$？我们已经观察到，当 $x = 3.142$时等式成立，但当 $x = 1.618$ 时则不成立；进一步实验表明，当 $x$ 介于 9 和 10 之间时，等式同样不成立。哦哈。没错。我们发现，只要 $m^2 < x < m^2+1$，就会出现反例，因为此时左边得到 $m$，而右边则是 $m+1$。在所有其他情况下，即当 $\sqrt{x}$ 有定义时——也就是当 $x=0\ or\ m^2+1\le x\le (m+1)^2$ 时，等式都能成立。因此，以下陈述便是等式的必要且充分条件：要么 $x$ 是整数，要么 $\sqrt{\lfloor x\rfloor}$ 不是实数。
 
-对于我们的下一个问题，让我们来考虑一种由C. A. R. Hoare和Lyle Ramshaw提出的、用于表示实数轴上区间的新颖便捷的记法： $[\alpha\cdots \beta]$ 表示实数集合 $x$，使得 $\alpha\le x \le\beta$。这个集合被称为*闭区间*，因为它包含了两个端点 $\alpha$ 和 $\beta$。不包含任何端点的区间，用 $(\alpha\cdots \beta)$ 表示，由所有满足 $\alpha< x< \beta$ 的 $x$ 组成；这被称为*开区间*。而区间 $[\alpha\cdots \beta)$ 和 $(\alpha\cdots \beta)$，它们只包含一个端点，定义方式类似，并被称为*半开区间*。
+对于我们的下一个问题，让我们来考虑一种由 C. A. R. Hoare 和 Lyle Ramshaw 提出的、用于表示实数轴上区间的新颖便捷的记法： $[\alpha\cdots \beta]$ 表示实数集合 $x$，使得 $\alpha\le x \le\beta$。这个集合被称为*闭区间*，因为它包含了两个端点 $\alpha$ 和 $\beta$。不包含任何端点的区间，用 $(\alpha\cdots \beta)$ 表示，由所有满足 $\alpha< x< \beta$ 的 $x$ 组成；这被称为*开区间*。而区间 $[\alpha\cdots \beta)$ 和 $(\alpha\cdots \beta)$，它们只包含一个端点，定义方式类似，并被称为*半开区间*。
 
 这样的区间里包含多少个整数？半开区间更容易处理，所以我们从它开始。事实上，半开区间几乎总是比开区间或闭区间更 “好用”。例如，它们具有可加性—— 我们可以把半开区间 $[\alpha\cdots \beta)$ 和 $[\beta\cdots \gamma)$ 合并成 $[\alpha\cdots \gamma)$。如果是开区间就行不通，因为点 $\beta$ 会被排除掉；而闭区间也会出问题，因为 $\beta$ 会被算进去两次。
 
@@ -154,7 +154,7 @@ f(x) = integer \implies x = integer.
 
 当 $n$ 是一个整数时，根据（3.7）。右侧的区间具有整数端点，并且包含与左侧区间相同数量的整数，而左侧区间的端点是实数。因此，区间 $[\alpha\cdots \beta)$ 恰好包含 $\lceil\beta\rceil −\lfloor \alpha\rfloor$ 个整数，而 $(\alpha . . \beta]$  包含 $\lfloor\beta\rfloor -\lceil\alpha\rceil$ 个整数。这种情况正是我们实际上希望引入下取整或上取整符号的时候，而不是将其去除。
 
-顺便说一下，有一个记忆技巧可以帮助你记住哪些情况用地板，哪些情况用天花板：半开区间如果包含左端点但不包含右端点（比如 $0\le\theta < 1$），比包含右端点但不包含左端点的区间稍微多一些；而地板比天花板稍微多一些。因此，根据墨菲定律，正确的规则与我们预期的恰恰相反——对于 $[\alpha\cdots \beta)$，用 $ceil$；而对于 $(\alpha\cdots \beta)$，用 $floor$。
+顺便说一下，有一个记忆技巧可以帮助你记住哪些情况用 $floor$，哪些情况用 $ceiling$：半开区间如果包含左端点但不包含右端点（比如 $0\le\theta < 1$），比包含右端点但不包含左端点的区间稍微多一些；而 $floor$ 比 $ceiling$ 稍微多一些。因此，根据墨菲定律(Murphy's Law)，正确的规则与我们预期的恰恰相反——对于 $[\alpha\cdots \beta)$，用 $ceil$；而对于 $(\alpha\cdots \beta]$，用 $floor$。
 
 类似分析表明，闭区间 $[\alpha\cdots \beta]$ 恰好包含 $\lfloor\beta\rfloor−\lceil\alpha\rceil+1$ 个整数，而开区间 $(\alpha\cdots \beta)$ 包含 $\lfloor\beta\rfloor−\lceil\alpha\rceil-1$；但我们对后者施加了额外的限制 $\alpha\ne\beta$，以避免该公式因声称空区间 $(\alpha\cdots \alpha)$ 总共包含 −1 个整数而令人尴尬。总而言之，我们推导出了以下事实：
 ```math
@@ -286,12 +286,12 @@ m\le n \iff m < n+1, integers\ m\ and\ n \tag{3.15}
 ```math
 \lceil\frac{n+1}{\sqrt{2}}\rceil -1 + \lceil\frac{n+1}{2+\sqrt{2}}\rceil -1 = n \\
 \iff \lfloor\frac{n+1}{\sqrt{2}}\rfloor + \lfloor\frac{n+1}{2+\sqrt{2}}\rfloor = n, \qquad by (3.2)\\
-\iff frac{n+1}{\sqrt{2}} - \{\frac{n+1}{\sqrt{2}}\}  + frac{n+1}{2+\sqrt{2}} - \{\frac{n+1}{2+\sqrt{2}}\} = n, \qquad by (3.8)
+\iff \frac{n+1}{\sqrt{2}} - \{\frac{n+1}{\sqrt{2}}\}  + \frac{n+1}{2+\sqrt{2}} - \{\frac{n+1}{2+\sqrt{2}}\} = n, \qquad by (3.8)
 ```
 
 现在一切都变得简单了，因为有了这个简洁的标识。
 ```math
-frac{1}{\sqrt{2}} + \frac{1}{2 + \sqrt{2}} = 1,
+\frac{1}{\sqrt{2}} + \frac{1}{2 + \sqrt{2}} = 1,
 ```
 
 我们的条件归结为测试是否
@@ -306,7 +306,7 @@ $floor$ 和 $ceiling$ 为研究增添了有趣的新维度关于递归关系。�
 ```math
 \begin{aligned}
 K_0 &= 1; \\
-K_{n+1} &= 1 + min(2K_{\lfloor n/2\rfloor}, 3K_{\lfloor n/3\rfloor}), for\ n\ge 0. \tag{3.14}
+K_{n+1} &= 1 + min(2K_{\lfloor n/2\rfloor}, 3K_{\lfloor n/3\rfloor}), for\ n\ge 0. \tag{3.16}
 \end{aligned}
 ```
 

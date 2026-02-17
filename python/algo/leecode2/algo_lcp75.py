@@ -1,60 +1,70 @@
+from bisect import bisect_left
+from cmath import inf
 from typing import List
-from functools import lru_cache
+
 class Solution:
     def challengeOfTheKeeper(self, maze: List[str]) -> int:
-        n, m = len(maze), len(maze[0])
-        distance = [float("inf")] * (n*m)
+        n = len(maze)
+        dis = [[inf] * n for _ in range(n)]
 
-        begin, end = (0, 0), (0, 0)
+        st, end = (0, 0), (0, 0)
         for i in range(n):
-            for j in range(m):
+            for j in range(n):
                 if maze[i][j] == 'S':
-                    begin = (i, j)
+                    st = (i, j)
                 if maze[i][j] == 'T':
                     end = (i, j)
-        visited = set()
+
+        q = [(end[0], end[1])]
+        step, dis[end[0]][end[1]] = 1, 0
+        while q:
+            tmp = q
+            q = []
+            for x, y in tmp:
+                for _x, _y in [(0,1),(0,-1),(-1,0),(1,0)]:
+                    if 0<=x+_x<n and 0<=y+_y<n and maze[x+_x][y+_y]!='#' \
+                    and dis[x+_x][y+_y] == inf:
+                        dis[x+_x][y+_y] = step
+                        q.append((x+_x, y+_y))
+            step += 1
         
-        todo = [(end[0], end[1], 0)]
-        visited.add(end[0]*m+end[1])
-        while todo:
-            x, y, dist = todo.pop(0)
-            distance[x*m+y] = dist
-            for _x, _y in [(0,1),(0,-1),(-1,0),(1,0)]:
-                if 0<=x+_x<n and 0<=y+_y<m and maze[x+_x][y+_y]!='#' \
-                    and (x+_x)*m+y+_y not in visited:
-                    visited.add((x+_x)*m+y+_y)
-                    todo.append((x+_x, y+_y, dist+1))
-        
-        if distance[begin[0]*m+begin[1]] == float("inf"): return -1
-        if distance[begin[0]*m+begin[1]] == 1: return 0
+        if dis[st[0]][st[1]] == inf: return -1
+        if dis[st[0]][st[1]] == 1: return 0
         
         def mirror_len(x, y):
             mirror = 0
-            if maze[x][y] == '.' and maze[x][m-1-y] == '.':
-                mirror = max(mirror, distance[x*m+m-y-1])
-            if maze[x][y] == '.' and maze[n-x-1][y] == '.':
-                mirror = max(mirror, distance[(n-x-1)*m+y])            
+            if maze[x][y] != '.':return mirror
+            if  maze[x][n-1-y] != '#':
+                mirror = max(mirror, dis[x][n-y-1])
+            if maze[n-x-1][y] != '#':
+                mirror = max(mirror, dis[n-x-1][y])
             return mirror
 
-        tranfer = [float("inf")] * (n*m)
-        todo = [(end[0], end[1], 0)]
-        while todo:
-            x, y, t_len = todo.pop(0)
-            if t_len < tranfer[x*m+y]:
-                tranfer[x*m+y] = t_len
+        def check(mid: int)  -> bool:
+            vis = [[False]*n for _ in range(n)]
+            def dfs(x: int, y: int) -> bool:
+                if maze[x][y] == '.' and mirror_len(x, y) > mid: return False
+                if x == end[0] and y == end[1]: return True
                 for _x, _y in [(0,1),(0,-1),(-1,0),(1,0)]:
-                    if 0<=x+_x<n and 0<=y+_y<m and maze[x+_x][y+_y] in ['S', '.']:
-                        todo.append((x+_x, y+_y, max(t_len, mirror_len(x+_x, y+_y))))
+                    if 0<=x+_x<n and 0<=y+_y<n and maze[x+_x][y+_y]!='#' \
+                        and not vis[x+_x][y+_y]:
+                        vis[x+_x][y+_y] = True
+                        if dfs(x+_x, y+_y): return True
+                return False
+            return dfs(st[0], st[1])
 
-        # ans = dfs2(begin[0], begin[1])
-        ans = tranfer[begin[0]*m + begin[1]]
-        # ans = min(ans1, ans2)
-        return -1 if ans == float("inf") else ans
+        # l, r = 0, n * n + 1
+        # while l + 1 < r:
+        #     mid = (l + r) // 2
+        #     if check(mid): r = mid
+        #     else: l = mid
+
+        r = bisect_left(range(n * n + 1), True, key=check)
+        return -1 if r > n*n else r
+
 
 
 if __name__ == "__main__":
     sol = Solution()
     maze = [".....","##S..","...#.","T.#..","###.."]
-    maze = ["........T.","..........","....#..#..","........#.","..#......#","#...#.....",".........#",".#S.......","#.........","..##.#..#."]
-    maze = [".......#.....#..#####.###..#.#..#.....##...","#..#......#.................#.....#.##....#","..#...........#........#.##.##.....#.#.....",".......####.#.........##.......#..#........",".#........#....##............#.......#.....","......##.......#.......#.#...#...##........","..#...#....#.....##...#...###....#.#..#....",".......#..#..........#...#...#####.......##","......#..#.#...#...........#....#....#..#..","....#....##...##..#........#.....#...#.....","#...........#....#.#.#..............#...##.","#.#.#..#T...##........####.#...#......#....","..###....##.#.....#........#...#....#..S.#.","..#......#.#...##.....##.#..#............##","#.....#.#...#.........#....##..#..#.#......","#..#..#.##.#.....##.......#......#...#...#.","##......#....#...##.#......#.##........##..",".......#..#...#......#......#.....#..#.....",".....#...#.##.##..........#..#..#...#..#...","....#...###..........#.###.#.##............","....#.##.#......##.#.....#...#.......#.#...",".....#.#.........#...#........#....#.#..#..",".....#.#......#..##..#........#....#.#.....",".....#........#.......#.#...#..............","#...##.##......#.....#.#.#.....#........#.#","........#.#....#..###.#.........#.......###","#....###.....##....#.#....#.#.#........#..#","....#...##....##..#....#..........##..#....","...#...........#..#.....#..#.#..#........#.","..##.#.......#.#.#..##.........#.#...##....",".##.#...##.##.#.##....#...##....#..........","##......##...#.#.....#..#..###.#....#....#.","............#.....#......##..#..###..#...#.",".......##...#..#...#......#.#..##...##...#.","#..##..##.............#.###.#..#.#.#..#.###","...#..#......##..#..#.........#.........#.#","......##.....#.....###.......#.#..#...#....","##.#.#...##..#.#.#...#.........#........###","....#.#.........#.#....####................","..##..##.....#...#...##......#.#.......#...","#.###....#..##....#.....#....####..#....#..",".#.......#........#....##..#...#..##.......","......#..........##...##..##.......#......."]
     print(sol.challengeOfTheKeeper(maze))

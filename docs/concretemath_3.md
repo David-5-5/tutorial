@@ -160,10 +160,10 @@ f(x) = integer \implies x = integer.
 ```math
 \begin{aligned}
 区间 &\qquad 包含的整数 &\qquad 限制 \\
-[\alpha\cdots \beta] &\qquad \lfloor\beta\rfloor−\lceil\alpha\rceil+1 &\qquad \alpha\le \beta, \\
-[\alpha\cdots \beta) &\qquad \lfloor\beta\rfloor−\lceil\alpha\rceil &\qquad \alpha\le \beta, \\
-(\alpha\cdots \beta] &\qquad \lfloor\beta\rfloor−\lceil\alpha\rceil &\qquad \alpha\le \beta \\
-(\alpha\cdots \beta) &\qquad \lfloor\beta\rfloor−\lceil\alpha\rceil-1 &\qquad \alpha< \beta     \tag{3.12}
+[\alpha\cdots \beta] &\qquad \lfloor\beta\rfloor − \lceil\alpha\rceil+1 &\qquad \alpha\le \beta, \\
+[\alpha\cdots \beta) &\qquad \lceil\beta\rceil - \lceil\alpha\rceil &\qquad \alpha\le \beta, \\
+(\alpha\cdots \beta] &\qquad \lfloor\beta\rfloor − \lfloor\alpha\rfloor &\qquad \alpha\le \beta \\
+(\alpha\cdots \beta) &\qquad \lceil\beta\rceil − \lfloor\alpha\rfloor-1 &\qquad \alpha< \beta     \tag{3.12}
 \end{aligned}
 ```
 
@@ -188,9 +188,9 @@ f(x) = integer \implies x = integer.
 \begin{aligned}
 W &= \sum_{n=1}^{1000} [n\ is\ a\ winner] \\
   &= \sum_{1\le n\le 1000} [\lfloor\sqrt[3]{n}\rfloor \backslash n] \\
-  &= \sum_{k, m}[k=\lfloor\sqrt[3]{n}][k\backslash][1\le n\le 1000] \\
-  &= 1 + \sum_{k, m}[k^3\le km<(k+1)^3][1\le k\le 10] \\
-  &= 1 + \sum_{k, m}[m\in [k^2\cdots (k+1)^3/k]][1\le k\le 10] \\
+  &= \sum_{k, m}[k=\lfloor\sqrt[3]{n}\rfloor][k\backslash n][1\le n\le 1000] \\
+  &= 1 + \sum_{k, m}[k^3\le km<(k+1)^3][1\le k< 10] \\
+  &= 1 + \sum_{k, m}[m\in [k^2\cdots (k+1)^3/k]][1\le k< 10] \\
   &= 1 + \sum_{1\le k\le 10}(\lceil k^2+3k+3+1/k\rceil - \lceil k^2\rceil) \\
   &= 1 + \sum_{1\le k\le 10}{3k+4} = 1 + \frac{7 + 31}{2}\cdot 9 = 172
 \end{aligned}
@@ -206,7 +206,7 @@ W &= \sum_{n=1}^{1000} [n\ is\ a\ winner] \\
 
 同样的论点同样适用，但我们需要更谨慎地处理k的最大值，为方便起见，我们可以将其称为 $K$：
 ```math
-k = \lfloor\sqrt[3]{n}\rceil.
+K = \lfloor\sqrt[3]{n}\rfloor.
 ```
 
 此前 K 为$10$。一般 $N$ 的获奖者总数为：
@@ -245,7 +245,7 @@ W = \frac{3}{2}N^{2/3} + O(N^{1/3})
 
 近似公式之所以实用，是因为它们比包含下取整、上取整的公式更简洁。然而，精确结果往往也很重要，尤其对于实际应用中经常出现的较小 $N$ 值而言。举个例子：赌场老板可能会错误地认为，当 $N = 1000$ 时，赢家只有 $\frac{3}{2}N^{2/3} = 150$ 人（这种情况下，庄家每注可赚取 $10$ 美分的优势）。
 
-本节的最后一个应用，我们来看所谓的谱（spectrum）。我们将实数 x 的谱定义为整数构成的无限多重集，
+本节的最后一个应用，我们来看所谓的谱（spectrum）。我们将实数 $\alpha$ 的谱定义为整数构成的无限多重集，
 ```math
 Spec(\alpha) = \{\lfloor\alpha\rfloor, \lfloor 2\alpha\rfloor, \lfloor 3\alpha\rfloor, \cdots \}
 ```
@@ -301,6 +301,8 @@ m\le n \iff m < n+1, integers\ m\ and\ n \tag{3.15}
 
 对于所有 $n> 0$，我们赢了，因为这两个非整数的分数部分相加等于整数 $n + 1$。这便是一个划分。
 
+
+---
 ## 3.3 FLOOR/CEILING RECURRENCES
 $floor$ 和 $ceiling$ 为研究增添了有趣的新维度关于递归关系。让我们首先看看递归
 ```math

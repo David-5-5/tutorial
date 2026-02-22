@@ -689,6 +689,62 @@ if\ \alpha < 1\ then\ (output(L); \alpha:=\alpha(1-\alpha));  \\
 欧几里得算法与有理数的斯特恩‑布罗科特表示之间存在密切联系。给定 $\alpha = m/n$，我们先得到 $\lfloor m/n \rfloor$ 个 $R$，接着是 $\lfloor n/(m \bmod n) \rfloor$ 个 $L$，然后是 $\lfloor (m \bmod n)/(n \bmod (m \bmod n)) \rfloor$ 个 $R$，依此类推。这些数 $m \bmod n$、$n \bmod (m \bmod n)$、…… 正是欧几里得算法中出现的数值。（最后需要稍作调整，以保证不会出现无限多个 $R$。）我们将在第6章进一步探讨这种关系。
 
 
+---
+## 4.6 MOD: THE CONGRUENCE RELATION 同余关系
+模算术是数论提供的核心工具之一。我们在第3章中初次接触到它——当时我们将二元运算 `mod` 用作表达式中的一种运算。在本章中，我们还会将 `mod` 用于整个等式，此时采用一种稍有不同的记号会更方便：
+```math
+a \equiv b \pmod{m} \quad \iff \quad a \bmod m = b \bmod m. \tag{4.35}
+```
+
+例如，$9 \equiv -16 \pmod{5}$，因为 $9 \bmod 5 = 4 = (-16) \bmod 5$。式子 $a \equiv b \pmod{m}$ 可以读作“$a$ 与 $b$ 模 $m$ 同余”。该定义对任意实数 $a,b,m$ 都成立，但我们几乎只在整数范围内使用它。
+
+因为 $x \bmod m$ 与 $x$ 相差 $m$ 的一个倍数，所以我们可以用另一种方式理解同余式：
+```math
+a \equiv b \pmod{m} \iff \text{a-b is a multiple of m}. \tag{4.36}
+```
+
+因为若 $a \bmod m = b \bmod m$，则式 $(3.21)$ 中 `mod` 的定义告诉我们 $a-b = a\bmod m + km - (b\bmod m + lm) = (k-l)m$，其中 $k$ 和 $l$ 为整数。反之若 $a-b = km$，则当 $m=0$ 时 $a=b$；否则
+```math
+\begin{align*}
+a\bmod m = a-\lfloor a/m\rfloor m &= b+km-\lfloor (b+km)/m\rfloor m \\
+&= b-\lfloor b/m\rfloor m = b\bmod m.
+\end{align*}
+```
+
+式 $(4.36)$ 中 $\equiv$ 的刻画通常比 $(4.35)$ 更易用。例如，我们有 $8\equiv23\pmod{5}$，因为 $8-23=-15$ 是 $5$ 的倍数；我们不必同时计算 $8\bmod5$ 和 $23\bmod5$。
+
+同余号 $\equiv$ 看起来与等号 $=$ 很相似，这很方便，因为同余式几乎就像等式一样。例如，同余是一种等价关系；也就是说，它满足自反律 $a\equiv a$，对称律 $a\equiv b\Rightarrow b\equiv a$，以及传递律 $a\equiv b,b\equiv c\Rightarrow a\equiv c$。所有这些性质都很容易证明，因为任何满足 $a\equiv b\iff f(a)=f(b)$（其中 $f$ 是某个函数）的关系 $\equiv$ 都是等价关系。（在我们这里，$f(x)=x\bmod m$。）此外，我们可以对同余的元素进行加、减运算而不破坏同余性：
+```math
+a\equiv b\ (\text{mod}\ m) \land c\equiv d\ (\text{mod}\ m) \;\Rightarrow\; a+c\equiv b+d\ (\text{mod}\ m);\\ 
+```
+```math
+a\equiv b\ (\text{mod}\ m) \land c\equiv d\ (\text{mod}\ m) \;\Rightarrow\; a-c\equiv b-d\ (\text{mod}\ m).
+```
+
+因为若 $a-b$ 和 $c-d$ 均为 $m$ 的倍数，则 $(a+c)-(b+d)=(a-b)+(c-d)$ 和 $(a-c)-(b-d)=(a-b)-(c-d)$ 也均为 $m$ 的倍数。顺便提一下，并非每出现一次 $\equiv$ 就需要书写一次 $\pmod{m}$；若模数保持不变，我们只需在开头声明一次即可确定上下文。这是同余记号带来的一大便利。
+
+乘法同样适用，只要我们处理的是整数：
+```math
+a\equiv b\ \text{and}\ c\equiv d\ \Rightarrow\ ac\equiv bd\pmod{m}. \text{integer b,c}.
+```
+
+证明：$ac-bd=(a-b)c+b(c-d)$。反复应用这一乘法性质，我们现在还可以取幂：
+```math
+a\equiv b\ \Rightarrow\ a^n\equiv b^n\pmod{m},\text{ integers }a,b; n\ge 0
+```
+
+例如，因为 $2\equiv-1\pmod{3}$，所以有 $2^n\equiv(-1)^n\pmod{3}$；这意味着 $2^n-1$ 是 $3$ 的倍数当且仅当 $n$ 为偶数。
+
+因此，我们通常对等式进行的大多数代数运算，也同样可以用于同余式。是大多数，但并非全部。除法运算显然是个例外。若 $ad\equiv bd\pmod{m}$，我们不能总推出 $a\equiv b$。例如，$3\cdot2\equiv5\cdot2\pmod{4}$，但 $3\not\equiv5$。
+
+不过，当 $d$ 与 $m$ 互质时，我们可以挽救同余式的消去律：
+```math
+ad\equiv bd\iff a\equiv b\pmod{m}, \\ \text{integer a,b,d,m and }d\perp m. \tag{4.37}
+```
+
+
+
+
 
 
 

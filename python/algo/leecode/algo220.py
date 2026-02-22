@@ -1,6 +1,6 @@
 class Solution:
     def containsNearbyAlmostDuplicate(self, nums, indexDiff: int, valueDiff: int) -> bool:
-        if len(nums) == 0 : return 0
+        if len(nums) == 0 : return False
         n = len(nums)
         numInx = {}
         for i in range(n):

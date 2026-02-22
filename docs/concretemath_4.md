@@ -422,7 +422,225 @@ n\pi(n) > n\lg(n/e) + \frac12\lg(2\pi n)
 
 
 ## 4.5 RELATIVE PRIMALITY 相对素性
+当 $\gcd(m,n)=1$ 时，整数 $m$ 和 $n$ 没有公共素因子，我们称它们互素。
+
+这个概念在实际中非常重要，我们本应为它设计一种专门的记号；但遗憾的是，数论学家们至今还没有达成一个很好的共识。所以我们呼吁：听我说，全世界的数学家们！别再等待了！现在就采用一种新记号，我们就能让许多公式变得更清晰！让我们约定：若 $m$ 与 $n$ 互素，则记作 $m\perp n$，读作“$m$ 与 $n$ 互素”。换句话说，我们定义：
+```math
+m\perp n\iff m,n\text{ 为整数且 }\gcd(m,n)=1.\tag{4.26}
+```
+
+分数 $m/n$ 是既约分数当且仅当 $m\perp n$。由于我们是通过约去分子和分母的最大公因子将分数化为既约形式的，因此我们猜想，一般地有
+```math
+\frac{m}{\gcd(m,n)} \perp \frac{n}{\gcd(m,n)}.\tag{4.27}
+```
+
+$\gcd(km,kn)=k\gcd(m,n)$，这一更一般的结论在习题 $14$ 中已证，由此即可推出上式成立。
+
+利用数的素因子指数表示法，借助 $\gcd$ 的法则 $(4.14)$，关系 $\perp$ 可以有一个简洁的表述：
+```math
+m\perp n\iff \min(m_p,n_p)=0\text{ for all primes }p.\tag{4.28}
+```
+
+此外，由于 $m_p$ 和 $n_p$ 均为非负整数，我们可将其重写为
+```math
+m\perp n\iff m_pn_p=0\text{ for all primes }p.\tag{4.29}
+```
+
+现在我们可以证明一条重要法则，用它可以拆分与合并具有相同左边的两个 $\perp$ 关系：
+```math
+k\perp m\ and\ k\perp n\iff k\perp mn.\tag{4.30}
+```
+
+根据 $(4.29)$，这条法则换一种说法就是：当 $m_p$ 与 $n_p$ 均非负时，$k_p m_p=0$ 且 $k_p n_p=0$ 当且仅当 $k_p(m_p+n_p)=0$。
+
+有一种优美的方法可以构造出所有满足 $m\perp n$ 的非负分数 $m/n$ 构成的集合，它被称为 **Stern-Brocot 树**，因为它由德国数学家 Moriz Stern [339] 与法国钟表匠 Achille Brocot [40] 各自独立发现。其思路是从两个分数 $\bigl(\frac01,\frac10\bigr)$ 开始，然后按需重复以下操作：
+
+在两个相邻分数 $\frac{m}{n}$ 和 $\frac{m'}{n'}$ 之间插入 $\frac{m+m'}{n+n'}$。
+
+这个新分数 $\frac{m+m'}{n+n'}$ 称为 $\frac{m}{n}$ 与 $\frac{m'}{n'}$ 的**中介分数（mediant）**。例如，第一步会在它们之间生成一个新项：
+```math
+\frac01,\ \frac11,\ \frac10
+```
+
+下一步再给出两个：
+```math
+\frac01,\ \frac12,\ \frac11,\ \frac21,\ \frac10
+```
+
+再下一步给出四个：
+```math
+\frac01,\ \frac13,\ \frac12,\ \frac23,\ \frac11,\ \frac32,\ \frac21,\ \frac31,\ \frac10
+```
+
+然后依次得到 $8$、$16$ 个，依此类推。整个序列可看作一棵**无限二叉树**，其顶层结构如下：
+```math
+\begin{array}{ccccccccc}
+&&&& \dfrac{1}{1} &&&& \\
+&& \swarrow && \downarrow && \searrow && \\
+&& \dfrac{1}{2} &&&& \dfrac{2}{1} && \\
+& \swarrow && \searrow && \swarrow && \searrow & \\
+\dfrac{1}{3} &&&& \dfrac{2}{3} \quad \dfrac{3}{2} &&&& \dfrac{3}{1}
+\end{array}
+```
+
+每个分数都是 $\dfrac{m+m'}{n+n'}$，其中 $\dfrac{m}{n}$ 是其左上方最近的祖先，$\dfrac{m'}{n'}$ 是其右上方最近的祖先。（“祖先”指沿着树枝向上能够到达的分数。）这棵树中可以观察到许多规律。
 
 
+这种构造方式为什么有效？例如，为什么每个中介分数 $\dfrac{m+m'}{n+n'}$ 出现在这棵树中时一定是既约分数？（如果 $m$、$m'$、$n$、$n'$ 全都是奇数，我们就会得到偶数/偶数；但该构造 somehow 保证了分子分母均为奇数的分数永远不会相邻出现。）而为什么所有可能的分数 $\dfrac mn$ 都恰好出现一次？为什么某个分数不会出现两次，或者根本不出现？
 
+所有这些问题都有着惊人简洁的答案，其依据是如下基本事实：若 $\frac{m}{n}$ 与 $\frac{m'}{n'}$ 是构造过程中任意阶段的相邻分数，则有
+```math
+m'n - mn' = 1.\tag{4.31}
+```
+
+该关系式在初始时成立（$1\cdot1-0\cdot0=1$）；当我们插入新的中介分数 $\frac{m+m'}{n+n'}$ 时，需要验证的新情形为
+```math
+(m+m')n - m(n+n') = 1; \\
+m'(n+n')-(m+m')n'=1.
+```
+这两个等式都等价于它们所替换的原始条件 $(4.31)$。因此 $(4.31)$ 在构造的所有阶段都是不变式。
+
+此外，如果 $\frac{m}{n}<\frac{m'}{n'}$ 且所有值均非负，那么容易验证
+```math
+\frac{m}{n}<\frac{m+m'}{n+n'}<\frac{m'}{n'}.
+```
+
+中介分数并不在其前驱的正中间，但确实位于两者之间。因此该构造保持了顺序，我们不可能在两个不同位置得到同一个分数。
+
+还有一个问题：任何满足 $a\le b$ 的正分数 $\frac{a}{b}$ 会不会被漏掉？答案是不会。因为我们可以把构造过程限制在 $\frac{a}{b}$ 的紧邻区域内，而在这个区域里的性质很容易分析：初始时我们有
+```math
+\frac{0}{1}=0<\Bigl(\frac{a}{b}\Bigr)<\frac{1}{0}=\infty.
+```
+
+其中我们给 $\frac{a}{b}$ 加上括号，表示它目前还没有真正出现。然后如果在某一阶段我们有
+```math
+\frac{m}{n}<\Bigl(\frac{a}{b}\Bigr)<\frac{m'}{n'}
+```
+
+构造就会生成 $\frac{m+m'}{n+n'}$，此时有三种情况：要么 $\frac{m+m'}{n+n'}=\frac{a}{b}$，我们就找到了；要么 $\frac{m+m'}{n+n'}<\frac{a}{b}$，我们就令 $m\leftarrow m+m',n\leftarrow n+n'$；要么 $\frac{m+m'}{n+n'}>\frac{a}{b}$，我们就令 $m'\leftarrow m+m',n'\leftarrow n+n'$。这个过程不可能无限进行，因为条件
+```math
+m'b - na > 0\ and\ an' - bm' > 0
+```
+
+蕴含着
+```math
+an - bm \ge 1\ and\ bm' - an' \ge 1;
+```
+
+因此
+```math
+(m'+n')(an - bm) + (m + n)(bm' - an') \ge m' + n' + m + n;
+```
+
+而根据 $(4.31)$，上式等价于 $a+b \ge m+n+m'+n'$。每一步中 $m$、$n$、$m'$、$n'$ 中至少有一个会增大，因此我们最多在 $a+b$ 步内就一定能找到目标分数。
+
+$N$ 阶法雷级数（记作 $\mathcal{F}_N$），是指 $0$ 到 $1$ 之间所有既约分数构成的集合，其分母不超过 $N$，并按递增顺序排列。例如当 $N=6$ 时，有
+```math
+\mathcal{F}_6 = \bigl\{\frac{0}{1},\frac{1}{6},\frac{1}{5},\frac{1}{4},\frac{1}{3},\frac{2}{5},\frac{1}{2},\frac{3}{5},\frac{2}{3},\frac{3}{4},\frac{4}{5},\frac{5}{6},\frac{1}{1}\bigr\}
+```
+
+一般地，我们可以这样得到 $\mathcal{F}_N$：从 $\mathcal{F}_1=\bigl\{\frac{0}{1},\frac{1}{1}\bigr\}$ 开始，只要分母不超过 $N$ 就不断插入中介分数。用这种方法不会漏掉任何分数，因为我们已知斯特恩‑布罗科特构造不会遗漏分数，而且分母 $\le N$ 的中介分数一定由分母 $\le N$ 的分数生成。（换句话说，$\mathcal{F}_N$ 对应斯特恩‑布罗科特树的一棵子树，通过剪去不需要的分支得到。）由此可知，当 $\frac{m}{n}$ 与 $\frac{m'}{n'}$ 是法雷级数中相邻两项时，必有 $m'n - mn' = 1$。
+
+这种构造方式表明，可以从 $\mathcal{F}_{N-1}$ 简单得到 $\mathcal{F}_N$：只需在 $\mathcal{F}_{N-1}$ 中满足分母之和为 $N$ 的相邻两项 $\frac{m}{n}$、$\frac{m'}{n'}$ 之间插入分数 $\frac{m+m'}{N}$ 即可。例如，很容易按此规则插入相应分数，从 $\mathcal{F}_6$ 得到 $\mathcal{F}_7$。
+```math
+\mathcal{F}_7 = \bigl\{\frac{0}{1},\frac{1}{7},\frac{1}{6},\frac{1}{5},\frac{1}{4},\frac{2}{7},\frac{1}{3},\frac{2}{5},\frac{3}{7},\frac{1}{2},\frac{4}{7},\frac{3}{5},\frac{2}{3},\frac{5}{7},\frac{3}{4},\frac{4}{5},\frac{5}{6},\frac{6}{7},\frac{1}{1}\bigr\}
+```
+
+当 $N$ 为素数时，会出现 $N-1$ 个新分数；否则新分数个数会少于 $N-1$，因为该过程只生成与 $N$ 互质的分子。
+
+很久以前在 $(4.5)$ 中我们已经用不同的方式证明过：只要 $m\perp n$ 且 $0<m\le n$，就一定存在整数 $a$ 和 $b$ 使得
+```math
+ma - nb = 1.\qquad (4.32)
+```
+
+（实际上我们当时写的是 $m'm + n'n = \gcd(m,n)$，但此处可令 $\gcd(m,n)=1$、$a=m'$、$b=-n'$。）法雷级数为 $(4.32)$ 提供了另一种证明：只需取 $\frac{b}{a}$ 作为 $\mathcal{F}_n$ 中位于 $\frac{m}{n}$ 之前的分数即可。因此式 $(4.5)$ 本质上就是式 $(4.31)$ 的重现。例如，方程 $3a - 7b = 1$ 的一组解是 $a=5, b=2$，因为 $\frac{2}{5}$ 是 $\mathcal{F}_7$ 中排在 $\frac{3}{7}$ 之前的分数。这一构造说明，若 $0<m\le n$，则总能找到满足 $0\le b<a<n$ 的解 $(a,b)$ 使得 $(4.32)$ 成立。同理，若 $0\le n<m$ 且 $m\perp n$，取 $\frac{a}{b}$ 为 $\mathcal{F}_m$ 中位于 $\frac{n}{m}$ 之后的分数，就能得到满足 $0<a\le b\le m$ 的解。
+
+法雷级数中任意三个连续项有着一个极为精妙的性质，这会在习题 $61$ 中证明。不过我们最好不再继续讨论法雷级数，因为整个斯特恩‑布罗科特树其实更加有趣。
+
+事实上，我们可以把斯特恩‑布罗科特树看作表示有理数的数制，因为每个正的既约分数都会恰好出现一次。我们用字母 $L$ 和 $R$ 分别表示从树根走向某分数时向左或向右走一步；那么由 $L$、$R$ 组成的字符串就唯一地对应树上的一个位置。例如，$LRRL$ 表示：从 $\frac{1}{1}$ 向左走到 $\frac{1}{2}$，再向右走到 $\frac{2}{3}$，再向右走到 $\frac{3}{4}$，再向左走到 $\frac{5}{7}$。于是我们可以把 $LRRL$ 看作 $\frac{5}{7}$ 的一种表示。每个正分数都能这样唯一地表示成一个由 $L$ 和 $R$ 构成的字符串。
+
+不过其实有个小问题：分数 $\frac{1}{1}$ 对应空字符串，我们需要给它一个记号。约定把它记作 $I$，因为它看起来有点像 $1$，而且表示“单位元”。
+
+这种表示法自然引出两个问题：(1) 给定互质的正整数 $m$ 和 $n$，对应 $\frac{m}{n}$ 的 $L$, $R$ 串是什么？(2) 给定一个 $L$, $R$ 串，它对应的分数是多少？问题 (2) 看起来更简单，我们先来处理它。为此定义: $f(S) =$  字符串 $S$ 对应的分数
+
+其中 $S$ 是由 $L$ 和 $R$ 组成的字符串。例如 $f(LRRL) = \frac{5}{7}$。
+
+根据构造规则，若 $\frac{m}{n}$ 和 $\frac{m'}{n'}$ 是树中上层里位于 $S$ 前后最近的两个分数，则 $f(S) = \frac{m+m'}{n+n'}$。初始时 $\frac{m}{n} = \frac{0}{1}$，$\frac{m'}{n'} = \frac{1}{0}$；然后在树中向右或向左移动时，我们分别用中介数 $\frac{m+m'}{n+n'}$ 依次替换 $\frac{m}{n}$ 或 $\frac{m'}{n'}$。
+
+怎样用简洁易用的数学公式刻画这一过程？稍加尝试后会发现，最好的方法是维护一个 $2\times2$ 矩阵
+```math
+M(S) = \begin{pmatrix} n & n' \\ m & m'\end{pmatrix}
+```
+
+这个矩阵保存了包围 $f(S)$ 的两个“祖先分数” $\frac{m}{n}$ 与 $\frac{m'}{n'}$ 所涉及的四个量。按分数形式，我们本可以把 $m$、$m'$ 放上面，$n$、$n'$ 放下面；但这种上下颠倒的排布会更简洁优美，因为过程开始时 $M(I) = \begin{pmatrix} 1 & 0 \\ 0 & 1 \end{pmatrix}$，而 $\begin{pmatrix} 1 & 0 \\ 0 & 1 \end{pmatrix}$ 正是通常所说的单位矩阵 $I$。
+
+向左移动一步会将 $n'$ 替换为 $n+n'$，将 $m'$ 替换为 $m+m'$；因此
+```math
+M(SL) = 
+\begin{pmatrix} n & n+n' \\ 
+m & m+m'
+\end{pmatrix} = 
+\begin{pmatrix} n & n'  \\ 
+m & m'
+\end{pmatrix} 
+\begin{pmatrix} 1 & 1 \\ 
+0 & 1 
+\end{pmatrix} = 
+M(S) \begin{pmatrix} 1 & 1 \\ 0 & 1 \end{pmatrix}
+```
+
+（这是下述通用规则的一个特例：
+```math
+\begin{pmatrix} a & b \\ c & d \end{pmatrix} \begin{pmatrix} w & x \\ y & z \end{pmatrix} = \begin{pmatrix} aw+by & ax+bz \\ cw+dy & cx+dz \end{pmatrix}
+```
+（这是 $2\times2$ 矩阵乘法的一般规则。）同理可得
+```math
+M(SR) = \begin{pmatrix} n+n' & n' \\ m+m' & m' \end{pmatrix} = M(S) \begin{pmatrix} 1 & 0 \\ 1 & 1 \end{pmatrix}
+```
+
+因此如果我们把 $L$ 和 $R$ 定义为 $2\times2$ 矩阵
+```math
+L = \begin{pmatrix} 1 & 1 \\ 0 & 1 \end{pmatrix},\quad R = \begin{pmatrix} 1 & 0 \\ 1 & 1 \end{pmatrix}. \qquad (4.33)
+```
+
+那么通过对字符串 $S$ 的长度做归纳，就能得到简洁的公式 $M(S) = S$。是不是很巧妙？（字母 $L$ 和 $R$ 承担着双重角色：既是矩阵，也是字符串表示中的字符。）例如：
+```math
+M(LRRL) = LRRL = 
+\begin{pmatrix} 1 & 1 \\ 0 & 1 \end{pmatrix} \begin{pmatrix} 1 & 0 \\ 1 & 1 \end{pmatrix} \begin{pmatrix} 1 & 0 \\ 1 & 1 \end{pmatrix} \begin{pmatrix} 1 & 1 \\ 0 & 1 \end{pmatrix} = 
+\begin{pmatrix} 2 & 1 \\ 1 & 1 \end{pmatrix} \begin{pmatrix} 1 & 1 \\ 1 & 2 \end{pmatrix}= 
+\begin{pmatrix} 3 & 4 \\ 2 & 3 \end{pmatrix};
+```
+
+包围 $LRRL$ 对应分数 $\frac{5}{7}$ 的祖先分数是 $\frac{2}{3}$ 和 $\frac{3}{4}$。这一构造也给出了问题 (2) 的答案：
+```math
+f(S) = f\begin{pmatrix}\begin{pmatrix} n & n' \\ m & m' \end{pmatrix}\end{pmatrix} = \frac{m+m'}{n+n'}. \qquad (4.34)
+```
+
+那问题 (1) 该如何解决呢？现在既然理解了树节点与 $2\times2$ 矩阵之间的核心关联，这个问题就变得简单了。给定一对互质的正整数 $m$ 和 $n$，我们可以通过如下“二分查找”的方式，找到 $\frac{m}{n}$ 在斯特恩‑布罗科特树中的位置：
+$S := I;$
+
+$\text{while } m/n \neq f(S) \text{ do}$
+
+$\quad \text{if } \frac{m}{n} < f(S) \text{ then } (\text{output}(L); S := SL) \\ \text{ else } (\text{output}(R); S := SR).$
+
+这会输出所需的由 $L$ 和 $R$ 组成的字符串。
+
+也有另一种方法可以完成同样的工作，即通过修改 $m$ 和 $n$ 而非维护状态 $S$。若 $S$ 为任意 $2\times2$ 矩阵，则有
+```math
+f(RS) = f(S) + 1
+```
+
+这是因为 $RS$ 类似于 $S$，只是将 $S$ 的第一行加到了第二行上。（我们来慢慢推导一下：
+```math
+S = \begin{pmatrix} m & m' \\ n & n' \end{pmatrix};\quad RS = \begin{pmatrix} n & n' \\ m+n & m'+n' \end{pmatrix};
+```
+
+因此 $f(S) = (m+m')/(n+n')$ 且 $f(RS) = ((m+n)+(m'+n'))/(n+n')$。）若我们对分数 $m/n$（其中 $m > n$）执行二分查找算法，第一个输出结果将是 $R$；因此该算法后续的执行过程中，$f(S)$ 的值会恰好比我们以 $(m-n)/n$ 而非 $m/n$ 为初始值时大 $1$。类似的性质对 $L$ 也成立，于是我们有
+
+```math
+\frac{m}{n} = f(RS) \iff \frac{m-n}{n} = f(S),\quad \text{当 } m > n \text{ 时};
+```
+```math
+\frac{m}{n} = f(LS) \iff \frac{m}{n-m} = f(S),\quad \text{当 } m < n \text{ 时}.
+```
 

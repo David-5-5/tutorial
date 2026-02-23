@@ -742,6 +742,55 @@ a\equiv b\ \Rightarrow\ a^n\equiv b^n\pmod{m},\text{ integers }a,b; n\ge 0
 ad\equiv bd\iff a\equiv b\pmod{m}, \\ \text{integer a,b,d,m and }d\perp m. \tag{4.37}
 ```
 
+例如，由 $15\equiv35\pmod{m}$ 推出 $3\equiv7\pmod{m}$ 是合法的，除非模数 $m$ 是 $5$ 的倍数。
+
+为证明这一性质，我们再次使用扩展欧几里得算法 $(4.5)$，找到整数 $d'$ 和 $m'$ 使得 $d'd+m'm=1$。那么若 $ad\equiv bd$，我们可以在同余式两边同乘 $d'$，得到 $ad'd\equiv bd'd$。由于 $d'd\equiv1$，于是有 $ad'd\equiv a$ 且 $bd'd\equiv b$，因此 $a\equiv b$。这一证明表明，在模 $m$ 同余的意义下，数 $d'$ 的作用几乎等同于 $1/d$；因此我们称其为“$d$ 在模 $m$ 下的逆元”。
+```math
+ad\equiv bd\pmod{md}\Rightarrow a\equiv b\pmod{m},\quad d\neq 0.\tag{4.38}
+```
+
+该定律对所有实数 $a,b,d,m$ 都成立，因为它仅依赖于分配律 $(a\bmod m)d=ad\bmod md$：我们有 $a\bmod m=b\bmod m\iff (a\bmod m)d=(b\bmod m)d\iff ad\bmod md=bd\bmod md$。因此，例如由 $3\cdot2\equiv5\cdot2\pmod{4}$ 我们可推出 $3\equiv5\pmod{2}$。
+```math
+ad\equiv bd\pmod{m} \\
+\iff a\equiv b\pmod{\frac{m}{\gcd(d,m)}},\quad \text{integer }a,b,d,m.\tag{4.39}
+```
+
+因为我们可以用满足 $d'd+m'm=\gcd(d,m)$ 的 $d'$ 去乘 $ad\equiv bd$，这就得到同余式 $a\cdot\gcd(d,m)\equiv b\cdot\gcd(d,m)\pmod{m}$，该式两边可以除以 $\gcd(d,m)$。
+
+我们再深入探讨一下改变模数的思想。如果已知 $a\equiv b\pmod{100}$，那么必然有 $a\equiv b\pmod{10}$，或者对 $100$ 的任意因数取模都成立。说 $a-b$ 是 $100$ 的倍数，比说它是 $10$ 的倍数更强。一般而言：
+```math
+a\equiv b\pmod{md}\Rightarrow a\equiv b\pmod{m},\quad \text{integer }d.\tag{4.40}
+```
+因为任何 $md$ 的倍数都是 $m$ 的倍数。
+
+反之，如果已知 $a\equiv b$ 对两个较小的模数成立，我们能否推出对更大的模数也成立？答案是肯定的，其规则为：
+```math
+a\equiv b\pmod{m}\ \text{and}\ a\equiv b\pmod{n} \\
+\iff a\equiv b\pmod{m}\ \text{且}\ a\equiv b\pmod{n}\iff a\equiv b\pmod{mn},\quad \text{if } m\perp n\tag{4.42}
+```
+
+例如，如果我们已知 $a\equiv b\pmod{12}$ 且 $a\equiv b\pmod{18}$，就可以稳妥地推出 $a\equiv b\pmod{36}$。原因是如果 $a-b$ 是 $m$ 和 $n$ 的公倍数，那么它一定是 $\operatorname{lcm}(m,n)$ 的倍数，这可由唯一分解定理推出。
+
+该定律中 $m\perp n$ 的特殊情形极为重要，因为当 $m$ 与 $n$ 互质时 $\operatorname{lcm}(m,n)=mn$，因此我们将其明确表述出来：
+```math
+a\equiv b\pmod{mn} \\
+a\equiv b\pmod{m} and\ a\equiv b\pmod{n}\iff a\equiv b\pmod{mn}，if\ m\perp n\tag{4.42}
+```
+
+例如，$a\equiv b\pmod{100}$ 当且仅当 $a\equiv b\pmod{25}$ 且 $a\equiv b\pmod{4}$。换一种说法，如果我们知道 $x\bmod 25$ 和 $x\bmod 4$，就有足够的信息确定 $x\bmod 100$。这是中国剩余定理的一个特例（见习题30），该定理之所以如此命名，是因为它大约在公元350年由中国的孙子发现。
+
+
+式 $(4.42)$ 中的模数 $m$ 和 $n$ 可以进一步分解为互质的因子，直到每个不同的素数都被分离出来，因此
+```math
+a\equiv b\pmod{m}\iff a\equiv b\pmod{p^{m_p}} \text{for all p},
+```
+
+若 $m$ 的素因数分解式 $(4.11)$ 为 $m=\prod_p p^{m_p}$，则模素数幂的同余式是所有整数模同余式的构造基础。
+
+---
+## 4.7INDEPENDENT RESIDUES 独立残差
+
+
 
 
 

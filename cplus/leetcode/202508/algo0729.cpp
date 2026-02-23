@@ -4,8 +4,6 @@ using namespace std;
 // 常用数据结构 - 8.5 动态开点线段树
 class MyCalendar {
 private:
-    map<int, int> mp; // key: start time, value: end time
-
     // for dynamic segment tree
     // ID begin at 0:
     // left_child_id  = parent_id * 2 + 1
@@ -13,19 +11,8 @@ private:
     unordered_map<int, int> tree, lazy; // lazy 支持区间更新优化
 
 public:
-    MyCalendar() {
-        
+    MyCalendar() {        
     }
-    bool book(int startTime, int endTime) {
-        // 自行解答 方法一 使用有序哈希表
-        auto it = mp.lower_bound(startTime);
-        if (it!=mp.begin() && prev(it)->second > startTime) return false;
-        if (it!=mp.end() && endTime > it->first) return false;
-        
-        mp[startTime] = endTime;
-        return true;
-    }
-
     bool book(int startTime, int endTime) {
         // 自行解答 方法二 动态开点线段树
         // 动态开点线段树 - 模板 - 区间最大值 区间更新 懒标记
@@ -74,4 +61,23 @@ public:
         update(startTime, endTime-1, 1, start, end, 0);
         return true;
     }
+};
+
+class MyCalendar {
+private:
+    map<int, int> mp; // key: start time, value: end time
+public:
+    MyCalendar() {
+        
+    }
+    bool book(int startTime, int endTime) {
+        // 自行解答 方法一 使用有序哈希表
+        auto it = mp.lower_bound(startTime);
+        if (it!=mp.begin() && prev(it)->second > startTime) return false;
+        if (it!=mp.end() && endTime > it->first) return false;
+        
+        mp[startTime] = endTime;
+        return true;
+    }
+
 };

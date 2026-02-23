@@ -369,7 +369,7 @@ J_3(n) = \lceil\frac{3}{2}J_3(\lfloor \frac{2}{3}n\rfloor)+a_n \rceil \mod n+1,
 ```math
 N := 3n; \\
 while\ N>n\ do\ N:=\lfloor\frac{N-n-1}{2}\rfloor + N - n; \\
-J_3(n) := n.
+J_3(n) := N.
 ```
 这并非 $J_3​(n)$ 的闭式解，甚至都算不上一个递推式。但至少它告诉我们，当 $n$ 很大时，如何高效地计算出答案。
 
@@ -383,7 +383,7 @@ D :&= 3n + 1 - (\lfloor\frac{(3n+1-D)-n-1}{2}\rfloor + (3n+1-D) - n) \\
 由此，我们可将该算法重写如下：
 ```math
 D := 1; \\
-while\ D\le 2n do\ D:=\lfloor\frac{3}{2}D\rfloor; \\
+while\ D\le 2n\ do\ D:=\lceil\frac{3}{2}D\rceil; \\
 J_3(n) := 3n + 1 - D.
 ```
 
@@ -391,7 +391,7 @@ J_3(n) := 3n + 1 - D.
 ```math
 \begin{aligned}
 &D := 1; \\
-&while\ D\le (q-1)n do\ D:=\lfloor\frac{q}{q-1}D\rfloor; \\
+&while\ D\le (q-1)n\ do\ D:=\lceil\frac{q}{q-1}D\rceil; \\
 &J_q(n) := qn + 1 - D. \tag{3.19}
 \end{aligned} 
 ```
@@ -399,11 +399,10 @@ J_3(n) := 3n + 1 - D.
 对于我们熟知的 $q=2$ 的情形，结合约瑟夫问题的经典形式 $n=2^m+l$，代入上述通用方法后可得 $D$ 最终取值为 $2^m+l$；因此推导得：$J_2​(n)=2(2^m+l)+1−(2^{m+l})=2l+1$。
 
 式 (3.19) 中的计算法则可求出一个整数序列，该序列亦可由下述递推式定义：
-极简批注版（书页标注）
 ```math
 \begin{aligned}
 &D_0^{(q)} = 1; \\
-&D_n^{(q)} :=  \lceil\frac{q}{q-1}D_{n-1}^{(q)}\rceil for\ n > 0 \tag{3.20}
+&D_n^{(q)} :=  \lceil\frac{q}{q-1}D_{n-1}^{(q)}\rceil \qquad for\ n > 0 \tag{3.20}
 \end{aligned} 
 ```
 
@@ -416,11 +415,11 @@ J_3(n) := 3n + 1 - D.
 n = m
 \begin{matrix}
 \underbrace{\lfloor n/m\rfloor} \\
-除数
+quotient
 \end{matrix}  + 
 \begin{matrix}
 \underbrace{n \mod m} \\
-余数
+remainder
 \end{matrix} 
 ```
 

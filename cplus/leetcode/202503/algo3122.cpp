@@ -22,8 +22,8 @@ public:
             
             auto& res = memo[i][v];
             if (res != -1) return res;
-            res = n + dfs(i+1, 10);     // 全部都改
-            for (int nv=0; nv<10; nv++) {
+            res = n + dfs(i+1, 10);         // 全部都改 10 可以理解为不与前后两列值相同的任意值
+            for (int nv=0; nv<10; nv++) {   // 贪心优选频率最大的两列是错误的
                 if (nv == v) continue;  // 与前一列相同，跳过
                 // i 列都改为 nv，需要修改的数量为 n - cnt[i][nv]
                 res = min(res, n - cnt[i][nv] + dfs(i+1, nv));

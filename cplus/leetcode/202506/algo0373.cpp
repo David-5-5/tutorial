@@ -9,10 +9,11 @@ public:
         vector<vector<int>> ans;
         priority_queue<tuple<int,int,int>, vector<tuple<int,int,int>>, greater<>> pq;
         set<pair<int, int>> vis;
-
+        int n = nums1.size(), m = nums2.size();
+        
         pq.emplace(nums1[0]+nums2[0], 0, 0);
         vis.insert({0,0});
-        while (ans.size() < k) {
+        while (ans.size() < min(n*m, k)) {
             auto [_, u, v] = pq.top(); pq.pop();
             ans.push_back({nums1[u], nums2[v]});
 
@@ -37,7 +38,7 @@ public:
         for (int i=0; i<min(k, n); i++)
             pq.emplace(nums1[i]+nums2[0], i, 0);    // 将 nums1 所有的元素 + nums2[0]
 
-        while (ans.size() < k) {
+        while (ans.size() < min(n*m, k)) {
             auto [_, u, v] = pq.top(); pq.pop();
             ans.push_back({nums1[u], nums2[v]});
 

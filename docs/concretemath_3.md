@@ -495,10 +495,10 @@ c(x\mod y) = c(x-y\lfloor x/y\rfloor) = cx -cy\lfloor cx/cy\rfloor = cx\mod cy,
 | --: | --: | --: |
 314 | 6 | 53
 261 | 5 | 53
-208 | 6 | 52
-156 | 6 | 52
-104 | 6 | 52
-52 | 6 | 52
+208 | 4 | 52
+156 | 3 | 52
+104 | 2 | 52
+52 | 1 | 52
 
 该方法是有效的。即便除数在不断变化，我们得到的各组（groups）大小仍大致相等。
 
@@ -509,15 +509,15 @@ c(x\mod y) = c(x-y\lfloor x/y\rfloor) = cx -cy\lfloor cx/cy\rfloor = cx\mod cy,
 \lceil\frac{n-k+1}{m} \rceil
 ```
 
-该式具备我们想要的性质，因为若按照上一段的写法令 $n=qm+r$（其中 $q=\lfloor n/m\rfloor$），原式可化简为：$q+\lceil (r−k+1​)/m\rceil$。 当 $1\le k\le m$ 且 $0\le r<m$ 时，有 $\lceil (r−k+1​)/m\rceil=[k\le r]$。由此我们可写出一个恒等式，它将 $n$ 划分为 $m$ 个尽可能相等、且按非递增顺序排列的部分:
+该式具备我们想要的性质，因为若按照上一段的写法令 $n=qm+r$，其中 $q=\lfloor n/m\rfloor$，原式可化简为：$q+\lceil (r−k+1​)/m\rceil$。 当 $1\le k\le m$ 且 $0\le r<m$ 时，有 $\lceil (r−k+1​)/m\rceil=[k\le r]$。由此我们可写出一个恒等式，它将 $n$ 划分为 $m$ 个尽可能相等、且按非递增顺序排列的部分:
 ```math
 n = \lceil\frac{n}{m}\rceil + \lceil\frac{n-1}{m}\rceil + \cdots + \lceil\frac{n-m+1}{m}\rceil. \tag{3.24}
 ```
-该恒等式对所有正整数 $m$ 以及任意整数 $n$（无论正、负或零）均成立。我们在式 (3.17) 中已经见过 $m=2$ 的情形，尽管当时的写法略有不同：$n=\lfloor 2n\rfloor + \lceil 2n\rceil​⌉$
+该恒等式对所有正整数 $m$ 以及任意整数 $n$（无论正、负或零）均成立。我们在式 (3.17) 中已经见过 $m=2$ 的情形，尽管当时的写法略有不同：$n=\lfloor n/2\rfloor + \lceil n/2\rceil​$
 
 如果我们希望各部分按非递减顺序排列，让较小的 $groups$ 出现在较大的 $groups$ 之前，只需沿用同样的推导方式，只是在第一组中放入 $\lfloor n/m\rfloor$ 个 $%$ 即可。这样我们便能推导出对应的恒等式：
 ```math
-n = \lfloor\frac{n}{m}\rfloor + \lfloor\frac{n-1}{m}\rfloor + \cdots + \lfloor\frac{n-m+1}{m}\rfloor. \tag{3.25}
+n = \lfloor\frac{n}{m}\rfloor + \lfloor\frac{n+1}{m}\rfloor + \cdots + \lfloor\frac{n+m-1}{m}\rfloor. \tag{3.25}
 ```
 
 利用式 (3.4) 或习题 12 中的恒等式，即可在式 (3.25) 与式 (3.24) 之间相互转换。
@@ -527,7 +527,7 @@ n = \lfloor\frac{n}{m}\rfloor + \lfloor\frac{n-1}{m}\rfloor + \cdots + \lfloor\f
 \lfloor mx\rfloor = \lfloor x\rfloor + \lfloor x+\frac{1}{m}\rfloor + \cdots + \lfloor x+\frac{m-1}{m}\rfloor. \tag{3.26}
 ```
 
-这一结论相当令人惊叹，因为下取整函数只是对实数的整数近似，但左侧这单次近似，竟然与右侧一长串近似值的总和完全相等。如果我们假设平均来看 $\lfloor x\rfloor \approx x-\frac{1}{2}$​，那么左侧大致等于 $mx-\frac{1}{2}$​；而右侧则近似为 $(x-\frac{1}{2}) + (x-\frac{1}{2}+\frac{1}{m})+ \cdots + (x-\frac{1}{2}+\frac{m-1}{m}) = x-\frac{1}{2}$；​这些粗略近似值的总和，最终竟然是精确等式！
+这一结论相当令人惊叹，因为下取整函数只是对实数的整数近似，但左侧这单次近似，竟然与右侧一长串近似值的总和完全相等。如果我们假设平均来看 $\lfloor x\rfloor \approx x-\frac{1}{2}$​，那么左侧大致等于 $mx-\frac{1}{2}$​；而右侧则近似为 $(x-\frac{1}{2}) + (x-\frac{1}{2}+\frac{1}{m})+ \cdots + (x-\frac{1}{2}+\frac{m-1}{m}) = mx-\frac{1}{2}$；​这些粗略近似值的总和，最终竟然是精确等式！
 
 
 ## 3.5 FLOOR/CEILING SUMS
@@ -563,13 +563,13 @@ n = \lfloor\frac{n}{m}\rfloor + \lfloor\frac{n-1}{m}\rfloor + \cdots + \lfloor\f
 
 对于一般情形，我们可令 $a=\lfloor\sqrt{n}\rfloor$；此时只需补上满足 $a^2\le k< n$ 的项，这些项的值均为 $a$，因此它们的和为 $(n-a^2)a$。由此便得到了所求的closed form（闭式）：
 ```math
-\sum_{0\le k<n} \lfloor\sqrt{k}\rfloor=na -\frac{1}{3}a^3 -\frac{1}{2}a^2-\frac{1}{6}a, a=\lfloor\sqrt{n}\rfloor \tag{3.27}
+\sum_{0\le k<n} \lfloor\sqrt{k}\rfloor=na -\frac{1}{3}a^3 -\frac{1}{2}a^2-\frac{1}{6}a, \qquad a=\lfloor\sqrt{n}\rfloor \tag{3.27}
 ```
 
-处理这类和式的另一种方法，是将形如 $\lfloor x\rfloor$ 的表达式替换为 $\sum_j​[1\le j\le x]$；当 $x\ge 0$ 时，这种替换是合法的。为方便起见，不妨设 $n=a^2$，下面演示该方法如何用于 square roots 下取整的求和：
+处理这类和式的另一种方法，是将形如 $\lfloor x\rfloor$ 的表达式替换为 $\sum_j​[1\le j\le x]$；当 $x\ge 0$ 时，这种替换是合法的。为方便起见，不妨设 $n=a^2$，下面演示该方法如何用于 $\lfloor square\ roots\rfloor$ 的求和：
 ```math
 \begin{aligned} 
-\sum_{0\le k<n} \lfloor\sqrt{k}\rfloor &=\sum_{j, k}[1\le j\le sqrt{k}][0\le k\le a^2] \\
+\sum_{0\le k<n} \lfloor\sqrt{k}\rfloor &=\sum_{j, k}[1\le j\le \sqrt{k}][0\le k< a^2] \\
 &=\sum_{1\le j<a}\sum_k[j^2\le k< a^2] \\
 &=\sum_{1\le j<a}(a^2-j^2) = a^3-\frac{1}{3}a(a+\frac{1}{2})(a+1)
 \end{aligned}

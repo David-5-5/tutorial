@@ -617,12 +617,12 @@ b &= \lceil v\alpha^{-1}\rceil, & v\alpha^{-1} = b - v'
 \end{aligned}
 ```
 
-因此 $\alpha' = \{\alpha^{-1}\}$ 是 $\\alpha^{-1}$ 的小数部分，而 $v'$ 是 $v\alpha^{-1}$ 的模糊小数部分。
+因此 $\alpha' = \{\alpha^{-1}\}$ 是 $\alpha^{-1}$ 的小数部分，而 $v'$ 是 $v\alpha^{-1}$ 的模糊小数部分。
 
 再次强调，边界条件是我们唯一的烦恼来源。目前，让我们先忽略限制条件 $k < n$，不带它来计算求和：
 ```math
 \begin{aligned} 
-\sum_k[k\in [j\alpha^{-1}..(j+v)\alpha^{-1}]] &= \lceil(j+v)(a+\alpha')\rceil - \lceil j(a+\alpha')\rceil \\
+\sum_k[k\in [j\alpha^{-1}..(j+v)\alpha^{-1}）] &= \lceil(j+v)(a+\alpha')\rceil - \lceil j(a+\alpha')\rceil \\
 &= b + \lceil j\alpha'-v'\rceil - \lceil j\alpha'\rceil.
 \end{aligned}
 ```
@@ -634,10 +634,10 @@ s(\alpha, n, v) = -nv + \lceil n\alpha\rceil b + \sum_{0\le j<\lceil n\alpha\rce
 
 其中 S 是对那些我们未能排除的 $k\ge n$ 情况所作的修正。量 $j\alpha'$ 永远不会是整数，因为 $\alpha$（从而 $\alpha'$）是无理数；而且 $j\alpha'-v'$  至多只有一个 $j$ 的值会是整数。因此我们可以把上取整项换成下取整项：
 ```math
-s(\alpha, n, v) = -nv + \lfloor n\alpha\rfloor b + \sum_{0\le j<\lfloor n\alpha\rfloor}(\lfloor j\alpha'\rfloor - \lfloor j\alpha'-v'\rfloor) - S + \{0\ or\ 1\}.
+s(\alpha, n, v) = -nv + \lceil n\alpha\rceil b + \sum_{0\le j<\lceil n\alpha\rceil}(\lfloor j\alpha'\rfloor - \lfloor j\alpha'-v'\rfloor) - S + \{0\ or\ 1\}.
 ```
 
-挺有意思的。我们并没有得到闭式，反而得到了一个和式，它看上去和 $s(\alpha, n, v)$ 十分相似，只是参数不同：用 $\alpha'$ 代替了 $\alpha$，用 $\lfloor n\alpha\rfloor$ 代替了 $n$，用 $v'$ 代替了 $v$。这样一来，我们就能得到关于 $s(\alpha, n, v)$ 的一个递推关系，而这（有望）进一步导出偏差 $D(\alpha,n)$ 的递推关系。这就意味着，我们也要亲自上阵
+挺有意思的。我们并没有得到闭式，反而得到了一个和式，它看上去和 $s(\alpha, n, v)$ 十分相似，只是参数不同：用 $\alpha'$ 代替了 $\alpha$，用 $\lceil n\alpha\rceil$ 代替了 $n$，用 $v'$ 代替了 $v$。这样一来，我们就能得到关于 $s(\alpha, n, v)$ 的一个递推关系，而这（有望）进一步导出偏差 $D(\alpha,n)$ 的递推关系。这就意味着，我们也要亲自上阵
 ```math
 s(\alpha', \lceil n\alpha\rceil, v') = \sum_{0\le j<\lceil n\alpha\rceil}(\lfloor j\alpha'\rfloor-\lfloor j\alpha'-v'\rfloor-v').
 ```
@@ -652,24 +652,23 @@ s(\alpha, n, v) =  -nv + \lceil n\alpha\rceil b -\lceil n\alpha\rceil v' - s(\al
 s(\alpha, n, v) =  -s(\alpha', \lceil n\alpha\rceil, v') -S + \epsilon + \{0\ or\ 1\}.
 ```
 
-这里 $\epsilon$ 是一个不超过 $v\alpha^{−1}$ 的正误差。习题 18 同样证明了，$S$ 也介于 $0$ 和 $\lceil v\alpha^{−1}\rceil$ 之间。我们还可以从和式中去掉 $j=\lceil n\alpha^{−1}\rceil−1=\lfloor j\alpha'\rfloor$ 对应的项，因为它的贡献要么是 $v'$，要么是 $v'−1$。
-因此，如果对所有 $v$ 取绝对值的最大值，我们就得到：
+这里 $\epsilon$ 是一个不超过 $v\alpha^{−1}$ 的正误差。习题 18 同样证明了，$S$ 也介于 $0$ 和 $\lceil v\alpha^{−1}\rceil$ 之间。我们还可以从和式中去掉 $j=\lceil n\alpha\rceil−1=\lfloor n\alpha\rfloor$ 对应的项，因为它的贡献要么是 $v'$，要么是 $v'−1$。因此，如果对所有 $v$ 取绝对值的最大值，我们就得到：
 ```math
 D(\alpha, n)\le D(\alpha',\lfloor \alpha n\rfloor) + \alpha^{-1} + 2. \tag{3.31}
 ```
 
 在后续章节中我们将学到的方法，可以让我们从这个递推式得出结论：当 $n$ 足够大时，$D(\alpha, n)$ 始终远小于 $n$。因此，定理 (3.28) 不仅成立，还可以加强：它收敛到极限的速度非常快。
 
-这可真是一场对和式、下取整与上取整的花式操作演练。那些不习惯于 **证明误差很小** 的读者，可能很难相信，面对如此怪异的和式，居然有人有勇气一路推导下去。但仔细再看就会发现，整个计算过程中其实贯穿着一条简单清晰的主线。核心思想是：某个包含 $n$ 项的和 $s(\alpha, n, v)$，可以被化简为一个至多只有 $\lfloor \alpha n\rfloor$ 项的同类和式。除了在边界附近会留下一点点微小的余项之外，其他所有项都会相互抵消。
+这可真是一场对和式、下取整与上取整的花式操作演练。那些不习惯于 **证明误差很小** 的读者，可能很难相信，面对如此怪异的和式，居然有人有勇气一路推导下去。但仔细再看就会发现，整个计算过程中其实贯穿着一条简单清晰的主线。核心思想是：某个包含 $n$ 项的和 $s(\alpha, n, v)$，可以被化简为一个至多只有 $\lceil n\alpha\rceil$ 项的同类和式。除了在边界附近会留下一点点微小的余项之外，其他所有项都会相互抵消。
 
 现在让我们深呼吸，再来算一个和式。它并不简单，但相比我们刚才做的那些，它有一个巨大的优点：最终能得到闭式，这样我们就能轻松检验结果对不对。我们现在的目标，是把式 (3.26) 中的和式推广，求出下面这个表达式：
 ```math
-\sum_{0\le <m} \bigg\lfloor\frac{nk+x}{m}\bigg\rfloor, integer\ m>0, integer\ n.
+\sum_{0\le <m} \bigg\lfloor\frac{nk+x}{m}\bigg\rfloor, \quad \text{integer m>0, integer n}.
 ```
 
 求出这个和式的闭式，比我们到目前为止做过的所有题目都更难（也许只比刚才那个偏差问题简单一点）。但它非常有启发性，所以本章剩下的内容，我们就专心把它啃下来。
 
-跟往常一样，尤其是面对难题时，我们先从简单情形入手观察。$n=1$ 的特例就是公式 (3.26)，只是把 x$ 换成了 $x/m$：
+跟往常一样，尤其是面对难题时，我们先从简单情形入手观察。$n=1$ 的特例就是公式 (3.26)，只是把 $x$ 换成了 $x/m$：
 ```math
  \lfloor\frac{x}{m}\rfloor + \lfloor\frac{1+x}{m}\rfloor + \cdots + \lfloor\frac{m-1+x}{m}\rfloor = \lfloor x\rfloor.
 ```
@@ -679,7 +678,7 @@ D(\alpha, n)\le D(\alpha',\lfloor \alpha n\rfloor) + \alpha^{-1} + 2. \tag{3.31}
  \lfloor\frac{x}{m}\rfloor + \lfloor\frac{x}{m}\rfloor + \cdots + \lfloor\frac{x}{m}\rfloor = m\lfloor\frac{x}{m}\rfloor.
 ```
 
-我们的问题里有两个参数：$m$ 和 $n$。先来看 $m$ 取小值的情况。当 $m=1$ 时，和式里只有一项，值为 $\lfloor x\rfloor$。当 m=2 时，和式是 $\lfloor x/2\rfloor + \lfloor (x+n)/2\rfloor$。我们可以把 $n$ 从下取整符号里挪出来，以此消除 $x$ 和 $n$ 之间的耦合，但要这么做，必须分偶数和奇数两种情况讨论。如果 $n$ 是偶数，$n/2$ 是整数，于是可以把它从下取整里提出来：
+我们的问题里有两个参数：$m$ 和 $n$。先来看 $m$ 取小值的情况。当 $m=1$ 时，和式里只有一项，值为 $\lfloor x\rfloor$。当 $m=2$ 时，和式是 $\lfloor x/2\rfloor + \lfloor (x+n)/2\rfloor$。我们可以把 $n$ 从下取整符号里挪出来，以此消除 $x$ 和 $n$ 之间的耦合，但要这么做，必须分偶数和奇数两种情况讨论。如果 $n$ 是偶数，$n/2$ 是整数，于是可以把它从下取整里提出来：
 ```math
 \lfloor\frac{x}{2}\rfloor + (\lfloor\frac{x}{2}\rfloor + \frac{n}{2}) = 2\lfloor\frac{x}{2}\rfloor + \frac{n}{2}.
 ```
@@ -705,7 +704,7 @@ D(\alpha, n)\le D(\alpha',\lfloor \alpha n\rfloor) + \alpha^{-1} + 2. \tag{3.31}
 \lfloor\frac{x}{3}\rfloor + (\lfloor\frac{x+1}{3}\rfloor+\frac{n-1}{3}) + (\lfloor\frac{x+2}{3}\rfloor+\frac{2n-2}{3})=\lfloor x\rfloor + n-1.
 ```
 
-最后这一步同样由公式 (3.26) 得出，$m=3$。最后如果 $n\mod 3=2$，那么：
+最后这一步同样由公式 (3.26) $m=3$ 时得出，。最后如果 $n\mod 3=2$，那么：
 ```math
 \lfloor\frac{x}{3}\rfloor + (\lfloor\frac{x+2}{3}\rfloor+\frac{n-2}{3}) + (\lfloor\frac{x+1}{3}\rfloor+\frac{2n-1}{3})=\lfloor x\rfloor + n-1.
 ```

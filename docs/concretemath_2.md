@@ -1,4 +1,4 @@
-# SUM 总和
+# 2 SUM 总和
 
 求和在数学中无处不在，因此我们需要基本的工具来处理它们。本章将介绍使求和更易于使用的符号表示法和通用技巧。
 
@@ -826,12 +826,12 @@ x^{\overline{m}} = \begin{matrix} m\ factors \\ \overbrace{x(x+1)\cdots(x+m-1)} 
 
 无限微积分中的微分算子 D 存在逆算子，即反导数（或积分）算子 $\int$ 。微积分基本定理建立了算子 D 与 $\int$ 之间的关联:
 ```math
-g(x) = Df(x) \ 当且仅当\ \int g(x)dx = f(x) + C.
+g(x) = Df(x) \quad \text{if and only if } \quad \int g(x)dx = f(x) + C.
 ```
 
 其中 $\int g(x)dx$ 为 $g(x)$ 的不定积分，指所有导数为 $g(x)$ 的函数所构成的函数类。与之类似，差分算子 $\Delta$ 也存在逆算子，即反差分（或求和）算子 $\sum$;并且有限微积分中也有对应的一条基本定理。
 ```math
-g(x) = \Delta f(x) \ 当且仅当\ \sum g(x)\delta x = f(x) + C. \tag{2.46}
+g(x) = \Delta f(x) \quad \text{if and only if } \quad \sum g(x)\delta x = f(x) + C. \tag{2.46}
 ```
 
 $\sum g(x)\delta x$ 为 $g(x)$ 的不定和，指所有差分等于 $g(x)$ 的函数所构成的函数类。（注意小写的 $\delta$ 与大写的 $\Delta$ 的对应关系，恰如小写的 d 与大写的 D 的对应关系。）不定积分中的 C 为任意常数；而不定和中的 C 则是满足 $p(x+1)=p(x)$ 的任意函数。例如，C 可以是周期函数 $a+b\sin2\pi x$; 这类函数在取差分时会被消去，正如常数在求导时会被消去一样。当 x 取整数值时，函数 C 为常数。

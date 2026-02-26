@@ -24,4 +24,14 @@ public:
 
         return winner;
     }
+
+    int findTheWinner(int n, int k) {
+        // CONCRETE MATH
+        int N = n * k;
+        while (N > n) {
+            N = (N - n - 1)/(k-1) + N - n;
+        }   
+
+        return N;
+    }
 };

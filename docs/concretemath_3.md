@@ -733,12 +733,12 @@ D(\alpha, n)\le D(\alpha',\lfloor \alpha n\rfloor) + \alpha^{-1} + 2. \tag{3.31}
 最后这一步化简的是形如 $\lfloor y/2\rfloor + \lfloor (y+1)/2\rfloor$ 的式子，这同样是公式 (3.26) 的一个特例。
 
 总结一下，下面是我们对较小的 $m$ 算出的和式的值：
-| $m$ | $n\mod m = 0$ | $n\mod m = 1$ | $n\mod m = 2$ | $n\mod n = 3$ |
+| $m$ | $n\mod m = 0$ | $n\mod m = 1$ | $n\mod m = 2$ | $n\mod m = 3$ |
 | :-- | :-- | :-- | :-- | :-- |
 | 1 | $\lfloor x\rfloor$ |  |  |  |
 | 2 | 2$\lfloor\frac{x}{2}\rfloor + \frac{n}{2}$ | $\lfloor x\rfloor + \frac{n}{2} - \frac{1}{2}$|  |  |
 | 3 | 3$\lfloor\frac{x}{3}\rfloor + n$ | $\lfloor x\rfloor + n -1$ | $\lfloor x\rfloor + n -1$ |  |
-| 4 | 4$\lfloor\frac{x}{4}\rfloor + \frac{3n}{2}n$ | $\lfloor x\rfloor + \frac{3n}{2} - \frac{3}{2}$ | 2$\lfloor\frac{x}{2}\rfloor + \frac{3n}{2} -1$ | $\lfloor x\rfloor + \frac{3n}{2} - \frac{3}{2}$ | 
+| 4 | 4$\lfloor\frac{x}{4}\rfloor + \frac{3n}{2}$ | $\lfloor x\rfloor + \frac{3n}{2} - \frac{3}{2}$ | 2$\lfloor\frac{x}{2}\rfloor + \frac{3n}{2} -1$ | $\lfloor x\rfloor + \frac{3n}{2} - \frac{3}{2}$ | 
 
 看起来我们得到的结果好像都具有某种形式：
 ```math
@@ -749,17 +749,17 @@ a\lfloor\frac{x}{a}\rfloor + bn + c,
 
 在对较小的 $m$ 计算这个和式时，我们实际上已经把和式中的每一项重新写成了：
 ```math
-\lfloor\frac{x+kn}{m}\rfloor = \lfloor\frac{x+kn\mod n}{m}\rfloor + \frac{kn}{m} - \frac{kn\mod m}{m},
+\lfloor\frac{x+kn}{m}\rfloor = \lfloor\frac{x+kn\mod m}{m}\rfloor + \frac{kn}{m} - \frac{kn\mod m}{m},
 ```
 
 因为 $(kn−(kn\mod m))/m$ 是一个整数，可以从下取整括号里提出来。于是，原来的和式就可以展开成下面这样的形式：
 ```math
 \begin{aligned} 
-\lfloor\frac{x}{m}\rfloor &+ \lfloor\frac{0}{m}\rfloor -& \lfloor\frac{0\mod m}{m}\rfloor \\
-+\lfloor\frac{x + n\mod n}{m}\rfloor &+ \lfloor\frac{n}{m}\rfloor -& \lfloor\frac{n\mod m}{m}\rfloor \\
-+\lfloor\frac{x + 2n\mod n}{m}\rfloor &+ \lfloor\frac{2n}{m}\rfloor -& \lfloor\frac{2n\mod m}{m}\rfloor \\
+\lfloor\frac{x}{m}\rfloor &+ \frac{0}{m} -& \frac{0\mod m}{m} \\
++\lfloor\frac{x + n\mod n}{m}\rfloor &+ \frac{n}{m} -& \frac{n\mod m}{m}\ \\
++\lfloor\frac{x + 2n\mod n}{m}\rfloor &+ \frac{2n}{m} -& \frac{2n\mod m}{m}\ \\
 \vdots & \vdots  & \vdots \\
-+\lfloor\frac{x + (m-1)n\mod n}{m}\rfloor &+ \lfloor\frac{(n-1)n}{m}\rfloor -& \lfloor\frac{(m-1)n\mod m}{m}\rfloor 
++\lfloor\frac{x + (m-1)n\mod n}{m}\rfloor &+ \frac{(m-1)n}{m} -& \frac{(m-1)n\mod m}{m} 
 \end{aligned}
 ```
 
@@ -767,7 +767,7 @@ a\lfloor\frac{x}{a}\rfloor + bn + c,
 
 尤其是，我们能看出 $b$ 是怎么来的。第二列是一个等差数列，它的和我们是知道的 —— 等于首项与末项的平均值，再乘以项数：
 ```math
-\frac{1}{2}(0 + frac{(m-1)n}{m})\cdot m = \frac{(m-1)n}{2}.
+\frac{1}{2}(0 + \frac{(m-1)n}{m})\cdot m = \frac{(m-1)n}{2}.
 ```
 
 于是我们之前猜测的 $b=(m−1)/2$ ​就得到了验证。
@@ -809,7 +809,7 @@ c = \frac{d-m}{2}
 
 谜团解开，探索结束。我们想要的闭式就是：
 ```math
-\sum_{0\le<m} \lfloor\frac{nk+x}{m}\rfloor = d\lfloor\frac{x}{d}\rfloor + \frac{m-1}{2}\cdot n + \frac{d-m}{2},
+\sum_{0\le k<m} \lfloor\frac{nk+x}{m}\rfloor = d\lfloor\frac{x}{d}\rfloor + \frac{m-1}{2}\cdot n + \frac{d-m}{2},
 ```
 
 其中 $d=\gcd(m,n)$。作为验证，我们可以用之前已知的特殊情况 $n=0$ 和 $n=1$ 来检验：当 $n=0$ 时，有 $d=\gcd(m,0)=m$；公式中最后两项都为 $0$，因此公式正确给出 $m\lfloor x/m\rfloor$。当 $n=1$ 时，有 $d=\gcd(m,1)=1$；最后两项正好抵消，和式就等于 $\lfloor x\rfloor $。
@@ -817,7 +817,7 @@ c = \frac{d-m}{2}
 只要对这个闭式稍作整理，我们就能让它在 $m$ 和 $n$ 之间呈现出对称性：
 ```math
 \begin{aligned} 
-\sum_{0\le<m} \lfloor\frac{nk+x}{m}\rfloor &= d\lfloor\frac{x}{d}\rfloor + \frac{m-1}{2}\cdot n + \frac{d-m}{2} \\
+\sum_{0\le k<m} \lfloor\frac{nk+x}{m}\rfloor &= d\lfloor\frac{x}{d}\rfloor + \frac{m-1}{2}\cdot n + \frac{d-m}{2} \\
 &= d\lfloor\frac{x}{d}\rfloor + \frac{(m-1)(n-1)}{2} + \frac{(m-1)}{2} + \frac{d-m}{2} \\
 &= d\lfloor\frac{x}{d}\rfloor + \frac{(m-1)(n-1)}{2} + \frac{(d-1)}{2}. \tag{3.32}
 \end{aligned}
@@ -825,7 +825,7 @@ c = \frac{d-m}{2}
 
 这结果简直令人惊叹，因为从代数形式上，我们完全没有理由预料到这个和式会具有这样的对称性。我彻底被折服了。没错，我们就此证明了一条互反律。
 ```math
-\sum_{0\le<m} \lfloor\frac{nk+x}{m}\rfloor = \sum_{0\le<n} \lfloor\frac{mk+x}{n}\rfloor, integers\ m, n>0.
+\sum_{0\le k<m} \lfloor\frac{nk+x}{m}\rfloor = \sum_{0\le k<n} \lfloor\frac{mk+x}{n}\rfloor, \quad \text{integers m, n>0}.
 ```
 
 例如，当 $m=41, n=127$ 时，左边的和只有 $41$ 项，右边的和却有 $127$ 项，但对任意实数 $x$，它们的值仍然完全相等。

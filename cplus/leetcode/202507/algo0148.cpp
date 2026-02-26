@@ -23,7 +23,7 @@ public:
             arr.push_back(cur->val); cur = cur->next;
         }
         sort(arr.begin(), arr.end());
-        auto cur = head;
+        cur = head;
         for (auto v: arr) {cur->val = v; cur= cur->next;}
         return head;
     }

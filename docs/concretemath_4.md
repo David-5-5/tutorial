@@ -19,7 +19,7 @@ m\backslash n \iff m > 0\ and\ n = mk\ for\ some\ integer\ k. \tag{4.1}
 
 还有一个类似的关系，叫作“$n$ 是 $m$ 的倍数”，它的含义几乎与整除相同，只是$m$ 不必是正数。在这种情况下，我们的意思就是存在某个整数 $k$，使得 $n=mk$。举例来说，$0$ 只有一个倍数（就是 $0$ 本身），但没有数可以被 $0$ 整除。每个整数都是 $-1$ 的倍数，但严格来说，没有整数能被 $-1$ 整除。这些定义在 $m$ 和 $n$ 是任意实数时都成立；例如，$2\pi$ 可以被 $\pi$ 整除。但我们几乎只在 $m$ 和 $n$ 都是整数时使用它们。毕竟，这是数论。
 
-两个整数 $m$ 和 $n$ 的最大公约数，是能够同时整除它们两者的最大整数：
+两个整数 $m$ 和 $n$ 的*最大公约数*，是能够同时整除它们两者的最大整数：
 ```math
 \gcd(m, n) = \max\{k| k\backslash m\ and\ k\backslash n\}. \tag{4.2}
 ```
@@ -59,7 +59,7 @@ m'm + n'n = gcd(m, n). \tag{4.5}
 
 我们可以把左边重新整理，以显式表示它对 $m$ 和 $n$ 的依赖关系：
 ```math
-(\bar{m}-\lfloor n/m \rfloor\bar{r}) + \bar{r}m = gcd(m, n);
+(\bar{m}-\lfloor n/m \rfloor\bar{r})m + \bar{r}m = gcd(m, n);
 ```
 
 因此 $m' = \bar{m} - \lfloor n/m \rfloor \bar{r}$ 且 $n' = \bar{r}$ 就是我们在式 (4.5) 中所需的整数。以我们最熟悉的例子来说，当 $m=12$，$n=18$ 时，该方法给出：$6 = 0 \cdot 0 + 1 \cdot 6 = 1 \cdot 6 + 0 \cdot 12 = (-1) \cdot 12 + 1 \cdot 18$。
@@ -75,7 +75,7 @@ k\backslash m\ \text{and}\ k\backslash n\ \iff \ k\backslash\gcd(m,n). \tag{4.6}
 
 有些时候我们需要对 $n$ 的所有因子求和。这种情况下，使用下面这条简便的法则通常很有用：
 ```math
-\sum_{m\backslash n} a_m = \sum_{m\backslash k} a_{n/m},\ integer\ n>0,  \tag{4.7}
+\sum_{m\backslash n} a_m = \sum_{m\backslash n} a_{n/m},\ integer\ n>0,  \tag{4.7}
 ```
 
 该式成立的原因是，当 $m$ 取遍 $n$ 的所有因子时，$n/m$ 也恰好取遍 $n$ 的所有因子。例如，当 $n=12$ 时，该法则表明$a_1+a_2+a_3+a_4+a_6+a_{12}=a_{12}+a_6+a_4+a_3+a_2+a_1$。
@@ -85,7 +85,7 @@ k\backslash m\ \text{and}\ k\backslash n\ \iff \ k\backslash\gcd(m,n). \tag{4.6}
 \sum_{m\backslash n} a_m = \sum_k\sum_{m>0} a_m[n=mk],  \tag{4.8}
 ```
 
-这是定义 (4.1) 的一个直接推论。若 $n$ 为正数，(4.8) 式右边即为 $\sum_{k\mid n} a_{n/k}$，因此 (4.8) 蕴含 (4.7)。并且当 $n$ 为负数时，方程 (4.8) 依然成立。（此时，右边的非零项出现在 $k$ 是 $n$ 的某个因子的相反数时。）
+这是定义 (4.1) 的一个直接推论。若 $n$ 为正数，(4.8) 式右边即为 $\sum_{k\backslash n} a_{n/k}$，因此 (4.8) 蕴含 (4.7)。并且当 $n$ 为负数时，方程 (4.8) 依然成立。（此时，右边的非零项出现在 $k$ 是 $n$ 的某个因子的相反数时。）
 
 此外，对因子的二重求和可以按照下面的法则交换次序：
 ```math
@@ -106,7 +106,7 @@ a_{1,1}+ &(a_{1,2}+a_{2,2})+(a_{1,3}+a_{3,3}) \\
 
 我们可以用艾弗森约定的运算来证明式 (4.9)。左边是
 ```math
-\sum_{j,l}\sum_{k,m>0} a_{k,m}[m=jm][m=kl] = \sum_j\sum_{k,l>0} a_{k,kl}[n=jkl];
+\sum_{j,l}\sum_{k,m>0} a_{k,m}[n=jm][m=kl] = \sum_j\sum_{k,l>0} a_{k,kl}[n=jkl];
 ```
 
 右边是

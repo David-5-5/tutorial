@@ -43,6 +43,28 @@ public:
         return right>mx?-1:right;
     }
 
+    int minMaxWeight(int n, vector<vector<int>>& edges, int threshold) {
+        // 单源最短路：Dijkstra, 用最小的权值，代替最短路径
+        if (edges.size() < n-1) return -1;
 
+        vector<vector<pair<int, int>>> g(n);
+        for (auto e: edges) {
+            g[e[1]].emplace_back(e[0], e[2]);
+        }
+
+        vector<bool> vis(n); int left = n; int mx = 0;
+        priority_queue<pair<int, int>, vector<pair<int,int>>, greater<>> pq;
+        pq.emplace(0, 0);
+        while (!pq.empty() && left) {
+            auto [d, u] = pq.top(); pq.pop();
+            if (vis[u]) continue;
+            vis[u] = true; left --; mx = max(mx, d);
+            for (auto [v, w]: g[u]) {
+                pq.emplace(w, v);
+            }
+        }
+
+        return left == 0?mx : -1;
+    }
 
 };

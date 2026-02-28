@@ -1082,7 +1082,7 @@ g(m_1m_2)=\sum\limits_{d\mid m_1m_2}f(d)=\sum\limits_{d_1\mid m_1}\sum\limits_{d
 
 莫比乌斯函数 $\mu(m)$ 以十九世纪数学家奥古斯特·莫比乌斯命名（他还因著名的莫比乌斯带闻名），对所有整数 $m\ge 1$ 可由下式定义：
 ```math
-\sum\limits_{d\mid m}\mu(d)=[m=1].\tag{4.55}
+\sum\limits_{d\backslash m}\mu(d)=[m=1].\tag{4.55}
 ```
 
 这个等式其实是一个递推式，因为左边是一个包含 $\mu(m)$ 以及若干满足 $d<m$ 的 $\mu(d)$ 值的和。例如，如果依次代入 $m=1,2,\dots,12$，我们就能算出前 $12$ 个值：
@@ -1093,10 +1093,142 @@ $\mu(m)$m | 1 | -1 | -1 | 0 | -1 | 1 | -1 | 0 | 0 | 1 | -1 | 0 |
 
 理查德·戴德金 $(77)$ 与约瑟夫·刘维尔 $(251)$ 在 $1857$ 年发现了下述重要的**反演原理**：
 ```math
-g(m)=\sum\limits_{d\mid m}f(d) \iff f(m)=\sum\limits_{d\mid m}\mu(d)g\left(\frac{m}{d}\right).\tag{4.56}
+g(m)=\sum\limits_{d\backslash m}f(d) \iff f(m)=\sum\limits_{d\backslash m}\mu(d)g\left(\frac{m}{d}\right).\tag{4.56}
 ```
-根据这个反演原理，只要我们知道 $\sum\limits_{d\mid m}f(d)$，函数 $\mu$ 就能为我们提供一种理解任意函数 $f(m)$ 的新方法。
+根据这个反演原理，只要我们知道 $\sum\limits_{d\backslash m}f(d)$，函数 $\mu$ 就能为我们提供一种理解任意函数 $f(m)$ 的新方法。
 
+式 $(4.56)$ 的证明用到了本章开头介绍的两个技巧 $(4.7)$ 和 $(4.9)$：若 $g(m)=\sum\limits_{d\backslash m}f(d)$，则
+```math
+\begin{align*}
+\sum\limits_{d\backslash m}\mu(d)g\left(\frac{m}{d}\right)&=\sum\limits_{d\backslash m}\mu\left(\frac{m}{d}\right)g(d) \\
+&=\sum\limits_{d\backslash m}\mu\left(\frac{m}{d}\right)\sum\limits_{k\backslash d}f(k) \\
+&=\sum\limits_{k\backslash m}\sum\limits_{d\backslash (m/k)}\mu(\frac{m}{kd})f(k) \\
+&=\sum\limits_{k\backslash m}\sum\limits_{d\backslash (m/k)}\mu(d)f(k) \\
+&=\sum\limits_{k\backslash m}[m/k=1]f(k) = f(m). 
+\end{align*}
+```
 
+式 $(4.56)$ 的另一半可类似证明（见习题 $12$）。
+
+式 $(4.56)$ 给出了莫比乌斯函数的一个有用性质，我们已经列出了前12个值；但当 $m$ 很大时，$\mu(m)$ 的值是多少呢？我们如何求解递推式 $(4.55)$？其实，函数 $g(m)=[m=1]$ 显然是积性的——毕竟除了 $m=1$ 外它都为0。因此，由 $(4.55)$ 定义的莫比乌斯函数，根据刚才证明的那个奇妙结论，也一定是积性函数。于是只要算出素数幂处的 $\mu(p^k)$，我们就能确定任意 $m$ 对应的 $\mu(m)$。
+
+当 $m=p$ 时，式 $(4.55)$ 给出：
+```math
+\mu(1)+\mu(p)+\mu(p^2)+\dots+\mu(p^k)=0
+```
+
+对所有 $k\ge 1$ 成立，因为 $p^k$ 的约数是 $1,p,p^2,\dots,p^k$。由此可得
+```math
+\mu(p)=-1;\quad \mu(p^k)=0\ \text{for}\ k>1.
+```
+
+因此由式 $(4.52)$，我们得到一般公式：
+```math
+\mu(m)=\prod\limits_{p\backslash m}\mu(p^{m_p})=
+\begin{cases}
+(-1)^r,&\text{if m=}p_1p_2\cdots p_r;\\
+0,&\text{if m is divisible by some } p^2.
+\end{cases}
+\tag{4.57}
+```
+这就是 $\mu$。
+
+若将式 $(4.54)$ 看作函数 $\rho(m)$ 的递推式，我们可以利用戴德金–刘维尔反演原理 $(4.56)$ 求解该递推式，从而得到：
+```math
+\rho(m)=\sum\limits_{d\backslash m}\mu(d)\frac{m}{d}.\tag{4.58}
+```
+
+例如：
+```math
+\begin{align*}
+\rho(12)&=\mu(1)\cdot12+\mu(2)\cdot6+\mu(3)\cdot4+\mu(4)\cdot3+\mu(6)\cdot2+\mu(12)\cdot1\\
+&=12-6-4+0+2+0=4.
+\end{align*}
+```
+
+若 $m$ 被 $r$ 个不同的素数（记为 $p_1,p_2,\dots,p_r$）整除，则求和式 $(4.58)$ 仅有 $2^r$ 个非零项，这是因为 $\mu$ 函数在绝大多数情况下取值为0。由此我们可以看出，式 $(4.58)$ 与式 $(4.53)$ 完全相符，式 $(4.53)$ 的表达式为：
+```math
+\rho(m)=m\prod\limits_{p\mid m}\left(1-\dfrac1p\right).
+```
+
+如果我们将这 $r$ 个因子 $(1-1/p_i)$ 展开，恰好得到式 $(4.58)$ 中的 $2^r$ 个非零项。莫比乌斯函数的优势在于，它除了此处之外，还能应用于许多其他场景。
+
+例如，我们来求法里级数 $\mathcal{F}_n$ 中包含多少个分数。这是区间 $[0,1]$ 上分母不超过 $n$ 的既约分数的个数，因此它比 $\Phi(n)$ 大 $1$，其中我们定义
+```math
+\Phi(x)=\sum\limits_{1\le k\le x}\varphi(k).\tag{4.59}
+```
+
+由于最后一个分数 $\dfrac11$ 我们必须给 $\Phi(n)$ 加上 $1$。式 $(4.59)$ 中的和式看似难求，但我们可以通过观察下式间接求出 $\Phi(x)$：
+```math
+\sum\limits_{d\ge 1}\Phi\left(\left\lfloor\frac{x}{d}\right\rfloor\right)=\frac12x\lfloor x\rfloor+\frac12x.\tag{4.60}
+```
+
+对所有实数 $x\ge 0$ 成立。这个恒等式为什么成立？道理其实很巧妙，但并不难懂。满足 $0\le m<n\le x$ 的基本分数 $\dfrac{m}{n}$（既约与非既约都算）共有 $\dfrac12\lfloor x\rfloor(\lfloor x\rfloor+1)$ 个，这就是等式右边。其中满足 $\gcd(m,n)=d$ 的分数个数为 $\Phi\left(\left\lfloor\dfrac{x}{d}\right\rfloor\right)$，因为令 $m=dm',\ n=dn'$ 后，这些分数就对应 $0\le m'<n'\le \dfrac{x}{d}$。所以左边只是用另一种方式统计同一批分数，恒等式必然成立。
+
+我们再仔细观察一下，让式 $(4.59)$ 和 $(4.60)$ 更清晰。$\Phi(x)$ 的定义意味着 $\Phi(x)=\Phi(\lfloor x\rfloor)$；但把 $\Phi(x)$ 定义在**全体实数**上（而不只是整数）会更方便。在整数点上我们有下表：
+
+$n$ | 0 |  1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 |
+| --: | --: | --: | --: | --: | --: | --: | --: | --: | --: | --: | --: | --: | --: |
+$\varphi(n)$ | - | 1 | 1 | 2 | 2 | 4 | 2 | 6 | 4 | 6 | 4 | 10 | 4 |
+$\Phi(n)$ | 0 | 1 | 2 | 4 | 6 | 10 | 12 | 18 | 22 | 28 | 32 | 42 | 46 |
+
+我们可以用 $x=12$ 来验证式 $(4.60)$：
+```math
+\Phi(12)+\Phi(6)+\Phi(4)+\Phi(3)+\Phi(2)+\Phi(2)+6\cdot\Phi(1)\\
+=46+12+6+4+2+2+6=78=\frac{1}{2}\cdot 12\cdot 13.
+```
+太神奇了。
+
+恒等式 $(4.60)$ 可以看作是关于 $\Phi(x)$ 的一个隐式递推式；例如，我们刚刚已经看到，可以利用它从一些满足 $m<12$ 的 $\Phi(m)$ 的值来计算出 $\Phi(12)$，并且我们可以利用莫比乌斯函数的另一个优美性质来求解这类递推式：
+```math
+g(x)=\sum\limits_{d\ge 1}f\left(\left\lfloor\frac{x}{d}\right\rfloor\right) \iff f(x)=\sum\limits_{d\ge 1}\mu(d)g\left(\left\lfloor\frac{x}{d}\right\rfloor\right).\tag{4.61}
+```
+
+这个反演律对所有满足 $\sum\limits_{k,d\ge 1}\left|f\left(\left\lfloor\frac{x}{kd}\right\rfloor\right)\right|<\infty$ 的函数 $f$ 都成立；我们可以如下证明。假设 $g(x)=\sum\limits_{d\ge 1}f\left(\left\lfloor\frac{x}{d}\right\rfloor\right)$，那么
+```math
+\begin{align*}
+\sum_{d\ge 1}\mu(d)g(x/d)&=\sum_{d\ge 1}\mu(d)\sum_{k\ge 1}f(x/kd) \\
+&=\sum_{m\ge 1}f(x/m) \sum_{d,k\ge 1}\mu(d)[m=kd]\\
+&=\sum_{m\ge 1}f(x/m)\sum_{d\backslash m}\mu(d)=\sum_{m\ge 1}f(x/m)[m=1]=f(x)
+\end{align*}
+```
+反方向的证明本质上是完全相同的。
+
+因此现在我们可以求解关于 $\Phi(x)$ 的递推式 $(4.60)$：
+```math
+\Phi(x)=\frac12\sum\limits_{d\ge 1}\mu(d)\left\lfloor\frac{x}{d}\right\rfloor\left(1+\left\lfloor\frac{x}{d}\right\rfloor\right).\tag{4.62}
+```
+
+这始终是一个有限和。例如，
+```math
+\begin{align*}
+\Phi(12)&=\frac12\bigl(12\cdot13-6\cdot7-4\cdot5+0-2\cdot3+2\cdot3 \\
+& \qquad -1\cdot2+0+0+1\cdot2-1\cdot2+0\bigr)\\
+&=78-21-10-3+3-1+1-1=46
+\end{align*}
+```
+
+在第 $9$ 章我们会看到如何使用 $(4.62)$ 来得到 $\Phi(x)$ 的良好近似；事实上，我们将证明一个由 Mertens 在 $1874$ 年给出的结果 $[270]$。
+```math
+\Phi(x)=\frac{3}{\pi^2}x^2+O(x\log x).
+```
+
+因此函数 $\Phi(x)$ 增长得很“平滑”；它平均了 $\mu(k)$ 的不规则行为。
+
+遵循上一章建立的惯例，我们用一道题来结束本章，这道题既能体现我们刚刚所学的大部分内容，又能为下一章做铺垫。假设我们有 $n$ 种不同颜色的珠子，目标是计算把它们串成长度为 $m$ 的环形项链有多少种不同的方法。我们可以尝试用“命名并求解”的方法来解决这个问题，把可能的项链数记为 $N(m,n)$。
+
+例如，用 $R$、$B$ 两种颜色的珠子，我们可以串成长度为 $4$ 的项链，共有 $N(4,2)=6$ 种不同方式：$RRRR,\ RRRB,\ RRBB,\ RBRB,\ RBBR,\ BBBB$
+
+其余所有串法都与这些等价，因为项链的旋转不改变其本质。不过翻转被视为不同；例如在 $m=6$ 的情形下，这类计数问题最早由 P. A. Mac‑Mahon 在 $1892$ 年解决 $[264]$。
+
+$N(m,n)$ 没有明显的递推式，但我们可以通过将每条项链以 $m$ 种方式拆成线性串并考虑得到的片段来计数。例如，当 $m=4$ 且 $n=2$ 时，我们得到
+RRRR RRRR RRRR RRRR
+RRBR RRRB BRRR RBRR
+RBBR RRBB BRRB BBRR
+RBRB BRBR RBRB BRBR
+RBBB BRBB BBRB BBBR
+BBBB BBBB BBBB BBBB
+
+在这 $mN(m,n)$ 个串组成的数组中，$n^m$ 种可能的模式每种至少出现一次，有些模式会出现多次。一个模式 $a_0a_1\cdots a_{m-1}$ 会出现多少次？很简单：等于循环移位 $a_k\cdots a_{m-1}a_0\cdots a_{k-1}$ 中与原模式 $a_0a_1\cdots a_{m-1}$ 相同的次数。例如，$BRBR$ 出现两次，因为把由 $BRBR$ 构成的项链切开得到的四种循环移位是 $(BRBR,RBRB,BRBR,RBRB)$，其中两种与 $BRBR$ 本身相同。这个论证表明
 
 

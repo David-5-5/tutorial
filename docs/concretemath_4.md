@@ -854,13 +854,13 @@ x^2 \equiv 1 \pmod m,\tag{4.43}
 (x-1)(x+1)\equiv 0\pmod{p^k}
 ```
 
-所以 $p$ 必须整除 $x-1$ 或 $x+1$，或同时整除两者。但除非 $p=2$，否则 $p$ 不能同时整除 $x-1$ 和 $x+1$；我们将这种情况留到后面讨论。如果 $p>2$，那么 $p\mid(x-1)(x+1)$ 等价于 $p\mid(x-1)$ 或 $p\mid(x+1)$；因此恰好有两个解，即 $x\equiv 1$ 和 $x\equiv -1$。
+所以 $p$ 必须整除 $x-1$ 或 $x+1$，或同时整除两者。但除非 $p=2$，否则 $p$ 不能同时整除 $x-1$ 和 $x+1$；我们将这种情况留到后面讨论。如果 $p>2$，那么 $p\backslash(x-1)(x+1)$ 等价于 $p\backslash(x-1)$ 或 $p\backslash(x+1)$；因此恰好有两个解，即 $x\equiv 1$ 和 $x\equiv -1$。
 
-$p=2$ 的情形略有不同。若 $2^k\mid(x-1)(x+1)$，则 $x-1$ 或 $x+1$ 可被 $2$ 整除但不能被 $4$ 整除，因此另一个必被 $2^{k-1}$ 整除。这意味着当 $k\ge 3$ 时有四个解，即 $x\equiv\pm 1$ 与 $x\equiv 2^{k-1}\pm 1$。（例如，当 $p=8$ 时四个解为 $x\equiv 1,3,5,7\pmod 8$；知道任意奇数的平方都形如 $8n+1$ 通常很有用。）
+$p=2$ 的情形略有不同。若 $2^k\backslash(x-1)(x+1)$，则 $x-1$ 或 $x+1$ 可被 $2$ 整除但不能被 $4$ 整除，因此另一个必被 $2^{k-1}$ 整除。这意味着当 $k\ge 3$ 时有四个解，即 $x\equiv\pm 1$ 与 $x\equiv 2^{k-1}\pm 1$。（例如，当 $p=8$ 时四个解为 $x\equiv 1,3,5,7\pmod 8$；知道任意奇数的平方都形如 $8n+1$ 通常很有用。）
 
 $x^2\equiv 1\pmod m$ 成立当且仅当对于 $m$ 的完全素因数分解中所有满足 $m_p>0$ 的素数 $p$，都有 $x^2\equiv 1\pmod{p^{m_p}}$。每个素数彼此独立，且除 $p=2$ 外，$x\bmod p^{m_p}$ 恰好有两种可能。因此若 $m$ 恰有 $r$ 个不同的素因子，则 $x^2\equiv 1$ 的解总数为 $2^r$，$m$ 为偶数时需修正。一般情况下的准确解数为
 ```math
-2^{r+\left[8\mid m\right]+\left[4\mid m\right]-\left[2\mid m\right]}\quad \tag{4.44}
+2^{r+\left[8\backslash m\right]+\left[4\backslash m\right]-\left[2\backslash m\right]}\quad \tag{4.44}
 ```
 
 例如，模 $12$ 有四个“单位平方根”，即 $1,5,7,11$。当 $m=15$ 时，四个解是模 $3$ 与模 $5$ 均为 $\pm1$ 的数，即在剩余数系中为 $(1,1),(1,4),(2,1),(2,4)$，这些解在普通十进制数系中为 $1,4,11,14$。
@@ -935,7 +935,7 @@ n\cdot(2n)\cdots((p-1)n) \\
 n^p\equiv n\pmod p,\quad\text{integer }n. \tag{4.48}
 ```
 
-这个同余式对所有整数 $n$ 都成立。证明很简单：若 $n\perp p$，只需将式 $(4.47)$ 乘以 $n$ 即可。若不然，则 $p\mid n$，于是 $n^p=0=n$。
+这个同余式对所有整数 $n$ 都成立。证明很简单：若 $n\perp p$，只需将式 $(4.47)$ 乘以 $n$ 即可。若不然，则 $p\backslash n$，于是 $n^p=0=n$。
 
 就在发现式 (4.47) 的同一年，费马写信给梅森，称他怀疑这个数
 ```math
@@ -1028,7 +1028,7 @@ f(m)=\prod_{p}f(p^{m_p}) \text{ if } m=\prod_{p}p^{m_p} \tag{4.52}
 
 特别地，该公式给出了欧拉函数对一般 $m$ 的取值：
 ```math
-\varphi(m)=\prod_{p\mid m}(p^{m_p}-p^{m_p-1})=m\prod_{p\mid m}\Bigl(1-\frac1p\Bigr) \tag{4.52}
+\varphi(m)=\prod_{p\backslash m}(p^{m_p}-p^{m_p-1})=m\prod_{p\backslash m}\Bigl(1-\frac1p\Bigr) \tag{4.52}
 ```
 例如，$\varphi(12)=(4-2)(3-1)=12\left(1-\dfrac12\right)\left(1-\dfrac13\right)$
 
@@ -1056,29 +1056,29 @@ f(m)=\prod_{p}f(p^{m_p}) \text{ if } m=\prod_{p}p^{m_p} \tag{4.52}
 
 对任意正整数 $m$，如果从分母为 $m$ 的未约分分数 $\dfrac0m,\dfrac1m,\dots,\dfrac{m-1}m$ 出发，显然会发生类似的情况，因此
 ```math
-\sum\limits_{d\mid m}\varphi(d)=m. \tag{4.54}
+\sum\limits_{d\backslash m}\varphi(d)=m. \tag{4.54}
 ```
 
 我们在本章开头就说过，数论中的问题常常需要对一个数的约数求和。而式 $(4.54)$ 正是这样一个和式，这印证了我们的观点。（我们还会看到更多例子。）
 
 现在有一个奇妙的事实：如果 $f$ 是任意满足求和
 ```math
-g(m)=\sum\limits_{d\mid m}f(d)
+g(m)=\sum\limits_{d\backslash m}f(d)
 ```
 
 是积性函数，那么 $f$ 本身也是积性函数。（这个结论，再加上式 $(4.54)$ 以及 $g(m)=m$ 显然是积性函数这一事实，给出了 $\varphi(m)$ 是积性函数的另一个理由。）我们可以对 $m$ 用归纳法证明这个奇妙的事实：基础情形很简单，因为 $f(1)=g(1)=1$。设 $m>1$，且假设当 $m_1\perp m_2$ 且 $m_1m_2<m$ 时，有 $f(m_1m_2)=f(m_1)f(m_2)$。若 $m=m_1m_2$ 且 $m_1\perp m_2$，则有
 ```math
-g(m_1m_2)=\sum\limits_{d\mid m_1m_2}f(d)=\sum\limits_{d_1\mid m_1}\sum\limits_{d_2\mid m_2}f(d_1d_2)
+g(m_1m_2)=\sum\limits_{d\backslash m_1m_2}f(d)=\sum\limits_{d_1\backslash m_1}\sum\limits_{d_2\backslash m_2}f(d_1d_2)
 ```
 
 且因为 $m_1$ 的所有约数与 $m_2$ 的所有约数都互质，所以 $d_1\perp d_2$。由归纳假设，除了可能 $d_1=m_1$ 且 $d_2=m_2$ 的情况外，都有 $f(d_1d_2)=f(d_1)f(d_2)$；于是我们得到
 ```math
-\biggl(\sum\limits_{d_1\mid m_1}f(d_1)\biggr)\biggl(\sum\limits_{d_2\mid m_2}f(d_2)\biggr)-f(m_1)f(m_2)+f(m_1m_2) \\
+\biggl(\sum\limits_{d_1\backslash m_1}f(d_1)\biggr)\biggl(\sum\limits_{d_2\backslash m_2}f(d_2)\biggr)-f(m_1)f(m_2)+f(m_1m_2) \\
 =g(m_1)g(m_2)-f(m_1)f(m_2)+f(m_1m_2)
 ```
 但这等于 $g(m_1m_2)=g(m_1)g(m_2)$，所以 $f(m_1m_2)=f(m_1)f(m_2)$。
 
-反之，如果 $f(m)$ 是积性函数，那么对应的约数和函数 $g(m)=\sum\limits_{d\mid m}f(d)$ 也一定是积性函数。事实上，习题 $33$ 表明结论还可以更强。因此这个奇妙的事实及其逆命题都成立。
+反之，如果 $f(m)$ 是积性函数，那么对应的约数和函数 $g(m)=\sum\limits_{d\backslash m}f(d)$ 也一定是积性函数。事实上，习题 $33$ 表明结论还可以更强。因此这个奇妙的事实及其逆命题都成立。
 
 莫比乌斯函数 $\mu(m)$ 以十九世纪数学家奥古斯特·莫比乌斯命名（他还因著名的莫比乌斯带闻名），对所有整数 $m\ge 1$ 可由下式定义：
 ```math
@@ -1148,7 +1148,7 @@ g(m)=\sum\limits_{d\backslash m}f(d) \iff f(m)=\sum\limits_{d\backslash m}\mu(d)
 
 若 $m$ 被 $r$ 个不同的素数（记为 $p_1,p_2,\dots,p_r$）整除，则求和式 $(4.58)$ 仅有 $2^r$ 个非零项，这是因为 $\mu$ 函数在绝大多数情况下取值为0。由此我们可以看出，式 $(4.58)$ 与式 $(4.53)$ 完全相符，式 $(4.53)$ 的表达式为：
 ```math
-\rho(m)=m\prod\limits_{p\mid m}\left(1-\dfrac1p\right).
+\rho(m)=m\prod\limits_{p\backslash m}\left(1-\dfrac1p\right).
 ```
 
 如果我们将这 $r$ 个因子 $(1-1/p_i)$ 展开，恰好得到式 $(4.58)$ 中的 $2^r$ 个非零项。莫比乌斯函数的优势在于，它除了此处之外，还能应用于许多其他场景。
@@ -1250,4 +1250,128 @@ a_j = a_{(j+k) \bmod m}, \text{ for } 0 \leq j < m
 ```
 
 这使得我们将 $a_j$ 与 $a_{(j+kl) \bmod m}$（其中 $l=1,2,\dots$）等同起来；并且我们知道 $k$ 模 $m$ 的倍数集合为 $\{0, d, 2d, \dots, m-d\}$，其中 $d = \gcd(k, m)$（$\gcd$ 表示最大公约数）。因此通解为：独立选取 $a_0, \dots, a_{d-1}$ 的值，然后对 $d \leq j < m$，令 $a_j = a_{j-d}$。这样的解共有 $n^d$ 个。
+
+
+我们刚刚证明了
+```math
+mN(m,n)=\sum\limits_{0\le k<m}n^{\gcd(k,m)}.
+```
+
+这个求和式可以化简，因为它仅包含满足 $d\backslash m$ 的项 $n^d$。令 $d = \gcd(k, m)$ 代入可得
+```math
+\begin{align*}
+N(m,n)&=\dfrac1m\sum\limits_{d\backslash m}n^d\sum\limits_{0\le k<m}[d=\gcd(k,m)]  \\
+&=\dfrac1m\sum\limits_{d\backslash m}n^d\sum\limits_{0\le k<m}[k/d\perp m/d] \\
+&=\dfrac1m\sum\limits_{d\backslash m}n^d\sum\limits_{0\le k<m/d}[k\perp m/d].
+ \end{align*}
+```
+
+（因为 $k$ 必须是 $d$ 的倍数，所以我们可以把 $k/d$ 替换成 $k$。）最后，根据定义有 $\sum\limits_{0\le k<m/d}[k\perp m/d]=\varphi(m/d)$，于是我们得到麦克马洪公式：
+```math
+N(m,n)=\dfrac1m\sum\limits_{d\backslash m}\varphi(d)n^{m/d}=\dfrac1m\sum\limits_{d\backslash m}\varphi(d)n^{m/d}.\tag{4.63}
+```
+
+例如当 $m=4$ 且 $n=2$ 时，项链的数量为 $\dfrac14(1\cdot2^4+1\cdot2^2+2\cdot2^1)=6$，与我们之前得到的结果一致。
+
+由麦克马洪求和式定义的 $N(m,n)$ 是整数，这一点并不显然！我们来直接证明
+```math
+\sum\limits_{d\backslash m}\varphi(d)n^{m/d}\equiv 0\pmod m.\tag{4.64}
+```
+
+不借助它与项链相关这个线索来证明。在 $m$ 是素数的特殊情形下，这个同余式简化为 $n^p+(p-1)n\equiv 0\pmod p$；也就是说，它简化为 $n^p\equiv n$。我们在 $(4.48)$ 中已经看到这个同余式是费马小定理的另一种形式。因此当 $m=p$ 时 $(4.64)$ 成立；我们可以把它看作费马小定理到模非素数情形的推广。（欧拉的推广 $(4.50)$ 与此不同。）
+
+我们已经对所有素数模证明了 $(4.64)$，接下来看剩下的最小情形，$m=4$。我们必须证明
+```math
+n^4+n^2+2n\equiv 0\pmod 4.
+```
+
+如果分开考虑偶数和奇数的情形，证明就很简单。如果 $n$ 是偶数，左边三项模 $4$ 都同余于 $0$，所以它们的和也是。如果 $n$ 是奇数，$n^4$ 和 $n^2$ 都各自同余于 $1$，而 $2n$ 同余于 $2$；于是左边同余于 $1+1+2$，因此模 $4$ 等于 $0$，证毕。
+
+接下来我们大胆一点尝试 $m=12$。这个 $m$ 应该很有意思，因为它有很多因数，包含一个素数的平方，同时又相当小。（而且我们很有希望把对 $12$ 的证明推广到一般的 $m$。）我们需要证明的同余式是
+```math
+n^{12}+n^6+2n^4+2n^3+2n^2+4n\equiv 0\pmod{12}.
+```
+
+现在该怎么办？根据 $(4.42)$，这个同余式成立当且仅当它在模 $3$ 和模 $4$ 下都成立。所以我们先来证明它在模 $3$ 下成立。我们的同余式 $(4.64)$ 对素数成立，因此有 $n^3+2n\equiv 0\pmod 3$。仔细观察可以发现，我们可以用这个结论对大求和式分组：
+```math
+\begin{align*}
+n^{12}&+n^6+2n^4+2n^3+2n^2+4n \\
+&=(n^{12}+2n^4)+(n^6+2n^2)+2(n^3+2n) \\
+&\equiv 0+0+2\cdot 0=0\pmod 3.
+ \end{align*}
+```
+所以它在模 $3$ 下成立。
+
+我们已经完成了一半。要证明模 $4$ 同余，我们用同样的技巧。我们已经证明 $n^4+n^2+2n\equiv 0\pmod 4$，于是用这个模式来分组：
+```math
+\begin{align*}
+n^{12}&+n^6+2n^4+2n^3+2n^2+4n \\
+&=(n^{12}+n^6+2n^3)+2(n^4+n^2+2n) \\
+&\equiv 0+2\cdot 0=0\pmod 4.
+ \end{align*}
+```
+对 $m=12$ 的情形证毕。
+
+至此我们已经对素数 $m$、$m=4$ 以及 $m=12$ 证明了该同余式。现在我们尝试对素数幂证明它。为具体起见，不妨设 $m=p^k$，其中 $p$ 为素数。那么 $(4.64)$ 的左边是
+```math
+\begin{align*}
+n^{p^3}&+\varphi(p)n^{p^2}+\varphi(p^2)n^p+\varphi(p^3)n \\
+&=n^{p^3}+(p-1)n^{p^2}+(p^2-p)n^p+(p^3-p^2)n \\
+&=(n^{p^3}-n^{p^2})+p(n^{p^2}-n^p)+p^2(n^p-n)+p^3n.
+ \end{align*}
+```
+
+如果我们能证明 $n^{p^3}-n^{p^2}$ 被 $p^3$ 整除、$n^{p^2}-n^p$ 被 $p^2$ 整除、$n^p-n$ 被 $p$ 整除，就能说明上式模 $p^3$ 同余于 $0$。根据费马小定理的另一形式，我们有 $n^p\equiv n\pmod p$，所以 $p$ 整除 $n^p-n$；因此存在整数 $q$ 使得
+```math
+n^p = n + pq.
+```
+
+现在我们把两边同时取 $p$ 次幂，按照二项式定理展开右边（我们将在第 $5$ 章遇到它），然后重新分组，可得
+```math
+\begin{align*}
+n^{p^2}&=(n+pq)^p=n^p + \binom{p}{1}(pq)n^{p-1} + \binom{p}{2}(pq)^2n^{p-2}+\cdots 
+&= n^p + pQ.
+ \end{align*}
+```
+对某个整数 $Q$ 成立。我们可以在这里提出一个 $p^2$ 因子，因为第二项中 $\binom{p}{1}=p$，而后面所有项里都出现 $(pq)^2$ 因子。于是我们得到 $p^2$ 整除 $n^{p^2}-n^p$。
+
+我们再次把两边取 $p$ 次幂、展开并重新分组，就得到
+```math
+\begin{align*}
+n^{p^3}&=(n^{p^2}+pQ)^p \\
+&=n^{p^2}+\binom{p}{1}(pQ)n^{p^2(p-1)}+\binom{p}{2}(pQ)^2n^{p^2(p-2)} +\cdots \\
+&= n^{p^2}+p^3Q.
+ \end{align*}
+```
+对另一个整数 $Q'$ 成立。所以 $p^3$ 整除 $n^{p^3}-n^{p^2}$。这就完成了对 $m=p^3$ 的证明，因为我们已经说明 $p^3$ 整除 $(4.64)$ 的左边。
+
+而且我们可以用归纳法证明
+```math
+n^{p^k} = n^{p^{k-1}} + p^k \mathfrak{Q}.
+```
+
+对某个整数 $\mathfrak{Q}$ 成立（称之为最终整数是因为我们快没有字体可用了）；于是
+```math
+n^{p^k} \equiv n^{p^{k-1}} \pmod{p^k},\quad \text{for } k>0.\tag{4.65}.
+```
+
+因此 $(4.64)$ 的左边是
+```math
+\bigl(n^{p^k} - n^{p^{k-1}}\bigr) + p\bigl(n^{p^{k-1}} - n^{p^{k-2}}\bigr) + \cdots + p^{k-1}\bigl(n^p - n\bigr) + p^k n,
+```
+它能被 $p^k$ 整除，因此模 $p^k$ 与 $0$ 同余。
+
+我们就快完成了。既然已经对素数幂证明了 $(4.64)$，剩下只需证明：若 $m = m_1 m_2$ 且 $m_1$ 与 $m_2$ 互素，并假设同余式对 $m_1$ 和 $m_2$ 都成立，则它对 $m$ 也成立。我们对 $m=12$ 情形的检验（分解为 $m=3$ 和 $m=4$ 的情形）让我们有理由相信这个方法是可行的。
+
+我们知道 $\varphi$ 函数是积性函数，因此可以写成
+```math
+\begin{align*}
+\sum_{d\backslash m}\varphi(d)n^{m/d}&=\sum_{\substack{d_1\backslash m_1\\d_2\backslash m_2}}\varphi(d_1d_2)n^{m_1m_2/(d_1d_2)}\\
+&=\sum_{d_1\backslash m_1}\varphi(d_1)\biggl(\sum_{d_2\backslash m_2}\varphi(d_2)\bigl(n^{m_1/d_1}\bigr)^{m_2/d_2}\biggr).
+ \end{align*}
+```
+而内层和模 $m_2$ 与 $0$ 同余，因为我们已经假设 $(4.64)$ 对 $m_2$ 成立；所以整个和模 $m_2$ 与 $0$ 同余。由对称性可知，整个和模 $m_1$ 也与 $0$ 同余。因此根据 $(4.42)$，它模 $m$ 与 $0$ 同余。证毕。
+
+
+
 

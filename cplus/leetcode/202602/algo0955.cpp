@@ -22,5 +22,32 @@ public:
         return ans;  
     }
 
- 
+    int minDeletionSize2(vector<string>& strs) {
+        // 参考题解，题解优化，建立需要比较的元素下标
+        int ans = 0;
+        int n = strs.size(), m = strs[0].length(); 
+        vector<int> idx(n-1);       // 需要比较的行下标 idx[i] <-> idx[i] + 1
+        iota(idx.begin(), idx.end(), 0);
+
+        for (int i = 0; i<m; i++) {
+            bool to_del = false;
+            for (auto& j : idx) {
+                if (strs[j][i] > strs[j+1][i]) {
+                    to_del = true; break;
+                }
+            }
+            if (to_del) ans ++;
+            else {
+                int newsize = 0;
+                for (auto& j : idx) {
+                    if (strs[j][i] == strs[j+1][i]) {
+                        idx[newsize++] = j;
+                    }
+                }
+                idx.resize(newsize);
+            }
+        }
+
+        return ans;
+    }    
 };

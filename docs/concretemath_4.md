@@ -867,7 +867,7 @@ x^2 \equiv 1 \pmod m,\tag{4.43}
 (x-1)(x+1)\equiv 0\pmod{p^k}
 ```
 
-所以 $p$ 必须整除 $x-1$ 或 $x+1$，或同时整除两者。但除非 $p=2$，否则 $p$ 不能同时整除 $x-1$ 和 $x+1$；我们将这种情况留到后面讨论。如果 $p>2$，那么 $p\backslash(x-1)(x+1)$ 等价于 $p\backslash(x-1)$ 或 $p\backslash(x+1)$；因此恰好有两个解，即 $x\equiv 1$ 和 $x\equiv -1$。
+所以 $p$ 必须整除 $x-1$ 或 $x+1$，或同时整除两者。但除非 $p=2$，否则 $p$ 不能同时整除 $x-1$ 和 $x+1$；我们将这种情况留到后面讨论。如果 $p>2$，那么 $p\backslash(x-1)(x+1)$ 等价于 $p\backslash(x-1)$ 或 $p\backslash(x+1)$；因此恰好有两个解，即 $x\equiv +1$ 和 $x\equiv -1$。
 
 $p=2$ 的情形略有不同。若 $2^k\backslash(x-1)(x+1)$，则 $x-1$ 或 $x+1$ 可被 $2$ 整除但不能被 $4$ 整除，因此另一个必被 $2^{k-1}$ 整除。这意味着当 $k\ge 3$ 时有四个解，即 $x\equiv\pm 1$ 与 $x\equiv 2^{k-1}\pm 1$。（例如，当 $p=8$ 时四个解为 $x\equiv 1,3,5,7\pmod 8$；知道任意奇数的平方都形如 $8n+1$ 通常很有用。）
 
@@ -931,9 +931,11 @@ n^{p-1}\equiv 1\pmod p,\quad \text{if }n\perp p. \tag{4.47}
 
 证明：照常假设 $p$ 是素数。我们知道 $p-1$ 个数 $n\bmod p,\,2n\bmod p,\dots,\,(p-1)n\bmod p$ 就是 $1,2,\dots,p-1$ 的某个排列。因此将它们相乘可得
 ```math
-n\cdot(2n)\cdots((p-1)n) \\
-\equiv (n\bmod p)\cdot(2n\bmod p)\cdots((p-1)n\bmod p) \\
-\equiv (p-1)!
+\begin{align}
+n\cdot(2n)&\cdots((p-1)n) \\
+&\equiv (n\bmod p)\cdot(2n\bmod p)\cdots((p-1)n\bmod p) \\
+&\equiv (p-1)!
+\end{align}
 ```
 
 其中同余式均对模 $p$ 成立。这就推出
@@ -948,7 +950,7 @@ n\cdot(2n)\cdots((p-1)n) \\
 n^p\equiv n\pmod p,\quad\text{integer }n. \tag{4.48}
 ```
 
-这个同余式对所有整数 $n$ 都成立。证明很简单：若 $n\perp p$，只需将式 $(4.47)$ 乘以 $n$ 即可。若不然，则 $p\backslash n$，于是 $n^p=0=n$。
+这个同余式对所有整数 $n$ 都成立。证明很简单：若 $n\perp p$，只需将式 $(4.47)$ 乘以 $n$ 即可。若不然，则 $p\backslash n$，于是 $n^p\equiv 0\equiv n$。
 
 就在发现式 (4.47) 的同一年，费马写信给梅森，称他怀疑这个数
 ```math

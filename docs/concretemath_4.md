@@ -745,10 +745,10 @@ a\equiv b\ \Rightarrow\ a^n\equiv b^n\pmod{m},\text{ integers }a,b; n\ge 0
 
 不过，当 $d$ 与 $m$ 互质时，我们可以挽救同余式的消去律：
 ```math
-\begin{align}
+\begin{aligned}
 ad\equiv bd\iff a\equiv b &\pmod{m}, \\ 
     &\text{integer a,b,d,m and }d\perp m. \tag{4.37}
-\end{align}
+\end{aligned}
 ```
 
 例如，由 $15\equiv35\pmod{m}$ 推出 $3\equiv7\pmod{m}$ 是合法的，除非模数 $m$ 是 $5$ 的倍数。
@@ -774,20 +774,20 @@ a\equiv b\pmod{md}\Rightarrow a\equiv b\pmod{m},\quad \text{integer }d.\tag{4.40
 
 反之，如果已知 $a\equiv b$ 对两个较小的模数成立，我们能否推出对更大的模数也成立？答案是肯定的，其规则为：
 ```math
-\begin{align}
+\begin{aligned}
 a\equiv b &\pmod{m} \text{ and } a\equiv b &\pmod{n}\\
 &\iff a\equiv b\pmod{lcm(m,n)}, \text{ integers m; n > 0 }.\tag{4.41}
-\end{align}
+\end{aligned}
 ```
 
 例如，如果我们已知 $a\equiv b\pmod{12}$ 且 $a\equiv b\pmod{18}$，就可以稳妥地推出 $a\equiv b\pmod{36}$。原因是如果 $a-b$ 是 $m$ 和 $n$ 的公倍数，那么它一定是 $\operatorname{lcm}(m,n)$ 的倍数，这可由唯一分解定理推出。
 
 该定律中 $m\perp n$ 的特殊情形极为重要，因为当 $m$ 与 $n$ 互质时 $\operatorname{lcm}(m,n)=mn$，因此我们将其明确表述出来：
 ```math
-\begin{align}
+\begin{aligned}
 a\equiv b &\pmod{mn} \\
 &\iff a\equiv b\pmod{m} \text{ and } a\equiv b\pmod{n}, m\perp n.\tag{4.42}
-\end{align}
+\end{aligned}
 ```
 
 例如，$a\equiv b\pmod{100}$ 当且仅当 $a\equiv b\pmod{25}$ 且 $a\equiv b\pmod{4}$。换一种说法，如果我们知道 $x\bmod 25$ 和 $x\bmod 4$，就有足够的信息确定 $x\bmod 100$。这是中国剩余定理的一个特例（见习题30），该定理之所以如此命名，是因为它大约在公元350年由中国的孙子发现。
@@ -931,11 +931,11 @@ n^{p-1}\equiv 1\pmod p,\quad \text{if }n\perp p. \tag{4.47}
 
 证明：照常假设 $p$ 是素数。我们知道 $p-1$ 个数 $n\bmod p,\,2n\bmod p,\dots,\,(p-1)n\bmod p$ 就是 $1,2,\dots,p-1$ 的某个排列。因此将它们相乘可得
 ```math
-\begin{align}
+\begin{aligned}
 n\cdot(2n)&\cdots((p-1)n) \\
 &\equiv (n\bmod p)\cdot(2n\bmod p)\cdots((p-1)n\bmod p) \\
 &\equiv (p-1)!
-\end{align}
+\end{aligned}
 ```
 
 其中同余式均对模 $p$ 成立。这就推出

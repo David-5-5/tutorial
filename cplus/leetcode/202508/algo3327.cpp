@@ -69,7 +69,7 @@ public:
             }
         }
         vector<int> d2(n);
-            for (int i = 0, l = 0, r = -1; i < n; i++) {
+        for (int i = 0, l = 0, r = -1; i < n; i++) {
             int k = (i > r) ? 0 : min(d2[l + r - i + 1], r - i + 1);
             while (0 <= i - k - 1 && i + k < n && dfs_str[i - k - 1] == dfs_str[i + k]) {
                 k++;

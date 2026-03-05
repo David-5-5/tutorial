@@ -706,7 +706,7 @@ a \equiv b \pmod{m} \quad \iff \quad a \bmod m = b \bmod m. \tag{4.35}
 
 因为 $x \bmod m$ 与 $x$ 相差 $m$ 的一个倍数，所以我们可以用另一种方式理解同余式：
 ```math
-a \equiv b \pmod{m} \iff \text{a-b is a multiple of m}. \tag{4.36}
+a \equiv b \pmod{m} \iff a-b\text{ is a multiple of }m. \tag{4.36}
 ```
 
 因为若 $a \bmod m = b \bmod m$，则式 $(3.21)$ 中 `mod` 的定义告诉我们 $a-b = a\bmod m + km - (b\bmod m + lm) = (k-l)m$，其中 $k$ 和 $l$ 为整数。反之若 $a-b = km$，则当 $m=0$ 时 $a=b$；否则
@@ -721,17 +721,17 @@ a\bmod m = a-\lfloor a/m\rfloor m &= b+km-\lfloor (b+km)/m\rfloor m \\
 
 同余号 $\equiv$ 看起来与等号 $=$ 很相似，这很方便，因为同余式几乎就像等式一样。例如，同余是一种等价关系；也就是说，它满足自反律 $a\equiv a$，对称律 $a\equiv b\Rightarrow b\equiv a$，以及传递律 $a\equiv b,b\equiv c\Rightarrow a\equiv c$。所有这些性质都很容易证明，因为任何满足 $a\equiv b\iff f(a)=f(b)$（其中 $f$ 是某个函数）的关系 $\equiv$ 都是等价关系。（在我们这里，$f(x)=x\bmod m$。）此外，我们可以对同余的元素进行加、减运算而不破坏同余性：
 ```math
-a\equiv b\ (\text{mod}\ m) \land c\equiv d\ (\text{mod}\ m) \;\Rightarrow\; a+c\equiv b+d\ (\text{mod}\ m);\\ 
+a\equiv b \text{  and  } c\equiv d\ (\text{mod}\ m) \Rightarrow a+c\equiv b+d \pmod m;\\ 
 ```
 ```math
-a\equiv b\ (\text{mod}\ m) \land c\equiv d\ (\text{mod}\ m) \;\Rightarrow\; a-c\equiv b-d\ (\text{mod}\ m).
+a\equiv b \text{  and  } c\equiv d\ (\text{mod}\ m) \Rightarrow a-c\equiv b-d \pmod m.
 ```
 
 因为若 $a-b$ 和 $c-d$ 均为 $m$ 的倍数，则 $(a+c)-(b+d)=(a-b)+(c-d)$ 和 $(a-c)-(b-d)=(a-b)-(c-d)$ 也均为 $m$ 的倍数。顺便提一下，并非每出现一次 $\equiv$ 就需要书写一次 $\pmod{m}$；若模数保持不变，我们只需在开头声明一次即可确定上下文。这是同余记号带来的一大便利。
 
 乘法同样适用，只要我们处理的是整数：
 ```math
-a\equiv b\ \text{and}\ c\equiv d\ \Rightarrow\ ac\equiv bd\pmod{m}. \text{integer b,c}.
+a\equiv b\ \text{and}\ c\equiv d\ \Rightarrow\ ac\equiv bd\pmod{m}. \text{  integer b,c}.
 ```
 
 证明：$ac-bd=(a-b)c+b(c-d)$。反复应用这一乘法性质，我们现在还可以取幂：
@@ -745,14 +745,17 @@ a\equiv b\ \Rightarrow\ a^n\equiv b^n\pmod{m},\text{ integers }a,b; n\ge 0
 
 不过，当 $d$ 与 $m$ 互质时，我们可以挽救同余式的消去律：
 ```math
-ad\equiv bd\iff a\equiv b\pmod{m}, \\ \text{integer a,b,d,m and }d\perp m. \tag{4.37}
+\begin{align}
+ad\equiv bd\iff a\equiv b &\pmod{m}, \\ 
+    &\text{integer a,b,d,m and }d\perp m. \tag{4.37}
+\end{align}
 ```
 
 例如，由 $15\equiv35\pmod{m}$ 推出 $3\equiv7\pmod{m}$ 是合法的，除非模数 $m$ 是 $5$ 的倍数。
 
 为证明这一性质，我们再次使用扩展欧几里得算法 $(4.5)$，找到整数 $d'$ 和 $m'$ 使得 $d'd+m'm=1$。那么若 $ad\equiv bd$，我们可以在同余式两边同乘 $d'$，得到 $ad'd\equiv bd'd$。由于 $d'd\equiv1$，于是有 $ad'd\equiv a$ 且 $bd'd\equiv b$，因此 $a\equiv b$。这一证明表明，在模 $m$ 同余的意义下，数 $d'$ 的作用几乎等同于 $1/d$；因此我们称其为“$d$ 在模 $m$ 下的逆元”。
 ```math
-ad\equiv bd\pmod{md}\Rightarrow a\equiv b\pmod{m},\quad d\neq 0.\tag{4.38}
+ad\equiv bd\pmod{md}\Rightarrow a\equiv b\pmod{m}, \text{ for } \quad d\neq 0.\tag{4.38}
 ```
 
 该定律对所有实数 $a,b,d,m$ 都成立，因为它仅依赖于分配律 $(a\bmod m)d=ad\bmod md$：我们有 $a\bmod m=b\bmod m\iff (a\bmod m)d=(b\bmod m)d\iff ad\bmod md=bd\bmod md$。因此，例如由 $3\cdot2\equiv5\cdot2\pmod{4}$ 我们可推出 $3\equiv5\pmod{2}$。
@@ -771,16 +774,20 @@ a\equiv b\pmod{md}\Rightarrow a\equiv b\pmod{m},\quad \text{integer }d.\tag{4.40
 
 反之，如果已知 $a\equiv b$ 对两个较小的模数成立，我们能否推出对更大的模数也成立？答案是肯定的，其规则为：
 ```math
-a\equiv b\pmod{m}\ \text{and}\ a\equiv b\pmod{n} \\
-\iff a\equiv b\pmod{m}\ \text{且}\ a\equiv b\pmod{n}\iff a\equiv b\pmod{mn},\quad \text{if } m\perp n\tag{4.42}
+\begin{align}
+a\equiv b &\pmod{m} \text{ and } a\equiv b &\pmod{n}\\
+&\iff a\equiv b\pmod{lcm(m,n)}, \text{ integers m; n > 0 }.\tag{4.41}
+\end{align}
 ```
 
 例如，如果我们已知 $a\equiv b\pmod{12}$ 且 $a\equiv b\pmod{18}$，就可以稳妥地推出 $a\equiv b\pmod{36}$。原因是如果 $a-b$ 是 $m$ 和 $n$ 的公倍数，那么它一定是 $\operatorname{lcm}(m,n)$ 的倍数，这可由唯一分解定理推出。
 
 该定律中 $m\perp n$ 的特殊情形极为重要，因为当 $m$ 与 $n$ 互质时 $\operatorname{lcm}(m,n)=mn$，因此我们将其明确表述出来：
 ```math
-a\equiv b\pmod{mn} \\
-a\equiv b\pmod{m} and\ a\equiv b\pmod{n}\iff a\equiv b\pmod{mn}，if\ m\perp n\tag{4.42}
+\begin{align}
+a\equiv b &\pmod{mn} \\
+&\iff a\equiv b\pmod{m} \text{ and } a\equiv b\pmod{n}, m\perp n.\tag{4.42}
+\end{align}
 ```
 
 例如，$a\equiv b\pmod{100}$ 当且仅当 $a\equiv b\pmod{25}$ 且 $a\equiv b\pmod{4}$。换一种说法，如果我们知道 $x\bmod 25$ 和 $x\bmod 4$，就有足够的信息确定 $x\bmod 100$。这是中国剩余定理的一个特例（见习题30），该定理之所以如此命名，是因为它大约在公元350年由中国的孙子发现。
@@ -860,7 +867,7 @@ x^2 \equiv 1 \pmod m,\tag{4.43}
 (x-1)(x+1)\equiv 0\pmod{p^k}
 ```
 
-所以 $p$ 必须整除 $x-1$ 或 $x+1$，或同时整除两者。但除非 $p=2$，否则 $p$ 不能同时整除 $x-1$ 和 $x+1$；我们将这种情况留到后面讨论。如果 $p>2$，那么 $p\backslash(x-1)(x+1)$ 等价于 $p\backslash(x-1)$ 或 $p\backslash(x+1)$；因此恰好有两个解，即 $x\equiv 1$ 和 $x\equiv -1$。
+所以 $p$ 必须整除 $x-1$ 或 $x+1$，或同时整除两者。但除非 $p=2$，否则 $p$ 不能同时整除 $x-1$ 和 $x+1$；我们将这种情况留到后面讨论。如果 $p>2$，那么 $p\backslash(x-1)(x+1)$ 等价于 $p\backslash(x-1)$ 或 $p\backslash(x+1)$；因此恰好有两个解，即 $x\equiv +1$ 和 $x\equiv -1$。
 
 $p=2$ 的情形略有不同。若 $2^k\backslash(x-1)(x+1)$，则 $x-1$ 或 $x+1$ 可被 $2$ 整除但不能被 $4$ 整除，因此另一个必被 $2^{k-1}$ 整除。这意味着当 $k\ge 3$ 时有四个解，即 $x\equiv\pm 1$ 与 $x\equiv 2^{k-1}\pm 1$。（例如，当 $p=8$ 时四个解为 $x\equiv 1,3,5,7\pmod 8$；知道任意奇数的平方都形如 $8n+1$ 通常很有用。）
 
@@ -924,9 +931,11 @@ n^{p-1}\equiv 1\pmod p,\quad \text{if }n\perp p. \tag{4.47}
 
 证明：照常假设 $p$ 是素数。我们知道 $p-1$ 个数 $n\bmod p,\,2n\bmod p,\dots,\,(p-1)n\bmod p$ 就是 $1,2,\dots,p-1$ 的某个排列。因此将它们相乘可得
 ```math
-n\cdot(2n)\cdots((p-1)n) \\
-\equiv (n\bmod p)\cdot(2n\bmod p)\cdots((p-1)n\bmod p) \\
-\equiv (p-1)!
+\begin{align}
+n\cdot(2n)&\cdots((p-1)n) \\
+&\equiv (n\bmod p)\cdot(2n\bmod p)\cdots((p-1)n\bmod p) \\
+&\equiv (p-1)!
+\end{align}
 ```
 
 其中同余式均对模 $p$ 成立。这就推出
@@ -941,7 +950,7 @@ n\cdot(2n)\cdots((p-1)n) \\
 n^p\equiv n\pmod p,\quad\text{integer }n. \tag{4.48}
 ```
 
-这个同余式对所有整数 $n$ 都成立。证明很简单：若 $n\perp p$，只需将式 $(4.47)$ 乘以 $n$ 即可。若不然，则 $p\backslash n$，于是 $n^p=0=n$。
+这个同余式对所有整数 $n$ 都成立。证明很简单：若 $n\perp p$，只需将式 $(4.47)$ 乘以 $n$ 即可。若不然，则 $p\backslash n$，于是 $n^p\equiv 0\equiv n$。
 
 就在发现式 (4.47) 的同一年，费马写信给梅森，称他怀疑这个数
 ```math

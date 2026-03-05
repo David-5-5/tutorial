@@ -19,64 +19,94 @@ public:
         }
         if (t>1) return "-1";
 
-        auto add = [&](int i) -> void {
+        // prime factors 1 <= val <= 9
+        auto pf = [&](int val) -> vector<int> {
+            vector<int> res(4);
+            for (int p=0; p<4; ++p) {
+                while (val % primes[p] == 0) {
+                    res[p] ++; val /= primes[p];
+                }
+            }
+            return res;
+        };
+
+        auto sub_inx = [&](int i) -> void {
+            auto val = num[i] - '0';
+            vector<int> factors = pf(val);
+            for (int p=0; p<4; ++p) {
+                factors[p] = min(factors[p], suf[p]);
+                suf[p] -= factors[p];
+            }
+            pre.push_back(factors);
+        };
+
+        auto add_inx = [&](int i) -> void {
             for (int p=0; p<4; ++p) suf[p] += pre[i][p];
         };
 
-        auto sub = [&](int i) -> void {
-            auto val = num[i]; vector<int> cnt(4);
-            if (val == '9') {cnt[1] = min(2, suf[1]); suf[1] -= cnt[1];}
-            else if (val == '8') {cnt[0] = min(3, suf[0]); suf[0] -= cnt[0];}
-            else if (val == '7') {cnt[3] = min(1, suf[3]); suf[3] -= cnt[3];}
-            else if (val == '6') {
-                cnt[0] = min(1, cnt[0]); cnt[1] = min(1, suf[1]);
-                suf[0] -= cnt[0]; suf[1] -= cnt[1]; 
-            }else if (val == '5') {cnt[3] = min(1, suf[3]); suf[3] -= cnt[3];}
-            else if (val == '4') {cnt[0] = min(2, suf[0]); suf[0] -= cnt[0];}
-            else if (val == '3') {cnt[1] = min(1, suf[1]); suf[1] -= cnt[1];}
-            else if (val == '2') {cnt[0] = min(1, suf[0]); suf[0] -= cnt[0];}
-
-            pre.emplace_back(cnt);
+        auto sub_val = [&](int val) -> void {
+            vector<int> factors = pf(val);
+            for (int p=0; p<4; ++p) {
+                suf[p] -= factors[p];
+            }            
         };
-        int pos0 = -1, n = num.length();
+
+        auto count = [&](vector<int>& arr) -> int {
+            return arr[0] + arr[1] + arr[2] + arr[3];
+        };
+
+        auto get_max = [&](int limit) -> int {
+            if (count(suf) == 0) return limit;
+
+            for (int v=limit-1; v>=2; v--) {
+                vector<int> factors = pf(v);
+                if (suf[0]>=factors[0] && suf[1]>=factors[1] &&
+                    suf[2]>=factors[2] && suf[3]>=factors[3])
+                    return v;
+            }
+            return 1;
+        };
+
+        auto equal = [&](int val) -> int {
+            vector<int> factors = pf(val);
+            return suf[0]==factors[0] && suf[1]==factors[1] && 
+                suf[2]==factors[2] && suf[3]==factors[3];
+        };
+
+        int n = num.length(), pos0 = n;
         for (int i=0; i<n; i++) {
             if (num[i] == '0') {
                 pos0 = i; break;
             }
-            sub(i);
+            sub_inx(i);
         }
 
         string ans = "";
+        
         for (int i=n-1; i>=0; --i) {
+            if (count(suf) == 0) {ans.push_back(max(num[i], '1')); continue;}
+            
+            if (i<pos0) {
+                add_inx(i);
+                if (i) {
+                    
+                }
+            }
+            int val = get_max(i<pos0?num[i]-'0':2);
 
-            if (i > pos0) add(i); int exp = 0;
-            // cout << suf[0] << ", " << suf[1] << ", " << suf[2] << ", " << suf[3] << endl;
-            if (suf[1]>=2) {suf[1] -= 2; exp = 9;}
-            else if (suf[0] >= 3) {suf[0] -= 3; exp = 8;}
-            else if (suf[3]>=1) {suf[3] -= 1; exp = 7;}
-            else if (suf[0] >= 1 && suf[1]>=1 ) {suf[0] -= 1; suf[1] -= 1; exp = 6;}
-            else if (suf[2] >= 1) {suf[2] -= 1; exp = 5;}
-            else if (suf[0] >= 2) {suf[0] -= 2; exp = 4;}
-            else if (suf[1] >= 1) {suf[1] -= 1; exp = 3;}
-            else if (suf[0] >= 1) {suf[0] -= 1; exp = 2;}
-            else exp = 1;
-
-            if (suf[0] || suf[1] || suf[2] || suf[3]) ans.push_back(exp + '0');
-            else ans.push_back(max(num[i]-'0', exp)+'0');
+            if (val < (num[i]-'0') && equal(val)) {
+                for (int p=0; p<4; ++p) if (suf[p]) {
+                    val /= primes[p];
+                }
+            }
+            sub_val(val); ans.push_back(val + '0');
         }
 
-        while (suf[0] || suf[1] || suf[2] || suf[3]) {
-            if (suf[1]>=2) {suf[1] -= 2; ans.push_back('9');}
-            else if (suf[0] >= 3) {suf[0] -= 3; ans.push_back('8');}
-            else if (suf[3]>=1) {suf[3] -= 1; ans.push_back('7');}
-            else if (suf[0] >= 1 && suf[1]>=1 ) {suf[0] -= 1; suf[1] -= 1; ans.push_back('6');}
-            else if (suf[2] >= 1) {suf[2] -= 1; ans.push_back('5');}
-            else if (suf[0] >= 2) {suf[0] -= 2; ans.push_back('4');}
-            else if (suf[1] >= 1) {suf[1] -= 1; ans.push_back('3');}
-            else if (suf[0] >= 1) {suf[0] -= 1; ans.push_back('2');}
-            else ans.push_back('1');
+        while (count(suf)) {
+            auto val = get_max(2); sub_val(val);
+            ans.push_back(val + '0');
         }
 
         reverse(ans.begin(), ans.end()); return ans;   
-    }
+    }    
 };

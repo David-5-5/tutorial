@@ -1150,22 +1150,22 @@ g(m)=\sum\limits_{d\backslash m}f(d) \iff f(m)=\sum\limits_{d\backslash m}\mu(d)
 ```
 这就是 $\mu$。
 
-若将式 $(4.54)$ 看作函数 $\rho(m)$ 的递推式，我们可以利用戴德金–刘维尔反演原理 $(4.56)$ 求解该递推式，从而得到：
+若将式 $(4.54)$ 看作函数 $\varphi(m)$ 的递推式，我们可以利用戴德金–刘维尔反演原理 $(4.56)$ 求解该递推式，从而得到：
 ```math
-\rho(m)=\sum\limits_{d\backslash m}\mu(d)\frac{m}{d}.\tag{4.58}
+\varphi(m)=\sum\limits_{d\backslash m}\mu(d)\frac{m}{d}.\tag{4.58}
 ```
 
 例如：
 ```math
 \begin{align*}
-\rho(12)&=\mu(1)\cdot12+\mu(2)\cdot6+\mu(3)\cdot4+\mu(4)\cdot3+\mu(6)\cdot2+\mu(12)\cdot1\\
+\varphi(12)&=\mu(1)\cdot12+\mu(2)\cdot6+\mu(3)\cdot4+\mu(4)\cdot3+\mu(6)\cdot2+\mu(12)\cdot1\\
 &=12-6-4+0+2+0=4.
 \end{align*}
 ```
 
 若 $m$ 被 $r$ 个不同的素数（记为 $p_1,p_2,\dots,p_r$）整除，则求和式 $(4.58)$ 仅有 $2^r$ 个非零项，这是因为 $\mu$ 函数在绝大多数情况下取值为0。由此我们可以看出，式 $(4.58)$ 与式 $(4.53)$ 完全相符，式 $(4.53)$ 的表达式为：
 ```math
-\rho(m)=m\prod\limits_{p\backslash m}\left(1-\dfrac1p\right).
+\varphi(m)=m\prod\limits_{p\backslash m}\left(1-\dfrac1p\right).
 ```
 
 如果我们将这 $r$ 个因子 $(1-1/p_i)$ 展开，恰好得到式 $(4.58)$ 中的 $2^r$ 个非零项。莫比乌斯函数的优势在于，它除了此处之外，还能应用于许多其他场景。
@@ -1177,10 +1177,10 @@ g(m)=\sum\limits_{d\backslash m}f(d) \iff f(m)=\sum\limits_{d\backslash m}\mu(d)
 
 由于最后一个分数 $\dfrac11$ 我们必须给 $\Phi(n)$ 加上 $1$。式 $(4.59)$ 中的和式看似难求，但我们可以通过观察下式间接求出 $\Phi(x)$：
 ```math
-\sum\limits_{d\ge 1}\Phi\left(\left\lfloor\frac{x}{d}\right\rfloor\right)=\frac12x\lfloor x\rfloor+\frac12x.\tag{4.60}
+\sum\limits_{d\ge 1}\Phi\left(\frac{x}{d}\right)=\frac12\lfloor x\rfloor\lfloor 1+x\rfloor.\tag{4.60}
 ```
 
-对所有实数 $x\ge 0$ 成立。这个恒等式为什么成立？道理其实很巧妙，但并不难懂。满足 $0\le m<n\le x$ 的基本分数 $\dfrac{m}{n}$（既约与非既约都算）共有 $\dfrac12\lfloor x\rfloor(\lfloor x\rfloor+1)$ 个，这就是等式右边。其中满足 $\gcd(m,n)=d$ 的分数个数为 $\Phi\left(\left\lfloor\dfrac{x}{d}\right\rfloor\right)$，因为令 $m=dm',\ n=dn'$ 后，这些分数就对应 $0\le m'<n'\le \dfrac{x}{d}$。所以左边只是用另一种方式统计同一批分数，恒等式必然成立。
+对所有实数 $x\ge 0$ 成立。这个恒等式为什么成立？道理其实很巧妙，但并不难懂。满足 $0\le m<n\le x$ 的基本分数 $\dfrac{m}{n}$，既约与非既约都算，共有 $\frac12\lfloor x\rfloor\lfloor 1+x\rfloor$ 个，这就是等式右边。其中满足 $\gcd(m,n)=d$ 的分数个数为 $\Phi(x/d)$，因为令 $m=m'd,\ n=n'd$ 后，这些分数就对应 $0\le m'<n'\le \dfrac{x}{d}$。所以左边只是用另一种方式统计同一批分数，恒等式必然成立。
 
 我们再仔细观察一下，让式 $(4.59)$ 和 $(4.60)$ 更清晰。$\Phi(x)$ 的定义意味着 $\Phi(x)=\Phi(\lfloor x\rfloor)$；但把 $\Phi(x)$ 定义在**全体实数**上（而不只是整数）会更方便。在整数点上我们有下表：
 
@@ -1198,10 +1198,10 @@ $\Phi(n)$ | 0 | 1 | 2 | 4 | 6 | 10 | 12 | 18 | 22 | 28 | 32 | 42 | 46 |
 
 恒等式 $(4.60)$ 可以看作是关于 $\Phi(x)$ 的一个隐式递推式；例如，我们刚刚已经看到，可以利用它从一些满足 $m<12$ 的 $\Phi(m)$ 的值来计算出 $\Phi(12)$，并且我们可以利用莫比乌斯函数的另一个优美性质来求解这类递推式：
 ```math
-g(x)=\sum\limits_{d\ge 1}f\left(\left\lfloor\frac{x}{d}\right\rfloor\right) \iff f(x)=\sum\limits_{d\ge 1}\mu(d)g\left(\left\lfloor\frac{x}{d}\right\rfloor\right).\tag{4.61}
+g(x)=\sum\limits_{d\ge 1}f(x/d) \iff f(x)=\sum\limits_{d\ge 1}\mu(d)g(x/d).\tag{4.61}
 ```
 
-这个反演律对所有满足 $\sum\limits_{k,d\ge 1}\left|f\left(\left\lfloor\frac{x}{kd}\right\rfloor\right)\right|<\infty$ 的函数 $f$ 都成立；我们可以如下证明。假设 $g(x)=\sum\limits_{d\ge 1}f\left(\left\lfloor\frac{x}{d}\right\rfloor\right)$，那么
+这个反演律对所有满足 $\sum\limits_{k,d\ge 1}\left|f(x/kd)\right|<\infty$ 的函数 $f$ 都成立；我们可以如下证明。假设 $g(x)=\sum\limits_{d\ge 1}f(x/d)$，那么
 ```math
 \begin{align*}
 \sum_{d\ge 1}\mu(d)g(x/d)&=\sum_{d\ge 1}\mu(d)\sum_{k\ge 1}f(x/kd) \\
@@ -1213,7 +1213,7 @@ g(x)=\sum\limits_{d\ge 1}f\left(\left\lfloor\frac{x}{d}\right\rfloor\right) \iff
 
 因此现在我们可以求解关于 $\Phi(x)$ 的递推式 $(4.60)$：
 ```math
-\Phi(x)=\frac12\sum\limits_{d\ge 1}\mu(d)\left\lfloor\frac{x}{d}\right\rfloor\left(1+\left\lfloor\frac{x}{d}\right\rfloor\right).\tag{4.62}
+\Phi(x)=\frac12\sum\limits_{d\ge 1}\mu(d)\lfloor x/d\rfloor\lfloor(1+x/d\rfloor).\tag{4.62}
 ```
 
 这始终是一个有限和。例如，

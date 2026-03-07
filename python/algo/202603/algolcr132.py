@@ -35,3 +35,18 @@ class Solution:
             else: ans = res 
         return ans % mod   
     
+    def cuttingBamboo3(self, bamboo_len: int) -> int:
+        dp = [0] * (bamboo_len + 1)
+        dp[0], dp[1] = 1, 1
+        
+        # 遍历每个长度i，从2到bamboo_len
+        for i in range(2, bamboo_len + 1):
+            # 遍历分割出的第一段长度len，从i-1递减到1
+            len = i - 1
+            while len > 0:
+                current = max(dp[i - len], i - len) * len
+                if current > dp[i]:
+                    dp[i] = current
+                len -= 1
+        
+        return dp[bamboo_len] % (10 ** 9 + 7)

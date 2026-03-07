@@ -351,7 +351,7 @@ powers of 2 | 0 | 1 | 0 | 2 | 0 | 1 | 0 | 3 | 0 | 1 | 8
 
 每一项都是前一项向下取半。这对所有 $n$ 都成立，因为作为式 $(3.11)$ 的特例，我们有 $\left\lfloor n/2^{k+1} \right\rfloor = \left\lfloor \left\lfloor n/2^k \right\rfloor / 2 \right\rfloor$。把数写成二进制时尤其容易看清这一点：
 ```math
-\begin{align*}
+\begin{aligned}
 100 &= (1100100)_2 &= 100 \\
 \left\lfloor 100/2 \right\rfloor &= (110010)_2 &= 50 \\
 \left\lfloor 100/4 \right\rfloor &= (11001)_2 &= 25 \\
@@ -359,7 +359,7 @@ powers of 2 | 0 | 1 | 0 | 2 | 0 | 1 | 0 | 3 | 0 | 1 | 8
 \left\lfloor 100/16 \right\rfloor &= (110)_2 &= 6 \\
 \left\lfloor 100/32 \right\rfloor &= (11)_2&= 3 \\
 \left\lfloor 100/64 \right\rfloor &= (1)_2 &= 1 \\
-\end{align*}
+\end{aligned}
 ```
 我们只需要把前一项的最低有效位去掉，就能得到下一项。
 
@@ -377,12 +377,12 @@ powers of 2 | 0 | 1 | 0 | 2 | 0 | 1 | 0 | 3 | 0 | 1 | 8
 
 $\epsilon_p(n!)$ 大约有多大？我们只需去掉求和项中的下取整符号，然后对无穷等比数列求和，就能得到一个简单（但很好）的上界：
 ```math
-\begin{align*}
+\begin{aligned}
 \epsilon_p(n!) &< \frac{n}{p} + \frac{n}{p^2} + \frac{n}{p^3} + \cdots \\
 &= \frac{n}{p}\left(1 + \frac{1}{p} + \frac{1}{p^2} + \cdots\right) \\
 &= \frac{n}{p} \left(\frac{p}{p-1}\right) \\
 &= \frac{n}{p-1}
-\end{align*}
+\end{aligned}
 ```
 
 当 $p=2$ 且 $n=100$ 时，这个不等式给出 $97 < 100$。可见上界 $100$ 不仅正确，而且与真实值 $97$ 非常接近。事实上，真实值 $n-v_2(n)$ 一般近似于 $n$，因为 $v_2(n)\le\lfloor\lg n\rfloor$ 相对于 $n$ 来说渐近地小得多。
@@ -711,10 +711,10 @@ a \equiv b \pmod{m} \iff a-b\text{ is a multiple of }m. \tag{4.36}
 
 因为若 $a \bmod m = b \bmod m$，则式 $(3.21)$ 中 `mod` 的定义告诉我们 $a-b = a\bmod m + km - (b\bmod m + lm) = (k-l)m$，其中 $k$ 和 $l$ 为整数。反之若 $a-b = km$，则当 $m=0$ 时 $a=b$；否则
 ```math
-\begin{align*}
+\begin{aligned}
 a\bmod m = a-\lfloor a/m\rfloor m &= b+km-\lfloor (b+km)/m\rfloor m \\
 &= b-\lfloor b/m\rfloor m = b\bmod m.
-\end{align*}
+\end{aligned}
 ```
 
 式 $(4.36)$ 中 $\equiv$ 的刻画通常比 $(4.35)$ 更易用。例如，我们有 $8\equiv23\pmod{5}$，因为 $8-23=-15$ 是 $5$ 的倍数；我们不必同时计算 $8\bmod5$ 和 $23\bmod5$。
@@ -1116,13 +1116,13 @@ g(m)=\sum\limits_{d\backslash m}f(d) \iff f(m)=\sum\limits_{d\backslash m}\mu(d)
 
 式 $(4.56)$ 的证明用到了本章开头介绍的两个技巧 $(4.7)$ 和 $(4.9)$：若 $g(m)=\sum\limits_{d\backslash m}f(d)$，则
 ```math
-\begin{align*}
+\begin{aligned}
 \sum\limits_{d\backslash m}\mu(d)g\left(\frac{m}{d}\right)&=\sum\limits_{d\backslash m}\mu\left(\frac{m}{d}\right)g(d) \\
 &=\sum\limits_{d\backslash m}\mu\left(\frac{m}{d}\right)\sum\limits_{k\backslash d}f(k) \\
 &=\sum\limits_{k\backslash m}\sum\limits_{d\backslash (m/k)}\mu(\frac{m}{kd})f(k) \\
 &=\sum\limits_{k\backslash m}\sum\limits_{d\backslash (m/k)}\mu(d)f(k) \\
 &=\sum\limits_{k\backslash m}[m/k=1]f(k) = f(m). 
-\end{align*}
+\end{aligned}
 ```
 
 式 $(4.56)$ 的另一半可类似证明（见习题 $12$）。
@@ -1157,10 +1157,10 @@ g(m)=\sum\limits_{d\backslash m}f(d) \iff f(m)=\sum\limits_{d\backslash m}\mu(d)
 
 例如：
 ```math
-\begin{align*}
+\begin{aligned}
 \varphi(12)&=\mu(1)\cdot12+\mu(2)\cdot6+\mu(3)\cdot4+\mu(4)\cdot3+\mu(6)\cdot2+\mu(12)\cdot1\\
 &=12-6-4+0+2+0=4.
-\end{align*}
+\end{aligned}
 ```
 
 若 $m$ 被 $r$ 个不同的素数（记为 $p_1,p_2,\dots,p_r$）整除，则求和式 $(4.58)$ 仅有 $2^r$ 个非零项，这是因为 $\mu$ 函数在绝大多数情况下取值为0。由此我们可以看出，式 $(4.58)$ 与式 $(4.53)$ 完全相符，式 $(4.53)$ 的表达式为：
@@ -1203,11 +1203,11 @@ g(x)=\sum\limits_{d\ge 1}f(x/d) \iff f(x)=\sum\limits_{d\ge 1}\mu(d)g(x/d).\tag{
 
 这个反演律对所有满足 $\sum\limits_{k,d\ge 1}\left|f(x/kd)\right|<\infty$ 的函数 $f$ 都成立；我们可以如下证明。假设 $g(x)=\sum\limits_{d\ge 1}f(x/d)$，那么
 ```math
-\begin{align*}
+\begin{aligned}
 \sum_{d\ge 1}\mu(d)g(x/d)&=\sum_{d\ge 1}\mu(d)\sum_{k\ge 1}f(x/kd) \\
 &=\sum_{m\ge 1}f(x/m) \sum_{d,k\ge 1}\mu(d)[m=kd]\\
 &=\sum_{m\ge 1}f(x/m)\sum_{d\backslash m}\mu(d)=\sum_{m\ge 1}f(x/m)[m=1]=f(x)
-\end{align*}
+\end{aligned}
 ```
 反方向的证明本质上是完全相同的。
 
@@ -1218,11 +1218,11 @@ g(x)=\sum\limits_{d\ge 1}f(x/d) \iff f(x)=\sum\limits_{d\ge 1}\mu(d)g(x/d).\tag{
 
 这始终是一个有限和。例如，
 ```math
-\begin{align*}
+\begin{aligned}
 \Phi(12)&=\frac12\bigl(12\cdot13-6\cdot7-4\cdot5+0-2\cdot3+2\cdot3 \\
 & \qquad -1\cdot2+0+0+1\cdot2-1\cdot2+0\bigr)\\
 &=78-21-10-3+3-1+1-1=46
-\end{align*}
+\end{aligned}
 ```
 
 在第 $9$ 章我们会看到如何使用 $(4.62)$ 来得到 $\Phi(x)$ 的良好近似；事实上，我们将证明一个由 Mertens 在 $1874$ 年给出的结果 $[270]$。
@@ -1234,7 +1234,7 @@ g(x)=\sum\limits_{d\ge 1}f(x/d) \iff f(x)=\sum\limits_{d\ge 1}\mu(d)g(x/d).\tag{
 
 遵循上一章建立的惯例，我们用一道题来结束本章，这道题既能体现我们刚刚所学的大部分内容，又能为下一章做铺垫。假设我们有 $n$ 种不同颜色的珠子，目标是计算把它们串成长度为 $m$ 的环形项链有多少种不同的方法。我们可以尝试用“命名并求解”的方法来解决这个问题，把可能的项链数记为 $N(m,n)$。
 
-例如，用 $R$、$B$ 两种颜色的珠子，我们可以串成长度为 $4$ 的项链，共有 $N(4,2)=6$ 种不同方式：RRRR, RRRB, RRBB, RBRB, RBBR, BBBB
+例如，用 $R$，$B$ 两种颜色的珠子，我们可以串成长度为 $4$ 的项链，共有 $N(4,2)=6$ 种不同方式：RRRR, RRRB, RRBB, RBRB, RBBR, BBBB
 
 其余所有串法都与这些等价，因为项链的旋转不改变其本质。不过翻转被视为不同；例如在 $m=6$ 的情形下，这类计数问题最早由 P. A. Mac‑Mahon 在 1892 年解决 [264]。
 
@@ -1248,10 +1248,10 @@ BBBB BBBB BBBB BBBB
 
 在这 $mN(m,n)$ 个串组成的数组中，$n^m$ 种可能的模式每种至少出现一次，有些模式会出现多次。一个模式 $a_0a_1\cdots a_{m-1}$ 会出现多少次？很简单：等于循环移位 $a_k\cdots a_{m-1}a_0\cdots a_{k-1}$ 中与原模式 $a_0a_1\cdots a_{m-1}$ 相同的次数。例如，BRBR 出现两次，因为把由 BRBR 构成的项链切开得到的四种循环移位是 (BRBR,RBRB,BRBR,RBRB)，其中两种与 BRBR 本身相同。这个论证表明
 ```math
-\begin{align*}
+\begin{aligned}
 mN(m, n) &= \sum_{a_0,\dots,a_{m-1} \in S_n} \sum_{\le k < m}[ a_0 \dots a_{m-1} = a_k \dots a_{m-1}a_0 \dots a_{k-1}]\\
  &= \sum_{\le k < m} \sum_{a_0,\dots,a_{m-1} \in S_n} [ a_0 \dots a_{m-1} = a_k \dots a_{m-1}a_0 \dots a_{k-1}].
- \end{align*}
+ \end{aligned}
 ```
 
 这里 $S_n$ 是由 $n$ 种不同颜色构成的集合。
@@ -1276,11 +1276,11 @@ mN(m,n)=\sum\limits_{0\le k<m}n^{\gcd(k,m)}.
 
 这个求和式可以化简，因为它仅包含满足 $d\backslash m$ 的项 $n^d$。令 $d = \gcd(k, m)$ 代入可得
 ```math
-\begin{align*}
+\begin{aligned}
 N(m,n)&=\dfrac1m\sum\limits_{d\backslash m}n^d\sum\limits_{0\le k<m}[d=\gcd(k,m)]  \\
 &=\dfrac1m\sum\limits_{d\backslash m}n^d\sum\limits_{0\le k<m}[k/d\perp m/d] \\
 &=\dfrac1m\sum\limits_{d\backslash m}n^d\sum\limits_{0\le k<m/d}[k\perp m/d].
- \end{align*}
+ \end{aligned}
 ```
 
 （因为 $k$ 必须是 $d$ 的倍数，所以我们可以把 $k/d$ 替换成 $k$。）最后，根据定义有 $\sum\limits_{0\le k<m/d}[k\perp m/d]=\varphi(m/d)$，于是我们得到麦克马洪公式：
@@ -1311,31 +1311,31 @@ n^{12}+n^6+2n^4+2n^3+2n^2+4n\equiv 0\pmod{12}.
 
 现在该怎么办？根据 $(4.42)$，这个同余式成立当且仅当它在模 $3$ 和模 $4$ 下都成立。所以我们先来证明它在模 $3$ 下成立。我们的同余式 $(4.64)$ 对素数成立，因此有 $n^3+2n\equiv 0\pmod 3$。仔细观察可以发现，我们可以用这个结论对大求和式分组：
 ```math
-\begin{align*}
+\begin{aligned}
 n^{12}&+n^6+2n^4+2n^3+2n^2+4n \\
 &=(n^{12}+2n^4)+(n^6+2n^2)+2(n^3+2n) \\
 &\equiv 0+0+2\cdot 0=0\pmod 3.
- \end{align*}
+ \end{aligned}
 ```
 所以它在模 $3$ 下成立。
 
 我们已经完成了一半。要证明模 $4$ 同余，我们用同样的技巧。我们已经证明 $n^4+n^2+2n\equiv 0\pmod 4$，于是用这个模式来分组：
 ```math
-\begin{align*}
+\begin{aligned}
 n^{12}&+n^6+2n^4+2n^3+2n^2+4n \\
 &=(n^{12}+n^6+2n^3)+2(n^4+n^2+2n) \\
 &\equiv 0+2\cdot 0=0\pmod 4.
- \end{align*}
+ \end{aligned}
 ```
 对 $m=12$ 的情形证毕。
 
-至此我们已经对素数 $m$、$m=4$ 以及 $m=12$ 证明了该同余式。现在我们尝试对素数幂证明它。为具体起见，不妨设 $m=p^k$，其中 $p$ 为素数。那么 $(4.64)$ 的左边是
+至此我们已经对素数 $m$，$m=4$ 以及 $m=12$ 证明了该同余式。现在我们尝试对素数幂证明它。为具体起见，不妨设 $m=p^3$，其中 $p$ 为素数。那么 $(4.64)$ 的左边是
 ```math
-\begin{align*}
+\begin{aligned}
 n^{p^3}&+\varphi(p)n^{p^2}+\varphi(p^2)n^p+\varphi(p^3)n \\
 &=n^{p^3}+(p-1)n^{p^2}+(p^2-p)n^p+(p^3-p^2)n \\
 &=(n^{p^3}-n^{p^2})+p(n^{p^2}-n^p)+p^2(n^p-n)+p^3n.
- \end{align*}
+ \end{aligned}
 ```
 
 如果我们能证明 $n^{p^3}-n^{p^2}$ 被 $p^3$ 整除、$n^{p^2}-n^p$ 被 $p^2$ 整除、$n^p-n$ 被 $p$ 整除，就能说明上式模 $p^3$ 同余于 $0$。根据费马小定理的另一形式，我们有 $n^p\equiv n\pmod p$，所以 $p$ 整除 $n^p-n$；因此存在整数 $q$ 使得
@@ -1345,22 +1345,22 @@ n^p = n + pq.
 
 现在我们把两边同时取 $p$ 次幂，按照二项式定理展开右边（我们将在第 $5$ 章遇到它），然后重新分组，可得
 ```math
-\begin{align*}
-n^{p^2}&=(n+pq)^p=n^p + \binom{p}{1}(pq)n^{p-1} + \binom{p}{2}(pq)^2n^{p-2}+\cdots 
-&= n^p + pQ.
- \end{align*}
+\begin{aligned}
+n^{p^2}&=(n+pq)^p=n^p + (pq)^1n^{p-1}\binom{p}{1} + (pq)^2n^{p-2}\binom{p}{2}+\cdots \\
+&= n^p + p^2Q.
+ \end{aligned}
 ```
 对某个整数 $Q$ 成立。我们可以在这里提出一个 $p^2$ 因子，因为第二项中 $\binom{p}{1}=p$，而后面所有项里都出现 $(pq)^2$ 因子。于是我们得到 $p^2$ 整除 $n^{p^2}-n^p$。
 
 我们再次把两边取 $p$ 次幂、展开并重新分组，就得到
 ```math
-\begin{align*}
-n^{p^3}&=(n^{p^2}+pQ)^p \\
-&=n^{p^2}+\binom{p}{1}(pQ)n^{p^2(p-1)}+\binom{p}{2}(pQ)^2n^{p^2(p-2)} +\cdots \\
+\begin{aligned}
+n^{p^3}&=(n^p+p^2Q)^p \\
+&=n^{p^2}+(p^2Q)n^{p(p-1)}\binom{p}{1}+(p^2Q)^2n^{p(p-2)}\binom{p}{2} +\cdots \\
 &= n^{p^2}+p^3Q.
- \end{align*}
+ \end{aligned}
 ```
-对另一个整数 $Q'$ 成立。所以 $p^3$ 整除 $n^{p^3}-n^{p^2}$。这就完成了对 $m=p^3$ 的证明，因为我们已经说明 $p^3$ 整除 $(4.64)$ 的左边。
+对另一个整数 $Q$ 成立。所以 $p^3$ 整除 $n^{p^3}-n^{p^2}$。这就完成了对 $m=p^3$ 的证明，因为我们已经说明 $p^3$ 整除 $(4.64)$ 的左边。
 
 而且我们可以用归纳法证明
 ```math
@@ -1382,10 +1382,10 @@ n^{p^k} \equiv n^{p^{k-1}} \pmod{p^k},\quad \text{for } k>0.\tag{4.65}.
 
 我们知道 $\varphi$ 函数是积性函数，因此可以写成
 ```math
-\begin{align*}
-\sum_{d\backslash m}\varphi(d)n^{m/d}&=\sum_{\substack{d_1\backslash m_1\\d_2\backslash m_2}}\varphi(d_1d_2)n^{m_1m_2/(d_1d_2)}\\
+\begin{aligned}
+\sum_{d\backslash m}\varphi(d)n^{m/d}&=\sum_{\substack{d_1\backslash m_1\\d_2\backslash m_2}}\varphi(d_1d_2)n^{m_1m_2/d_1d_2}\\
 &=\sum_{d_1\backslash m_1}\varphi(d_1)\biggl(\sum_{d_2\backslash m_2}\varphi(d_2)\bigl(n^{m_1/d_1}\bigr)^{m_2/d_2}\biggr).
- \end{align*}
+ \end{aligned}
 ```
 而内层和模 $m_2$ 与 $0$ 同余，因为我们已经假设 $(4.64)$ 对 $m_2$ 成立；所以整个和模 $m_2$ 与 $0$ 同余。由对称性可知，整个和模 $m_1$ 也与 $0$ 同余。因此根据 $(4.42)$，它模 $m$ 与 $0$ 同余。证毕。
 

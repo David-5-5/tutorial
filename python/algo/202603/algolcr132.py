@@ -19,3 +19,19 @@ class Solution:
                 ans = res
         return ans % mod
 
+    def cuttingBamboo2(self, bamboo_len: int) -> int:
+        mod = 10**9 + 7 
+        ans = 1
+        
+        for k in range(2, bamboo_len + 1):
+            tot = bamboo_len
+            res = 1
+            while tot:
+                div = (tot + k - 1) // k    # CONCRETE MATH gropus PAGE 97
+                res *= div
+                tot -= div
+                k -= 1
+            if res <= ans: break
+            else: ans = res 
+        return ans % mod   
+    

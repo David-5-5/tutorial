@@ -341,7 +341,6 @@ $$
 \end{aligned}
 $$
 
-
 于是我们正好回到了起点。这或许并非该恒等式提出者的本意，但能知道我们没有出错，还是很令人安心的。
 
 当然，式 $(5.14)$ 的一些应用比这个更有用。例如，我们可以用上指标取反来在上下指标之间移动量。该恒等式还有一种对称形式，
@@ -598,10 +597,191 @@ $$
 
 这个恒等式在习题 83 中给出证明，甚至有可能出现在实际应用里。不过我们已经偏离“基本恒等式”这个主题太远了，所以最好停下来，梳理一下我们已经学到的内容。
 
-我们已经看到，二项式系数满足多得几乎令人眼花缭乱的各种恒等式。幸运的是，其中有些很容易记住，并且我们可以用这些好记的恒等式在几步之内推导出其他大多数恒等式。第 174 页的表格汇集了十个最有用的公式，全部放在一起；这些是最值得掌握的恒等式。
+我们已经看到，二项式系数满足多得几乎令人眼花缭乱的各种恒等式。幸运的是，其中有些很容易记住，并且我们可以用这些好记的恒等式在几步之内推导出其他大多数恒等式。表 174 汇集了十个最有用的公式，全部放在一起；这些是最值得掌握的恒等式。
 
 
 ## 5.2BASIC PRACTICE 基本实践
+在上一节中，我们通过对和式进行变形、代入其他恒等式，推导出了一批恒等式。找出这些推导过程并不算太难——我们知道自己要证明什么，因此可以拟定一个大致思路，再轻松补齐细节。
+但在实际应用中，我们通常不是要去证明某个现成的恒等式，而是要化简一个和式，而且事先并不知道化简后的形式是什么样的（甚至不知道它是否存在闭式）。
+通过本节和下一节处理大量这类和式，我们将打磨好自己的二项式系数工具。
+
+首先，我们先来动手试试，处理几个仅含单个二项式系数的和式。
+
+**问题 1：比值之和**
+我们想要给出它的闭式：
+$$
+\sum_{k=0}^m \binom{m}{k}\bigg/\binom{n}{k}. \quad \text{integers }n\ge m\ge 0.
+$$
+
+乍一看这个和式让人有点无从下手，因为我们还没见过处理二项式系数比值的恒等式。（而且这个和式里出现了两个二项式系数，似乎和问题前那句话有点矛盾。）不过，就像我们可以用阶乘形式把二项式系数的乘积重新表示成另一种乘积——我们就是这样得到恒等式 (5.21) 的——对比值我们也可以照此办理。事实上，我们可以避开繁琐的阶乘展开，令 $r=n$，并将等式 (5.21) 两边同时除以 $\binom{n}{k}\binom{n}{m}$，这样就得到
+$$
+\binom{m}{k}\bigg/\binom{n}{k}
+= \binom{n-k}{m-k}\bigg/\binom{n}{m}
+$$
+
+于是我们把和式中左边的这个比值，替换成右边的；和式就变成了
+$$
+\sum_{k=0}^m \binom{n-k}{m-k}\bigg/\binom{n}{m}.
+$$
+
+我们仍然有一个比值，但分母里的二项式系数不再与求和指标 $k$ 有关，因此可以把它从和式中提出来，后面再放回去。
+
+我们还可以简化求和边界：对所有 $k\ge 0$ 求和即可，因为当 $k>m$ 时项为 0。剩下的和式就没那么吓人了：
+$$
+\sum_{k\ge 0}\binom{n-k}{m-k}.
+$$
+
+它和恒等式 (5.9) 里的和式很像，因为指标 $k$ 以相同符号出现了两次。只不过这里是 $-k$，而 (5.9) 中不是。所以下一步应该很明显：只有一件合理的事可做：
+$$
+\begin{aligned}
+\sum_{k\ge 0}\binom{n-k}{m-k} &= \sum_{m-k\ge 0} \binom{n-(m-k)}{m-(m-k)} \\
+&= \sum_{k\le m} \binom{n-m+k}{k}.
+\end{aligned}
+$$
+
+**表174 十大最常用二项式系数恒等式**
+$$
+\binom{n}{k} = \dfrac{n!}{k!\,(n-k)!},\quad \text{integers }n\ge k\ge 0. \tag{factorial expansion}
+$$
+$$
+\binom{n}{k} = \binom{n}{n-k},\quad \text{integer k. }n\ge 0. \tag{symmetry}
+$$
+$$
+\binom{r}{k} = \frac{r}{k}\binom{r-1}{k-1},\quad \text{integer }k\ne 0. \tag{absorption/extraction}
+$$
+$$
+\binom{r}{k} = \binom{r-1}{k} + \binom{r-1}{k-1},\quad \text{integer }k.\tag{addition/induction}
+$$
+$$
+\binom{r}{k} = (-1)^k\binom{k-r-1}{k},\quad \text{integer }k,\tag{upper negation}
+$$
+$$
+\binom{r}{m}\binom{m}{k} = \binom{r}{k}\binom{r-k}{m-k},\quad \text{integers }m,k,\tag{trinomial revision}
+$$
+$$
+\sum_{k}\binom{r}{k}x^k y^{r-k} = (x+y)^r,\quad \text{integer }r\ge 0,\text{or }|x/y|<1.\tag{binomial theorem}
+$$
+$$
+\sum_{k\le n}\binom{r+k}{k} = \binom{r+n+1}{n},\quad \text{integer }n. \tag{parallel summation}
+$$
+$$
+\sum_{0\le k\le n}\binom{k}{m} = \binom{n+1}{m+1},\quad \text{integers m,n}\ge 0.\tag{upper summation}
+$$
+$$
+\sum_{k}\binom{r}{k}\binom{s}{r-k} = \binom{r+s}{n},\quad \text{integer }r,\tag{Vandermonde convolution}
+$$
+
+
+现在我们可以使用平行求和恒等式 (5.9)：
+$$
+\sum_{k\le m}\binom{n-m+k}{k} = \binom{(n-m)+m+1}{m} = \binom{n+1}{m}
+$$
+
+最后，我们把之前从和式中提出来的分母 $\binom{m}{m}$ 放回去，再利用公式 (5.7) 就得到了我们想要的闭式：
+$$
+\binom{n+1}{m}\bigg/\binom{m}{m} = \frac{n+1}{n+1-m}
+$$
+
+只要不出现除以零的情况，也就是只要 $n$ 不是 $0,1,\dots,m-1$ 中的整数，这个推导实际上对任意实数 $n$ 都成立。
+
+推导过程越复杂，检验答案就越重要。这次的推导不算太复杂，但我们还是要检验一下。取小例子 $m=2$，$n=4$，有
+$$
+\binom{4}{0}\bigg/\binom{2}{0} + \binom{2}{1}\bigg/\binom{4}{1} + \binom{2}{2}\bigg/\binom{4}{2} = 1 + 1/2 + 1/6 = 5/3
+$$
+没错，这与我们的闭式 (4+1)/(4+1-2) 完全吻合。
+
+
+**问题 2：源自排序相关文献。**
+我们接下来要算的这个和，早在很久以前（20世纪70年代初），人们还不太熟练运用二项式系数时就已经出现了。一篇介绍改进归并技术的论文[196]在结尾处写道：“可以证明，节省的转移操作的期望次数 $\cdots$ 由下式给出：
+$$
+T = \sum_{r=0}^n r\frac{_{m-r-1}C_{m-n-1}}{_mC_n}
+$$
+
+式中 $m$ 和 $n$ 与前面定义相同，$_mC_n$ 表示从 $m$ 个对象中选出 $n$ 个的组合数。……作者感谢审稿人将一个关于节省转移次数期望的更复杂式子化简为这里给出的形式。
+
+我们会看到，这绝对不是作者问题的最终答案，它甚至连中间结果都算不上。
+
+首先我们要把这个和式改写成便于处理的形式；这种吓人的记号 $_{m-r-1}C_{m-n-1}$ 足以让任何人望而却步，除了那位热心的审稿人（拜托了）。用我们的记号应该写成
+$$
+T = \sum_{k=0}^n k\binom{m-k-1}{m-n-1} \bigg/\binom{m}{n},\quad \text{integers } m>n\ge 0.
+$$
+
+分母中的组合数与求和指标无关，因此我们可以把它提出来，转而处理新的和式
+$$
+S = \sum_{k=0}^n k\binom{m-k-1}{m-n-1} .
+$$
+
+接下来该怎么做？求和指标出现在组合数的上标，而不是下标。所以如果没有那个额外的 $k$，我们就可以整理和式，并使用上标求和公式(5.10)。但多了一个 $k$，就不行了。如果能利用某个吸收恒等式把 $k$ 吸收到组合数里，我们就能对上标求和。可惜那些恒等式在这里不适用。但如果把 $k$ 换成 $m-k$，我们就可以用吸收恒等式(5.6)：
+$$
+(m-k)\binom{m-k-1}{m-n-1} = (m-n)\binom{m-k}{m-n}
+$$
+
+所以关键就在这里：我们把 $k$ 改写成 $m-(m-k)$，并把和式 $S$ 拆成两个和：
+$$
+\begin{aligned}
+\sum_{k=0} \binom{m-k-1}{m-n-1} &= \sum_{k=0}(m-(m-k)) \binom{m-k-1}{m-n-1} \\
+&= \sum_{k=0} m\binom{m-k-1}{m-n-1} - \sum_{k=0} (m-k)\binom{m-k-1}{m-n-1} \\
+&= m\sum_{k=0} \binom{m-k-1}{m-n-1} - \sum_{k=0} (m-n)\binom{m-k}{m-n} \\
+&= mA - (m-n) B
+\end{aligned}
+$$
+
+其中
+$$
+A = \sum_{k=0} ^n\binom{m-k-1}{m-n-1},\quad
+B = \sum_{k=0}^n \binom{m-k}{m-n}
+$$
+
+剩下的和式 A 与 B 正是我们的老朋友——下标固定、上标变化的类型。先算 B，因为它看起来更简单。稍微变形就能让被加项匹配公式(5.10)的左边：
+$$
+\begin{aligned}
+\sum_{0\le k\le n}\binom{m-k}{m-n} &= \sum_{0\le m-k\le n}\binom{m-(m-k)}{m-n} \\
+&= \sum_{m-n\le k\le m}\binom{k}{m-n} \\
+&= \sum_{0\le k\le m}\binom{k}{m-n}.
+\end{aligned}
+$$
+
+在最后一步中，我们将 $0 ≤ k < m-n$ 的项纳入了求和范围；这些项的值均为 0，因为组合数的上标小于下标。接下来我们利用公式 (5.10) 对上标求和，得到
+$$
+B = \sum_{0\le k\le m}\binom{k}{m-n}=\binom{m+1}{m-n+1}.
+$$
+
+另一个和式 $A$ 形式相同，只是将 $m$ 替换为 $m-1$。于是我们得到了和式 $S$ 的闭式，并且可以进一步化简：
+$$
+\begin{aligned}
+S &= mA - (m-n)B \\
+&= m\binom{m}{m-n} - (m-n)\binom{m+1}{m - n + 1} \\
+&= \left(m-(m-n)\frac{m+1}{m - n + 1}\right)\binom{m}{m-n} \\
+&=\left(\frac{n}{m - n + 1}\right)\binom{m}{m-n}
+\end{aligned}
+$$
+
+于是我们得到了原和式的闭式：
+$$
+\begin{aligned}
+T &= S\bigg/\binom{m}{n} \\
+&= \frac{n}{m - n + 1}\binom{m}{m-n}\bigg/\binom{m}{n}\\
+&= \frac{n}{m - n + 1}.
+\end{aligned}
+$$
+就算是审稿人也没法再化简这个式子了。
+
+我们再用一个小例子来检验答案是否正确。当 $m=4$，$n=2$ 时，我们有
+$$
+\begin{aligned}
+T &= 0\cdot\binom{3}{1}\bigg/\binom{4}{2} + 1\cdot\binom{2}{1}\bigg/\binom{4}{2} + 20\cdot\binom{1}{1}\bigg/\binom{4}{2} \\
+&= 0 + \frac26 + \frac26 = \frac23
+\end{aligned}
+$$
+
+这与我们的公式 $2/(4-2+1)$ 结果一致。
+
+
+
+
+
+
+
 
 
 

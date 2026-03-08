@@ -901,7 +901,10 @@ $$
 
 $(5.23)$ 与我们现在的式子最大的区别是我们的和式中多了一个 $k$。但是我们可以利用某个吸收恒等式，把 $k$ 吸收到其中一个二项式系数里：
 $$
-\sum_k \binom{n}{k}\binom{s}{k}k = \sum_k \binom{n}{k}\binom{s-1}{k-1}s = s\sum_k \binom{n}{k}\binom{s-1}{k-1}
+\begin{aligned}
+\sum_k \binom{n}{k}\binom{s}{k}k &= \sum_k \binom{n}{k}\binom{s-1}{k-1}s \\
+&= s\sum_k \binom{n}{k}\binom{s-1}{k-1}
+\end{aligned}
 $$
 
 我们并不在意 $k$ 消失时出现的 $s$，因为它是常数。现在我们准备应用恒等式并求出闭式，
@@ -915,46 +918,48 @@ $$
 **问题 6：一个具有棘手特征的和式。**
 下一个和式更具挑战性。我们寻求闭式
 $$
-\sum_{k\ge 0}\binom{n+k}{2k}\frac{(-1)^k}{k+1},\text{integer }n\ge 0
+\sum_{k\ge 0}\binom{n+k}{2k}\binom{2k}{k}\frac{(-1)^k}{k+1}, \qquad \text{integer }n\ge 0
 $$
 
 衡量一个和式难度的一个有用标准是求和指标出现的次数。按照这个标准，我们遇到了大麻烦——$k$ 出现了六次。此外，上一题中有效的关键步骤——将二项式系数外的项吸收到其中一个系数里——在这里行不通。如果我们吸收 $k+1$，只会在原来的位置上得到另一个 $k$。不仅如此：我们的指标 $k$ 在二项式系数内还被系数 $2$ 束缚着。乘法常数通常比加法常数更难去掉。
 
 不过这次我们很幸运。$2k$ 正好出现在可以应用恒等式 $(5.21)$ 的位置，于是我们得到
 $$
-\sum_{k\ge 0}\binom{n+k}{2k}\frac{(-1)^k}{k+1} = \sum_{k\ge 0}\binom{n+k}{n-k}\frac{(-1)^k}{k+1}
+\sum_{k\ge 0}\binom{n+k}{2k}\binom{2k}{k}\frac{(-1)^k}{k+1} = \sum_{k\ge 0}\binom{n+k}{k}\binom{n}{k}\frac{(-1)^k}{k+1}
 $$
 
 两个 $2$ 消失了，$k$ 也少出现了一次。所以这是搞定了一个，还剩五个。
 
-分母中的 $k+1$ 是剩下最麻烦的部分，现在我们可以用恒等式 $(5.6)$ 把它吸收到二项式系数中：
+分母中的 $k+1$ 是剩下最麻烦的部分，现在我们可以用恒等式 $(5.6)$ 把它吸收到二项式系数 $\binom{n}{k} $ 中：
 $$
-\sum_{k\ge 0}\binom{n+k}{n-k}\frac{(-1)^k}{k+1} = \frac{1}{n+1}\sum_{k\ge 0}\binom{n+1}{k+1}\binom{n+k}{n-k}(-1)^k
+\begin{aligned}
+\sum_{k\ge 0}\binom{n+k}{k}\binom{n}{k}\frac{(-1)^k}{k+1} &= \sum_k \binom{n+k}{k}\binom{n+1}{k+1}\frac{(-1)^k}{n+1} \\
+&= \frac{1}{n+1}\sum_k \binom{n+k}{k}\binom{n+1}{k+1}(-1)^k
+\end{aligned}
 $$
 （记住 $n\ge 0$。）已经搞定两个，还剩四个。
 
-为了消去另一个 $k$，我们有两个可行的选择。我们可以对 $\binom{n+1}{k+1}$ 用对称性；或者把上指标 $n+k$ 取反，从而同时消去那个 $k$ 以及因子 $(-1)^k$。我们先尝试对称性的方法：
+为了消去另一个 $k$，我们有两个可行的选择。我们可以对 $\binom{n+k}{k}$ 用对称性；或者把上指标 $n+k$ 取反，从而同时消去那个 $k$ 以及因子 $(-1)^k$。我们先尝试对称性的方法：
 $$
-\frac{1}{n+1}\sum_{k\ge 0}\binom{n+1}{k+1}\binom{n+k}{n-k}(-1)^k = \frac{1}{n+1}\sum_{k\ge 0}\binom{n+1}{n-k}\binom{n+k}{n-k}(-1)^k
+\frac{1}{n+1}\sum_k \binom{n+k}{k}\binom{n+1}{k+1}(-1)^k = \frac{1}{n+1}\sum_k \binom{n+k}{n}\binom{n+1}{k+1}(-1)^k.
 $$
 
 搞定第三个，还剩三个，现在我们代入 $(5.24)$ 就能大幅化简：把 $(l,m,n,s)$ 换成 $(n+1,1,n,n)$，得到
-$
 $$
-\frac{1}{n+1}\sum_{k}\binom{n+1}{k}\binom{n+k-1}{n-1}(-1)^k = \frac{1}{n+1}\cdot 0 = 0
-$$
-
-结果是零？忙活了这么久？我们用 n=2 检验一下，当 n=2 时：$\binom{2}{0}\binom{2}{0}\frac{1}{1} - \binom{3}{2}\binom{2}{1}\frac{1}{2} + \binom{4}{4}\binom{2}{2}\frac{1}{3} = 1 - \frac{3}{2} + \frac{1}{3} = 0$。检验正确。
-
-纯粹出于好玩，我们来试试另一种方法：对 $\binom{n+k}{n-k}$ 的上指标取反：
-$$
-\frac{1}{n+1}\sum_{k\ge 0}\binom{n+1}{k+1}\binom{n+k}{n-k}(-1)^k = \frac{1}{n+1}\sum_{k\ge 0}\binom{n+1}{k+1}\binom{-k-1}{n-k}(-1)^k
+\frac{1}{n+1}\sum_{k}\binom{n+1}{k}\binom{n+1}{k+1}(-1)^k = \frac{1}{n+1}(-1)^n\binom{n-1}{-1} = 0
 $$
 
-现在可以应用 $(5.23)$，令 $(l, m, n, s) = (n+1, 1, 0, -n-1)$，于是
-$$
-\frac{1}{n+1}\sum_{k}\binom{n+1}{k+1}\binom{-n-1}{n-k}(-1)^k = 0
-$$
+结果是零？忙活了这么久？我们用 n=2 检验一下，当 n=2 时：$\binom{2}{0}\binom{0}{0}\frac{1}{1} - \binom{3}{2}\binom{2}{1}\frac{1}{2} + \binom{4}{4}\binom{4}{2}\frac{1}{3} = 1 - \frac{6}{2} + \frac{6}{3} = 0$。检验正确。
+
+纯粹出于好玩，我们来试试另一种方法：对 $\binom{n+k}{k}$ 的上指标取反：
+```math
+\frac{1}{n+1}\sum_k \binom{n+k}{k}\binom{n+1}{k+1}(-1)^k = \frac{1}{n+1}\sum_k \binom{-n-1}{k}\binom{n+1}{k+1}.
+```
+
+现在可以应用 $(5.23)$，令 $(l, m, n, s) \leftarrow (n+1, 1, 0, -n-1)$，于是
+```math
+\frac{1}{n+1}\sum_{k}\binom{-n-1}{k}\binom{n+1}{k+1} = \frac{1}{n+1}\binom{0}{n}.
+```
 
 等等。当 $n>0$ 时结果是零，但 $n=0$ 时是 1。我们上一种方法得出的结论是所有情况都为零！这是怎么回事？当 $n=0$ 时这个和确实是 1，所以正确答案是 $[n=0]$。我们之前的推导一定哪里出错了。
 
@@ -965,27 +970,34 @@ $$
 
 **问题7：一个新的障碍**
 这个更难；我们想要它的闭式：
-$$
-\sum_{k\ge 0}\binom{n+k}{m+2k}\frac{(-1)^k}{k+1},\quad \text{integers } m,n>0.
-$$
+```math
+\sum_{k\ge 0}\binom{n+k}{m+2k}\binom{2k}{k}\frac{(-1)^k}{k+1},\quad \text{integers } m,n>0.
+```
 
 如果 $m=0$，就回到我们刚做完的那个求和式。但现在 $m\neq 0$，情况就变得很麻烦——问题6里用过的方法在这里全都失效了。（尤其是关键的第一步。）
 
 不过，如果我们能想办法消掉 $m$，就能用上刚才得到的结论。所以我们的策略是：把 $\binom{n+k}{m+2k}$ 替换成若干形如 $\binom{l+k}{2k}$ 的项之和；这样被求和式就会和问题6里的形式一样，然后我们就可以交换求和次序。
 
-我们该用什么式子来替换 $\binom{n+k}{m+2k}$ 呢？仔细查阅本章前面推导的恒等式，只有一个合适的候选，也就是表169中的式(5.26)。其中一种用法是把参数 $(l,m,n,q,k)$ 分别替换成 $(n+k-1,2k,m-1,0,j)$：
-$\sum_{k\ge 0}\binom{n+k}{m+2k}\frac{(-1)^k}{k+1}
-= \sum_{k\ge 0}\left( \sum_{0\le j\le n+k-1}\binom{n+k-1-j}{m-1}\binom{j}{2k} \right)
-\frac{(-1)^k}{k+1}
-= \sum_{j\ge 0}\sum_{k\ge j-n+1}\binom{n+k-1-j}{m-1}\binom{j}{2k}\frac{(-1)^k}{k+1}$
+我们该用什么式子来替换 $\binom{n+k}{m+2k}$ 呢？仔细查阅本章前面推导的恒等式，只有一个合适的候选，也就是表 $169$ 中的式 (5.26)。其中一种用法是把参数 $(l,m,n,q,k)$ 分别替换成 $(n+k-1,2k,m-1,0,j)$：
+```math
+\begin{aligned}
+\sum_{k\ge 0}&\binom{n+k}{m+2k}\binom{2k}{k}\frac{(-1)^k}{k+1} \\
+&= \sum_{k\ge 0} \sum_{0\le j\le n+k-1}\binom{n+k-1-j}{2k}\binom{j}{m-1}\binom{2k}{k} \frac{(-1)^k}{k+1} \\
+&= \sum_{j\ge 0} \binom{j}{m-1} \sum_{k\ge j-n+1}\binom{n+k-1-j}{2k}\binom{2k}{k}\frac{(-1)^k}{k+1}
+\end{aligned}
+```
 
 在最后一步我们交换了求和次序，并按照第2章的规则调整了求和下标条件。
 
 我们还不能直接用问题6的结果替换内层和，因为它多了个条件 $k\ge j-n+1$。但这个额外条件只有在 $j-n+1>0$ 也就是 $j\ge n$ 时才起作用。而当 $j\ge n$ 时，内层和里第一个二项式系数为零，因为它的上指标介于 $0$ 到 $k-1$ 之间，严格小于下指标 $2k$。因此我们可以对外层和加上条件 $j < n$，而不改变任何非零项。这就让条件 $k\ge j-n+1$ 变成多余的，于是可以使用问题6的结论。双重和现在就能顺利化简：
-$$
-\sum_{0\le j<n}\binom{n-1-j}{m-1}\bigl([j=0]\bigr)
-= \binom{n-1}{m-1}
-$$
+
+```math
+\begin{aligned}
+\sum_{j\ge 0}\binom{j}{m-1}& \sum_{\substack{k\ge j-n+1\\k\ge 0}}\binom{n+k-1-j}{2k}\binom{2k}{k}\frac{(-1)^k}{k+1} \\
+&=\sum_{0\le j<n} \binom{j}{m-1} \sum_{k\ge 0}\binom{n+k-1-j}{2k} \binom{2k}{k}\frac{(-1)^k}{k+1} \\
+&=\sum_{0\le j<n}\binom{j}{m-1}\,[n-1-j=0]=\binom{n-1}{m-1}.
+\end{aligned}
+```
 内层和只有在 $j = n-1$ 时不为零，于是我们得到一个简洁的闭式作为答案。
 
 

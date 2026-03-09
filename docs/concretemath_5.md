@@ -1055,7 +1055,86 @@ $$
 我们的推导要求 $m$ 为整数，但该结果对所有实数 $m$ 均成立，因为 $(m+1)\cdots(m+n+1)S_m$ 是一个关于 $m$ 的次数 $\le n$ 的多项式。
 
 
-## 5.3TRICKS OF THE TRADE
+## 5.3 TRICKS OF THE TRADE
+接下来我们来看三种能显著拓展我们已学方法的技巧。
+
+技巧 1：取半技巧。
+我们的许多恒等式都涉及任意实数 $r$。当 $r$ 取“整数减二分之一”这种特殊形式时，二项式系数 $\binom{r}{k}$ 可以写成一种形式上截然不同的二项式系数乘积。这会引出一类新的恒等式，它们的处理会出奇地简便。
+
+要明白这一原理，一种方法是从倍乘公式开始
+$$
+r^{\underline{k}}\left(r-\frac{1}{2}\right)^{\underline{k}} = (2r)^{\underline{2k}}/2^{2k},\quad \text{integer }k\ge 0.\tag{5.34}
+$$
+
+如果我们把左侧的下降阶乘展开并交错因子，这个恒等式就很显然：
+$$
+\begin{aligned}
+r(r-\frac12)(r-1)(r-\frac32)&\cdots(r-k+1)(r-k+\frac12) \\
+&=\frac{(2r)(2r-1)\cdots(2r-2k+1)}{2\cdot2\cdots2}
+\end{aligned}
+$$
+
+现在我们在两边同时除以 $k!^2$，可得
+$$
+\binom{r}{k}\binom{r-1/2}{k} = \binom{2r}{2k}\binom{2k}{k}\bigg/2^{2k},\quad \text{integer }k.\tag{5.35}
+$$
+
+如果令 $k=r=n$，其中 $n$ 为整数，就得到
+$$
+\binom{n-1/2}{n} = \binom{2n}{n}\bigg/2^{2n},\quad \text{integer }n.\tag{5.36}
+$$
+
+对上指标取反又能得到另一个有用的公式：
+$$
+\binom{-1/2}{n} = (\frac{-1}{4})^4\binom{2n}{n},\quad \text{integer }n.\tag{5.37}
+$$
+
+例如，当 $n=4$ 时，有
+$$
+\begin{aligned}
+\binom{-1/2}{4} &= \frac{(-1/2)(-3/2)(-5/2)(-7/2)}{4!} \\
+& =(\frac{-1}{2})^4 \frac {1\cdot3\cdot5\cdot7}{1\cdot2\cdot3\cdot4} \\
+& =(\frac{-1}{4})^4 \frac {1\cdot3\cdot5\cdot7\cdot2\cdot4\cdot6\cdot8}{1\cdot2\cdot3\cdot4\cdot1\cdot2\cdot3\cdot4} \\
+&= (\frac{-1}{4})^4\binom{8}{4}
+\end{aligned}
+$$
+
+注意我们是如何把奇数的乘积转化成阶乘的。
+
+恒等式 (5.35) 有一个有趣的推论。令 $r=n$，并对所有整数 $k$ 求和，结果为
+$$
+\begin{aligned}
+\sum_{k}\binom{n}{2k}\binom{2k}{k}2^{-2k} &= \sum_{k}\binom{n/2}{k}\binom{n-1/2}{k} \\
+&= \binom{(n-1)/2}{\lfloor n/2\rfloor},\quad \text{integer }n\ge 0.\tag{5.38}
+\end{aligned}
+$$
+根据 (5.23)，因为 $n/2$ 或 $(n-1)/2$ 就是 $\lfloor n/2\rfloor$，一个非负整数！
+
+我们也可以用范德蒙德卷积 (5.27) 推出
+$$
+\sum_{k}\binom{-\frac12}{k}\binom{-\frac12}{n-k} = \binom{-1}{n} = (-1)^n,\quad \text{integer }n\ge 0.
+$$
+
+将 (5.37) 中的值代入可得
+$$
+\begin{aligned}
+\binom{-\frac12}{k}\binom{-\frac12}{n-k} &= \frac{-1}{4}^k\binom{2k}{k}\frac{-1}{4}^{n-k}\binom{2(n-k)}{n-k} \\
+&= \frac{(-1)^n}{4^n} \binom{2k}{k}\binom{2n-2k}{n-k};
+\end{aligned}
+$$
+
+这个和等于 $(-1)^n$。于是我们得到了帕斯卡三角“中间”项的一个非凡性质：
+$$
+\sum_{k}\binom{2k}{k}\binom{2n-2k}{n-k} = 4^n,\quad \text{整数 }n\ge 0.\tag{5.39}
+$$
+
+例如，$\binom{0}{0}\binom{6}{3}+\binom{2}{1}\binom{4}{2}+\binom{4}{2}\binom{2}{1}+\binom{6}{3}\binom{0}{0}=1\cdot20 + 2\cdot 6 + 6\cdot 2 + 20\cdot 1 = 64 = 4^3.$
+
+这些关于第一个技巧的示例表明：将形如 $\binom{2k}{k}$ 的二项式系数转化为形如 $\binom{n-1/2}{k}$，其中 $n$ 是某个合适的整数，通常为 0、1 或 $k$；的二项式系数是一种明智的做法；转化后的公式可能会简洁得多。
+
+
+
+
 
 
 

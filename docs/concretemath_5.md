@@ -1001,17 +1001,61 @@ $$
 内层和只有在 $j = n-1$ 时不为零，于是我们得到一个简洁的闭式作为答案。
 
 
+**问题8：另一种障碍**
+我们从问题6换个方向拓展，来研究这个和式：
+$$
+S_m = \sum_{k\ge 0}\binom{n+k}{2k}\binom{2k}{k}\frac{(-1)^k}{k+1+m},\quad \text{integers } m,n\ge 0.
+$$
+
+当 $m=0$ 时就回到我们之前算过的和；但现在 $m$ 出现在了不同位置。这道题比问题7还要难一点，不过（幸好）我们现在解题越来越熟练了。我们可以像问题 6 那样开头。
+$$
+S_m = \sum_{k\ge 0}\binom{n+k}{k}\binom{n}{k}\frac{(-1)^k}{k+1+m}
+$$
+
+现在（如同在问题7中）我们尝试将依赖于 $m$ 的部分展开成我们知道如何处理的项。当 $m$ 为 $0$ 时，我们把 $k+1$ 吸收进 $\binom{}{}$ 中；如果 $m>0$，我们可以将 $1/(k+1+m)$ 展开成可吸收的项来做同样的事情。而我们运气依然不错：我们已经证明过一个适用的恒等式
+$$
+\sum_{j=0}^m\binom{m}{j}\binom{r}{j}^{-1} = \frac{r+1}{r+1-m},\quad \substack{\text{integer m}\ge 0, \\r\notin\{0,1,\dots,m-1\}.} \tag{5.33}
+$$
+
+在问题1中，将 $r$ 替换为 $-k-2$ 就得到了所需的展开式：
+$$
+S_m = \sum_{k\ge 0}\binom{n+k}{k}\binom{n}{k}\frac{(-1)^k}{k+1}\sum_{j\ge 0}\binom{m}{j}\binom{-k-2}{j}^{-1}
+$$
+
+现在 $(k+1)^{-1}$ 可以按计划被吸收进 $\binom{n}{k}$ 中。事实上，它也可以被吸收进 $\binom{-k-2}{j}^{-1}$ 中。双重吸收暗示着背后可能会有更多的抵消。没错——把新的被求和式全部展开成阶乘，再还原回二项式系数，就得到了一个可以对 $k$ 求和的式子：
+$$
+\begin{aligned}
+S_m&= \frac{m!n!}{(m+n+1)!}\sum_{j\ge 0}(-1)^j\binom{m+n+1}{n+1+j}\sum_{k}\binom{n+1+j}{k+j+1}\binom{-n-1}{k} \\
+&= \frac{m!n!}{(m+n+1)!}\sum_{j\ge 0}(-1)^j\binom{m+n+1}{n+1+j}\binom{j}{n}
+\end{aligned}
+$$
+
+根据式 $(5.24)$，对所有整数 $j$ 求和的结果为 $0$。因此 $-S_m$ 等于对 $j<0$ 求和的结果。
+
+为了计算 $j<0$ 时的 $-S_m$，我们将 $j$ 替换为 $-k-1$，并对 $k\ge 0$ 求和：
+$$
+\begin{aligned}
+S_m &= \frac{m!n!}{(m+n+1)!}\sum_{k\ge 0}(-1)^k\binom{m+n+1}{n-k}\binom{-k-1}{n} \\
+&= \frac{m!n!}{(m+n+1)!}\sum_{k\le n}(-1)^{n-k}\binom{m+n+1}{k}\binom{k-n-1}{n} \\
+&= \frac{m!n!}{(m+n+1)!}\sum_{k\le n}(-1)^k\binom{m+n+1}{k}\binom{2n-k}{n} \\
+&= \frac{m!n!}{(m+n+1)!}\sum_{k\le 2n}(-1)^k\binom{m+n+1}{k}\binom{2n-k}{n}
+\end{aligned}
+$$
+
+最后应用式 $(5.25)$，我们就得到了答案：
+$$
+S_m = (-1)^n\frac{m!n!}{(m+n+1)!}\binom{m}{n} = (-1)^nm^{\underline{n}}m^{\underline{-n-1}}
+$$
+
+我们最好验证一下。当 $n=2$ 时，我们得到
+$$
+S_m = \frac{1}{m+1} - \frac{6}{m+2} \frac{6}{m+3} = \frac{m(m-1)}{(m+1)(m+2)(m+3)}
+$$
+
+我们的推导要求 $m$ 为整数，但该结果对所有实数 $m$ 均成立，因为 $(m+1)\cdots(m+n+1)S_m$ 是一个关于 $m$ 的次数 $\le n$ 的多项式。
 
 
-
-
-
-
-
-
-
-
-
+## 5.3TRICKS OF THE TRADE
 
 
 

@@ -28,5 +28,17 @@ public:
         return ans;  
     }
 
+    long long minimumCost2(int m, int n, vector<int>& horizontalCut, vector<int>& verticalCut) {
+        // 参考题解，用 kruskal 理解，蛋糕已经切好，开始根据权重，从小到大合并节点（蛋糕）
+        sort(horizontalCut.begin(), horizontalCut.end());
+        sort(verticalCut.begin(), verticalCut.end());
+        long long ans = 0; int i = 0, j = 0;
+        while (i < m-1 || j < n-1) {
+            if (j == n-1 || i < m-1 && horizontalCut[i] < verticalCut[j]) {
+                ans +=  horizontalCut[i++] * (n-j);
+            } else ans += verticalCut[j++] * (m-i);
+        }
+        return ans;
+    }    
 
 };

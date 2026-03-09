@@ -1249,8 +1249,8 @@ BBBB BBBB BBBB BBBB
 在这 $mN(m,n)$ 个串组成的数组中，$n^m$ 种可能的模式每种至少出现一次，有些模式会出现多次。一个模式 $a_0a_1\cdots a_{m-1}$ 会出现多少次？很简单：等于循环移位 $a_k\cdots a_{m-1}a_0\cdots a_{k-1}$ 中与原模式 $a_0a_1\cdots a_{m-1}$ 相同的次数。例如，BRBR 出现两次，因为把由 BRBR 构成的项链切开得到的四种循环移位是 (BRBR,RBRB,BRBR,RBRB)，其中两种与 BRBR 本身相同。这个论证表明
 ```math
 \begin{aligned}
-mN(m, n) &= \sum_{a_0,\dots,a_{m-1} \in S_n} \sum_{\le k < m}[ a_0 \dots a_{m-1} = a_k \dots a_{m-1}a_0 \dots a_{k-1}]\\
- &= \sum_{\le k < m} \sum_{a_0,\dots,a_{m-1} \in S_n} [ a_0 \dots a_{m-1} = a_k \dots a_{m-1}a_0 \dots a_{k-1}].
+mN(m, n) &= \sum_{a_0,\dots,a_{m-1} \in S_n} \sum_{0\le k < m}[ a_0 \dots a_{m-1} = a_k \dots a_{m-1}a_0 \dots a_{k-1}]\\
+ &= \sum_{0\le k < m} \sum_{a_0,\dots,a_{m-1} \in S_n} [ a_0 \dots a_{m-1} = a_k \dots a_{m-1}a_0 \dots a_{k-1}].
  \end{aligned}
 ```
 
@@ -1285,7 +1285,7 @@ N(m,n)&=\dfrac1m\sum\limits_{d\backslash m}n^d\sum\limits_{0\le k<m}[d=\gcd(k,m)
 
 （因为 $k$ 必须是 $d$ 的倍数，所以我们可以把 $k/d$ 替换成 $k$。）最后，根据定义有 $\sum\limits_{0\le k<m/d}[k\perp m/d]=\varphi(m/d)$，于是我们得到麦克马洪公式：
 ```math
-N(m,n)=\dfrac1m\sum\limits_{d\backslash m}\varphi(d)n^{m/d}=\dfrac1m\sum\limits_{d\backslash m}\varphi(d)n^{m/d}.\tag{4.63}
+N(m,n)=\dfrac1m\sum\limits_{d\backslash m}n^d\varphi(\frac{m}{d})=\dfrac1m\sum\limits_{d\backslash m}\varphi(d)n^{m/d}.\tag{4.63}
 ```
 
 例如当 $m=4$ 且 $n=2$ 时，项链的数量为 $\dfrac14(1\cdot2^4+1\cdot2^2+2\cdot2^1)=6$，与我们之前得到的结果一致。

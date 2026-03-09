@@ -1,3 +1,6 @@
+from bisect import bisect_left
+
+
 class Solution:
     def findLength(self, nums1, nums2) -> int:
         # 动态规划
@@ -34,3 +37,39 @@ class Solution:
             maxLen(0, j)
         
         return ans
+
+    def findLength3(self, nums1, nums2) -> int:
+        # rabinKarp + binary search
+        n, m = len(nums1), len(nums2)
+
+        base = 113
+        mod = 10 ** 9 + 9
+
+        def check(lenght: int):
+            if lenght == 0: return True
+            blen = pow(base, lenght-1, mod)
+            bucket = set()  # for hash1
+            hash1, hash2 = 0, 0
+            for i in range(lenght):
+                hash1 = (hash1 * base + nums1[i]) % mod
+                hash2 = (hash2 * base + nums2[i]) % mod
+            
+            if hash1 == hash2: return True
+            bucket.add(hash1)
+            for i in range(lenght, n):
+                hash1 = ((hash1 - nums1[i-lenght]*blen) * base  + nums1[i]) % mod
+                bucket.add(hash1)
+            
+            if hash2 in bucket: return True
+            for i in range(lenght, m):
+                hash2 = ((hash2 - nums2[i-lenght]*blen) * base  + nums2[i]) % mod
+                if hash2 in bucket: return True
+            
+            return False
+
+        left , right = -1, min(n, m) + 1
+        while left + 1 < right:
+            mid = (left + right) // 2
+            if check(mid): left = mid
+            else: right = mid
+        return left

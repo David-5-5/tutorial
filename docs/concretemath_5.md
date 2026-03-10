@@ -1133,6 +1133,202 @@ $$
 这些关于第一个技巧的示例表明：将形如 $\binom{2k}{k}$ 的二项式系数转化为形如 $\binom{n-1/2}{k}$，其中 $n$ 是某个合适的整数，通常为 0、1 或 $k$；的二项式系数是一种明智的做法；转化后的公式可能会简洁得多。
 
 
+**技巧 2：高阶差分**
+我们之前看到，可以求出级数 $\sum\binom{n}{k}(-1)^k$ 的部分和，却对级数 $\sum\binom{n}{k}$ 束手无策。事实证明，带交错符号的二项式系数 $\binom{n}{k}(-1)^k$ 有着许多重要应用。原因之一在于，这类系数与 2.6 节中定义的**差分算子**密切相关。
+
+函数 $f$ 在点 $x$ 处的差分 $\Delta f$ 定义为
+$$
+\Delta f(x) = f(x+1) - f(x);
+$$
+
+若再次作用 $\Delta$，我们便得到二阶差分
+$$
+\begin{aligned}
+\Delta^2 f(x) = \Delta f(x+1) - \Delta f(x) &= \big(f(x+2)-f(x+1)\big) - \big(f(x+1)-f(x)\big)  \\
+&= f(x+2) - 2f(x+1) + f(x),
+\end{aligned}
+$$
+
+这与二阶导数是类似的。同理，我们有
+$$
+\Delta^3 f(x) = f(x+3) - 3f(x+2) + 3f(x+1) - f(x); \\
+\Delta^4 f(x) = f(x+4) - 4f(x+3) + 6f(x+2) - 4f(x+1) + f(x);
+$$
+
+依此类推。二项式系数带着交错符号出现在这些公式中。
+
+一般而言，$n$ 阶差分为
+$$
+\Delta^n f(x) = \sum_k \binom{n}{k} (-1)^{n-k} f(x+k),\quad \text{integer }n\ge 0.\tag{5.40}
+$$
+
+这个公式用归纳法很容易证明，但还有一种利用算子基本理论直接证明的好方法。回忆一下 2.6 节中按如下规则定义的移位算子 $E$：
+$$
+Ef(x) = f(x+1);
+$$
+
+因此差分算子 $\Delta = E - 1$，其中 $1$ 是恒等算子，满足 $1f(x)=f(x)$。由二项式定理可得：
+$$
+\Delta^n = (E-1)^n = \sum_k \binom{n}{k} E^k (-1)^{n-k}
+$$
+
+这是一个算子等式，它与式 (5.40) 等价，因为 $E^k$ 就是将 $f(x)$ 变为 $f(x+k)$ 的算子。
+
+一个有趣且重要的情形出现在我们考虑负下降幂时。令 $f(x)=(x-1)^{\underline{-1}} = 1/x$。那么根据式 (2.45)，我们有 $\Delta f(x)=(-1)(x-1)^{\underline{-2}},\Delta^2 f(x) = (-1)(-2)(x-1)^{\underline{-3}}$，一般地有
+$$
+\Delta^n (x-1)^{\underline{-1}} = (-1)^{\underline{n}} (x-1)^{\underline{-n-1}} = (-1)^n \frac{n!}{x(x+1)\dots(x+n)}
+$$
+
+式 (5.40) 现在告诉我们
+$$
+\begin{aligned}
+\sum_k \binom{n}{k} \frac{(-1)^k}{x+k} &= \frac{n!}{x(x+1)\cdots(x+n)} \\
+&= x^{-1} \binom{x+n}{n}^{-1}, \quad x \notin \{0,-1,\dots,-n\}. \tag{5.41}
+\end{aligned}
+$$
+
+例如，
+$$
+\begin{aligned}
+\frac{1}{x} - \frac{4}{x+1} & + \frac{6}{x+2} - \frac{4}{x+3} + \frac{1}{x+4} \\
+& = \frac{4!}{x(x+1)(x+2)(x+3)(x+4)} = 1\bigg/ x\binom{x+4}{4}
+\end{aligned}
+$$
+
+式 (5.41) 中的和就是 $n!/(x(x+1)\cdots(x+n))$ 的部分分式展开。
+
+从正下降幂同样可以得到重要结论。若 $f(x)$ 是 $d$ 次多项式，则 $\Delta f(x)$ 是 $d-1$ 次多项式；因此 $\Delta^d f(x)$ 为常数，且当 $n>d$ 时 $\Delta^n f(x)=0$。这一极其重要的性质能简化许多公式。
+
+进一步观察可以得到更多信息：令
+$$
+f(x) = a_d x^d + a_{d-1} x^{d-1} + \dots + a_1 x^1 + a_0 x^0
+$$
+
+设为任意 $d$ 次多项式。我们将在第 6 章看到，普通幂可以表示为下降幂的和（例如 $x^n=x^{\underline{n}}+x^{\underline{n-1}}$）；因此存在系数 $b_d,b_{d-1},\dots,b_1,b_0$ 使得
+$$
+f(x)=b_d x^{\underline{d}}+b_{d-1} x^{\underline{d-1}}+\dots+b_1 x^{\underline{1}}+b_0 x^{\underline{0}}
+$$
+
+(事实证明 $b_d = a_d$ 且 $b_0 = a_0$，但中间系数的关系更为复杂。) 令 $c_k = k!\,b_k$（$0\le k\le d$），则
+$$
+f(x) = c_d \binom{x}{d} + c_{d-1} \binom{x}{d-1} + \dots + c_1 \binom{x}{1} + c_0 \binom{x}{0};
+$$
+
+因此，任意多项式都可以表示为 $\binom{x}{k}$ 的倍数之和，这样的展开式称为 $f(x)$ 的牛顿级数，因为艾萨克·牛顿曾广泛使用它。
+
+我们在本章早些时候已经看到，加法公式蕴含
+$$
+\Delta (\binom{x}{k}) = \binom{x}{k-1}
+$$
+
+因此，由归纳法可知，牛顿级数的 $n$ 阶差分形式非常简洁：
+$$
+\Delta^n f(x) = c_d \binom{x}{d-n} + c_{d-1} \binom{x}{d-1-n} + \dots + c_1 \binom{x}{1-n} + c_0 \binom{x}{-n}
+$$
+
+若此时令 $ x = 0 $，则右侧所有项 $ c_k \binom{x}{k-n} $ 均为零，除了满足 $ k-n = 0 $ 的那一项；因此
+$$
+\Delta^n f(0) =
+\begin{cases}
+c_n, & \text{if } n \le d, \\
+0, & \text{if } n > d.
+\end{cases}
+$$
+
+因此 $f(x)$ 的牛顿级数为
+$$
+f(x) = \Delta^d f(0) \binom{x}{d} + \Delta^{d-1} f(0) \binom{x}{d-1} + \dots + \Delta f(0) \binom{x}{1} + f(0) \binom{x}{0}
+$$
+
+例如，假设 $f(x) = x^3$，容易计算得
+$$
+f(0)=0,\ f(1)=1,\ f(2)=8,\ f(3)=27;\\
+ \Delta f(0)=1,\ \Delta f(1)=7,\ \Delta f(2)=19;\\
+  \Delta^2 f(0)=6,\ \Delta^2 f(1)=12;\ \\
+   \Delta^3 f(0)=6.
+$$
+
+所以牛顿级数是 $x^3=6\binom{x}{3}+6\binom{x}{2}+1\binom{x}{1}+0\binom{x}{0}$。
+
+我们的公式 $\Delta^n f(0)=c_n$ 也可以用 $x=0$ 时的式 $(5.40)$ 这样表述：
+$$
+\sum_{k} \binom{n}{k} (-1)^k (c_0\binom{k}{0}+c_1\binom{k}{1}+c_2\binom{k}{2}+\dots) = (-1)^n c_n,
+\\ \text{integer } n \ge 0
+$$
+
+这里 <$c_0,c_1,c_2,\dots$> 是任意系数序列；无穷和 $c_0\binom{k}{0}+c_1\binom{k}{1}+c_2\binom{k}{2}+\dots$ 对所有 $k\ge 0$ 实际上都是有限的，因此收敛性不成问题。特别地，我们可以证明这个重要恒等式：
+$$
+\sum_{k} \binom{n}{k} (-1)^k (a_0 + a_1 k + \dots + a_n k^n) = (-1)^n n!\,a_n,\\
+\text{integer } n \ge 0, \tag{5.42}
+$$
+
+因为多项式 $a_0+a_1k+\dots+a_nk^n$ 总可以写成牛顿级数 $c_0\binom{k}{0}+c_1\binom{k}{1}+\dots+c_n\binom{k}{n}$，其中 $c_n = n!\,a_n$。
+
+许多乍看之下毫无头绪的求和，实际上利用 $n$ 阶差分的思想都能轻松求出。例如，我们来看这个恒等式
+$$
+\sum_k \binom{n}{k}\binom{r-sk}{n}(-1)^k = s^n, \text{integer n}\ge 0. \tag{5.43}
+$$
+
+这看起来令人叹服，因为它与我们迄今为止见过的任何形式都大相径庭。但只要我们注意到求和项中暴露特征的因子 $\binom{x}{k} (-1)^k$，就会发现它其实极易理解，这是因为函数
+$$
+f(k) = \binom{r-sk}{n} = \frac{1}{n!}(-1)^ns^nk^n + \cdots = (-1)^ns^n\binom{k}{n} + \cdots
+$$
+是关于 $k$ 的 $n$ 次多项式，首项系数为 $(-1)^ns^n/n!$。因此式 $(5.43)$ 只不过是式 $(5.42)$ 的一个应用。
+
+我们在假设 $f(x)$ 是多项式的前提下讨论了牛顿级数。但我们也已经看到，无穷牛顿级数
+```math
+f(x)=c_0\binom{x}{0}+c_1\binom{x}{1}+c_2\binom{x}{2}+\dots
+```
+
+也是有意义的，因为当 $x$ 为非负整数时，这样的和总是有限的。我们推导的公式 $\Delta^n f(0)=c_n$ 在无穷情形下同样成立，就像在多项式情形中一样；因此我们得到一般恒等式
+```math
+f(x)=f(0)\binom{x}{0}+\Delta f(0)\binom{x}{1}+\Delta^2 f(0)\binom{x}{2}+\Delta^3 f(0)\binom{x}{3}+\dots,\\
+\text{integer } x\ge 0. \tag{5.44}
+```
+
+此公式对所有定义在非负整数 $x$ 上的函数 $f(x)$ 都成立。而且，如果右端对其他 $x$ 值收敛，它就以一种自然的方式定义了一个对 $f(x)$ 进行“插值”的函数。（对函数值进行插值的方法有无穷多种，因此我们不能断言式 $(5.44)$ 对所有使无穷级数收敛的 $x$ 都成立。例如，令 $f(x)=\sin(\pi x)$，它在所有整数点处都有 $f(x)=0$，于是 $(5.44)$ 的右端恒为零；但左端在所有非整数 $x$ 处都不为零。）
+
+牛顿级数是有限微积分对无穷微积分中泰勒级数的对应物。就像泰勒级数可以写成
+```math
+g(a+x)=\frac{g(a)}{0!}x^{0}+\frac{g'(a)}{1!}x^{1}+\frac{g'(a)}{2!}x^{2}+\frac{g'''(a)}{3!}x^{3}+\dots,
+```
+
+$f(x)=g(a+x)$ 的牛顿级数可以写成
+```math
+g(a+x)=\frac{g(a)}{0!}x^{\underline{0}}+\frac{\Delta g(a)}{1!}x^{\underline{1}}+\frac{\Delta^2 g(a)}{2!}x^{\underline{2}}+\frac{\Delta^3 g(a)}{3!}x^{\underline{3}}+\dots. \tag{5.45}
+```
+
+（这与式 (5.44) 是一样的，因为当 $f(x)=g(a+x)$ 时，对所有 $n\ge 0$ 都有 $\Delta^n f(0)=\Delta^n g(a)$。）当 $g$ 是多项式或 $x=0$ 时，泰勒级数与牛顿级数都是有限的；此外，当 $x$ 是正整数时，牛顿级数也是有限的。否则，对某些 $x$ 值，级数可能收敛也可能不收敛。如果牛顿级数在 $x$ 不是非负整数时收敛，它实际上可能收敛到与 $g(a+x)$ 不同的值，因为牛顿级数 (5.45) 只依赖于离散的函数值 $g(a),g(a+1),g(a+2),\dots$。
+
+
+收敛牛顿级数的一个例子由二项式定理给出。令 $g(x)=(1+z)^x$，其中 $z$ 是满足 $|z|<1$ 的固定复数。那么 $\Delta g(x)=(1+z)^{x+1}-(1+z)^x=z(1+z)^x$，因此 $\Delta^n g(x)=z^n(1+z)^x$。此时无穷牛顿级数
+```math
+g(a+x)=\sum_{n}\Delta^ng(a)\binom{x}{n}=(1+z)^a\sum_{n}\binom{x}{n}z^n
+```
+
+对所有 $x$ 都收敛到“正确”的值 $(1+z)^{a+x}$。
+
+詹姆斯·斯特林曾尝试用牛顿级数将阶乘函数推广到非整数取值。他首先求出系数 $S_n$ 使得
+```math
+x! = \sum_{n} S_n \binom{x}{n} = S_0 \binom{x}{0} + S_1 \binom{x}{1} + S_2 \binom{x}{2} + \cdots$ \tag{5.46}
+```
+
+该式对 $x=0$，$x=1$，$x=2$ 等均为恒等式。但他发现所得级数仅当 $x$ 为非负整数时收敛。于是他重新尝试，这次写成
+```math
+\ln x! = \sum_n s_n \binom{x}{n} = s_0 \binom{x}{0} + s_1 \binom{x}{1} + s_2 \binom{x}{2} + \cdots$ \tag{5.47}
+```
+
+现在 $\Delta(\ln x!) = \ln(x+1)! - \ln x! = \ln(x+1)$，因此
+
+```math
+\begin{aligned}
+S_n &= \Delta^n (\ln x!) \big|_{x=0}  \\
+&= \Delta^{n-1} (\ln(x+1)) \big|_{x=0} \\
+&= \sum_k \binom{n-1}{k} (-1)^{n-1-k} \ln(k+1)  \ln(k+1)
+\end{aligned}
+```
+
+由式 (5.40) 可得。因此系数为 $S_0=S_1=0$；$S_2=\ln 2$；$S_3=\ln 3-2\ln 2=\ln\dfrac{3}{4}$；$S_4=\ln 4-3\ln 3+3\ln 2=\ln\dfrac{16}{27}$；等等。斯特林以此得到了一个收敛的级数（尽管他并未给出证明）；事实上，该级数对所有 $x>-1$ 都收敛。他由此能够令人满意地计算出 $\left(-\dfrac{1}{2}\right)!$。习题 88 讲述了余下的内容。
 
 
 

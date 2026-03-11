@@ -360,7 +360,7 @@ $$
 思路是先对上指标取反，再应用式 $(5.9)$，最后再次取反：
 $$
 \begin{aligned}
-\sum_{k\le m}(-1)^k\binom{r}{k} &= \sum_{k\le m}\binom{k-r-1}{k} \\
+\sum_{k\le m}\binom{r}{k}(-1)^k &= \sum_{k\le m}\binom{k-r-1}{k} \\
 &= \binom{-r+m}{m} \\
 &= (-1)^m\binom{r-1}{m}.
 \end{aligned}
@@ -372,7 +372,7 @@ $$
 
 那么更简单的部分和呢，
 $$
-\sum_{k\le m}\binom{n}{k} = \binom{n}{0} + \binom{r}{1} + \cdots + \binom{n}{m} \tag{5.17}
+\sum_{k\le m}\binom{n}{k} = \binom{n}{0} + \binom{n}{1} + \cdots + \binom{n}{m} \tag{5.17}
 $$
 
 按理说，既然能求出带交错符号的对应和，我们也应该能求出这个和吧？但并不能；帕斯卡三角一整行的部分和并没有闭式。我们可以求列的部分和——那就是式 $(5.10)$——但不行的是行。然而很奇妙的是，如果把行里的元素乘上它们到中心的距离，就可以求这一行的部分和：
@@ -402,8 +402,8 @@ S_m = \sum_{k\le m}\binom{m-1+r}{k}x^k y^{m-k} + \sum_{k\le m}\binom{m-1+r}{k-1}
 $$
 以及
 $$
-\sum_{k\le m}\binom{m-1+r}{k}x^k y^{r-k}=y S_{m-1} + \binom{m-1+r}{m}x^m, \\
-\sum_{k\le m}\binom{m-1+r}{k-1}x^k y^{r-k}=x S_{m-1}
+\sum_{k\le m}\binom{m-1+r}{k}x^k y^{m-k}=y S_{m-1} + \binom{m-1+r}{m}x^m, \\
+\sum_{k\le m}\binom{m-1+r}{k-1}x^k y^{m-k}=x S_{m-1}
 $$
 
 当 $m > 0$ 时。因此

@@ -1613,11 +1613,130 @@ $$
 $$
 这就解释了为什么带参数 $t$ 的级数被称为“广义”二项级数和指数级数。
 
+对所有实数 $r$，下列恒等式对都成立：
+$$
+\mathcal{B}_t(z)^r = \sum_{k\ge 0}\binom{tk+r}{k}\frac{r}{tk+r}z^k; \qquad
+\mathcal{E}_t(z)^r = \sum_{k\ge 0}\binom{tk+t}{k}\frac{r^{k+1}}{k!}z^k. \tag{5.60}
+$$
 
+$$
+\mathcal{B}_t(z)^r \cdot \frac{1 - t + t\mathcal{B}_t(z)^{-1}}{tk + r} = \sum_{k\ge 0}\binom{tk + r}{k} z^k; \qquad
+\mathcal{E}_t(z)^r \cdot \frac{1 - zt\mathcal{E}_t(z)^t}{(tk + r)k!} = \sum_{k\ge 0}\binom{tk + r}{k} r^k z^k. \tag{5.61}
+$$
 
+（当 $tk+r=0$ 时，我们需要稍微小心一点解释 $z^k$ 的系数；每个系数都是关于 $r$ 的多项式。例如，$\mathcal{E}_t(z)^r$ 的常数项是 $r(0+r)^{-1}$，即使在 $r=0$ 时它也等于 $1$。）
 
+由于式 (5.60) 和 (5.61) 对所有 $r$ 都成立，当我们把对应不同幂次 $r$ 和 $s$ 的级数乘在一起时，就能得到非常一般的恒等式。例如，
+$$
+\mathcal{B}_t(z)^r \cdot \frac{1 - t + t\mathcal{B}_t(z)^{-1}}{tk + r} \cdot \mathcal{B}_t(z)^s = 
+\sum_{k\ge 0}\binom{tk + r}{k} z^k \cdot \sum_{j\ge 0}\binom{tj + s}{j} \frac{s}{tj + s} z^j = 
+\sum_{n\ge 0}\left( \sum_{k=0}^n \binom{tk + r}{k} \cdot \binom{t(n-k) + s}{n-k} \cdot \frac{s}{t(n-k) + s} \right) z^n
+$$
 
+这个幂级数必定等于
+$$
+\mathcal{B}_t(z)^{r+s} \cdot \frac{1 - t + t\mathcal{B}_t(z)^{-1}}{tn + r + s} = \sum_{n\ge 0}\binom{tn + r + s}{n} z^n
+$$
 
+因此我们可以令 $z^n$ 的系数相等，从而得到如下恒等式：
+$$
+\sum_{k=0}^n \binom{tk + r}{k} \cdot \binom{t(n-k) + s}{n-k} \cdot \frac{s}{t(n-k) + s} = \binom{tn + r + s}{n} \cdot \frac{r+s}{tn + r + s}, \quad n \in \mathbb{Z}^+, \, 0 \le k \le n
+$$
 
+对所有实数 $r$、$s$、$t$ 都成立。当 $t=0$ 时，这个恒等式就退化为范德蒙德卷积。（如果公式中碰巧出现 $tk+r=0$，分母中的 $tk+r$ 应当看作与二项式系数分子里的 $tk+r$ 相互抵消。恒等式两边都是关于 $r$、$s$、$t$ 的多项式。）把 $\mathcal{B}_t(z)^r$ 与 $\mathcal{B}_t(z)^s$ 等相乘时，也有类似的恒等式；结果见表 202。
+
+**Table 202  通用卷积恒等式，对整数 $n\ge 0$**
+$$
+\sum_k \binom{tk + r}{k}\binom{tn-tk+s}{n-k} \frac{r}{tk+r}= \binom{tn+r+s}{n} \tag{5.62}
+$$
+$$
+\sum_k \binom{tk + r}{k}\binom{tn-tk+s}{n-k} \frac{r}{tk+r} \cdot\frac{s}{tn-tk+s}\\
+= \binom{tn+r+s}{n}\frac{r+s}{tn+r+s} \tag{5.63}
+$$
+$$
+\sum_k \binom{n}{k}(tk+r)^k (tn-tk+s)^{n-k} \frac{r}{tk+r}= (tn+r+s)^n\tag{5.64}
+$$
+$$
+\sum_k \binom{n}{k}(tk+r)^k (tn-tk+s)^{n-k} \frac{r}{tk+r}\cdot\frac{s}{tn-tk+s} \\
+= (tn+r+s)^n\frac{r+s}{tn+r+s}, \tag{5.65}
+$$
+
+我们已经知道，考察一般结论的特殊情形通常是个好主意。例如，如果令 $t=1$，会发生什么？广义二项级数 $\mathcal{B}_1(z)$ 非常简单——它就是
+$$
+\mathcal{B}_1(z) = \sum_{k\ge 0} z^k = \frac{1}{1-z}
+$$
+
+因此 $\mathcal{B}_1(z)$ 并没有给出超出范德蒙德卷积之外的新东西。但是 $\mathcal{E}_1(z)$ 是一个很重要的函数。
+$$
+\mathcal{E}_1(z) = \sum_{k\ge 0}(k+1)^{k-1}\frac{z^k}{k!} = 1 + z + \frac{3}{2}z^2 + \frac{8}{3}z^3 + \frac{125}{24}z^4 + \dots \tag{5.66}
+$$
+
+这是我们此前未曾见过的；它满足如下基本恒等式：
+$$
+\mathcal{E}(z) = e^{z\mathcal{E}(z)} \tag{5.67}
+$$
+
+这个函数最早由 $Euler$[117] 和 $Eisenstein$[91] 研究，在大量应用中出现[203,193]。
+
+广义二项式中 $t=2$ 与 $t=-1$ 的特殊情况尤为值得关注，因为它们的系数在具有递归结构的问题中反复出现。因此显式写出这些级数以供后续参考是很有用的。
+$$
+\begin{aligned}
+\mathcal{B}_2(z) &= \sum_{k} \binom{2k}{k} \frac{z^k}{1+k} \\
+&=  \sum_{k} \binom{2k+1}{k} \frac{z^k}{1+2k} = \frac{1-\sqrt{1-4z}}{2z}. \tag{5.69}
+\end{aligned}
+$$
+$$
+\begin{aligned}
+\mathcal{B}_{-1}(z) &= \sum_{k} \binom{1-k}{k} \frac{z^k}{1-k} \\
+&=  \sum_{k} \binom{2k-1}{k} \frac{(-z)^k}{1-2k} = \frac{1+\sqrt{1+4z}}{2}. \tag{5.69}
+\end{aligned}
+$$
+$$
+\mathcal{B}_2(z)^r = \sum_{k} \binom{2k+r}{k}\frac{r}{2k+r}z^k \tag{5.70}
+$$
+$$
+\mathcal{B}_{-1}(z)^r = \sum_{k} \binom{r-k}{k}\frac{r}{r-k}z^k \tag{5.71}
+$$
+$$
+\frac{\mathcal{B}_2(z)^r}{\sqrt{1-4z}} =\sum_{k} \binom{2k+r}{k} z^k \tag{5.72}
+$$
+$$
+\frac{\mathcal{B}_{-1}(z)^{r+1}}{\sqrt{1+4z}}= \sum_{k} \binom{r-k}{k} z^k. \tag{5.73}
+$$
+
+$\mathcal{B}_2(z)$ 的系数 $\dbinom{2n}{n}\!\big/(n+1)$ 被称为卡特兰数 $C_n$，因为 $Eugène\ Catalan$ 在 1830 年代发表了一篇关于它们的有影响力的论文[52]。该数列的开头几项如下：
+| $n$ | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| $C_n$ | 1  | 1  | 2 | 5 | 14 | 42 | 132 | 429 | 1430 | 4862 | 16796 
+
+$\mathcal{B}_{-1}(z)$ 的系数本质上是相同的，但开头多了一个 $1$，且其余数字的符号交替变化：$\langle 1, 1, -1, 2, -5, 14, \dots \rangle$。因此 $\mathcal{B}_{-1}(z) = 1 + z \mathcal{B}_2(-z)$。我们还有 $\mathcal{B}_{-1}(z) = \frac{1}{z} \mathcal{B}_2(-z)$。
+
+我们以推导式 $(5.72)$ 和 $(5.73)$ 的一个重要推论来结束本节，这个关系式进一步揭示了函数 $\mathcal{B}_{-1}(z)$ 和 $\mathcal{B}_2(-z)$ 之间的联系：
+$$
+\frac{\mathcal{B}_1(z)^{n+1} - (-z)^{n+1} \mathcal{B}_2(-z)^{n+1}}{\sqrt{1+4z}} = \sum_{k\le n}\binom{n-k}{k}z^k.
+$$
+
+该式成立是因为 $(-z)^{n+1}\mathcal{B}_2(-z)^{n+1}/\sqrt{1+4z}$ 中 $z^k$ 的系数为
+$$
+\begin{aligned}
+[z^k]\frac{(-z)^{n+1} \mathcal{B}_2(-z)^{n+1}}{\sqrt{1+4z}} 
+&= (-1)^{n+1} [z^{k-n-1}] \frac{\mathcal{B}_2(-z)^{n+1}}{\sqrt{1+4z}} \\
+&= (-1)^{n+1} (-1)^{k-n-1} [z^{k-n-1}] \frac{\mathcal{B}_2(z)^{n+1}}{\sqrt{1-4z}} \\
+&= (-1)^k \binom{2(k-n-1)+n+1}{k-n-1} \\
+&= (-1)^k \binom{2k-n-1}{k-n-1} = (-1)^k \binom{2k-n-1}{k} \\
+&= \binom{n-k}{k} = [z^k] \frac{\mathcal{B}_{-1}(z)}{(n+1)\sqrt{1+4z}}
+\end{aligned}
+$$
+
+当 $k > n$ 时，这些项会很好地相互抵消。我们现在可以利用 $(5.68)$ 和 $(5.69)$ 得到闭形式。
+$$
+\sum_{k \leq n} \binom{n-k}{k}z^k = \frac{1}{\sqrt{1+4z}}\left(\frac{1+\sqrt{1+4z}}{2}\right)^{n+1} + \left(\frac{1-\sqrt{1+4z}}{2}\right)^{n+1} \\ 
+\text{integer } n>0. \tag{5.75}
+$$
+
+（特殊情况 $z=-1$ 出现在 5.2 节的问题 3 中。由于 $-\frac{1}{2}(1\pm\sqrt{-3})$ 是单位六次根，因此求和式 $\sum_{k \leq n} \binom{n+1}{k} (-1)^k$ 具有我们在该问题中观察到的周期性。）类似地，我们可以将 $(5.70)$ 与 $(5.71)$ 结合起来消去大系数，得到
+$$
+\sum_{k < n}\binom{n-k}{k}\frac{n}{n-k} z^k=\left(\frac{1+\sqrt{1+4z}}{2}\right)^n + \left(\frac{1-\sqrt{1+4z}}{2}\right)^n, \\ \text{integer } n>0. \tag{5.75}
+$$
 
 

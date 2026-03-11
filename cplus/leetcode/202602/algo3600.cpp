@@ -61,5 +61,31 @@ public:
         return upgrades.size()>k?min(upgrades[k], mn):mn;
     }
 
-  
+    int maxStability2(int n, vector<vector<int>>& edges, int k) {
+        // 自行解答 Kruskal 算法，直接计算出强度
+        int cnt = 0, mn = 1e6; UnionFind uf(n);
+        priority_queue<tuple<int, int, int>> pq;    // 大根堆
+        for (auto & e: edges) {
+            auto u = e[0], v = e[1], s = e[2], must = e[3];
+            if (must) {
+                mn = min(mn, s); cnt ++;
+                if (!uf.is_same(u, v)) uf.merge(u, v);
+                else return -1;
+            } else {
+                pq.emplace(s, u, v);
+            }
+        }
+
+        while (cnt < n-1 && !pq.empty()) {
+            auto [s, u, v] = pq.top(); pq.pop();
+            if (!uf.is_same(u, v)) {
+                cnt ++; uf.merge(u, v);
+                if (n-cnt>k) mn = min(mn, s);   
+                else mn = min(mn, s * 2);       // 可以升级的边
+            }
+        }
+        if (cnt < n-1) return -1;
+
+        return mn;
+    }    
 };

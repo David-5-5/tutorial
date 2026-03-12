@@ -477,27 +477,27 @@ $$
 **Table 169 二项式系数乘积的和**
 $$
 \begin{aligned}
-&\sum_k\binom{r}{m+k}\binom{s}{n-k}=\binom{r+s}{m+n},\text{integers }m,n.\tag{5.22}
+&\sum_k\binom{r}{m+k}\binom{s}{n-k}=\binom{r+s}{m+n}, \qquad \text{integers }m,n.\tag{5.22}
 \end{aligned}
 $$
 $$
 \begin{aligned}
-&\sum_k\binom{l}{m+k}\binom{s}{n+k}=\binom{l+s}{l-m+n},\text{integer }l\ge0,\text{integers }m,n.\tag{5.23}
+&\sum_k\binom{l}{m+k}\binom{s}{n+k}=\binom{l+s}{l-m+n}, \qquad \substack{\text{integer }l\ge0,\\  \text{integers }m,n.}\tag{5.23}
 \end{aligned}
 $$
 $$
 \begin{aligned}
-&\sum_k\binom{l}{m+k}\binom{s+k}{n}(-1)^k=(-1)^{l+m}\binom{s-m}{n-l},\text{integer }l\ge0,\text{integers }m,n.\tag{5.24}
+&\sum_k\binom{l}{m+k}\binom{s+k}{n}(-1)^k=(-1)^{l+m}\binom{s-m}{n-l}, \qquad \substack{\text{integer }l\ge0,\\ \text{integers }m,n.}\tag{5.24}
 \end{aligned}
 $$
 $$
 \begin{aligned}
-&\sum_k\binom{l-k}{m}\binom{s}{k-n}(-1)^k=(-1)^{l+m}\binom{s-m-1}{l-m-n},\text{integers }l,m,n\ge0.\tag{5.25}
+&\sum_k\binom{l-k}{m}\binom{s}{k-n}(-1)^k=(-1)^{l+m}\binom{s-m-1}{l-m-n}, \qquad \substack{\text{integers }\\ l,m,n\ge0.}\tag{5.25}
 \end{aligned}
 $$
 $$
 \begin{aligned}
-&\sum_k\binom{l-k}{m}\binom{q+k}{n}=\binom{l+q+1}{m+n+1},\text{integers }l,m\ge0,\text{integers }n\ge q\ge0.\tag{5.26}
+&\sum_k\binom{l-k}{m}\binom{q+k}{n}=\binom{l+q+1}{m+n+1}, \qquad \substack{\text{integers }l,m\ge0,\\ \text{integers }n\ge q\ge0.}\tag{5.26}
 \end{aligned}
 $$
 
@@ -541,7 +541,7 @@ $$
 这里还有一个更对称的例子：
 $$
 \begin{aligned}
-\sum_k &\binom{a+b}{b+k} \binom{b+c}{c+k} \binom{c+a}{a+k} (-1)^k \\
+\sum_k &\binom{a+b}{a+k} \binom{b+c}{b+k} \binom{c+a}{c+k} (-1)^k \\
 &= \frac{(a+b+c)!}{a!\,b!\,c!},\quad \text{integers }a,b,c\ge0.\tag{5.29}
 \end{aligned}
 $$
@@ -554,7 +554,7 @@ $$
 它并没有出现在表 $169$ 中。类似的四项二项式系数和没有闭式，但一个相近的和式却有：
 $$
 \begin{aligned}
-\sum_k &\binom{a+b}{a+k}\binom{b+c}{b+k}\binom{c+d}{c+k}\binom{d+a}{d+k} / \binom{2a+2b+2c+2d}{a+b+c+d+k} \\
+\sum_k &\binom{a+b}{a+k}\binom{b+c}{b+k}\binom{c+d}{c+k}\binom{d+a}{d+k} \bigg/ \binom{2a+2b+2c+2d}{a+b+c+d+k} \\
 &=\frac{(a+b+c+d)!\,(a+b+c)!\,(a+b+d)!\,(a+c+d)!\,(b+c+d)!\,}{(2a+2b+2c+2d)!(a+c)!\,(b+d)!\,a!\,b!\,c!\,d!} \\
 & \text{                   integers a,b,c,d }\ge0.
 \end{aligned}
@@ -565,7 +565,7 @@ $$
 $$
 \begin{aligned}
 \sum_k &(-1)^{\sum_{i<j}k_{ij}} \left(\prod_{1\le i<j\le n}\binom{a_i+a_j}{a_i+k_{ij}}\right) \left(\prod_{1\le j<n}\binom{a_j+a_n}{a_n+\sum_{i<j}k_{ij}-\sum_{i>j}k_{ij}}\right) \\
-&= \frac{\left(a_1+a_2+\dots+a_n\right)!}{a_1!\,a_2!\,\dots\,a_n!},\quad \text{integers }a_1,a_2,\dots,a_n\ge0.\tag{5.31}
+&= \binom{a_1+\dots+a_n}{a_1,a_2,\dots,a_n},\quad \text{integers }a_1,a_2,\dots,a_n\ge0.\tag{5.31}
 \end{aligned}
 $$
 

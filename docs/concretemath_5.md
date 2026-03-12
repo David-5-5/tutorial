@@ -1615,35 +1615,37 @@ $$
 
 对所有实数 $r$，下列恒等式对都成立：
 $$
-\mathcal{B}_t(z)^r = \sum_{k\ge 0}\binom{tk+r}{k}\frac{r}{tk+r}z^k; \qquad
-\mathcal{E}_t(z)^r = \sum_{k\ge 0}\binom{tk+t}{k}\frac{r^{k+1}}{k!}z^k. \tag{5.60}
+\mathcal{B}_t(z)^r = \sum_{k\ge 0}\binom{tk+r}{k}\frac{r}{tk+r}z^k; \\
+\mathcal{E}_t(z)^r = \sum_{k\ge 0}r\frac{(tk+r)^{k-1}}{k!}z^k; \tag{5.60}
 $$
 
 $$
-\mathcal{B}_t(z)^r \cdot \frac{1 - t + t\mathcal{B}_t(z)^{-1}}{tk + r} = \sum_{k\ge 0}\binom{tk + r}{k} z^k; \qquad
-\mathcal{E}_t(z)^r \cdot \frac{1 - zt\mathcal{E}_t(z)^t}{(tk + r)k!} = \sum_{k\ge 0}\binom{tk + r}{k} r^k z^k. \tag{5.61}
+\frac{\mathcal{B}_t(z)^r}{1 - t + t\mathcal{B}_t(z)^{-1}} = \sum_{k\ge 0}\binom{tk + r}{k} z^k; \\
+\frac{\mathcal{E}_t(z)^r}{1 - zt\mathcal{E}_t(z)^t} = \sum_{k\ge 0}\frac{(tk + r)^k}{k!}z^k. \tag{5.61}
 $$
 
 （当 $tk+r=0$ 时，我们需要稍微小心一点解释 $z^k$ 的系数；每个系数都是关于 $r$ 的多项式。例如，$\mathcal{E}_t(z)^r$ 的常数项是 $r(0+r)^{-1}$，即使在 $r=0$ 时它也等于 $1$。）
 
 由于式 (5.60) 和 (5.61) 对所有 $r$ 都成立，当我们把对应不同幂次 $r$ 和 $s$ 的级数乘在一起时，就能得到非常一般的恒等式。例如，
 $$
-\mathcal{B}_t(z)^r \cdot \frac{1 - t + t\mathcal{B}_t(z)^{-1}}{tk + r} \cdot \mathcal{B}_t(z)^s = 
-\sum_{k\ge 0}\binom{tk + r}{k} z^k \cdot \sum_{j\ge 0}\binom{tj + s}{j} \frac{s}{tj + s} z^j = 
-\sum_{n\ge 0}\left( \sum_{k=0}^n \binom{tk + r}{k} \cdot \binom{t(n-k) + s}{n-k} \cdot \frac{s}{t(n-k) + s} \right) z^n
+\begin{aligned}
+\mathcal{B}_t(z)^r \frac{\mathcal{B}_t(z)^{r+s}}{1 - t + t\mathcal{B}_t(z)^{-1}} &= 
+\sum_{k\ge 0}\binom{tk + r}{k}\frac{r}{tk+r} z^k \sum_{j\ge 0}\binom{tj+s}{j}z^j  \\
+&= \sum_{n\ge 0} \sum_{k=0}^n \binom{tk + r}{k}\frac{r}{tk+r}  \binom{t(n-k) + s}{n-k}.
+\end{aligned}
 $$
 
 这个幂级数必定等于
 $$
-\mathcal{B}_t(z)^{r+s} \cdot \frac{1 - t + t\mathcal{B}_t(z)^{-1}}{tn + r + s} = \sum_{n\ge 0}\binom{tn + r + s}{n} z^n
+\frac{\mathcal{B}_t(z)^{r+s}}{1-t+t\mathcal{B}_t(z)^{-1}} = \sum_{n\ge 0}\binom{tn+r+s}{n} z^n;
 $$
 
 因此我们可以令 $z^n$ 的系数相等，从而得到如下恒等式：
 $$
-\sum_{k=0}^n \binom{tk + r}{k} \cdot \binom{t(n-k) + s}{n-k} \cdot \frac{s}{t(n-k) + s} = \binom{tn + r + s}{n} \cdot \frac{r+s}{tn + r + s}, \quad n \in \mathbb{Z}^+, \, 0 \le k \le n
+\sum_k \binom{tk + r}{k}\binom{t(n-k)+s}{n-k}\frac{r}{tk+r} = \binom{tn+r+s}{n}, \text{   integer n},
 $$
 
-对所有实数 $r$、$s$、$t$ 都成立。当 $t=0$ 时，这个恒等式就退化为范德蒙德卷积。（如果公式中碰巧出现 $tk+r=0$，分母中的 $tk+r$ 应当看作与二项式系数分子里的 $tk+r$ 相互抵消。恒等式两边都是关于 $r$、$s$、$t$ 的多项式。）把 $\mathcal{B}_t(z)^r$ 与 $\mathcal{B}_t(z)^s$ 等相乘时，也有类似的恒等式；结果见表 202。
+对所有实数 $r$，$s$，$t$ 都成立。当 $t=0$ 时，这个恒等式就退化为范德蒙德卷积。（如果公式中碰巧出现 $tk+r=0$，分母中的 $tk+r$ 应当看作与二项式系数分子里的 $tk+r$ 相互抵消。恒等式两边都是关于 $r$，$s$，$t$ 的多项式。）把 $\mathcal{B}_t(z)^r$ 与 $\mathcal{B}_t(z)^s$ 等相乘时，也有类似的恒等式；结果见表 202。
 
 **Table 202  通用卷积恒等式，对整数 $n\ge 0$**
 $$

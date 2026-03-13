@@ -18,4 +18,15 @@ public:
 
     }
 
+    long long maxScore2(int n, vector<vector<int>>& edges) {
+        // 数学
+        long long ans = 1LL * n * (n - 1) + 1LL * n * (n-2); 
+
+        for (int i = n-1; i>=3; i--) {
+            ans += 1LL * i * (i-2);
+        }
+
+        return (edges.size() == n)?ans + 2: ans;   
+    }
+
 };

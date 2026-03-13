@@ -677,9 +677,9 @@ $$
 \sum_{k\le m}\binom{n-m+k}{k} = \binom{(n-m)+m+1}{m} = \binom{n+1}{m}
 $$
 
-最后，我们把之前从和式中提出来的分母 $\binom{m}{m}$ 放回去，再利用公式 (5.7) 就得到了我们想要的闭式：
+最后，我们把之前从和式中提出来的分母 $\binom{n}{m}$ 放回去，再利用公式 (5.7) 就得到了我们想要的闭式：
 $$
-\binom{n+1}{m}\bigg/\binom{m}{m} = \frac{n+1}{n+1-m}
+\binom{n+1}{m}\bigg/\binom{n}{m} = \frac{n+1}{n+1-m}
 $$
 
 只要不出现除以零的情况，也就是只要 $n$ 不是 $0,1,\dots,m-1$ 中的整数，这个推导实际上对任意实数 $n$ 都成立。
@@ -719,7 +719,7 @@ $$
 所以关键就在这里：我们把 $k$ 改写成 $m-(m-k)$，并把和式 $S$ 拆成两个和：
 $$
 \begin{aligned}
-\sum_{k=0} \binom{m-k-1}{m-n-1} &= \sum_{k=0}(m-(m-k)) \binom{m-k-1}{m-n-1} \\
+\sum_{k=0} k\binom{m-k-1}{m-n-1} &= \sum_{k=0}(m-(m-k)) \binom{m-k-1}{m-n-1} \\
 &= \sum_{k=0} m\binom{m-k-1}{m-n-1} - \sum_{k=0} (m-k)\binom{m-k-1}{m-n-1} \\
 &= m\sum_{k=0} \binom{m-k-1}{m-n-1} - \sum_{k=0} (m-n)\binom{m-k}{m-n} \\
 &= mA - (m-n) B

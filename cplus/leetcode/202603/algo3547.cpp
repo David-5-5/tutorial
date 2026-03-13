@@ -29,4 +29,13 @@ public:
         return (edges.size() == n)?ans + 2: ans;   
     }
 
+    long long maxScore3(int n, vector<vector<int>>& edges) {
+        // 数学
+        // a_n = n^2 - 2n, sum(a_n) + n * (n-1)
+        // cycle           sum(a_n) + n * (n-1) + 2 * 1 
+        // sum(a_n) + n * (n-1) = 1/3n(n+1)(n+1/2) - n*(n+1) + n*(n-1) + 1
+        //                      = （2n^3 + 3n^2 - 11n) / 6 + 1
+        long long ans = (2LL * n * n * n + 3LL * n * n - 11 * n)/6 + 1;
+        return (edges.size() == n)?ans + 2: ans; 
+    }
 };

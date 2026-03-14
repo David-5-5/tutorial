@@ -4,7 +4,7 @@ using namespace std;
 class Solution {
 public:
     int findKthLargest(vector<int>& nums, int k) {
-        // 快速选择算法 - 模板
+        // 快速选择算法 - 模板 算法导论 第9章
         auto qs = [&] (this auto&& qs, int l, int r, int k) -> int {
             if (l == r) return nums[k];
             auto pivot = nums[l]; auto i = l-1, j = r+1; 

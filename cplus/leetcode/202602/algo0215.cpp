@@ -21,4 +21,9 @@ public:
         int n = nums.size(); 
         return qs(0, n-1, n-k);
     }
+    int findKthLargest(vector<int>& nums, int k) {
+        // 快速选择算法 - 系统函数
+        nth_element(nums.begin(), nums.begin() + nums.size()-k, nums.end());
+        return  nums[nums.size()-k];
+    }    
 };

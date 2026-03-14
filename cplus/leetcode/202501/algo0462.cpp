@@ -38,5 +38,12 @@ public:
         return ans;
     }  
 
-
+    int minMoves2_nth(vector<int>& nums) {
+        // 自行解答
+        int n = nums.size(); 
+        nth_element(nums.begin(), nums.begin() + n/2, nums.end());
+        int median = nums[n/2];
+        int ans = 0; for(auto v:nums) ans += abs(v-median);
+        return ans;
+    }    
 };

@@ -2126,12 +2126,65 @@ $$
 该极限中的每一项都是良定义的，因为分母因子 $(-2m)^{\overline{k}}$ 直到 $k>2m$ 时才会变为零。因此这个极限恰好给出了我们最开始的和式 $(5.20)$。
 
 
+## 5.6 HYPERGEOMETRIC TRANSFORMATIONS 超几何变换
+到现在应该很清楚，一个已知的超几何函数闭形式数据库，是求解二项式系数和式的实用工具。我们只需将任意给定的和式转化为标准超几何形式，然后在表中查找即可。如果存在，那就直接得到答案；如果不存在，而这个和式又能表示成闭形式，我们就可以把它加入数据库。我们甚至还可以在表中加入类似“该和式一般没有简单闭形式”的条目。例如，和式 $\sum_{k\le m}\binom{n}{k}$ 对应于超几何级数
+$$
+\binom{n}{m} F\left( \begin{array}{c} 1,\ -m \\ n-m+1 \end{array} \middle| -1 \right),\quad \text{整数 }n\ge m\ge 0; \tag{5.100}
+$$
+这个和式只有当 $m$ 接近 $0$、$\dfrac12n$ 或 $n$ 时，才具有简单的闭形式。
 
+但故事还不止于此，因为超几何函数本身也满足一系列恒等式。这意味着超几何函数的每一个闭形式都会导出更多的闭形式，并为数据库增添更多条目。例如，习题 25 和 26 中的恒等式告诉我们如何将一个超几何函数转化为另外两个参数相似但不同的超几何函数，而这些函数还可以继续被转化。
 
+1797 年，J. F. 普法夫（J. F. Pfaff）发现了一条令人意外的反演定律，
+$$
+(1-z)^{-a} F\left( \begin{array}{c} a,\ b \\ c \end{array} \middle| \frac{z}{z-1} \right)
+= F\left( \begin{array}{c} a,\ c-b \\ c \end{array} \middle| z \right), \tag{5.101}
+$$
 
+这是另一种变换形式。它是幂级数中的形式恒等式：若将左边展开时，把项 $(-z)^k/(1-z)^{k+a}$ 替换为无穷级数 $(-z)^k\left(1+\binom{k+a}{1}z+\binom{k+a+1}{2}z^2+\cdots\right)$，等式便成立（见习题 50）。当 $z\ne 1$ 时，我们可以用这条定律从已知恒等式推导出新公式。
 
+例如，如果我们选取合适的参数使得两个恒等式都适用，就可以将库默尔公式 (5.94) 与反演定律 (5.101) 结合起来：
+$$
+2^{-a} F\left( \begin{array}{c} a,\ 1-a \\ 1+b-a \end{array} \middle| \frac12 \right)
+= F\left( \begin{array}{c} a,\ b \\ 1+b-a \end{array} \middle| -1 \right) \\
+= \frac{(b/2)!}{b!}(b-a)^{\underline{b/2}}. \tag{5.102}
+$$
 
+我们现在令 $a=-n$，就可以从这个式子回推得到一个日后可能会用到的新的二项式系数恒等式：
+$$
+\sum_{k\ge 0}\frac{(-n)^{\overline{k}}(1+n)^{\overline{k}}}{(1+b+n)^{\overline{k}}}\frac{2^{-k}}{k!}
+= \sum_{k}\binom{n}{k}\left(-\frac12\right)^k \binom{n+k}{k} \bigg/ \binom{b+n+k}{k} \\
+= 2^{-n}\frac{(b/2)!\,(b+n)!}{b!\,(b/2+n)!},\quad \text{integer }n\ge 0. \tag{5.103}
+$$
 
+例如，当 $n=3$ 时，该恒等式给出：
+```math
+1-\frac{3\cdot 4}{2(4+b)} + \frac{3\cdot 4\cdot 5}{4(4+b)(5+b)} - \frac{4\cdot 5\cdot 6}{8(4+b)(5+b)(6+b)} \\
+= \frac{(b+3)(b+2)(b+1)}{(b+6)(b+4)(b+2)}.
+```
+
+这几乎令人难以置信，但对所有 $b$ 都成立（分母中的因子为 0 时除外）。
+
+这很有趣；我们再来试一次。说不定能找到一个真正让朋友们大吃一惊的公式。如果把普法夫反演定律用到 $z=2$ 的奇特式子 (5.99) 上，会得到什么？此时令 $a=-m,\ b=1,\ c=-2m+\epsilon$，可得
+$$
+(-1)^m \lim_{\epsilon\to 0} F\left( \begin{array}{c} -m,\ 1 \\ -2m+\epsilon \end{array} \middle| 2 \right) 
+= \lim_{\epsilon\to 0} F\left( \begin{array}{c} -m,\ -2m-1+\epsilon \\ -2m+\epsilon \end{array} \middle| 2 \right) \\
+= \lim_{\epsilon\to 0} \sum_{k\ge 0} \frac{(-m)^{\overline{k}}(-2m-1+\epsilon)^{\overline{k}}}{(-2m+\epsilon)^{\overline{k}}} \frac{2^k}{k!} \\
+= \sum_{k\le m} \binom{m}{k} \frac{(2m+1)^{\overline{k}}}{(2m)^{\overline{k}}} (-2)^k.
+$$
+
+因为极限中的每一项都不会趋近于零，这就导出了另一个神奇的公式：
+$$
+\sum_{k\le m} \binom{m}{k} \frac{2m+1}{2m+1-k} (-2)^k
+= (-1)^m 2^{2m} \bigg/ \binom{2m}{m} \\
+= 1 \bigg/ \binom{-m}{1/2},\quad \text{整数 }m\ge 0. \tag{5.104}
+$$
+
+当 $m=3$ 时，例如，和式为
+$$
+1 - 7 + \frac{84}{5} - 14 = -\frac{16}{5},
+$$
+并且 $\dbinom{-\frac{1}{2}}{3}$ 确实等于 $-\dfrac{5}{16}$。
 
 
 

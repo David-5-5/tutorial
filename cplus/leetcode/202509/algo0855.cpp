@@ -8,6 +8,7 @@ struct Comp {
     }
 };
 
+// 同赛码网 Restaurant 题目
 class ExamRoom {
 private:
     int n = 0;

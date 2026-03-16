@@ -1012,7 +1012,7 @@ $$
 S_m = \sum_{k\ge 0}\binom{n+k}{k}\binom{n}{k}\frac{(-1)^k}{k+1+m}
 $$
 
-现在（如同在问题7中）我们尝试将依赖于 $m$ 的部分展开成我们知道如何处理的项。当 $m$ 为 $0$ 时，我们把 $k+1$ 吸收进 $\binom{}{}$ 中；如果 $m>0$，我们可以将 $1/(k+1+m)$ 展开成可吸收的项来做同样的事情。而我们运气依然不错：我们已经证明过一个适用的恒等式
+现在（如同在问题7中）我们尝试将依赖于 $m$ 的部分展开成我们知道如何处理的项。当 $m$ 为 $0$ 时，我们把 $k+1$ 吸收进 $\binom{n}{k}$ 中；如果 $m>0$，我们可以将 $1/(k+1+m)$ 展开成可吸收的项来做同样的事情。而我们运气依然不错：我们已经证明过一个适用的恒等式
 $$
 \sum_{j=0}^m\binom{m}{j}\binom{r}{j}^{-1} = \frac{r+1}{r+1-m},\quad \substack{\text{integer m}\ge 0, \\r\notin\{0,1,\dots,m-1\}.} \tag{5.33}
 $$
@@ -1049,10 +1049,10 @@ $$
 
 我们最好验证一下。当 $n=2$ 时，我们得到
 $$
-S_m = \frac{1}{m+1} - \frac{6}{m+2} \frac{6}{m+3} = \frac{m(m-1)}{(m+1)(m+2)(m+3)}
+S_m = \frac{1}{m+1} - \frac{6}{m+2} + \frac{6}{m+3} = \frac{m(m-1)}{(m+1)(m+2)(m+3)}
 $$
 
-我们的推导要求 $m$ 为整数，但该结果对所有实数 $m$ 均成立，因为 $(m+1)\cdots(m+n+1)S_m$ 是一个关于 $m$ 的次数 $\le n$ 的多项式。
+我们的推导要求 $m$ 为整数，但该结果对所有实数 $m$ 均成立，因为 $(m+1)^{\overline{n+1}}S_m$ 是一个关于 $m$ 的次数 $\le n$ 的多项式。
 
 
 ## 5.3 TRICKS OF THE TRADE
@@ -1061,7 +1061,7 @@ $$
 技巧 1：取半技巧。
 我们的许多恒等式都涉及任意实数 $r$。当 $r$ 取“整数减二分之一”这种特殊形式时，二项式系数 $\binom{r}{k}$ 可以写成一种形式上截然不同的二项式系数乘积。这会引出一类新的恒等式，它们的处理会出奇地简便。
 
-要明白这一原理，一种方法是从倍乘公式开始
+要明白这一原理，一种方法是从*倍乘公式*开始
 $$
 r^{\underline{k}}\left(r-\frac{1}{2}\right)^{\underline{k}} = (2r)^{\underline{2k}}/2^{2k},\quad \text{integer }k\ge 0.\tag{5.34}
 $$
@@ -1086,7 +1086,7 @@ $$
 
 对上指标取反又能得到另一个有用的公式：
 $$
-\binom{-1/2}{n} = (\frac{-1}{4})^4\binom{2n}{n},\quad \text{integer }n.\tag{5.37}
+\binom{-1/2}{n} = (\frac{-1}{4})^n\binom{2n}{n},\quad \text{integer }n.\tag{5.37}
 $$
 
 例如，当 $n=4$ 时，有
@@ -1101,7 +1101,7 @@ $$
 
 注意我们是如何把奇数的乘积转化成阶乘的。
 
-恒等式 (5.35) 有一个有趣的推论。令 $r=n$，并对所有整数 $k$ 求和，结果为
+恒等式 (5.35) 有一个有趣的推论。令 $r=\frac12n$，并对所有整数 $k$ 求和，结果为
 $$
 \begin{aligned}
 \sum_{k}\binom{n}{2k}\binom{2k}{k}2^{-2k} &= \sum_{k}\binom{n/2}{k}\binom{n-1/2}{k} \\
@@ -1112,13 +1112,13 @@ $$
 
 我们也可以用范德蒙德卷积 (5.27) 推出
 $$
-\sum_{k}\binom{-\frac12}{k}\binom{-\frac12}{n-k} = \binom{-1}{n} = (-1)^n,\quad \text{integer }n\ge 0.
+\sum_{k}\binom{-1/2}{k}\binom{-1/2}{n-k} = \binom{-1}{n} = (-1)^n,\quad \text{integer }n\ge 0.
 $$
 
 将 (5.37) 中的值代入可得
 $$
 \begin{aligned}
-\binom{-\frac12}{k}\binom{-\frac12}{n-k} &= \frac{-1}{4}^k\binom{2k}{k}\frac{-1}{4}^{n-k}\binom{2(n-k)}{n-k} \\
+\binom{-1/2}{k}\binom{-1/2}{n-k} &= \frac{-1}{4}^k\binom{2k}{k}\frac{-1}{4}^{n-k}\binom{2(n-k)}{n-k} \\
 &= \frac{(-1)^n}{4^n} \binom{2k}{k}\binom{2n-2k}{n-k};
 \end{aligned}
 $$
@@ -1204,7 +1204,7 @@ $$
 f(x) = a_d x^d + a_{d-1} x^{d-1} + \dots + a_1 x^1 + a_0 x^0
 $$
 
-设为任意 $d$ 次多项式。我们将在第 6 章看到，普通幂可以表示为下降幂的和（例如 $x^n=x^{\underline{n}}+x^{\underline{n-1}}$）；因此存在系数 $b_d,b_{d-1},\dots,b_1,b_0$ 使得
+设为任意 $d$ 次多项式。我们将在第 6 章看到，普通幂可以表示为下降幂的和（例如 $x^2=x^{\underline{2}}+x^{\underline{1}}$）；因此存在系数 $b_d,b_{d-1},\dots,b_1,b_0$ 使得
 $$
 f(x)=b_d x^{\underline{d}}+b_{d-1} x^{\underline{d-1}}+\dots+b_1 x^{\underline{1}}+b_0 x^{\underline{0}}
 $$

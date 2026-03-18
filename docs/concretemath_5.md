@@ -2460,7 +2460,7 @@ $$
 但我们该如何确定 $s$ 的次数呢？事实证明，最多只有两种可能。我们可以将式 $(5.122)$ 改写成如下形式：
 $$
 2p(k) = Q(k)\big(s(k+1) + s(k)\big) + R(k)\big(s(k+1) - s(k)\big), \\
-\text {where } $Q(k) = q(k) - r(k) \text { and } R(k) = q(k) + r(k). \tag{5.124}
+\text {where } Q(k) = q(k) - r(k) \text { and } R(k) = q(k) + r(k). \tag{5.124}
 $$
 
 若 $s(k)$ 的次数为 $d$，则和式 $s(k+1) + s(k) = 2\alpha_d k^d + \cdots$ 的次数同样为 $d$；而差式 $s(k+1) - s(k) = \Delta s(k) = d\alpha_d k^{d-1} + \cdots$ 的次数为 $d-1$。（零多项式的次数可约定为 $-1$。）
@@ -2558,7 +2558,7 @@ $$\bar{t}(n,k) = t(n,k)\left(\beta_0(n) + \beta_1(n)\frac{n+1}{n+1-k}\right)$$
 $$p(n,k) = (n+1-k)\beta_0(n) + (n+1)\beta_1(n).$$
 
 我们现在将戈斯珀算法应用于 $\bar{t}(n,k)$，固定 $n$ 不变，首先写出
-$$\frac{\bar{t}(n,k+1)}{\bar{t}(n,k)} = \frac{\bar{p}(n,k+1)}{\bar{p}(n,k)} \frac{q(n,k)}{r(n,k+1)} \tag{5.127}$v
+$$\frac{\bar{t}(n,k+1)}{\bar{t}(n,k)} = \frac{\bar{p}(n,k+1)}{\bar{p}(n,k)} \frac{q(n,k)}{r(n,k+1)} \tag{5.127}$$
 
 与式 $(5.117)$ 一致。戈斯珀算法会从 $\bar{p}(n,k)=1$ 开始寻找这样的表达式，但在泽尔贝格的推广中，我们最好从 $\bar{p}(n,k)=p(n,k)$ 开始。注意到如果我们设 $\bar{t}(n,k)=\hat{t}(n,k)/p(n,k)$ 且 $\bar{p}(n,k)=\hat{p}(n,k)/p(n,k)$，那么式 $(5.127)$ 等价于
 $$\frac{\bar{t}(n,k+1)}{\bar{t}(n,k)} = \frac{\bar{p}(n,k+1)}{\bar{p}(n,k)} \frac{q(n,k)}{r(n,k+1)} \tag{5.128}$$

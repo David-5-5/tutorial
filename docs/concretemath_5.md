@@ -1602,7 +1602,7 @@ $$
 $$
 这就是我们之前用反演方法推导出的公式。
 
-到目前为止，我们对生成函数的探索，只是给那些已经能用更繁琐方法推导出来的结论，提供了更简洁的证明。除了式 (5.55) 之外，我们还没有用生成函数得到过任何新结果。现在我们准备来点全新、更出人意料的内容。有两类幂级数能生成极其丰富的二项式系数恒等式：我们把广义二项级数 $\mathcal{B}(z)$ 和广义指数级数 $\mathcal{E}(z)$ 定义如下：
+到目前为止，我们对生成函数的探索，只是给那些已经能用更繁琐方法推导出来的结论，提供了更简洁的证明。除了式 (5.55) 之外，我们还没有用生成函数得到过任何新结果。现在我们准备来点全新、更出人意料的内容。有两类幂级数能生成极其丰富的二项式系数恒等式：我们把*广义二项级数* $\mathcal{B}(z)$ 和*广义指数级数* $\mathcal{E}(z)$ 定义如下：
 $$
 \mathcal{B}_t(z) = \sum_{k\ge 0}(tk)^{\underline{k-1}}\frac{z^k}{k!},\qquad
 \mathcal{E}_t(z) = \sum_{k\ge 0}(tk+1)^{k-1}\frac{z^k}{k!}. \tag{5.58}
@@ -1622,12 +1622,12 @@ $$
 对所有实数 $r$，下列恒等式对都成立：
 $$
 \mathcal{B}_t(z)^r = \sum_{k\ge 0}\binom{tk+r}{k}\frac{r}{tk+r}z^k; \\
-\mathcal{E}_t(z)^r = \sum_{k\ge 0}r\frac{(tk+r)^{k-1}}{k!}z^k; \tag{5.60}
+\qquad\qquad\qquad \mathcal{E}_t(z)^r = \sum_{k\ge 0}r\frac{(tk+r)^{k-1}}{k!}z^k; \tag{5.60}
 $$
 
 $$
 \frac{\mathcal{B}_t(z)^r}{1 - t + t\mathcal{B}_t(z)^{-1}} = \sum_{k\ge 0}\binom{tk + r}{k} z^k; \\
-\frac{\mathcal{E}_t(z)^r}{1 - zt\mathcal{E}_t(z)^t} = \sum_{k\ge 0}\frac{(tk + r)^k}{k!}z^k. \tag{5.61}
+\qquad\qquad\qquad \frac{\mathcal{E}_t(z)^r}{1 - zt\mathcal{E}_t(z)^t} = \sum_{k\ge 0}\frac{(tk + r)^k}{k!}z^k. \tag{5.61}
 $$
 
 （当 $tk+r=0$ 时，我们需要稍微小心一点解释 $z^k$ 的系数；每个系数都是关于 $r$ 的多项式。例如，$\mathcal{E}_t(z)^r$ 的常数项是 $r(0+r)^{-1}$，即使在 $r=0$ 时它也等于 $1$。）
@@ -1637,7 +1637,7 @@ $$
 \begin{aligned}
 \mathcal{B}_t(z)^r \frac{\mathcal{B}_t(z)^{r+s}}{1 - t + t\mathcal{B}_t(z)^{-1}} &= 
 \sum_{k\ge 0}\binom{tk + r}{k}\frac{r}{tk+r} z^k \sum_{j\ge 0}\binom{tj+s}{j}z^j  \\
-&= \sum_{n\ge 0} \sum_{k=0}^n \binom{tk + r}{k}\frac{r}{tk+r}  \binom{t(n-k) + s}{n-k}.
+&= \sum_{n\ge 0} z^n \sum_{k=0}^n \binom{tk + r}{k}\frac{r}{tk+r}  \binom{t(n-k) + s}{n-k}.
 \end{aligned}
 $$
 
@@ -1690,7 +1690,7 @@ $$
 $$
 \begin{aligned}
 \mathcal{B}_2(z) &= \sum_{k} \binom{2k}{k} \frac{z^k}{1+k} \\
-&=  \sum_{k} \binom{2k+1}{k} \frac{z^k}{1+2k} = \frac{1-\sqrt{1-4z}}{2z}. \tag{5.69}
+&=  \sum_{k} \binom{2k+1}{k} \frac{z^k}{1+2k} = \frac{1-\sqrt{1-4z}}{2z}. \tag{5.68}
 \end{aligned}
 $$
 $$
@@ -1712,12 +1712,12 @@ $$
 \frac{\mathcal{B}_{-1}(z)^{r+1}}{\sqrt{1+4z}}= \sum_{k} \binom{r-k}{k} z^k. \tag{5.73}
 $$
 
-$\mathcal{B}_2(z)$ 的系数 $\dbinom{2n}{n}\!\big/(n+1)$ 被称为卡特兰数 $C_n$，因为 $Eugène\ Catalan$ 在 1830 年代发表了一篇关于它们的有影响力的论文[52]。该数列的开头几项如下：
+$\mathcal{B}_2(z)$ 的系数 $\binom{2n}{n}\!\big/(n+1)$ 被称为*卡特兰数* $C_n$，因为 $Eugène\ Catalan$ 在 1830 年代发表了一篇关于它们的有影响力的论文[52]。该数列的开头几项如下：
 | $n$ | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |
 |---|---|---|---|---|---|---|---|---|---|---|---|
 | $C_n$ | 1  | 1  | 2 | 5 | 14 | 42 | 132 | 429 | 1430 | 4862 | 16796 
 
-$\mathcal{B}_{-1}(z)$ 的系数本质上是相同的，但开头多了一个 $1$，且其余数字的符号交替变化：$\langle 1, 1, -1, 2, -5, 14, \dots \rangle$。因此 $\mathcal{B}_{-1}(z) = 1 + z \mathcal{B}_2(-z)$。我们还有 $\mathcal{B}_{-1}(z) = \frac{1}{z} \mathcal{B}_2(-z)$。
+$\mathcal{B}_{-1}(z)$ 的系数本质上是相同的，但开头多了一个 $1$，且其余数字的符号交替变化：$\langle 1, 1, -1, 2, -5, 14, \dots \rangle$。因此 $\mathcal{B}_{-1}(z) = 1 + z \mathcal{B}_2(-z)$。我们还有 $\mathcal{B}_{-1}(z)=\mathcal{B}_2(-z)^{-1}$。
 
 我们以推导式 $(5.72)$ 和 $(5.73)$ 的一个重要推论来结束本节，这个关系式进一步揭示了函数 $\mathcal{B}_{-1}(z)$ 和 $\mathcal{B}_2(-z)$ 之间的联系：
 $$
@@ -1739,7 +1739,7 @@ $$
 当 $k > n$ 时，这些项会很好地相互抵消。我们现在可以利用 $(5.68)$ 和 $(5.69)$ 得到闭形式。
 $$
 \sum_{k \leq n} \binom{n-k}{k}z^k = \frac{1}{\sqrt{1+4z}}\left(\frac{1+\sqrt{1+4z}}{2}\right)^{n+1} + \left(\frac{1-\sqrt{1+4z}}{2}\right)^{n+1} \\ 
-\text{integer } n>0. \tag{5.75}
+\text{integer } n\ge 0. \tag{5.74}
 $$
 
 （特殊情况 $z=-1$ 出现在 5.2 节的问题 3 中。由于 $-\frac{1}{2}(1\pm\sqrt{-3})$ 是单位六次根，因此求和式 $\sum_{k \leq n} \binom{n+1}{k} (-1)^k$ 具有我们在该问题中观察到的周期性。）类似地，我们可以将 $(5.70)$ 与 $(5.71)$ 结合起来消去大系数，得到

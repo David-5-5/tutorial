@@ -2602,3 +2602,121 @@ $$t(n,k) = T(n,k+1) - T(n,k) \tag{5.131}$$
 $$T(n,k) = \frac{r(n,k)s(n,k)\hat{t}(n,k)}{\hat{p}(n,k)} = r(n,k)s(n,k)\bar{t}(n,k) \tag{5.132}$$
 
 
+因为 $ \bar{p}(n,k) = 1 $。（事实上，$ \bar{p}(n,k) $ 在实际中几乎总是等于 $ 1 $。）因此
+$$ T(n,k) = \frac{k}{n+1-k} t(n,k) = \frac{k}{n+1-k} \binom{n}{k} z^k = \binom{n}{k-1} z^k $$
+
+而且毫无疑问，所有式子都验证成立方程  $(5.131)$ 是正确的：
+$$(z+1) \binom{n}{k} z^k - \binom{n+1}{k} z^k = \binom{n}{k} z^{k+1} - \binom{n}{k-1} z^k$$
+
+但我们实际上并不需要精确地知道 $ T(n,k) $，因为我们将要对所有整数 $ k $ 求和 $ t(n,k) $。我们只需要知道，当 $ n $ 是任意给定的非负整数时，$ T(n,k) $ 只对有限多个 $ k $ 值非零。那么对所有 $ k $ 求和 $ T(n,k+1)-T(n,k) $ 必定望远镜求和为 $ 0 $。
+
+令 $ S_n = \sum_k t(n,k) = \sum_k \binom{n}{k} z^k $，这就是我们最开始的和式，现在我们已经可以计算它了，因为我们对 $ t(n,k) $ 已经有了很多了解。Gosper‑Zeilberger 方法已经推导出
+$$\sum_k \bigl((z+1)t(n,k) - t(n+1,k)\bigr) = 0$$
+
+但这个和等于 $ (z+1)\sum_k t(n,k) - \sum_k t(n+1,k) = (z+1)S_n - S_{n+1} $。因此我们有
+$$ S_{n+1} = (z+1)S_n \tag{5.133} $$
+
+啊哈！只要知道 $ S_0 $，我们就知道如何求解这个递推式。而显然 $ S_0 = 1 $。因此我们推导出对所有整数 $ n \ge 0 $，有 $ S_n = (z+1)^n $。证毕。
+
+我们回顾一下这个计算过程，并以同样适用于其他求和项 $ t(n,k) $ 的形式总结我们所做的工作。当给定 $ t(n,k) $ 时，Gosper‑Zeilberger 算法可以形式化描述如下：
+1) 令 $ l := 0 $。（我们将求解阶数为 $ l $ 的关于 $ n $ 的递推式。）
+
+2) 令 $ \hat{t}(n,k) = \beta_0(n)t(n,k) + \dots + \beta_l(n)t(n+l,k) $，其中 $ \beta_0(n), \dots, \beta_l(n) $ 是未知函数。利用 $ t(n,k) $ 的性质找到 $ \beta_0(n), \dots, \beta_l(n) $ 的一个线性组合 $ p(n,k) $，其系数为关于 $ n $ 和 $ k $ 的多项式，从而使得 $ \hat{t}(n,k) $ 可以表示为 $ p(n,k)\bar{t}(n,k) $ 的形式，其中 $ \bar{t}(n,k) $ 是关于 $ k $ 的超几何项。求解多项式 $ \bar{p}(n,k) $，$ q(n,k) $，$ r(n,k) $，使得 $ \bar{t}(n,k) $ 的项比可以表示为 $ (5.128) $ 的形式，其中 $ q(n,k) $ 和 $ r(n,k) $ 满足 Gosper 条件 $ (5.118) $。令 $ \hat{p}(n,k) = p(n,k)\bar{p}(n,k) $。
+
+3) 令 $ d_Q := \deg(q-r) $，$ d_R := \deg(q+r) $，且
+   $$ d := \begin{cases} \deg(\hat{p}) - d_Q, & \text{if } d_Q \ge d_R; \\ \deg(\hat{p}) - d_R + 1, & \text{if } d_Q < d_R. \end{cases} $$
+ 
+4) 若 $ d \ge 0 $，通过 $ (5.130) $ 定义 $ s(n,k) $，并考虑在基本方程 $ (5.129) $ 中令 $ k $ 的幂次系数相等所得到的关于 $ \alpha_0, \dots, \alpha_d, \beta_0, \dots, \beta_l $ 的线性方程组。若该方程组存在 $ \beta_0, \dots, \beta_l $ 不全为零的解，则转入步骤 4。否则，若 $ d_Q < d_R $ 且 $ -2\lambda_0 / \lambda $ 是大于 $ d $ 的整数（其中 $ \lambda $ 是 $ q+r $ 中 $ k^{d_R} $ 的系数，$ \lambda_0 $ 是 $ q-r $ 中 $ k^{d_R-1} $ 的系数），则令 $ d := -2\lambda_0 / \lambda $ 并重复步骤 2b。
+
+5) （项 $ \hat{t}(n,k) $ 不是超几何可求和的。）将 $ l $ 增加 $ 1 $ 并返回步骤 $ 1 $。
+
+6) （求解成功。）令 $ T(n,k) := r(n,k)s(n,k)\bar{t}(n,k) / \bar{p}(n,k) $。该算法已经推导出 $ \hat{t}(n,k) = T(n,k+1) - T(n,k) $。
+
+我们稍后将证明，只要 $ t(n,k) $ 属于一个被称为真项的大类项，该算法就会成功终止。
+
+二项式定理可以用多种方法推导，因此我们关于 Gosper-Zeilberger 方法的第一个示例更具指导性而非震撼性。接下来我们来处理 Vandermonde 卷积。Gosper 和 Zeilberger 能否通过算法推导出 $ \sum_k \binom{a}{k}\binom{b}{n-k} $ 具有简洁形式？算法从 $ l=0 $ 开始，这本质上重现了 Gosper 的原始算法，尝试判断 $ \binom{a}{k}\binom{b}{n-k} $ 是否是超几何项可求和的。令人惊讶的是：当 $ a+b $ 是特定的非负整数时（见习题 94），该项确实是可求和的。但我们关注的是 $ a $ 和 $ b $ 的一般取值，算法很快发现不定和式在一般情况下不是超几何项。因此 $ l $ 从 $ 0 $ 增加到 $ 1 $，算法转而尝试 $ \hat{t}(n,k) = \beta_0(n)t(n,k) + \beta_1(n)t(n+1,k) $。下一步，与我们推导二项式定理时一样，是将 $ \hat{t}(n,k) $ 写成 $ p(n,k)\bar{t}(n,k) $，其中 $ p(n,k) $ 通过对 $ t(n+1,k)/t(n,k) $ 通分得到。在这种情况下——请读者在草稿纸上同步计算以核对所有这些过程——它们并没有看起来那么难——所有步骤都以类似的方式进行，但此时
+$$
+\begin{aligned}
+p(n,k) &= (n+1-k)\beta_0(n) + (b-n+k)\beta_1(n) = \hat{p}(n,k) \\
+\bar{t}(n,k) &= t(n,k)/(n+1-k) = \dfrac{a!\,b!}{(a-k)!\,k!\,(b-n+k)!\,(n+1-k)!} \\
+q(n,k) &= (n+1-k)(a-k) \\
+r(n,k) &= (b-n+k)k.
+\end{aligned}
+$$
+
+步骤 3 求得 $ \deg(q-r) < \deg(q+r) $，且 $ d = \deg(\hat{p}) - \deg(q+r) + 1 = 0 $，因此 $ s(n,k) $ 再次与 $ k $ 无关。Gosper 基本方程 $ (5.129) $ 等价于关于三个未知数的两个方程，
+$$
+\begin{aligned}
+(n+1)\beta_0(n) + (b-n)\beta_1(n) - (n+1)a\alpha_0(n) &= 0  \\
+-\beta_0(n) + \beta_1(n) + (a+b+1)\alpha_0(n) &= 0 
+\end{aligned}
+$$
+
+该方程组存在解
+$$ \beta_0(n) = a+b-n, \quad \beta_1(n) = -n-1, \quad \alpha_0(n) = 1 $$。
+
+我们得出结论：$ (a+b-n)t(n,k) - (n+1)t(n+1,k) $ 关于 $ k $ 是可求和的；因此若 $ S_n = \sum_k \binom{a}{k}\binom{b}{n-k} $，则递推式为
+$$ S_{n+1} = \frac{a+b-n}{n+1} S_n $$
+成立；于是 $S_n = \dbinom{a+b}{n}$，因为 $S_0 = 1$。轻而易举。
+
+那么式 (5.28) 中的 Saalschütz 三重二项恒等式又如何呢？习题 43 中对 (5.28) 的证明很有趣，但需要灵感。当我们把一种技艺变成一门科学时，目标是用汗水代替灵感；所以我们来看看 Gosper‑Zeilberger 求和方法能否以纯机械的方式发现并证明 (5.28)。为方便起见，我们做代换 $m = b+d$，$n = a$，$r = a+b+c+d$，$s = a+b+c$，从而使 (5.28) 变成更对称的形式
+$$
+\begin{aligned}
+\sum_k &\frac{(a+b+c+d+k)!}{(a-k)!(b-k)!(c+k)!(d+k)!k!} \\
+&= \frac{(a+b+c+d)!(a+b+c)!(a+b+d)!}{a!b!(a+c)!(a+d)!(b+c)!(b+d)!}. \tag{5.134}
+\end{aligned}
+$$
+为使求和有限，我们假设 $a$ 或 $b$ 为非负整数。
+
+且 $\hat{t}(n,k) = \beta_0(n)t(n,k) + \beta_1(n)t(n+1,k)$。沿着一条已经变得十分熟悉的路径继续，我们令
+$$
+\begin{aligned}
+p(n, k) &= (n + 1 - k)\beta_0(n) + (n + 1 + b + c + d + k)\beta_1(n) = \hat{p}(n, k), \\
+\bar{t}(n, k) &= \frac{t(n, k)}{n + 1 - k} = \frac{(n + b + c + d + k)!}{(n + 1 - k)!\,(b - k)!\,(c + k)!\,(d + k)!\,k!}, \\
+q(n, k) &= (n + b + c + d + k + 1)(n + 1 - k)(b - k), \\
+r(n, k) &= (c + k)(d + k)k,
+\end{aligned}
+$$
+
+然后我们尝试求解方程 (5.129) 以得到 $s(n,k)$。同样地，$\deg(q-r) < \deg(q+r)$，但这一次 $\deg(\hat{p}) - \deg(q+r) + 1 = -1$，看起来我们陷入了困境。不过，步骤 2b 为 $s$ 的次数提供了一个重要的备选方案：$d = -2\lambda'/\lambda$；在放弃之前，我们最好现在就尝试它。这里 $R(n,k) = q(n,k) + r(n,k) = 2k^3 + \dots$，因此 $\lambda = 2$，而多项式 $Q(n,k) = q(n,k) - r(n,k)$ 几乎奇迹般地关于 $k$ 的次数为 $1$——$k^2$ 项的系数恰好消失了！因此 $\lambda' = 0$；Gosper 算法允许我们取 $d = 0$ 且 $s(n,k) = \alpha_0(n)$。
+
+现在需要求解的方程为
+```math
+\begin{aligned}
+(n+1)\beta_0(n) & + (n+1+b+c+d)\beta_1(n) \\
+- (n+1)&(n+1+b+c+d)b\alpha_0(n) = 0, \\[4pt]
+-  \beta_0(n)&+ \beta_1(n) \\
+-  &((n+1)b - (n+1+b)(n+1+b+c+d) - cd) \alpha_0(n) = 0 ;
+\end{aligned}
+```
+
+且我们求得
+$$
+\begin{aligned}
+\beta_0(n) &= (n+1+b+c)(n+1+b+d)(n+1+b+c+d), \\[4pt]
+\beta_1(n) &= -(n+1)(n+1+c)(n+1+d), \\[4pt]
+\alpha_0(n) &= 2n+2+b+c+d,
+\end{aligned}
+$$
+
+只需付出一点点努力，恒等式 (5.134) 就立刻得证。
+
+如果我们取 $n=d$ 而不是 $n=a$，同样可以得到 (5.134) 的类似证明。（见习题 99。）
+
+Gosper-Zeilberger 方法不仅能处理对全体 $k$ 求和，也能帮助我们计算有限区间上的定和。例如，我们来考虑
+$$
+S_n(z) = \sum_{k=0}^n \binom{n+k}{k} z^k. \tag{5.135}
+$$
+
+当 $z=\frac12$ 时，我们在式 (5.20) 中得到了一个“出人意料”的结果；Gosper 和 Zeilberger 会预料到它吗？令 $t(n,k)=\dbinom{n+k}{k}z^k$，即可导出
+$$
+\begin{aligned}
+p(n, k) &= (n+1)\beta_0(n) + (n+1+k)\beta_1(n) = \hat{p}(n, k), \\
+\bar{t}(n, k) &= t(n, k)/(n+1) = \frac{(n+k)! z^k}{k! \,(n+1)!}, \\
+q(n, k) &= (n+1+k)z, \\
+r(n, k) &= k,
+\end{aligned}
+$$
+
+且 $\deg(s) = \deg(\hat{p}) - \deg(q-r) = 0$。方程 (5.129) 的解为 $\beta_0(n) = 1$，$\beta_1(n) = z-1$，$s(n,k) = 1$。于是我们得到
+

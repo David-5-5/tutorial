@@ -2719,4 +2719,119 @@ r(n, k) &= k,
 $$
 
 且 $\deg(s) = \deg(\hat{p}) - \deg(q-r) = 0$。方程 (5.129) 的解为 $\beta_0(n) = 1$，$\beta_1(n) = z-1$，$s(n,k) = 1$。于是我们得到
+$$
+t(n, k) + (z-1)t(n+1, k) = T(n, k+1) - T(n, k) \tag{5.136}
+$$
+
+其中 $T(n, k) = r(n,k)s(n,k)\bar{t}(n,k)/\hat{p}(n,k) = \binom{n+k}{k-1} z^k$。现在我们对 $0 \le k \le n+1$ 求和式 (5.136)，得到
+$$
+\begin{aligned}
+S_n(z) + t(n, n+1) + (z-1)S_{n+1}(z) &= T(n, n+2) - T(n, 0) \\
+&= \binom{2n+2}{n+1} z^{n+2} \\
+&= 2\binom{2n}{n+1} z^{n+2}.
+\end{aligned}
+$$
+
+而 $t(n, n+1) = \dbinom{2n+1}{n+1} z^{n+1} = \dbinom{2n}{n+1} z^{n+1}$，因此
+$$S_{n+1}(z) = \frac{1}{1-z} \left( S_n(z) + (1-2z) \binom{2n}{n+1} z^{n+1} \right). \tag{5.137}$$
+
+我们立刻可以看出 $z=\frac{1}{2}$ 是特殊情况，此时 $S_{n+1}\left(\frac{1}{2}\right) = 2S_n\left(\frac{1}{2}\right)$。 此外，在递推式 (5.137) 两边同时乘以求和因子 $(1-z)^{n+1}$ 可以对其进行化简，由此可得到通用恒等式
+$$(1-z)^n \sum_{k=0}^n \binom{n+k}{k} z^k = 1 + \frac{1-2z}{2-2z} \sum_{k=1}^n \binom{2k}{k} \bigl(z(1-z)\bigr)^k. \tag{5.138}$$
+
+在 Gosper 和 Zeilberger 出现之前，很少有人能预料到这样的恒等式。而如今，构造这类恒等式已经成为常规操作。
+
+那么类似的和式又如何呢
+$$S_n(z) = \sum_{k=0}^n \binom{n-k}{k} z^k. \tag{5.139}$$
+
+这就是我们在式 (5.74) 中遇到的和式。满怀信心地，我们令 $t(n,k)=\dbinom{n-k}{k}z^k$ 并开始计算
+
+$$
+\begin{aligned}
+p(n, k) &= (n + 1 - 2k)\beta_0(n) + (n + 1 - k) \beta_1(n) = \hat{p}(n, k),\\
+\bar{t}(n, k) &= t(n, k)/(n + 1 - 2k) = \frac{(n - k)! z^k}{k! (n + 1 - 2k)!},\\ 
+q(n, k) &= (n + 1 - 2k)(n - 2k)z, \\
+r(n, k) &= (n + 1 - k)k.
+\end{aligned}
+$$
+
+但是请注意——如果令 $z=-\frac{1}{4}$，我们无法求解方程 (5.129)，因为多项式 $s$ 的次数必须满足 $\deg(\hat{p})-\deg(q-r)=-1$。
+
+没问题。我们只需引入另一个参数 $\beta_2(n)$，改用 $\hat{t}(n,k) = \beta_0(n)t(n,k) + \beta_1(n)t(n+1,k) + \beta_2(n)t(n+2,k)$ 尝试即可：
+$$
+\begin{aligned}
+p(n,k) &= (n+1-2k)(n+2-2k)\beta_0(n) \\
+&\qquad+ (n+1-k)(n+2-2k)\beta_1(n) \\
+&\qquad+ (n+1-k)(n+2-k)\beta_2(n) = \hat{p}(n,k), \\
+\bar{t}(n,k) &= t(n,k)\big/\left[(n+1-2k)(n+2-2k)\right] = (n-k)!z^k/k!(n+2-2k)!,\\
+q(n,k) &= (n+2-2k)(n+1-2k)z,\\
+r(n,k) &= (n+1-k)k.
+\end{aligned}
+$$
+
+现在我们可以尝试令 $s(n,k) = \alpha_0(n)$，此时方程 (5.129) 确实存在解：
+$$\beta_0(n) = z,\ \beta_1(n) = 1,\ \beta_2(n) = -1,\ \alpha_0(n) = 1.$$
+
+我们由此发现
+$$zt(n,k)+t(n+1,k)-t(n+2,k)=T(n,k+1)-T(n,k).$$
+
+其中 $T(n,k)$ 等于 $r(n,k)s(n,k)\bar{t}(n,k)/\hat{p}(n,k) = (n+1-k)k\bar{t}(n,k) = \dbinom{n+1-k}{k-1} z^k$。对 $k=0$ 到 $k=n$ 求和可得
+$$
+\begin{aligned}
+zS_n(z) &+ \left( S_{n+1}(z) - \binom{0}{n+1} z^{n+1} \right) - \left( S_{n+2}(z) - \binom{0}{n+2} z^{n+2} - \binom{1}{n+1} z^{n+1} \right) \\
+&= T(n, n+1) - T(n, 0).
+\end{aligned}
+$$
+
+且对所有 $n \ge 0$ 都有 $\binom{1}{n+1} = \binom{0}{n} z^{n+1} = T(n, n+1)$，因此我们得到
+$$S_{n+2}(z) = S_{n+1}(z) + z S_n(z),\quad n \ge 0. \tag{5.140}$$
+
+我们将在第6章和第7章学习这类递推关系的解法；当 $S_0(z) = S_1(z) = 1$ 时，那些章节的方法可以直接从递推式 (5.140) 推导出闭式 (5.74)。
+
+再举一个著名的例子，我们就完整了。法国数学家 Roger Apéry 在 1978 年解决了一个长期悬而未决的问题，他证明了数 $\zeta(3)=1+2^{-3}+3^{-3}+4^{-3}+\cdots$ 是无理数[14]。他证明的核心部分之一用到了二项式和
+$$A_n = \sum_{k} \binom{n}{k}^2 \binom{n+k}{k}^2. \tag{5.141}$$
+
+他为此给出了一个递推关系，但当时其他数学家都无法验证。（这些数 $A_n$ 后来被称为Apéry 数；我们有 $A_0 = 1$，$A_1 = 5$，$A_2 = 73$，$A_3 = 1445$，$A_4 = 33001$。）最终 Don Zagier 和 Henri Cohen 给出了 Apéry 结论的证明[356]，而他们对这个特殊（但困难）和式的证明，正是最终引导 Zeilberger 发现我们现在讨论的这套通用方法的关键线索之一。
+
+
+事实上，到目前为止我们已经见过足够多的例子，足以让式 (5.141) 中的这个和式几乎变得微不足道。令 $t(n,k) = \binom{n}{k}^2 \binom{n+k}{k}^2$ 且 $\hat{t}(n,k) = \beta_0(n)t(n,k) + \beta_1(n)t(n+1,k) + \beta_2(n)t(n+2,k)$，我们尝试求解方程 (5.129)，其中
+$$
+\begin{aligned}
+p(n, k) &= (n+1-k)^2(n+2-k)^2\beta_0(n) \\
+&\quad + (n+1+k)^2(n+2-k)^2\beta_1(n) \\
+&\quad + (n+1+k)^2(n+2+k)^2\beta_2(n) = \hat{p}(n, k), \\
+\bar{t}(n, k) &= t(n,k)\big/(n+1-k)^2(n+2-k)^2 = \frac{(n+k)!^2}{k!^4(n+2-k)!^2}, \\
+q(n, k) &= (n+1+k)^2(n+2-k)^2, \\
+r(n, k) &= k^4.
+\end{aligned}
+$$
+
+(我们不必担心 $q$ 含有因子 $(k+n+1)$ 而 $r$ 含有因子 $k$；这并不违反式 (5.118)，因为我们将 $n$ 视为一个可变参数，而非固定整数。)由于 $q(n,k)-r(n,k) = -2k^3 + \cdots$，我们可以令 $\deg(s) = -2\lambda'/\lambda = 2$，因此取
+$$s(n, k) = \alpha_2(n)k^2 + \alpha_1(n)k + \alpha_0(n).$$
+
+通过这样选取 $s$，递推式 (5.129) 最终转化为关于六个未知量 $\beta_0(n), \beta_1(n), \beta_2(n), \alpha_0(n), \alpha_1(n), \alpha_2(n)$ 的方程。例如，由 $k^0$ 项系数产生的方程可简化为
+$$\beta_0 + \beta_1 + \beta_2 - \alpha_0 - \alpha_1 - \alpha_2 = 0;$$
+
+由 $k^4$ 项系数所得到的方程是
+$$\beta_0 + \beta_1 + \beta_2 + \alpha_1 + (6 + 6n + 2n^2)\alpha_2 = 0.$$
+
+另外三个方程更为复杂。但关键在于，这些线性方程——就像我们在 Gosper‑Zeilberger 算法这一步所遇到的所有方程一样——都是齐次的（右端均为 0）。因此，当未知量个数多于方程个数时，它们一定存在非零解。在我们这个情形中，一组解为
+$$
+\begin{aligned}
+\beta_0(n) &= (n+1)^3, \\
+\beta_1(n) &= -(2n+3)(17n^2+51n+39), \\
+\beta_2(n) &= (n+2)^3, \\
+\alpha_0(n) &= -16(n+1)(n+2)(2n+3), \\
+\alpha_1(n) &= -12(2n+3), \\
+\alpha_2(n) &= 8(2n+3).
+\end{aligned}
+$$
+
+因此
+$$
+(n+1)^3 t(n,k) - (2n+3)(17n^2+51n+39)t(n+1,k) + \\
+(n+2)^3 t(n+2,k) = T(n,k+1) - T(n,k),
+$$
+
+其中 $T(n, k) = k^4 s(n,k) \bar{t}(n,k) = (2n+3)\bigl(8k^2-12k-16(n+1)(n+2)\bigr) \cdot \dfrac{(n+k)!^2}{(k-1)!^4 (n+2-k)!^2}$。对 $k$ 求和即可得到曾经令人难以置信的Apéry 递推关系，
+$$(n + 1)^3 A_n + (n + 2)^3 A_{n+2} = (2n + 3)(17n^2 + 51n + 39)A_{n+1}. \tag{5.142}$$
 

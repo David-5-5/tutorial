@@ -1989,14 +1989,14 @@ $$\sum_{k\ge 0} \binom{m}{k} \bigg/ \binom{n}{k}.$$
 
 问题 2 和问题 4 中的求和式同样可以化为 $F(2,1-n;2-m;1)$（我们需要先把 $k$ 换成 $k+1$）。而问题 6 中那个“看起来很吓人”的求和式，结果也只是 $F(n+1,-n;2;1)$。除了这些换了马甲的范德蒙德强大卷积之外，就没有别的求和式了吗？
 
-还真有，问题 3 就有点不一样。它处理的是式 $(5.74)$ 中一般求和 $\sum\binom{\alpha}{k}z^k$ 的一种特例，这会给出一个闭形式表达式，对应于
+还真有，问题 3 就有点不一样。它处理的是式 $(5.74)$ 中一般求和 $\sum\binom{n-k}{k}z^k$ 的一种特例，这会给出一个闭形式表达式，对应于
 $$
-F\left(\begin{array}{c}1+2\lfloor n/2\rfloor,\ -n\\1/2\end{array}\bigg|\ -\frac{z}{4}\right).
+F\left(\begin{array}{c}1+2\lceil n/2\rceil,\ -n\\1/2\end{array}\bigg|\ -z/4\right).
 $$
 
 我们在考察 $(1-z)^r(1+z)^r$ 的系数时，也在式 $(5.55)$ 中证明了一个新结论：
 ```math
-F\left(\begin{array}{c}1-c-2n,\ -2n\\c\end{array}\bigg|\ -1\right) = (-1)^n \frac{(2n)!}{n!} \frac{(c-1)_{n}}{(c+n-1)_{n}},\ \text{integer }n \ge 0.
+F\left(\begin{array}{c}1-c-2n,\ -2n\\c\end{array}\bigg|\ -1\right) = (-1)^n \frac{(2n)!}{n!} \frac{(c-1)!}{(c+n-1)!},\ \text{integer }n \ge 0.
 ```
 
 将其推广到复数情形，这就称为库默尔公式：
@@ -2023,35 +2023,34 @@ a,\ b \\
 \tag{5.95}
 ```
 
-当 $n$ 为正整数时。例如取 $n=3$，那么应有 $\frac{(-6)!}{3!} = \lim_{x\to -3}\frac{x!}{(2x)!}$。 我们知道 $(-3)!$ 和 $(-6)!$ 都是无穷大；但我们可能会想忽略这个困难，假装 $(-3)! = (-3)(-4)(-5)(-6)$!
-
-从而让两个 $(-6)!$ 抵消。然而必须抵制这种想法，因为它会得出错误结果！
-根据式 $(5.95)$，当 $x\to -3$ 时，$\dfrac{x!}{(2x)!}$ 的极限不是 $(-3)(-4)(-5)$，而是
-$$
-\frac{(-6)!}{3!} = (-4)(-5)(-6).
-$$
-
-当 $n$ 为正整数时。例如取 $n=3$，那么应有 $\dfrac{(-6)!}{3!} = \lim\limits_{x\to -3}\dfrac{x!}{(2x)!}$。我们知道 $(-3)!$ 和 $(-6)!$ 都是无穷大；但我们可能会想忽略这个困难，假装 $(-3)! = (-3)(-4)(-5)(-6)!$，从而让两个 $(-6)!$ 抵消。然而必须抵制这种想法，因为它会得出错误结果！根据式 $(5.95)$，当 $x\to -3$ 时，$\dfrac{x!}{(2x)!}$ 的极限不是 $(-3)(-4)(-5)$，而是 $\dfrac{(-6)!}{3!} = (-4)(-5)(-6)$。
+当 $n$ 为正整数时。例如取 $n=3$，那么应有 $-6!/3! = \lim\limits_{x\to -3}x!/(2x)!$。我们知道 $(-3)!$ 和 $(-6)!$ 都是无穷大；但我们可能会想忽略这个困难，假装 $(-3)! = (-3)(-4)(-5)(-6)!$，从而让两个 $(-6)!$ 抵消。然而必须抵制这种想法，因为它会得出错误结果！根据式 $(5.95)$，当 $x\to -3$ 时，$x!/(2x)!$ 的极限不是 $(-3)(-4)(-5)$，而是 $-6!/3! = (-4)(-5)(-6)$。
 
 计算式 $(5.95)$ 中极限的正确方法是使用式 $(5.87)$，它将负自变量阶乘与正自变量伽马函数联系起来。如果把 $x$ 替换成 $-n-\epsilon$ 并令 $\epsilon\to 0$，对 $(5.87)$ 应用两次可得
-$$ \frac{(-n - 2)!}{(-2n - 2^2)!} \frac{\Gamma(n + 2)}{\Gamma(2n + 2^2)} = \frac{\sin(2n + 2^2)\pi}{\sin(n + 2)\pi} $$
+$$ \frac{(-n - \epsilon)!}{(-2n - 2\epsilon)!} \frac{\Gamma(n + \epsilon)}{\Gamma(2n + 2\epsilon)} = \frac{\sin(2n + 2\epsilon)\pi}{\sin(n + \epsilon)\pi} $$
 
 现在 $ \sin(x+y) = \sin x \cos y + \cos x \sin y$；因此这些正弦的比值为
-$$ \frac{\cos 2n\pi \sin 2^2\pi}{\cos n\pi \sin 2\pi} = (-1)^n \left( 2 + O(2) \right) $$
+$$ \frac{\cos 2n\pi \sin 2\epsilon\pi}{\cos n\pi \sin \epsilon\pi} = (-1)^n \left( 2 + O(\epsilon) \right) $$
 
 根据第 9 章的方法。因此，由式 $(5.86)$ 可得
-$$ \lim_{t\to 0} \frac{(-n - t)!}{(-2n - 2t)!} = 2(-1)^n \frac{\Gamma(2n)}{\Gamma(n)} = 2(-1)^n \frac{(2n-1)!}{(n-1)!} = (-1)^n \frac{(2n)!}{n!} $$
+$$ \lim_{\epsilon\to 0} \frac{(-n - \epsilon)!}{(-2n - 2\epsilon)!} = 2(-1)^n \frac{\Gamma(2n)}{\Gamma(n)} = 2(-1)^n \frac{(2n-1)!}{(n-1)!} = (-1)^n \frac{(2n)!}{n!} $$
 正如所求。
 
 让我们通过重新表述本章到目前为止见过的其他恒等式，并将它们包装成超几何函数的形式，来完成我们的综述。式 $(5.29)$ 中的三重二项式和可以写成
-$$ F\left( \begin{array}{c} 1-a-2n,\ 1-a,\ b \\ b-2n,\ -2n \end{array} \middle| 1 \right) = (-1)^n \frac{(2n)!}{n!} \frac{(a+b+2n-1)^{\underline{n}}}{a^{\underline{n}} b^{\underline{n}}},\ \text{integer } n \ge 0. $$
+$$ F\left( \begin{array}{c} 1-a-2n,\ 1-a,\ b \\ b-2n,\ -2n \end{array} \middle| 1 \right) = (-1)^n \frac{(2n)!}{n!} \frac{(a+b+2n-1)^{\overline{n}}}{a^{\overline{n}} b^{\overline{n}}},\ \text{integer } n \ge 0. $$
 
 当将其推广到复数时，它被称为 $ \text{Dixon}$ 公式：
-$$ F\left( \begin{array}{c} 1+c-a,\ b,\ c \\ a,\ 1+c-b \end{array} \middle| 1 \right) = \frac{(c/2)!}{c!} \frac{(c-a)^{\underline{c/2}} (c-b)^{\underline{c/2}}}{(c-a-b)^{\underline{c/2}}}, \quad (5.96) $$
-$$ \Re(a) + \Re(b) < 1 + \Re(c/2). $$
+$$
+F\left( \begin{array}{c} 1+c-a,\ b,\ c \\ a,\ 1+c-b \end{array} \middle| 1 \right) = \frac{(c/2)!}{c!} \frac{(c-a)^{\underline{c/2}} (c-b)^{\underline{c/2}}}{(c-a-b)^{\underline{c/2}}}, \\
+\Re(a) + \Re(b) < 1 + \Re(c/2). \tag{5.96}
+$$
 
 我们遇到过的最一般的公式之一是三重二项式和 $(5.28)$，它导出了 $ \text{Saalschütz}$ 恒等式：
-$$ F\left( \begin{array}{c} a,\ b,\ -n \\ c,\ a+b-c-n+1 \end{array} \middle| 1 \right) = \frac{(c-a)^{\underline{n}} (c-b)^{\underline{n}}}{c^{\underline{n}} (c-a-b)^{\underline{n}}} \quad (5.97) = \frac{(a-c)^{\underline{n}} (b-c)^{\underline{n}}}{(-c)^{\underline{n}} (a+b-c)^{\underline{n}}},\ 整数 $n \ge 0$。
+$$
+\begin{aligned}
+F\left( \begin{array}{c} a,\ b,\ -n \\ c,\ a+b-c-n+1 \end{array} \middle| 1 \right) &= \frac{(c-a)^{\overline{n}} (c-b)^{\overline{n}}}{c^{\overline{n}} (c-a-b)^{\overline{n}}} 
+&= \frac{(a-c)^{\underline{n}} (b-c)^{\underline{n}}}{(-c)^{\underline{n}} (a+b-c)^{\underline{n}}}, \text{ integer n}\ge 0 \tag{5.97}
+\end{aligned}
+$$
 
 这个公式给出了具有三个上参数和两个下参数的一般超几何级数在 $ z=1$ 处的值，条件是其中一个上参数为非正整数，且 $ b_1+b_2 = a_1+a_2+a_3+1$。（如果下参数之和比上参数之和大 $ 2$ 而不是 $ 1$，则可以利用习题 $ 25$ 的公式，将 $ F(a_1,a_2,a_3;b_1,b_2;1)$ 用两个满足 $ \text{Saalschütz}$ 恒等式的超几何函数来表示。）
 
@@ -2060,7 +2059,7 @@ $$ \frac{1+x}{2} F\left( \begin{array}{c} x+1,\ n+1,\ -n \\ 1,\ x+1 \end{array} 
 唉。这只不过是 $ \text{Saalschütz}$ 恒等式 $(5.97)$ 在 $ c=1$ 时的特殊情况，所以我们原本直接使用超几何函数就能省去大量工作！
 
 那么问题 7 呢？那个极其棘手的和式给出了公式
-$$ F\left( \begin{array}{c} n+1,\ m-n,\ 1,\ \dfrac{1}{2} \\ \dfrac{1}{2}m+1,\ \dfrac{1}{2}m+\dfrac{1}{2},\ 2 \end{array} \middle| 1 \right) = \binom{m}{n} $$
+$$ F\left( \begin{array}{c} n+1,\ m-n,\ 1,\ \dfrac{1}{2} \\ \dfrac{1}{2}m+1,\ \dfrac{1}{2}m+\dfrac{1}{2},\ 2 \end{array} \middle| 1 \right) = \frac{m}{n} $$
 
 这是我们见过的第一种具有三个下参数的情形，因此看起来是新的。但事实并非如此；左边可以替换为
 $$ F\left( \begin{array}{c} n,\ m-n-1,\ -\dfrac{1}{2} \\ \dfrac{1}{2}m,\ \dfrac{1}{2}m-\dfrac{1}{2} \end{array} \middle| 1 \right) - 1 $$
@@ -2071,14 +2070,14 @@ $$ F\left( \begin{array}{c} n,\ m-n-1,\ -\dfrac{1}{2} \\ \dfrac{1}{2}m,\ \dfrac{
 
 表 $202$ 中的卷积恒等式没有超几何函数的等价形式，因为只有当 $t$ 为整数时，它们的项比值才是 $k$ 的有理函数。即使 $t=1$，式 $(5.64)$ 和 $(5.65)$ 也不是超几何级数。但我们可以留意当 $t$ 取较小整数值时 $(5.62)$ 给出的结论：
 $$
-F\left( \begin{array}{c} \dfrac12 r,\ \dfrac12 r+\dfrac12,\ -n,\ -n-s \\[4pt] r+1,\ -n-\dfrac12 s,\ -n-\dfrac12 s+\dfrac12 \end{array} \middle| 1 \right)
+F\left( \begin{array}{c} \frac12 r,\frac12 r+\frac12, -n, -n-s \\[4pt] r+1, -n-\frac12 s, -n-\frac12 s+\frac12 \end{array} \middle| 1 \right)
 = \binom{r+s+2n}{n} \bigg/ \binom{s+2n}{n};
 $$
 $$
 F\left(
 \begin{array}{c}
-\dfrac13 r,\ \dfrac13 r+\dfrac13,\ \dfrac13 r+\dfrac23,\ -n,\ -n-\dfrac12 s,\ -n-\dfrac12 s-\dfrac12 \\[4pt]
-\dfrac12 r+\dfrac12,\ \dfrac12 r+1,\ -n-\dfrac13 s,\ -n-\dfrac13 s+\dfrac13,\ -n-\dfrac13 s+\dfrac23
+\frac13 r, \frac13 r+\frac13, \frac13 r+\frac23,-n,-n-\frac12 s,-n-\frac12 s-\frac12 \\[4pt]
+\frac12 r+\frac12,\ \frac12 r+1,-n-\frac13 s,-n-\frac13 s+\frac13,-n-\frac13 s+\dfrac23
 \end{array}
 \middle| 1\right) \\
 = \binom{r+s+3n}{n} \bigg/ \binom{s+3n}{n}.
@@ -2092,39 +2091,43 @@ $$
 \sum_{k\ge 0}\binom{2m-k}{m-k}2^k=2^{2m}.
 $$
 
-由 $(2m-k)!\,2^k/(m!\,(m-k)!)$ 得到的项比为 $2(k-m)/(k-2m)$，因此我们得到一个 $z=2$ 的超几何恒等式：
+由 $(2m-k)!2^k/m!(m-k)!$ 得到的项比为 $2(k-m)/(k-2m)$，因此我们得到一个 $z=2$ 的超几何恒等式：
 $$
 \binom{2m}{m} F\left( \begin{array}{c} 1,\ -m \\ -2m \end{array} \middle| 2 \right) = 2^{2m}, \quad \text{integer } m \ge 0. \tag{5.98}
 $$
 
-但看一下下参数 $-2m$。负整数是不允许的，所以这个恒等式是**无定义**的！
+但看一下下参数 $-2m$。负整数是不允许的，所以这个恒等式是无定义的！
 
 正如之前承诺的，现在我们必须仔细研究这类极限情形，因为退化的超几何函数通常可以从附近的非退化点取极限来计算。这么做时我们必须小心，因为不同的极限方式可能得到不同的结果。例如，当其中一个上参数增加 $\epsilon$ 时，下面两个极限会得到完全不同的结果：
 ```math
-\lim_{\epsilon\to 0} F\left( \begin{array}{c} -1+\epsilon,\ 2+\epsilon \\ -3+\epsilon \end{array} \middle| 1 \right)
-= \lim_{\epsilon\to 0}\left( 1
-+ \frac{(-1+\epsilon)(2+\epsilon)}{(-3+\epsilon)\,1!}
-+ \frac{(-1+\epsilon)(\epsilon)(2+\epsilon)(3+\epsilon)}{(-3+\epsilon)(-2+\epsilon)\,2!} \\
-+ \frac{(-1+\epsilon)(\epsilon)(1+\epsilon)(2+\epsilon)(3+\epsilon)(4+\epsilon)}{(-3+\epsilon)(-2+\epsilon)(-1+\epsilon)\,3!} \right) \\
-= 1 - \frac{3}{2} + 0 + \frac{1}{2} = 0;
+\begin{aligned}
+\lim_{\epsilon\to 0} F\left( \begin{array}{c} -1+\epsilon,-3 \\ -2+\epsilon \end{array} \middle| 1 \right)
+&= \lim_{\epsilon\to 0}\bigg( 1
++ \frac{(-1+\epsilon)(-3)}{(-2+\epsilon)1!}
++ \frac{(-1+\epsilon)(\epsilon)(-3)(-2)}{(-3+\epsilon)(-2+\epsilon)\,2!}  \\ 
+& \qquad + \frac{(-1+\epsilon)(\epsilon)(1+\epsilon)(-3)(-2)(-1)}{(-2+\epsilon)(-1+\epsilon)(\epsilon)\,3!} \bigg) \\
+&= 1 - \frac{3}{2} + 0 + \frac{1}{2} = 0;
+\end{aligned}
 ```
 
 ```math
+\begin{aligned}
 \lim_{\epsilon\to 0} F\left( \begin{array}{c} -1,\ -3 \\ -2+\epsilon \end{array} \middle| 1 \right)
-= \lim_{\epsilon\to 0}\left( 1
+&= \lim_{\epsilon\to 0}\left( 1
 + \frac{(-1)(-3)}{(-2+\epsilon)\,1!}
-+ 0 + 0 \right)
-= 1 - \frac{3}{2} + 0 + 0 = -\frac{1}{2}.
++ 0 + 0 \right)   \\
+&= 1 - \frac{3}{2} + 0 + 0 = -\frac{1}{2}.
+\end{aligned}
 ```
 
-类似地，我们定义 $\dbinom{-1}{-1}=0=\lim\limits_{\epsilon\to 0}\dbinom{-1+\epsilon}{-1}$；这与 $\lim\limits_{\epsilon\to 0}\dbinom{-1+\epsilon}{-1+\epsilon}=1$ 并不相同。将式 $(5.98)$ 作为极限处理的正确方式是：意识到上参数 $-m$ 的作用是使级数 $\sum\limits_{k\ge 0}\dbinom{2m-k}{m-k}2^k$ 中所有 $k>m$ 的项都为 $0$；这意味着我们需要给出如下更精确的表述：
+类似地，我们定义 $\binom{-1}{-1}=0=\lim\limits_{\epsilon\to 0}\binom{-1+\epsilon}{-1}$；这与 $\lim\limits_{\epsilon\to 0}\binom{-1+\epsilon}{-1+\epsilon}=1$ 并不相同。将式 $(5.98)$ 作为极限处理的正确方式是：意识到上参数 $-m$ 的作用是使级数 $\sum\limits_{k\ge 0}\binom{2m-k}{m-k}2^k$ 中所有 $k>m$ 的项都为 $0$；这意味着我们需要给出如下更精确的表述：
 $$
 \binom{2m}{m}
 \lim_{\epsilon\to 0}
 F\left(
 \begin{array}{c}
-1,\ -m+\epsilon \\
--2m
+1,\ -m \\
+-2m+\epsilon
 \end{array}
 \middle| 2\right)
 = 2^{2m},\quad \text{integer }m\ge 0. \tag{5.99}

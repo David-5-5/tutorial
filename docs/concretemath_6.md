@@ -364,5 +364,132 @@ $$
 
 我们得到了一种**对偶性**，类似于最小值与最大值、向下取整 $\lfloor x\rfloor$ 与向上取整 $\lceil x\rceil$、上升幂 $x^{\overline{n}}$ 与下降幂 $x^{\underline{n}}$、最大公约数 gcd 与最小公倍数 lcm 之间的关系。在这种对应下，很容易验证递推式$\genfrac{[}{]}{0pt}{}{n}{k}=(n-1)\genfrac{[}{]}{0pt}{}{n-1}{k}+\genfrac{[}{]}{0pt}{}{n-1}{k-1}$ 和 $\genfrac\{\}{0pt}{}{n}{k} = k\genfrac\{\}{0pt}{}{n-1}{k} + \genfrac\{\}{0pt}{}{n-1}{k-1}$ 本质上是同一个式子。
 
+## 6.2 EULERIAN NUMBERS 欧拉数
+
+
+另一类数值三角也时常出现，它由欧拉提出[104, 813; 110, 第485页]，我们用尖括号来表示它的元素：$\left\langle \begin{matrix}n\\k\end{matrix} \right\rangle$。这里的尖括号形象地表示“小于”和“大于”；$\left\langle \begin{matrix}n\\k\end{matrix} \right\rangle$ 是集合 $\{1,2,\dots,n\}$ 的排列 $\pi_1\pi_2\cdots\pi_n$ 中**恰好有 $k$ 个上升位**的排列个数。所谓上升位，是指满足 $\pi_i < \pi_{i+1}$ 的位置 $i$。（注意：这个记号不如斯特林数的记号通用，但我们会看到它是非常合理的。）
+
+例如，集合 $\{1,2,3,4\}$ 的排列中，有 11 个排列恰好包含 2 个上升位：
+$$
+1324, 1423, 2314, 2413, 3412;        \\
+1243, 1342, 2341; 2134, 3124, 4123.
+$$
+
+（第一行列出的是满足 $\pi_1 < \pi_2 > \pi_3 < \pi_4$ 的排列；第二行列出的是满足 $\pi_1 < \pi_2 < \pi_3 > \pi_4$ 与 $\pi_1 > \pi_2 < \pi_3 < \pi_4$ 的排列。）因此 $\left\langle \begin{matrix}4\\2\end{matrix} \right\rangle = 11$。
+
+**表 268 欧拉三角**
+|$n$|$\left\langle \begin{matrix}n\\0\end{matrix} \right\rangle$|$\left\langle \begin{matrix}n\\1\end{matrix} \right\rangle$|$\left\langle \begin{matrix}n\\2\end{matrix} \right\rangle$|$\left\langle \begin{matrix}n\\3\end{matrix} \right\rangle$|$\left\langle \begin{matrix}n\\4\end{matrix} \right\rangle$|$\left\langle \begin{matrix}n\\5\end{matrix} \right\rangle$|$\left\langle \begin{matrix}n\\6\end{matrix} \right\rangle$|$\left\langle \begin{matrix}n\\7\end{matrix} \right\rangle$|$\left\langle \begin{matrix}n\\8\end{matrix} \right\rangle$|$\left\langle \begin{matrix}n\\9\end{matrix} \right\rangle$|
+|-:|-:|-:|-:|-:|-:|-:|-:|-:|-:|-:|
+|0|1||||||||||
+|1|1|0|||||||||
+|2|1|1|0||||||||
+|3|1|4|1|0|||||||
+|4|1|11|11|1|0||||||
+|5|1|26|66|26|1|0|||||
+|6|1|57|302|302|57|1|0||||
+|7|1|120|1191|2416|1191|120|1|0|||
+|8|1|247|4293|15619|15619|4293|247|1|0||
+|9|1|502|14608|88234|156190|88234|14608|502|1|0|
+
+
+表 268 列出了最小的一些欧拉数；可以看到这次标志性的序列是 1, 11, 11, 1。当 $n>0$ 时，上升位最多有 $n-1$ 个，因此在三角的对角线上我们有 $\left\langle \begin{matrix}n\\n\end{matrix} \right\rangle = [n=0]$。
+
+欧拉三角与帕斯卡三角类似，左右是对称的。但在这种情形下，对称规律略有不同：
+$$
+\left\langle \begin{matrix}n\\k\end{matrix} \right\rangle = \left\langle \begin{matrix}n\\n-1-k\end{matrix} \right\rangle,\quad \text{整数 }n>0; \tag{6.34}
+$$
+
+排列 $\pi_1\pi_2\cdots\pi_n$ 有 $n-1-k$ 个上升位，当且仅当其翻转排列 $\pi_n\cdots\pi_2\pi_1$ 有 $k$ 个上升位。
+
+我们来推导欧拉数 $\left\langle \begin{matrix}n\\k\end{matrix} \right\rangle$ 的递推关系。将元素 $n$ 插入 $\{1,\dots,n-1\}$ 的任意排列 $\rho = \rho_1 \dots \rho_{n-1}$ 中，可得到 $n$ 个 $\{1,2,\dots,n\}$ 的排列。假设把 $n$ 插入位置 $j$，得到排列 $\pi = \rho_1 \dots \rho_{j-1} n \rho_j \dots \rho_{n-1}$。若 $j=1$ 或 $\rho_{j-1} < \rho_j$，$\pi$ 的上升位数量与 $\rho$ 相同；若 $\rho_{j-1} > \rho_j$ 或 $j=n$，$\pi$ 的上升位数量比 $\rho$ 多 1。因此，从含 $k$ 个上升位的排列 $\rho$ 出发，有 $(k+1)\left\langle \begin{matrix}n-1\\k\end{matrix} \right\rangle$ 种方式得到含 $k$ 个上升位的 $\pi$；再加上从含 $k-1$ 个上升位的排列 $\rho$ 出发，有 $\left( (n-2)-(k-1)+1 \right)\left\langle \begin{matrix}n-1\\k-1\end{matrix} \right\rangle$ 种方式。最终递推关系为：
+$$
+\left\langle \begin{matrix}n\\k\end{matrix} \right\rangle = (k+1)\left\langle \begin{matrix}n-1\\k\end{matrix} \right\rangle + (n-k)\left\langle \begin{matrix}n-1\\k-1\end{matrix} \right\rangle , \text{integer n }> 0. \tag{6.35}
+$$
+
+我们再次通过设定初始条件来启动递推关系：
+$$
+\left\langle \begin{matrix} 0 \\ k \end{matrix} \right\rangle = [k=0],\quad \text{整数 }k. \tag{6.36}
+$$
+
+并且我们约定，当 $k < 0$ 时，$\left\langle \begin{matrix} n \\ k \end{matrix} \right\rangle = 0$。
+
+欧拉数之所以重要，主要是因为它在普通幂与连续二项式系数之间建立了一种不寻常的联系：
+$$
+x^n = \sum_k \left\langle \begin{matrix} n \\ k \end{matrix} \right\rangle \binom{x+k}{n},\quad \text{integer }n \ge 0. \tag{6.37}
+$$
+
+（这被称为沃皮茨基恒等式[378]。）例如，我们有：
+$$
+\begin{aligned}
+x^2 &= \binom{x}{2} + \binom{x+1}{2}, \\
+x^3 &= \binom{x}{3} + 4\binom{x+1}{3} + \binom{x+2}{3}, \\
+x^4 &= \binom{x}{4} + 11\binom{x+1}{4} + 11\binom{x+2}{4} + \binom{x+3}{4},
+\end{aligned}
+$$
+依此类推。式 (6.37) 可以用数学归纳法轻松证明（见习题 14）。
+
+顺便一提，式 (6.37) 还给出了求前 $n$ 个平方数之和的另一种方法：
+我们有 $k^2= \langle \begin{matrix} 2 \\ 0 \end{matrix} \rangle \binom{k}{2} + \langle \begin{matrix} 2 \\ 1 \end{matrix} \rangle \binom{k+1}{2} = \binom{k}{2} + \binom{k+1}{2},$ 因此
+$$
+\begin{aligned}
+1^2 + 2^2 + \cdots + n^2
+&= \left( \binom{1}{2} + \binom{2}{2} + \cdots + \binom{n}{2} \right) + \left( \binom{2}{2} + \binom{3}{2} + \cdots + \binom{n+1}{2} \right) \\
+&= \binom{n+1}{3} + \binom{n+2}{3} = \frac16 (n+1)n\bigl((n-1)+(n+2)\bigr).
+\end{aligned}
+$$
+
+欧拉数递推式 (6.35) 比斯特林数递推式 (6.3) 和 (6.8) 稍微复杂一些，因此我们并不指望 $\left\langle \begin{matrix} n \\ k \end{matrix} \right\rangle$ 满足同样多的简单恒等式。尽管如此，它们仍然满足一些恒等式：
+$$
+\left\langle \begin{matrix} n \\ m \end{matrix} \right\rangle
+= \sum_{k=0}^m \binom{n+1}{k} (m+1-k)^n (-1)^k; \tag{6.38}
+$$
+$$
+m! \left\{ \begin{matrix} n \\ m \end{matrix} \right\}
+= \sum_k \left\langle \begin{matrix} n \\ k \end{matrix} \right\rangle \binom{k}{n-m}; \tag{6.39}
+$$
+$$
+\left\langle \begin{matrix} n \\ m \end{matrix} \right\rangle
+= \sum_k \left\{ \begin{matrix} n \\ k \end{matrix} \right\} \binom{n-m}{k} (-1)^{n-k-m} k!. \tag{6.40}
+$$
+
+如果将 (6.39) 式乘以 $z^{n-m}$ 并对 $m$ 求和，可得 $\sum_m \left\{ \begin{matrix} n \\ m \end{matrix} \right\} m! z^{n-m}= \sum_k \left\langle \begin{matrix} n \\ k \end{matrix} \right\rangle (z+1)^k.$。将 $z$ 替换为 $z-1$ 并比较 $z^k$ 的系数，即可得到 (6.40) 式。因此这后两个恒等式本质上是等价的。第一个恒等式 (6.38) 在 $m$ 取较小值时能给出特殊值：
+$$
+\left\langle \begin{matrix} n \\ 0 \end{matrix} \right\rangle = 1; \quad
+\left\langle \begin{matrix} n \\ 1 \end{matrix} \right\rangle = 2^n - n - 1; \quad
+\left\langle \begin{matrix} n \\ 2 \end{matrix} \right\rangle = 3^n - (n+1)2^n + \binom{n+1}{2}.
+$$
+
+**表 270 二阶欧拉数三角形**
+|n|<<n,0>>|<<n,1>>|<<n,2>>|<<n,3>>|<<n,4>>|<<n,5>>|<<n,6>>|<<n,7>>|<<n,8>>|
+|-:|-:|-:|-:|-:|-:|-:|-:|-:|-:|
+|0|1|||||||||
+|1|1|0||||||||
+|2|1|2|0|||||||
+|3|1|8|6|0||||||
+|4|1|22|58|24|0|||||
+|5|1|52|328|444|120|0||||
+|6|1|114|1452|4400|3708|720|0|||
+|7|1|240|5610|32120|58140|33984|5040|0||
+|8|1|494|19950|195800|644020|785304|341136|40320|0|
+
+这里我们不必再深入探讨欧拉数；通常只要知道它们存在，并且在需要时能查阅基本恒等式列表就足够了。不过，在结束这个话题之前，我们应当留意另一种系数的三角排列，如表 270 所示。我们把这些数称为**二阶欧拉数** $\left\langle\!\!\left\langle\begin{matrix}n\\k\end{matrix}\right\rangle\!\!\right\rangle$，因为它们满足与式 (6.35) 相似的递推关系，只是在一处将 $n$ 替换成了 $2n-1$。
+$$
+\left\langle\!\!\left\langle n\atop k\right\rangle\!\!\right\rangle = (k+1)\left\langle\!\!\left\langle n-1\atop k\right\rangle\!\!\right\rangle + (2n-1-k)\left\langle\!\!\left\langle n-1\atop k-1\right\rangle\!\!\right\rangle. \tag{6.41}
+$$
+
+这些数有着奇妙的组合意义，最早由 Gessel 和 Stanley [147] 发现：如果我们构造多重集合 $\{1,1,2,2,\dots,n,n\}$ 的排列，且满足特殊性质：对每个 $1\le m\le n$，两个 $m$ 之间的所有数都大于 $m$，那么 $\left\langle\!\!\left\langle n\atop k\right\rangle\!\!\right\rangle$ 就是这类排列中**恰有 $k$ 个上升位**的数目。例如，$\{1,1,2,2,3,3\}$ 恰有 8 个满足条件且只有 1 个上升位的排列：
+$$
+113322, 133221, 221331, 221133, 223311, 233211, 331122, 331221.
+$$
+
+因此 $\left\langle\!\!\left\langle 3\atop 1\right\rangle\!\!\right\rangle = 8$。多重集合 $\{1,1,2,2,\dots,n,n\}$ 总共有
+$$
+\sum_k \left\langle\!\!\left\langle n\atop k\right\rangle\!\!\right\rangle
+= (2n-1)(2n-3)\cdots(1)
+= \frac{(2n)!}{2^n n!}.
+\tag{6.42}
+$$
+个满足条件的排列，因为两个 $n$ 必须相邻，而且在 $n-1$ 对应的排列中共有 $2n-1$ 个位置可以插入它们。例如，当 $n=3$ 时，排列 $1221$ 有 5 个插入位置，分别得到 $331221$，$133221$，$123321$，$122331$ 和 $122133$。递推式 (6.41) 可以通过推广我们对普通欧拉数所用的论证方法来证明。
+
 
 

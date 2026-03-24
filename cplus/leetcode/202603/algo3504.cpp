@@ -5,9 +5,6 @@ using namespace std;
 class Solution {
 public:
     int longestPalindrome(string s, string t) {
-class Solution {
-public:
-    int longestPalindrome(string s, string t) {
         // 参考题解，优化代码，一次完成计算
         int n = s.length(), m = t.length();
         
@@ -38,8 +35,6 @@ public:
         }
 
         return ans;
-    }
-};
     }
 };
 

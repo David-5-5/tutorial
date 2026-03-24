@@ -491,5 +491,83 @@ $$
 $$
 个满足条件的排列，因为两个 $n$ 必须相邻，而且在 $n-1$ 对应的排列中共有 $2n-1$ 个位置可以插入它们。例如，当 $n=3$ 时，排列 $1221$ 有 5 个插入位置，分别得到 $331221$，$133221$，$123321$，$122331$ 和 $122133$。递推式 (6.41) 可以通过推广我们对普通欧拉数所用的论证方法来证明。
 
+二阶欧拉数之所以重要，主要是因为它们与斯特林数存在关联[148]：对 $n$ 进行归纳可得
+$$
+\left\{ \begin{matrix} x \\ x-n \end{matrix} \right\}
+= \sum_k \left\langle\!\!\left\langle n\atop k\right\rangle\!\!\right\rangle \binom{x+n-1}{2n-k},
+\quad \text{integer } n\ge 0; \tag{6.43}
+$$
+$$
+\left[ \begin{matrix} x \\ x-n \end{matrix} \right]
+= \sum_k \left\langle\!\!\left\langle n\atop k\right\rangle\!\!\right\rangle \binom{x+k}{2n},
+\quad \text{integer } n\ge 0. \tag{6.44}
+$$
+
+例如，
+$$
+\left\{ \begin{matrix} x \\ x-1 \end{matrix} \right\} = \binom{x}{2},\qquad
+\left[ \begin{matrix} x \\ x-1 \end{matrix} \right] = \binom{x}{2};
+$$
+$$
+\left\{ \begin{matrix} x \\ x-2 \end{matrix} \right\} = \binom{x+1}{4} + 2\binom{x}{4},\qquad
+\left[ \begin{matrix} x \\ x-2 \end{matrix} \right] = \binom{x}{4} + 2\binom{x+1}{4};
+$$
+$$
+\left\{ \begin{matrix} x \\ x-3 \end{matrix} \right\} = \binom{x+2}{6} + 8\binom{x+1}{6} + 6\binom{x}{6},\qquad
+\left[ \begin{matrix} x \\ x-3 \end{matrix} \right] = \binom{x}{6} + 8\binom{x+1}{6} + 6\binom{x+2}{6}.
+$$
+
+（我们在式 (6.7) 中已经见过 $n=1$ 的情形。）这些恒等式对任意整数 $x$ 与非负整数 $n$ 都成立。由于右端是关于 $x$ 的多项式，我们可以用 (6.43) 和 (6.44) 把斯特林数 $\left\{\begin{matrix}x\\x-n\end{matrix}\right\}$ 与 $\left[\begin{matrix}x\\x-n\end{matrix}\right]$ 延拓定义到任意实数（或复数）$x$ 上。
+
+若 $n>0$，则多项式 $\left\{\begin{matrix}x\\x-n\end{matrix}\right\}$ 与 $\left[\begin{matrix}x\\x-n\end{matrix}\right]$ 在 $x=0$，$x=1$，$\dots$，$x=n$ 时取值为 $0$，因此它们可被 $(x-0)$，$(x-1)$，$\dots$，$(x-n)$ 整除。将这些已知因子提出后剩下的部分很值得研究。我们按照如下规则定义斯特林多项式 $\sigma_n(x)$
+$$
+\sigma_n(x) = \left[ \begin{matrix} x \\ x-n \end{matrix} \right] \bigg/ \bigl(x(x-1)\cdots(x-n)\bigr). \tag{6.45}
+$$
+
+（$\sigma_n(x)$ 的次数为 $n-1$。）前几项为
+$$
+\begin{aligned}
+\sigma_0(x) &= 1/x, \\
+\sigma_1(x) &= 1/2, \\
+\sigma_2(x) &= (3x-1)/24, \\
+\sigma_3(x) &= (x^2-x)/48, \\
+\sigma_4(x) &= (15x^3-30x^2+5x+2)/5760.
+\end{aligned}
+$$
+
+它们可以通过二阶欧拉数来计算；例如，
+$$
+\sigma_3(x) = \frac{(x-4)(x-5) + 8(x-4)(x+1) + 6(x+2)(x+1)}{6!}.
+$$
+
+**表 272 斯特林卷积公式**
+$$
+r\sum_{k=0}^n \sigma_k(r+tk)\,\sigma_{n-k}(s+t(n-k)) = (r+s)\,\sigma_n(r+s+tn), \tag{6.46}
+$$
+$$
+s\sum_{k=0}^n k\sigma_k(r+tk)\,\sigma_{n-k}(s+t(n-k)) = n\,\sigma_n(r+s+tn), \tag{6.47} 
+$$
+$$
+\left\{\begin{matrix}n\\m\end{matrix}\right\} = (-1)^{n-m+1} \frac{n!}{(m-1)!}\,\sigma_{n-m}(-m), \tag{6.48} 
+$$
+$$
+\left[\begin{matrix}n\\m\end{matrix}\right] = \frac{n!}{(m-1)!}\,\sigma_{n-m}(n). \tag{6.49}
+$$
+
+事实证明，这些多项式满足两个非常优美的恒等式：
+$$
+\left( \frac{z e^z}{e^z - 1} \right)^x = x \sum_{n\ge 0} \sigma_n(x) z^n; \tag{6.50}
+$$
+$$
+\left( \frac{1}{z}\ln\frac{1}{1-z} \right)^x = x \sum_{n\ge 0} \sigma_n(x+n) z^n. \tag{6.51}
+$$
+
+并且一般地，如果 $S_t(z)$ 是满足下式的幂级数
+$$\ln\left(1-zS_t(z)^{t-1}\right) = -zS_t(z)^t. \tag{6.52}$$
+那么
+$$S_t(z)^x = x \sum_{n\ge 0} \sigma_n(x+tn) z^n. \tag{6.53}$$
+
+因此我们可以像在表 202 中对二项式系数那样，得到斯特林数的一般卷积公式，其结果列于表 272。当一个斯特林数的求和式不满足表 264 或 265 中的恒等式时，表 272 或许正是合适的工具。（本章稍后在式 (6.100) 后会给出一个例子。习题 7.19 讨论了基于形如 (6.50) 和 (6.53) 这类恒等式的卷积一般原理。）
+
 
 

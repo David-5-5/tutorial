@@ -2141,13 +2141,13 @@ $$
 $$
 \binom{n}{m} F\left( \begin{array}{c} 1,\ -m \\ n-m+1 \end{array} \middle| -1 \right),\quad \text{整数 }n\ge m\ge 0; \tag{5.100}
 $$
-这个和式只有当 $m$ 接近 $0$、$\dfrac12n$ 或 $n$ 时，才具有简单的闭形式。
+这个和式只有当 $m$ 接近 $0$，$\dfrac12n$ 或 $n$ 时，才具有简单的闭形式。
 
 但故事还不止于此，因为超几何函数本身也满足一系列恒等式。这意味着超几何函数的每一个闭形式都会导出更多的闭形式，并为数据库增添更多条目。例如，习题 25 和 26 中的恒等式告诉我们如何将一个超几何函数转化为另外两个参数相似但不同的超几何函数，而这些函数还可以继续被转化。
 
 1797 年，J. F. 普法夫（J. F. Pfaff）发现了一条令人意外的反演定律，
 $$
-(1-z)^{-a} F\left( \begin{array}{c} a,\ b \\ c \end{array} \middle| \frac{z}{z-1} \right)
+\frac{1}{(1-z)^a} F\left( \begin{array}{c} a,\ b \\ c \end{array} \middle| \frac{z}{z-1} \right)
 = F\left( \begin{array}{c} a,\ c-b \\ c \end{array} \middle| z \right), \tag{5.101}
 $$
 
@@ -2163,13 +2163,13 @@ $$
 我们现在令 $a=-n$，就可以从这个式子回推得到一个日后可能会用到的新的二项式系数恒等式：
 $$
 \sum_{k\ge 0}\frac{(-n)^{\overline{k}}(1+n)^{\overline{k}}}{(1+b+n)^{\overline{k}}}\frac{2^{-k}}{k!}
-= \sum_{k}\binom{n}{k}\left(-\frac12\right)^k \binom{n+k}{k} \bigg/ \binom{b+n+k}{k} \\
+= \sum_{k}\binom{n}{k}\left(-\frac12\right)^k \binom{n+k}{k} \bigg/ \binom{n+b+k}{k} \\
 = 2^{-n}\frac{(b/2)!\,(b+n)!}{b!\,(b/2+n)!},\quad \text{integer }n\ge 0. \tag{5.103}
 $$
 
 例如，当 $n=3$ 时，该恒等式给出：
 ```math
-1-\frac{3\cdot 4}{2(4+b)} + \frac{3\cdot 4\cdot 5}{4(4+b)(5+b)} - \frac{4\cdot 5\cdot 6}{8(4+b)(5+b)(6+b)} \\
+1-3\frac{4}{2(4+b)} + 3\frac{4\cdot 5}{4(4+b)(5+b)} - \frac{4\cdot 5\cdot 6}{8(4+b)(5+b)(6+b)} \\
 = \frac{(b+3)(b+2)(b+1)}{(b+6)(b+4)(b+2)}.
 ```
 
@@ -2177,47 +2177,54 @@ $$
 
 这很有趣；我们再来试一次。说不定能找到一个真正让朋友们大吃一惊的公式。如果把普法夫反演定律用到 $z=2$ 的奇特式子 (5.99) 上，会得到什么？此时令 $a=-m,\ b=1,\ c=-2m+\epsilon$，可得
 $$
+\begin{aligned}
 (-1)^m \lim_{\epsilon\to 0} F\left( \begin{array}{c} -m,\ 1 \\ -2m+\epsilon \end{array} \middle| 2 \right) 
-= \lim_{\epsilon\to 0} F\left( \begin{array}{c} -m,\ -2m-1+\epsilon \\ -2m+\epsilon \end{array} \middle| 2 \right) \\
-= \lim_{\epsilon\to 0} \sum_{k\ge 0} \frac{(-m)^{\overline{k}}(-2m-1+\epsilon)^{\overline{k}}}{(-2m+\epsilon)^{\overline{k}}} \frac{2^k}{k!} \\
-= \sum_{k\le m} \binom{m}{k} \frac{(2m+1)^{\overline{k}}}{(2m)^{\overline{k}}} (-2)^k.
+&= \lim_{\epsilon\to 0} F\left( \begin{array}{c} -m,\ -2m-1+\epsilon \\ -2m+\epsilon \end{array} \middle| 2 \right) \\
+&= \lim_{\epsilon\to 0} \sum_{k\ge 0} \frac{(-m)^{\overline{k}}(-2m-1+\epsilon)^{\overline{k}}}{(-2m+\epsilon)^{\overline{k}}} \frac{2^k}{k!} \\
+&= \sum_{k\le m} \binom{m}{k} \frac{(2m+1)^{\underline{k}}}{(2m)^{\underline{k}}} (-2)^k.
+\end{aligned}
 $$
 
 因为极限中的每一项都不会趋近于零，这就导出了另一个神奇的公式：
 $$
-\sum_{k\le m} \binom{m}{k} \frac{2m+1}{2m+1-k} (-2)^k
-= (-1)^m 2^{2m} \bigg/ \binom{2m}{m} \\
-= 1 \bigg/ \binom{-m}{1/2},\quad \text{整数 }m\ge 0. \tag{5.104}
+\begin{aligned}
+\sum_{k\le m} \binom{m}{k} \frac{2m+1}{2m+1-k} (-2)^k &= (-1)^m 2^{2m} \bigg/ \binom{2m}{m} \\
+&= 1 \bigg/ \binom{-1/2}{m},\quad \text{integer }m\ge 0. \tag{5.104}
+\end{aligned}
 $$
 
 当 $m=3$ 时，例如，和式为
 $$
 1 - 7 + \frac{84}{5} - 14 = -\frac{16}{5},
 $$
-并且 $\dbinom{-\frac{1}{2}}{3}$ 确实等于 $-\dfrac{5}{16}$。
+并且 $\binom{-1/2}{3}$ 确实等于 $-\frac{5}{16}$。
 
-当我们考察二项式系数恒等式并将它们转化为超几何级数形式时，我们忽略了式 (5.19)，因为它是两个和式之间的关系，而非闭式表达式。但现在我们可以把 (5.19) 看作超几何级数之间的恒等式。如果对 $y$ 求 $n$ 阶导数，再把 $k$ 替换成 $m-k$，就可以得到：
+当我们考察二项式系数恒等式并将它们转化为超几何级数形式时，我们忽略了式 (5.19)，因为它是两个和式之间的关系，而非闭式表达式。但现在我们可以把 (5.19) 看作超几何级数之间的恒等式。如果对 $y$ 求 $n$ 阶导数，再把 $k$ 替换成 $m-n-k$，就可以得到：
 $$
-\sum_{k\ge 0} \binom{m+r}{m-n-k} \binom{n+k}{n} x^{m-n-k} y^k \\
-= \sum_{k\ge 0} \binom{-r}{m-n-k} \binom{n+k}{n} (-x)^{m-n-k} (x+y)^k.
+\begin{aligned}
+\sum_{k\ge 0} & \binom{m+r}{m-n-k} \binom{n+k}{n} x^{m-n-k} y^k \\
+&= \sum_{k\ge 0} \binom{-r}{m-n-k} \binom{n+k}{n} (-x)^{m-n-k} (x+y)^k.
+\end{aligned}
 $$
 
 由此得到如下超几何级数变换：
 $$
-F\left( \begin{array}{c} a,\ -n \\ c \end{array} \middle| z \right)
+F\left( \begin{array}{c} a,-n \\ c \end{array} \middle| z \right)
 = \frac{(a-c)^{\underline{n}}}{(-c)^{\underline{n}}}
-F\left( \begin{array}{c} 1-a,\ -n \\ n+a-c \end{array} \middle| 1-z \right),
+F\left( \begin{array}{c} a,-n \\ 1-n+a-c \end{array} \middle| 1-z \right),
 \quad \text{integer } n \ge 0. \tag{5.105}
 $$
 注意当 $z=1$ 时，上式就退化为范德蒙德卷积公式 (5.93)。
 
 从这个例子看来，求导似乎很有用；我们在第 2 章求和 $x + 2x^2 + \cdots + nx^n$ 时也发现它很有帮助。我们来看看对一般的超几何级数关于 $z$ 求导会发生什么：
 $$
+\begin{aligned}
 \frac{d}{dz} F\!\left(\begin{array}{c} a_1,\dots,a_m \\ b_1,\dots,b_n \end{array} \middle| z\right)
-= \sum_{k\ge 1} \frac{a_1^{\overline{k}}\dots a_m^{\overline{k}} z^{k-1}}{b_1^{\overline{k}}\dots b_n^{\overline{k}} (k-1)!} \\
-= \sum_{k+1\ge 1} \frac{a_1^{\overline{k+1}}\dots a_m^{\overline{k+1}} z^k}{b_1^{\overline{k+1}}\dots b_n^{\overline{k+1}} k!} \\
-= \sum_{k\ge 0} \frac{a_1(a_1+1)^{\overline{k}}\dots a_m(a_m+1)^{\overline{k}} z^k}{b_1(b_1+1)^{\overline{k}}\dots b_n(b_n+1)^{\overline{k}} k!} \\
-= \frac{a_1\cdots a_m}{b_1\cdots b_n} F\!\left(\begin{array}{c} a_1+1,\dots,a_m+1 \\ b_1+1,\dots,b_n+1 \end{array} \middle| z\right). \tag{5.106}
+&= \sum_{k\ge 1} \frac{a_1^{\overline{k}}\dots a_m^{\overline{k}} z^{k-1}}{b_1^{\overline{k}}\dots b_n^{\overline{k}} (k-1)!} \\
+&= \sum_{k+1\ge 1} \frac{a_1^{\overline{k+1}}\dots a_m^{\overline{k+1}} z^k}{b_1^{\overline{k+1}}\dots b_n^{\overline{k+1}} k!} \\
+&= \sum_{k\ge 0} \frac{a_1(a_1+1)^{\overline{k}}\dots a_m(a_m+1)^{\overline{k}} z^k}{b_1(b_1+1)^{\overline{k}}\dots b_n(b_n+1)^{\overline{k}} k!} \\
+&= \frac{a_1\cdots a_m}{b_1\cdots b_n} F\!\left(\begin{array}{c} a_1+1,\dots,a_m+1 \\ b_1+1,\dots,b_n+1 \end{array} \middle| z\right). \tag{5.106}
+\end{aligned}
 $$
 参数会被移出并向上偏移。
 
@@ -2233,19 +2240,23 @@ $$
 
 这个式子本身用处不大。但如果我们将 $F$ 乘以它的一个上参数（例如 $a_1$），再与 $\vartheta F$ 相加，就会得到：
 $$
+\begin{aligned}
 (\vartheta + a_1) F\!\left(\begin{array}{c} a_1,\dots,a_m \\ b_1,\dots,b_n \end{array} \middle| z\right)
-= \sum_{k\ge 0} \frac{(k+a_1)a_1^{\overline{k}}\dots a_m^{\overline{k}} z^k}{b_1^{\overline{k}}\dots b_n^{\overline{k}} k!} \\
-= \sum_{k\ge 0} \frac{a_1(a_1+1)^{\overline{k}}\,a_2^{\overline{k}}\dots a_m^{\overline{k}} z^k}{b_1^{\overline{k}}\dots b_n^{\overline{k}} k!} \\
-= a_1 F\!\left(\begin{array}{c} a_1+1,\,a_2,\dots,a_m \\ b_1,\dots,b_n \end{array} \middle| z\right).
+&= \sum_{k\ge 0} \frac{(k+a_1)a_1^{\overline{k}}\dots a_m^{\overline{k}} z^k}{b_1^{\overline{k}}\dots b_n^{\overline{k}} k!} \\
+&= \sum_{k\ge 0} \frac{a_1(a_1+1)^{\overline{k}}\,a_2^{\overline{k}}\dots a_m^{\overline{k}} z^k}{b_1^{\overline{k}}\dots b_n^{\overline{k}} k!} \\
+&= a_1 F\!\left(\begin{array}{c} a_1+1,\,a_2,\dots,a_m \\ b_1,\dots,b_n \end{array} \middle| z\right).
+\end{aligned}
 $$
 此时只有一个参数发生了上移。
 
 对于下参数也有类似的技巧，只不过此时参数是下移而非上移：
 $$
+\begin{aligned}
 (\vartheta + b_1 - 1) F\!\left(\begin{array}{c} a_1,\dots,a_m \\ b_1,\dots,b_n \end{array} \middle| z\right)
-= \sum_{k\ge 0} \frac{(k+b_1-1)a_1^{\overline{k}}\dots a_m^{\overline{k}} z^k}{b_1^{\overline{k}}\dots b_n^{\overline{k}} k!} \\
-= \sum_{k\ge 0} \frac{(b_1-1)\,a_1^{\overline{k}}\dots a_m^{\overline{k}} z^k}{(b_1-1)^{\overline{k}}\,b_2^{\overline{k}}\dots b_n^{\overline{k}} k!} \\
-= (b_1-1) F\!\left(\begin{array}{c} a_1,\dots,a_m \\ b_1-1,\,b_2,\dots,b_n \end{array} \middle| z\right).
+&= \sum_{k\ge 0} \frac{(k+b_1-1)a_1^{\overline{k}}\dots a_m^{\overline{k}} z^k}{b_1^{\overline{k}}\dots b_n^{\overline{k}} k!} \\
+&= \sum_{k\ge 0} \frac{(b_1-1)\,a_1^{\overline{k}}\dots a_m^{\overline{k}} z^k}{(b_1-1)^{\overline{k}}\,b_2^{\overline{k}}\dots b_n^{\overline{k}} k!} \\
+&= (b_1-1) F\!\left(\begin{array}{c} a_1,\dots,a_m \\ b_1-1,\,b_2,\dots,b_n \end{array} \middle| z\right).
+\end{aligned}
 $$
 
 现在我们可以把所有这些算子结合起来，用两种不同方式表示同一个量，从而得到一个数学“等式”。具体来说，我们有：
@@ -2256,11 +2267,13 @@ $$
 
 以及
 $$
-(\vartheta + b_1 - 1)\cdots(\vartheta + b_n - 1)F
-= (b_1-1)\cdots(b_n-1)\, F\!\left(\begin{array}{c} a_1,\dots,a_m \\ b_1-1,\dots,b_n-1 \end{array} \middle| z\right),
+\begin{aligned}
+(\vartheta + b_1 - 1)&\cdots(\vartheta + b_n - 1)F
+&= (b_1-1)\cdots(b_n-1)\, F\!\left(\begin{array}{c} a_1,\dots,a_m \\ b_1-1,\dots,b_n-1 \end{array} \middle| z\right),
+\end{aligned}
 $$
 
-其中 $F=F\left(\begin{array}{c}a_1,\dots,a_m\\b_1,\dots,b_n\end{array}\middle| z\right)$。而式 (5.106) 告诉我们，第一行是第二行的导数。因此一般超几何函数 $F$ 满足微分方程：
+其中 $F=F(a_1,\dots,a_m;b_1,\dots,b_n; z)$。而式 (5.106) 告诉我们，第一行是第二行的导数。因此一般超几何函数 $F$ 满足微分方程：
 $$
 D(\vartheta + b_1 - 1)\cdots(\vartheta + b_n - 1)F = (\vartheta + a_1)\cdots(\vartheta + a_m)F, \tag{5.107}
 $$
@@ -2278,9 +2291,11 @@ $$
 
 等式的右边为
 $$
+\begin{aligned}
 (\vartheta+a)\bigl(zF'(z)+bF(z)\bigr)
-= z\frac{d}{dz}\bigl(zF'(z)+bF(z)\bigr) + a\bigl(zF'(z)+bF(z)\bigr) \\
-= zF'(z)+z^2F''(z)+bzF'(z)+azF'(z)+abF(z).
+&= z\frac{d}{dz}\bigl(zF'(z)+bF(z)\bigr) + a\bigl(zF'(z)+bF(z)\bigr) \\
+&= zF'(z)+z^2F''(z)+bzF'(z)+azF'(z)+abF(z).
+\end{aligned}
 $$
 
 令两边相等，可得
@@ -2312,8 +2327,8 @@ $$
 
 这套微分理论的一个用途是发现并证明新的恒等变换。例如，我们可以轻松验证这两个超几何函数
 $$
-F\left(\begin{array}{c}a\\2a,2b\end{array}\bigg| z\right)
-\text{ and } F\left(\begin{array}{c}a+b+\tfrac12\\a,b\end{array}\bigg| 4z(1-z)\right)
+F\left(\begin{array}{c}2a,2b\\ a+b+\frac12\end{array}\bigg| z\right)
+\text{ and } F\left(\begin{array}{c}a,b\\ a+b+\frac12\end{array}\bigg| 4z(1-z)\right)
 $$
 都满足微分方程
 $$
@@ -2322,52 +2337,54 @@ $$
 
 因此高斯恒等式 [143, 式 102]
 $$
-F\left(\begin{array}{c}a\\2a,2b\end{array}\bigg| z\right) = F\left(\begin{array}{c}a+b+\tfrac12\\a,b\end{array}\bigg| 4z(1-z)\right) \tag{5.110}
+F\left(\begin{array}{c}2a,2b\\ a+b+\frac12\end{array}\bigg| z\right)
+= F\left(\begin{array}{c}a,b\\ a+b+\frac12\end{array}\bigg| 4z(1-z)\right)\tag{5.110}
 $$
 
 必定成立。特别地，
 $$
-F\left(\begin{array}{c}a\\2a,2b\end{array}\bigg| \frac12\right) =F\left(\begin{array}{c}a+b+\tfrac12\\a,b\end{array}\bigg| 1\right), \tag{5.111}
+F\left(\begin{array}{c}2a,2b\\ a+b+\frac12\end{array}\bigg| \frac12\right)
+= F\left(\begin{array}{c}a,b\\ a+b+\frac12\end{array}\bigg| 1\right)\tag{5.111}
 $$
 只要两个无穷级数都收敛，上式就成立。
 
 超几何函数的每一个新恒等式都能导出关于二项式系数的结论，这个恒等式也不例外。我们来考察求和式
 $$
-\sum_{k}\binom{m}{n-k}\binom{m+k}{n+1}\left(-\frac12\right)^k,\quad \text{integer } m\ge n\ge 0.
+\sum_{k\le m}\binom{m-k}{n}\binom{m+n+1}{k}\left(-\frac12\right)^k,\quad \text{integer } m\ge n\ge 0.
 $$
 
 当 $0\le k\le m-n$ 时项非零，和之前一样，经过一点细致的极限处理，我们可以把这个和表示成超几何函数
 $$
-\lim_{\varepsilon\to 0} \binom{m}{n} F\left(\begin{array}{c}n-m,\,-m\\-n-m+\alpha\varepsilon-1\end{array}\bigg| \frac12\right).
+\lim_{\varepsilon\to 0} \binom{m}{n} F\left(\begin{array}{c}n-m,-n-m-1\alpha\varepsilon\\-m+\varepsilon\end{array}\bigg| \frac12\right).
 $$
 
-$\alpha$ 的值不影响极限，因为非正的上参数 $n-m$ 会提前截断求和。我们可以取 $\alpha=2$，这样式 $(5.111)$ 就能适用。
-现在可以计算该极限，因为等式右边是式 $(5.92)$ 的特殊情形。结果可化简为：
+$\alpha$ 的值不影响极限，因为非正的上参数 $n-m$ 会提前截断求和。我们可以取 $\alpha=2$，这样式 $(5.111)$ 就能适用。现在可以计算该极限，因为等式右边是式 $(5.92)$ 的特殊情形。结果可化简为：
 $$
-\sum_{k}\binom{m}{n-k}\binom{m+k}{n+1}\left(-\frac12\right)^k \\
-= \binom{m}{\frac{m+n}{2}} \frac{2^{n-m}}{[m+n\text{ is even}]},\quad \text{integer } m\ge n\ge 0. \tag{5.112}
+\sum_{k\le m}\binom{m-k}{n}\binom{m+n+1}{k}\left(-\frac12\right)^k \\
+= \binom{(m+n)/2}{n} 2^{n-m}[m+n\text{ is even}],\quad \text{integer } m\ge n\ge 0. \tag{5.112}
 $$
 
-如习题 54 所示。例如，当 $m=5$，$n=2$ 时，我们得到 $\binom{5}{2}\binom{8}{0}-\binom{5}{1}\binom{8}{1}/2+\binom{5}{0}\binom{8}{2}/4-\binom{5}{-1}\binom{8}{3}/18 = 10 - 24 + 21 - 7 = 0;$ 当 $m=4$，$n=2$ 时，两边都等于 $\dfrac{3}{4}$。
+如习题 54 所示。例如，当 $m=5$，$n=2$ 时，我们得到 $\binom{5}{2}\binom{8}{0}-\binom{4}{2}\binom{8}{1}/2+\binom{3}{2}\binom{8}{2}/4-\binom{2}{2}\binom{8}{3}/18 = 10 - 24 + 21 - 7 = 0;$ 当 $m=4$，$n=2$ 时，两边都等于 $\dfrac{3}{4}$。
 
 我们还能找到当 $z=-1$ 时，式 $(5.110)$ 给出二项式和的情形，不过这些形式相当奇特。若令 $a=\frac16-\frac n3$，$b=-n$，就会得到一个形式复杂的公式
 ```math
 F\left(\begin{array}{c}
-\frac13-\frac23n,\,-2n\\
+\frac13-\frac23n,-2n\\
 \frac23-\frac43n
 \end{array}\bigg| -1\right)
 =
 F\left(\begin{array}{c}
-\frac16-\frac13n,\,-n\\
+\frac16-\frac13n,-n\\
 \frac23-\frac43n
 \end{array}\bigg| -8\right).
 ```
 
 当 $n\not\equiv2\pmod3$ 时，这些超几何函数是非退化的多项式；并且参数经过巧妙选取，使得左边可以利用式 $(5.94)$ 计算。由此我们得到一个相当惊人的结果：
 $$
-\sum_{k}\binom{n}{k}\frac{\binom{\frac13n-\frac16}{k}}{\binom{\frac43n-\frac23}{k}}8^k
-= \frac{\binom{2n}{n}}{\binom{\frac43n-\frac23}{n}},\quad
-\text{integer } n\ge0,\ n\not\equiv2\pmod3. \tag{5.113}
+\begin{aligned}
+\sum_{k} &\binom{n}{k}\binom{\frac13n-\frac16}{k}8^k\bigg/\binom{\frac43n-\frac23}{k} \\
+&= \binom{2n}{n}\bigg/\binom{\frac43n-\frac23}{n},\quad \text{integer } n\ge0,\ n\not\equiv2\pmod3. \tag{5.113}
+\end{aligned}
 $$
 
 这是我们见过的最令人震惊的二项式系数恒等式。这个恒等式的小例子甚至都不容易手动验证。（结果表明，当 $n=3$ 时，两边确实相等。）但这个恒等式当然完全没用；它肯定永远不会出现在实际问题中。

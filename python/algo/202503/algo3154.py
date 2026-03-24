@@ -1,4 +1,5 @@
 from functools import cache
+from math import comb
 
 # 动态规划 -  多维 DP
 class Solution:
@@ -16,3 +17,14 @@ class Solution:
             return res
         
         return dfs(1, 0, True)
+
+    def waysToReachStair2(self, k: int) -> int:
+        # 复习 组合数学
+        ans = 0
+        for j in range(32):
+            i = pow(2, j)
+            m = i - k
+            if 0 <= m <= j+1:
+                ans += comb(j+1, m)
+            elif m > k + 1: break
+        return ans

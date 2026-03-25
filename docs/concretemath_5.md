@@ -2433,7 +2433,7 @@ $$
 
 $$\sum F\!\left(\begin{matrix}a_1,\dots,a_m\\b_1,\dots,b_n\end{matrix}\bigg|\,z\right)_k \delta k = c F\!\left(\begin{matrix}A_1,\dots,A_M\\B_1,\dots,B_N\end{matrix}\bigg|\,Z\right)_k + C, \tag{5.116}$$
 
-给定 $a_1,\dots,a_m,b_1,\dots,b_n$ 以及 $z$。如果存在这样的常数 $c,A_1,\dots,A_M,B_1,\dots,B_N,Z$，我们就称给定函数 $F(a_1,\dots,a_m;b_1,\dots,b_n;z)_k$ 是超几何项可求和的。高斯珀算法要么能求出这些未知常数，要么能证明这类常数不存在。
+给定 $a_1,\dots,a_m,b_1,\dots,b_n$ 以及 $z$。如果存在这样的常数 $c,A_1,\dots,A_M,B_1,\dots,B_N,Z$，我们就称给定函数 $F(a_1,\dots,a_m;b_1,\dots,b_n;z)_k$ 是*超几何项可求和*的。高斯珀算法要么能求出这些未知常数，要么能证明这类常数不存在。
 
 一般地，如果 $t(k+1)/t(k)$ 是关于 $k$ 的有理函数且不恒为零，我们就称 $t(k)$ 为超几何项。这本质上意味着 $t(k)$ 是形如 $(5.115)$ 这样的项乘以一个常数。（然而在零点处会有技术细节，因为我们希望当 $k$ 为负数，或者 $(5.115)$ 中某个 $b$ 为零或负整数时，$t(k)$ 仍然有定义。严格来说，最一般的超几何项是将 $(5.115)$ 乘以一个非零常数再乘以 $0$ 的幂，然后将分子与分母中的零点相消。习题 12 中的例子有助于阐明这一通用规则。）
 
@@ -2441,10 +2441,10 @@ $$\sum F\!\left(\begin{matrix}a_1,\dots,a_m\\b_1,\dots,b_n\end{matrix}\bigg|\,z\
 $$\frac{t(k+1)}{t(k)} = \frac{p(k+1)}{p(k)} \frac{q(k)}{r(k+1)}, \tag{5.117}$$
 
 其中 $p, q, r$ 是多项式，且满足以下条件：
-$$(k+\alpha)\mid q(k) \text{ and } (k+\beta)\mid r(k) \implies \alpha-\beta \text{ is not a positive integer}. \tag{5.118}$$
+$$(k+\alpha)\mid q(k) \text{ and } (k+\beta)\mid r(k) \\ \implies \alpha-\beta \text{ is not a positive integer}. \tag{5.118}$$
 
 这个条件很容易满足：我们先临时令 $p(k)=1$，并将 $q(k)$ 和 $r(k+1)$ 分别设为项比的分子和分母，再将它们分解为一次因式。例如，如果 $t(k)$ 具有 $(5.115)$ 的形式，我们从分解式 $q(k)=(k+a_1)\dots(k+a_m)z$ 和 $r(k)=(k+b_1-1)\dots(k+b_n-1)k$ 开始。接着检查是否违反了 $(5.118)$。如果 $q$ 和 $r$ 分别含有因式 $(k+\alpha)$ 和 $(k+\beta)$ 且满足 $\alpha-\beta=N>0$，就将这两个因式从 $q$ 和 $r$ 中约去，并将 $p(k)$ 替换为
-$$p(k)(k+\alpha-1)^{\overline{N-1}} = p(k)(k+\alpha-1)(k+\alpha-2)\dots(k+\beta+1). \tag{5.119}$$
+$$p(k)(k+\alpha-1)^{\underline{N-1}} = p(k)(k+\alpha-1)(k+\alpha-2)\dots(k+\beta+1). \tag{5.119}$$
 
 新的 $p,q,r$ 仍然满足 $(5.117)$，我们可以重复这一过程直到 $(5.118)$ 成立。我们马上就会明白 $(5.118)$ 为什么很重要。
 
@@ -2474,7 +2474,7 @@ $$p(k)g(k+1)g(k) = q(k)f(k+1)g(k) - r(k)g(k+1)f(k),$$
 若令 $k = -\beta$ 与 $k = -\beta - N$，则可得
 $$r(-\beta)g(1-\beta)f(-\beta) = 0 = q(-\beta-N)f(1-\beta-N)g(-\beta-N).$$
 
-由于 $f$ 与 $g$ 无公共根，故 $f(-\beta)=0$ 且 $f(1-\beta-N)=0$。同样有 $g(1-\beta)=0$ 且 $g(-\beta-N)=0$，否则 $g(k)$ 将含有因式 $(k+\beta-1)$ 或 $(k+\beta+N)$，与 $N$ 的极大性矛盾。因此
+由于 $f$ 与 $g$ 无公共根，故 $f(-\beta)\ne 0$ 且 $f(1-\beta-N)\ne 0$。同样有 $g(1-\beta)\ne 0$ 且 $g(-\beta-N)\ne 0$，否则 $g(k)$ 将含有因式 $(k+\beta-1)$ 或 $(k+\beta+N)$，与 $N$ 的极大性矛盾。因此
 $$r(-\beta) = q(-\beta-N) = 0.$$
 但这与条件 (5.118) 矛盾。因此 $s(k)$ 必定是一个多项式。
 
@@ -2490,12 +2490,12 @@ $$
 \text {where } Q(k) = q(k) - r(k) \text { and } R(k) = q(k) + r(k). \tag{5.124}
 $$
 
-若 $s(k)$ 的次数为 $d$，则和式 $s(k+1) + s(k) = 2\alpha_d k^d + \cdots$ 的次数同样为 $d$；而差式 $s(k+1) - s(k) = \Delta s(k) = d\alpha_d k^{d-1} + \cdots$ 的次数为 $d-1$。（零多项式的次数可约定为 $-1$。）
+若 $s(k)$ 的次数为 $d$，则和式 $s(k+1) + s(k) = 2\alpha_d k^d + \cdots$ 的次数同样为 $d$；而差式 $s(k+1) - s(k) = \Delta s(k) = d\alpha_d k^{d-1} + \cdots$ 的次数为 $d-1$。（零多项式的次数可约定为 $-1$。）记 $\deg(P)$ 为多项式 $P$ 的次数。若 $\deg(Q) \ge \deg(R)$，则式 $(5.124)$ 右端的次数为 $\deg(Q) + d$，因此必有 $d = \deg(p) - \deg(Q)$。反之，若 $\deg(Q) < \deg(R) = d'$，可设 $Q(k) = \lambda' k^{d'-1} + \cdots$ 与 $R(k) = \lambda k^{d'} + \cdots$（其中 $\lambda \neq 0$），则式 $(5.124)$ 右端可表示为
+$$
+(2\lambda_0 \alpha_d + \lambda d \alpha_d)k^{d+d'-1} + \cdots.
+$$
 
-记 $\deg(P)$ 为多项式 $P$ 的次数。若 $\deg(Q) \ge \deg(R)$，则式 $(5.124)$ 右端的次数为 $\deg(Q) + d$，因此必有 $d = \deg(p) - \deg(Q)$。反之，若 $\deg(Q) < \deg(R) = d_0$，可设 $Q(k) = \lambda_0 k^{d_0-1} + \cdots$ 与 $R(k) = \lambda k^{d_0} + \cdots$（其中 $\lambda \neq 0$），则式 $(5.124)$ 右端可表示为
-$$(2\lambda_0 \alpha_d + \lambda d \alpha_d)k^{d+d_0-1} + \cdots.$$
-
-因此存在两种可能：要么 $2\lambda_0 + \lambda d = 0$ 且 $d = \deg(p) - \deg(R) + 1$；要么 $2\lambda_0 + \lambda d \neq 0$ 且 $d > \deg(p) - \deg(R) + 1$。仅当 $-2\lambda_0/\lambda$ 是大于 $\deg(p) - \deg(R) + 1$ 的整数 $d$ 时，才需要检验第二种情况。
+因此存在两种可能：要么 $2\lambda' + \lambda d = 0$ 且 $d = \deg(p) - \deg(R) + 1$；要么 $2\lambda' + \lambda d \neq 0$ 且 $d > \deg(p) - \deg(R) + 1$。仅当 $-2\lambda'/\lambda$ 是大于 $\deg(p) - \deg(R) + 1$ 的整数 $d$ 时，才需要检验第二种情况。
 
 至此我们已掌握足够的结论来执行戈斯珀两步算法的第二步：只要方程 (5.122) 存在多项式解，我们最多尝试两个 $d$ 的值就能求出 $s(k)$。若 $s(k)$ 存在，将其代入式 (5.121) 即可得到 $T$；若不存在，则证明 $t(k)$ 无法用超几何项求和。
 
@@ -2503,7 +2503,7 @@ $$(2\lambda_0 \alpha_d + \lambda d \alpha_d)k^{d+d_0-1} + \cdots.$$
 $$\sum \binom{n}{k} (-1)^k \delta k$$
 
 对任意固定的 $n$，我们来求
-$t(k) = \dbinom{n}{k} (-1)^k = \dfrac{n! (-1)^k}{k!(n-k)!}.$
+$$t(k) = \dbinom{n}{k} (-1)^k = \dfrac{n! (-1)^k}{k!(n-k)!}.$$
 
 第一步是将项的比值化为所需的形式 (5.117)，我们有
 $$
@@ -2512,7 +2512,7 @@ $$
 
 因此我们直接取 $p(k)=1$，$q(k)=k-n$，$r(k)=k$。这样选取的 $p,q,r$ 满足条件 (5.118)，除非 $n$ 是负整数；我们不妨假设 $n$ 非负。
 
-现在进入第二步。根据式 $(5.124)$，我们考察多项式 $Q(k)=-n$ 与 $R(k)=2k-n$。由于 $R$ 的次数大于 $Q$，需分两种情形：要么 $d = \deg(p)-\deg(R)+1$，即 $d=0$；要么 $d=-2\lambda_0/\lambda$，其中 $\lambda_0=-n$，$\lambda=2$，故 $d=n$。第一种情形更简便，因为不要求 $n$ 为正整数，因此先尝试；只有第一种情形失败时，才需要检验另一个 $d$。假设 $d=0$，则 $s(k)$ 为常数 $\alpha_0$，方程 $(5.122)$ 简化为
+现在进入第二步。根据式 $(5.124)$，我们考察多项式 $Q(k)=-n$ 与 $R(k)=2k-n$。由于 $R$ 的次数大于 $Q$，需分两种情形：要么 $d = \deg(p)-\deg(R)+1$，即 $d=0$；要么 $d=-2\lambda'/\lambda$，其中 $\lambda'=-n$，$\lambda=2$，故 $d=n$。第一种情形更简便，因为不要求 $n$ 为正整数，因此先尝试；只有第一种情形失败时，才需要检验另一个 $d$。假设 $d=0$，则 $s(k)$ 为常数 $\alpha'$，方程 $(5.122)$ 简化为
 $$1 = (k - n)\alpha_0 - k\alpha_0.$$
 
 因此我们取 $\alpha_0 = -1/n$，该值满足方程，且可得
@@ -2523,9 +2523,9 @@ T(k) = \frac{r(k) s(k) t(k)}{p(k)}  \\
 $$
 这正是我们想要验证的结果。
 
-如果用同样的方法求不定和 $\displaystyle\sum\binom{n}{k}\delta k$（不带 $(-1)^k$），过程几乎完全一样，只是此时 $q(k)=n-k$；于是 $Q(k)=n-2k$ 的次数会比 $R(k)=n$ 更高，我们会得到 $d=\deg(p)-\deg(Q)=-1$ 这个不可能的值。（多项式 $s(k)$ 次数不能为负，因为它不能是零多项式。）因此 $\displaystyle\binom{n}{k}$ 无法用超几何项求和。
+如果用同样的方法求不定和 $\sum\binom{n}{k}\delta k$（不带 $(-1)^k$），过程几乎完全一样，只是此时 $q(k)=n-k$；于是 $Q(k)=n-2k$ 的次数会比 $R(k)=n$ 更高，我们会得到 $d=\deg(p)-\deg(Q)=-1$ 这个不可能的值。（多项式 $s(k)$ 次数不能为负，因为它不能是零多项式。）因此 $\binom{n}{k}$ 无法用超几何项求和。
 
-然而，一旦排除了不可能，剩下的无论多么难以置信——都必定是真相（引自 S. Holmes [83]）。我们在第一步定义 $p,q,r$ 时，忽略了 $n$ 可能是负整数的情况。如果它真的是呢？令 $n=-N$，其中 $N$ 为正数。那么 $\displaystyle\sum\binom{n}{k}\delta k$ 的项之比为
+然而，一旦排除了不可能，剩下的无论多么难以置信——都必定是真相（引自 S. Holmes [83]）。我们在第一步定义 $p,q,r$ 时，忽略了 $n$ 可能是负整数的情况。如果它真的是呢？令 $n=-N$，其中 $N$ 为正数。那么 $\sum\binom{n}{k}\delta k$ 的项之比为
 $$
 \frac{t(k+1)}{t(k)} = \frac{-(k+N)}{k+1} = \frac{p(k+1)}{p(k)} \frac{q(k)}{r(k+1)}
 $$
@@ -2536,10 +2536,9 @@ $$k + 1 = -\bigl((k + 1)\alpha_1 + \alpha_0\bigr) - \bigl(k\alpha_1 + \alpha_0\b
 令 $k$ 的系数与常数项分别相等，可得
 $$1 = -\alpha_1 - \alpha_1; \quad 1 = -\alpha_1 - \alpha_0 - \alpha_0;$$
 
-因此 $s(k) = -\dfrac{1}{2}k - \dfrac{1}{4}$ 是一个解，且
+因此 $s(k) = -\frac{1}{2}k - \frac{1}{4}$ 是一个解，且
 $$
-T(k) = \frac{1 \cdot \left(-\dfrac{1}{2}k - \dfrac{1}{4}\right) \cdot \dbinom{-2}{k}}{k + 1} \\
-= (-1)^{k-1} \frac{2k + 1}{4}.
+T(k) = \frac{1 \cdot \left(-\frac{1}{2}k - \dfrac{1}{4}\right) \cdot \binom{-2}{k}}{k + 1} = (-1)^{k-1} \frac{2k + 1}{4}.
 $$
 
 这就是我们想要的和式吗？没错，验证成立：
@@ -2547,12 +2546,13 @@ $$(-1)^k\frac{2k+3}{4}-(-1)^{k-1}\frac{2k+1}{4}=(-1)^k(k+1)=\binom{-2}{k}.$$
 
 顺便一提，我们可以添加上限，把这个求和公式写成另一种形式：
 $$
-\sum_{k<m}\binom{-2}{k}
-= (-1)^{k-1}\frac{2k+1}{4}\bigg|_{0}^{m}    \\
-= \frac{(-1)^{m-1}}{2}\left(m + \frac{1-(-1)^m}{2}\right) \\
-= (-1)^{m-1}\left\lceil\frac{m}{2}\right\rceil,\quad \text{整数 }m\ge 0.
+\begin{aligned}
+\sum_{k<m}\binom{-2}{k} &= (-1)^{k-1}\frac{2k+1}{4}\bigg|_{0}^{m}    \\
+&= \frac{(-1)^{m-1}}{2}\left(m + \frac{1-(-1)^m}{2}\right) \\
+&= (-1)^{m-1}\left\lceil\frac{m}{2}\right\rceil,\quad \text{integer }m\ge 0.
+\end{aligned}
 $$
-这种表示隐藏了 $\dbinom{-2}{k}$ 是超几何可求和的事实，因为 $\lceil m/2\rceil$ 并不是超几何项。（见习题12。）
+这种表示隐藏了 $\binom{-2}{k}$ 是超几何可求和的事实，因为 $\lceil m/2\rceil$ 并不是超几何项。（见习题12。）
 
 若对某个整数 $k$ 有 $p(k)=0$，式 $(5.121)$ 的分母就可能出现问题。习题97会介绍这种情况下的处理方法。
 

@@ -748,8 +748,159 @@ $$
 
 事实上，习题 9.49 证明：临界的 $n$ 值要么是 $\lfloor e^{100-\gamma}\rfloor$，要么是 $\lceil e^{100-\gamma}\rceil$。我们可以想象蠕虫 W 在漫长爬行后终于冲过终点、取得胜利时的场景，这让看守者 K 极为懊恼——而这距离它开始爬行已经过去了大约 287 万亿亿亿个世纪。（此时橡皮筋已经被拉伸到超过 $10^{27}$ 光年长，上面的分子早已被拉得极度分散。）
 
+## 6.4 HARMONIC SUMMATION 调和求和
+现在我们来看一些包含调和数的求和公式，先回顾一下第2章学过的几个结论。我们在式(2.36)和(2.57)中已经证明：
+$$
+\sum_{k=1}^n H_k = (n+1)H_n - n; \tag{6.67}
+$$
+$$
+\sum_{k=1}^n kH_k = \frac{n(n+1)}{2}H_n - \frac{n(n+1)}{4}. \tag{6.68}
+$$
 
+让我们大胆地求解一个更一般的求和式，它把上面两个式子都作为特例包含在内：当 $m$ 为非负整数时，求和
+$$
+\sum_{0\le k<n}\binom{k}{m} H_k
+$$
+的值是多少？
 
+在第 2 章中对式 (6.67) 和 (6.68) 最有效的方法叫作*分部求和*。我们把被加项写成 $u(k)\Delta v(k)$ 的形式，并应用恒等式
+$$
+\sum_a^b u(x)\Delta v(x)\,\delta x
+= u(x)v(x)\bigg|_a^b - \sum_a^b v(x+1)\Delta u(x)\,\delta x. \tag{6.69}
+$$
+还记得吗？我们现在要处理的这个和 $\sum_{0\le k<n}\binom{k}{m} H_k$ 非常适合用这个方法，因为可以令
+$$
+\begin{aligned}
+u(k)&=H_k, & \Delta u(k)&=H_{k+1}-H_k=\frac1{k+1}; \\
+v(k)&=\binom{k+1}{m+1}, & \Delta v(k)&=\binom{k+2}{m+1}-\binom{k+1}{m+1}=\binom{k+1}{m}.
+\end{aligned}
+$$
 
+（换句话说，调和数的差分很简单，而二项式系数的逆差分很简单，因此方法可行。）代入 (6.69) 得到
+$$
+\begin{aligned}
+\sum_{0\le k<n}\binom{k}{m} H_k = \sum_0^n \binom{x}{m} H_x\,\delta x &= \binom{x}{m+1} H_x\bigg|_0^n - \sum_0^n \binom{x+1}{m+1} \frac{\delta x}{x+1}\, \\
+&= \binom{n}{m+1} H_n - \sum_{0\le k<n}\binom{k+1}{m+1}\frac1{k+1}.
+\end{aligned}
+$$
+剩下的这个和很容易计算，因为可以用我们熟悉的式 (5.5) 把 $(k+1)^{-1}$ 吸收进去：
+$$
+\sum_{0\le k<n}\binom{k+1}{m+1}\frac1{k+1} = \sum_{0\le k<n}\binom{k}{m}\frac1{m+1} = \binom{n}{m+1}\frac1{m+1}.
+$$
+
+于是我们就得到了所求的答案：
+$$
+\sum_{0\le k<n}\binom{k}{m} H_k
+= \binom{n+1}{m+1}\left( H_n - \frac1{m+1} \right). \tag{6.70}
+$$
+（当 $m=0$ 和 $m=1$ 时，该式与 (6.67)、(6.68) 吻合得很好。）
+
+下一个求和例子用到除法而不是乘法：我们来计算
+$$
+S_n = \sum_{k=1}^n \frac{H_k}{k}.
+$$
+如果按定义展开 $H_k$，可以得到二重和：
+$$
+S_n = \sum_{1\le j\le k\le n}\frac1{j\cdot k}.
+$$
+这时第 2 章的另一个方法可以派上用场；式 (2.33) 告诉我们
+$$
+S_n = \frac12\left( \left( \sum_{k=1}^n \frac1k \right)^2 + \sum_{k=1}^n \frac1{k^2} \right)
+= \frac12\bigl( H_n^2 + H_n^{(2)} \bigr). \tag{6.71}
+$$
+事实上，如果尝试用分部求和，我们也能用另一种途径得到这个结果（见习题 26）。
+
+现在我们来挑战一个更难的问题 [354]，它无法用分部求和直接解决：
+$$
+U_n = \sum_{k\ge1}\binom{n}{k}\frac{(-1)^{k-1}}{k}(n-k)^n,\quad \text{integer }n\ge1.
+$$
+（这个求和式里也没有明显出现调和数，但谁也说不准它们什么时候会突然冒出来。）
+
+我们将用两种方法解决这个问题：一种是硬算到底，另一种是巧妙（或者说运气好）的方法。首先是硬算派的思路。我们用二项式定理展开 $(n-k)^n$，让分母里麻烦的 $k$ 能和分子结合：
+$$
+U_n = \sum_{k\ge1}\binom{n}{k}\frac{(-1)^{k-1}}{k}
+       \sum_j\binom{n}{j}(-k)^j n^{n-j} \\
+     = \sum_j\binom{n}{j}(-1)^{j-1}n^{n-j}
+       \sum_{k\ge1}\binom{n}{k}(-1)^k k^{j-1}.
+$$
+
+这看起来一团乱麻，其实不然：内层和里的 $k^{j-1}$ 是关于 $k$ 的多项式，而恒等式 (5.40) 告诉我们，这其实就是在对这个多项式取 **$n$ 阶差分**。差不多是这样；不过我们先要整理几点：
+第一，如果 $j=0$，$k^{j-1}$ 就不是多项式了，所以要把这一项单独拆分处理。
+第二，$n$ 阶差分公式里本来有 $k=0$ 这一项，我们这里漏掉了；而当 $j=1$ 时这一项不为零，所以最好把它补回来（再减掉）。
+结果是：
+$$
+\begin{aligned}
+U_n &= \sum_{j\ge1}\binom{n}{j}(-1)^{j-1}n^{n-j}
+       \sum_{k\ge0}\binom{n}{k}(-1)^k k^{j-1} \\
+    &\quad - \sum_{j\ge1}\binom{n}{j}(-1)^{j-1}n^{n-j}
+       \binom{n}{0}0^{j-1}
+     - \binom{n}{0}n^n
+       \sum_{k\ge1}\binom{n}{k}\frac{(-1)^k}{k}.
+\end{aligned}
+$$
+好了，现在第一行（唯一剩下的二重和）等于 **0**：它是次数小于 $n$ 的多项式的 $n$ 阶差分的线性组合，而这样的 $n$ 阶差分都是 0。
+第二行只有在 $j=1$ 时不为 0，等于 $-n^n$。
+所以只剩下第三行还有点麻烦。我们已经把原问题化简成一个简单得多的和：
+$$
+U_n = n^n (T_n - 1),
+\quad\text{其中}\quad
+T_n = \sum_{k\ge1}\binom{n}{k}\frac{(-1)^{k-1}}{k}. \tag{6.72}
+$$
+举个例子： $U_3 = \binom31\frac81 - \binom32\frac12 = \frac{45}2$；$T_3 = \binom31\frac11 - \binom32\frac12 + \binom33\frac13 = \frac{11}6$；于是 $U_3=27(T_3-1)$，和上面一致。
+
+那怎么计算 $T_n$ 呢？一种方法是把 $\dbinom nk$ 拆成 $\dbinom{n-1}k+\dbinom{n-1}{k-1}$，得到 $T_n$ 关于 $T_{n-1}$ 的简单递推。
+但还有一个更有启发性的方法：我们在 (5.41) 里见过一个很像的公式：
+$$
+\sum_k\binom{n}{k}\frac{(-1)^k}{x+k}
+= \frac{n!}{x(x+1)\dots(x+n)}.
+$$
+把 $k=0$ 这一项去掉，再令 $x=0$，得到的就是 $-T_n$。于是：
+$$
+\begin{aligned}
+T_n &= \left(\frac1x - \frac{n!}{x(x+1)\cdots(x+n)}\right)\bigg|_{x=0} \\
+     &= \left(\frac{(x+1)\cdots(x+n)-n!}{x(x+1)\cdots(x+n)}\right)\bigg|_{x=0} \\
+    &= \left(\frac{x\genfrac{[}{]}{0pt}{}{n+1}{n+1}+\cdots+x\genfrac{[}{]}{0pt}{}{n+1}{2}+\genfrac{[}{]}{0pt}{}{n+1}{1}-n!}{x(x+1)\cdots(x+n)}\right)\bigg|_{x=0}
+     = \frac1{n!}\genfrac{[}{]}{0pt}{}{n+1}{2}.
+\end{aligned}
+$$
+
+（我们用到了展开式 (6.11)：$(x+1)\cdots(x+n)=x^{\overline{n+1}}/x$；因为 $\displaystyle\left[\begin{array}{c}n+1\\1\end{array}\right]=n!$，所以可以把分子中的 $x$ 约去。）而由式 (6.58) 我们已知 $\displaystyle\left[\begin{array}{c}n+1\\2\end{array}\right]=n!H_n$，因此 $T_n=H_n$，于是得到答案：
+$$
+U_n=n^n(H_n-1).\tag{6.73}
+$$
+
+这是第一种方法。另一种方法是尝试计算一个更一般的和式：
+$$
+U_n(x,y)=\sum_{k\ge1}\binom{n}{k}\frac{(-1)^{k-1}}{k}(x+ky)^n,\quad 整数\ n\ge0;\tag{6.74}
+$$
+原问题中的 $U_n$ 就是其特殊情形 $U_n(n,-1)$。我们之所以尝试推广，是因为之前的推导“舍弃”了原题的大部分细节，这些细节想必无关紧要，因为 $n$ 阶差分已经将它们消去了。
+
+我们可以对之前的推导稍作修改，求出 $U_n(x,y)$ 的值；也可以把 $(x+ky)^n$ 写成 $(x+ky)^{n-1}(x+ky)$，再将 $\binom{n}{k}$ 拆分为 $\binom{n-1}{k}+\binom{n-1}{k-1}$，从而得到递推关系：
+$$
+U_n(x,y)=xU_{n-1}(x,y)+\frac{x^n}{n}+yx^{n-1};\tag{6.75}
+$$
+这个递推式可以用求和因子轻松求解（见习题5）。
+
+不过最简单的是使用第2章中帮过我们大忙的另一个技巧：求导。对 $y$ 求导后，$U_n(x,y)$ 会多出一个因子 $k$，正好与分母中的 $k$ 抵消，得到的和式非常简洁：
+$$
+\begin{aligned}
+\frac{\partial}{\partial y}U_n(x,y)&=\sum_{k\ge1}\binom{n}{k}(-1)^{k-1}n(x+ky)^{n-1} \\
+&=\binom{n}{0}nx^{n-1}-\sum_{k\ge0}\binom{n}{k}(-1)^kn(x+ky)^{n-1} =nx^{n-1}.
+\end{aligned}
+$$
+
+（次数小于 $n$ 的多项式的 $n$ 阶差分再次消失了。）
+
+我们已经证明，$U_n(x,y)$ 对 $y$ 的导数为 $nx^{n-1}$，与 $y$ 无关。一般地，若 $f'(y)=c$，则 $f(y)=f(0)+cy$；因此必有
+$$
+U_n(x,y)=U_n(x,0)+nx^{n-1}y.
+$$
+
+接下来只需确定 $U_n(x,0)$。而 $U_n(x,0)$ 正是 $x^n$ 乘以我们在 (6.72) 中已经求得的和 $T_n=H_n$。于是，一般和式 (6.74) 的闭式为：
+$$
+U_n(x,y)=x^n H_n+nx^{n-1}y.\tag{6.76}
+$$
+
+特别地，原问题的解即为 $U_n(n,-1)=n^n(H_n-1)$。
 
 

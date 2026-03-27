@@ -1074,6 +1074,184 @@ $$
 公式 (6.89) 不仅给出了 $H_\infty^{(2n)}$ 的闭式，还揭示了 $B_{2n}$ 的大致量级——当 $n$ 很大时，$H_\infty^{(2n)}$ 非常接近 1。
 同时它也说明：对所有 $n>0$，有 $(-1)^{n-1}B_{2n}>0$，即非零伯努利数的符号正负交替。
 
+不仅如此，伯努利数同样出现在正切函数的系数中：
+$$
+\tan z=\frac{\sin z}{\cos z}
+=\sum_{n\ge0} (-1)^{n-1}4^n(4^n-1)B_{2n}\frac{z^{2n-1}}{(2n)!},\tag{6.92}
+$$
+其余三角函数的展开式中也会出现伯努利数（见习题72）。由式 $(6.92)$ 可得到伯努利数的另一重要性质：
+$$
+T_{2n-1}=(-1)^{n-1}\frac{4^n(4^n-1)}{2n}B_{2n}
+$$
+为正整数。$(6.93)$
 
+例如取值：
+
+| $n$ | $1$ | $3$ | $5$ | $7$ | $9$ | $11$ | $13$ |
+|-----|-----|-----|-----|-----|-----|------|------|
+| $T_n$ | $1$ | $2$ | $16$ | $272$ | $7936$ | $353792$ | $22368256$ |
+
+这些 $T_n$ 被称为**正切数**。
+
+沿用 B. F. Logan 的思路，考察如下幂级数即可证明式 $(6.93)$：
+$$
+\begin{aligned}
+\frac{\sin z+x\cos z}{\cos z-x\sin z}
+&=x+(1+x^2)z+(2x^3+2x)\frac{z^2}{2}+(6x^4+8x^2+2)\frac{z^3}{6}+\cdots\\
+&=\sum_{n\ge0}T_n(x)\frac{z^n}{n!}.\tag{6.94}
+\end{aligned}
+$$
+
+其中 $T_n(x)$ 是关于 $x$ 的多项式；令 $x=0$ 可得 $T_n(0)=T_n$，即第 $n$ 个正切数。
+对式 $(6.94)$ 关于 $x$ 求导：
+$$
+\frac{1}{(\cos z - x\sin z)^2}
+=\sum_{n\ge0} T_n'(x)\frac{z^n}{n!};
+$$
+再对 $z$ 求导：
+$$
+\frac{1+x^2}{(\cos z - x\sin z)^2}
+=\sum_{n\ge1} T_n(x)\frac{z^{n-1}}{(n-1)!}
+=\sum_{n\ge0} T_{n+1}(x)\frac{z^n}{n!}.
+$$
+（自行验算即可发现化简抵消过程十分优美。）
+
+由此得到递推关系：
+$$
+T_{n+1}(x)=(1+x^2)\,T_n'(x),\quad T_0(x)=x. \tag{6.95}
+$$
+这组简洁递推表明：$T_n(x)$ 的各项系数均为非负整数。同时易证 $T_n(x)$ 次数为 $n+1$，系数奇偶位置交替取零、取正值。因此 $T_{2n+1}(0)=T_{2n+1}$ 必为正整数，印证式 $(6.93)$ 的结论。
+
+递推式 $(6.95)$ 提供了一种借助正切数计算伯努利数的简便途径，全程仅需整数基础运算；相比之下，定义递推 $(6.79)$ 需要处理复杂的分数算术。
+
+若需要计算从 $a$ 到 $b-1$ 的 $m$ 次幂和（而非从 $0$ 到 $n-1$），根据第2章理论有：
+$$
+\sum_{k=a}^{b-1} k^m
+=\sum_a^b x^m \delta x
+=S_m(b)-S_m(a). \tag{6.96}
+$$
+
+考察负数项求和可得到有趣推论：当 $m>0$ 时
+$$
+\sum_{k=-n+1}^{-1} k^m
+=(-1)^m \sum_{k=0}^{n-1} k^m,
+$$
+于是
+$$
+S_m(0)-S_m(-n+1)
+=(-1)^m\big(S_m(n)-S_m(0)\big).
+$$
+又 $S_m(0)=0$，因此得到恒等式：
+$$
+S_m(1-n)=(-1)^{m+1}S_m(n),\quad m>0. \tag{6.97}
+$$
+
+因此 $S_m(1)=0$。若将多项式 $S_m(n)$ 写为因式形式，它必定含有因子 $n$ 与 $(n-1)$，因其在 $0$ 与 $1$ 处取零点。
+一般而言，$S_m(n)$ 是次数为 $m+1$ 的多项式，首项为 $\dfrac{1}{m+1}n^{m+1}$。
+
+此外，在式 $(6.97)$ 中令 $n=\dfrac12$，可推得
+$$
+S_m\left(\frac12\right)=(-1)^{m+1}S_m\left(\frac12\right);
+$$
+当 $m$ 为偶数时必有 $S_m\left(\frac12\right)=0$，于是 $\left(n-\dfrac12\right)$ 为额外因式。
+这也解释了第 2 章中简洁因式分解
+$$
+S_2(n)=\frac13n\left(n-\frac12\right)(n-1)
+$$
+的由来；依靠上述分析即可直接判定结构，无需逐项计算。
+
+进一步，记剩余因子构成多项式 $\widehat{S}_m(n)=S_m(n)\bigg/\left(n-\dfrac12\right)$，则对偶数 $m>0$ 恒满足
+$$
+\widehat{S}_m(1-n)=\widehat{S}_m(n).
+$$
+
+综上，$S_m(n)$ 总可写为如下标准因式形式：
+$$
+S_m(n)=
+\begin{cases}
+\displaystyle\frac{1}{m+1}\prod_{k=1}^{\lceil m/2\rceil}
+\left(n-\tfrac12-\alpha_k\right)\left(n-\tfrac12+\alpha_k\right),& m\text{ odd};\\[6pt]
+\displaystyle\frac{n-\tfrac12}{m+1}\prod_{k=1}^{m/2}
+\left(n-\tfrac12-\alpha_k\right)\left(n-\tfrac12+\alpha_k\right),& m\text{ even}.
+\end{cases}\tag{6.98}
+$$
+
+这里 $\alpha_1=\dfrac12$，而 $\alpha_2,\dots,\alpha_{\lceil m/2\rceil}$ 为依赖于 $m$ 的合适复数。例如：
+$$
+\begin{aligned}
+S_3(n) &= \frac{n^2(n-1)^2}{4};  \\
+S_4(n) &= \frac{1}{5}\,n\left(n-\frac12\right)(n-1)\left(n-\frac12+\sqrt{\frac{7}{12}}\right)\left(n-\frac12-\sqrt{\frac{7}{12}}\right); \\
+S_5(n) &= \frac{1}{6}\,n^2(n-1)^2\left(n-\frac12+\sqrt{\frac{3}{4}}\right)\left(n-\frac12-\sqrt{\frac{3}{4}}\right); \\
+S_6(n) &= n\left(n-\frac12\right)(n-1)\!\left(n-\frac12+\alpha\right)\!\left(n-\frac12-\alpha\right)\!\left(n-\frac12+\overline{\alpha}\right)\!\left (n-\frac12-\overline{\alpha}\right), \\
+&\text{ where } \alpha = 2^{-5/2}\,3^{-1/2}\,3^{1/4}\!\left(\sqrt{\sqrt{31}+\sqrt{27}}+i\sqrt{\sqrt{31}-\sqrt{27}}\right).
+\end{aligned}
+$$
+
+若 $m$ 为大于 $1$ 的奇数，则有 $B_m=0$；因此 $S_m(n)$ 能够被 $n^2$（以及 $(n-1)^2$）整除。除此之外，$S_m(n)$ 的根并无简洁通用规律可循。
+
+最后我们结合斯特林数总结伯努利数的相关内容。求解 $S_m(n)$ 的一种思路是：将普通幂次转化为下降幂次——下降幂次具备简洁的求和公式，完成求和后再还原为普通幂次：
+
+$$
+\begin{aligned}
+S_m(n)=\sum_{k=0}^{n-1} k^m &=\sum_{k=0}^{n-1}\sum_{j\ge 0}\genfrac\{\}{0pt}{}{m}{j}k^{\underline{j}}
+=\sum_{j\ge 0}\genfrac\{\}{0pt}{}{m}{j}\sum_{k=0}^{n-1}k^{\underline{j}} \\
+&=\sum_{j\ge 0}\genfrac\{\}{0pt}{}{m}{j}\frac{n^{\underline{j+1}}}{j+1} \\
+&=\sum_{j\ge 0}\genfrac\{\}{0pt}{}{m}{j}\frac{1}{j+1}\sum_{k\ge 0}(-1)^{j+1-k}\genfrac[]{0pt}{}{j+1}{k}n^k.
+\end{aligned}
+$$
+
+将上式与 (6.78) 的幂次系数比对，即可得到恒等式：
+$$
+\sum_{j\ge 0}\genfrac\{\}{0pt}{}{m}{j}\genfrac[]{0pt}{}{j+1}{k}\frac{(-1)^{j+1-k}}{j+1}
+=\frac{1}{m+1}\binom{m+1}{k}B_{m+1-k}. \tag{6.99}
+$$
+
+倘若能直接证明该关系式，就能以全新方式推导伯努利数。但对照书中第 264、265 页的恒等式，很难直接用数学归纳法证明：式 (6.99) 左侧求和是组合数 $\dbinom{m}{k-1}$ 的常数倍。当 $k=m+1$ 时，左侧仅有单项：$\genfrac\{\}{0pt}{}{m}{m}\genfrac[]{0pt}{}{m+1}{m+1}\frac{1}{m+1}=\frac{1}{m+1}$，该情形易于验证；当 $k=m$ 时，左侧化简结果为 $-\dfrac12$，同样简单直观。但若满足 $k<m$，左侧求和形式极其繁杂。倘若伯努利当初沿这条路径研究，大概率无法发现伯努利数体系。
+
+我们可以做的一个替换是：将 $\genfrac\{\}{0pt}{}{m}{j}$ 替换为 $\genfrac\{\}{0pt}{}{m+1}{j+1} - (j+1)\genfrac\{\}{0pt}{}{m}{j+1}$。
+$(j+1)$ 项可以很好地消去复杂的分母，于是左侧变为：
+
+$$
+\sum_{j\ge 0}\genfrac\{\}{0pt}{}{m+1}{j+1}\genfrac[]{0pt}{}{j+1}{k}\frac{(-1)^{j+1-k}}{j+1}
+-\sum_{j\ge 0}\genfrac\{\}{0pt}{}{m}{j+1}\genfrac[]{0pt}{}{j+1}{k}(-1)^{j+1-k}.
+$$
+
+当 $k<m$ 时，根据式 (6.31)，**第二个和式等于 0**。
+于是只剩下第一个和式，它非常适合更换记号；我们重新命名所有变量，让求和指标为 $k$，另外两个参数为 $m$ 和 $n$。
+这样，恒等式 (6.99) 就等价于：
+
+$$
+\sum_{k}\genfrac\{\}{0pt}{}{n}{k}\genfrac[]{0pt}{}{k}{m}\frac{(-1)^{k-m}}{k}
+=\frac{1}{n}\binom{n}{m}B_{n-m}+[m=n-1]. \tag{6.100}
+$$
+
+很好，这个形式看起来更简洁了——尽管第 265 页的表格依然没有给出明显的下一步证明思路。
+
+这时，第 272 页的卷积公式派上了用场。我们可以用 (6.49) 和 (6.48) 将求和项用斯特林多项式重新表示：
+
+$$
+\genfrac\{\}{0pt}{}{n}{k}\genfrac[]{0pt}{}{k}{m}
+=(-1)^{n-k+1}\frac{n!}{(k-1)!}\sigma_{n-k}(-k)\cdot\frac{k!}{(m-1)!}\sigma_{k-m}(k);
+$$
+$$
+\genfrac\{\}{0pt}{}{n}{k}\genfrac[]{0pt}{}{k}{m}\frac{(-1)^{k-m}}{k}
+=(-1)^{n+1-m}\frac{n!}{(m-1)!}\sigma_{n-k}(-k)\sigma_{k-m}(k).
+$$
+
+情况变得明朗起来；在 (6.46) 中令 $t=1$，可得卷积公式：
+
+$$
+\begin{aligned}
+\sum_{k=0}^{n}\sigma_{n-k}(-k)\sigma_{k-m}(k)
+&=\sum_{k=0}^{n-m}\sigma_{n-m-k}\!\big(-n+(n-m-k)\big)\sigma_{k}(m+k) \\
+&=\frac{m-n}{(m)(-n)}\sigma_{n-m}\!\big(m-n+(n-m)\big).
+\end{aligned}
+$$
+
+至此，式 (6.100) 得到验证，并且我们发现伯努利数与斯特林多项式的常数项直接相关：
+
+$$
+\frac{B_m}{m!}=-m\sigma_m(0). \tag{6.101}
+$$
 
 

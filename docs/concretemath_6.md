@@ -1458,3 +1458,287 @@ $$F_{n+1} = \phi F_n + \hat\phi^n \tag{6.125}$$
 事实表明：对所有满足 $n \le 100$ 的数值，下标下移规则几乎总能给出千米转英里的正确舍入结果；仅在 $n=4,\,12,\,62,\,75,\,91,\,96$ 时存在偏差，且误差均小于 $2/3$ 英里。而下标上移规则对 $n \le 126$ 的英里转千米运算，要么得到精确舍入值，要么仅多出 $1$ 千米。其中最典型误差出现在 $n=4$：该数分解为斐波那契组合 $3+1$，两项各自舍入误差同向叠加，无法相互抵消，最终造成明显偏差。
 
 
+## 6.7 CONTINUANTS 连续体
+斐波那契数与第四章讨论的斯特恩—布罗科树存在深刻关联，同时可推广为一类多项式序列，欧拉曾对其展开系统性研究。这类多项式称为连分式多项式，是分析如下连分式结构的核心工具：
+$$a_0+\dfrac{1}{a_1+\dfrac{1}{a_2+\dfrac{1}{a_3+\dfrac{1}{a_4+\dfrac{1}{a_5+\dfrac{1}{a_6+\dfrac{1}{a_7}}}}}}}\tag{6.126}$$
+
+连多项式 $K_n(x_1,x_2,\dots,x_n)$ 含有 $n$ 个参数，递推定义如下：
+$$
+\begin{aligned}
+K_0() &= 1; \\ K_1(x_1) &= x_1; \\
+K_n(x_1,\dots,x_n) &= K_{n-1}(x_1,\dots,x_{n-1})x_n + K_{n-2}(x_1,\dots,x_{n-2}). \tag{6.127}
+\end{aligned}
+$$
+
+示例展开：
+$$
+\begin{aligned}
+K_2(x_1,x_2) &= x_1 x_2 + 1,    \\
+K_3(x_1,x_2,x_3) &= x_1 x_2 x_3 + x_1 + x_3,    \\
+K_4(x_1,x_2,x_3,x_4) &= x_1 x_2 x_3 x_4 + x_1 x_2 + x_1 x_4 + x_3 x_4 + 1.
+\end{aligned}
+$$
+
+由数学归纳法易证，项数服从斐波那契数规律：
+$$
+K_n(1,1,\dots,1) = F_{n+1}. \tag{6.128}
+$$
+
+若参数个数可由上下文明确，则可简写 $K$ 替代 $K_n$，这与第五章超几何函数 $F$ 省略参数个数的写法一致。例如 $K(x_1,x_2)=K_2(x_1,x_2)=x_1 x_2+1$；但形如 $(6.128)$ 的式子仍必须保留下标 $n$。
+
+欧拉指出：$K(x_1,x_2,\dots,x_n)$ 可先取乘积 $x_1 x_2 \cdots x_n$，再剔除所有相邻因子对 $x_k x_{k+1}$ 的全部组合得到。该规则可用「摩尔斯码」直观刻画：长为 $n$ 的点划序列，点占单位长度、划占两段长度；下面给出长度为 $4$ 的全体摩尔斯码构型。
+$\cdot\cdot\cdot\cdot \quad \cdot\cdot- \quad \cdot-\cdot \quad -\cdot\cdot \quad -- $
+
+这些点划模式一一对应 $K(x_1,x_2,x_3,x_4)$ 的各项：点代表保留单个变量，划代表删去一对相邻变量。例如序列 $\cdot-\cdot$ 对应 $x_1 x_4$。
+
+长度为 $n$、含 $k$ 个划的摩尔斯序列，拥有 $n-2k$ 个点，总符号数量为 $n-k$。排布方式共计 $\binom{n-k}{k}$ 种；若将每个点替换为 $z$、每个划替换为 $1$，即可得到
+$$
+\begin{aligned}
+K_n(z,z,\dots,z) = \sum_{k=0}^{}\binom{n-k}{k} z^{n-2k}. \tag{6.129}
+\end{aligned}
+$$
+
+连多项式的总项数为斐波那契数，因而成立恒等式
+$$
+\begin{aligned}
+F_{n+1} = \sum_{k=0}^{}\binom{n-k}{k}. \tag{6.130}
+\end{aligned}
+$$
+式 $(6.129)$ 存在闭式表达，是斐波那契数欧拉—比内公式 $(6.123)$ 的推广，见 $(5.74)$。
+
+结合摩尔斯码序列模型，可知连多项式具备镜像对称性：
+$$
+\begin{aligned}
+K(x_n,\dots,x_2,x_1) = K(x_1,x_2,\dots,x_n). \tag{6.131}
+\end{aligned}
+$$
+因此除定义 $(6.127)$ 右侧递推外，还满足左侧参数调整递推：
+$$
+\begin{aligned}
+K_n(x_1,\dots,x_n) = x_1 K_{n-1}(x_2,\dots,x_n) + K_{n-2}(x_3,\dots,x_n). \tag{6.132}
+\end{aligned}
+$$
+
+两组递推均可归入通用合成法则：
+$$
+\begin{aligned}
+K_{m+n}(x_1,\dots,x_{m+n})
+&= K_m(x_1,\dots,x_m)\,K_n(x_{m+1},\dots,x_{m+n}) \\
+&\quad + K_{m-1}(x_1,\dots,x_{m-1})\,K_{n-1}(x_{m+2},\dots,x_{m+n}). \tag{6.133}
+\end{aligned}
+$$
+借助摩尔斯码直观理解：第一项对应位置 $[m,m+1]$ 无划的构型，第二项对应该处存在一划的构型。若全体变量取 $1$，即得 $F_{m+n+1} = F_{m+1}F_{n+1}+F_m F_n$，可见 $(6.108)$ 是 $(6.133)$ 的特例。
+
+欧拉发现连多项式还满足卡西尼恒等式的高阶推广：
+$$
+\begin{aligned}
+&K_{m+n}(x_1,\dots,x_{m+n})\,K_k(x_{m+1},\dots,x_{m+k}) \\
+=\;&K_{m+k}(x_1,\dots,x_{m+k})\,K_n(x_{m+1},\dots,x_{m+n}) \\
+&\quad + (-1)^k K_{m-1}(x_1,\dots,x_{m-1})\,K_{n-k-1}(x_{m+k+2},\dots,x_{m+n}). \tag{6.134}
+\end{aligned}
+$$
+只要下标非负，该式恒成立。取 $k=2,\,m=1,\,n=3$ 即可验证特例：
+\[
+K(x_1,x_2,x_3,x_4)\,K(x_2,x_3) = K(x_1,x_2,x_3)\,K(x_2,x_3,x_4)+1.
+\]
+
+连多项式与欧几里得算法深度关联。若 $\gcd(m,n)$ 经四步迭代完成计算：
+\[
+\begin{aligned}
+\gcd(n_0,n_1)&=\gcd(n_1,n_2),\; n_0=m,\,n_1=n;\\
+n_2 &= n_0-q_1 n_1,\quad n_3 = n_1-q_2 n_2,\\
+n_4 &= n_2-q_3 n_3,\quad 0 = n_3-q_4 n_4,
+\end{aligned}
+\]
+则有层级关系
+\[
+\begin{aligned}
+n_4 &= K()\,n_4,\quad n_3 = K(q_4)\,n_4,\\
+n_2 &= K(q_3,q_4)\,n_4,\quad n_1 = K(q_2,q_3,q_4)\,n_4,\\
+n_0 &= K(q_1,q_2,q_3,q_4)\,n_4.
+\end{aligned}
+\]
+一般地，欧几里得算法经 $k$ 步得到最大公约数 $d$、商序列为 $q_1,\dots,q_k$ 时，初始两数可写为 $K(q_1,q_2,\dots,q_k)\,d$ 与 $K(q_2,\dots,q_k)\,d$。十八世纪早期拉尼最早明确研究连多项式；相邻斐波那契数对应商取最小值时的连多项式取值，也是固定步数欧几里得算法所需的最小输入。
+
+连多项式之名源自与连分数的紧密联系，例如
+$$
+\begin{aligned}
+a_0+\dfrac{1}{a_1+\dfrac{1}{a_2+\dfrac{1}{a_3}}}
+=\dfrac{K(a_0,a_1,a_2,a_3)}{K(a_1,a_2,a_3)}. \tag{6.135}
+\end{aligned}
+$$
+任意深度连分数均服从该结构，可用归纳结合基础恒等式证明：
+$$
+\begin{aligned}
+K_n(x_1,\dots,x_{n-1},x_n+y)
+= K_n(x_1,\dots,x_{n-1},x_n)+K_{n-1}(x_1,\dots,x_{n-1})\,y. \tag{6.136}
+\end{aligned}
+$$
+
+此外，连多项式与第四章介绍的斯特恩–布罗科树联系紧密。树上每个结点均可由一串左右行走序列表示：
+$$
+R^{a_0}L^{a_1}R^{a_2}L^{a_3}\cdots R^{a_{n-2}}L^{a_{n-1}} \tag{6.137}
+$$
+其中 $a_0\ge 0,\,a_1,a_2,\dots,a_{n-2}\ge 1,\,a_{n-1}\ge 0$，且 $n$ 为偶数。
+
+借助式 $(4.33)$ 的二阶矩阵 $\boldsymbol L$ 与 $\boldsymbol R$，由数学归纳法可证，序列 $(6.137)$ 对应的等价矩阵为
+$$
+\begin{aligned}
+\begin{pmatrix}
+K_{n-2}(a_1,\dots,a_{n-2}) & K_{n-1}(a_1,\dots,a_{n-2},a_{n-1})\\
+K_{n-1}(a_0,a_1,\dots,a_{n-2}) & K_{n}(a_0,a_1,\dots,a_{n-2},a_{n-1})
+\end{pmatrix} \tag{6.138}
+\end{aligned}
+$$
+
+例如特例：
+$$
+R^a L^b R^c L^d
+$$
+可对应展开为含连多项式组合的二阶矩阵形式。
+
+结合式 $(4.34)$，即可给出斯特恩–布罗科树中路径 $(6.137)$ 对应分数的闭式，此即**哈尔芬定理**：
+$$
+\begin{aligned}
+f(R^{a_0}\cdots L^{a_{n-1}})
+=\frac{K_{n+1}(a_0,a_1,\dots,a_{n-1},1)}{K_{n}(a_1,\dots,a_{n-1},1)} \tag{6.139}
+\end{aligned}
+$$
+
+以路径 $\mathit{LRRL}$ 举例：取 $a_0=0,\,a_1=1,\,a_2=2,\,a_3=1,\,n=4$，代入计算
+$$
+\frac{K(0,1,2,1,1)}{K(1,2,1,1)}
+=\frac{K(2,1,1)}{K(1,2,1,1)}
+=\frac{K(2,2)}{K(3,2)}
+=\frac{5}{7}.
+$$
+推导用到规则：在 $(6.136)$ 中取 $y=1$，即可合并首尾参数里的常数 $1$。
+
+对比 $(6.135)$ 与 $(6.139)$ 可知：树中一般结点对应的分数等价连分式展开为
+$$
+\begin{aligned}
+f(R^{a_0}\cdots L^{a_{n-1}})
+=a_0+\dfrac{1}{a_1+\dfrac{1}{a_2+\dfrac{1}{\cdots+\dfrac{1}{a_{n-1}+1/1}}}} \tag{6.140}
+\end{aligned}
+$$
+
+于是我们能够直观完成连分式与斯特恩—布罗科树结点的相互转换，例如：
+$$
+\begin{aligned}
+f(\mathit{LRRL}) = 0+\frac{1}{1+\frac{1}{2+\frac{1}{1+1/1}}}
+\end{aligned}
+$$
+
+第四章曾指出：无理数对应斯特恩—布罗科树中的无穷路径，可表示为无穷 $\mathit{L},\mathit{R}$ 序列。若 $\alpha$ 的无穷序列形如 $R^{a_0}L^{a_1}R^{a_2}L^{a_3}\cdots$，则对应无穷连分式
+$$
+\begin{aligned}
+\alpha = a_0+\dfrac{1}{a_1+\dfrac{1}{a_2+\dfrac{1}{a_3+\dfrac{1}{a_4+\dfrac{1}{a_5+\cdots}}}}} \tag{6.141}
+\end{aligned}
+$$
+
+该无穷连分式亦可递推直接构造：置 $\alpha_0=\alpha$，对 $k\ge 0$ 定义
+$$
+\begin{aligned}
+a_k = \lfloor \alpha_k\rfloor,\quad \alpha_k = a_k + 1/\alpha_{k+1} \tag{6.142}
+\end{aligned}
+$$
+序列 $a_k$ 称作 $\alpha$ 的**部分商**。若 $\alpha$ 为有理数 $m/n$，该迭代过程等价遍历欧几里得算法的全部商后终止，最终满足 $\alpha_{k+1}=\infty$。
+
+欧拉常数 $\gamma$ 究竟为有理数还是无理数，至今仍是未解难题。借助斯特恩–布罗科树可对该经典猜想给出部分结论：若 $\gamma$ 为有理数，则必能在树中精准定位；若为无理数，则可由此获取其全体最优有理逼近。
+
+欧拉常数 $\gamma$ 的连分式前若干项部分商如下：
+$$
+\begin{array}{c|ccccccccc}
+k & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 \\
+a_k & 0 & 1 & 1 & 2 & 1 & 2 & 1 & 4 & 3
+\end{array}
+$$
+
+对应斯特恩–布罗科路径起始串为 $\mathit{LRLLRLLRLLLLRRRL}\cdots$，序列无明显周期规律。理查德·布伦特的计算结果表明：倘若 $\gamma$ 确为有理数，其分母的十进制位数必超过 $10000$ 位。
+
+因此学界普遍猜测 $\gamma$ 为无理数，但至今尚无严格证明。
+
+本章最后证明一则精妙恒等式，串联前述诸多概念。回顾第三章的谱概念：常数 $\alpha$ 的谱是全体 $\lfloor n\alpha \rfloor$ 构成的多重集。无穷级数
+$$\sum_{n\ge 1} z^{\lfloor n\phi \rfloor} = z + z^3 + z^4 + z^6 + z^8 + z^9 + \cdots$$
+即为黄金比例 $\phi=(1+\sqrt{5})/2$ 的谱对应的生成函数。1976 年戴维森发现如下无穷连分式恒等式，将该生成函数与斐波那契序列关联：
+$$
+\begin{aligned}
+\dfrac{z^{F_1}}{1+\dfrac{z^{F_2}}{1+\dfrac{z^{F_3}}{1+\dfrac{z^{F_4}}{\;\cdots\;}}}}
+=(1-z)\sum_{n\ge 1} z^{\lfloor n\phi \rfloor}. \tag{6.143}
+\end{aligned}
+$$
+
+先分析 $\lfloor n\phi \rfloor$：设 $n$ 的斐波那契展开为 $F_{k_1}+\cdots+F_{k_r}$，由下标左移近似可知 $n\phi$ 逼近 $F_{k_1+1}+\cdots+F_{k_r+1}$。结合式 $(6.125)$ 有
+$$n\phi = F_{k_1+1}+\cdots+F_{k_r+1}-\big(\hat\phi^{k_1}+\cdots+\hat\phi^{k_r}\big).$$
+由于 $\hat\phi=-1/\phi$、指标满足严格递减 $k_1\gg\cdots\gg k_r\gg 0$，估计
+$$
+\begin{aligned}
+\big|\hat\phi^{k_1}+\cdots+\hat\phi^{k_r}\big|
+&< \phi^{-k_r}+\phi^{-k_r-2}+\phi^{-k_r-4}+\cdots \\
+&= \phi^{-k_r}/(1-\phi^{-2})
+= \phi^{1-k_r} \le \phi^{-1} < 1;
+\end{aligned}
+$$
+且该求和符号与 $(-1)^{k_r}$ 一致，于是
+$$
+\lfloor n\phi \rfloor
+= F_{k_1+1}+\cdots+F_{k_r+1}-\big[k_r(n)\text{ is even}\big]. \tag{6.144}
+$$
+
+若数 $n$ 的最低有效斐波那契位为 $1$，即满足 $k_r(n)=2$，则称 $n$ 为**斐波那契奇数**（简称F奇数）；反之称为**斐波那契偶数**（F偶数）。最小一批F奇数依次为：$1,4,6,9,12,14,17,19$。
+
+由 $(6.114)$：当 $k_r(n)$ 为偶数时，$n-1$ 是F偶数；当 $k_r(n)$ 为奇数时，$n-1$ 是F奇数。于是等价关系成立：
+$$k_r(n)\text{ is even} \iff n-1\text{ is F-even}.$$
+
+结合式 $(6.144)$：若 $k_r(n)$ 偶，则 $k_r(\lfloor n\phi\rfloor)=2$；若 $k_r(n)$ 奇，则 $k_r(\lfloor n\phi\rfloor)=k_r(n)+1$。故 $k_r(\lfloor n\phi\rfloor)$ 恒为偶数，由此证得：$\lfloor n\phi\rfloor - 1$ 恒为 F 偶数。
+
+反之，任取一个 F 偶数 $m$，均可反向构造整数 $n$ 使得 $m+1=\lfloor n\phi\rfloor$。先对斐波那契表示做加 $1$ 操作：若无进位，则 $n$ 为 $m+2$ 下标右移；若有进位，则 $n$ 为 $m+1$ 下标右移。因此 $(6.143)$ 右侧求和可改写为
+$$
+\sum_{n\ge 1} z^{\lfloor n\phi\rfloor}
+= z\sum_{m\ge 0} z^{m}\,[m\text{ is F-even}]. \tag{6.145}
+$$
+
+再处理左侧连分式，将 $(6.143)$ 标准化为分子全为 $1$ 的经典连分式形制 $(6.141)$：
+$$
+\begin{aligned}
+\frac{1}{z^{-F_0}+\dfrac{1}{z^{-F_1}+\dfrac{1}{z^{-F_2}+\cdots}}}
+=\frac{1-z}{z}\sum_{n\ge 1} z^{\lfloor n\phi\rfloor}. \tag{6.146}
+\end{aligned}
+$$
+该变换需将原式每层含 $z^{F_n}$ 的分式同除 $z^{F_{n-1}}$。
+
+若截断至项 $1/z^{-F_n}$，其值可表为连多项式比值，与 $(6.135)$ 结构一致：
+$$
+\frac{K_{n+2}(0,z^{-F_0},z^{-F_1},\dots,z^{-F_n})}{K_{n+1}(z^{-F_0},z^{-F_1},\dots,z^{-F_n})}
+=\frac{K_n(z^{-F_1},\dots,z^{-F_n})}{K_{n+1}(z^{-F_0},z^{-F_1},\dots,z^{-F_n})}.
+$$
+
+记分母序列 $Q_n=K_{n+1}(z^{-F_0},\dots,z^{-F_n})$，枚举初项：$Q_0=1,\ Q_1=1+z^{-1},\ Q_2=1+z^{-1}+z^{-2},\ Q_3=1+z^{-1}+z^{-2}+z^{-3}+z^{-4}$，一般规律贴合几何级数结构：
+$$Q_n = 1 + z^{-1} + z^{-2} + \dots + z^{-(F_{n+2}-1)}.$$
+
+对应分子记为 $P_n = K_n(z^{-F_1},\dots,z^{-F_n})$，其结构与 $Q_n$ 相似但项数更少。
+例如：
+$$P_5 = z^{-1}+z^{-2}+z^{-4}+z^{-5}+z^{-7}+z^{-9}+z^{-10}+z^{-12}$$，
+而 $Q_5 = 1+z^{-1}+\dots+z^{-12}$。整理可清晰看出规律：
+$$
+P_5
+=\frac{1+z^2+z^3+z^5+z^7+z^8+z^{10}+z^{11}}{z^{12}}
+=z^{-12}\sum_{m=0}^{12} z^m\,[m\text{ 为 F-even}]
+$$
+
+由数学归纳法可证一般形式：
+$$
+P_n = z^{\,1-F_{n+2}}\sum_{m=0}^{F_{n+2}-1} z^m\,[m\text{ 为 F-even}]$$。
+
+于是分式比值为
+$$
+\begin{aligned}
+\frac{P_n}{Q_n}
+=\frac{\displaystyle\sum_{m=0}^{F_{n+2}-1} z^m\,[m\text{ 为 F-even}]}
+{\displaystyle\sum_{m=0}^{F_{n+2}-1} z^m}.
+\end{aligned}
+$$
+
+令 $n\to\infty$，结合恒等式 $(6.145)$ 取极限，即可证得 $(6.146)$ 成立。
+
+

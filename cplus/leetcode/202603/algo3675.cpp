@@ -15,5 +15,13 @@ public:
         }
         return 0;
     }
-   
+
+    int minOperations2(string s) {
+        // 方法二
+        int ans = 0;
+        for (auto & ch: s) {
+            ans = max(ans, (26 - (ch-'a'))%26);
+        }
+        return ans;
+    }    
 };

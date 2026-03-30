@@ -2648,7 +2648,7 @@ $$ S_{n+1} = (z+1)S_n \tag{5.133} $$
 3) 令 $d_Q := \deg(q-r) $，$ d_R := \deg(q+r)$，且
    $$d := \begin{cases} \deg(\hat{p}) - d_Q, & \text{if } d_Q \ge d_R; \\ \deg(\hat{p}) - d_R + 1, & \text{if } d_Q < d_R. \end{cases}$$
  
-4) 若 $d\ge 0$，通过 $(5.130)$ 定义 $s(n,k)$，并考虑在基本方程 $(5.129)$ 中令 $k$ 的幂次系数相等所得到的关于 $\alpha_0, \dots, \alpha_d, \beta_0, \dots, \beta_l$ 的线性方程组。若该方程组存在 $\beta_0, \dots, \beta_l$ 不全为零的解，则转入步骤 4。否则，若 $d_Q < d_R$ 且 $-2\lambda' / \lambda$ 是大于 $d$ 的整数（其中 $\lambda$ 是 $q+r$ 中 $k^{d_R}$ 的系数，$\lambda'$ 是 $q-r$ 中 $k^{d_R-1}$ 的系数），则令 $d := -2\lambda'/\lambda$ 并重复步骤 2b。
+4) 若 $d\ge 0$，通过 $(5.130)$ 定义 $s(n,k)$，并考虑在基本方程 $(5.129)$ 中令 $k$ 的幂次系数相等所得到的关于 $\alpha_0, \dots, \alpha_d, \beta_0, \dots, \beta_l$ 的线性方程组。若该方程组存在 $\beta_0, \dots, \beta_l$ 不全为零的解，则转入步骤 6。否则，若 $d_Q < d_R$ 且 $-2\lambda' / \lambda$ 是大于 $d$ 的整数（其中 $\lambda$ 是 $q+r$ 中 $k^{d_R}$ 的系数，$\lambda'$ 是 $q-r$ 中 $k^{d_R-1}$ 的系数），则令 $d := -2\lambda'/\lambda$ 并重复步骤 2b。
 
 5) （项 $\hat{t}(n,k)$ 不是超几何可求和的。）将 $l$ 增加 $1$ 并返回步骤 $1$。
 
@@ -2690,7 +2690,7 @@ $$
 $$
 为使求和有限，我们假设 $a$ 或 $b$ 为非负整数。
 
-令 $t(n;k)=\frac{(n+b+c+d+k)!}{(n-k)!\,(b-k)!\,(c+k)!\,(d+k)!\,k!}$ 且 $\hat{t}(n,k) = \beta_0(n)t(n,k) + \beta_1(n)t(n+1,k)$。沿着一条已经变得十分熟悉的路径继续，我们令
+设 $t(n;k) = (n+b+c+d+k)! /(n-k)!(b-k)!(c+k)!(d+k)!k!$ 并令 $\hat{t}(n,k) = \alpha_0(n)t(n;k) + \alpha_1(n)t(n+1;k)$。按照一条已经逐渐熟悉的常规思路，我们令
 $$
 \begin{aligned}
 p(n,k) &= (n+1-k)\beta_0(n) + (n+1+b+c+d+k)\beta_1(n) = \hat{p}(n, k), \\
@@ -2700,7 +2700,7 @@ r(n, k) &= (c+k)(d+k)k,
 \end{aligned}
 $$
 
-然后我们尝试求解方程 (5.129) 以得到 $s(n,k)$。同样地，$\deg(q-r) < \deg(q+r)$，但这一次 $\deg(\hat{p}) - \deg(q+r) + 1 = -1$，看起来我们陷入了困境。不过，步骤 2b 为 $s$ 的次数提供了一个重要的备选方案：$d = -2\lambda'/\lambda$；在放弃之前，我们最好现在就尝试它。这里 $R(n,k) = q(n,k) + r(n,k) = 2k^3 + \dots$，因此 $\lambda = 2$，而多项式 $Q(n,k) = q(n,k) - r(n,k)$ 几乎奇迹般地关于 $k$ 的次数为 $1$——$k^2$ 项的系数恰好消失了！因此 $\lambda' = 0$；Gosper 算法允许我们取 $d = 0$ 且 $s(n,k) = \alpha_0(n)$。
+然后我们尝试求解方程 (5.129) 以得到 $s(n,k)$。同样地，$\deg(q-r) < \deg(q+r)$，但这一次 $\deg(\hat{p}) - \deg(q+r) + 1 = -1$，看起来我们陷入了困境。不过，步骤 4 为 $s$ 的次数提供了一个重要的备选方案：$d = -2\lambda'/\lambda$；在放弃之前，我们最好现在就尝试它。这里 $R(n,k) = q(n,k) + r(n,k) = 2k^3 + \dots$，因此 $\lambda = 2$，而多项式 $Q(n,k) = q(n,k) - r(n,k)$ 几乎奇迹般地关于 $k$ 的次数为 $1$——$k^2$ 项的系数恰好消失了！因此 $\lambda' = 0$；Gosper 算法允许我们取 $d = 0$ 且 $s(n,k) = \alpha_0(n)$。
 
 现在需要求解的方程为
 ```math
@@ -2734,7 +2734,7 @@ $$
 $$
 \begin{aligned}
 p(n, k) &= (n+1)\beta_0(n) + (n+1+k)\beta_1(n) = \hat{p}(n, k), \\
-\bar{t}(n, k) &= t(n, k)/(n+1) = \frac{(n+k)! z^k}{k! \,(n+1)!}, \\
+\bar{t}(n, k) &= t(n, k)/(n+1) = (n+k)!z^k/k!(n+1)! , \\
 q(n, k) &= (n+1+k)z, \\
 r(n, k) &= k,
 \end{aligned}
@@ -2745,17 +2745,17 @@ $$
 t(n, k) + (z-1)t(n+1, k) = T(n, k+1) - T(n, k) \tag{5.136}
 $$
 
-其中 $T(n, k) = r(n,k)s(n,k)\bar{t}(n,k)/\hat{p}(n,k) = \binom{n+k}{k-1} z^k$。现在我们对 $0 \le k \le n+1$ 求和式 (5.136)，得到
+其中 $T(n, k) = r(n,k)s(n,k)\hat{t}(n,k)/\hat{p}(n,k) = \binom{n+k}{k-1} z^k$。现在我们对 $0 \le k \le n+1$ 求和式 (5.136)，得到
 $$
 \begin{aligned}
 S_n(z) + t(n, n+1) + (z-1)S_{n+1}(z) &= T(n, n+2) - T(n, 0) \\
 &= \binom{2n+2}{n+1} z^{n+2} \\
-&= 2\binom{2n}{n+1} z^{n+2}.
+&= 2\binom{2n+1}{n} z^{n+2}.
 \end{aligned}
 $$
 
-而 $t(n, n+1) = \dbinom{2n+1}{n+1} z^{n+1} = \dbinom{2n}{n+1} z^{n+1}$，因此
-$$S_{n+1}(z) = \frac{1}{1-z} \left( S_n(z) + (1-2z) \binom{2n}{n+1} z^{n+1} \right). \tag{5.137}$$
+而 $t(n, n+1) = \binom{2n+1}{n+1} z^{n+1} = \binom{2n+1}{n} z^{n+1}$，因此
+$$S_{n+1}(z) = \frac{1}{1-z} \left( S_n(z) + (1-2z) \binom{2n+1}{n} z^{n+1} \right). \tag{5.137}$$
 
 我们立刻可以看出 $z=\frac{1}{2}$ 是特殊情况，此时 $S_{n+1}\left(\frac{1}{2}\right) = 2S_n\left(\frac{1}{2}\right)$。 此外，在递推式 (5.137) 两边同时乘以求和因子 $(1-z)^{n+1}$ 可以对其进行化简，由此可得到通用恒等式
 $$(1-z)^n \sum_{k=0}^n \binom{n+k}{k} z^k = 1 + \frac{1-2z}{2-2z} \sum_{k=1}^n \binom{2k}{k} \bigl(z(1-z)\bigr)^k. \tag{5.138}$$
@@ -2763,20 +2763,19 @@ $$(1-z)^n \sum_{k=0}^n \binom{n+k}{k} z^k = 1 + \frac{1-2z}{2-2z} \sum_{k=1}^n \
 在 Gosper 和 Zeilberger 出现之前，很少有人能预料到这样的恒等式。而如今，构造这类恒等式已经成为常规操作。
 
 那么类似的和式又如何呢
-$$S_n(z) = \sum_{k=0}^n \binom{n-k}{k} z^k. \tag{5.139}$$
+$$S_n(z) = \sum_{k=0}^n \binom{n-k}{k} z^k, \tag{5.139}$$
 
-这就是我们在式 (5.74) 中遇到的和式。满怀信心地，我们令 $t(n,k)=\dbinom{n-k}{k}z^k$ 并开始计算
-
+这就是我们在式 (5.74) 中遇到的和式。满怀信心地，我们令 $t(n,k)=\binom{n-k}{k}z^k$ 并开始计算
 $$
 \begin{aligned}
 p(n, k) &= (n + 1 - 2k)\beta_0(n) + (n + 1 - k) \beta_1(n) = \hat{p}(n, k),\\
-\bar{t}(n, k) &= t(n, k)/(n + 1 - 2k) = \frac{(n - k)! z^k}{k! (n + 1 - 2k)!},\\ 
+\bar{t}(n, k) &= t(n, k)/(n + 1 - 2k) = (n - k)! z^k/k! (n + 1 - 2k)!,\\ 
 q(n, k) &= (n + 1 - 2k)(n - 2k)z, \\
 r(n, k) &= (n + 1 - k)k.
 \end{aligned}
 $$
 
-但是请注意——如果令 $z=-\frac{1}{4}$，我们无法求解方程 (5.129)，因为多项式 $s$ 的次数必须满足 $\deg(\hat{p})-\deg(q-r)=-1$。
+但是请注意——如果令 $z\ne -\frac{1}{4}$，我们无法求解方程 (5.129)，因为多项式 $s$ 的次数必须满足 $\deg(\hat{p})-\deg(q-r)=-1$。
 
 没问题。我们只需引入另一个参数 $\beta_2(n)$，改用 $\hat{t}(n,k) = \beta_0(n)t(n,k) + \beta_1(n)t(n+1,k) + \beta_2(n)t(n+2,k)$ 尝试即可：
 $$
@@ -2784,7 +2783,7 @@ $$
 p(n,k) &= (n+1-2k)(n+2-2k)\beta_0(n) \\
 &\qquad+ (n+1-k)(n+2-2k)\beta_1(n) \\
 &\qquad+ (n+1-k)(n+2-k)\beta_2(n) = \hat{p}(n,k), \\
-\bar{t}(n,k) &= t(n,k)\big/\left[(n+1-2k)(n+2-2k)\right] = (n-k)!z^k/k!(n+2-2k)!,\\
+\bar{t}(n,k) &= t(n,k)\big/(n+1-2k)(n+2-2k) = (n-k)!z^k/k!(n+2-2k)!,\\
 q(n,k) &= (n+2-2k)(n+1-2k)z,\\
 r(n,k) &= (n+1-k)k.
 \end{aligned}
@@ -2796,10 +2795,10 @@ $$\beta_0(n) = z,\ \beta_1(n) = 1,\ \beta_2(n) = -1,\ \alpha_0(n) = 1.$$
 我们由此发现
 $$zt(n,k)+t(n+1,k)-t(n+2,k)=T(n,k+1)-T(n,k).$$
 
-其中 $T(n,k)$ 等于 $r(n,k)s(n,k)\bar{t}(n,k)/\hat{p}(n,k) = (n+1-k)k\bar{t}(n,k) = \dbinom{n+1-k}{k-1} z^k$。对 $k=0$ 到 $k=n$ 求和可得
+其中 $T(n,k)$ 等于 $r(n,k)s(n,k)\hat{t}(n,k)/\hat{p}(n,k) = (n+1-k)k\bar{t}(n,k) = \binom{n+1-k}{k-1} z^k$。对 $k=0$ 到 $k=n$ 求和可得
 $$
 \begin{aligned}
-zS_n(z) &+ \left( S_{n+1}(z) - \binom{0}{n+1} z^{n+1} \right) - \left( S_{n+2}(z) - \binom{0}{n+2} z^{n+2} - \binom{1}{n+1} z^{n+1} \right) \\
+zS_n(z) &+ (S_{n+1}(z) - \binom{0}{n+1} z^{n+1}) - ( S_{n+2}(z) - \binom{0}{n+2} z^{n+2} - \binom{1}{n+1} z^{n+1}) \\
 &= T(n, n+1) - T(n, 0).
 \end{aligned}
 $$
@@ -2821,7 +2820,7 @@ $$
 p(n, k) &= (n+1-k)^2(n+2-k)^2\beta_0(n) \\
 &\quad + (n+1+k)^2(n+2-k)^2\beta_1(n) \\
 &\quad + (n+1+k)^2(n+2+k)^2\beta_2(n) = \hat{p}(n, k), \\
-\bar{t}(n, k) &= t(n,k)\big/(n+1-k)^2(n+2-k)^2 = \frac{(n+k)!^2}{k!^4(n+2-k)!^2}, \\
+\bar{t}(n, k) &= t(n,k)\big/(n+1-k)^2(n+2-k)^2 = (n+k)!^2/k!^4(n+2-k)!^2, \\
 q(n, k) &= (n+1+k)^2(n+2-k)^2, \\
 r(n, k) &= k^4.
 \end{aligned}
@@ -2854,18 +2853,17 @@ $$
 (n+2)^3 t(n+2,k) = T(n,k+1) - T(n,k),
 $$
 
-其中 $T(n, k) = k^4 s(n,k) \bar{t}(n,k) = (2n+3)\bigl(8k^2-12k-16(n+1)(n+2)\bigr) \cdot \dfrac{(n+k)!^2}{(k-1)!^4 (n+2-k)!^2}$。对 $k$ 求和即可得到曾经令人难以置信的Apéry 递推关系，
+其中 $T(n, k) = k^4 s(n,k) \bar{t}(n,k) = (2n+3)(8k^2-12k-16(n+1)(n+2)) \times (n+k)!^2/(k-1)!^4 (n+2-k)!^2$。对 $k$ 求和即可得到曾经令人难以置信的Apéry 递推关系，
 $$(n + 1)^3 A_n + (n + 2)^3 A_{n+2} = (2n + 3)(17n^2 + 51n + 39)A_{n+1}. \tag{5.142}$$
 
-Gosper‑Zeilberger 方法对本章中遇到的所有和式都有效吗？并非如此。当和式项 $t(n,k)$ 为式 (5.65) 中的$\dbinom{n}{k} (k+1)^{k-1} (n-k+1)^{n-k-1}$ 时，该方法不适用，因为项比 $t(n,k+1)/t(n,k)$ 不是关于 $k$ 的有理函数。它同样无法处理诸如 $t(n,k) = \dbinom{n}{k} n^k$ 这类情形，因为另一个项比 $t(n+1,k)/t(n,k)$ 不是关于 $k$ 的有理函数。
-（不过，我们可以先对 $\dbinom{n}{k} z^k$ 求和，再令 $z=n$ 来处理这个和式。）即便对于相对简单的和式项 $t(n,k) = 1/(nk+1)$，尽管 $t(n,k+1)/t(n,k)$ 与 $t(n+1,k)/t(n,k)$ 都是关于 $n$ 和 $k$ 的有理函数，该方法依然失效；见习题 107。
+Gosper‑Zeilberger 方法对本章中遇到的所有和式都有效吗？并非如此。当和式项 $t(n,k)$ 为式 (5.65) 中的 $\binom{n}{k} (k+1)^{k-1} (n-k+1)^{n-k-1}$ 时，该方法不适用，因为项比 $t(n,k+1)/t(n,k)$ 不是关于 $k$ 的有理函数。它同样无法处理诸如 $t(n,k) = \binom{n}{k} n^k$ 这类情形，因为另一个项比 $t(n+1,k)/t(n,k)$ 不是关于 $k$ 的有理函数。（不过，我们可以先对 $\binom{n}{k} z^k$ 求和，再令 $z=n$ 来处理这个和式。）即便对于相对简单的和式项 $t(n,k) = 1/(nk+1)$，尽管 $t(n,k+1)/t(n,k)$ 与 $t(n+1,k)/t(n,k)$ 都是关于 $n$ 和 $k$ 的有理函数，该方法依然失效；见习题 107。
 
 但 Gosper‑Zeilberger 算法在极其广泛的情形下都保证有效，即只要和式项 $t(n,k)$ 是所谓的真项（proper term）可以写成如下形式的项：
 $$
 t(n,k) = f(n,k)\,\frac{(a_1n+a'_{1}k+a''_1)!\cdots(a_pn+a'_pk+a''_p)!}{(b_1n+b'_{1}k+b''_1)!\cdots(b_qn+b'_qk+b''_q)!}\,w^n z^k. \tag{5.143}
 $$
 
-其中 $f(n,k)$ 是关于 $n$ 和 $k$ 的多项式；系数 $a_1, a'_1, \dots, a_p, a'_p$、$b_1, b'_1, \dots, b_q, b'_q$ 均为给定的整数常数；参数 $w$ 和 $z$ 非零；其余量 $a''_1, \dots, a''_p$、$b''_1, \dots, b''_q$ 为任意复数。我们将证明：只要 $t(n,k)$ 是真项，就一定存在不全为零的多项式 $\beta_0(n), \dots, \beta_l(n)$，以及一个真项 $T(n,k)$，使得
+其中 $f(n,k)$ 是关于 $n$ 和 $k$ 的多项式；系数 $a_1, a'_1, \dots, a_p, a'_p$、$b_1, b'_1, \dots, b_q, b'_q$ 均为给定的整数常数；参数 $w$ 和 $z$ 非零；其余量 $a''_1, \dots, a''_p$，$b''_1, \dots, b''_q$ 为任意复数。我们将证明：只要 $t(n,k)$ 是真项，就一定存在不全为零的多项式 $\beta_0(n), \dots, \beta_l(n)$，以及一个真项 $T(n,k)$，使得
 $$\beta_0(n)t(n, k) + \dots + \beta_l(n)t(n + l, k) = T(n, k+1) - T(n, k). \tag{5.144}$$
 
 下面的证明由 Wilf 和 Zeilberger [374] 给出。
@@ -2877,7 +2875,7 @@ $$
 
 其中每个 $\alpha_{i,j}(n)$ 都是关于 $n$ 的多项式。我们首先注意到：若 $t(n,k)$ 是任意真项，$H(N,K,n)$ 是任意线性差分算子，则 $H(N,K,n)t(n,k)$ 仍是一个真项。设 $t$ 和 $H$ 分别由式 (5.143) 和 (5.145) 给出，我们定义一个“基项”：
 $$
-t(n,k)_{I,J} =
+\bar{t}(n,k)_{I,J} =
 \frac{
 \prod_{i=1}^{p}
 \left(a_i n+a'_i k+a_i I\,[a_i<0]+a'_i J\,[a'_i<0]+a''_i\right)!
@@ -2887,7 +2885,7 @@ t(n,k)_{I,J} =
 } w^n z^k .
 $$
 
-例如，如果 $t(n,k) = \binom{n-2k}{k} = \frac{(n-2k)!}{k!\,(n-3k)!}$，那么对应次数为 $I$、$J$ 的线性差分算子的基项就是 $\bar{t}(n,k)_{I,J} = \frac{(n-2k-2J)!}{(k+J)!\,(n-3k+I)!}$。关键结论是：只要 $0 \le i \le I$ 且 $0 \le j \le J$，$\alpha_{i,j}(n)N^iK^j t(n,k)$ 就等于基项 $\bar{t}(n,k)_{I,J}$ 乘以一个关于 $n$ 和 $k$ 的多项式。有限个多项式之和仍然是多项式，因此 $H(N,K,n)t(n,k)$ 满足真项的形式 (5.143)。
+例如，如果 $t(n,k) = \binom{n-2k}{k} = (n-2k)!/k!\,(n-3k)!$，那么对应次数为 $I$、$J$ 的线性差分算子的基项就是 $\bar{t}(n,k)_{I,J} = (n-2k-2J)!/(k+J)!\,(n-3k+I)!$。关键结论是：只要 $0 \le i \le I$ 且 $0 \le j \le J$，$\alpha_{i,j}(n)N^iK^j t(n,k)$ 就等于基项 $\bar{t}(n,k)_{I,J}$ 乘以一个关于 $n$ 和 $k$ 的多项式。有限个多项式之和仍然是多项式，因此 $H(N,K,n)t(n,k)$ 满足真项的形式 (5.143)。
 
 下一步要证明：只要 $t(n,k)$ 是真项，就一定存在非零的线性差分算子 $H(N,K,n)$，使得
 $$H(N,K,n)\,t(n,k) = 0.$$

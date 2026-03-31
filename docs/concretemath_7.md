@@ -251,5 +251,178 @@ $$
 p(5n+4)\equiv 0 \pmod{5},\quad p(7n+5)\equiv 0 \pmod{7},\quad p(11n+6)\equiv 0 \pmod{11}
 $$
 
+## 7.2 BASIC MANEUVERS
 
+现在我们深入探讨使幂级数具备强大效用的若干核心技巧。
+
+首先规范术语与记号。一般生成函数形如
+$$
+\begin{aligned}
+G(z) = g_0 + g_1 z + g_2 z^2 + \cdots = \sum_{n\ge 0} g_n z^n \tag{7.12}
+\end{aligned}
+$$
+称 $G(z)$（简写为 $G$）是序列 $\langle g_0,g_1,g_2,\dots\rangle$（记作 $\langle g_n\rangle$）的生成函数。$G(z)$ 中 $z^n$ 的系数常记作 $[z^n]G(z)$，记号沿用第 5.4 节定义。
+
+式 (7.12) 求和范围为 $n\ge 0$，实际运算中常延拓至全体整数下标；只需约定负下标项满足 $g_{-1}=g_{-2}=\cdots=0$ 即可，此时仍默认主序列仅考虑非负下标 $\langle g_0,g_1,g_2,\dots\rangle$。
+
+生成函数研究涉及两类闭式表达：一类是关于变量 $z$ 的 $G(z)$ 闭式，另一类是关于下标 $n$ 的通项 $g_n$ 闭式。例如斐波那契序列的生成函数闭式为 $z/(1-z-z^2)$，斐波那契数通项闭式为 $(\phi^n-\hat\phi^n)/\sqrt{5}$；具体所指可由上下文区分。
+
+再来补充视角层面的说明：依据解读方式不同，生成函数 $G(z)$ 具备两层截然不同的含义。其一，可视为复变量 $z$ 的函数，满足微积分中的标准解析性质；其二，可单纯当作形式幂级数，此时 $z$ 仅为占位符号。上一节便采用第二种理解：在组合对象的求和模型中，用 $z$ 替换组合特征，$z^n$ 的系数即为该特征恰好出现 $n$ 次的组合对象总数。
+
+若将 $G(z)$ 视作复变函数，则需讨论收敛性。第2章已给出结论：级数 $\sum_{n\ge 0}g_n z^n$ 绝对收敛，当且仅当存在常数上界 $A$，使得对任意 $N$，有限和 $\sum_{0\le n\le N}|g_n z^n|$ 恒不超过 $A$。由此可知：若级数在 $z=z_0$ 处收敛，则对所有满足 $|z|<|z_0|$ 的取值同样收敛；同时必有 $\lim\limits_{n\to\infty}|g_n z_0^n|=0$，依第9章记号可得 $g_n=O\big(|1/z_0|^n\big)$。反之若 $g_n=O(M^n)$，则级数对全部 $|z|<1/M$ 收敛，以上为幂级数收敛基础结论。
+
+但在组合应用场景中，收敛性大多无关紧要，仅分析系数渐近阶时才需考量。对生成函数执行的绝大多数运算，均可依托形式幂级数理论严格成立，即便级数本身不收敛也合法可行。
+
+即便推导过程省略严谨论证，所得公式通常仍能用数学归纳法核验正确性。例如斐波那契生成函数仅在 $|z|<1/\phi\approx 0.618$ 收敛，但推导通项 $F_n=(\phi^n-\hat\phi^n)/\sqrt{5}$ 无需依赖收敛条件；该通项求出后亦可直接独立验证。因此本章将忽略收敛性讨论——它在此处弊大于利。
+
+视角铺垫完毕，接下来介绍变形生成函数的核心手段：加法、移位、变量替换、求导、积分与乘法。若无特殊说明，设 $F(z),G(z)$ 分别为序列 $\langle f_n\rangle,\langle g_n\rangle$ 的生成函数，且约定负下标满足 $f_n=g_n=0$，简化求和上下限书写。常数倍线性叠加：
+$$
+\begin{aligned}
+\alpha F(z)+\beta G(z)
+&=\alpha\sum_n f_n z^n+\beta\sum_n g_n z^n \\
+&=\sum_n \big(\alpha f_n+\beta g_n\big)z^n \tag{7.13}
+\end{aligned}
+$$
+该式直接给出序列 $\langle \alpha f_n+\beta g_n\rangle$ 的生成函数。
+
+向右移位 $m$ 位（前置 $m$ 个零，对应 $\langle g_{n-m}\rangle$），只需乘 $z^m$：
+$$
+z^m G(z)=\sum_n g_n z^{n+m}=\sum_n g_{n-m} z^n,\quad m\ge 0 \tag{7.14}
+$$
+第6章推导斐波那契闭式 $(1-z-z^2)F(z)=z$，即两次用到移位与加法组合运算。
+
+向左移位 $m$ 位（舍去前 $m$ 项，对应 $\langle g_{n+m}\rangle$），先减去前 $m$ 项再除以 $z^m$：
+$$
+\frac{G(z)-g_0-g_1 z-\cdots-g_{m-1}z^{m-1}}{z^m}
+=\sum_{n\ge m}g_n z^{n-m}
+=\sum_{n\ge 0}g_{n+m}z^n \tag{7.15}
+$$
+若 $g_0,\dots,g_{m-1}$ 不全为零，则无法将求和拓展至全体整数下标。
+
+将变量 $z$ 替换为常数倍是另一常用技巧：
+$$
+\begin{aligned}
+G(cz) = \sum_n g_n (cz)^n = \sum_n c^n g_n z^n \tag{7.16}
+\end{aligned}
+$$
+该式给出序列 $\langle c^n g_n\rangle$ 对应的生成函数，其中特例 $c=-1$ 在推导中尤为实用。
+
+我们常希望将因子 $n$ 引入系数，求导便可实现这一操作：
+$$
+\begin{aligned}
+G'(z) = g_1 + 2g_2 z + 3g_3 z^2 + \cdots
+= \sum_{n} (n+1)g_{n+1}\,z^n \tag{7.17}
+\end{aligned}
+$$
+将上式右移一位，得到更常用形式：
+$$
+z G'(z) = \sum_{n} n g_n\, z^n \tag{7.18}
+$$
+这是序列 $\langle n g_n \rangle$ 的生成函数；反复求导可使 $g_n$ 乘以任意关于 $n$ 的多项式。
+
+积分作为逆运算，可将各项系数除以 $n$：
+$$
+\int_{0}^{z} G(t)\,\mathrm dt
+= g_0 z + \frac12 g_1 z^2 + \frac13 g_2 z^3 + \cdots
+= \sum_{n\ge 1} \frac1n g_{n-1}\, z^n \tag{7.19}
+$$
+注意其常数项为 $0$。若需要 $\langle g_n/n \rangle$ 而非 $\langle g_{n-1}/n \rangle$，应先左移一位，在积分中将被积函数换为 $(G(t)-g_0)/t$。
+
+最后给出生成函数乘法规则：
+$$
+\begin{aligned}
+F(z)G(z)
+&=\big(f_0+f_1 z+f_2 z^2+\cdots\big)\big(g_0+g_1 z+g_2 z^2+\cdots\big) \\
+&= f_0 g_0 + \big(f_0 g_1+f_1 g_0\big)z + \big(f_0 g_2+f_1 g_1+f_2 g_0\big)z^2+\cdots \\
+&= \sum_{n}\left(\sum_{k} f_k g_{n-k}\right) z^n \tag{7.20}
+\end{aligned}
+$$
+
+如第5章所述，结果为两序列卷积 $\langle h_n\rangle$ 的生成函数，其中 $h_n=\sum_{k=0}^{n} f_k g_{n-k}$（负下标项系数为 $0$）。乘法/卷积运算相对复杂，但应用价值极高，7.5 节将专门举例讲解。
+
+乘法存在若干特例：当 $F(z)=z^m$ 时，退化为式 $(7.17)$ 的移位操作；此时仅 $f_m=1$、其余 $f_k=0$，卷积和仅剩单项 $g_{n-m}$。
+
+**表334 生成函数变形**
+$$
+\begin{aligned}
+\alpha F(z) + \beta G(z) &= \sum_{n} (\alpha f_n + \beta g_n) z^n,\\[4pt]
+z^m G(z) &= \sum_{n} g_{n-m} z^n,\quad m\ge 0,\\[4pt]
+\frac{G(z)-g_0-g_1 z-\cdots-g_{m-1}z^{m-1}}{z^m} &= \sum_{n\ge 0} g_{n+m} z^n,\quad m\ge 0,\\[4pt]
+G(cz) &= \sum_{n} c^n g_n z^n,\\[4pt]
+G'(z) &= \sum_{n} (n+1)g_{n+1} z^n,\\[4pt]
+z G'(z) &= \sum_{n} n g_n z^n,\\[4pt]
+\int_{0}^{z} G(t)\,\mathrm dt &= \sum_{n\ge 1} \frac{1}{n}g_{n-1} z^n,\\[4pt]
+F(z)G(z) &= \sum_{n}\left(\sum_{k} f_k g_{n-k}\right) z^n,\\[4pt]
+\frac{1}{1-z}G(z) &= \sum_{n}\left(\sum_{k\le n} g_k\right) z^n.
+\end{aligned}
+$$
+
+另一经典特例：取 $F(z)=1/(1-z)=1+z+z^2+\cdots$，此时对任意 $k\ge 0$ 均有 $f_k=1$，由此得到关键恒式：
+$$
+\frac{1}{1-z}\,G(z)
+=\sum_{n}\left(\sum_{k\ge 0}g_{n-k}\right)z^n
+=\sum_{n}\left(\sum_{k\le n}g_k\right)z^n \tag{7.21}
+$$
+将生成函数乘以 $1/(1-z)$，等价于求取原序列前缀累加和对应的生成函数。
+
+表334汇总了前述全部基础运算；熟练运用这些变形，还需储备一批常用标准生成函数模板。表335罗列最简基础形式，可直接用于入门求解各类组合问题。
+
+表335 中的生成函数均需熟记，彼此多互为特例，亦可借助表334 的基本变换快速互推，记忆负担较低。
+
+**表335 基础序列与其对应生成函数**
+$$
+\begin{aligned}
+&\langle 1,0,0,0,\dots \rangle:\quad \sum_{n\ge 0}[n=0]z^n = 1,\\
+&\langle \underbrace{0,\dots,0}_{m},1,0,\dots \rangle:\quad \sum_{n\ge 0}[n=m]z^n = z^m,\\
+&\langle 1,1,1,1,\dots \rangle:\quad \sum_{n\ge 0}z^n = 1/(1-z),\\
+&\langle 1,-1,1,-1,\dots \rangle:\quad \sum_{n\ge 0}(-1)^n z^n = 1/(1+z),\\
+&\langle 1,0,1,0,\dots \rangle:\quad \sum_{n\ge 0}[2\mid n]z^n = 1/(1-z^2),\\
+&\langle 1,0,\dots,1,0,\dots \rangle:\quad \sum_{n\ge 0}[m\mid n]z^n = 1/(1-z^m),\\
+&\langle 1,2,3,4,\dots \rangle:\quad \sum_{n\ge 0}(n+1)z^n = 1/(1-z)^2,\\
+&\langle 1,2,4,8,\dots \rangle:\quad \sum_{n\ge 0}2^n z^n = 1/(1-2z),\\
+&\langle 1,4,6,4,1,0,\dots \rangle:\quad \sum_{n\ge 0}\binom{4}{n}z^n = (1+z)^4,\\
+&\left\langle 1,\binom{c}{1},\binom{c}{2},\binom{c}{3},\dots \right\rangle:\quad \sum_{n\ge 0}\binom{c}{n}z^n = (1+z)^c,\\
+&\left\langle 1,\binom{c+n-1}{n} \right\rangle:\quad \sum_{n\ge 0}\binom{c+n-1}{n}z^n = 1/(1-z)^c,\\
+&\langle 1,c,c^2,c^3,\dots \rangle:\quad \sum_{n\ge 0}c^n z^n = 1/(1-cz),\\
+&\left\langle 1,\binom{m+1}{1},\binom{m+2}{2},\dots \right\rangle:\quad \sum_{n\ge 0}\binom{m+n}{n}z^n = 1/(1-z)^{m+1},\\
+&\left\langle 0,1,\dfrac12,\dfrac13,\dots \right\rangle:\quad \sum_{n\ge 1}\dfrac1n z^n = \ln\dfrac{1}{1-z},\\
+&\left\langle 0,1,-\dfrac12,\dfrac13,-\dfrac14,\dots \right\rangle:\quad \sum_{n\ge 1}\dfrac{(-1)^{n+1}}{n} z^n = \ln(1+z),\\
+&\left\langle 1,1,\dfrac12,\dfrac16,\dfrac{1}{24},\dots \right\rangle:\quad \sum_{n\ge 0}\dfrac{1}{n!} z^n = e^z.
+\end{aligned}
+$$
+
+例如考察序列 $\langle 1,2,3,4,\dots\rangle$，其生成函数 $1/(1-z)^2$ 十分常用。该式出自表 335 中部，同时它也是序列 $\langle 1,\binom{m+1}{m},\binom{m+2}{m},\binom{m+3}{m},\dots\rangle$ 在 $m=1$ 时的特例，亦是相近序列 $\langle 1,c,\binom{c+1}{2},\binom{c+2}{3},\dots\rangle$ 在 $c=2$ 时的特例。我们可以对常序列 $\langle 1,1,1,1,\dots\rangle$ 的生成函数按 (7.21) 做前缀累加得到该式，即用 $1/(1-z)$ 再除以 $(1-z)$；也可依托 (7.17)，对常序列生成函数直接求导推出。
+
+序列 $\langle 1,0,1,0,\dots\rangle$ 的生成函数同样有多条推导路径：在恒等式 $\sum_n z^n = 1/(1-z)$ 中将 $z$ 替换为 $z^2$，直接得到 $\sum_n z^{2n} = 1/(1-z^2)$；也可对交错序列 $\langle 1,-1,1,-1,\dots\rangle$（生成函数 $1/(1+z)$）执行前缀累加，得到 $1/((1+z)(1-z)) = 1/(1-z^2)$。
+
+还有通用方法抽取任意序列的偶数位置项 $\langle g_0,0,g_2,0,g_4,0,\dots\rangle$：
+将 $G(z)$ 与 $G(-z)$ 相加：
+$$
+G(z)+G(-z) = \sum_n g_n\big(1+(-1)^n\big) z^n = 2\sum_n g_n\,[n\text{ is even}]\,z^n
+$$
+因此
+$$
+(G(z)+G(-z))/2 = \sum_{n} g_{2n} z^{2n} \tag{7.22}
+$$
+
+奇数项同理可得：
+$$
+(G(z)-G(-z))/2 = \sum_{n} g_{2n+1} z^{2n+1} \tag{7.23}
+$$
+
+取 $g_n=1$、$G(z)=1/(1-z)$，则 $\langle 1,0,1,0,\dots\rangle$ 的生成函数为 $(1/2)\big(G(z)+G(-z)\big) = (1/2)\big(1/(1-z)+1/(1+z)\big) = 1/(1-z^2)$。
+
+把该奇偶抽取技巧用于斐波那契生成函数，已知 $\sum_n F_n z^n = z/(1-z-z^2)$，于是
+$$
+\begin{aligned}
+\sum_n F_{2n} z^{2n}
+&= (1/2)\left(\frac{z}{1-z-z^2}+\frac{-z}{1+z-z^2}\right) \\
+&= z^2/(1-3z^2+z^4)
+\end{aligned}
+$$。
+
+上式对应序列 $\langle F_0,0,F_2,0,F_4,\dots\rangle$；替换变量后，隔项斐波那契序列 $\langle F_0,F_2,F_4,F_6,\dots\rangle = \langle 0,1,3,8,\dots\rangle$ 满足：
+$$
+\sum_{n} F_{2n} z^n = z/(1-3z+z^2) \tag{7.24}
+$$
 

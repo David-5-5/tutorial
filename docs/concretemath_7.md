@@ -930,5 +930,88 @@ $$
 f_n = F_{2n},\quad n\ge0. \tag{7.42}
 $$
 
+## 7.4 SPECIAL GENERATING FUNCTIONS
+四步法的步骤 $4$ 在我们已知大量不同幂级数的系数时会变得简单许多，表 $335$ 中的展开式就目前而言十分实用，但还存在许多其他类型的闭式，因此我们应当用另一张表对其进行补充，这张表列出了与第 $6$ 章中讨论的特殊数字相对应的幂级数。
+
+**表 $351$ 特殊数的生成函数**
+$$
+\frac{1}{(1-z)^{m+1}}\ln\frac{1}{1-z}=\sum_{n\ge0}(H_{m+n}-H_m)\binom{m+n}{n}z^n \tag{7.43}
+$$
+$$
+\frac{z}{e^z-1}=\sum_{n\ge0}B_n\frac{z^n}{n!}\tag{7.44}
+$$
+$$
+\frac{F_m z}{1-(F_{m-1}+F_{m+1})z+(-1)^m z^2}=\sum_{n\ge0}F_{mn}z^n\tag{7.45}
+$$
+$$
+\sum_{k}\genfrac\{\}{0pt}{}{m}{k}\frac{k!z^k}{(1-z)^{k+1}}=\sum_{n\ge0}n^m z^n\tag{7.46}
+$$
+$$
+\left(\frac{1}{z}-1\right)^{-m}=\frac{z^m}{(1-z)(1-2z)\cdots(1-mz)}=\sum_{n\ge0}\genfrac\{\}{0pt}{}{n}{m}z^n\tag{7.47}
+$$
+$$
+z^{\overline m}=z(z+1)\cdots(z+m-1)=\sum_{n\ge0}\genfrac[]{0pt}{}{m}{n}z^n\tag{7.48}
+$$
+$$
+(e^z-1)^m=m!\sum_{n\ge0}\genfrac\{\}{0pt}{}{n}{m}\frac{z^n}{n!}\tag{7.49}
+$$
+$$
+\left(\ln\frac{1}{1-z}\right)^m=m!\sum_{n\ge0}\genfrac[]{0pt}{}{n}{m}\frac{z^n}{n!}\tag{7.50}
+$$
+$$
+\left(\ln\frac{1+z}{z}\right)^m=\sum_{n\ge0}\frac{z^n}{n!}\genfrac\{\}{0pt}{}{m}{m-n}\bigg/\binom{m}{n-1}\tag{7.51}
+$$
+$$
+\left(1-\frac{z}{e^{-z}}\right)^m=\sum_{n\ge0}\frac{z^n}{n!}\genfrac[]{0pt}{}{m}{m-n}\bigg/\binom{m}{n-1}\tag{7.52}
+$$
+$$
+e^{z+wz}=\sum_{m,n\ge0}\binom{n}{m}\frac{w^m z^n}{n!}\tag{7.53}
+$$
+$$
+e^{w(e^z-1)}=\sum_{m,n\ge0}\genfrac\{\}{0pt}{}{n}{m}\frac{w^m z^n}{n!}\tag{7.54}
+$$
+$$
+\frac{1}{(1-z)^w}=\sum_{m,n\ge0}\genfrac[]{0pt}{}{n}{m}\frac{w^m z^n}{n!}\tag{7.55}
+$$
+$$
+\frac{1-w}{e^{(w-1)z}-w}=\sum_{m,n\ge0}\left\langle\genfrac{}{}{0pt}{}{n}{m}\right\rangle\frac{w^m z^n}{n!}\tag{7.56}
+$$
+
+表 $351$ 是我们需要的数据库，该表中的恒等式证明并不困难，因此不必过多赘述；本表主要用于遇到新问题时查阅参考。但第一个公式 $(7.43)$ 有一种巧妙的证明方法值得一提：我们从恒等式
+$$\frac{1}{(1-z)^{x+1}} = \sum_{n}\binom{x+n}{n}z^n$$
+出发，对 $x$ 求导。左侧的 $(1-z)^{-x-1}$ 等于 $e^{(x+1)\ln(1/(1-z))}$，因此关于 $x$ 的导数会引入因子 $\ln\frac{1}{1-z}$。右侧 $\binom{x+n}{n}$ 的分子为 $(x+n)\cdots(x+1)$，对 $x$ 求导后拆分为 $n$ 项之和，等价于将 $\binom{x+n}{n}$ 乘以 
+$$\frac{1}{x+n}+\cdots+\frac{1}{x+1}=H_{x+n}-H_x$$
+将 $x$ 替换为 $m$ 即可得到 $(7.43)$。注意即使 $x$ 不是整数，$H_{x+n}-H_x$ 依然有意义。
+
+顺便一提，这种对复杂乘积求导并保留乘积形式的方法，通常比将导数展开为和式更简便。例如
+$$
+\frac{d}{dx}\left((x+n)^{\underline{n}}\cdots(x+1)^{\underline{1}}\right)=(x+n)^{\underline{n}}\cdots(x+1)^{\underline{1}}\left(\frac{n}{x+n}+\cdots+\frac{1}{x+1}\right)
+$$
+的右侧若展开为和式会繁琐得多。
+
+表 $351$ 中的通用恒等式包含许多重要特例，例如当 $m=0$ 时，$(7.43)$ 可简化为调和数 $H_n$ 的生成函数：
+$$\frac{1}{1-z}\ln\frac{1}{1-z}=\sum_{n}H_n z^n \tag{7.57}$$
+
+该式也可通过其他方式推导，例如对 $\ln\frac{1}{1-z}$ 的幂级数除以 $1-z$ 得到累积和。
+
+恒等式 $(7.51)$ 与 $(7.52)$ 分别包含比值 $\genfrac\{\}{0pt}{}{m}{m-n}\big/\binom{m}{n-1}$ 与 $\genfrac[]{0pt}{}{m}{m-n}\big/\binom{m}{n-1}$，当 $n\ge m$ 时会出现未定义形式 $0/0$。但借助 $(6.45)$ 中的斯特林多项式可以为其赋予合理定义，因为我们有
+$$\genfrac\{\}{0pt}{}{m}{m-n}\big/\binom{m}{n-1}=(-1)^{n+1}n!m\sigma_n(n-m), \tag{7.58}$$
+$$\genfrac[]{0pt}{}{m}{m-n}\big/\binom{m}{n-1}=n!m\sigma_n(m) \tag{7.59}$$
+
+因此举例而言，$(7.51)$ 中 $m=1$ 的情形不应被视为幂级数 $\sum_{n\ge0}\frac{z^n}{n!}\genfrac\{\}{0pt}{}{1}{1-n}\big/\binom{0}{n}$，而应写作
+$$\frac{z}{\ln(1+z)}=-\sum_{n\ge0}(-z)^n\sigma_n(n-1)=1+\frac{1}{2}z-\frac{1}{12}z^2+\cdots$$。
+
+
+恒等式 $(7.53)$、$(7.55)$、$(7.54)$ 与 $(7.56)$ 是**二重生成函数**或称**超生成函数**，因为它们形如 $G(w,z)=\sum_{m,n}g_{m,n}w^m z^n$。$w^m$ 的系数是关于变量 $z$ 的生成函数；$z^n$ 的系数是关于变量 $w$ 的生成函数。
+
+式 $(7.56)$ 可以写成更对称的形式：
+$$
+\frac{e^w-e^z}{we^z-ze^w}
+=\sum_{m,n}\left\langle\genfrac{}{}{0pt}{}{m+n+1}{m}\right\rangle
+\frac{w^m z^n}{(m+n+1)!}
+\tag{7.60}
+$$
+
+
 
 

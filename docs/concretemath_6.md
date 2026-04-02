@@ -167,29 +167,29 @@ $$
 \begin{aligned}
 x^{\overline{0}} &= x^0; \\
 x^{\overline{1}} &= x^1; \\
-x^{\overline{2}} &= x^2 - x^1; \\
-x^{\overline{3}} &= x^3 - 3x^2 + 2x^1; \\
-x^{\overline{4}} &= x^4 - 6x^3 + 11x^2 - 6x^1.
+x^{\overline{2}} &= x^2 + x^1; \\
+x^{\overline{3}} &= x^3 + 3x^2 + 2x^1; \\
+x^{\overline{4}} &= x^4 + 6x^3 + 11x^2 + 6x^1.
 \end{aligned}
 $$
 
-我们有 $(x + n - 1) \cdot x^{\underline{k}} = x^{\underline{k+1}} + (n - 1) x^{\underline{k}}$，因此用与刚才类似的证明方法可以得出：
+我们有 $(x + n - 1) \cdot x^k = x^{k+1} + (n - 1) x^k$，因此用与刚才类似的证明方法可以得出：
 $$
-(x + n - 1)x^{\underline{n-1}}
+(x + n - 1)x^{\overline{n-1}}
 = (x + n - 1)\sum_{k}\genfrac{[}{]}{0pt}{}{n-1}{k}x^k
 = \sum_{k}\genfrac{[}{]}{0pt}{}{n}{k}x^k.
 $$
 
 由此即可通过归纳法证明一般公式：
 $$
-x^{\underline{n}} = \sum_{k} \genfrac{[}{]}{0pt}{}{n}{k} x^k,\quad \text{integer }n\ge 0. \tag{6.11}
+x^{\overline{n}} = \sum_{k} \genfrac{[}{]}{0pt}{}{n}{k} x^k,\quad \text{integer }n\ge 0. \tag{6.11}
 $$
 
 （令 \(x=1\) 就再次得到式 (6.9)。）
 
 不过你可能会问：这个等式用到的是上升阶乘幂\(x^{\overline{n}}\)，而式 (6.10) 用到的是下降阶乘幂\(x^{\underline{n}}\)。如果我们想把上升阶乘幂 \(x^{\overline{n}}\) 用普通幂表示，或者把下降阶乘幂 \(x^{\underline{n}}\) 用上升幂表示，该怎么办？很简单，只要添上一些正负号即可：
 $$
-x^{\overline{n}} = \sum_{k} \genfrac\{\}{0pt}{}{n}{k} (-1)^{n-k} x^k,\quad \text{integer }n\ge 0. \tag{6.12}
+x^n = \sum_{k} \genfrac\{\}{0pt}{}{n}{k} (-1)^{n-k} x^{\overline{k}},\quad \text{integer }n\ge 0. \tag{6.12}
 $$
 $$
 x^{\underline{n}} = \sum_{k} \genfrac{[}{]}{0pt}{}{n}{k} (-1)^{n-k} x^k,\quad \text{integer }n\ge 0. \tag{6.13}

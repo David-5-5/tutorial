@@ -264,13 +264,13 @@ $$
 
 **表 265  更多斯特林数恒等式（整数 $l,m,n \ge 0$）。**
 $$
-\genfrac\{\}{0pt}{}{n}{m+1} = \sum_{k} \binom{n}{k} \genfrac\{\}{0pt}{}{k}{m}. \tag{6.15}
+\genfrac\{\}{0pt}{}{n+1}{m+1} = \sum_{k} \binom{n}{k} \genfrac\{\}{0pt}{}{k}{m}. \tag{6.15}
 $$
 $$
-\genfrac{[}{]}{0pt}{}{n}{m+1} = \sum_{k} \genfrac{[}{]}{0pt}{}{n}{k} \binom{k}{m}. \tag{6.16}
+\genfrac{[}{]}{0pt}{}{n+1}{m+1} = \sum_{k} \genfrac{[}{]}{0pt}{}{n}{k} \binom{k}{m}. \tag{6.16}
 $$
 $$
-\genfrac\{\}{0pt}{}{n}{m} = \sum_{k} \binom{n}{k} \genfrac\{\}{0pt}{}{k}{m+1} (-1)^{n-k}. \tag{6.17}
+\genfrac\{\}{0pt}{}{n}{m} = \sum_{k} \binom{n}{k} \genfrac\{\}{0pt}{}{k+1}{m+1} (-1)^{n-k}. \tag{6.17}
 $$
 $$
 \genfrac{[}{]}{0pt}{}{n}{m} = \sum_{k} \genfrac{[}{]}{0pt}{}{n+1}{k+1} \binom{k}{m} (-1)^{m-k}. \tag{6.18}
@@ -279,10 +279,10 @@ $$
 m!\genfrac\{\}{0pt}{}{n}{m} = \sum_{k}\binom{m}{k}k^n(-1)^{m-k}. \tag{6.19}
 $$
 $$
-\genfrac\{\}{0pt}{}{n}{m+1} = \sum_{k=0}^{n}\genfrac\{\}{0pt}{}{k}{m}(m+1)^{n-k}. \tag{6.20}
+\genfrac\{\}{0pt}{}{n+1}{m+1} = \sum_{k=0}^{n}\genfrac\{\}{0pt}{}{k}{m}(m+1)^{n-k}. \tag{6.20}
 $$
 $$
-\genfrac{[}{]}{0pt}{}{n}{m+1} = \sum_{k=0}^{n}\genfrac{[}{]}{0pt}{}{k}{m}n^{\underline{n-k}} = n!\sum_{k=0}^{n}\genfrac{[}{]}{0pt}{}{k}{m}\bigg/k!. \tag{6.21}
+\genfrac{[}{]}{0pt}{}{n+1}{m+1} = \sum_{k=0}^{n}\genfrac{[}{]}{0pt}{}{k}{m}n^{\underline{n-k}} = n!\sum_{k=0}^{n}\genfrac{[}{]}{0pt}{}{k}{m}\bigg/k!. \tag{6.21}
 $$
 $$
 \genfrac\{\}{0pt}{}{m+n+1}{m} = \sum_{k=0}^{m}k\genfrac\{\}{0pt}{}{n+k}{k}. \tag{6.22}
@@ -303,10 +303,10 @@ $$
 \genfrac{[}{]}{0pt}{}{n}{n-m} = \sum_{k} \binom{m-n}{m+k} \binom{m+n}{n+k} \genfrac\{\}{0pt}{}{m+k}{k}. \tag{6.27}
 $$
 $$
-\genfrac\{\}{0pt}{}{l+n}{m} \binom{l+n}{l} = \sum_{k} \genfrac\{\}{0pt}{}{k}{l} \genfrac\{\}{0pt}{}{n-m}{k} \binom{n}{k}. \tag{6.28}
+\genfrac\{\}{0pt}{}{n}{l+m} \binom{l+m}{l} = \sum_{k} \genfrac\{\}{0pt}{}{k}{l} \genfrac\{\}{0pt}{}{n-k}{m} \binom{n}{k}. \tag{6.28}
 $$
 $$
-\genfrac{[}{]}{0pt}{}{l+n}{m} \binom{l+n}{l} = \sum_{k} \genfrac{[}{]}{0pt}{}{k}{l} \genfrac{[}{]}{0pt}{}{n-m}{k} \binom{n}{k}. \tag{6.29}
+\genfrac{[}{]}{0pt}{}{n}{l+m} \binom{l+m}{l} = \sum_{k} \genfrac{[}{]}{0pt}{}{k}{l} \genfrac{[}{]}{0pt}{}{n-k}{m} \binom{n}{k}. \tag{6.29}
 $$
 
 我们可以记住像公式 (6.12) 中何时需要代入因子 $(-1)^{n-k}$，因为当 $x$ 很大时，幂次之间存在一种自然的大小次序：

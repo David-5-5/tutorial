@@ -1012,6 +1012,188 @@ $$
 \tag{7.60}
 $$
 
+## 7.5 CONVOLUTIONS
+两个给定序列 $\langle f_0,f_1,\dots\rangle=\langle f_n\rangle$ 与 $\langle g_0,g_1,\dots\rangle=\langle g_n\rangle$ 的卷积是序列 $\langle f_0g_0,f_0g_1+f_1g_0,\dots\rangle=\langle\sum_k f_k g_{n-k}\rangle$。我们在 $5.4$ 节与 $7.2$ 节中已经发现，序列的卷积对应于它们生成函数的乘积，这一事实使得许多原本难以处理的和式变得易于计算。
+
+例 $1$：斐波那契卷积
+例如，我们尝试计算 $\sum_{k=0}^n F_k F_{n-k}$ 的闭式表达式，这是序列 $\langle F_n \rangle$ 与自身的卷积，因此该和式必定是 $F(z)^2$ 中 $z^n$ 的系数，其中 $F(z)$ 是序列 $\langle F_n \rangle$ 的生成函数，我们只需要求出这个系数的值即可。
+
+生成函数 $F(z)$ 为 $\dfrac{z}{1-z-z^2}$，是多项式的商式，因此有理函数的通用展开定理表明可以通过部分分式分解得到答案，我们可以使用通用展开定理 $(7.30)$ 直接计算，也可以利用如下等式：
+
+$$
+\begin{aligned}
+F(z)^2
+&= \left( \frac{1}{\sqrt5} \left( \frac{1}{1-\phi z} - \frac{1}{1-\hat\phi z} \right) \right)^2 \\
+&= \frac{1}{5} \left( \frac{1}{(1-\phi z)^2} - \frac{2}{(1-\phi z)(1-\hat\phi z)} + \frac{1}{(1-\hat\phi z)^2} \right) \\
+&= \frac{1}{5}\sum_{n\ge0}(n+1)\phi^n z^n - \frac{2}{5}\sum_{n\ge0}F_{n+1}z^n + \frac{1}{5}\sum_{n\ge0}(n+1)\hat\phi^n z^n
+\end{aligned}
+$$
+
+我们不使用 $\phi$ 和 $\hat\phi$ 表示结果，而是尝试用斐波那契数构造闭式，回顾 $\phi+\hat\phi=1$，可得：
+
+$$
+\begin{aligned}
+\phi^n+\hat\phi^n
+&= [z^n] \left( \frac{1}{1-\phi z} + \frac{1}{1-\hat\phi z} \right) \\
+&= [z^n] \frac{2-(\phi+\hat\phi)z}{(1-\phi z)(1-\hat\phi z)} \\
+&= [z^n] \frac{2-z}{1-z-z^2} = 2F_{n+1}-F_n
+\end{aligned}
+$$
+
+因此可得
+$$
+\begin{aligned}
+F(z)^2
+&= \frac15\sum_{n\ge0}(n+1)(2F_{n+1}-F_n)z^n- \frac25\sum_{n\ge0}F_{n+1}z^n,
+\end{aligned}
+$$
+由此我们得到所求结果：
+$$
+\sum_{k=0}^n F_k F_{n-k} = \frac{2nF_{n+1}-(n+1)F_n}{5}. \tag{7.61}
+$$
+例如当 $n=3$ 时，该公式左侧为 $F_0F_3+F_1F_2+F_2F_1+F_3F_0=0+1+1+0=2$，右侧为 $(6F_4-4F_3)/5=(18-8)/5=2$。
+
+**例 $2$：调和数卷积**
+一种名为“样本排序”的计算机算法的效率取决于和式
+$$
+T_{m,n} = \sum_{0\le k<n}\binom{k}{m}\frac{1}{n-k},\quad \text{integer} \ m,n\ge 0
+$$
+的值。习题 $5.58$ 用一种较为复杂的双重归纳并结合求和因子求出了该和式的值。而更简便的思路是：$T_{m,n}$ 恰好是序列 $\left\langle\binom{0}{m},\binom{1}{m},\binom{2}{m},\dots\right\rangle$ 与 $\left\langle 0,\frac{1}{1},\frac{1}{2},\dots\right\rangle$ 卷积后的第 $n$ 项。
+
+这两个序列在表 $335$ 中都有简单的生成函数：
+$$
+\sum_{n\ge0}\binom{n}{m}z^n = \frac{z^m}{(1-z)^{m+1}};\quad
+\sum_{n>0}\frac{z^n}{n} = \ln\frac{1}{1-z}
+$$
+
+因此，由 $(7.43)$ 可得
+$$
+\begin{aligned}
+T_{m,n}
+&= [z^n]\frac{z^m}{(1-z)^{m+1}}\ln\frac{1}{1-z} \\
+&= [z^{n-m}]\frac{1}{(1-z)^{m+1}}\ln\frac{1}{1-z} \\
+&= (H_n - H_m)\binom{n}{n-m}
+\end{aligned}
+$$
+
+事实上，还有更多和式可以归结为这类卷积，因为对所有 $r,s$ 都有
+$$
+\frac{1}{(1-z)^{r+1}}\ln\frac{1}{1-z}\cdot\frac{1}{(1-z)^{s+1}}
+= \frac{1}{(1-z)^{r+s+2}}\ln\frac{1}{1-z}
+$$
+
+比较两边 $z^n$ 的系数即可得到通用恒等式
+$$
+\begin{aligned}
+\sum_{k}\binom{r+k}{k}&\binom{s+n-k}{n-k}(H_{r+k}-H_r) \\
+&= \binom{r+s+n+1}{n}(H_{r+s+n+1}-H_{r+s+1}) \tag{7.62}
+\end{aligned}
+$$
+
+这看起来好得令人难以置信，但至少在 $n=2$ 时可以验证成立：
+$$
+\binom{r+1}{1}\binom{s+1}{1}\frac{1}{r+1}
++\binom{r+2}{2}\binom{s+0}{0}\left(\frac{1}{r+2}+\frac{1}{r+1}\right)
+=\binom{r+s+3}{2}\left(\frac{1}{r+s+3}+\frac{1}{r+s+2}\right)
+$$
+像 $s=0$ 这样的特例与一般情形同样精妙。
+
+不止如此，我们还可以利用卷积恒等式
+$$
+\sum_{k}\binom{r+k}{k}\binom{s+n-k}{n-k}
+=\binom{r+s+n+1}{n}
+$$
+将 $H_r$ 移到等式另一边，因为 $H_r$ 与 $k$ 无关：
+$$
+\sum_{k}\binom{r+k}{k}\binom{s+n-k}{n-k}H_{r+k}
+=\binom{r+s+n+1}{n}(H_{r+s+n+1}-H_{r+s+1}+H_r) \tag{7.63}
+$$
+更进一步：如果 $r,s$ 为非负整数 $l,m$，我们可以把 $\binom{r+k}{k}$ 换成 $\binom{l+k}{l}$，把 $\binom{s+n-k}{n-k}$ 换成 $\binom{m+n-k}{m}$；再将 $k$ 替换为 $k-l$，$n$ 替换为 $n-m-l$，可得
+$$
+\sum_{k=0}^n\binom{k}{l}\binom{n-k}{m}H_k
+=\binom{n+1}{l+m+1}(H_{n+1}-H_{l+m+1}+H_l),\quad 整数\ l,m,n\ge0 \tag{7.64}
+$$
+即便这个恒等式取 $l=m=0$ 的特例，在第 $2$ 章中对我们而言也相当棘手（见 $(2.36)$）。我们已然前进了一大步。
+
+例 $3$：卷积的卷积。
+
+若先对 $\langle f_n\rangle$ 与 $\langle g_n\rangle$ 做卷积，再将结果与第三个序列 $\langle h_n\rangle$ 卷积，得到的序列第 $n$ 项为
+$$
+\sum_{j+k+l=n}f_jg_kh_l
+$$
+这个三重卷积的生成函数自然是三重乘积 $F(z)G(z)H(z)$。类似地，序列 $\langle g_n\rangle$ 的 $m$ 重自卷积第 $n$ 项为
+$$
+\sum_{k_1+k_2+\cdots+k_m=n}g_{k_1}g_{k_2}\cdots g_{k_m}
+$$
+其生成函数为 $G(z)^m$。
+
+我们可以将这些结论应用到之前讨论的“扇形图生成树”问题中（第 $7.3$ 节例 $6$）。其实还有另一种方法计算 $f_n$，即 $n$ 阶扇形图的生成树数目，其思路基于顶点集 $\{1,2,\dots,n\}$ 之间树边的构成方式：顶点 $k$ 与 $k+1$ 之间的边可以被选入生成树，也可以不选；而选择这些边的每一种方式，都会把相邻顶点连接成若干个连续块。例如，当 $n=10$ 时，我们可能把顶点连成 $\{1,2\}$、$\{3\}$、$\{4,5,6,7\}$ 以及 $\{8,9,10\}$ 这些块；
+
+再向顶点 $0$ 添加额外的边，一共能构造出多少棵生成树？我们需要把 $0$ 连到这四个块中的每一个；把 $0$ 连到 $\{1,2\}$ 有 $2$ 种方法，连到 $\{3\}$ 有 $1$ 种方法，连到 $\{4,5,6,7\}$ 有 $4$ 种方法，连到 $\{8,9,10\}$ 有 $3$ 种方法，总共有 $2·1·4·3=24$ 种方法。对所有可能的分块方式求和，就得到了生成树总数的如下表达式：
+$$
+f_n = \sum_{m>0}\sum_{\substack{k_1+k_2+\cdots+k_m=n\\k_1,k_2,\dots,k_m>0}}k_1k_2\cdots k_m. \tag{7.65}
+$$
+例如，$f_4=4+3·1+2·2+1·3+2·1·1+1·2·1+1·1·2+1·1·1·1=21$。
+
+这是序列 $\langle 0,1,2,3,\dots\rangle$ 在 $m=1,2,3,\dots$ 时的所有 $m$ 重卷积之和；因此 $\langle f_n\rangle$ 的生成函数为
+$$
+F(z)=G(z)+G(z)^2+G(z)^3+\cdots=\frac{G(z)}{1-G(z)}
+$$
+其中 $G(z)$ 是序列 $\langle 0,1,2,3,\dots\rangle$ 的生成函数，即 $\dfrac{z}{(1-z)^2}$。
+
+于是我们得到
+$$
+F(z)=\frac{z}{(1-z)^2-z}=\frac{z}{1-3z+z^2},
+$$
+和之前的结果一致。这种求解 $\langle f_n\rangle$ 的方法，比我们之前用的复杂递推更加对称、也更直观。
+
+
+**例 $4$：一个与卷积相关的递推式**
+我们的下一个例子尤为重要，事实上，它是生成函数在求解递推关系中为何如此有用的“经典范例”。
+假设我们有 $n+1$ 个变量 $x_0,x_1,\dots,x_n$，需要通过 $n$ 次乘法计算它们的乘积。在乘积 $x_0·x_1·\dots·x_n$ 中添加括号以完全确定乘法顺序，共有多少种方法 $C_n$？例如，当 $n=2$ 时有两种方法：$x_0·(x_1·x_2)$ 和 $(x_0·x_1)·x_2$。当 $n=3$ 时有五种方法：
+$$x_0·(x_1·(x_2·x_3)),x_0·((x_1·x_2)·x_3),(x_0·x_1)·(x_2·x_3),(x_0·(x_1·x_2))·x_3,((x_0·x_1)·x_2)·x_3$$
+因此 $C_2=2,C_3=5$；同时有 $C_1=1,C_0=1$。
+
+我们使用 $7.3$ 节的四步方法。$C_n$ 的递推式是什么？关键观察是：当 $n>0$ 时，恰好有一次乘法运算在所有括号之外，这是最终将所有部分结合起来的那次乘法。如果这个运算出现在 $x_k$ 和 $x_{k+1}$ 之间，那么对 $x_0·\dots·x_k$ 完全加括号有 $C_k$ 种方法，对 $x_{k+1}·\dots·x_n$ 完全加括号有 $C_{n-k-1}$ 种方法；因此
+$$C_n=C_0C_{n-1}+C_1C_{n-2}+\dots+C_{n-1}C_0, \text{if n>0}$$
+
+至此我们可以认出该式是一个卷积，也知道如何修正公式使其对所有整数 $n$ 成立：
+$$
+C_n = \sum_k C_k C_{n-1-k} + [n=0]. \tag{7.66}
+$$
+第一步完成。第二步告诉我们乘以 $z^n$ 并求和：
+$$
+\begin{aligned}
+C(z) &= \sum_n C_n z^n \\
+&= \sum_{k,n} C_k C_{n-1-k} z^n + \sum_{n=0} z^n \\
+&= \sum_k C_k z^k \sum_n C_{n-1-k} z^{n-k} + 1 \\
+&= C(z)·zC(z)+1.
+\end{aligned}
+$$
+
+你瞧，在生成函数的世界里，卷积已经变成了乘积，生活处处充满惊喜。
+第三步也很简单，我们用二次方程求根公式解出 $C(z)$：
+$$
+C(z) = \frac{1 \pm \sqrt{1-4z}}{2z}
+$$
+但我们该选正号还是负号？两种选择都满足 $C(z) = zC(z)^2 + 1$，但只有一种适合我们的问题。我们也许会出于乐观选择正号，但很快会发现这会导致 $C(0) = \infty$，与事实矛盾。（正确的函数应当满足 $C(0) = C_0 = 1$。）因此我们得到：
+$$
+C(z) = \frac{1 - \sqrt{1-4z}}{2z}
+$$
+最后是第四步，$[z^n]C(z)$ 是多少？二项式定理告诉我们：
+$$
+\sqrt{1-4z} = \sum_{k\ge0}\binom{1/2}{k}(-4z)^k
+= 1 + \sum_{k\ge1}\frac{1}{2k}\binom{-1/2}{k-1}(-4z)^k
+$$
+因此利用 $(5.37)$ 可得：
+$$
+\frac{1-\sqrt{1-4z}}{2z}
+= \sum_{k\ge1}\frac{1}{k}\binom{-1/2}{k-1}(-4z)^{k-1}
+= \sum_{n\ge0}\frac{1}{n+1}\binom{-1/2}{n}(-4z)^n
+= \sum_{n\ge0}\frac{1}{n+1}\binom{2n}{n}z^n
+$$
+加括号的方法数 $C_n$ 即为 $\dfrac{1}{n+1}\dbinom{2n}{n}$。
+
 
 
 

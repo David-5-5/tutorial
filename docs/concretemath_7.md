@@ -1398,7 +1398,206 @@ $$
 \mathcal{E}_t(z)^r = \lim_{x\to\infty}\mathcal{B}_{xt}(z/x)^{xr}.
 $$
 
+## 7.6 EXPONENTIAL GF’S
+有时候，序列 $\langle g_n\rangle$ 的生成函数性质十分复杂，而与之相关的序列 $\langle g_n/n!\rangle$ 的生成函数却非常简单。在这种情况下，我们自然更倾向于先处理 $\langle g_n/n!\rangle$，最后再乘以 $n!$。这个技巧非常常用，因此我们给它起了一个专门的名称：我们称幂级数
+$$
+\widehat{G}(z) = \sum_{n\ge0}\frac{g_n}{n!}z^n \tag{7.72}
+$$
 
+为序列 $\langle g_0,g_1,g_2,\dots\rangle$ 的**指数生成函数**，简称 egf。这个名称来源于指数函数 $e^z$ 正是序列 $\langle 1,1,1,\dots\rangle$ 的指数生成函数。
 
+表 $351$ 中的许多生成函数其实都是指数生成函数。例如，方程 $(7.50)$ 指出，$\frac1{m!}\left(\ln\frac1{1-z}\right)^m$ 是序列 $\left\langle\genfrac{[}{]}{0pt}{}{0}{m},\genfrac{[}{]}{0pt}{}{1}{m},\genfrac{[}{]}{0pt}{}{2}{m},\dots\right\rangle$ 的指数生成函数。该序列的普通生成函数则要复杂得多（而且还是发散的）。
+
+指数生成函数有一套自身的基本运算，与我们在 $7.2$ 节学到的运算类似。比如，如果将 $\langle g_n\rangle$ 的指数生成函数乘以 $z$，可得
+$$
+\sum_{n\ge0}\frac{g_n}{n!}z^{n+1}
+=\sum_{n\ge1}\frac{g_{n-1}}{(n-1)!}z^n
+=\sum_{n\ge0}\frac{n g_{n-1}}{n!}z^n,
+$$
+这正是序列 $\langle 0,g_0,2g_1,\dots\rangle=\langle n g_{n-1}\rangle$ 的指数生成函数。
+
+对序列 $\langle g_0,g_1,g_2,\dots\rangle$ 的指数生成函数关于 $z$ 求导，可得
+$$
+\sum_{n\ge0}\frac{n g_n}{n!}z^{n-1}
+= \sum_{n\ge1}\frac{g_n}{(n-1)!}z^{n-1}
+= \sum_{n\ge0}\frac{g_{n+1}}{n!}z^n; \tag{7.73}
+$$
+
+这是序列 $\langle g_1,g_2,\dots\rangle$ 的指数生成函数。因此，指数生成函数的求导对应于普通生成函数的左移运算 $(G(z)-g_0)/z$。（我们在研究超几何级数 $(5.106)$ 时就用到了指数生成函数的这一左移性质。）对指数生成函数积分可得
+$$
+\int_0^z\sum_{n\ge0}\frac{g_n t^n}{n!}\mathrm dt
+=\sum_{n\ge0}\frac{g_n z^{n+1}}{(n+1)!}
+=\sum_{n\ge1}\frac{g_{n-1} z^n}{n!}; \tag{7.74}
+$$
+这对应右移，是序列 $\langle 0,g_0,g_1,\dots\rangle$ 的指数生成函数。
+
+与普通生成函数一样，指数生成函数最有趣的运算是乘法。若 $\widehat F(z)$ 与 $\widehat G(z)$ 分别是 $\langle f_n\rangle$ 与 $\langle g_n\rangle$ 的指数生成函数，则 $\widehat F(z)\widehat G(z)=\widehat H(z)$ 是序列 $\langle h_n\rangle$ 的指数生成函数，其中 $\langle h_n\rangle$ 称为 $\langle f_n\rangle$ 与 $\langle g_n\rangle$ 的**二项式卷积**：
+$$
+h_n=\sum_k\binom{n}{k}f_k g_{n-k}. \tag{7.75}
+$$
+这里出现二项式系数是因为 $\binom{n}{k}=n!/(k!(n-k)!)$，即
+$$
+\frac{h_n}{n!}=\sum_{k=0}^n\frac{f_k}{k!}\frac{g_{n-k}}{(n-k)!},
+$$
+换言之，$\langle h_n/n!\rangle$ 是 $\langle f_n/n!\rangle$ 与 $\langle g_n/n!\rangle$ 的普通卷积。
+
+二项式卷积在应用中频繁出现。例如，我们在 $(6.79)$ 中用隐式递推
+$$
+\sum_{j=0}^m\binom{m+1}{j}B_j=[m=0],\quad \forall m\ge0
+$$
+定义了伯努利数；若用 $n$ 替换 $m+1$ 并在两边加上 $B_n$，可将其改写为二项式卷积形式：
+$$
+\sum_k\binom{n}{k}B_k=B_n+[n=1],\quad \forall n\ge0. \tag{7.76}
+$$
+现在我们引入伯努利数的指数生成函数 $\widehat B(z)=\sum_{n\ge0}B_n z^n/n!$，就能如第 $6$ 章所承诺的那样，把这一递推与幂级数联系起来。$(7.76)$ 左边是 $\langle B_n\rangle$ 与常序列 $\langle 1,1,1,\dots\rangle$ 的二项式卷积，因此其指数生成函数为 $\widehat B(z)e^z$。右边的指数生成函数是 $\sum_{n\ge0}(B_n+[n=1])z^n/n!=\widehat B(z)+z$。于是必有 $\widehat B(z)=z/(e^z-1)$；我们就此证明了 $(6.81)$，该式也出现在表 $351$ 中，编号为 $(7.44)$。
+
+现在我们再来看一个在本书中反复出现的和式：
+$$
+S_m(n) = 0^m + 1^m + 2^m + \cdots + (n-1)^m
+= \sum_{0\le k<n}k^m.
+$$
+这一次我们尝试用生成函数分析，希望能让问题突然变简单。我们把 $n$ 视为常数，$m$ 视为变量；因此目标是理解幂级数
+$$
+S(z) = S_0(n) + S_1(n)z + S_2(n)z^2 + \cdots
+= \sum_{m\ge0}S_m(n)z^m
+$$
+的系数。
+
+我们知道序列 $\langle 1,k,k^2,\dots\rangle$ 的生成函数是
+$$
+\frac{1}{1-kz} = \sum_{m\ge0}k^m z^m,
+$$
+因此交换求和次序可得
+$$
+S(z) = \sum_{m\ge0}\sum_{0\le k<n}k^m z^m
+= \sum_{0\le k<n}\frac{1}{1-kz}.
+$$
+我们可以把这个和写成闭式：
+$$
+S(z) = \frac1z\left(
+\frac1{z^{-1}-0} + \frac1{z^{-1}-1} + \cdots
++ \frac1{z^{-1}-n+1}
+\right)
+= \frac1z\!\left(H_{z^{-1}} - H_{z^{-1}-n}\right); \tag{7.77}
+$$
+但我们完全不知道如何把这样的闭式按 $z$ 的幂次展开。
+
+指数生成函数前来救场。序列 $\langle S_0(n),S_1(n),S_2(n),\dots\rangle$ 的指数生成函数是
+$$
+\widehat S(z,n) = S_0(n) + S_1(n)\frac{z}{1!} + S_2(n)\frac{z^2}{2!} + \cdots = \sum_{m\ge0}S_m(n)\frac{z^m}{m!}.
+$$
+为求出系数 $S_m(n)$，我们可以使用 $\langle 1,k,k^2,\dots\rangle$ 的指数生成函数，即
+$$
+e^{kz} = \sum_{m\ge0}k^m\frac{z^m}{m!},
+$$
+于是有
+$$
+\widehat S(z,n) = \sum_{m\ge0}\sum_{0\le k<n}k^m\frac{z^m}{m!} = \sum_{0\le k<n}e^{kz}.
+$$
+
+而后面这个和是等比数列，因此存在闭式：
+$$
+\widehat S(z,n) = \frac{e^{nz}-1}{e^z-1}. \tag{7.78}
+$$
+太棒了！我们只需要求出这个相对简单的函数的系数，就能得到 $S_m(n)$，因为 $S_m(n)=m![z^m]\widehat S(z,n)$。
+
+这里伯努利数就登场了。刚才我们已经看到，伯努利数的指数生成函数是
+$$
+\widehat B(z) = \sum_{k\ge0}B_k\frac{z^k}{k!} = \frac{z}{e^z-1},
+$$
+因此可以写成
+$$
+\widehat S(z,n) = \widehat B(z)\frac{e^{nz}-1}{z}
+= \left(B_0\frac{z^0}{0!}+B_1\frac{z^1}{1!}+B_2\frac{z^2}{2!}+\cdots\right)
+\left(\frac{n^1 z^0}{1!}+\frac{n^2 z^1}{2!}+\frac{n^3 z^2}{3!}+\cdots\right).
+$$
+和 $S_m(n)$ 等于 $m!$ 乘以该乘积中 $z^m$ 的系数。例如：
+$$
+\begin{aligned}
+S_0(n) &= 0!\left(B_0\frac{n}{0!1!}\right) = n;\\
+S_1(n) &= 1!\left(B_0\frac{n^2}{0!2!}+B_1\frac{n}{1!1!}\right)
+= \frac12n^2-\frac12n;\\
+S_2(n) &= 2!\left(B_0\frac{n^3}{0!3!}+B_1\frac{n^2}{1!2!}+B_2\frac{n}{2!1!}\right)
+= \frac13n^3-\frac12n^2+\frac16n.
+\end{aligned}
+$$
+我们就这样又一次推导出了平方和公式 $S_2(n)=\frac16n(n-1)(2n-1)$，而且这是迄今为止最简单的推导：只用几行就得到了对所有 $m$ 都成立的 $S_m(n)$ 的一般形式。
+
+一般公式可以写成
+$$
+S_{m-1}(n) = \frac1m\bigl(B_m(n)-B_m(0)\bigr), \tag{7.79}
+$$
+其中 $B_m(x)$ 是**伯努利多项式**，定义为
+$$
+B_m(x) = \sum_k\binom{m}{k}B_k x^{m-k}. \tag{7.80}
+$$
+理由如下：伯努利多项式是序列 $\langle B_0,B_1,B_2,\dots\rangle$ 与 $\langle 1,x,x^2,\dots\rangle$ 的二项式卷积，因此 $\langle B_0(x),B_1(x),B_2(x),\dots\rangle$ 的指数生成函数是两者指数生成函数的乘积：
+$$
+\widehat B(z,x) = \sum_{m\ge0}B_m(x)\frac{z^m}{m!}
+= \frac{z}{e^z-1}\sum_{m\ge0}x^m\frac{z^m}{m!}
+= \frac{ze^{xz}}{e^z-1}. \tag{7.81}
+$$
+式 $(7.79)$ 成立是因为，由 $(7.78)$，序列 $\langle 0,S_0(n),2S_1(n),\dots\rangle$ 的指数生成函数为
+$$
+z\frac{e^{nz}-1}{e^z-1} = \widehat B(z,n)-\widehat B(z,0).
+$$
+
+现在转向另一个特别适合用指数生成函数解决的问题：$n$ 个顶点 $\{1,2,\dots,n\}$ 的完全图中有多少棵生成树？记这个数目为 $t_n$。完全图有 $\frac12n(n-1)$ 条边，每对不同顶点之间恰有一条边；因此我们本质上是在求用 $n-1$ 条边连接 $n$ 个给定顶点的总方法数。
+
+我们有 $t_1=t_2=1$。同时 $t_3=3$，因为 3 个顶点的完全图就是 2 阶扇形图，我们已知 $f_2=3$。而 $n=4$ 时有 16 棵生成树，因此 $t_4=16$。
+
+我们在扇形图同类问题中的经验提示，解决这个问题的最佳方式是：选定一个顶点，忽略所有与该特殊顶点相连的边，考察生成树所连接的块或连通分支。如果其余非特殊顶点形成 $m$ 个大小为 $k_1,k_2,\dots,k_m$ 的分支，那么我们就有 $k_1k_2\cdots k_m$ 种方式把它们连到这个特殊顶点上。例如在 $n=4$ 的情形，我们可以把左下角顶点视为特殊顶点。式 $(7.82)$ 的第一行展示了 $3t_3$ 种情况：另外三个顶点先以 $t_3$ 种方式自身相连，再以 $3$ 种方式连到左下角顶点。第二行则展示了 $2·1×t_2t_1×\dbinom{3}{2}$ 种方案：另外三个顶点按 $\dbinom{3}{2}$ 种方式被分成大小为 $2$ 和 $1$ 的分支；还有一种情况是另外三个顶点之间完全不相连。
+
+这一思路导出递推式：
+$$
+t_n = \sum_{m>0}\frac1{m!}\sum_{\substack{k_1+\cdots+k_m=n-1\\k_1,\dots,k_m\ge1}}\binom{n-1}{k_1,k_2,\dots,k_m}k_1k_2\cdots k_m\,t_{k_1}t_{k_2}\cdots t_{k_m}
+$$
+
+对所有 $n>1$ 成立。理由如下：有 $\dbinom{n-1}{k_1,k_2,\dots,k_m}$ 种方式将 $n-1$ 个元素分到 $m$ 个大小分别为 $k_1,k_2,\dots,k_m$ 的分支中；有 $t_{k_1}t_{k_2}\cdots t_{k_m}$ 种方式为每个分支构造生成树；有 $k_1k_2\cdots k_m$ 种方式将顶点 $n$ 连到这些分支上；最后除以 $m!$ 是因为我们不关心分支的顺序。
+
+例如，当 $n=4$ 时，递推式给出
+$$
+t_4 = 3t_3 + \frac12\left(\binom{3}{1,2}2t_1t_2 + \binom{3}{2,1}2t_2t_1\right) + \frac16\left(\binom{3}{1,1,1}t_1^3\right)
+= 3t_3 + 6t_2t_1 + t_1^3.
+$$
+
+$t_n$ 的递推式乍一看很复杂，甚至有点吓人；但其实并不糟糕，只是卷积形式而已。我们可以令
+$$
+u_n = n t_n,
+$$
+之后一切都会大幅简化：
+$$
+\frac{u_n}{n!} = \sum_{m>0}\frac1{m!}\sum_{\substack{k_1+k_2+\cdots+k_m=n-1}}\frac{u_{k_1}}{k_1!}\frac{u_{k_2}}{k_2!}\cdots\frac{u_{k_m}}{k_m!},\quad n>1. \tag{7.83}
+$$
+
+内层和正是指数生成函数 $\widehat U(z)$ 的 $m$ 次幂中 $z^{n-1}$ 的系数；如果加入对应 $m=0$ 的项 $\widehat U(z)^0$，那么对 $n=1$ 公式也成立。于是
+$$
+\frac{u_n}{n!} = [z^{n-1}]\sum_{m\ge0}\frac1{m!}\widehat U(z)^m
+= [z^{n-1}]e^{\widehat U(z)}
+= [z^n]z e^{\widehat U(z)}
+$$
+对所有 $n>0$ 成立，从而得到方程
+$$
+\widehat U(z) = z e^{\widehat U(z)}. \tag{7.84}
+$$
+
+有进展了！式 $(7.84)$ 非常接近
+$$
+\mathcal{E}(z) = e^{z \mathcal{E}(z)},
+$$
+而这正是 $(5.59)$ 和 $(7.71)$ 中定义广义指数级数 $\mathcal{E}(z)=\mathcal{E}_1(z)$ 的式子；实际上我们有
+$$
+\widehat U(z) = z \mathcal{E}(z).
+$$
+
+于是可以直接读出问题的答案：
+$$
+t_n = \frac{u_n}{n}
+= \frac{n!}{n}[z^n]\widehat U(z)
+= (n-1)!\,[z^{n-1}]\mathcal{E}(z)
+= n^{n-2}. \tag{7.85}
+$$
+
+顶点集 $\{1,2,\dots,n\}$ 上的完全图，对所有 $n>0$，恰好有 $n^{n-2}$ 棵生成树。
 
 

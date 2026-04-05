@@ -1600,4 +1600,70 @@ $$
 
 顶点集 $\{1,2,\dots,n\}$ 上的完全图，对所有 $n>0$，恰好有 $n^{n-2}$ 棵生成树。
 
+## 7.7 DIRICHLET GENERATING FUNCTIONS 狄利克雷生成函数
+从一个序列构造级数的方法还有很多；任何一套“核”函数 $K_n(z)$，只要满足
+$$
+\sum_n g_n K_n(z)=0\implies g_n=0,\quad \forall n
+$$
+至少在理论上就可以使用。普通生成函数使用 $K_n(z)=z^n$，指数生成函数使用 $K_n(z)=z^n/n!$；我们也可以使用下降幂 $z^{\underline{n}}$，或是二项式系数 $z^{\underline{n}}/n!=\binom{z}{n}$。
+
+在普通生成函数与指数生成函数之外，最重要的一类生成函数使用核函数 $1/n^z$，它适用于从 $n=1$ 开始的序列 $\langle g_1,g_2,\dots\rangle$：
+$$
+\widetilde G(z)=\sum_{n\ge1}\frac{g_n}{n^z}.\tag{7.86}
+$$
+
+它被称为**狄利克雷生成函数**（dgf），以德国数学家古斯塔夫·勒热纳·狄利克雷（1805–1859）的名字命名，他对这一工具做了大量研究。
+
+例如，常序列 $\langle 1,1,1,\dots\rangle$ 的狄利克雷生成函数为
+$$
+\sum_{n\ge1}\frac{1}{n^z}=\zeta(z).\tag{7.87}
+$$
+
+这就是黎曼ζ函数，当 $z>1$ 时我们也将它记作广义调和数 $H_\infty^{(z)}$。
+
+狄利克雷生成函数的乘积对应一种特殊的卷积：
+$$
+\widetilde F(z)\widetilde G(z)
+=\sum_{l,m\ge1}\frac{f_l}{l^z}\frac{g_m}{m^z}
+=\sum_{n\ge1}\frac{1}{n^z}\sum_{l,m\ge1}f_l g_m\,[l\cdot m=n].
+$$
+
+因此 $\widetilde F(z)\widetilde G(z)=\widetilde H(z)$ 是序列
+$$
+h_n=\sum_{d\mid n}f_d g_{n/d}\tag{7.88}
+$$
+的狄利克雷生成函数。
+
+例如，由式 (4.55) 我们知道 $\sum_{d\mid n}\mu(d)=[n=1]$，这是莫比乌斯序列 $\langle\mu(1),\mu(2),\mu(3),\dots\rangle$ 与 $\langle1,1,1,\dots\rangle$ 的**狄利克雷卷积**，因此
+$$
+\widetilde M(z)\zeta(z)=\sum_{n\ge1}\frac{[n=1]}{n^z}=1.\tag{7.89}
+$$
+
+换句话说，$\langle\mu(1),\mu(2),\mu(3),\dots\rangle$ 的狄利克雷生成函数是 $\zeta(z)^{-1}$。
+
+狄利克雷生成函数对于序列 $\langle g_1,g_2,\dots\rangle$ 是**积性函数**的情形格外有用，即满足
+$$
+g_{mn}=g_m g_n,\quad \text{当 }m\perp n.
+$$
+在这种情况下，所有 $n$ 对应的 $g_n$ 都由素数幂处的取值决定，并且我们可以将狄利克雷生成函数按素数分解为乘积形式：
+$$
+\widetilde G(z)=\prod_{p\text{ 素数}}\left(1+\frac{g_p}{p^z}+\frac{g_{p^2}}{p^{2z}}+\frac{g_{p^3}}{p^{3z}}+\cdots\right).\tag{7.90}
+$$
+
+例如，如果对所有 $n$ 令 $g_n=1$，就得到黎曼ζ函数的乘积表示：
+$$
+\zeta(z)=\prod_{p\text{ 素数}}\frac1{1-p^{-z}}.\tag{7.91}
+$$
+
+莫比乌斯函数满足 $\mu(p)=-1$，且对 $k>1$ 有 $\mu(p^k)=0$，因此它的狄利克雷生成函数为
+$$
+\widetilde M(z)=\prod_{p\text{ 素数}}(1-p^{-z});\tag{7.92}
+$$
+这当然与式 (7.89) 和 (7.91) 一致。欧拉函数 $\varphi$ 满足 $\varphi(p^k)=p^k-p^{k-1}$，因此其狄利克雷生成函数有如下分解形式：
+$$
+\widetilde\Phi(z)=\prod_{p\text{ 素数}}\left(1+\frac{p-1}{p^z-p}\right)
+=\prod_{p\text{ 素数}}\frac{1-p^{-z}}{1-p^{1-z}}.\tag{7.93}
+$$
+
+由此可得 $\widetilde\Phi(z)=\zeta(z-1)/\zeta(z)$。
 

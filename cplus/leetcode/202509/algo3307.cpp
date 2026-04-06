@@ -8,7 +8,7 @@ public:
         // 自行解答
         stack<int> path; int n = operations.size();
 
-        for (int i=min(49,n-1); i>=0; --i) {
+        for (int i=min(47,n-1); i>=0; --i) {    // floor(log_2(10^14)) = 47
             if (k > (1L<<i)) {
                 path.push(i); k -= (1L<<i);
             }

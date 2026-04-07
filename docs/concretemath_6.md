@@ -117,7 +117,7 @@ $$
 
 每个置换都等价于一组轮换。例如，考虑将 123456789 映为 384729156 的置换，我们可以方便地用两行表示：
 $$
-\1\ 2\ 3\ 4\ 5\ 6\ 7\ 8\ 9 \\ 
+1\ 2\ 3\ 4\ 5\ 6\ 7\ 8\ 9 \\ 
 3\ 8\ 4\ 7\ 2\ 9\ 1\ 5\ 6
 $$
 
@@ -317,7 +317,7 @@ $$
 
 我们可以把 (6.11) 代入 (6.12)，从而得到一个二重和式：
 $$
-x^{\underline{n}} = \sum_{k} \genfrac\{\}{0pt}{}{n}{k} (-1)^{n-k} x^{\overline{k}}
+x^n = \sum_{k} \genfrac\{\}{0pt}{}{n}{k} (-1)^{n-k} x^{\overline{k}}
 = \sum_{k,m} \genfrac\{\}{0pt}{}{n}{k} \genfrac{[}{]}{0pt}{}{k}{m} (-1)^{n-k} x^m.
 $$
 
@@ -328,7 +328,7 @@ $$
 
 斯特林数与二项式系数一样，满足许多令人惊奇的恒等式。但这些恒等式不像我们在第5章中得到的那些那样用途广泛，因此它们的应用频率远没有那么高。所以对我们来说，最好只列出最简单的那些，以便将来在遇到棘手的斯特林数问题时查阅参考。表264和表265包含了最常用的公式，我们之前已经推导出来的主要恒等式也在其中重复列出。
 
-在第5章研究二项式系数时，我们发现，为了让恒等式$\binom{n}{k} = \binom{n-1}{k} + \binom{n-1}{k-1}$不受限制地成立，将 $\dbinom{n}{k}$ 推广到负整数 $n$ 是很有益的。利用这个递推关系把 $\dbinom{n}{k}$ 扩展到超出组合意义的范围后，我们发现（见表164）：帕斯卡三角向上延伸时，本质上会以旋转形式重现自身。我们对斯特林三角也做同样尝试：如果规定基本递推关系
+在第5章研究二项式系数时，我们发现，为了让恒等式 $\binom{n}{k} = \binom{n-1}{k} + \binom{n-1}{k-1}$ 不受限制地成立，将 $\binom{n}{k}$ 推广到负整数 $n$ 是很有益的。利用这个递推关系把 $\binom{n}{k}$ 扩展到超出组合意义的范围后，我们发现（见表164）：帕斯卡三角向上延伸时，本质上会以旋转形式重现自身。我们对斯特林三角也做同样尝试：如果规定基本递推关系
 
 $$
 \genfrac\{\}{0pt}{}{n}{k} = k\genfrac\{\}{0pt}{}{n-1}{k} + \genfrac\{\}{0pt}{}{n-1}{k-1},
@@ -366,21 +366,23 @@ $$
 
 我们得到了一种**对偶性**，类似于最小值与最大值、向下取整 $\lfloor x\rfloor$ 与向上取整 $\lceil x\rceil$、上升幂 $x^{\overline{n}}$ 与下降幂 $x^{\underline{n}}$、最大公约数 gcd 与最小公倍数 lcm 之间的关系。在这种对应下，很容易验证递推式$\genfrac{[}{]}{0pt}{}{n}{k}=(n-1)\genfrac{[}{]}{0pt}{}{n-1}{k}+\genfrac{[}{]}{0pt}{}{n-1}{k-1}$ 和 $\genfrac\{\}{0pt}{}{n}{k} = k\genfrac\{\}{0pt}{}{n-1}{k} + \genfrac\{\}{0pt}{}{n-1}{k-1}$ 本质上是同一个式子。
 
+
+
 ## 6.2 EULERIAN NUMBERS 欧拉数
-
-
-另一类数值三角也时常出现，它由欧拉提出[104, 813; 110, 第485页]，我们用尖括号来表示它的元素：$\left\langle \begin{matrix}n\\k\end{matrix} \right\rangle$。这里的尖括号形象地表示“小于”和“大于”；$\left\langle \begin{matrix}n\\k\end{matrix} \right\rangle$ 是集合 $\{1,2,\dots,n\}$ 的排列 $\pi_1\pi_2\cdots\pi_n$ 中**恰好有 $k$ 个上升位**的排列个数。所谓上升位，是指满足 $\pi_i < \pi_{i+1}$ 的位置 $i$。（注意：这个记号不如斯特林数的记号通用，但我们会看到它是非常合理的。）
+另一类数值三角也时常出现，它由欧拉提出[104, 813; 110, 第485页]，我们用尖括号来表示它的元素：$\langle \begin{matrix}n\\k\end{matrix} \rangle$。这里的尖括号形象地表示“小于”和“大于”；$\langle \begin{matrix}n\\k\end{matrix} \rangle$ 是集合 $\{1,2,\dots,n\}$ 的排列 $\pi_1\pi_2\cdots\pi_n$ 中恰好有 $k$ 个上升位的排列个数。所谓*上升位*，是指满足 $\pi_i < \pi_{i+1}$ 的位置 $i$。（注意：这个记号不如斯特林数的记号通用，但我们会看到它是非常合理的。）
 
 例如，集合 $\{1,2,3,4\}$ 的排列中，有 11 个排列恰好包含 2 个上升位：
 $$
-1324, 1423, 2314, 2413, 3412;        \\
-1243, 1342, 2341; 2134, 3124, 4123.
+\begin{aligned}
+&1324,\ 1423,\ 2314,\ 2413,\ 3412;\\
+&1243,\ 1342,\ 2341;\quad 2134,\ 3124,\ 4123.
+\end{aligned}
 $$
 
 （第一行列出的是满足 $\pi_1 < \pi_2 > \pi_3 < \pi_4$ 的排列；第二行列出的是满足 $\pi_1 < \pi_2 < \pi_3 > \pi_4$ 与 $\pi_1 > \pi_2 < \pi_3 < \pi_4$ 的排列。）因此 $\left\langle \begin{matrix}4\\2\end{matrix} \right\rangle = 11$。
 
 **表 268 欧拉三角**
-|$n$|$\left\langle \begin{matrix}n\\0\end{matrix} \right\rangle$|$\left\langle \begin{matrix}n\\1\end{matrix} \right\rangle$|$\left\langle \begin{matrix}n\\2\end{matrix} \right\rangle$|$\left\langle \begin{matrix}n\\3\end{matrix} \right\rangle$|$\left\langle \begin{matrix}n\\4\end{matrix} \right\rangle$|$\left\langle \begin{matrix}n\\5\end{matrix} \right\rangle$|$\left\langle \begin{matrix}n\\6\end{matrix} \right\rangle$|$\left\langle \begin{matrix}n\\7\end{matrix} \right\rangle$|$\left\langle \begin{matrix}n\\8\end{matrix} \right\rangle$|$\left\langle \begin{matrix}n\\9\end{matrix} \right\rangle$|
+|$n$|$\langle \begin{matrix}n\\0\end{matrix} \rangle$|$\langle \begin{matrix}n\\1\end{matrix} \rangle$|$\langle \begin{matrix}n\\2\end{matrix} \rangle$|$\langle \begin{matrix}n\\3\end{matrix} \rangle$|$\langle \begin{matrix}n\\4\end{matrix} \rangle$|$\langle \begin{matrix}n\\5\end{matrix} \rangle$|$\langle \begin{matrix}n\\6\end{matrix} \rangle$|$\langle \begin{matrix}n\\7\end{matrix} \rangle$|$\langle \begin{matrix}n\\8\end{matrix} \rangle$|$\langle \begin{matrix}n\\9\end{matrix} \rangle$|
 |-:|-:|-:|-:|-:|-:|-:|-:|-:|-:|-:|
 |0|1||||||||||
 |1|1|0|||||||||
@@ -394,11 +396,11 @@ $$
 |9|1|502|14608|88234|156190|88234|14608|502|1|0|
 
 
-表 268 列出了最小的一些欧拉数；可以看到这次标志性的序列是 1, 11, 11, 1。当 $n>0$ 时，上升位最多有 $n-1$ 个，因此在三角的对角线上我们有 $\left\langle \begin{matrix}n\\n\end{matrix} \right\rangle = [n=0]$。
+表 268 列出了最小的一些欧拉数；可以看到这次标志性的序列是 $1, 11, 11, 1$。当 $n>0$ 时，上升位最多有 $n-1$ 个，因此在三角的对角线上我们有 $\langle \begin{matrix}n\\n\end{matrix} \rangle = [n=0]$。
 
 欧拉三角与帕斯卡三角类似，左右是对称的。但在这种情形下，对称规律略有不同：
 $$
-\left\langle \begin{matrix}n\\k\end{matrix} \right\rangle = \left\langle \begin{matrix}n\\n-1-k\end{matrix} \right\rangle,\quad \text{整数 }n>0; \tag{6.34}
+\left\langle \begin{matrix}n\\k\end{matrix} \right\rangle = \left\langle \begin{matrix}n\\n-1-k\end{matrix} \right\rangle,\quad \text{integer }n>0; \tag{6.34}
 $$
 
 排列 $\pi_1\pi_2\cdots\pi_n$ 有 $n-1-k$ 个上升位，当且仅当其翻转排列 $\pi_n\cdots\pi_2\pi_1$ 有 $k$ 个上升位。
@@ -410,7 +412,7 @@ $$
 
 我们再次通过设定初始条件来启动递推关系：
 $$
-\left\langle \begin{matrix} 0 \\ k \end{matrix} \right\rangle = [k=0],\quad \text{整数 }k. \tag{6.36}
+\left\langle \begin{matrix} 0 \\ k \end{matrix} \right\rangle = [k=0],\quad \text{integer }k. \tag{6.36}
 $$
 
 并且我们约定，当 $k < 0$ 时，$\left\langle \begin{matrix} n \\ k \end{matrix} \right\rangle = 0$。
@@ -430,8 +432,7 @@ x^4 &= \binom{x}{4} + 11\binom{x+1}{4} + 11\binom{x+2}{4} + \binom{x+3}{4},
 $$
 依此类推。式 (6.37) 可以用数学归纳法轻松证明（见习题 14）。
 
-顺便一提，式 (6.37) 还给出了求前 $n$ 个平方数之和的另一种方法：
-我们有 $k^2= \langle \begin{matrix} 2 \\ 0 \end{matrix} \rangle \binom{k}{2} + \langle \begin{matrix} 2 \\ 1 \end{matrix} \rangle \binom{k+1}{2} = \binom{k}{2} + \binom{k+1}{2},$ 因此
+顺便一提，式 (6.37) 还给出了求前 $n$ 个平方数之和的另一种方法：我们有 $k^2= \langle \begin{matrix} 2 \\ 0 \end{matrix} \rangle \binom{k}{2} + \langle \begin{matrix} 2 \\ 1 \end{matrix} \rangle \binom{k+1}{2} = \binom{k}{2} + \binom{k+1}{2},$ 因此
 $$
 \begin{aligned}
 1^2 + 2^2 + \cdots + n^2

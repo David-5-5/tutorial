@@ -475,12 +475,12 @@ $$
 |7|1|240|5610|32120|58140|33984|5040|0||
 |8|1|494|19950|195800|644020|785304|341136|40320|0|
 
-这里我们不必再深入探讨欧拉数；通常只要知道它们存在，并且在需要时能查阅基本恒等式列表就足够了。不过，在结束这个话题之前，我们应当留意另一种系数的三角排列，如表 270 所示。我们把这些数称为**二阶欧拉数** $\left\langle\!\!\left\langle\begin{matrix}n\\k\end{matrix}\right\rangle\!\!\right\rangle$，因为它们满足与式 (6.35) 相似的递推关系，只是在一处将 $n$ 替换成了 $2n-1$。
+这里我们不必再深入探讨欧拉数；通常只要知道它们存在，并且在需要时能查阅基本恒等式列表就足够了。不过，在结束这个话题之前，我们应当留意另一种系数的三角排列，如表 270 所示。我们把这些数称为**二阶欧拉数** $\left\langle\!\!\left\langle n\atop k\right\rangle\!\!\right\rangle$，因为它们满足与式 (6.35) 相似的递推关系，只是在一处将 $n$ 替换成了 $2n-1$。
 $$
 \left\langle\!\!\left\langle n\atop k\right\rangle\!\!\right\rangle = (k+1)\left\langle\!\!\left\langle n-1\atop k\right\rangle\!\!\right\rangle + (2n-1-k)\left\langle\!\!\left\langle n-1\atop k-1\right\rangle\!\!\right\rangle. \tag{6.41}
 $$
 
-这些数有着奇妙的组合意义，最早由 Gessel 和 Stanley [147] 发现：如果我们构造多重集合 $\{1,1,2,2,\dots,n,n\}$ 的排列，且满足特殊性质：对每个 $1\le m\le n$，两个 $m$ 之间的所有数都大于 $m$，那么 $\left\langle\!\!\left\langle n\atop k\right\rangle\!\!\right\rangle$ 就是这类排列中**恰有 $k$ 个上升位**的数目。例如，$\{1,1,2,2,3,3\}$ 恰有 8 个满足条件且只有 1 个上升位的排列：
+这些数有着奇妙的组合意义，最早由 Gessel 和 Stanley [147] 发现：如果我们构造多重集合 $\{1,1,2,2,\dots,n,n\}$ 的排列，且满足特殊性质：对每个 $1\le m\le n$，两个 $m$ 之间的所有数都大于 $m$，那么 $\left\langle\!\!\left\langle n\atop k\right\rangle\!\!\right\rangle$ 就是这类排列中恰有 $k$ 个上升位的数目。例如，$\{1,1,2,2,3,3\}$ 恰有 8 个满足条件且只有 1 个上升位的排列：
 $$
 113322, 133221, 221331, 221133, 223311, 233211, 331122, 331221.
 $$
@@ -488,8 +488,7 @@ $$
 因此 $\left\langle\!\!\left\langle 3\atop 1\right\rangle\!\!\right\rangle = 8$。多重集合 $\{1,1,2,2,\dots,n,n\}$ 总共有
 $$
 \sum_k \left\langle\!\!\left\langle n\atop k\right\rangle\!\!\right\rangle
-= (2n-1)(2n-3)\cdots(1)
-= \frac{(2n)!}{2^n n!}.
+= (2n-1)(2n-3)\cdots(1) = \frac{(2n)^{\underline{n}}}{2^n}.
 \tag{6.42}
 $$
 个满足条件的排列，因为两个 $n$ 必须相邻，而且在 $n-1$ 对应的排列中共有 $2n-1$ 个位置可以插入它们。例如，当 $n=3$ 时，排列 $1221$ 有 5 个插入位置，分别得到 $331221$，$133221$，$123321$，$122331$ 和 $122133$。递推式 (6.41) 可以通过推广我们对普通欧拉数所用的论证方法来证明。
@@ -497,32 +496,26 @@ $$
 二阶欧拉数之所以重要，主要是因为它们与斯特林数存在关联[148]：对 $n$ 进行归纳可得
 $$
 \left\{ \begin{matrix} x \\ x-n \end{matrix} \right\}
-= \sum_k \left\langle\!\!\left\langle n\atop k\right\rangle\!\!\right\rangle \binom{x+n-1}{2n-k},
-\quad \text{integer } n\ge 0; \tag{6.43}
+= \sum_k \left\langle\!\!\left\langle n\atop k\right\rangle\!\!\right\rangle \binom{x+n-1-k}{2n},\quad \text{integer } n\ge 0; \tag{6.43}
 $$
 $$
 \left[ \begin{matrix} x \\ x-n \end{matrix} \right]
-= \sum_k \left\langle\!\!\left\langle n\atop k\right\rangle\!\!\right\rangle \binom{x+k}{2n},
-\quad \text{integer } n\ge 0. \tag{6.44}
+= \sum_k \left\langle\!\!\left\langle n\atop k\right\rangle\!\!\right\rangle \binom{x+k}{2n},\quad \text{integer } n\ge 0. \tag{6.44}
 $$
 
 例如，
 $$
 \left\{ \begin{matrix} x \\ x-1 \end{matrix} \right\} = \binom{x}{2},\qquad
-\left[ \begin{matrix} x \\ x-1 \end{matrix} \right] = \binom{x}{2};
-$$
-$$
+\left[ \begin{matrix} x \\ x-1 \end{matrix} \right] = \binom{x}{2};\\
 \left\{ \begin{matrix} x \\ x-2 \end{matrix} \right\} = \binom{x+1}{4} + 2\binom{x}{4},\qquad
-\left[ \begin{matrix} x \\ x-2 \end{matrix} \right] = \binom{x}{4} + 2\binom{x+1}{4};
-$$
-$$
-\left\{ \begin{matrix} x \\ x-3 \end{matrix} \right\} = \binom{x+2}{6} + 8\binom{x+1}{6} + 6\binom{x}{6},\qquad
+\left[ \begin{matrix} x \\ x-2 \end{matrix} \right] = \binom{x}{4} + 2\binom{x+1}{4}; \\
+\left\{ \begin{matrix} x \\ x-3 \end{matrix} \right\} = \binom{x+2}{6} + 8\binom{x+1}{6} + 6\binom{x}{6}, \\ \qquad
 \left[ \begin{matrix} x \\ x-3 \end{matrix} \right] = \binom{x}{6} + 8\binom{x+1}{6} + 6\binom{x+2}{6}.
 $$
 
 （我们在式 (6.7) 中已经见过 $n=1$ 的情形。）这些恒等式对任意整数 $x$ 与非负整数 $n$ 都成立。由于右端是关于 $x$ 的多项式，我们可以用 (6.43) 和 (6.44) 把斯特林数 $\left\{\begin{matrix}x\\x-n\end{matrix}\right\}$ 与 $\left[\begin{matrix}x\\x-n\end{matrix}\right]$ 延拓定义到任意实数（或复数）$x$ 上。
 
-若 $n>0$，则多项式 $\left\{\begin{matrix}x\\x-n\end{matrix}\right\}$ 与 $\left[\begin{matrix}x\\x-n\end{matrix}\right]$ 在 $x=0$，$x=1$，$\dots$，$x=n$ 时取值为 $0$，因此它们可被 $(x-0)$，$(x-1)$，$\dots$，$(x-n)$ 整除。将这些已知因子提出后剩下的部分很值得研究。我们按照如下规则定义斯特林多项式 $\sigma_n(x)$
+若 $n>0$，则多项式 $\left\{\begin{matrix}x\\x-n\end{matrix}\right\}$ 与 $\left[\begin{matrix}x\\x-n\end{matrix}\right]$ 在 $x=0$，$x=1$，$\dots$，$x=n$ 时取值为 $0$，因此它们可被 $(x-0)$，$(x-1)$，$\dots$，$(x-n)$ 整除。将这些已知因子提出后剩下的部分很值得研究。我们按照如下规则定义*斯特林多项式* $\sigma_n(x)$
 $$
 \sigma_n(x) = \left[ \begin{matrix} x \\ x-n \end{matrix} \right] \bigg/ \bigl(x(x-1)\cdots(x-n)\bigr). \tag{6.45}
 $$
@@ -545,7 +538,7 @@ $$
 
 **表 272 斯特林卷积公式**
 $$
-r\sum_{k=0}^n \sigma_k(r+tk)\,\sigma_{n-k}(s+t(n-k)) = (r+s)\,\sigma_n(r+s+tn), \tag{6.46}
+rs\sum_{k=0}^n \sigma_k(r+tk)\,\sigma_{n-k}(s+t(n-k)) = (r+s)\,\sigma_n(r+s+tn), \tag{6.46}
 $$
 $$
 s\sum_{k=0}^n k\sigma_k(r+tk)\,\sigma_{n-k}(s+t(n-k)) = n\,\sigma_n(r+s+tn), \tag{6.47} 

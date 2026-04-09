@@ -193,5 +193,45 @@ public:
         if (uf.find(n) == uf.find(n+1)) return false;
         else return true;
     }
- 
+
+    bool canReachCorner2(int xCorner, int yCorner, vector<vector<int>>& circles) {      
+        // DFS
+        auto in_circle = [] (long long ox, long long oy, long long r, long long x, long long y) {
+            return (ox - x) * (ox - x) + (oy - y) * (oy - y) <= r * r;
+        };
+
+        int n = circles.size();
+        vector<int> vis(n);
+        auto dfs = [&](auto&& dfs, int i) -> bool {
+            long long x1 = circles[i][0], y1 = circles[i][1], r1 = circles[i][2];
+            // 圆 i 是否与矩形右边界/下边界相交相切
+            if (y1 <= yCorner && abs(x1 - xCorner) <= r1 || x1 <= xCorner && y1 <= r1) {
+                return true;
+            }
+            vis[i] = true;
+            for (int j = 0; j < n; j++) {
+                long long x2 = circles[j][0], y2 = circles[j][1], r2 = circles[j][2];
+                // 在两圆相交相切的前提下，点 A 是否严格在矩形内
+                if (!vis[j] && (x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2) <= (r1 + r2) * (r1 + r2) &&
+                    x1 * r2 + x2 * r1 < (r1 + r2) * xCorner &&
+                    y1 * r2 + y2 * r1 < (r1 + r2) * yCorner &&
+                    dfs(dfs, j)) {
+                    return true;
+                }
+            }
+            return false;
+        };
+        for (int i = 0; i < n; i++) {
+            long long x = circles[i][0], y = circles[i][1], r = circles[i][2];
+            if (in_circle(x, y, r, 0, 0) || // 圆 i 包含矩形左下角
+                in_circle(x, y, r, xCorner, yCorner) || // 圆 i 包含矩形右上角
+                // 圆 i 是否与矩形上边界/左边界相交相切
+                !vis[i] && (x <= xCorner && abs(y - yCorner) <= r || y <= yCorner && x <= r) && dfs(dfs, i)) {
+                return false;
+            }
+        }
+        return true;             
+    }
+
+
 };

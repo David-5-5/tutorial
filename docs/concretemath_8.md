@@ -1333,6 +1333,319 @@ $$
 = \sum_{k=1}^n s_k\bigl[P(h_1,\dots,h_n;k)=p\bigr].
 $$
 
+对所有 $m^n$ 种可能的 $(h_1,\dots,h_n)$ 求和并除以 $m^n$ 所得到的 $A(h_1,\dots,h_n)$ 的均值，与我们之前在式 (8.95) 中得到的均值相同。但 $A(h_1,\dots,h_n)$ 的方差则不同：它是 $m^n$ 个平均值的方差，而不是 $m^n\cdot n$ 个探测次数的方差。例如，如果 $m=1$（即只有一个链表），“平均值”$A(h_1,\dots,h_n)=A(1,\dots,1)$ 实际上是常数，因此其方差 $VA$ 为零；但成功查找时的探测次数并非常数，所以方差 $VP$ 不为零。
 
+我们可以在最简单的情形下对一般的 $m$ 和 $n$ 进行计算，以此说明这两种方差的区别：设对 $1\le k\le n$ 有 $s_k=1/n$。换言之，我们暂时假设查找键服从均匀分布。任意给定的哈希值序列 $(h_1,\dots,h_n)$ 对应 $m$ 个链表，分别包含 $n_1,n_2,\dots,n_m$ 个条目，其中
+$$
+n_1+n_2+\cdots+n_m = n.
+$$
+在表中 $n$ 个键被等概率查找的成功查找中，平均运行时间（探测次数）为
+$$
+\begin{aligned}
+A(h_1,\dots,h_n)
+&= \frac{(1+\cdots+n_1)+(1+\cdots+n_2)+\cdots+(1+\cdots+n_m)}{n} \\
+&= \frac{n_1(n_1+1)+n_2(n_2+1)+\cdots+n_m(n_m+1)}{2n} \\
+&= \frac{n_1^2+n_2^2+\cdots+n_m^2 + n}{2n}.
+\end{aligned}
+$$
+我们的目标是在由所有 $m^n$ 个序列 $(h_1,\dots,h_n)$ 构成的概率空间上，计算该量 $A(h_1,\dots,h_n)$ 的方差。
+
+事实表明，如果我们计算一个稍有不同的量
+$$
+B(h_1,\dots,h_n)
+= \binom{n_1}{2} + \binom{n_2}{2} + \cdots + \binom{n_m}{2}
+$$
+的方差，计算会更简单。我们有
+$$
+A(h_1,\dots,h_n) = 1 + B(h_1,\dots,h_n)/n,
+$$
+因此 $A$ 的均值和方差满足
+$$
+EA = 1 + \frac{EB}{n},\quad
+VA = \frac{VB}{n^2}. \tag{8.100}
+$$
+
+链表长度为 $n_1,n_2,\dots,n_m$ 的概率是多项式系数
+$$
+\binom{n}{n_1,n_2,\dots,n_m}
+=\frac{n!}{n_1!\,n_2!\,\dots\,n_m!}
+$$
+除以 $m^n$。因此 $B(h_1,\dots,h_n)$ 的概率生成函数为
+$$
+B_n(z)
+=\sum_{\substack{n_1,n_2,\dots,n_m\ge0\\n_1+n_2+\cdots+n_m=n}}
+\binom{n}{n_1,n_2,\dots,n_m}
+z^{\binom{n_1}2+\binom{n_2}2+\cdots+\binom{n_m}2}m^{-n}.
+$$
+这个和式在新手看来有些吓人，但第7章的经验让我们认出它是一个 $m$ 重卷积。事实上，如果考虑指数型超生成函数
+$$
+G(w,z)=\sum_{n\ge0}B_n(z)\frac{m^n w^n}{n!},
+$$
+我们可以轻松验证 $G(w,z)$ 就是一个 $m$ 次幂：
+$$
+G(w,z)=
+\left(
+\sum_{k\ge0}z^{\binom k2}\frac{w^k}{k!}
+\right)^{\!m}.
+$$
+作为检验，令 $z=1$，可得 $G(w,1)=(e^w)^m$，因此 $m^n w^n/n!$ 的系数满足 $B_n(1)=1$。
+
+如果我们知道 $B_n'(1)$ 和 $B_n''(1)$，就能计算 $\operatorname{Var}(B_n)$。于是对 $G(w,z)$ 关于 $z$ 求偏导：
+$$
+\frac\partial{\partial z}G(w,z)
+=\sum_{n\ge0}B_n'(z)\frac{m^n w^n}{n!}
+=m\left(
+\sum_{k\ge0}z^{\binom k2}\frac{w^k}{k!}
+\right)^{\!m-1}
+\sum_{k\ge0}\binom k2 z^{\binom k2-1}\frac{w^k}{k!};
+$$
+$$
+\frac{\partial^2}{\partial z^2}G(w,z)
+=\sum_{n\ge0}B_n''(z)\frac{m^n w^n}{n!}
+$$
+$$
+\begin{aligned}={}&m(m-1)
+\left(
+\sum_{k\ge0}z^{\binom k2}\frac{w^k}{k!}
+\right)^{\!m-2}
+\left(
+\sum_{k\ge0}\binom k2 z^{\binom k2-1}\frac{w^k}{k!}
+\right)^{\!2}
+\\
+&+m\left(
+\sum_{k\ge0}z^{\binom k2}\frac{w^k}{k!}
+\right)^{\!m-1}
+\sum_{k\ge0}\binom k2\biggl(\binom k2-1\biggr)z^{\binom k2-2}\frac{w^k}{k!}.
+\end{aligned}
+$$
+
+
+式子确实复杂，但令 $z=1$ 后一切都会大幅简化。例如，我们有：
+
+$$
+\sum_{n\ge0} B_n'(1) \frac{m^n w^n}{n!}
+= m e^{(m-1)w} \sum_{k\ge2} \frac{w^k}{2(k-2)!}
+= m e^{(m-1)w} \sum_{k\ge0} \frac{w^{k+2}}{2k!}
+= \frac{m w^2 e^{(m-1)w}}{2} e^w
+= \sum_{n\ge0} \frac{(m w)^{n+2}}{2m n!}
+= \sum_{n\ge0} \frac{n(n-1) m^n w^n}{2m n!},
+$$
+
+由此可得
+
+$$
+B_n'(1) = \binom{n}{2} \frac{1}{m}. \tag{8.101}
+$$
+
+将其代入式 (8.100) 中的 $EA$，得到
+$EA = 1 + (n-1)/2m$，与式 (8.97) 一致。
+
+$B_n''(1)$ 的表达式涉及类似求和：
+
+$$
+\sum_{k\ge0} \binom{k}{2}\biggl(\binom{k}{2}-1\biggr) \frac{w^k}{k!}
+= \frac14 \sum_{k\ge0} (k+1)k(k-1)(k-2) \frac{w^k}{k!}
+= \frac14 \sum_{k\ge3} (k+1) \frac{w^k}{(k-3)!}
+= \frac14 \sum_{k\ge0} (k+4) \frac{w^{k+3}}{k!}
+= \Bigl(\frac14 w^4 + w^3\Bigr) e^w,
+$$
+
+因此我们得到
+
+$$
+\sum_{n\ge0} B_n''(1) \frac{m^n w^n}{n!} = m(m-1) e^{w(m-2)} \Bigl(\frac12 w^2 e^w\Bigr)^2 + m e^{w(m-1)} \Bigl(\frac14 w^4 + w^3\Bigr) e^w = m e^{wm} \Bigl(\frac14 m w^4 + w^3\Bigr),
+$$
+
+$$
+B_n''(1) = \binom{n}{2}\biggl(\binom{n}{2}-1\biggr) \frac{1}{m^2}. \tag{8.102}
+$$
+
+现在可以把所有部分拼起来，计算期望的方差 $VA$。
+大量项相互抵消，结果出奇简洁：
+
+$$
+VA = \frac{VB}{n^2} = \frac{B_n''(1) + B_n'(1) - B_n'(1)^2}{n^2} = \frac{n(n-1)}{m^2 n^2}
+\biggl(
+\frac{(n+1)(n-2)}{4} + \frac{m}{2} - \frac{n(n-1)}{4}
+\biggr) = \frac{(m-1)(n-1)}{2m^2 n}. \tag{8.103}
+$$
+
+当出现这种“巧合”时，我们会猜想背后一定有数学上的原因；或许存在另一种解题思路，能解释答案为何形式如此简洁。事实上确实有另一种方法（见习题 61），它表明成功查找的平均探测次数的方差具有一般形式：
+
+$$
+VA = \frac{m-1}{m^2}\sum_{k=1}^n s_k^2 (k-1) \tag{8.104}
+$$
+
+其中 $s_k$ 是查找第 $k$ 个插入元素的概率。式 (8.103) 就是 $s_k=1/n$（$1\le k\le n$）时的特例。
+
+除了“平均值的方差”，我们还可以考虑“方差的平均值”。换句话说，每一组确定哈希表的序列 $(h_1,\dots,h_n)$ 也定义了一个成功查找的概率分布，而这个分布的方差反映了不同成功查找中探测次数的离散程度。例如，回到之前 $n=16$ 个元素插入 $m=10$ 个链表的例子：
+
+$$
+(h_1,\dots,h_{16}) = 3\ 1\ 4\ 1\ 5\ 9\ 2\ 6\ 5\ 3\ 5\ 8\ 9\ 7\ 9\ 3
+$$
+$$
+(P_1,\dots,P_{16}) = 1\ 1\ 1\ 2\ 1\ 1\ 1\ 1\ 2\ 2\ 3\ 1\ 2\ 1\ 3\ 3
+$$
+
+在得到的哈希表中，一次成功查找的概率生成函数为：
+
+$$
+G(3,1,4,1,\dots,3) = \sum_{k=1}^{16} s_k z^{P(3,1,4,1,\dots,3;k)}
+= s_1 z + s_2 z + s_3 z + s_4 z^2 + \cdots + s_{16} z^3
+$$
+
+我们刚才已经讨论了这张表的平均探测次数 $A(3,1,4,1,\dots,3)=\operatorname{Mean}\bigl(G(3,1,4,1,\dots,3)\bigr)$。我们也可以考虑它的方差：
+
+$$
+s_1\cdot1^2 + s_2\cdot1^2 + s_3\cdot1^2 + s_4\cdot2^2 + \cdots + s_{16}\cdot3^2
+- \bigl(s_1\cdot1 + s_2\cdot1 + s_3\cdot1 + s_4\cdot2 + \cdots + s_{16}\cdot3\bigr)^2
+$$
+
+这个方差是依赖于 $(h_1,\dots,h_n)$ 的随机变量，因此很自然会去考虑它的平均值。
+
+换句话说，为了理解成功查找的行为，我们通常关心三种自然的方差：
+- 总方差：对所有 $(h_1,\dots,h_n)$ 和 $k$ 取探测次数的方差；
+- 平均值的方差：先对所有 $k$ 取平均，再对所有 $(h_1,\dots,h_n)$ 取方差；
+- 方差的平均值：先对所有 $k$ 取方差，再对所有 $(h_1,\dots,h_n)$ 取平均。
+
+用符号表示：
+总方差为
+
+$$
+VP = \sum_{1\le h_1,\dots,h_n\le m}\sum_{k=1}^n \frac{s_k}{m^n}
+P(h_1,\dots,h_n;k)^2 - \biggl(\sum_{1\le h_1,\dots,h_n\le m}\sum_{k=1}^n \frac{s_k}{m^n}
+P(h_1,\dots,h_n;k)\biggr)^2
+$$
+
+平均值的方差为
+
+$$
+VA = \sum_{1\le h_1,\dots,h_n\le m}\frac1{m^n}
+\biggl(\sum_{k=1}^n s_k P(h_1,\dots,h_n;k)\biggr)^2 - \biggl(\sum_{1\le h_1,\dots,h_n\le m}\frac1{m^n}
+\sum_{k=1}^n s_k P(h_1,\dots,h_n;k)\biggr)^2
+$$
+
+方差的平均值为
+
+$$
+AV = \sum_{1\le h_1,\dots,h_n\le m}\frac1{m^n}
+\biggl(
+\sum_{k=1}^n s_k P(h_1,\dots,h_n;k)^2 - \biggl(\sum_{k=1}^n s_k P(h_1,\dots,h_n;k)\biggr)^2
+\biggr)
+$$
+
+可以证明这三个量以简单方式相互联系：
+
+$$
+VP = VA + AV \tag{8.105}
+$$
+
+事实上，条件概率分布恒满足如下恒等式（对任意概率空间中的实值随机变量 $X,Y$ 都成立）：
+
+$$
+VX = V\bigl(E(X\mid Y)\bigr) + E\bigl(V(X\mid Y)\bigr) \tag{8.106}
+$$
+
+（该恒等式的证明见习题 22。）式 (8.105) 是其特例：$X$ 为成功查找的探测次数，$Y$ 为哈希值序列 $(h_1,\dots,h_n)$。
+
+对一般式 (8.106) 需要仔细理解，因为记号容易掩盖期望与方差所作用的不同随机变量和概率空间。对 $Y$ 取值范围内的每个 $y$，我们在 (8.91) 中定义了随机变量 $X\mid y$，其期望 $E(X\mid y)$ 依赖于 $y$。现在 $E(X\mid Y)$ 表示一个随机变量，其取值为 $E(X\mid y)$（$y$ 取遍 $Y$ 的所有可能值），而 $V\bigl(E(X\mid Y)\bigr)$ 是该随机变量关于 $Y$ 分布的方差。类似地，$E\bigl(V(X\mid Y)\bigr)$ 是 $V(X\mid y)$ 随 $y$ 变化的平均值。式 (8.106) 左边是 $X$ 的无条件方差。由于方差非负，我们总有
+
+$$
+VX \ge V\bigl(E(X\mid Y)\bigr),\quad
+VX \ge E\bigl(V(X\mid Y)\bigr) \tag{8.107}
+$$
+
+**再次回到情况 1：重新考察失败查找**
+
+我们用一个典型的算法分析计算来结束对哈希的微观考察。这一次我们更细致地分析失败查找的总运行时间，并假设计算机要把这个之前不存在的键插入内存。
+
+式 (8.83) 中的插入过程分两种情况，取决于 $j$ 是否为负。$j<0$ 当且仅当 $P=0$，因为负值来自空链表的 FIRST 入口。因此，如果链表原先为空，则 $P=0$，必须执行 $\text{FIRST}[h_{n+1}]:=n+1$（新记录插入位置 $n+1$）。否则 $P>0$，必须将某个 LINK 设为 $n+1$。这两种情况耗时可能不同；因此失败查找的总运行时间可表示为
+
+$$
+T = \alpha + \beta P + \delta[P=0] \tag{8.108}
+$$
+
+其中 $\alpha,\beta,\delta$ 是依赖于计算机与哈希实现方式的常数。我们很希望知道 $T$ 的均值与方差，因为这类信息比 $P$ 的均值与方差更贴近实际。
+
+到目前为止，我们只对非负整数值随机变量使用过概率生成函数。但事实证明，对任意实值随机变量 $X$，我们可以用完全相同的方式处理
+
+$$
+G_X(z) = \sum_{\omega\in\Omega}\Pr(\omega)z^{X(\omega)}
+$$
+
+因为 $X$ 的核心性质只取决于 $G_X$ 在 $z=1$ 附近的行为，而此处 $z$ 的幂都有良好定义。例如，失败查找的运行时间 (8.108) 就是一个定义在等概率哈希值 $(h_1,\dots,h_n,h_{n+1})$（$1\le h_j\le m$）上的随机变量，我们可以把级数
+
+$$
+G_T(z) = \frac1{m^{n+1}}
+\sum_{h_1=1}^m\cdots\sum_{h_n=1}^m\sum_{h_{n+1}=1}^m
+z^{\alpha+\beta P(h_1,\dots,h_{n+1})+\delta[P(h_1,\dots,h_{n+1})=0]}
+$$
+
+看作概率生成函数，即使 $\alpha,\beta,\delta$ 不是整数。（事实上这些参数是带时间量纲的物理量，甚至不是纯数！但我们仍然可以把它们放在 $z$ 的指数上。）我们依然可以通过计算 $G_T'(1)$ 和 $G_T''(1)$ 并按常规方式组合，求出 $T$ 的均值与方差。
+
+对应 $P$ 而非 $T$ 的生成函数是
+$$
+P(z) = \left( \frac{m-1}{m} + \frac{z}{m} \right)^n
+= \sum_{p\ge0} \Pr(P=p) z^p.
+$$
+因此我们有
+$$
+\begin{aligned}
+G_T(z)
+&= \sum_{p\ge0} \Pr(P=p) z^{\alpha+\beta p+\delta[p=0]} \\
+&= z^\alpha \left( (z^\delta-1)\Pr(P=0) + \sum_{p\ge0} \Pr(P=p) z^{\beta p} \right) \\
+&= z^\alpha \left(
+(z^\delta-1)\left( \frac{m-1}{m} \right)^n + \left( \frac{m-1}{m} + \frac{z^\beta}{m} \right)^n
+\right).
+\end{aligned}
+$$
+
+现在求 $\operatorname{Mean}(G_T)$ 和 $\operatorname{Var}(G_T)$ 就是常规计算了：
+$$
+\operatorname{Mean}(G_T)
+= G_T'(1)
+= \alpha + \beta \frac{n}{m} + \delta \left( \frac{m-1}{m} \right)^n. \tag{8.109}
+$$
+
+$$
+\begin{aligned}
+G_T''(1)
+&= \alpha(\alpha-1)+ 2\alpha\beta \frac{n}{m}+ \beta(\beta-1)\frac{n}{m}+ \beta^2 \frac{n(n-1)}{m^2} \\
+&\quad + 2\alpha\delta\left( \frac{m-1}{m} \right)^n+ \delta(\delta-1)\left( \frac{m-1}{m} \right)^n.
+\end{aligned}
+$$
+
+$$
+\begin{aligned}
+\operatorname{Var}(G_T)
+&= G_T''(1) + G_T'(1) - G_T'(1)^2 \\
+&= \beta^2 \frac{n(m-1)}{m^2} - 2\beta\delta \left( \frac{m-1}{m} \right)^n \frac{n}{m} \\
+&\quad + \delta^2 \left(
+\left( \frac{m-1}{m} \right)^n- \left( \frac{m-1}{m} \right)^{2n}
+\right). \tag{8.110}
+\end{aligned}
+$$
+
+在第 9 章我们会学习当 $m,n$ 很大时如何估计这类表达式。例如，若 $m=n$ 且 $n\to\infty$，第 9 章的方法会给出 $T$ 的均值和方差分别为
+$$
+\alpha+\beta+\delta e^{-1} + O(n^{-1})
+$$
+和
+$$
+\beta^2 - 2\beta\delta e^{-1} + \delta^2(e^{-1}-e^{-2}) + O(n^{-1}).
+$$
+
+若 $m=n/\ln n$ 且 $n\to\infty$，对应结果为
+$$
+\operatorname{Mean}(G_T)
+= \beta\ln n + \alpha + \delta/n + O\!\left( \frac{(\log n)^2}{n^2} \right),
+$$
+
+$$
+\begin{aligned}
+\operatorname{Var}(G_T)
+&= \beta^2\ln n - \frac{(\beta\ln n)^2 + 2\beta\delta\ln n - \delta^2}{n} + O\!\left( \frac{(\log n)^3}{n^2} \right).
+\end{aligned}
+$$
 
 

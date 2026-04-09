@@ -233,5 +233,64 @@ public:
         return true;             
     }
 
+    // 参考 canReachCorner2 的技巧，仍用并查集优化 canReachCorner 实现
+    bool canReachCorner3(int xCorner, int yCorner, vector<vector<int>>& circles) {
+        auto in_circle = [](long long ox, long long oy, long long r, long long x, long long y) {
+            return (ox - x) * (ox - x) + (oy - y) * (oy - y) <= r * r;
+        };
 
+        int n = circles.size();
+        UnionFind uf(n + 2);
+        const int LEFT_TOP = n;
+        const int RIGHT_BOTTOM = n + 1;
+
+        for (int i = 0; i < n; i++) {
+            long long x1 = circles[i][0], y1 = circles[i][1], r1 = circles[i][2];
+
+            // 判断圆是否连接左边界/上边 (x=0 或 y=yCorner)
+            bool connect_left_top = false;
+            if (x1 <= xCorner && abs(y1 - yCorner) <= r1) {
+                connect_left_top = true;
+            }
+            if (!connect_left_top && y1 <= yCorner && x1 <= r1) {
+                connect_left_top = true;
+            }
+
+            // 判断圆是否连接右边界/下边 (x=xCorner 或 y=0)
+            bool connect_right_bottom = false;
+            if (y1 <= yCorner && abs(x1 - xCorner) <= r1) {
+                connect_right_bottom = true;
+            }
+            if (!connect_right_bottom && x1 <= xCorner && y1 <= r1) {
+                connect_right_bottom = true;
+            }
+
+            // 如果圆包含矩形对角点，直接阻挡
+            if (in_circle(x1, y1, r1, 0, 0) || in_circle(x1, y1, r1, xCorner, yCorner)) {
+                return false;
+            }
+
+            if (connect_left_top) uf.merge(i, LEFT_TOP);
+            if (connect_right_bottom) uf.merge(i, RIGHT_BOTTOM);
+
+            // 与之前的圆比较
+            for (int j = 0; j < i; j++) {
+                long long x2 = circles[j][0], y2 = circles[j][1], r2 = circles[j][2];
+                long long dx = x1 - x2;
+                long long dy = y1 - y2;
+                long long dist_sq = dx * dx + dy * dy;
+                long long r_sum = r1 + r2;
+                if (dist_sq > r_sum * r_sum) {
+                    continue; // 两圆不相交
+                }
+                // 巧妙判断：加权重心在矩形内 => 至少一个交点在矩形内
+                if (x1 * r2 + x2 * r1 < r_sum * xCorner &&
+                    y1 * r2 + y2 * r1 < r_sum * yCorner) {
+                    uf.merge(i, j);
+                }
+            }
+        }
+
+        return !uf.is_same(LEFT_TOP, RIGHT_BOTTOM);
+    }    
 };

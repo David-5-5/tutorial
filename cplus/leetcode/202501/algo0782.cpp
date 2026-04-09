@@ -61,7 +61,7 @@ public:
         };
         
         if (n % 2 == 0) {
-            cout << "this" << endl;
+            // cout << "this" << endl;
             return min(cnt(first_row, t1), cnt(first_row,t2))/2 + 
                 min(cnt(first_col, t1), cnt(first_col,t2))/2;
         }

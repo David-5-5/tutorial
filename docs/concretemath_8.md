@@ -1588,11 +1588,11 @@ $$
 P(z) = \left( \frac{m-1}{m} + \frac{z}{m} \right)^n
 = \sum_{p\ge0} \Pr(P=p) z^p.
 $$
+
 因此我们有
 $$
 \begin{aligned}
-G_T(z)
-&= \sum_{p\ge0} \Pr(P=p) z^{\alpha+\beta p+\delta[p=0]} \\
+G_T(z) &= \sum_{p\ge0} \Pr(P=p) z^{\alpha+\beta p+\delta[p=0]} \\
 &= z^\alpha \left( (z^\delta-1)\Pr(P=0) + \sum_{p\ge0} \Pr(P=p) z^{\beta p} \right) \\
 &= z^\alpha \left(
 (z^\delta-1)\left( \frac{m-1}{m} \right)^n + \left( \frac{m-1}{m} + \frac{z^\beta}{m} \right)^n
@@ -1609,16 +1609,14 @@ $$
 
 $$
 \begin{aligned}
-G_T''(1)
-&= \alpha(\alpha-1)+ 2\alpha\beta \frac{n}{m}+ \beta(\beta-1)\frac{n}{m}+ \beta^2 \frac{n(n-1)}{m^2} \\
+G_T''(1) &= \alpha(\alpha-1)+ 2\alpha\beta \frac{n}{m}+ \beta(\beta-1)\frac{n}{m}+ \beta^2 \frac{n(n-1)}{m^2} \\
 &\quad + 2\alpha\delta\left( \frac{m-1}{m} \right)^n+ \delta(\delta-1)\left( \frac{m-1}{m} \right)^n.
 \end{aligned}
 $$
 
 $$
 \begin{aligned}
-\operatorname{Var}(G_T)
-&= G_T''(1) + G_T'(1) - G_T'(1)^2 \\
+\operatorname{Var}(G_T) &= G_T''(1) + G_T'(1) - G_T'(1)^2 \\
 &= \beta^2 \frac{n(m-1)}{m^2} - 2\beta\delta \left( \frac{m-1}{m} \right)^n \frac{n}{m} \\
 &\quad + \delta^2 \left(
 \left( \frac{m-1}{m} \right)^n- \left( \frac{m-1}{m} \right)^{2n}
@@ -1626,25 +1624,11 @@ $$
 \end{aligned}
 $$
 
-在第 9 章我们会学习当 $m,n$ 很大时如何估计这类表达式。例如，若 $m=n$ 且 $n\to\infty$，第 9 章的方法会给出 $T$ 的均值和方差分别为
-$$
-\alpha+\beta+\delta e^{-1} + O(n^{-1})
-$$
-和
-$$
-\beta^2 - 2\beta\delta e^{-1} + \delta^2(e^{-1}-e^{-2}) + O(n^{-1}).
-$$
-
-若 $m=n/\ln n$ 且 $n\to\infty$，对应结果为
-$$
-\operatorname{Mean}(G_T)
-= \beta\ln n + \alpha + \delta/n + O\!\left( \frac{(\log n)^2}{n^2} \right),
-$$
-
+在第 9 章我们会学习当 $m,n$ 很大时如何估计这类表达式。例如，若 $m=n$ 且 $n\to\infty$，第 9 章的方法会给出 $T$ 的均值和方差分别为 $\alpha+\beta+\delta e^{-1} + O(n^{-1})$ 和 $\beta^2 - 2\beta\delta e^{-1} + \delta^2(e^{-1}-e^{-2}) + O(n^{-1})$。若 $m=n/\ln n$ 且 $n\to\infty$，对应结果为
 $$
 \begin{aligned}
-\operatorname{Var}(G_T)
-&= \beta^2\ln n - \frac{(\beta\ln n)^2 + 2\beta\delta\ln n - \delta^2}{n} + O\!\left( \frac{(\log n)^3}{n^2} \right).
+\operatorname{Mean}(G_T) &= \beta\ln n + \alpha + \delta/n + O\!\left( \frac{(\log n)^2}{n^2} \right), \\
+\operatorname{Var}(G_T) &= \beta^2\ln n - \frac{(\beta\ln n)^2 + 2\beta\delta\ln n - \delta^2}{n} + O\!\left( \frac{(\log n)^3}{n^2} \right).
 \end{aligned}
 $$
 

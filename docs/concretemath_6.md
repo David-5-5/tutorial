@@ -961,11 +961,11 @@ n^{m+1} &= \sum_{j=0}^m \binom{m+1}{j} S_j(n) \\
 &= \sum_{0\le k\le j\le m} \binom{m+1}{j}\binom{j+1}{j-k}\frac{B_{j-k}}{j+1} n^{k+1}+ (m+1)\Delta \\
 &= \sum_{0\le k\le j\le m} \binom{m+1}{j}\binom{j+1}{k+1}\frac{B_{j-k}}{j+1} n^{k+1} + (m+1)\Delta \\
 &= \sum_{0\le k\le m} \frac{n^{k+1}}{k+1} \sum_{k\le j\le m} \binom{m+1}{j}\binom{j}{k} B_{j-k} + (m+1)\Delta \\
-&= \sum_{0\le k\le m} \frac{n^{k+1}}{k+1} \binom{m+1}{k+1} \sum_{k\le j\le m} \binom{m-k}{j-k} B_{j-k}  + (m+1)\Delta \\
-&= \sum_{0\le k\le m} \frac{n^{k+1}}{k+1} \binom{m+1}{k+1} \sum_{0\le j\le m-k} \binom{m-k}{j} B_j + (m+1)\Delta \\
-&= \sum_{0\le k\le m} \frac{n^{k+1}}{k+1} \binom{m+1}{k+1} [m-k=0] + (m+1)\Delta \\
-&= \frac{n^{m+1}}{m+1} \binom{m+1}{m+1} + (m+1)\Delta \\
-&= n^{m+1} + (m+1)\Delta, \quad\text{其中 }\Delta = S_m(n)-\hat{S}_m(n).
+&= \sum_{0\le k\le m} \frac{n^{k+1}}{k+1} \binom{m+1}{k} \sum_{k\le j\le m} \binom{m+1-k}{j-k} B_{j-k}  + (m+1)\Delta \\
+&= \sum_{0\le k\le m} \frac{n^{k+1}}{k+1} \binom{m+1}{k} \sum_{0\le j\le m-k} \binom{m+1-k}{j} B_j + (m+1)\Delta \\
+&= \sum_{0\le k\le m} \frac{n^{k+1}}{k+1} \binom{m+1}{k} [m-k=0] + (m+1)\Delta \\
+&= \frac{n^{m+1}}{m+1} \binom{m+1}{m} + (m+1)\Delta \\
+&= n^{m+1} + (m+1)\Delta, \quad\text{ where }\Delta = S_m(n)-\hat{S}_m(n).
 \end{aligned}
 $$
 
@@ -973,22 +973,22 @@ $$
 
 在第 7 章中，我们将利用生成函数给出式 (6.78) 一个简洁得多的证明。核心思路是证明伯努利数是幂级数的系数
 $$
-\frac{z}{e^z-1} = \sum_{n\ge0}\frac{B_n z^n}{n!} \tag{6.81}
+\frac{z}{e^z-1} = \sum_{n\ge0} B_n \frac{z^n}{n!} \tag{6.81}
 $$
 
-现在我们暂且假定式 (6.81) 成立，由此推导它的一些奇妙推论。如果在两边加上 $-\dfrac{z}{2}$，就可以消去右端的 $B_1 z/1! = -\dfrac{z}{2}$ 项，得到：
+现在我们暂且假定式 (6.81) 成立，由此推导它的一些奇妙推论。如果在两边加上 $-\frac{z}{2}$，就可以消去右端的 $B_1 z/1! = -\frac{z}{2}$ 项，得到：
 $$
 \frac{z}{e^z-1} + \frac{z}{2}
 = \frac{z}{2}\cdot\frac{e^z+1}{e^z-1}
 = \frac{z}{2}\cdot\frac{e^{z/2}+e^{-z/2}}{e^{z/2}-e^{-z/2}}
 = \frac{z}{2}\coth\frac{z}{2}. \tag{6.82}
 $$
-这里 $\coth$ 是**双曲余切**函数，微积分教材中也写作 $\cosh z/\sinh z$；我们有
+这里 $\coth$ 是*双曲余切*函数，微积分教材中也写作 $\cosh z/\sinh z$；我们有
 $$
 \sinh z = \frac{e^z-e^{-z}}{2},\quad \cosh z = \frac{e^z+e^{-z}}{2}. \tag{6.83}
 $$
 
-将 $z$ 换为 $-z$ 可得 $\dfrac{-z}{2}\coth\dfrac{-z}{2} = \dfrac{z}{2}\coth\dfrac{z}{2}$，因此 $\dfrac{z}{2}\coth\dfrac{z}{2}$ 中所有**奇次项系数均为 0**，从而
+将 $z$ 换为 $-z$ 可得 $\frac{-z}{2}\coth\frac{-z}{2} = \frac{z}{2}\coth\frac{z}{2}$，因此 $\frac{z}{2}\coth\frac{z}{2}$ 中所有奇次项系数均为 $0$，从而
 $$
 B_3 = B_5 = B_7 = B_9 = B_{11} = B_{13} = \cdots = 0. \tag{6.84}
 $$
@@ -1039,21 +1039,18 @@ $$
 $$
 \zeta(2n) = H_\infty^{(2n)}
          = (-1)^{n-1}\frac{2^{2n-1}\pi^{2n}B_{2n}}{(2n)!},
-\quad \text{整数 } n>0. \tag{6.89}
+\quad \text{ integer } n>0. \tag{6.89}
 $$
 
 例如：
 $$
-\zeta(2) = H_\infty^{(2)} = 1+\frac14+\frac19+\cdots
-         = \frac{\pi^2 B_2}{1} = \pi^2/6; \tag{6.90}
+\zeta(2) = H_\infty^{(2)} = 1+\frac14+\frac19+\cdots = \pi^2 B_2 = \pi^2/6; \tag{6.90}
 $$
 $$
-\zeta(4) = H_\infty^{(4)} = 1+\frac1{16}+\frac1{81}+\cdots
-         = -\frac{\pi^4 B_4}{3} = \pi^4/90. \tag{6.91}
+\zeta(4) = H_\infty^{(4)} = 1+\frac1{16}+\frac1{81}+\cdots = -\frac{\pi^4 B_4}{3} = \pi^4/90. \tag{6.91}
 $$
 
-公式 (6.89) 不仅给出了 $H_\infty^{(2n)}$ 的闭式，还揭示了 $B_{2n}$ 的大致量级——当 $n$ 很大时，$H_\infty^{(2n)}$ 非常接近 1。
-同时它也说明：对所有 $n>0$，有 $(-1)^{n-1}B_{2n}>0$，即非零伯努利数的符号正负交替。
+公式 (6.89) 不仅给出了 $H_\infty^{(2n)}$ 的闭式，还揭示了 $B_{2n}$ 的大致量级——当 $n$ 很大时，$H_\infty^{(2n)}$ 非常接近 1。同时它也说明：对所有 $n>0$，有 $(-1)^{n-1}B_{2n}>0$，即非零伯努利数的符号正负交替。
 
 不仅如此，伯努利数同样出现在正切函数的系数中：
 $$
@@ -1062,17 +1059,16 @@ $$
 $$
 其余三角函数的展开式中也会出现伯努利数（见习题72）。由式 $(6.92)$ 可得到伯努利数的另一重要性质：
 $$
-T_{2n-1}=(-1)^{n-1}\frac{4^n(4^n-1)}{2n}B_{2n}
+T_{2n-1}=(-1)^{n-1}\frac{4^n(4^n-1)}{2n}B_{2n} \text{ is a positive integer.} \tag{6.93}
 $$
-为正整数。$(6.93)$
+
 
 例如取值：
-
 | $n$ | $1$ | $3$ | $5$ | $7$ | $9$ | $11$ | $13$ |
 |-----|-----|-----|-----|-----|-----|------|------|
 | $T_n$ | $1$ | $2$ | $16$ | $272$ | $7936$ | $353792$ | $22368256$ |
 
-这些 $T_n$ 被称为**正切数**。
+这些 $T_n$ 被称为*正切数*。
 
 沿用 B. F. Logan 的思路，考察如下幂级数即可证明式 $(6.93)$：
 $$
@@ -1083,8 +1079,7 @@ $$
 \end{aligned}
 $$
 
-其中 $T_n(x)$ 是关于 $x$ 的多项式；令 $x=0$ 可得 $T_n(0)=T_n$，即第 $n$ 个正切数。
-对式 $(6.94)$ 关于 $x$ 求导：
+其中 $T_n(x)$ 是关于 $x$ 的多项式；令 $x=0$ 可得 $T_n(0)=T_n$，即第 $n$ 个正切数。对式 $(6.94)$ 关于 $x$ 求导：
 $$
 \frac{1}{(\cos z - x\sin z)^2}
 =\sum_{n\ge0} T_n'(x)\frac{z^n}{n!};
@@ -1095,9 +1090,8 @@ $$
 =\sum_{n\ge1} T_n(x)\frac{z^{n-1}}{(n-1)!}
 =\sum_{n\ge0} T_{n+1}(x)\frac{z^n}{n!}.
 $$
-（自行验算即可发现化简抵消过程十分优美。）
 
-由此得到递推关系：
+（自行验算即可发现化简抵消过程十分优美。）由此得到递推关系：
 $$
 T_{n+1}(x)=(1+x^2)\,T_n'(x),\quad T_0(x)=x. \tag{6.95}
 $$
@@ -1105,43 +1099,30 @@ $$
 
 递推式 $(6.95)$ 提供了一种借助正切数计算伯努利数的简便途径，全程仅需整数基础运算；相比之下，定义递推 $(6.79)$ 需要处理复杂的分数算术。
 
-若需要计算从 $a$ 到 $b-1$ 的 $m$ 次幂和（而非从 $0$ 到 $n-1$），根据第2章理论有：
+若需要计算从 $a$ 到 $b-1$ 的 $m$ 次幂和，而非从 $0$ 到 $n-1$，根据第2章理论有：
 $$
-\sum_{k=a}^{b-1} k^m
-=\sum_a^b x^m \delta x
-=S_m(b)-S_m(a). \tag{6.96}
+\sum_{k=a}^{b-1} k^m =\sum_a^b x^m \delta x=S_m(b)-S_m(a). \tag{6.96}
 $$
 
 考察负数项求和可得到有趣推论：当 $m>0$ 时
 $$
-\sum_{k=-n+1}^{-1} k^m
-=(-1)^m \sum_{k=0}^{n-1} k^m,
+\sum_{k=-n+1}^{-1} k^m =(-1)^m \sum_{k=0}^{n-1} k^m,
 $$
 于是
 $$
-S_m(0)-S_m(-n+1)
-=(-1)^m\big(S_m(n)-S_m(0)\big).
+S_m(0)-S_m(-n+1) =(-1)^m\big(S_m(n)-S_m(0)\big).
 $$
 又 $S_m(0)=0$，因此得到恒等式：
 $$
 S_m(1-n)=(-1)^{m+1}S_m(n),\quad m>0. \tag{6.97}
 $$
 
-因此 $S_m(1)=0$。若将多项式 $S_m(n)$ 写为因式形式，它必定含有因子 $n$ 与 $(n-1)$，因其在 $0$ 与 $1$ 处取零点。
-一般而言，$S_m(n)$ 是次数为 $m+1$ 的多项式，首项为 $\dfrac{1}{m+1}n^{m+1}$。
-
-此外，在式 $(6.97)$ 中令 $n=\dfrac12$，可推得
-$$
-S_m\left(\frac12\right)=(-1)^{m+1}S_m\left(\frac12\right);
-$$
-当 $m$ 为偶数时必有 $S_m\left(\frac12\right)=0$，于是 $\left(n-\dfrac12\right)$ 为额外因式。
-这也解释了第 2 章中简洁因式分解
+因此 $S_m(1)=0$。若将多项式 $S_m(n)$ 写为因式形式，它必定含有因子 $n$ 与 $(n-1)$，因其在 $0$ 与 $1$ 处取零点。一般而言，$S_m(n)$ 是次数为 $m+1$ 的多项式，首项为 $\frac{1}{m+1}n^{m+1}$。此外，在式 $(6.97)$ 中令 $n=\frac12$，可推得 $S_m\left(\frac12\right)=(-1)^{m+1}S_m\left(\frac12\right)$；当 $m$ 为偶数时必有 $S_m\left(\frac12\right)=0$，于是 $\left(n-\dfrac12\right)$ 为额外因式。这也解释了第 2 章中简洁因式分解
 $$
 S_2(n)=\frac13n\left(n-\frac12\right)(n-1)
 $$
-的由来；依靠上述分析即可直接判定结构，无需逐项计算。
 
-进一步，记剩余因子构成多项式 $\widehat{S}_m(n)=S_m(n)\bigg/\left(n-\dfrac12\right)$，则对偶数 $m>0$ 恒满足
+的由来；依靠上述分析即可直接判定结构，无需逐项计算。进一步，记剩余因子构成多项式 $\widehat{S}_m(n)=S_m(n)/\left(n-\frac12\right)$，则对偶数 $m>0$ 恒满足
 $$
 \widehat{S}_m(1-n)=\widehat{S}_m(n).
 $$
@@ -1157,7 +1138,7 @@ S_m(n)=
 \end{cases}\tag{6.98}
 $$
 
-这里 $\alpha_1=\dfrac12$，而 $\alpha_2,\dots,\alpha_{\lceil m/2\rceil}$ 为依赖于 $m$ 的合适复数。例如：
+这里 $\alpha_1=\frac12$，而 $\alpha_2,\dots,\alpha_{\lceil m/2\rceil}$ 为依赖于 $m$ 的合适复数。例如：
 $$
 \begin{aligned}
 S_3(n) &= \frac{n^2(n-1)^2}{4};  \\
@@ -1187,20 +1168,16 @@ $$
 =\frac{1}{m+1}\binom{m+1}{k}B_{m+1-k}. \tag{6.99}
 $$
 
-倘若能直接证明该关系式，就能以全新方式推导伯努利数。但对照书中第 264、265 页的恒等式，很难直接用数学归纳法证明：式 (6.99) 左侧求和是组合数 $\dbinom{m}{k-1}$ 的常数倍。当 $k=m+1$ 时，左侧仅有单项：$\genfrac\{\}{0pt}{}{m}{m}\genfrac[]{0pt}{}{m+1}{m+1}\frac{1}{m+1}=\frac{1}{m+1}$，该情形易于验证；当 $k=m$ 时，左侧化简结果为 $-\dfrac12$，同样简单直观。但若满足 $k<m$，左侧求和形式极其繁杂。倘若伯努利当初沿这条路径研究，大概率无法发现伯努利数体系。
+倘若能直接证明该关系式，就能以全新方式推导伯努利数。但对照书中第 264、265 页的恒等式，很难直接用数学归纳法证明：式 (6.99) 左侧求和是 $m^{\underline{k-1}}$ 的常数倍。当 $k=m+1$ 时，左侧仅有单项：$\genfrac\{\}{0pt}{}{m}{m}\genfrac[]{0pt}{}{m+1}{m+1}/(m+1)=1/(m+1)$，该情形易于验证；当 $k=m$ 时，左侧化简结果为 $\genfrac\{\}{0pt}{}{m}{m-1}\genfrac[]{0pt}{}{m}{m}m^{-1} - \genfrac\{\}{0pt}{}{m}{m}\genfrac[]{0pt}{}{m+1}{m}(m+1)^{-1} = \frac12 (m-1) = \frac12 m = -\frac12$，同样简单直观。但若满足 $k<m$，左侧求和形式极其繁杂。倘若伯努利当初沿这条路径研究，大概率无法发现伯努利数体系。
 
-我们可以做的一个替换是：将 $\genfrac\{\}{0pt}{}{m}{j}$ 替换为 $\genfrac\{\}{0pt}{}{m+1}{j+1} - (j+1)\genfrac\{\}{0pt}{}{m}{j+1}$。
-$(j+1)$ 项可以很好地消去复杂的分母，于是左侧变为：
+我们可以做的一个替换是：将 $\genfrac\{\}{0pt}{}{m}{j}$ 替换为 $\genfrac\{\}{0pt}{}{m+1}{j+1} - (j+1)\genfrac\{\}{0pt}{}{m}{j+1}$。$(j+1)$ 项可以很好地消去复杂的分母，于是左侧变为：
 
 $$
 \sum_{j\ge 0}\genfrac\{\}{0pt}{}{m+1}{j+1}\genfrac[]{0pt}{}{j+1}{k}\frac{(-1)^{j+1-k}}{j+1}
 -\sum_{j\ge 0}\genfrac\{\}{0pt}{}{m}{j+1}\genfrac[]{0pt}{}{j+1}{k}(-1)^{j+1-k}.
 $$
 
-当 $k<m$ 时，根据式 (6.31)，**第二个和式等于 0**。
-于是只剩下第一个和式，它非常适合更换记号；我们重新命名所有变量，让求和指标为 $k$，另外两个参数为 $m$ 和 $n$。
-这样，恒等式 (6.99) 就等价于：
-
+当 $k<m$ 时，根据式 (6.31)，第二个和式等于 0。于是只剩下第一个和式，它非常适合更换记号；我们重新命名所有变量，让求和指标为 $k$，另外两个参数为 $m$ 和 $n$。这样，恒等式 (6.99) 就等价于：
 $$
 \sum_{k}\genfrac\{\}{0pt}{}{n}{k}\genfrac[]{0pt}{}{k}{m}\frac{(-1)^{k-m}}{k}
 =\frac{1}{n}\binom{n}{m}B_{n-m}+[m=n-1]. \tag{6.100}
@@ -1212,9 +1189,7 @@ $$
 
 $$
 \genfrac\{\}{0pt}{}{n}{k}\genfrac[]{0pt}{}{k}{m}
-=(-1)^{n-k+1}\frac{n!}{(k-1)!}\sigma_{n-k}(-k)\cdot\frac{k!}{(m-1)!}\sigma_{k-m}(k);
-$$
-$$
+=(-1)^{n-k+1}\frac{n!}{(k-1)!}\sigma_{n-k}(-k)\cdot\frac{k!}{(m-1)!}\sigma_{k-m}(k); \\
 \genfrac\{\}{0pt}{}{n}{k}\genfrac[]{0pt}{}{k}{m}\frac{(-1)^{k-m}}{k}
 =(-1)^{n+1-m}\frac{n!}{(m-1)!}\sigma_{n-k}(-k)\sigma_{k-m}(k).
 $$

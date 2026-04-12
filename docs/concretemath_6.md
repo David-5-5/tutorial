@@ -995,10 +995,7 @@ $$
 
 此外，由 (6.82) 可直接得到 $\coth$ 展开式的闭式：
 $$
-z\coth z
-= \frac{2z}{e^{2z}-1} + z
-= \sum_{n\ge0} B_{2n}\frac{(2z)^{2n}}{(2n)!}
-= \sum_{n\ge0} 4^n B_{2n}\frac{z^{2n}}{(2n)!}. \tag{6.85}
+z\coth z = \frac{2z}{e^{2z}-1} + z = \sum_{n\ge0} B_{2n}\frac{(2z)^{2n}}{(2n)!} = \sum_{n\ge0} 4^n B_{2n}\frac{z^{2n}}{(2n)!}. \tag{6.85}
 $$
 
 不过双曲函数并不那么常用，人们更关心普通三角函数。利用关系式
@@ -1017,8 +1014,7 @@ $$
 
 因此 $\cot z = \cos z/\sin z = i\cosh iz/\sinh iz = i\coth iz$，于是有
 $$
-z\cot z = \sum_{n\ge0} B_{2n}\frac{(2iz)^{2n}}{(2n)!}
-         = \sum_{n\ge0} (-4)^n B_{2n}\frac{z^{2n}}{(2n)!}. \tag{6.87}
+z\cot z = \sum_{n\ge0} B_{2n}\frac{(2iz)^{2n}}{(2n)!} = \sum_{n\ge0} (-4)^n B_{2n}\frac{z^{2n}}{(2n)!}. \tag{6.87}
 $$
 
 欧拉还发现了 $z\cot z$ 的另一个优美公式（见习题 73）：
@@ -1037,9 +1033,7 @@ $$
 
 将上式与式 (6.87) 中 $z^{2n}$ 的系数对应相等，我们就得到了无穷级数求和的惊人闭式：
 $$
-\zeta(2n) = H_\infty^{(2n)}
-         = (-1)^{n-1}\frac{2^{2n-1}\pi^{2n}B_{2n}}{(2n)!},
-\quad \text{ integer } n>0. \tag{6.89}
+\zeta(2n) = H_\infty^{(2n)} = (-1)^{n-1}\frac{2^{2n-1}\pi^{2n}B_{2n}}{(2n)!}, \quad \text{ integer } n>0. \tag{6.89}
 $$
 
 例如：
@@ -1054,8 +1048,7 @@ $$
 
 不仅如此，伯努利数同样出现在正切函数的系数中：
 $$
-\tan z=\frac{\sin z}{\cos z}
-=\sum_{n\ge0} (-1)^{n-1}4^n(4^n-1)B_{2n}\frac{z^{2n-1}}{(2n)!},\tag{6.92}
+\tan z=\frac{\sin z}{\cos z} =\sum_{n\ge0} (-1)^{n-1}4^n(4^n-1)B_{2n}\frac{z^{2n-1}}{(2n)!},\tag{6.92}
 $$
 其余三角函数的展开式中也会出现伯努利数（见习题72）。由式 $(6.92)$ 可得到伯努利数的另一重要性质：
 $$
@@ -1081,14 +1074,11 @@ $$
 
 其中 $T_n(x)$ 是关于 $x$ 的多项式；令 $x=0$ 可得 $T_n(0)=T_n$，即第 $n$ 个正切数。对式 $(6.94)$ 关于 $x$ 求导：
 $$
-\frac{1}{(\cos z - x\sin z)^2}
-=\sum_{n\ge0} T_n'(x)\frac{z^n}{n!};
+\frac{1}{(\cos z - x\sin z)^2} =\sum_{n\ge0} T_n'(x)\frac{z^n}{n!};
 $$
 再对 $z$ 求导：
 $$
-\frac{1+x^2}{(\cos z - x\sin z)^2}
-=\sum_{n\ge1} T_n(x)\frac{z^{n-1}}{(n-1)!}
-=\sum_{n\ge0} T_{n+1}(x)\frac{z^n}{n!}.
+\frac{1+x^2}{(\cos z - x\sin z)^2}  =\sum_{n\ge1} T_n(x)\frac{z^{n-1}}{(n-1)!} =\sum_{n\ge0} T_{n+1}(x)\frac{z^n}{n!}.
 $$
 
 （自行验算即可发现化简抵消过程十分优美。）由此得到递推关系：
@@ -1173,14 +1163,12 @@ $$
 我们可以做的一个替换是：将 $\genfrac\{\}{0pt}{}{m}{j}$ 替换为 $\genfrac\{\}{0pt}{}{m+1}{j+1} - (j+1)\genfrac\{\}{0pt}{}{m}{j+1}$。$(j+1)$ 项可以很好地消去复杂的分母，于是左侧变为：
 
 $$
-\sum_{j\ge 0}\genfrac\{\}{0pt}{}{m+1}{j+1}\genfrac[]{0pt}{}{j+1}{k}\frac{(-1)^{j+1-k}}{j+1}
--\sum_{j\ge 0}\genfrac\{\}{0pt}{}{m}{j+1}\genfrac[]{0pt}{}{j+1}{k}(-1)^{j+1-k}.
+\sum_{j\ge 0}\genfrac\{\}{0pt}{}{m+1}{j+1}\genfrac[]{0pt}{}{j+1}{k}\frac{(-1)^{j+1-k}}{j+1} -\sum_{j\ge 0}\genfrac\{\}{0pt}{}{m}{j+1}\genfrac[]{0pt}{}{j+1}{k}(-1)^{j+1-k}.
 $$
 
 当 $k<m$ 时，根据式 (6.31)，第二个和式等于 0。于是只剩下第一个和式，它非常适合更换记号；我们重新命名所有变量，让求和指标为 $k$，另外两个参数为 $m$ 和 $n$。这样，恒等式 (6.99) 就等价于：
 $$
-\sum_{k}\genfrac\{\}{0pt}{}{n}{k}\genfrac[]{0pt}{}{k}{m}\frac{(-1)^{k-m}}{k}
-=\frac{1}{n}\binom{n}{m}B_{n-m}+[m=n-1]. \tag{6.100}
+\sum_{k}\genfrac\{\}{0pt}{}{n}{k}\genfrac[]{0pt}{}{k}{m}\frac{(-1)^{k-m}}{k} =\frac{1}{n}\binom{n}{m}B_{n-m}+[m=n-1]. \tag{6.100}
 $$
 
 很好，这个形式看起来更简洁了——尽管第 265 页的表格依然没有给出明显的下一步证明思路。
@@ -1188,24 +1176,19 @@ $$
 这时，第 272 页的卷积公式派上了用场。我们可以用 (6.49) 和 (6.48) 将求和项用斯特林多项式重新表示：
 
 $$
-\genfrac\{\}{0pt}{}{n}{k}\genfrac[]{0pt}{}{k}{m}
-=(-1)^{n-k+1}\frac{n!}{(k-1)!}\sigma_{n-k}(-k)\cdot\frac{k!}{(m-1)!}\sigma_{k-m}(k); \\
-\genfrac\{\}{0pt}{}{n}{k}\genfrac[]{0pt}{}{k}{m}\frac{(-1)^{k-m}}{k}
-=(-1)^{n+1-m}\frac{n!}{(m-1)!}\sigma_{n-k}(-k)\sigma_{k-m}(k).
+\genfrac\{\}{0pt}{}{n}{k}\genfrac[]{0pt}{}{k}{m} =(-1)^{n-k+1}\frac{n!}{(k-1)!}\sigma_{n-k}(-k)\cdot\frac{k!}{(m-1)!}\sigma_{k-m}(k); \\
+\genfrac\{\}{0pt}{}{n}{k}\genfrac[]{0pt}{}{k}{m}\frac{(-1)^{k-m}}{k} =(-1)^{n+1-m}\frac{n!}{(m-1)!}\sigma_{n-k}(-k)\sigma_{k-m}(k).
 $$
 
 情况变得明朗起来；在 (6.46) 中令 $t=1$，可得卷积公式：
-
 $$
 \begin{aligned}
-\sum_{k=0}^{n}\sigma_{n-k}(-k)\sigma_{k-m}(k)
-&=\sum_{k=0}^{n-m}\sigma_{n-m-k}\!\big(-n+(n-m-k)\big)\sigma_{k}(m+k) \\
+\sum_{k=0}^{n}\sigma_{n-k}(-k)\sigma_{k-m}(k) &=\sum_{k=0}^{n-m}\sigma_{n-m-k}\!\big(-n+(n-m-k)\big)\sigma_{k}(m+k) \\
 &=\frac{m-n}{(m)(-n)}\sigma_{n-m}\!\big(m-n+(n-m)\big).
 \end{aligned}
 $$
 
 至此，式 (6.100) 得到验证，并且我们发现伯努利数与斯特林多项式的常数项直接相关：
-
 $$
 \frac{B_m}{m!}=-m\sigma_m(0). \tag{6.101}
 $$

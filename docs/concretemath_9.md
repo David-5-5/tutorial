@@ -919,4 +919,122 @@ $$
 \Phi(n) = \frac3{\pi^2}n^2 + O(n\log n). \tag{9.56}
 $$
 
+## 9.4 TWO ASYMPTOTIC TRICKS 两种渐进技巧
+现在我们已经对 $O$ 记号的运算有了一定掌握，不妨从更高的视角回顾一下前面的做法。这样一来，在应对更困难的渐近问题时，我们就能掌握几件重要的武器。
+
+**技巧 1：逐步逼近（Bootstrapping）**
+在 9.3 节的问题 3 估计第 $n$ 个素数 $P_n$ 时，我们求解了形如
+$$
+P_n = n\ln P_n\bigl(1+O(1/\log n)\bigr)
+$$
+的渐近递推关系。我们先用递推得到较弱的结果 $O(n^2)$，再由此推出 $P_n = n\ln n + O(n)$。这是一种通用方法的特例，称为**逐步逼近法**：先从一个粗糙估计出发，把它代回递推式，反复迭代，通常就能得到越来越好的近似，就像“提着鞋带把自己拉起来”一样。
+
+下面再用一个问题很好地演示逐步逼近：
+生成函数
+$$
+G(z) = \exp\!\left(\sum_{k\ge1}\frac{z^k}{k^2}\right) \tag{9.57}
+$$
+
+的系数 $g_n = [z^n]G(z)$ 在 $n\to\infty$ 时的渐近值是多少？对 $z$ 求导：
+$$
+G'(z) = \sum_{n\ge0}n g_n z^{n-1} = \left(\sum_{k\ge1}\frac{z^{k-1}}{k}\right)G(z).
+$$
+比较两边 $z^{n-1}$ 的系数，得到递推式：
+$$
+n g_n = \sum_{0\le k<n}\frac{g_k}{n-k}. \tag{9.58}
+$$
+
+我们的问题等价于：在初值 $g_0=1$ 下，求递推式 (9.58) 解的渐近公式。
+前几项的值为：
+
+| n | 0 | 1 |  2  |   3    |    4     |     5      |      6       |
+|---|---|---|-----|--------|----------|------------|--------------|
+| $g_n$ | 1 | 1 | 3/4 | 19/36 | 107/288 | 641/2400 | 51103/259200 |
+
+看不出明显规律，整数序列 $\langle n!^2 g_n\rangle$ 也没有出现在 Sloane 手册 [330] 中。因此 $g_n$ 几乎不可能有闭式，我们能指望的最好结果就是渐近公式。
+
+第一个突破口是观察到：对所有 $n\ge0$ 有 $0<g_n\le1$，用归纳法很容易证明。于是我们有了起点：
+$$
+g_n = O(1).
+$$
+
+这个估计可以用来给逐步逼近“启动泵”：把它代入 (9.58) 右边，得到
+$$
+n g_n
+= \sum_{0\le k<n}\frac{O(1)}{n-k}
+= H_n\,O(1) = O(\log n);
+$$
+因此对 $n>1$ 有
+$$
+g_n = O\!\left(\frac{\log n}{n}\right).
+$$
+
+我们可以继续逐步逼近：
+$$
+\begin{aligned}
+n g_n
+&= \frac1n + \sum_{0<k<n}\frac{O\bigl((1+\log k)/k\bigr)}{n-k} \\
+&= \frac1n+ \sum_{0<k<n}\frac{O(\log n/k)}{n-k} \\
+&= \frac1n + \sum_{0<k<n}\left(\frac1k+\frac1{n-k}\right) \frac{O(\log n)}n \\
+&= \frac1n + \frac2n H_{n-1}\,O(\log n) = \frac1n O(\log n)^2,
+\end{aligned}
+$$
+
+于是得到
+$$
+g_n = O\!\left(\left(\frac{\log n}{n}\right)^{\!2}\right). \tag{9.59}
+$$
+
+这个过程会一直持续下去吗？也许我们会得到对所有 $m$ 都成立的 $g_n = O(n^{-1}(\log n)^m)$。
+
+其实并不会，我们已经到了收益递减的阶段。下一次逐步逼近会涉及和式
+$$
+\sum_{0<k<n}\frac1{k^2(n-k)}
+= \sum_{0<k<n}\left(\frac1{n k^2}+\frac1{n^2 k}+\frac1{n^2(n-k)}\right) \\
+= \frac1n H_{n-1}^{(2)}+\frac2{n^2}H_{n-1},
+$$
+
+它是 $\Omega(n^{-1})$ 的；因此我们不可能得到低于 $\Omega(n^{-2})$ 的 $g_n$ 估计。
+
+事实上，现在我们对 $g_n$ 已经有足够了解，可以使用老技巧——**提取主部**：
+$$
+\begin{aligned}
+n g_n
+&= \sum_{0\le k<n}\frac{g_k}n + \sum_{0\le k<n}g_k\left(\frac1{n-k}-\frac1n\right) \\
+&= \frac1n\sum_{k\ge0}g_k - \frac1n\sum_{k\ge n}g_k + \frac1n\sum_{0\le k<n}\frac{k g_k}{n-k}.
+\end{aligned}
+\tag{9.60}
+$$
+
+这里第一个和就是 $G(1) = \exp\!\left(1+\frac14+\frac19+\cdots\right) = e^{\pi^2/6}$， 因为 $G(z)$ 在 $|z|\le1$ 上处处收敛。第二个和是第一个的尾部；利用 (9.59) 可以给出上界：
+$$
+\sum_{k\ge n}g_k
+= O\!\left(\sum_{k\ge n}\frac{(\log k)^2}{k^2}\right)
+= O\!\left(\frac{(\log n)^2}{n}\right).
+$$
+
+这个最后的估计成立，是因为例如：
+$$
+\sum_{k>n}\frac{(\log k)^2}{k^2}
+< \sum_{m\ge1}\sum_{n^m<k\le n^{m+1}}
+\frac{(\log n^{m+1})^2}{k(k-1)}
+< \sum_{m\ge1}\frac{(m+1)^2(\log n)^2}{n^m}.
+$$
+（习题 54 会讨论估计这类尾部和的更一般方法。）
+
+(9.60) 中的第三个和为
+$$
+O\!\left(\sum_{0\le k<n}\frac{(\log n)^2}{k(n-k)}\right)
+= O\!\left(\frac{(\log n)^3}{n}\right),
+$$
+用我们已经熟悉的方法即可证明。于是 (9.60) 给出：
+$$
+g_n = \frac{e^{\pi^2/6}}{n^2}+ O\!\left(\frac{(\log n)^3}{n}\right). \tag{9.61}
+$$
+
+最后，把这个式子代回递推式再做一次逐步逼近，可得：
+$$
+g_n = \frac{e^{\pi^2/6}}{n^2}+ O\!\left(\frac{\log n}{n^3}\right). \tag{9.62}
+$$
+（习题 23 会进一步探究剩余 $O$ 项内部的结构。）
 

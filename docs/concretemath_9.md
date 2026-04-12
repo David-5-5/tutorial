@@ -881,3 +881,42 @@ $$
 
 注意这个结果的增长速度比我们最初粗略估计的 $C(\log n)^2$ 要慢。有时候离散和并不服从连续直观给出的预期。
 
+**问题 6：大和函数 $\Phi$**
+在第 4 章末尾我们看到，法雷序列 $F_n$ 中的分数个数为 $1+\Phi(n)$，其中
+$$
+\Phi(n) = \phi(1)+\phi(2)+\cdots+\phi(n).
+$$
+并且在式 (4.62) 中证明了
+$$
+\Phi(n) = \frac12\sum_{k\ge1}\mu(k)\left\lfloor\frac nk\right\rfloor
+\left\lfloor 1+\frac nk\right\rfloor. \tag{9.55}
+$$
+现在我们来估计大 $n$ 时的 $\Phi(n)$。（正是这类和式，最初促使 Bachmann 发明了 $O$ 记号。）
+
+量级分析告诉我们，$\Phi(n)$ 大致与 $n^2$ 成正比。如果最后一个因子只是 $\lfloor n/k\rfloor$ 而不是 $\lfloor 1+n/k\rfloor$，就有 $|\Phi(n)| \le \frac12\sum_{k\ge1}\left\lfloor\frac nk\right\rfloor^2\le \frac12\sum_{k\ge1}\left(\frac nk\right)^2= \frac{\pi^2}{12}n^2$，因为莫比乌斯函数 $\mu(k)$ 只能是 $-1,0,+1$。最后那个“$1+$”额外增加了 $\sum_{k\ge1}\mu(k)\lfloor n/k\rfloor$；但当 $k>n$ 时它为 0，所以绝对值不超过 $nH_n=O(n\log n)$。
+
+这一初步分析提示我们宜写成：
+$$
+\begin{aligned}
+\Phi(n)&= \frac12\sum_{k=1}^n\mu(k)
+\left( \left\lfloor\frac nk\right\rfloor + O(1) \right)^2 \\
+&= \frac12\sum_{k=1}^n\mu(k) \left( \left\lfloor\frac nk\right\rfloor^2 + O\!\left(\frac nk\right) \right) \\
+&= \frac12\sum_{k=1}^n\mu(k)\left(\frac nk\right)^2+ \sum_{k=1}^n O\!\left(\frac nk\right) \\
+&= \frac12\sum_{k=1}^n\frac{\mu(k)n^2}{k^2} + O(n\log n).
+\end{aligned}
+$$
+
+这样就去掉了取整符号。剩下的问题是把无取整的和 $\frac12\sum_{k=1}^n\mu(k)n^2/k^2$ 精确到 $O(n\log n)$；换句话说，要把 $\sum_{k=1}^n\mu(k)/k^2$ 精确到 $O(n^{-1}\log n)$。这很容易：直接把和延拓到 $k=\infty$ 即可，因为新增项满足
+$$
+\sum_{k>n}\frac{\mu(k)}{k^2}
+= O\!\left(\sum_{k>n}\frac1{k^2}\right)
+= O\!\left(\sum_{k>n}\frac1{k(k-1)}\right)
+= O\!\left(\frac1n\right).
+$$
+
+在式 (7.89) 中我们已经证明 $\sum_{k\ge1}\mu(k)/k^z = 1/\zeta(z)$，因此 $\sum_{k\ge1}\frac{\mu(k)}{k^2} = \frac1{\zeta(2)} = \frac6{\pi^2}.$于是得到最终结果：
+$$
+\Phi(n) = \frac3{\pi^2}n^2 + O(n\log n). \tag{9.56}
+$$
+
+

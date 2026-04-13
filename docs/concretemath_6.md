@@ -1263,7 +1263,7 @@ $$
 
 通过数学归纳法易证：
 $$
-F_{-n}=(-1)^{n-1}F_n,\quad \{ integer n}. \tag{6.107}
+F_{-n}=(-1)^{n-1}F_n,\quad \text{ integer n}. \tag{6.107}
 $$
 
 在该延拓定义下，卡西尼恒等式 $(6.103)$ 对全体整数 $n$ 成立，不再局限于 $n>0$。
@@ -1393,18 +1393,19 @@ $$
 F(z) = \frac{z}{1 - z - z^2}. \tag{6.117}
 $$
 
-如今我们已将斐波那契数列的全部信息浓缩为简洁表达式
-$$\frac{z}{1-z-z^2},$$
-该形式虽直观性不强，但已是关键推进：对分母因式分解后拆分部分分式，即可展开为幂级数，其系数便是斐波那契数的闭式通项。
+我们现在已经把斐波那契序列中的所有信息浓缩成了一个简单（尽管乍看并不眼熟）的表达式 $z/(1-z-z^2)$。信不信由你，这已经是很大的进展，因为我们可以对分母因式分解，再用部分分式展开，得到一个很容易展开成幂级数的公式。这个幂级数的系数就会是斐波那契数的闭式。
 
-逆向理解该思路更为清晰：最简生成函数形如 $\displaystyle\frac{1}{1-\alpha z}$（$\alpha$ 为常数），其幂级数展开熟知：
-$$\frac{1}{1-\alpha z}=1+\alpha z+\alpha^2 z^2+\alpha^3 z^3+\cdots.$$
-同理，组合分式
-$$\frac{A}{1-\alpha z}+\frac{B}{1-\beta z}$$
-极易提取系数：
-$$\frac{A}{1-\alpha z}+\frac{B}{1-\beta z}
-=A\sum_{n\ge 0}(\alpha z)^n+B\sum_{n\ge 0}(\beta z)^n
-=\sum_{n\ge 0}\big(A\alpha^n+B\beta^n\big)z^n. \tag{6.118}$$
+如果反过来思考，刚才勾勒的求解思路可能会更容易理解。如果我们有一个更简单的生成函数，比如 $1/(1-\alpha z)$，其中 $\alpha$ 是常数，我们就知道 $z$ 的所有幂次的系数，因为
+$$
+\frac{1}{1-\alpha z}=1+\alpha z+\alpha^2 z^2+\alpha^3 z^3+\cdots.
+$$
+
+类似地，如果生成函数形如 $A/(1-\alpha z)+B/(1-\beta z)$，系数也很容易确定，因为
+$$
+\frac{A}{1-\alpha z}+\frac{B}{1-\beta z}
+= A\sum_{n\ge0}(\alpha z)^n+B\sum_{n\ge0}(\beta z)^n    \\
+= \sum_{n\ge0}(A\alpha^n+B\beta^n)z^n. \tag{6.118}
+$$
 
 因此只需确定常数 $A,B,\alpha,\beta$，满足
 $$\frac{A}{1-\alpha z}+\frac{B}{1-\beta z}=\frac{z}{1-z-z^2},$$

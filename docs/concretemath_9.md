@@ -1038,3 +1038,119 @@ g_n = \frac{e^{\pi^2/6}}{n^2}+ O\!\left(\frac{\log n}{n^3}\right). \tag{9.62}
 $$
 （习题 23 会进一步探究剩余 $O$ 项内部的结构。）
 
+**技巧 2：尾部交换（Trading tails）**
+我们推导式 (9.62) 的思路，与推导 $\Phi(n)$ 的渐近式 (9.56) 颇为相似：两者都是从有限和出发，最终通过考虑**无穷和**得到渐近结果。我们不能简单地在通项里直接加 $O$ 就把和延到无穷；必须小心处理：对小的 $k$ 用一种近似，对大的 $k$ 用另一种。
+
+这些推导都是一个重要三步渐近求和法的特例，下面我们更一般地介绍它。每当我们要估计 $\sum_k a_k(n)$ 时，都可以尝试如下思路：
+
+1. 先把求和拆成两个不相交的范围：$D_n$（主部）和 $T_n$（尾部）。对充分大的 $n$，$D_n$ 上的和应是“主导部分”，包含足够多决定和式有效数字的项；另一部分 $T_n$ 只是“尾部”，对总和贡献很小。
+
+2. 对 $k\in D_n$，找到渐近展开 $a_k(n) = b_k(n) + O\bigl(c_k(n)\bigr)$ 这个 $O$ 估计只需要在 $D_n$ 内成立，不必在 $T_n$ 内成立。
+
+3. 接着证明下面三个和都足够小：
+$$\Sigma_a(n) = \sum_{k\in T_n}a_k(n),\quad
+\Sigma_b(n) = \sum_{k\in T_n}b_k(n),\quad   \\
+\Sigma_c(n) = \sum_{k\in D_n}\bigl|c_k(n)\bigr|. \tag{9.63}$$
+
+如果这三步都能顺利完成，我们就得到了很好的估计：
+$$\sum_{k\in D_n\cup T_n}a_k(n) = \sum_{k\in D_n\cup T_n}b_k(n) + O\bigl(\Sigma_a(n)\bigr) + O\bigl(\Sigma_b(n)\bigr) + O\bigl(\Sigma_c(n)\bigr).$$
+
+原理如下：我们可以“切掉”原和的尾部，在需要精确估计的主部 $D_n$ 上做近似：
+$$\sum_{k\in D_n}a_k(n)
+= \sum_{k\in D_n}\bigl(b_k(n)+O(c_k(n))\bigr)
+= \sum_{k\in D_n}b_k(n) + O\bigl(\Sigma_c(n)\bigr).$$
+
+而尾部可以直接换成另一个尾部，哪怕新尾部对旧尾部近似很差也没关系，因为尾部本身不重要：
+$$
+\begin{aligned}
+\sum_{k\in T_n}a_k(n) &= \sum_{k\in T_n}\bigl(b_k(n)-b_k(n)+a_k(n)\bigr) \\
+&= \sum_{k\in T_n}b_k(n) + O\bigl(\Sigma_b(n)\bigr) + O\bigl(\Sigma_a(n)\bigr).
+\end{aligned}
+$$
+
+比如在估计式 (9.60) 中的和时，我们取
+$$
+\begin{aligned}
+a_k(n) &= [0\le k<n]g_k/(n-k),\\
+b_k(n) &= g_k/n,\\
+c_k(n) &= k g_k/n(n-k);
+\end{aligned}
+$$
+求和范围是
+$$D_n = \{0,1,\dots,n-1\},\quad T_n = \{n,n+1,\dots\};$$
+
+并得到
+$$\Sigma_a(n)=0,\quad
+\Sigma_b(n)=O\bigl((\log n)^2/n^2\bigr),\quad
+\Sigma_c(n)=O\bigl((\log n)^3/n^2\bigr),$$
+由此推出了 (9.61)。
+
+类似地，在估计 (9.55) 中的 $\Phi(n)$ 时，我们取
+$$
+a_k(n) = \mu(k)\lfloor n/k\rfloor\lfloor 1+n/k\rfloor,\quad
+b_k(n) = \mu(k)n^2/k^2,\quad
+c_k(n) = n/k; \\
+D_n = \{1,2,\dots,n\},\quad T_n = \{n+1,n+2,\dots\}.
+$$
+并由 $\Sigma_a(n)=0$，$\Sigma_b(n)=O(n)$，$\Sigma_c(n)=O(n\log n)$ 推出了 (9.56)。
+
+再来看一个尾部交换特别有效的例子。（与之前不同，这个例子完整展示了一般情形，其中 $\Sigma_a(n)=0$。）我们求渐近值：
+$$
+L_n = \sum_{k\ge0}\frac{\ln(n+2^k)}{k!}
+$$
+
+因为分母是 $k!$，所以主要贡献来自 $k$ 较小的部分。在这个范围内：
+$$
+\ln(n+2^k) = \ln n + \frac{2^k}{n} - \frac{2^{2k}}{2n^2} + O\!\left(\frac{2^{3k}}{n^3}\right). \tag{9.64}
+$$
+
+可以证明这个估计在 $0\le k<\lfloor\lg n\rfloor$ 时成立，因为被 $O$ 吸收的截断项满足
+$$
+\sum_{m\ge3}\frac{2^{km}}{m n^m}
+\le \frac{2^{3k}}{n^3}\sum_{m\ge3}\frac{2^{k(m-3)}}{n^{m-3}}
+\le \frac{2^{3k}}{n^3}\left(1+\frac12+\frac14+\cdots\right)
+= \frac{2^{3k}}{n^3}\cdot2.
+$$
+（在此范围内 $2^k/n\le 2^{\lfloor\lg n\rfloor-1}/n\le\frac12$。）
+
+于是可以用上面的三步法，取
+$$
+\begin{aligned}
+a_k(n) &= \ln(n+2^k)/k!,\\
+b_k(n) &= \bigl(\ln n + 2^k/n - 4^k/(2n^2)\bigr)/k!,\\
+c_k(n) &= 8^k/(n^3 k!), \\
+D_n &= \{0,1,\dots,\lfloor\lg n\rfloor-1\}, \\
+T_n &= \{\lfloor\lg n\rfloor,\lfloor\lg n\rfloor+1,\dots\}.
+\end{aligned}
+$$
+只需对 (9.63) 中的三个 $\Sigma$ 给出好的界，就能得到$\sum_{k\ge0}a_k(n)\approx\sum_{k\ge0}b_k(n)$。
+
+主部中的误差 $\Sigma_c(n) = \sum_{k\in D_n}\frac{8^k}{n^3 k!} < \sum_{k\ge0}\frac{8^k}{n^3 k!} = e^8/n^3$ 可记为 $O(n^{-3})$。新尾部的误差
+$$
+\begin{aligned}
+|\Sigma_b(n)| &= \left|\sum_{k\ge\lfloor\lg n\rfloor}b_k(n)\right| \\
+&< \sum_{k\ge\lfloor\lg n\rfloor}\frac{\ln n+2^k+4^k}{k!}    \\
+&< \frac{\ln n+2^{\lfloor\lg n\rfloor}+4^{\lfloor\lg n\rfloor}}{\lfloor\lg n\rfloor!}\sum_{k\ge0}\frac{4^k}{k!} = O\!\left(\frac{n^2}{\lfloor\lg n\rfloor!}\right).
+\end{aligned}
+$$
+
+因为 $\lfloor\lg n\rfloor!$ 增长比任何 $n$ 的幂次都快，这个极小的误差完全被 $\Sigma_c(n)=O(n^{-3})$ 覆盖。来自原尾部的误差
+$$
+\Sigma_a(n) = \sum_{k\ge\lfloor\lg n\rfloor}a_k(n) < \sum_{k\ge\lfloor\lg n\rfloor}\frac{\ln n + 2^k}{k!}
+$$
+更小。
+
+最后，$\sum_{k\ge0}b_k(n)$ 很容易求出闭式，于是得到想要的渐近公式：
+$$
+\sum_{k\ge0}\frac{\ln(n+2^k)}{k!} = e\ln n + \frac{e^2}{n} - \frac{e^4}{2n^2} + O\!\left(\frac1{n^3}\right). \tag{9.65}
+$$
+
+我们所用的方法可以清楚地推广到一般情形：
+$$
+\sum_{k\ge0}\frac{\ln(n+2^k)}{k!} = e\ln n + \sum_{k=1}^{m-1}\frac{(-1)^{k+1}e^{2^k}}{k n^k} + O\!\left(\frac1{n^m}\right), \tag{9.66}
+$$
+对任意固定的 $m>0$ 成立。（这是一个级数的截断，若令 $m\to\infty$ 则对所有固定 $n$ 发散。）
+
+我们的解法里只有一点小遗憾：太过谨慎了。之前是在 $k<\lfloor\lg n\rfloor$ 的假设下推出 (9.64)，但习题 53 可以证明，这个估计其实对**所有** $k$ 都成立。如果早知道这个更强的结论，就不必使用尾部交换技巧，可以直接得到最终公式！但在后面遇到的问题里，尾部交换会是唯一靠谱的方法。
+
+

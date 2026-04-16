@@ -1388,4 +1388,134 @@ R_{2m}=R_{2m+1}
 $$
 且 $f^{(2m+1)}(x)$ 单调递增，因为 $f^{(2m+2)}(x)\ge0$。$B_{2m+1}(\{x\})$ 的图像形如 $(-1)^{m+1}$ 倍的正弦曲线，几何上显然：与递增函数相乘时，每个正弦波后半段的影响强于前半段。于是 $(-1)^m R_{2m+1}\ge0$，得证。习题 16 给出形式化证明。
 
+## 9.6 FINAL SUMMATIONS 最终总结
+现在进入总结部分，本书即将结束。我们将把欧拉求和公式应用到一些有趣且重要的例子上。
+
+**求和示例 1：这个例子过于简单**
+但首先我们来看一个有趣但不重要的例子——一个我们早已会计算的和。看看把欧拉求和公式用于望远镜求和
+$$
+S_n = \sum_{1\le k<n}\frac{1}{k(k+1)}  = \sum_{1\le k<n}\left(\frac1k-\frac1{k+1}\right) = 1-\frac1n
+$$
+会得到什么。用一个相当于“辅助轮”的简单渐近问题，开始我们第一次正式应用欧拉公式，并不会有什么坏处。
+
+不妨先把函数 $f(x)=\dfrac{1}{x(x+1)}$ 写成部分分式：
+$$
+f(x) = \frac1x-\frac1{x+1},
+$$
+
+这会让积分与求导更简便。事实上，$f'(x) = -1/{x^2}+1/{(x+1)^2},\quad f''(x) = 2/{x^3}-2/{(x+1)^3}$，一般地
+$$
+f^{(k)}(x) = (-1)^k k!\left(\frac1{x^{k+1}}-\frac1{(x+1)^{k+1}}\right),\quad k\ge0.
+$$
+并且
+$$
+\int_1^n f(x)\,dx
+= \bigl(\ln x-\ln(x+1)\bigr)\bigg|_1^n
+= \ln\frac{n}{n+1}+\ln 2
+= \ln\frac{2n}{n+1}.
+$$
+
+将其代入求和公式 (9.67) 得
+$$
+S_n = \ln\frac{2n}{n+1} - \sum_{k=1}^m \frac{(-1)^k B_k}{k}\left(\frac1{n^k}-\frac1{(n+1)^k}-1+\frac1{2^k}\right)+ R_m(n),
+$$
+其中
+$$
+R_m(n) = -\int_1^n B_m\bigl(\{x\}\bigr) \left(\frac1{x^{m+1}}-\frac1{(x+1)^{m+1}}\right)dx.
+$$
+
+例如取 $m=4$ 时，右边为：
+$$
+\begin{aligned}
+\ln\frac{2n}{n+1} - \frac12\left(\frac1n-\frac1{n+1}-\frac12\right) &- \frac1{12}\left(\frac1{n^2}-\frac1{(n+1)^2}-\frac34\right) \\
+& + \frac1{120}\left(\frac1{n^4}-\frac1{(n+1)^4}-\frac{15}{16}\right) + R_4(n).
+\end{aligned}
+$$
+
+这看起来一团糟；显然不像真实答案 $1-n^{-1}$。但我们还是继续往下看，看看会得到什么。我们知道如何把右边各项按 $n$ 的负幂展开到 $O(n^{-5})$：
+$$
+\begin{aligned}
+\ln\frac{n}{n+1} &= &-n^{-1}+\frac12n^{-2}-\frac13n^{-3}+\frac14n^{-4}+O(n^{-5}); \\
+\frac1{n+1} &= &n^{-1}-n^{-2}+n^{-3}-n^{-4}+O(n^{-5}); \\
+\frac1{(n+1)^2} &= &n^{-2}-2n^{-3}+3n^{-4}+O(n^{-5}); \\
+\frac1{(n+1)^4} &= &n^{-4}+O(n^{-5}).
+\end{aligned}
+$$
+
+因此近似式右边各项合并为：
+$$
+\begin{aligned}
+\ln 2 + \frac14 & +\frac1{16}-\frac1{128}
++\Bigl(-1-\frac12+\frac12\Bigr)n^{-1}
++\Bigl(\frac12-\frac12-\frac1{12}+\frac1{12}\Bigr)n^{-2} \\
+&+\Bigl(-\frac13+\frac12-\frac2{12}\Bigr)n^{-3} 
++\Bigl(\frac14-\frac12+\frac3{12}+\frac1{120}-\frac1{120}\Bigr)n^{-4}
++R_4(n) \\
+& = \ln 2 + \frac{39}{128} - n^{-1} + R_4(n) + O(n^{-5}).
+\end{aligned}
+$$
+
+$n^{-2},n^{-3},n^{-4}$ 的系数如预期般完美抵消。
+
+如果一切正常，我们本应能证明 $R_4(n)$ 渐近很小，比如 $O(n^{-5})$，从而得到和式的近似。但我们**不可能**做到这一点，因为我们已知正确的常数项是 $1$，而不是 $\ln 2+39/128$（约等于 $0.9978$）。所以 $R_4(n)$ 实际上等于 $89/128-\ln 2+O(n^{-4})$，但欧拉求和公式并没有告诉我们这一点。
+
+换句话说，我们失败了。
+
+一种修正思路是：若让 $m$ 越来越大，近似式中的常数项会形成一个级数：
+$$
+\ln 2 - \frac12B_1 + \frac12\cdot\frac34B_2 - \frac13\cdot\frac78B_3 + \frac14\cdot\frac{15}{16}B_4 - \frac15\cdot\frac{31}{32}B_5 + \cdots.
+$$
+
+也许我们能证明这个级数在项数趋于无穷时趋近于 $1$？但不行：伯努利数会变得极大。例如 $B_{22}=854513/138>6192$，因此 $|R_{22}(n)|$ 会远大于 $|R_4(n)|$。我们彻底失败。
+
+然而，存在一条出路，并且这个补救方法在欧拉公式的其他应用中至关重要。关键在于注意到：
+当 $n\to\infty$ 时，$R_4(n)$ 趋于一个确定的极限：
+$$
+\lim_{n\to\infty}R_4(n) = -\int_1^\infty B_4\bigl(\{x\}\bigr) \Bigl(\frac1{x^5}-\frac1{(x+1)^5}\Bigr)dx = R_4(\infty).
+$$
+
+当 $x\to\infty$ 时，只要 $f^{(m)}(x)=O(x^{-2})$，积分 $\int_1^\infty B_m\bigl(\{x\}\bigr)f^{(m)}(x)dx$ 就存在；本例中 $f^{(4)}(x)$ 显然满足。此外有
+$$
+\begin{aligned}
+R_4(n)&=R_4(\infty)+\int_n^\infty B_4\bigl(\{x\}\bigr)\Bigl(\frac1{x^5}-\frac1{(x+1)^5}\Bigr)dx \\
+&=R_4(\infty)+O\Bigl(\int_n^\infty x^{-6}dx\Bigr) =R_4(\infty)+O(n^{-5}).
+\end{aligned}
+$$
+
+于是我们用欧拉求和公式证明了
+$$
+\begin{aligned}
+\sum_{1\le k<n}\frac1{k(k+1)} &=\ln 2+\frac{39}{128}-n^{-1}+R_4(\infty)+O(n^{-5}) \\
+&=C-n^{-1}+O(n^{-5})
+\end{aligned}
+$$
+对某个常数 $C$ 成立。我们不知道 $C$ 具体是多少——必须用其他方法确定——但欧拉求和公式能让我们推出常数存在。
+
+若选取更大的 $m$，同理可得
+$$
+R_m(n)=R_m(\infty)+O(n^{-m-1}),
+$$
+
+于是有公式
+$$
+\sum_{1\le k<n}\frac1{k(k+1)}
+=C-n^{-1}+c_2n^{-2}+c_3n^{-3}+\cdots+c_mn^{-m}+O(n^{-m-1})
+$$
+
+对某些常数 $c_2,c_3,\dots$。本例中这些系数恰好都是 0；我们来证明这一点，以恢复对欧拉公式的信心。$\ln\frac{n}{n+1}$ 对 $c_m$ 的贡献为 $(-1)^m/m$；$(-1)^{m+1}(B_m/m)n^{-m}$ 贡献 $(-1)^{m+1}B_m/m$；$(-1)^k(B_k/k)(n+1)^{-k}$ 贡献 $(-1)^m\binom{m-1}{k-1}B_k/k$。因此
+$$
+\begin{aligned}
+(-1)^m c_m &=\frac1m-\frac{B_m}m+\sum_{k=1}^m\binom{m-1}{k-1}\frac{B_k}k \\
+&=\frac1m-\frac{B_m}m+\frac1m\sum_{k=1}^m\binom{m}{k}B_k=\frac1m\bigl(1-B_m+B_m(1)-1\bigr).
+\end{aligned}
+$$
+
+显然，当 $m>1$ 时它等于 0。我们证明了
+$$
+\sum_{1\le k<n}\frac1{k(k+1)}
+=C-n^{-1}+O(n^{-m-1}),\quad \forall m\ge1. \tag{9.82}
+$$
+
+这不足以证明和式严格等于 $C-n^{-1}$；真实值可能是 $C-n^{-1}+2^{-n}$ 等。但欧拉求和公式确实给出了对任意大 $m$ 都成立的误差界 $O(n^{-m-1})$，即便我们没有显式计算任何余项。
+
 

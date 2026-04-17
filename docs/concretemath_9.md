@@ -1645,6 +1645,162 @@ $$
 $$
 因为 $\alpha\ln n + n\ln n - n + \frac12\ln n - (n+\alpha)\ln(n+\alpha)+n-\frac12\ln(n+\alpha)\to -\alpha$，而其他未写出的项趋于 $0$。因此斯特林近似对推广后的阶乘（以及对伽马函数 $\Gamma(\alpha+1)=\alpha!$）的形式与普通阶乘完全一致。
 
+**求和示例 4：钟形求和项**
+我们现在来看一个风格截然不同的和式：
+$$
+\begin{aligned}
+\Theta_n &= \sum_k e^{-k^2/n} \tag{9.92} \\
+&= \cdots + e^{-9/n} + e^{-4/n} + e^{-1/n} + 1 + e^{-1/n} + e^{-4/n} + e^{-9/n} + \cdots.
+\end{aligned}
+$$
+
+这是一个双侧无穷和，当 $k=0$ 时项取到最大值 $e^0=1$。我们将其记为 $\Theta_n$，因为它是关于 $e^{-1/n}$ 的幂级数，指数为二次多项式 $p(k)=k^2$；这类幂级数通常称为 $\theta$ 函数。若 $n=10^{100}$，则有
+$$
+e^{-k^2/n}=
+\begin{cases}
+e^{-0.01}\approx 0.99005,&k=10^{49};\\
+e^{-1}\approx 0.36788,&k=10^{50};\\
+e^{-100}<10^{-43},&k=10^{51}.
+\end{cases}
+$$
+因此求和项在 $k$ 接近 $\sqrt{n}$ 之前都非常接近 $1$，之后迅速下降并趋近于 $0$。我们可以猜测 $\Theta_n$ 与 $\sqrt{n}$ 成正比。下图是 $n=10$ 时 $e^{-k^2/n}$ 的图像（略）。$n$ 越大，图像在水平方向就被拉伸 $\sqrt{n}$ 倍。
+
+我们可以令 $f(x) = e^{-x^2/n}$，并在欧拉求和公式中取 $a=-\infty$，$b=+\infty$ 来估计 $\Theta_n$。（若觉得无穷大过于抽象，可先设 $a=-A$，$b=+B$，再令 $A,B\to\infty$ 取极限。）$f(x)$ 的积分为
+$$
+\int_{-\infty}^{+\infty} e^{-x^2/n}\,dx = \sqrt{n}\int_{-\infty}^{+\infty} e^{-u^2}\,du = \sqrt{n}\,C,
+$$
+其中做了变量代换 $x=u\sqrt{n}$。$\int_{-\infty}^{+\infty} e^{-u^2}\,du$ 的值是熟知的，但我们暂时记为 $C$，待代入欧拉求和公式后再回头处理。
+
+接下来需要各阶导数 $f'(x),f''(x),\dots$，为此令
+$$
+f(x) = g\bigl(x/\sqrt{n}\bigr),\quad g(x)=e^{-x^2}.
+$$
+由微积分链式法则
+$$
+\frac{df(x)}{dx} = \frac{dg(y)}{dy}\frac{dy}{dx},\quad y=\frac{x}{\sqrt{n}},
+$$
+即
+$$
+f'(x) = \frac{1}{\sqrt{n}}\,g'\bigl(x/\sqrt{n}\bigr).
+$$
+由归纳法可得
+$$
+f^{(k)}(x) = n^{-k/2}\,g^{(k)}\bigl(x/\sqrt{n}\bigr).
+$$
+
+例如，$g'(x) = -2x e^{-x^2}$，$g''(x) = (4x^2-2)e^{-x^2}$，于是
+$$
+f'(x) = \frac{1}{\sqrt{n}}\left(-\frac{2x}{\sqrt{n}}\right)e^{-x^2/n},\quad
+f''(x) = \frac{1}{n}\left(4\left(\frac{x}{\sqrt{n}}\right)^2 - 2\right)e^{-x^2/n}.
+$$
+用更简单的函数 $g(x)$ 更容易看清规律。
+
+我们不必精确计算 $g(x)$ 的各阶导数，因为只关心 $x=\pm\infty$ 时的极限。为此只需注意：$g(x)$ 的每一阶导数都是 $e^{-x^2}$ 乘以某个 $x$ 的多项式：
+$$
+g^{(k)}(x) = P_k(x)e^{-x^2},
+$$
+其中 $P_k$ 是 $k$ 次多项式。这可用归纳法证明。
+
+当 $x\to\pm\infty$ 时，负指数 $e^{-x^2}$ 趋于 $0$ 的速度远快于多项式 $P_k(x)$ 趋于无穷的速度，因此对所有 $k\ge 0$ 有
+$$
+f^{(k)}(+\infty) = f^{(k)}(-\infty) = 0.
+$$
+于是欧拉求和公式中所有边界项
+$$
+\sum_{k=1}^m \frac{B_k}{k!}f^{(k-1)}(x)\bigg|_{-\infty}^{+\infty}
+$$
+都消失，只剩下积分项与余项：
+$$
+\begin{aligned}
+\Theta_n &= C\sqrt{n} + (-1)^{m+1}\int_{-\infty}^{+\infty}\frac{B_m(\{x\})}{m!}f^{(m)}(x)\,dx \\
+&= C\sqrt{n} + \frac{(-1)^{m+1}}{n^{m/2}}\int_{-\infty}^{+\infty}\frac{B_m(\{x\})}{m!}g^{(m)}\left(\frac{x}{\sqrt{n}}\right)dx \\
+&= C\sqrt{n} + \frac{(-1)^{m+1}}{n^{(m-1)/2}}\int_{-\infty}^{+\infty}\frac{B_m(\{u\sqrt{n}\})}{m!}P_m(u)e^{-u^2}\,du \\
+&= C\sqrt{n} + O\left(n^{(1-m)/2}\right). \quad x=u\sqrt{n}
+\end{aligned}
+$$
+
+这里的 $O$ 估计成立是因为 $|B_m(\{u\sqrt{n}\})|$ 有界，且对任意多项式 $P$，积分 $\int_{-\infty}^{+\infty}|P(u)|e^{-u^2}du$ 收敛。（$O$ 中的常数依赖于 $m$。）
+
+我们证明了 $\Theta_n = C\sqrt{n} + O(n^{-M})$ 对任意大的 $M$ 成立；$\Theta_n$ 与 $C\sqrt{n}$ 的差是**指数阶小量**。下面确定常数 $C$。
+
+确定 $C$ 的一种方法是查表，但我们更希望知道推导过程。利用初等微积分即可：考虑二重积分
+$$
+C^2 = \int_{-\infty}^{+\infty}e^{-x^2}dx \int_{-\infty}^{+\infty}e^{-y^2}dy
+= \int_{-\infty}^{+\infty}\int_{-\infty}^{+\infty}e^{-(x^2+y^2)}dx\,dy.
+$$
+化为极坐标：
+$$
+\begin{aligned}
+C^2 &= \int_0^{2\pi}\int_0^\infty e^{-r^2}r\,dr\,d\theta \\
+&= \frac12\int_0^{2\pi}d\theta\int_0^\infty e^{-u}du \\
+&= \frac12\int_0^{2\pi}d\theta = \pi. \quad u=r^2
+\end{aligned}
+$$
+
+故 $C=\sqrt{\pi}$。$x^2+y^2=r^2$ 是圆方程，周长为 $2\pi r$，这正是 $\pi$ 出现的原因。
+
+另一种方法：令 $x=\sqrt{t}$，$dx=\frac12 t^{-1/2}dt$：
+$$
+C = \int_{-\infty}^{+\infty}e^{-x^2}dx = 2\int_0^\infty e^{-x^2}dx
+= \int_0^\infty t^{-1/2}e^{-t}dt.
+$$
+该积分等于 $\Gamma(\frac12)$，因为由 (5.84)，$\Gamma(\alpha)=\int_0^\infty t^{\alpha-1}e^{-t}dt$。于是我们证明了 $\Gamma\left(\frac12\right) = \sqrt{\pi}$。最终公式为：
+$$
+\Theta_n = \sum_k e^{-k^2/n} = \sqrt{\pi n} + O(n^{-M}),\quad \text{ for all fixed }M. \tag{9.93}
+$$
+$O$ 中的常数依赖于 $M$，因此我们说 $M$ 是“固定的”。
+
+例如，当 $n=2$ 时，无穷和 $\Theta_2$ 约等于 $2.506628288$；即使 $n$ 很小，这也已经非常接近 $\sqrt{2\pi}\approx 2.506628275$。$\Theta_{100}$ 与 $10\sqrt{\pi}$ 在小数点后427 位都一致！
+
+习题 59 利用高等方法推导出 $\Theta_n$ 的一个快速收敛级数，结果为：
+$$
+\frac{\Theta_n}{\sqrt{\pi n}} = 1 + 2e^{-n\pi^2} + O(e^{-4n\pi^2}). \tag{9.94}
+$$
+
+**求和示例 5：压轴之求和**
+
+现在我们来做最后一个和式，它将最终给出斯特林常数 $\sigma$ 的值。这最后一个和式也将展示本章（乃至全书）的多种技巧，因此用它来结束《具体数学》的探索再合适不过。
+
+最终任务看起来简单得近乎荒谬：我们要用欧拉求和公式求
+$$
+A_n = \sum_k \binom{2n}{n+k}
+$$
+的渐近式。
+
+这个问题我们其实早已知道答案（对吧？）；但用新方法去解老问题总是很有意义，可以相互印证，甚至可能有新发现。
+
+我们先宏观观察：$A_n$ 的主要贡献来自中间项，即 $k\approx n$ 附近。通常一个好的做法是：把记号改为主项出现在 $k=0$ 附近，这样就能用尾项替换技巧去掉 $|k|$ 很大的项。因此令 $k \leftarrow n+k$：
+$$
+A_n = \sum_k \binom{2n}{n+k}
+= \sum_k \frac{(2n)!}{(n+k)!\,(n-k)!}.
+$$
+形式已经不错，因为我们知道当 $n$ 很大、$k$ 较小时如何近似 $(n\pm k)!$。
+
+现在执行尾项替换的三步流程，将
+$$
+\frac{(2n)!}{(n+k)!\,(n-k)!} = a_k(n) = b_k(n) + O\bigl(c_k(n)\bigr),\quad k\in D_n
+$$
+展开，从而得到估计：
+$$
+A_n = \sum_k b_k(n) + O\!\left(\sum_{k\notin D_n} a_k(n)\right) + O\!\left(\sum_{k\notin D_n} b_k(n)\right) + \sum_{k\in D_n} O\bigl(c_k(n)\bigr).
+$$
+
+于是我们在 $|k|$ 较小的区域估计 $\binom{2n}{n+k}$。可以直接用表 452 的斯特林公式，但用对数形式 (9.91) 更方便：
+$$
+\begin{aligned}
+\ln a_k(n) &= \ln(2n)! - \ln(n+k)! - \ln(n-k)! \\
+&= 2n\ln 2n - 2n + \tfrac12\ln 2n + \sigma + O(n^{-1}) \\
+&- (n+k)\ln(n+k) + n + k - \tfrac12\ln(n+k) - \sigma + O\!\bigl((n+k)^{-1}\bigr) \\
+&- (n-k)\ln(n-k) + n - k - \tfrac12\ln(n-k) - \sigma + O\!\bigl((n-k)^{-1}\bigr).
+\end{aligned}
+\tag{9.95}
+$$
+我们希望把它整理成简洁清晰的 $O$ 估计。
+
+尾项替换法只要求估计在主区域 $k\in D_n$ 内有效。但问题是：$D_n$ 该如何定义？
+
+
+
 
 
 

@@ -1799,6 +1799,90 @@ $$
 
 尾项替换法只要求估计在主区域 $k\in D_n$ 内有效。但问题是：$D_n$ 该如何定义？
 
+我们必须让 $D_n$ 足够小，以便做出精确估计；例如，最好不要让 $k$ 接近 $n$，否则式 (9.95) 中的项 $O((n-k)^{-1})$ 将会发散。然而 $D_n$ 又必须足够大，使得尾项（即 $k\notin D_n$ 的项）相对于整个和式可以忽略不计。找到合适的集合 $D_n$ 通常需要反复尝试；在这个问题中，接下来的计算会表明，如下定义是合理的：
+$$
+k\in D_n\ \Longleftrightarrow\ |k|\le n^{1/2+\epsilon}. \tag{9.96}
+$$
+
+这里 $\epsilon$ 是一个小的正常数，我们可以在后续推导完成后再选定。（我们的 $O$ 估计会依赖于 $\epsilon$ 的取值。）式 (9.95) 现在可以化简为
+$$
+\begin{aligned}
+\ln a_k(n) = &(2n+\tfrac12)\ln 2 - \sigma - \tfrac12\ln n + O(n^{-1}) \\
+&- (n+k+\tfrac12)\ln(1+k/n) - (n-k+\tfrac12)\ln(1-k/n).
+\end{aligned} \tag{9.97}
+$$
+
+（我们提取出了对数中的主部，写成 $$\ln(n\pm k) = \ln n + \ln(1\pm k/n)$$这使得大量的 $\ln n$ 项相互抵消。）
+
+现在我们需要对项 $\ln(1\pm k/n)$ 做渐近展开，直到误差项在 $n\to\infty$ 时趋于 0。我们用 $n\pm k+\tfrac12$ 乘以 $\ln(1\pm k/n)$，因此在假设 $|k|\le n^{1/2+\epsilon}$ 的条件下，应当将对数展开到 $o(n^{-1})$ 阶：
+$$
+\ln\left(1\pm\frac{k}{n}\right) = \pm\frac{k}{n} - \frac{k^2}{2n^2} + O(n^{-3/2+3\epsilon}).
+$$
+再乘以 $n\pm k+\tfrac12$ 可得
+$$
+\pm k - \frac{k^2}{2n} + \frac{k^2}{n} + O(n^{-1/2+3\epsilon}),
+$$
+其余项都被吸收进 $O(n^{-1/2+3\epsilon})$ 中。于是式 (9.97) 变为
+$$
+\ln a_k(n) = (2n+\tfrac12)\ln 2 - \sigma - \tfrac12\ln n - k^2/n + O(n^{-1/2+3\epsilon}).
+$$
+两边取指数，得到
+$$
+a_k(n) = \frac{2^{2n+1/2}e^{-\sigma}}{\sqrt n} e^{-k^2/n}\bigl(1+O(n^{-1/2+3\epsilon})\bigr). \tag{9.98}
+$$
+
+这就是我们的近似式，其中
+$$
+b_k(n) = \frac{2^{2n+1/2}e^{-\sigma}}{\sqrt n}e^{-k^2/n},\quad
+c_k(n) = 2^{2n}n^{-1+3\epsilon}e^{-k^2/n}.
+$$
+注意 $k$ 在 $b_k(n)$ 和 $c_k(n)$ 中的形式非常简单，我们很幸运，因为接下来要对 $k$ 求和。
+
+尾项替换技巧告诉我们，如果估计得当，$\sum_k a_k(n)$ 将会近似于 $\sum_k b_k(n)$。于是我们计算
+$$
+\begin{aligned}
+\sum_k b_k(n) &= \frac{2^{2n+1/2}e^{-\sigma}}{\sqrt n}\sum_k e^ {-k^2/n} \\
+&= \frac{2^{2n+1/2}e^{-\sigma}}{\sqrt n}\Theta_n = 2^{2n}\sqrt{\frac{2}{\pi}}e^{-\sigma}\bigl(1+O(n^{-M})\bigr).
+\end{aligned} 
+$$
+（又一个好运：我们用上了上一个例子中的和 $\Theta_n$。）这一结果很令人振奋，因为我们已知原和式其实是
+$$
+A_n = \sum_k \binom{2n}{k} = (1+1)^{2n} = 2^{2n}.
+$$
+由此看来，我们将会得到 $e^\sigma = \sqrt{2\pi}$，正如之前所宣称的。
+
+但这里有一个需要注意的地方：我们仍需证明估计的精度足够高。首先来看 $c_k(n)$ 带来的误差：
+$$
+\Sigma_c(n) = \sum_{|k|\le n^{1/2+\epsilon}}2^{2n}n^{-1+3\epsilon}e^{-k^2/n}
+\le 2^{2n}n^{-1+3\epsilon}\Theta_n
+= O(2^{2n}n^{-1/2+3\epsilon}).
+$$
+结果很好；只要 $3\epsilon<1/2$，这一项的阶就低于之前的和式。
+
+接下来我们必须检验尾项。我们有
+$$
+\sum_{k>n^{1/2+\epsilon}}e^{-k^2/n}
+< \exp\bigl(-\lfloor n^{1/2+\epsilon}\rfloor^2/n\bigr)(1+e^{-1/n}+e^{-2/n}+\cdots)
+= O(e^{-n^{2\epsilon}})\cdot O(n),
+$$
+它对所有 $M$ 都是 $O(n^{-M})$，因此 $\sum_{k\notin D_n}b_k(n)$ 渐近可忽略。（我们选取分界点 $n^{1/2+\epsilon}$，正是为了让 $D_n$ 外的 $e^{-k^2/n}$ 指数小。类似 $n^{1/2}\log n$ 这样的选择也可行，得到的估计会稍好一些，但公式会更复杂。我们不必追求最强估计，因为主要目标是确定常数 $\sigma$ 的值。）同理，另一部分尾项
+$$
+\sum_{k>n^{1/2+\epsilon}}\binom{2n}{n+k}
+$$
+以 $2n$ 乘以其最大项为上界，最大项出现在分界点 $k\approx n^{1/2+\epsilon}$ 处。该项近似等于 $b_k(n)$，相对于 $A_n$ 指数小；而一个指数小的因子足以消去因子 $2n$。
+
+于是我们成功运用尾项替换技巧证明了如下估计
+$$
+2^{2n} = \sum_k \binom{2n}{k}
+= \frac{\sqrt{2\pi}}{e^\sigma}2^{2n} + O(2^{2n}n^{-1/2+3\epsilon}),
+\quad \text{if } 0<\epsilon<\frac16. \tag{9.99}
+$$
+我们可以取 $\epsilon=\frac18$，并由此推出
+$$
+\sigma = \frac12\ln2\pi.
+$$
+证毕。
+
 
 
 

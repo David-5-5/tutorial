@@ -63,6 +63,46 @@ public:
         return dp[n]==INT_MAX?-1:dp[n];  
     }
 
+    int minimumCost2(string target, vector<string>& words, vector<int>& costs) {
+        // 使用前缀和计算字符串 hash，避免超时
+        int n = target.length(); vector<int> dp(n+1, INT_MAX/2); dp[0] = 0;
 
+        int mod = 1e9 + 7, base = 401; ; 
+
+        vector<int> pow_base(n + 1); // pow_base[i] = base^i
+        vector<int> pre_hash(n + 1); // 前缀哈希值 pre_hash[i] = hash(s[:i])
+        pow_base[0] = 1;
+        for (int i = 0; i < n; i++) {
+            pow_base[i + 1] = (long long) pow_base[i] * base % mod;
+            pre_hash[i + 1] = ((long long) pre_hash[i] * base + target[i]) % mod; // 秦九韶算法计算多项式哈希
+        }
+
+        // 计算 target[l] 到 target[r-1] 的哈希值
+        auto sub_hash = [&](int l, int r) {
+            return ((pre_hash[r] - (long long) pre_hash[l] * pow_base[r - l]) % mod + mod) % mod;
+        };
+
+        map<int, unordered_map<int, int>> hash_cost;
+        for (int i=0; i<words.size(); ++i) {
+            auto m = words[i].length();
+            long long p = 0;
+            for (int j=0; j<m; j++) {
+                p = (p * base + words[i][j]) % mod;
+            }
+            if (!hash_cost[m].contains(p)) hash_cost[m][p] = costs[i];
+            else hash_cost[m][p] = min(hash_cost[m][p], costs[i]);
+        }
+
+        
+        for (int i=1; i<=n; i++) {
+            for (auto &[len, mc]:hash_cost) {
+                if (len > i) break;
+                auto it = mc.find(sub_hash(i-len, i));
+                if (it != mc.end()) dp[i] = min(dp[i], dp[i-len] + it->second);
+            }
+        }
+        
+        return dp[n]>=INT_MAX/2?-1:dp[n]; 
+    }    
 };
 

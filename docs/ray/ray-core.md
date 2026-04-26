@@ -1,0 +1,731 @@
+# Ray Core 核心流程分析
+
+本文档聚合 Ray 核心流程，按主题分类记录。
+
+---
+
+## 目录
+
+[toc]
+
+---
+
+## ray start 完整执行流程
+
+### 概述
+
+`ray start` 命令支持 **Head 节点** 和 **Worker 节点** 两种模式，共用同一个 `start()` 函数（约 500 行代码），通过 `--head` 参数分支执行不同逻辑。
+
+---
+
+## 核心文件：python/ray/scripts/scripts.py
+
+**位置**: 第 679-1180 行
+
+这是 `ray start` 的入口文件，负责 CLI 参数解析、流程分支逻辑、Node 实例化、用户交互输出。
+
+### 一、CLI 参数设计
+
+40+ 个参数按功能分类：
+
+| 参数类别 | 关键参数 | 作用 |
+|---------|---------|------|
+| **节点标识** | `--head`, `--address`, `--port` | Head/Worker 模式选择 |
+| **资源配置** | `--num-cpus`, `--num-gpus`, `--memory`, `--resources` | 节点资源声明 |
+| **网络端口** | `--object-manager-port`, `--node-manager-port`, `--min-worker-port` | 各组件端口绑定 |
+| **Dashboard** | `--include-dashboard`, `--dashboard-port` | Dashboard 配置 |
+| **存储配置** | `--plasma-directory`, `--object-spilling-directory` | 对象存储配置 |
+| **高级配置** | `--system-config`, `--temp-dir`, `--block` | 系统级配置 |
+| **标签** | `--labels`, `--labels-file` | 节点标签（调度用） |
+
+### 二、执行流程总览
+
+```
+ray start [--head]
+    ↓
+[ 通用阶段 ] - Head 和 Worker 都执行
+    ├── 1. 参数解析与验证
+    ├── 2. 资源和标签解析
+    └── 3. 构建 RayParams 对象
+    ↓
+[ 分支阶段 ] - 根据 --head 分流
+    ├─→ Head 节点流程 ──┐
+    │                   │
+    └─→ Worker 节点流程 ┘
+    ↓
+[ 收尾阶段 ]
+    ├── 写入 gcs_address 到临时目录
+    └── --block 模式：进入无限循环监控
+```
+
+### 三、通用阶段详解
+
+#### 1. 参数解析与验证
+
+**关键技术点**:
+
+```python
+# 双重标签解析：字符串 + YAML 文件
+labels_from_file = parse_node_labels_from_yaml_file(labels_file)
+labels_from_string = parse_node_labels_string(labels)  # 新格式: key1=val1,key2=val2
+labels_dict = {**labels_from_file, **labels_from_string}  # 字符串优先级更高
+
+# 资源隔离配置
+resource_isolation_config = ResourceIsolationConfig(
+    enable_resource_isolation=enable_resource_isolation,
+    cgroup_path=cgroup_path,
+    system_reserved_cpu=system_reserved_cpu,
+    system_reserved_memory=system_reserved_memory,
+)
+```
+
+#### 2. RayParams 对象构建
+
+**关联文件**: `python/ray/_private/parameter.py`
+
+RayParams 是**所有配置的唯一容器**，包含：
+- 30+ 个基础配置字段
+- 资源隔离配置
+- Dashboard 相关配置
+- 系统级配置（`_system_config`）
+
+#### 3. 扩展点：RAY_START_HOOK
+
+```python
+if ray_constants.RAY_START_HOOK in os.environ:
+    load_class(os.environ[ray_constants.RAY_START_HOOK])(ray_params, head)
+```
+
+允许在真正启动前注入自定义逻辑（测试、监控、审计等）。
+
+### 四、Head 节点流程 (`--head`)
+
+```
+ray start --head --port=6379
+    ↓
+1. 设置 GCS 端口（默认 6379）
+    ↓
+2. ✅ 冲突检测：防止端口被占用
+    │  - 检查默认地址是否已在运行
+    │  - 已运行则抛出 ConnectionError
+    ↓
+3. 创建 Node 实例 (head=True)
+    ↓
+4. 打印 Dashboard 地址和使用说明
+    ↓
+5. 写入 gcs_address 到临时文件
+    ↓
+6. --block 模式：进入监控循环
+```
+
+**关键设计：冲突检测**
+
+```python
+# 在启动前检查是否已有 Ray 集群在运行
+default_address = build_address(ray_params.node_ip_address, port)
+bootstrap_address = services.find_bootstrap_address(temp_dir)
+if default_address == bootstrap_address:
+    raise ConnectionError("Ray is already running...")
+```
+
+### 五、Worker 节点流程
+
+```
+ray start --address=head-node:6379
+    ↓
+1. ✅ 必须指定 --address，否则直接 abort
+    ↓
+2. ✅ Head-only 参数检查
+    │  禁止 Worker 指定：
+    │  --port, --redis-shard-ports, --include-dashboard
+    ↓
+3. 规范化 GCS 地址
+    ↓
+4. 获取本机 IP 地址（需要连接到 GCS 后自动探测）
+    ↓
+5. 创建 Node 实例 (head=False)
+    ↓
+6. 版本检查：确保 Worker 与 Head 版本一致
+    ↓
+7. 写入 gcs_address 到临时文件
+    ↓
+8. --block 模式：进入监控循环
+```
+
+**关键设计：Worker 自动 IP 探测**
+
+```python
+# Worker 需要连接到 GCS 后才能确定自己应该用哪个网卡
+ray_params.update_if_absent(
+    node_ip_address=services.get_node_ip_address(bootstrap_address)
+)
+```
+
+### 六、--block 模式详解
+
+当指定 `--block` 时，进程**不会退出**，而是进入无限循环：
+
+```python
+while True:
+    time.sleep(1)
+    deceased = node.dead_processes()
+    
+    # 检查异常退出的进程
+    expected_return_codes = [0, SIGTERM, -SIGTERM, 128+SIGTERM]
+    unexpected_deceased = [p for p in deceased if p.returncode not in expected_return_codes]
+    
+    if unexpected_deceased:
+        cli_logger.error("Some Ray processes died unexpectedly...")
+```
+
+**作用**:
+- 生产环境推荐使用，防止进程退出导致集群节点离线
+- 监控所有子进程（raylet、gcs_server 等）
+- 异常退出时及时报警
+
+---
+
+## 核心文件：python/ray/_private/node.py
+
+Node 类是**进程编排器**，负责所有子进程的生命周期管理。
+
+### 一、类职责
+
+| 职责 | 说明 |
+|------|------|
+| **进程启动** | Head 专属服务、Raylet、Agent 等 |
+| **进程监控** | 检测子进程异常退出 |
+| **配置同步** | Worker 从 GCS 拉取系统配置 |
+| **生命周期** | 集群启动、关闭、清理 |
+
+### 二、关键方法矩阵
+
+| 方法 | Head | Worker | 作用 |
+|------|------|--------|------|
+| `__init__()` | ✅ | ✅ | 初始化，调用下面两个方法 |
+| `start_head_processes()` | ✅ | ❌ | GCS、Monitor、API Server |
+| `start_ray_processes()` | ✅ | ✅ | Raylet、Agent、Log Monitor |
+| `dead_processes()` | ✅ | ✅ | 获取已死亡的子进程 |
+| `kill_all_processes()` | ✅ | ✅ | 杀死所有子进程 |
+| `check_version_info()` | ❌ | ✅ | Worker 版本校验 |
+
+### 三、start_head_processes() 详解
+
+**位置**: 第 1344 行
+
+```python
+def start_head_processes(self):
+    self.start_gcs_server()
+    self._write_cluster_info_to_kv()
+    
+    if not self._ray_params.no_monitor:
+        self.start_monitor()
+    
+    if self._ray_params.ray_client_server_port:
+        self.start_ray_client_server()
+    
+    self.start_api_server()
+```
+
+**启动顺序**:
+1. **GCS Server** - 必须第一个启动，其他服务依赖 GCS
+2. **写入集群信息到 KV** - GCS 启动后写入元数据
+3. **Monitor** - 自动扩缩容监控（可选）
+4. **Ray Client Server** - 客户端连接服务（可选）
+5. **API Server** - Dashboard + REST API
+
+### 四、start_ray_processes() 详解
+
+**位置**: 第 1373 行
+
+```python
+def start_ray_processes(self):
+    # Worker 节点：先从 GCS 拉取系统配置
+    if not self.head:
+        gcs_options = ray._raylet.GcsClientOptions.create(...)
+        global_state = ray._private.state.GlobalState()
+        global_state._initialize_global_state(gcs_options)
+        self._config = global_state.get_system_config()
+    
+    # 确定 Plasma 存储配置
+    plasma_directory, fallback_directory, object_store_memory = \
+        services.determine_plasma_store_config(...)
+    
+    # 启动 Log Monitor（可选）
+    if self._ray_params.include_log_monitor:
+        self.start_log_monitor()
+    
+    # 启动 Raylet（核心！
+    self.start_raylet(plasma_directory, fallback_directory, object_store_memory)
+```
+
+**关键设计：Worker 配置同步机制**：
+
+```python
+# Worker 节点必须从 GCS 拉取系统配置，确保与 Head 一致
+assert self._config.items() <= new_config.items(), (
+    "The system config from GCS is not a superset of the local"
+    " system config. There might be a configuration inconsistency"
+)
+self._config = new_config
+```
+
+---
+
+## 核心文件：python/ray/_private/services.py
+
+底层进程启动函数的集合，提供所有 C++ 进程的 Python 包装。
+
+### 一、可执行文件路径映射
+
+**位置**: 第 52-56 行
+
+```python
+RAYLET_EXECUTABLE = os.path.join(
+    RAY_PATH, "core", "src", "ray", "raylet", "raylet" + EXE_SUFFIX
+)
+GCS_SERVER_EXECUTABLE = os.path.join(
+    RAY_PATH, "core", "src", "ray", "gcs", "gcs_server" + EXE_SUFFIX
+)
+```
+
+这些路径对应 Bazel 编译输出，打包在 Python wheel 中。
+
+### 二、start_gcs_server() 详解
+
+**位置**: 第 1452 行
+
+```python
+def start_gcs_server(
+    redis_address: str,
+    log_dir: str,
+    ...
+    gcs_server_port: Optional[int] = None,
+):
+    command = [
+        GCS_SERVER_EXECUTABLE,
+        f"--log_dir={log_dir}",
+        f"--config_list={serialize_config(config)}",
+        f"--gcs_server_port={gcs_server_port}",
+        f"--node-ip-address={node_ip_address}",
+        f"--session-name={session_name}",
+        f"--ray-commit={ray.__commit__}",
+    ]
+    
+    # Redis 相关参数
+    if redis_address:
+        command += [
+            f"--redis_address={redis_ip_address}",
+            f"--redis_port={redis_port}",
+        ]
+    
+    process_info = start_ray_process(
+        command,
+        ray_constants.PROCESS_TYPE_GCS_SERVER,
+        ...
+    )
+    return process_info
+```
+
+**关键参数**:
+- `--config_list`: 序列化后的系统配置
+- `--ray-commit`: Git commit hash，用于版本校验
+- `redis_address`: 可选的外部 Redis 地址
+
+### 三、start_raylet() 详解
+
+**位置**: 第 1536 行
+
+**函数签名**（30+ 个参数）：
+
+```python
+def start_raylet(
+    redis_address: str,
+    gcs_address: str,
+    node_id: str,
+    node_ip_address: str,
+    node_manager_port: int,
+    raylet_name: str,
+    plasma_store_name: str,
+    cluster_id: str,
+    worker_path: str,
+    setup_worker_path: str,
+    temp_dir: str,
+    session_dir: str,
+    resource_dir: str,
+    log_dir: str,
+    resource_and_label_spec,
+    plasma_directory: str,
+    fallback_directory: str,
+    object_store_memory: int,
+    session_name: str,
+    is_head_node: bool,
+    resource_isolation_config: ResourceIsolationConfig,
+    min_worker_port: Optional[int] = None,
+    max_worker_port: Optional[int] = None,
+    worker_port_list: Optional[List[int]] = None,
+    object_manager_port: Optional[int] = None,
+    redis_username: Optional[str] = None,
+    redis_password: Optional[str] = None,
+    metrics_agent_port: Optional[int] = None,
+    metrics_export_port: Optional[int] = None,
+    dashboard_agent_listen_port: Optional[int] = None,
+    runtime_env_agent_port: Optional[int] = None,
+    ...
+):
+```
+
+**设计特点**:
+- 参数数量极多（30+），反映了 Raylet 的复杂性
+- 包含资源隔离、端口管理、路径配置等所有底层细节
+- 所有配置最终通过命令行参数传递给 C++ 进程
+
+### 四、通用进程启动机制：start_ray_process()
+
+所有 C++ 进程都通过此函数启动，统一处理：
+
+```python
+def start_ray_process(
+    command: List[str],
+    process_type: str,
+    stdout_file=None,
+    stderr_file=None,
+    fate_share=None,
+):
+    # 1. 环境变量设置
+    # 2. 进程创建 subprocess.Popen
+    # 3. Fate Share 机制（父进程死亡时子进程自动死亡）
+    # 4. 返回 ProcessInfo 对象
+```
+
+**Fate Share 机制**：
+- Ray 的核心设计，确保父进程退出时所有子进程自动清理，防止孤儿进程
+
+---
+
+## @ray.remote 任务提交流程
+
+### 概述
+
+详细追踪 `@ray.remote` 装饰器从 Python 函数定义到任务提交、调度、执行、返回结果的完整调用链。
+
+### 一、Python 语法层：装饰器阶段
+
+#### 1. `@ray.remote` 装饰器入口
+
+**关键文件**: `python/ray/_private/worker.py` (第 3552 行)
+
+```python
+@PublicAPI
+def remote(
+    *args, **kwargs
+) -> Union[ray.remote_function.RemoteFunction, ray.actor.ActorClass]:
+```
+
+**执行流程**:
+1. 当用 `@ray.remote` 装饰一个函数或类时
+2. 如果是函数 → 创建 `RemoteFunction` 对象
+3. 如果是类 → 创建 `ActorClass` 对象
+
+### 二、Python 层：RemoteFunction 初始化
+
+**关键文件**: `python/ray/remote_function.py` (第 41 行)
+
+```python
+class RemoteFunction:
+    def __init__(self, language, function, function_descriptor, task_options):
+```
+
+**关键点**:
+- `self.remote` 方法是实际调用 `.remote()` 时的入口
+- 此时函数并未真正执行，只是被包装
+
+### 三、调用 `.remote()` 提交任务
+
+**关键文件**: `python/ray/remote_function.py` (第 314 行)
+
+```python
+def _remote(self, args=None, kwargs=None, ...):
+    """Submit the remote function for execution."""
+```
+
+**提交流程**:
+1. 检查 worker 连接状态
+2. 函数序列化与导出（第一次调用时）
+3. 创建函数描述符
+4. 序列化函数（pickle）
+5. 导出函数到 GCS
+6. 调用 core_worker.submit_task (C++ 边界)
+
+### 四、C++ 层：任务提交
+
+**关键文件**: `src/ray/core_worker/task_submission/normal_task_submitter.h`
+
+```cpp
+class NormalTaskSubmitter {
+public:
+    void SubmitTask(TaskSpecification task_spec);
+private:
+    DependencyResolver resolver_;
+    TaskManagerInterface &task_manager_;
+    std::shared_ptr<RayletClientInterface> local_raylet_client_;
+};
+```
+
+### 五、调度层：Raylet 任务调度
+
+**关键文件**: `src/ray/raylet/node_manager.h`
+
+**调度流程**:
+```
+RequestLease RPC → Raylet
+  ↓
+1. ClusterResourceScheduler 检查资源可用性
+  ↓
+2. 找到可用节点后，检查是否有匹配的 worker 进程
+  ↓
+3. 若没有现成 worker: 启动新的 Python 进程
+  ↓
+4. 返回租约（包含目标 worker 的地址）
+```
+
+### 六、完整流程架构图
+
+```
+用户代码 Python 进程 (Driver)
+┌─────────────────────────────────────────────────────────┐
+│  @ray.remote                                            │
+│      ↓ (装饰阶段)                                        │
+│  RemoteFunction 实例                                     │
+│      ↓ (调用 .remote())                                  │
+│  _remote() 方法                                           │
+│      ↓ (函数序列化 + export)                              │
+│  worker.core_worker.submit_task()                        │
+└────────────────────────┬────────────────────────────────┘
+                         │ C++ 边界
+┌────────────────────────▼────────────────────────────────┐
+│  C++ CoreWorker (Driver)                                │
+│      ↓ NormalTaskSubmitter::SubmitTask                  │
+│  1. 依赖解析                                             │
+│  2. 向 Raylet 请求租约 (RequestLease)                   │
+└────────────────────────┬────────────────────────────────┘
+                         │ gRPC
+┌────────────────────────▼────────────────────────────────┐
+│  Raylet (本地节点调度器)                                 │
+│      ↓ ClusterResourceScheduler                         │
+│  1. 资源匹配与节点选择                                    │
+│  2. 启动/复用 Worker 进程                                 │
+│  3. 返回租约（目标 Worker 地址）                          │
+└────────────────────────┬────────────────────────────────┘
+                         │ gRPC
+┌────────────────────────▼────────────────────────────────┐
+│  Worker 进程 (Python + C++)                             │
+│  ┌─────────────────────────────────────────────────┐   │
+│  │  C++ CoreWorker                                 │   │
+│  │    ↓ TaskReceiver::HandleTasks                  │   │
+│  │  1. 反序列化任务参数                              │   │
+│  │  2. 调用 Python 执行器                            │   │
+│  └──────────────────┬──────────────────────────────┘   │
+│                     │ Python 边界                        │
+│  ┌──────────────────▼──────────────────────────────┐   │
+│  │  Python Worker                                   │   │
+│  │    ↓ 反序列化函数和参数                            │   │
+│  │    ↓ 执行用户函数                                  │   │
+│  │    ↓ 序列化结果                                   │   │
+│  └──────────────────┬──────────────────────────────┘   │
+│                     │ 写入对象存储                        │
+└────────────────────────▼────────────────────────────────┘
+                         │
+┌────────────────────────▼────────────────────────────────┐
+│  Object Store (Plasma) - 共享内存对象存储               │
+└─────────────────────────────────────────────────────────┘
+```
+
+---
+
+## GCS Server 深度架构分析
+
+### 概述
+
+GCS（Global Control Store）是 Ray 的全局状态管理中心，所有元数据都存储在这里。
+
+**关键文件**: `src/ray/gcs/gcs_server.h`
+
+### GcsServer 核心组件
+
+```cpp
+class GcsServer {
+private:
+    // 节点管理
+    std::unique_ptr<GcsNodeManager> gcs_node_manager_;
+    
+    // Actor 管理（核心！）
+    std::unique_ptr<GcsActorManager> gcs_actor_manager_;
+    
+    // Job 管理
+    std::unique_ptr<GcsJobManager> gcs_job_manager_;
+    
+    // Worker 管理
+    std::unique_ptr<GcsWorkerManager> gcs_worker_manager_;
+    
+    // 放置组管理
+    std::unique_ptr<GcsPlacementGroupManager> gcs_placement_group_manager_;
+    
+    // 任务管理
+    std::unique_ptr<GcsTaskManager> gcs_task_manager_;
+    
+    // 资源管理
+    std::unique_ptr<GcsResourceManager> gcs_resource_manager_;
+    
+    // 集群资源调度器（全局调度）
+    std::unique_ptr<ClusterResourceScheduler> cluster_resource_scheduler_;
+    
+    // 租约管理
+    std::unique_ptr<ClusterLeaseManager> cluster_lease_manager_;
+    
+    // KV 存储
+    std::unique_ptr<GcsKVManager> gcs_kv_manager_;
+    
+    // gRPC 服务
+    std::unique_ptr<rpc::GrpcServer> rpc_server_;
+};
+```
+
+### GCS 启动完整流程
+
+**文件**: `src/ray/gcs/gcs_server.cc`
+
+```
+GcsServer::Start()
+  ↓
+1. 初始化存储后端（Redis / 内存）
+   ↓
+2. 初始化各 Manager（按依赖顺序）
+   ├── GcsNodeManager
+   ├── GcsResourceManager
+   ├── GcsActorManager    ← Actor 生命周期管理
+   ├── GcsJobManager
+   ├── GcsTaskManager
+   └── GcsKVManager
+   ↓
+3. 注册所有 gRPC 服务 handler
+   ↓
+4. 启动 gRPC Server 监听（默认端口 6379）
+   ↓
+5. 启动后台定时任务（节点健康检查等）
+```
+
+---
+
+## Actor 创建完整流程
+
+### 概述
+
+Actor 是 Ray 的有状态计算抽象，创建流程涉及多个组件协同。
+
+### 调用链追踪
+
+```
+用户代码: @ray.remote class MyActor: pass
+  ↓
+1. Python 层: ActorClass 实例化
+   文件: python/ray/actor.py
+  ↓
+2. 调用 .remote() 创建 Actor
+   ↓
+3. CoreWorker::CreateActor（C++ 边界）
+   文件: src/ray/core_worker/core_worker.cc
+  ↓
+4. 向 GCS 发送 RegisterActorRequest
+   文件: src/ray/gcs/gcs_server/gcs_actor_manager.cc
+  ↓
+5. GcsActorManager 调度 Actor 到合适节点
+   ├── 检查资源需求
+   ├── 选择合适的 Raylet
+   └── 记录 Actor 状态（PENDING → SCHEDULED）
+  ↓
+6. 目标 Raylet 创建 Worker 进程
+   文件: src/ray/raylet/node_manager.cc
+  ↓
+7. Worker 进程中初始化 Actor
+   ├── 反序列化 Actor 类
+   ├── 执行 __init__ 方法
+   └── 向 GCS 报告 Actor READY
+  ↓
+8. 返回 ActorHandle 给用户
+```
+
+### 关键状态转换
+
+```
+PENDING (等待调度)
+    ↓
+SCHEDULED (已分配节点)
+    ↓
+CREATING (Worker 正在创建中)
+    ↓
+READY (可接收任务)
+    ↓
+DEAD (已死亡/退出)
+```
+
+---
+
+## Raylet 内部架构
+
+### 概述
+
+Raylet 是每个节点上的本地调度器，负责：
+- 本地资源管理
+- Worker 进程池管理
+- 任务调度
+- 对象管理
+
+**关键文件**: `src/ray/raylet/raylet.h`
+
+### 核心组件
+
+| 组件 | 作用 | 关键文件 |
+|------|------|---------|
+| `NodeManager` | 节点资源管理、任务调度、Worker 生命周期 | `node_manager.h` |
+| `WorkerPool` | Worker 进程池，管理空闲/忙碌的 Worker | `worker_pool.h` |
+| `ClusterResourceScheduler` | 全局资源视图、节点选择 | `cluster_resource_scheduler.h` |
+| `LocalResourceManager` | 本地资源核算 | `local_resource_manager.h` |
+| `ObjectManager` | 对象传输、拉取/推送 | `object_manager.h` |
+| `AgentManager` | Dashboard Agent 管理 | `agent_manager.h` |
+
+### Worker 进程类型
+
+| 类型 | 作用 | 数量 |
+|------|------|------|
+| Python Worker | 执行普通任务/Actor | 动态增减 |
+| Java Worker | 执行 Java 任务 | 动态增减 |
+| CoreWorker | C++ 核心层（每个进程 1 个） | 每个进程 1 个 |
+| Driver | 用户主进程（Python/Java） | 每个 Job 1 个 |
+
+---
+
+## 关键文件索引
+
+### Python 层
+
+| 文件 | 作用 |
+|------|------|
+| `python/ray/scripts/scripts.py` | CLI 入口 |
+| `python/ray/_private/node.py` | Node 类，进程编排 |
+| `python/ray/_private/services.py` | 服务启动与进程管理 |
+| `python/ray/remote_function.py` | RemoteFunction 类 |
+
+### C++ 层
+
+| 文件 | 作用 |
+|------|------|
+| `src/ray/gcs/gcs_server.h` | GCS Server 核心类 |
+| `src/ray/raylet/raylet.h` | Raylet 核心类 |
+| `src/ray/raylet/node_manager.h` | 节点管理器 |
+| `src/ray/core_worker/core_worker.h` | CoreWorker 核心类 |
+| `src/ray/core_worker/task_submission/normal_task_submitter.h` | 任务提交器 |
+
+---
+
+*文档生成时间: 2024-04-25*

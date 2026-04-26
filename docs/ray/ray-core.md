@@ -215,60 +215,291 @@ Node 类是**进程编排器**，负责所有子进程的生命周期管理。
 
 ```python
 def start_head_processes(self):
-    self.start_gcs_server()
-    self._write_cluster_info_to_kv()
+    self.start_gcs_server()              # 核心！启动 GCS
+    self._write_cluster_info_to_kv()     # 写入元数据
     
     if not self._ray_params.no_monitor:
-        self.start_monitor()
+        self.start_monitor()             # 自动扩缩容监控
     
     if self._ray_params.ray_client_server_port:
-        self.start_ray_client_server()
+        self.start_ray_client_server()   # 客户端连接服务
     
-    self.start_api_server()
+    self.start_api_server()              # Dashboard + REST API
 ```
 
-**启动顺序**:
-1. **GCS Server** - 必须第一个启动，其他服务依赖 GCS
-2. **写入集群信息到 KV** - GCS 启动后写入元数据
-3. **Monitor** - 自动扩缩容监控（可选）
-4. **Ray Client Server** - 客户端连接服务（可选）
-5. **API Server** - Dashboard + REST API
+**启动顺序原则**:
+1. **GCS Server 必须第一个启动**，其他所有服务都依赖 GCS 进行通信和状态存储
+2. 启动顺序严格按照依赖关系排列
 
-### 四、start_ray_processes() 详解
+---
+
+### 四、Node.start_gcs_server() 方法详解
+
+**位置**: 第 1113 行
+
+这是 Head 节点启动 GCS Server 的包装方法：
+
+```python
+def start_gcs_server(self):
+    # 前置断言：确保只启动一次
+    gcs_server_port = self._ray_params.gcs_server_port
+    assert gcs_server_port > 0
+    assert self._gcs_address is None, "GCS server is already running."
+    assert self._gcs_client is None, "GCS client is already connected."
+
+    # 1. 日志文件命名（唯一化）
+    stdout_log_fname, stderr_log_fname = self.get_log_file_names(
+        "gcs_server", unique=True, create_out=True, create_err=True
+    )
+    
+    # 2. 调用 services.start_gcs_server() 启动 C++ 进程
+    process_info = ray._private.services.start_gcs_server(
+        self.redis_address,
+        log_dir=self._logs_dir,
+        stdout_filepath=stdout_log_fname,
+        stderr_filepath=stderr_log_fname,
+        session_name=self.session_name,
+        redis_username=self._ray_params.redis_username,
+        redis_password=self._ray_params.redis_password,
+        config=self._config,
+        fate_share=self.kernel_fate_share,
+        gcs_server_port=gcs_server_port,
+        metrics_agent_port=self._ray_params.metrics_agent_port,
+        node_ip_address=self._node_ip_address,
+    )
+    
+    # 3. 注册进程到 all_processes 字典（用于监控和清理）
+    assert ray_constants.PROCESS_TYPE_GCS_SERVER not in self.all_processes
+    self.all_processes[ray_constants.PROCESS_TYPE_GCS_SERVER] = [
+        process_info,
+    ]
+    
+    # 4. 保存 GCS 地址供其他组件使用
+    self._gcs_address = build_address(self._node_ip_address, gcs_server_port)
+```
+
+**关键设计要点**:
+
+| 设计点 | 说明 |
+|--------|------|
+| **前置断言** | 防止重复启动 GCS，确保单例 |
+| **日志唯一化** | `unique=True` 确保每次启动生成不同的日志文件，不覆盖历史 |
+| **Fate Share 机制** | `kernel_fate_share` 确保父进程退出时 GCS 自动清理 |
+| **进程注册** | 所有进程注册到 `all_processes` 字典，统一监控和生命周期管理 |
+
+---
+
+### 五、start_ray_processes() 详解
 
 **位置**: 第 1373 行
 
+Head 和 Worker 节点都需要执行此方法：
+
 ```python
 def start_ray_processes(self):
-    # Worker 节点：先从 GCS 拉取系统配置
+    # [Worker 节点专属] 先从 GCS 拉取系统配置
     if not self.head:
         gcs_options = ray._raylet.GcsClientOptions.create(...)
         global_state = ray._private.state.GlobalState()
         global_state._initialize_global_state(gcs_options)
-        self._config = global_state.get_system_config()
+        new_config = global_state.get_system_config()
+        
+        # 配置一致性校验：本地配置必须是 GCS 配置的子集
+        assert self._config.items() <= new_config.items(), (
+            "The system config from GCS is not a superset of the local"
+            " system config. There might be a configuration inconsistency"
+        )
+        self._config = new_config
     
-    # 确定 Plasma 存储配置
+    # 1. 资源规格与硬件使用记录
+    resource_and_label_spec = self.get_resource_and_label_spec()
+    
+    # 2. 确定 Plasma 对象存储配置
     plasma_directory, fallback_directory, object_store_memory = \
         services.determine_plasma_store_config(...)
     
-    # 启动 Log Monitor（可选）
+    # 3. 资源隔离：将对象存储内存计入系统保留内存
+    if self.resource_isolation_config.is_enabled():
+        self.resource_isolation_config.add_object_store_memory(object_store_memory)
+    
+    # 4. 启动 Log Monitor（可选，用于日志聚合）
     if self._ray_params.include_log_monitor:
         self.start_log_monitor()
     
-    # 启动 Raylet（核心！
+    # 5. 启动 Raylet（核心！本地调度器和对象存储）
     self.start_raylet(plasma_directory, fallback_directory, object_store_memory)
 ```
 
-**关键设计：Worker 配置同步机制**：
+**关键设计：Worker 配置同步机制**
+
+Worker 节点必须从 GCS 拉取系统配置，确保整个集群配置一致：
+- 使用 `GlobalState` 客户端连接 GCS
+- 拉取后进行子集校验，确保本地配置没有冲突
+- 冲突时直接抛出异常，防止启动不一致的节点
+
+---
+
+### 六、Node.start_raylet() 方法详解
+
+**位置**: 第 1147 行
+
+这是 Node 类中参数最多的方法之一，负责启动 Raylet 进程：
 
 ```python
-# Worker 节点必须从 GCS 拉取系统配置，确保与 Head 一致
-assert self._config.items() <= new_config.items(), (
-    "The system config from GCS is not a superset of the local"
-    " system config. There might be a configuration inconsistency"
-)
-self._config = new_config
+def start_raylet(
+    self,
+    plasma_directory: str,
+    fallback_directory: str,
+    object_store_memory: int,
+    use_valgrind: bool = False,
+    use_profiler: bool = False,
+):
 ```
+
+**方法内部分为 4 个阶段**：
+
+#### 阶段 1：日志文件准备
+
+为 Raylet 及其内部的 Agent 进程分别准备日志文件：
+
+```python
+# Raylet 主进程日志
+raylet_stdout_filepath, raylet_stderr_filepath = self.get_log_file_names(
+    PROCESS_TYPE_RAYLET, unique=True, create_out=True, create_err=True
+)
+
+# Dashboard Agent 日志
+dashboard_agent_stdout_filepath, dashboard_agent_stderr_filepath = \
+    self.get_log_file_names(PROCESS_TYPE_DASHBOARD_AGENT, ...)
+
+# Runtime Env Agent 日志
+runtime_env_agent_stdout_filepath, runtime_env_agent_stderr_filepath = \
+    self.get_log_file_names(PROCESS_TYPE_RUNTIME_ENV_AGENT, ...)
+```
+
+#### 阶段 2：资源隔离配置
+
+```python
+# 收集系统进程 PID，用于 Cgroup 资源隔离
+self.resource_isolation_config.add_system_pids(
+    self._get_system_processes_for_resource_isolation()
+)
+```
+
+#### 阶段 3：调用 services.start_raylet() 启动 C++ 进程
+
+**传递 30+ 个参数**，完整参数列表：
+
+```python
+process_info = ray._private.services.start_raylet(
+    # 地址与标识
+    self.redis_address,                # Redis 地址（可选外部 Redis）
+    self.gcs_address,                  # GCS 服务地址
+    self._node_id,                     # 本节点唯一 ID
+    self._node_ip_address,             # 本节点 IP
+    
+    # Socket 通信
+    self._ray_params.node_manager_port,
+    self._raylet_socket_name,          # Raylet 本地 socket
+    self._plasma_store_socket_name,    # Plasma 存储 socket
+    
+    # 路径配置
+    self.cluster_id.hex(),
+    self._ray_params.worker_path,
+    self._ray_params.setup_worker_path,
+    self._temp_dir,
+    self._session_dir,
+    self._runtime_env_dir,
+    self._logs_dir,
+    
+    # 资源与存储
+    self.get_resource_and_label_spec(),
+    plasma_directory,
+    fallback_directory,
+    object_store_memory,
+    
+    # 会话与角色
+    self.session_name,
+    is_head_node=self.is_head(),
+    
+    # 端口范围
+    min_worker_port=self._ray_params.min_worker_port,
+    max_worker_port=self._ray_params.max_worker_port,
+    worker_port_list=self._ray_params.worker_port_list,
+    object_manager_port=self._ray_params.object_manager_port,
+    
+    # Agent 端口
+    metrics_agent_port=self._ray_params.metrics_agent_port,
+    runtime_env_agent_port=self._ray_params.runtime_env_agent_port,
+    metrics_export_port=self._metrics_export_port,
+    dashboard_agent_listen_port=self._ray_params.dashboard_agent_listen_port,
+    
+    # 调试选项
+    use_valgrind=use_valgrind,
+    use_profiler=use_profiler,
+    ray_debugger_external=self._ray_params.ray_debugger_external,
+    
+    # 日志路径
+    raylet_stdout_filepath=raylet_stdout_filepath,
+    raylet_stderr_filepath=raylet_stderr_filepath,
+    dashboard_agent_stdout_filepath=...,
+    dashboard_agent_stderr_filepath=...,
+    runtime_env_agent_stdout_filepath=...,
+    runtime_env_agent_stderr_filepath=...,
+    
+    # 高级选项
+    huge_pages=self._ray_params.huge_pages,
+    fate_share=self.kernel_fate_share,
+    max_bytes=self.max_bytes,
+    backup_count=self.backup_count,
+    env_updates=self._ray_params.env_vars,
+    node_name=self._ray_params.node_name,
+    webui=self._webui_url,
+    resource_isolation_config=self.resource_isolation_config,
+)
+```
+
+#### 阶段 4：进程注册
+
+```python
+assert ray_constants.PROCESS_TYPE_RAYLET not in self.all_processes
+self.all_processes[ray_constants.PROCESS_TYPE_RAYLET] = [process_info]
+```
+
+---
+
+### 七、进程启动关键参数解析
+
+| 参数 | 作用 | 设计意图 |
+|------|------|---------|
+| `fate_share` | 进程命运共享 | 父进程退出时自动清理子进程，防止孤儿进程 |
+| `unique=True` | 日志文件唯一化 | 每次重启生成新日志，不覆盖历史，便于排查 |
+| `is_head_node` | 节点角色标识 | Raylet 内部根据此参数决定是否启用 Head 专属功能 |
+| `resource_isolation_config` | Cgroup 配置 | 限制 Ray 进程的 CPU/内存使用，防止影响系统 |
+| `huge_pages` | 大页内存开关 | 提升对象存储性能，减少 TLB 失效 |
+
+---
+
+### 八、all_processes 进程字典
+
+Node 类通过 `all_processes` 字典统一管理所有子进程：
+
+```python
+# 字典结构
+self.all_processes = {
+    PROCESS_TYPE_GCS_SERVER: [process_info],      # Head 专属
+    PROCESS_TYPE_RAYLET: [process_info],           # 所有节点
+    PROCESS_TYPE_DASHBOARD: [process_info],        # Head 专属
+    PROCESS_TYPE_MONITOR: [process_info],          # Head 专属
+    PROCESS_TYPE_LOG_MONITOR: [process_info],      # 可选
+    # ... 其他进程类型
+}
+```
+
+**作用**:
+- `dead_processes()` 从此字典查询异常退出的进程
+- `kill_all_processes()` 从此字典获取所有进程并杀死
+- `ray stop` 命令最终调用此机制清理所有进程
 
 ---
 

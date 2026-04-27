@@ -1064,6 +1064,259 @@ class MyCustomStorage(ExternalStorage):
 
 ---
 
+## 4. 核心架构洞察
+
+---
+
+### 4.1 Python 进程与 C++ 进程的交互边界
+
+Ray 的核心设计哲学是：**Python 作为控制面，C++ 作为数据面**。
+
+#### 4.1.1 通信机制分层
+
+```
+用户 Python 进程 (Driver/Worker)
+    │
+    ├─► [Cython 边界层] _raylet.pyx
+    │       │
+    │       ▼
+    │   GcsClient / CoreWorkerClient (C++ 对象)
+    │       │
+    │       ▼
+    │   gRPC 调用 (TCP 端口)
+    │       │
+    │       ▼
+    └──► C++ 服务进程
+            ├─ GCS Server (6379 端口)
+            ├─ Raylet (node_manager_port)
+            └─ Object Manager (object_manager_port)
+```
+
+**关键设计：所有跨进程通信都通过 gRPC**
+- Python 从不直接访问 C++ 内部内存
+- 所有交互都是明确的 RPC 调用
+- 这也是 Ray 能无缝支持多语言（Java、C++）的根本原因
+
+---
+
+### 4.2 GCS Server 的资源管理与控制边界
+
+#### 4.2.1 完全独立的进程生命周期
+
+| 特性 | 说明 |
+|------|------|
+| **独立性** | 独立 OS 进程，PID 与 Driver 不同 |
+| **内存** | 独立地址空间，自己管理堆内存 |
+| **线程** | 内部有 gRPC 线程池、IO 事件循环、后台定时任务 |
+| **日志** | 独立写入 `gcs_server.out` |
+| **退出** | 可独立崩溃/重启，不影响正在运行的任务 |
+
+#### 4.2.2 Python 对 GCS 的控制权限矩阵
+
+| 操作 | Python 能控制 | 实现方式 |
+|------|--------------|---------|
+| 启动/停止 | ✅ 完全控制 | `subprocess.Popen()` + `kill()` |
+| 发送 RPC 请求 | ✅ 完全控制 | 通过 `GcsClient` 包装 |
+| 直接访问内部内存 | ❌ 不能 | 进程地址空间隔离 |
+| 中断内部线程 | ❌ 不能 | 只能通过 RPC 优雅关闭 |
+| 热更新配置 | ❌ 不能 | 必须重启进程 |
+
+---
+
+### 4.3 `ray.remote` 任务传递的本质
+
+#### 4.3.1 传递的不是指针，而是"完整的计算描述"
+
+这是 Ray 最核心的设计洞察：
+
+```
+用户以为在"传递函数调用"：
+    my_func.remote(1, 2)
+
+实际在"传递序列化的计算描述"：
+┌──────────────────────────────────────────┐
+│  TaskSpecification (序列化消息)          │
+├──────────────────────────────────────────┤
+│ 1. 函数描述 (cloudpickle 序列化)         │
+│    ├─ 函数字节码                         │
+│    ├─ 闭包变量                           │
+│    └─ 装饰器信息                         │
+│                                          │
+│ 2. 参数                                 │
+│    ├─ 小对象：直接内联序列化             │
+│    └─ 大对象：ObjectID 引用 (20字节)     │
+│                                          │
+│ 3. 资源需求                             │
+│    ├─ num_cpus, num_gpus                │
+│    └─ 自定义资源 (GPU_MEM, etc)          │
+│                                          │
+│ 4. 调度元数据                           │
+│    ├─ 任务依赖关系 (ObjectID 列表)       │
+│    ├─ 调度策略 (SPREAD / PACK)           │
+│    └─ 超时 / 重试配置                    │
+└──────────────────────────────────────────┘
+```
+
+#### 4.3.2 为什么必须序列化，不能传递指针？
+
+分布式系统的本质约束：
+- **跨机器**：进程地址空间完全独立，指针毫无意义
+- **容错**：Worker 崩溃后，可以在其他节点重放函数定义
+- **多语言**：Python 函数可以被 Java Worker 执行（序列化格式中立）
+
+---
+
+### 4.4 Worker 节点 Raylet 任务执行全链路
+
+从 Driver 提交任务到 Worker 执行的完整旅程：
+
+```
+[Driver Python]
+    │
+    ├─► 1. @ray.remote 装饰函数
+    │
+    ├─► 2. 调用 .remote() 提交任务
+    │
+    ▼
+[CoreWorker C++]
+    │
+    ├─► 3. NormalTaskSubmitter::SubmitTask
+    │     ├─ DependencyResolver 解析依赖
+    │     └─ 等待对象就绪
+    │
+    ├─► 4. 向本地 Raylet 请求 Worker 租约 (RequestLease RPC)
+    │
+    ▼
+[Raylet 调度器]
+    │
+    ├─► 5. ClusterResourceScheduler 节点选择
+    │     ├─ 资源匹配检查
+    │     ├─ 亲和性调度
+    │     └─ 选择目标 Worker
+    │
+    ├─► 6. 若没有空闲 Worker，启动新 Python 进程
+    │
+    ▼
+[Worker 进程启动]
+    │
+    ├─► 7. 初始化 C++ CoreWorker
+    │
+    ├─► 8. TaskReceiver 接收任务 gRPC
+    │
+    ▼
+[Python 执行层]
+    │
+    ├─► 9. cloudpickle.loads() 反序列化函数定义
+    │
+    ├─► 10. 从 Plasma 获取参数对象（零拷贝）
+    │
+    ├─► 11. 执行用户函数体
+    │
+    └─► 12. 结果写入 Plasma，返回 ObjectID
+```
+
+---
+
+### 4.5 五大核心进程的控制关系图谱
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│              用户 Python 进程 (Driver)                        │
+│  - 用户代码                                                   │
+│  - ray.init() / ray.shutdown()                                │
+│  - @ray.remote 装饰器                                         │
+│  - ObjectRef 引用计数                                         │
+└────────────┬──────────────────────────────────────────────────┘
+             │
+             │ 父进程 → 启动和控制
+             │
+    ┌────────┴────────┬──────────────────────────────────┐
+    │                 │                                  │
+    ▼                 ▼                                  ▼
+[GCS Server]     [Raylet 进程]                     [API Server]
+  (C++)            (C++)                              (Python)
+  全局元数据        本地调度器                          Dashboard
+                    │
+                    │ 启动和管理
+                    │
+          ┌─────────┴─────────┐
+          │                   │
+          ▼                   ▼
+    [Worker 进程]       [Dashboard Agent]
+      (Python)            (Python)
+      执行任务             指标收集
+```
+
+---
+
+### 4.6 深入理解核心的五个方向
+
+掌握前面的流程分析后，可以朝这五个方向继续深入：
+
+| 方向 | 核心问题 | 关键入口文件 |
+|------|---------|-------------|
+| **对象存储 Plasma** | 零拷贝如何实现？引用计数如何工作？ | `src/ray/object_manager/plasma/store.h` |
+| **调度器算法** | 任务怎么分配到 Worker？死锁检测？ | `src/ray/raylet/scheduling/cluster_task_manager.cc` |
+| **Actor 生命周期** | Actor 故障恢复、Direct Call 优化 | `src/ray/core_worker/actor_handle.h` |
+| **CoreWorker 事件循环** | 单线程如何处理数千并发任务？ | `src/ray/core_worker/core_worker.h` |
+| **分布式 GC** | 对象何时被真正删除？ | `src/ray/core_worker/reference_count.h` |
+
+---
+
+### 4.7 验证理解的三道测试题
+
+能清晰回答这三个问题，说明你真正理解了 Ray 核心：
+
+#### 问题 1：为什么 `ray.get(x)` 几乎不会阻塞 GIL？
+
+<details>
+<summary>点击查看答案</summary>
+
+**答案**：
+`ray.get()` 的等待逻辑在 C++ 层的 `CoreWorker::Get()` 中实现，使用 Boost.Asio 的异步事件循环。
+- Python 线程只是在等待一个条件变量（不持有 GIL）
+- 对象就绪时通过回调唤醒 Python 线程
+- 整个等待过程 GIL 是释放的，其他 Python 线程可正常运行
+
+</details>
+
+#### 问题 2：为什么 Actor 方法调用比普通任务快 2-3 倍？
+
+<details>
+<summary>点击查看答案</summary>
+
+**答案**：
+普通任务走完整调度链路：`Driver → GCS → Raylet → Worker`
+
+而 **Direct Actor Call** 跳过了中间层：
+- Actor 创建后，Driver 直接持有 Worker 的 gRPC 地址
+- 后续方法调用：`Driver → Worker` 直接通信
+- 跳过了 GCS 查询、Raylet 调度、租约申请等步骤
+- 这就是 Ray Actor 高性能的核心原因
+
+</details>
+
+#### 问题 3：Worker 进程 OOM 被 Kill 后，正在执行的任务状态去哪了？
+
+<details>
+<summary>点击查看答案</summary>
+
+**答案**：
+任务状态存储在 **两处**：
+1. **Driver 侧 CoreWorker**：持有任务的引用和状态
+2. **GCS TaskManager**：全局任务状态表
+
+当 Worker OOM 被 Kill：
+- Raylet 检测到 Worker 死亡，向 GCS 报告
+- GCS 将任务状态标记为 `FAILED` / `RETRYING`
+- Driver 的 `wait` 回调被触发
+- 如果配置了重试，任务会被重新调度到其他 Worker
+- 整个过程对用户透明（除了日志警告）
+
+</details>
+
+---
+
 ## 附录：关键文件索引
 
 ### Python 层
@@ -1094,3 +1347,4 @@ class MyCustomStorage(ExternalStorage):
 *重构时间: 2024-04-25 - 按调用链组织并建立交叉引用*
 *新增章节时间: 2024-04-27 - 新增对象存储与外部存储集成*
 *结构整理时间: 2024-04-27 - 统一数字编号，使用 [toc] 自动目录*
+*新增核心洞察: 2024-04-28 - 新增第4章"核心架构洞察"，含进程边界、任务本质、控制关系图谱*

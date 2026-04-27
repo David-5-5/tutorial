@@ -1,0 +1,27 @@
+{
+  "models": {
+    "providers": {
+      "anthropic": {
+        "apiKey": "dynamic://anthropic"
+      },
+      "openai": {
+        "apiKey": "dynamic://openai"
+      }
+    }
+  },
+  "plugins": {
+    "entries": {
+      "dynamic-api-key-provider": {
+        "enabled": true,
+        "config": {
+          "keyManagerUrl": "https://key-manager.internal",
+          "cacheTtl": 300,
+          "fallbackKeys": [
+            "sk-ant-fallback-1",
+            "sk-ant-fallback-2"
+          ]
+        }
+      }
+    }
+  }
+}

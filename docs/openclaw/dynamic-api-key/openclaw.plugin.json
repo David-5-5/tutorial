@@ -1,0 +1,41 @@
+{
+  "id": "dynamic-api-key-provider",
+  "name": "Dynamic API Key Provider",
+  "version": "1.0.0",
+  "description": "运行时动态注入 API Key 的 Provider 插件",
+  "type": "provider",
+
+  "pluginSdkVersion": "^0.98.0",
+
+  "providers": [
+    {
+      "id": "anthropic",
+      "name": "Anthropic (Dynamic Key)",
+      "capabilities": ["chat", "tools", "thinking"]
+    },
+    {
+      "id": "openai",
+      "name": "OpenAI (Dynamic Key)",
+      "capabilities": ["chat", "tools", "vision"]
+    }
+  ],
+
+  "configSchema": {
+    "type": "object",
+    "properties": {
+      "keyManagerUrl": {
+        "type": "string",
+        "description": "密钥管理服务地址"
+      },
+      "cacheTtl": {
+        "type": "number",
+        "description": "Key 缓存时长（秒）",
+        "default": 300
+      },
+      "fallbackKeys": {
+        "type": "array",
+        "description": "备用 Key 列表"
+      }
+    }
+  }
+}

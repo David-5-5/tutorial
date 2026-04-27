@@ -74,6 +74,76 @@ applyModelDefaults() → 应用模型默认配置
          └─→ AWS_PROFILE + 默认凭证链
 ```
 
+## API Key 验证的两层机制
+
+### 关键结论
+**API Key 的正确性只会在真正调用大模型时才会被验证！**
+
+配置加载、消息接收时只做"存在性验证"，不做"正确性验证"。
+
+### 1. 配置加载/消息接收时 - 存在性验证
+
+```
+配置加载 / CLI启动 / 收到消息
+    ↓
+resolveApiKeyForProvider()
+    ↓
+按优先级查找Key来源
+    ↓
+检查Key是否存在、格式是否合法
+    ↓
+✅ 返回找到的Key（**不验证是否正确**）
+❌ 抛出 "找不到认证" 错误（完全没有Key）
+```
+
+**关键点**：
+- `resolveApiKeyForProvider` 只检查 **"有没有Key"**，不检查 **"Key对不对"**
+- 不会发起任何HTTP请求去验证Key的有效性
+- 只要Key存在（或环境变量有值）就通过
+
+### 2. 实际调用LLM时 - 正确性验证
+
+```
+收到用户消息 → 准备调用大模型
+    ↓
+getApiKeyForModel() 获取Key（存在性验证）
+    ↓
+✅ 有Key → 组装 HTTP 请求头 Authorization: Bearer <key>
+    ↓
+发起真实 HTTP 请求到 Provider API
+    ↓
+Provider 返回响应:
+    ├─→ 200 OK → Key正确，继续
+    ├─→ 401 Unauthorized → 包装为 FailoverError(reason="auth")
+    ├─→ 403 Forbidden → 包装为 FailoverError(reason="auth_permanent")
+    └─→ 其他错误 → 相应的 failover 处理
+```
+
+### 验证时机对照表
+
+| 阶段 | 验证内容 | 是否真正验证正确性 | 错误处理 |
+|------|----------|-------------------|----------|
+| **配置加载/CLI启动** | Key是否存在 | ❌ 否 | 启动失败，提示配置 |
+| **`openclaw doctor`** | 检查是否有配置Key | ❌ 否 | 给出诊断建议 |
+| **收到用户消息** | Key是否存在 | ❌ 否 | 快速返回错误 |
+| **发起LLM API调用** | Key是否真实有效 | ✅ 是，通过Provider API验证 | 触发Failover机制，尝试下一个Profile/降级 |
+
+### 设计原因
+
+1. **性能**：每次消息都验证Key会增加API Round-Trip延迟
+2. **成本**：验证Key通常需要消耗真实API配额
+3. **Failover机制**：失败后可以自动切换Profile/Fallback，属于运行时容错设计
+
+### 特殊情况：Live Test
+
+只有 `pnpm test:live` 这类真实API测试时，才会在测试阶段主动验证Key正确性：
+
+```typescript
+// 真实发起测试请求，验证Key是否有效
+const auth = await resolveApiKeyForProvider({ provider, cfg });
+// → 然后用这个Key发起真实API调用测试
+```
+
 ## 认证存储层级
 
 ### 1. Auth Profiles 系统

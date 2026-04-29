@@ -439,31 +439,29 @@ $$
 **表335 基础序列与其对应生成函数**
 $$
 \begin{aligned}
-&\langle 1,0,0,0,\dots \rangle:\quad \sum_{n\ge 0}[n=0]z^n = 1,\\
-&\langle \underbrace{0,\dots,0}_{m},1,0,\dots \rangle:\quad \sum_{n\ge 0}[n=m]z^n = z^m,\\
-&\langle 1,1,1,1,\dots \rangle:\quad \sum_{n\ge 0}z^n = 1/(1-z),\\
-&\langle 1,-1,1,-1,\dots \rangle:\quad \sum_{n\ge 0}(-1)^n z^n = 1/(1+z),\\
-&\langle 1,0,1,0,\dots \rangle:\quad \sum_{n\ge 0}[2\mid n]z^n = 1/(1-z^2),\\
-&\langle 1,0,\dots,1,0,\dots \rangle:\quad \sum_{n\ge 0}[m\mid n]z^n = 1/(1-z^m),\\
-&\langle 1,2,3,4,\dots \rangle:\quad \sum_{n\ge 0}(n+1)z^n = 1/(1-z)^2,\\
-&\langle 1,2,4,8,\dots \rangle:\quad \sum_{n\ge 0}2^n z^n = 1/(1-2z),\\
-&\langle 1,4,6,4,1,0,\dots \rangle:\quad \sum_{n\ge 0}\binom{4}{n}z^n = (1+z)^4,\\
-&\left\langle 1,\binom{c}{1},\binom{c}{2},\binom{c}{3},\dots \right\rangle:\quad \sum_{n\ge 0}\binom{c}{n}z^n = (1+z)^c,\\
-&\left\langle 1,\binom{c+n-1}{n} \right\rangle:\quad \sum_{n\ge 0}\binom{c+n-1}{n}z^n = 1/(1-z)^c,\\
-&\langle 1,c,c^2,c^3,\dots \rangle:\quad \sum_{n\ge 0}c^n z^n = 1/(1-cz),\\
-&\left\langle 1,\binom{m+1}{1},\binom{m+2}{2},\dots \right\rangle:\quad \sum_{n\ge 0}\binom{m+n}{n}z^n = 1/(1-z)^{m+1},\\
-&\left\langle 0,1,\dfrac12,\dfrac13,\dots \right\rangle:\quad \sum_{n\ge 1}\dfrac1n z^n = \ln\dfrac{1}{1-z},\\
-&\left\langle 0,1,-\dfrac12,\dfrac13,-\dfrac14,\dots \right\rangle:\quad \sum_{n\ge 1}\dfrac{(-1)^{n+1}}{n} z^n = \ln(1+z),\\
-&\left\langle 1,1,\dfrac12,\dfrac16,\dfrac{1}{24},\dots \right\rangle:\quad \sum_{n\ge 0}\dfrac{1}{n!} z^n = e^z.
+&\langle 1,0,0,0,\dots \rangle:&& \sum_{n\ge 0}[n=0]z^n  && 1,\\
+&\langle \underbrace{0,\dots,0}_{m},1,0,\dots \rangle:&& \sum_{n\ge 0}[n=m]z^n  && z^m,\\
+&\langle 1,1,1,1,\dots \rangle:&& \sum_{n\ge 0}z^n && 1/(1-z),\\
+&\langle 1,-1,1,-1,\dots \rangle:&& \sum_{n\ge 0}(-1)^n z^n && 1/(1+z),\\
+&\langle 1,0,1,0,\dots \rangle:&& \sum_{n\ge 0}[2\mid n]z^n && 1/(1-z^2),\\
+&\langle 1,0,\dots,1,0,\dots \rangle:&& \sum_{n\ge 0}[m\mid n]z^n && 1/(1-z^m),\\
+&\langle 1,2,3,4,\dots \rangle:&& \sum_{n\ge 0}(n+1)z^n && 1/(1-z)^2,\\
+&\langle 1,2,4,8,\dots \rangle:&& \sum_{n\ge 0}2^n z^n && 1/(1-2z),\\
+&\langle 1,4,6,4,1,0,\dots \rangle:&& \sum_{n\ge 0}\binom{4}{n}z^n && (1+z)^4,\\
+&\left\langle 1,\binom{c}{1},\binom{c}{2},\binom{c}{3},\dots \right\rangle:&& \sum_{n\ge 0}\binom{c}{n}z^n && (1+z)^c,\\
+&\left\langle 1,\binom{c+n-1}{n} \right\rangle:&& \sum_{n\ge 0}\binom{c+n-1}{n}z^n && 1/(1-z)^c,\\
+&\langle 1,c,c^2,c^3,\dots \rangle:&& \sum_{n\ge 0}c^n z^n && 1/(1-cz),\\
+&\left\langle 1,\binom{m+1}{1},\binom{m+2}{2},\dots \right\rangle:&& \sum_{n\ge 0}\binom{m+n}{n}z^n &&1/(1-z)^{m+1},\\
+&\left\langle 0,1,\dfrac12,\dfrac13,\dots \right\rangle:&& \sum_{n\ge 1}\dfrac1n z^n && \ln\dfrac{1}{1-z},\\
+&\left\langle 0,1,-\dfrac12,\dfrac13,-\dfrac14,\dots \right\rangle:&& \sum_{n\ge 1}\dfrac{(-1)^{n+1}}{n} z^n && \ln(1+z),\\
+&\left\langle 1,1,\dfrac12,\dfrac16,\dfrac{1}{24},\dots \right\rangle:&& \sum_{n\ge 0}\dfrac{1}{n!} z^n && e^z.
 \end{aligned}
 $$
 
 例如考察序列 $\langle 1,2,3,4,\dots\rangle$，其生成函数 $1/(1-z)^2$ 十分常用。该式出自表 335 中部，同时它也是序列 $\langle 1,\binom{m+1}{m},\binom{m+2}{m},\binom{m+3}{m},\dots\rangle$ 在 $m=1$ 时的特例，亦是相近序列 $\langle 1,c,\binom{c+1}{2},\binom{c+2}{3},\dots\rangle$ 在 $c=2$ 时的特例。我们可以对常序列 $\langle 1,1,1,1,\dots\rangle$ 的生成函数按 (7.21) 做前缀累加得到该式，即用 $1/(1-z)$ 再除以 $(1-z)$；也可依托 (7.17)，对常序列生成函数直接求导推出。
 
-序列 $\langle 1,0,1,0,\dots\rangle$ 的生成函数同样有多条推导路径：在恒等式 $\sum_n z^n = 1/(1-z)$ 中将 $z$ 替换为 $z^2$，直接得到 $\sum_n z^{2n} = 1/(1-z^2)$；也可对交错序列 $\langle 1,-1,1,-1,\dots\rangle$（生成函数 $1/(1+z)$）执行前缀累加，得到 $1/((1+z)(1-z)) = 1/(1-z^2)$。
-
-还有通用方法抽取任意序列的偶数位置项 $\langle g_0,0,g_2,0,g_4,0,\dots\rangle$：
-将 $G(z)$ 与 $G(-z)$ 相加：
+序列 $\langle 1,0,1,0,\dots\rangle$ 的生成函数同样有多条推导路径：在恒等式 $\sum_n z^n = 1/(1-z)$ 中将 $z$ 替换为 $z^2$，直接得到 $\sum_n z^{2n} = 1/(1-z^2)$；也可对交错序列 $\langle 1,-1,1,-1,\dots\rangle$（生成函数 $1/(1+z)$）执行前缀累加，得到 $1/((1+z)(1-z)) = 1/(1-z^2)$。还有通用方法抽取任意序列的偶数位置项 $\langle g_0,0,g_2,0,g_4,0,\dots\rangle$：
+将 $G(+z)$ 与 $G(-z)$ 相加：
 $$
 G(z)+G(-z) = \sum_n g_n\big(1+(-1)^n\big) z^n = 2\sum_n g_n\,[n\text{ is even}]\,z^n
 $$
@@ -477,7 +475,7 @@ $$
 (G(z)-G(-z))/2 = \sum_{n} g_{2n+1} z^{2n+1} \tag{7.23}
 $$
 
-取 $g_n=1$、$G(z)=1/(1-z)$，则 $\langle 1,0,1,0,\dots\rangle$ 的生成函数为 $(1/2)\big(G(z)+G(-z)\big) = (1/2)\big(1/(1-z)+1/(1+z)\big) = 1/(1-z^2)$。
+取 $g_n=1$ 和 $G(z)=1/(1-z)$，则 $\langle 1,0,1,0,\dots\rangle$ 的生成函数为 $(1/2)\big(G(z)+G(-z)\big) = (1/2)\big(1/(1-z)+1/(1+z)\big) = 1/(1-z^2)$。
 
 把该奇偶抽取技巧用于斐波那契生成函数，已知 $\sum_n F_n z^n = z/(1-z-z^2)$，于是
 $$

@@ -554,6 +554,172 @@ Raylet 是每个节点上的本地调度器，负责：
 
 ---
 
+### 1.5 手动启动方式（调试进阶）
+
+**适用场景**：底层调试、gdb 附加、单步追踪 C++ 代码。
+
+---
+
+#### 1.5.1 组件启动顺序与依赖
+
+```
+1. GCS Server (gcs_server)    ← 全局控制存储
+    ↓
+2. Raylet (raylet)            ← 包含 Plasma Store + Object Manager + Scheduler
+    ↓
+3. Python Client (ray.init()) ← 连接到 GCS 地址
+```
+
+**核心依赖关系**：
+
+| 组件 | 必需参数 |
+|------|---------|
+| **GCS Server** | `--gcs_server_port`, `--session-name`, `--config_list` |
+| **Raylet** | `--gcs-address`, `--raylet_socket_name`, `--plasma_store_name`, `--node-id` |
+| **Python Client** | `gcs_address` |
+
+---
+
+#### 1.5.2 方案一：命令行手动启动（不推荐，仅供学习）
+
+##### 步骤 1：启动 GCS Server
+
+```bash
+# 获取 gcs_server 可执行文件路径
+GCS_SERVER=$(python -c "import ray; print(ray.__path__[0])")/core/src/ray/gcs/gcs_server
+
+# 必需参数（最简配置）
+$GCS_SERVER \
+  --gcs_server_port=6379 \
+  --node-ip-address=127.0.0.1 \
+  --session-name=manual-session-$(date +%s) \
+  --log_dir=/tmp/ray/logs \
+  --config_list='[{"ClientServerPort": 0}]'
+```
+
+##### 步骤 2：启动 Raylet
+
+```bash
+# 获取 raylet 可执行文件路径
+RAYLET=$(python -c "import ray; print(ray.__path__[0])")/core/src/ray/raylet/raylet
+
+# 创建 session 目录（存放 socket 文件）
+mkdir -p /tmp/ray/session_manual
+
+# 启动 raylet（核心参数缺一不可）
+$RAYLET \
+  --gcs-address=127.0.0.1:6379 \
+  --node-manager-port=6380 \
+  --object-manager-port=6381 \
+  --node-id=$(python -c "import uuid; print(uuid.uuid4().hex)") \
+  --raylet_socket_name=/tmp/ray/session_manual/raylet_socket \
+  --plasma_store_name=/tmp/ray/session_manual/plasma_socket \
+  --temp-dir=/tmp/ray/session_manual \
+  --log_dir=/tmp/ray/logs \
+  --object-store-memory=1000000000  # 1GB 对象存储内存
+```
+
+##### 步骤 3：Python 客户端连接
+
+```python
+import ray
+
+# 关键：指定 gcs_address 连接到手动启动的集群
+ray.init(
+    gcs_address="127.0.0.1:6379",
+    # 多网卡环境需指定
+    # node_ip_address="127.0.0.1"
+)
+
+# 验证连接
+@ray.remote
+def f():
+    return "hello from manual cluster"
+
+print(ray.get(f.remote()))
+```
+
+---
+
+#### 1.5.3 方案二：Python API 启动（推荐用于调试）
+
+使用 Ray 内部的 `services.py` 模块启动，自动处理参数：
+
+```python
+import ray._private.services as services
+import tempfile
+import os
+
+# 1. 创建临时 session 目录
+session_dir = tempfile.mkdtemp(prefix="ray_session_")
+os.makedirs(os.path.join(session_dir, "logs"), exist_ok=True)
+
+# 2. 启动 GCS Server
+gcs_process = services.start_gcs_server(
+    redis_address=None,              # 使用内置内存存储，无需外部 Redis
+    log_dir=os.path.join(session_dir, "logs"),
+    stdout_filepath=None,
+    stderr_filepath=None,
+    session_name="manual-session",
+    gcs_server_port=6379,
+    node_ip_address="127.0.0.1",
+    config={}
+)
+
+print(f"GCS Server started, PID: {gcs_process.process.pid}")
+print(f"GCS address: 127.0.0.1:6379")
+
+# 3. 现在可以用 Python 连接进行调试
+# import ray
+# ray.init(gcs_address="127.0.0.1:6379")
+```
+
+---
+
+#### 1.5.4 为什么手动启动很困难？
+
+| 难点 | 说明 |
+|------|------|
+| **参数爆炸** | `start_raylet()` 需要 **30+ 个参数**，缺一个都无法启动 |
+| **Socket 文件** | Raylet 需要 `raylet_socket` 和 `plasma_socket`，Python 客户端路径必须完全一致 |
+| **Node ID** | 需要唯一的 hex ID，且各组件之间必须匹配 |
+| **资源配置格式** | `resource_argument` 格式特殊（`CPU,4.0,GPU,0`） |
+| **Worker Path** | 需要正确指定 worker 进程的 Python 入口文件路径 |
+| **Fate Share 失效** | 手动启动失去父子进程绑定，退出时容易产生孤儿进程 |
+
+---
+
+#### 1.5.5 ✅ 最佳实践：别手动启动，用 `ray start`！
+
+```bash
+# 最简单：一行命令启动 Head 节点（推荐）
+ray start --head --port=6379
+
+# Python 直接连接
+import ray
+ray.init(address="auto")  # 或 ray.init(address="127.0.0.1:6379")
+```
+
+**自动化优势**：
+- ✅ 自动生成所有参数和 socket 文件路径
+- ✅ 正确配置日志、资源、端口分配
+- ✅ 内置健康检查
+- ✅ `ray stop` 一键清理无孤儿进程
+
+> 💡 **调试技巧**：先用 `ray start --head` 正常启动，然后 `ps aux | grep gcs_server` 查看它实际用了哪些参数，这是学习参数配置最快的方式。
+
+---
+
+#### 1.5.6 各方式对比总结
+
+| 启动方式 | 复杂度 | 推荐度 | 适用场景 |
+|---------|--------|--------|---------|
+| **`ray start --head`** | ⭐ | ✅ 强烈推荐 | 日常开发、生产环境 |
+| **Python API (`services.py`)** | ⭐⭐⭐ | ⚠️ 仅限特殊场景 | 调试、定制化启动、测试 |
+| **纯命令行手动** | ⭐⭐⭐⭐⭐ | ❌ 不推荐 | 仅用于学习底层机制、gdb 调试 |
+
+---
+
 ## 2. ray remote 任务提交与执行
 
 ### 2.1 @ray.remote 完整流程
@@ -1064,477 +1230,6 @@ class MyCustomStorage(ExternalStorage):
 
 ---
 
-## 4. 核心架构洞察
-
----
-
-### 4.1 Python 进程与 C++ 进程的交互边界
-
-Ray 的核心设计哲学是：**Python 作为控制面，C++ 作为数据面**。
-
-#### 4.1.1 通信机制分层
-
-```
-用户 Python 进程 (Driver/Worker)
-    │
-    ├─► [Cython 边界层] _raylet.pyx
-    │       │
-    │       ▼
-    │   GcsClient / CoreWorkerClient (C++ 对象)
-    │       │
-    │       ▼
-    │   gRPC 调用 (TCP 端口)
-    │       │
-    │       ▼
-    └──► C++ 服务进程
-            ├─ GCS Server (6379 端口)
-            ├─ Raylet (node_manager_port)
-            └─ Object Manager (object_manager_port)
-```
-
-**关键设计：所有跨进程通信都通过 gRPC**
-- Python 从不直接访问 C++ 内部内存
-- 所有交互都是明确的 RPC 调用
-- 这也是 Ray 能无缝支持多语言（Java、C++）的根本原因
-
----
-
-### 4.2 GCS Server 的资源管理与控制边界
-
-#### 4.2.1 完全独立的进程生命周期
-
-| 特性 | 说明 |
-|------|------|
-| **独立性** | 独立 OS 进程，PID 与 Driver 不同 |
-| **内存** | 独立地址空间，自己管理堆内存 |
-| **线程** | 内部有 gRPC 线程池、IO 事件循环、后台定时任务 |
-| **日志** | 独立写入 `gcs_server.out` |
-| **退出** | 可独立崩溃/重启，不影响正在运行的任务 |
-
-#### 4.2.2 Python 对 GCS 的控制权限矩阵
-
-| 操作 | Python 能控制 | 实现方式 |
-|------|--------------|---------|
-| 启动/停止 | ✅ 完全控制 | `subprocess.Popen()` + `kill()` |
-| 发送 RPC 请求 | ✅ 完全控制 | 通过 `GcsClient` 包装 |
-| 直接访问内部内存 | ❌ 不能 | 进程地址空间隔离 |
-| 中断内部线程 | ❌ 不能 | 只能通过 RPC 优雅关闭 |
-| 热更新配置 | ❌ 不能 | 必须重启进程 |
-
----
-
-### 4.3 `ray.remote` 任务传递的本质
-
-#### 4.3.1 传递的不是指针，而是"完整的计算描述"
-
-这是 Ray 最核心的设计洞察：
-
-```
-用户以为在"传递函数调用"：
-    my_func.remote(1, 2)
-
-实际在"传递序列化的计算描述"：
-┌──────────────────────────────────────────┐
-│  TaskSpecification (序列化消息)          │
-├──────────────────────────────────────────┤
-│ 1. 函数描述 (cloudpickle 序列化)         │
-│    ├─ 函数字节码                         │
-│    ├─ 闭包变量                           │
-│    └─ 装饰器信息                         │
-│                                          │
-│ 2. 参数                                 │
-│    ├─ 小对象：直接内联序列化             │
-│    └─ 大对象：ObjectID 引用 (20字节)     │
-│                                          │
-│ 3. 资源需求                             │
-│    ├─ num_cpus, num_gpus                │
-│    └─ 自定义资源 (GPU_MEM, etc)          │
-│                                          │
-│ 4. 调度元数据                           │
-│    ├─ 任务依赖关系 (ObjectID 列表)       │
-│    ├─ 调度策略 (SPREAD / PACK)           │
-│    └─ 超时 / 重试配置                    │
-└──────────────────────────────────────────┘
-```
-
-#### 4.3.2 为什么必须序列化，不能传递指针？
-
-分布式系统的本质约束：
-- **跨机器**：进程地址空间完全独立，指针毫无意义
-- **容错**：Worker 崩溃后，可以在其他节点重放函数定义
-- **多语言**：Python 函数可以被 Java Worker 执行（序列化格式中立）
-
----
-
-### 4.4 Worker 节点 Raylet 任务执行全链路
-
-从 Driver 提交任务到 Worker 执行的完整旅程：
-
-```
-[Driver Python]
-    │
-    ├─► 1. @ray.remote 装饰函数
-    │
-    ├─► 2. 调用 .remote() 提交任务
-    │
-    ▼
-[CoreWorker C++]
-    │
-    ├─► 3. NormalTaskSubmitter::SubmitTask
-    │     ├─ DependencyResolver 解析依赖
-    │     └─ 等待对象就绪
-    │
-    ├─► 4. 向本地 Raylet 请求 Worker 租约 (RequestLease RPC)
-    │
-    ▼
-[Raylet 调度器]
-    │
-    ├─► 5. ClusterResourceScheduler 节点选择
-    │     ├─ 资源匹配检查
-    │     ├─ 亲和性调度
-    │     └─ 选择目标 Worker
-    │
-    ├─► 6. 若没有空闲 Worker，启动新 Python 进程
-    │
-    ▼
-[Worker 进程启动]
-    │
-    ├─► 7. 初始化 C++ CoreWorker
-    │
-    ├─► 8. TaskReceiver 接收任务 gRPC
-    │
-    ▼
-[Python 执行层]
-    │
-    ├─► 9. cloudpickle.loads() 反序列化函数定义
-    │
-    ├─► 10. 从 Plasma 获取参数对象（零拷贝）
-    │
-    ├─► 11. 执行用户函数体
-    │
-    └─► 12. 结果写入 Plasma，返回 ObjectID
-```
-
----
-
-### 4.5 五大核心进程的控制关系图谱
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│              用户 Python 进程 (Driver)                        │
-│  - 用户代码                                                   │
-│  - ray.init() / ray.shutdown()                                │
-│  - @ray.remote 装饰器                                         │
-│  - ObjectRef 引用计数                                         │
-└────────────┬──────────────────────────────────────────────────┘
-             │
-             │ 父进程 → 启动和控制
-             │
-    ┌────────┴────────┬──────────────────────────────────┐
-    │                 │                                  │
-    ▼                 ▼                                  ▼
-[GCS Server]     [Raylet 进程]                     [API Server]
-  (C++)            (C++)                              (Python)
-  全局元数据        本地调度器                          Dashboard
-                    │
-                    │ 启动和管理
-                    │
-          ┌─────────┴─────────┐
-          │                   │
-          ▼                   ▼
-    [Worker 进程]       [Dashboard Agent]
-      (Python)            (Python)
-      执行任务             指标收集
-```
-
----
-
-### 4.6 深入理解核心的五个方向
-
-掌握前面的流程分析后，可以朝这五个方向继续深入：
-
-| 方向 | 核心问题 | 关键入口文件 |
-|------|---------|-------------|
-| **对象存储 Plasma** | 零拷贝如何实现？引用计数如何工作？ | `src/ray/object_manager/plasma/store.h` |
-| **调度器算法** | 任务怎么分配到 Worker？死锁检测？ | `src/ray/raylet/scheduling/cluster_task_manager.cc` |
-| **Actor 生命周期** | Actor 故障恢复、Direct Call 优化 | `src/ray/core_worker/actor_handle.h` |
-| **CoreWorker 事件循环** | 单线程如何处理数千并发任务？ | `src/ray/core_worker/core_worker.h` |
-| **分布式 GC** | 对象何时被真正删除？ | `src/ray/core_worker/reference_count.h` |
-
----
-
-### 4.7 验证理解的三道测试题
-
-能清晰回答这三个问题，说明你真正理解了 Ray 核心：
-
-#### 问题 1：为什么 `ray.get(x)` 几乎不会阻塞 GIL？
-
-<details>
-<summary>点击查看答案</summary>
-
-**答案**：
-`ray.get()` 的等待逻辑在 C++ 层的 `CoreWorker::Get()` 中实现，使用 Boost.Asio 的异步事件循环。
-- Python 线程只是在等待一个条件变量（不持有 GIL）
-- 对象就绪时通过回调唤醒 Python 线程
-- 整个等待过程 GIL 是释放的，其他 Python 线程可正常运行
-
-</details>
-
-#### 问题 2：为什么 Actor 方法调用比普通任务快 2-3 倍？
-
-<details>
-<summary>点击查看答案</summary>
-
-**答案**：
-普通任务走完整调度链路：`Driver → GCS → Raylet → Worker`
-
-而 **Direct Actor Call** 跳过了中间层：
-- Actor 创建后，Driver 直接持有 Worker 的 gRPC 地址
-- 后续方法调用：`Driver → Worker` 直接通信
-- 跳过了 GCS 查询、Raylet 调度、租约申请等步骤
-- 这就是 Ray Actor 高性能的核心原因
-
-</details>
-
-#### 问题 3：Worker 进程 OOM 被 Kill 后，正在执行的任务状态去哪了？
-
-<details>
-<summary>点击查看答案</summary>
-
-**答案**：
-任务状态存储在 **两处**：
-1. **Driver 侧 CoreWorker**：持有任务的引用和状态
-2. **GCS TaskManager**：全局任务状态表
-
-当 Worker OOM 被 Kill：
-- Raylet 检测到 Worker 死亡，向 GCS 报告
-- GCS 将任务状态标记为 `FAILED` / `RETRYING`
-- Driver 的 `wait` 回调被触发
-- 如果配置了重试，任务会被重新调度到其他 Worker
-- 整个过程对用户透明（除了日志警告）
-
-</details>
-
----
-
-## 5. 资源管理与调度器
-
----
-
-### 5.1 核心设计原则：静态声明 + 动态借贷
-
-| 维度 | 设计 | 说明 |
-|------|------|------|
-| **节点资源总量** | ✅ **静态** | `ray start` 时通过 `--num-cpus`、`--num-gpus`、`--memory` 声明，启动后不可变 |
-| **任务资源分配** | ✅ **动态借贷** | 任务开始时「借」资源，完成时「还」资源 |
-| **物理隔离** | ⚠️ **软限制** | Ray 只是记账，不做真正的物理隔离（除 cgroup 模式外） |
-
----
-
-### 5.2 资源账本数据结构
-
-**关键文件**: `src/ray/common/scheduling/resource_set.h:80`
-
-核心判断算子：
-```cpp
-/// Check whether this set is a subset of another one.
-/// If A <= B, it means for each resource, 
-/// its value in A is less than or equal to that in B.
-bool operator<=(const ResourceSet &other) const;
-```
-
-**节点资源初始化**: `src/ray/raylet/scheduling/local_resource_manager.cc:32-53`
-
-```cpp
-LocalResourceManager::LocalResourceManager(
-    scheduling::NodeID local_node_id,
-    const NodeResources &node_resources,  // 传入的资源配置
-    ...) {
-  // 关键断言：初始时刻总容量 = 可用容量
-  RAY_CHECK(node_resources.total == node_resources.available);
-  
-  // 一次性赋值到成员变量，此后不再从外部读取
-  local_resources_.available = NodeResourceInstanceSet(node_resources.total);
-  local_resources_.total = NodeResourceInstanceSet(node_resources.total);
-}
-```
-
-**设计局限证据**:
-- `local_resources_.total` 只在构造时设一次
-- 整个类中没有 `UpdateTotalResources()` 方法
-- 只有借（Allocate）和还（Free）操作，没有修改总量的操作
-
----
-
-### 5.3 调度可行性判断：IsSchedulable
-
-**关键文件**: `src/ray/raylet/scheduling/cluster_resource_scheduler.cc:113-123`
-
-```cpp
-bool ClusterResourceScheduler::IsSchedulable(
-    const ResourceRequest &resource_request,
-    scheduling::NodeID node_id) const {
-  // 核心判断：任务需求 <= 节点可用资源
-  return cluster_resource_manager_->HasAvailableResources(
-             node_id,
-             resource_request,
-             /*ignore_object_store_memory_requirement*/ ...) &&
-         NodeAvailable(node_id);
-}
-```
-
----
-
-### 5.4 INFEASIBLE 任务的生命周期
-
-**典型场景**：任务 `num_cpus=16`，但所有节点最大只有 8 核
-
-```
-1. 任务提交到 GCS
-   ↓
-2. GetBestSchedulableNode() 遍历所有节点
-   ├─ Node A: 16 CPUs <= 可用 CPUs？❌ 不满足
-   └─ Node B: 16 CPUs <= 可用 CPUs？❌ 不满足
-   ↓
-3. best_node_id = Nil()  ← 没有找到合适节点
-   ↓
-4. *is_infeasible = true  ← 标记为"不可行"
-   ↓
-5. 任务在 GCS 中无限等待排队
-```
-
-**用户可见的表现**：
-- `ray.get()` 永远不会返回
-- Dashboard 显示红色的 "Infeasible" 标记
-- 日志每 5 秒打印 `There are N pending tasks with infeasible ...`
-- **不会抛出异常！**
-
-**恢复机制**：后续加入更大容量的节点时，任务会自动调度。
-
----
-
-### 5.5 三种资源类型的语义差异
-
-| 资源类型 | 单位 | 调度语义 | 是否超售 | 物理隔离 |
-|---------|------|---------|---------|---------|
-| **CPU** | 核数 | 逻辑并发槽位 | ✅ 可以超售（配置 `num_cpus` > 实际核数） | ❌ 无隔离 |
-| **GPU** | 卡数 | 物理卡映射 | ❌ 不建议超售 | ❌ 无隔离 |
-| **memory** | 字节 | 内存保留量 | ❌ 超售导致 OOM | ❌ 软限制 |
-| **object_store_memory** | 字节 | Plasma 共享内存 | ❌ 硬限制 | ✅ 隔离 |
-
----
-
-### 5.6 memory 参数的双重含义
-
-#### 层 1：调度约束（总是生效）
-```python
-@ray.remote(memory=8 * 1024**3)  # 需要 8GB 内存
-def task():
-    pass
-```
-- Raylet 会检查节点的**可用内存账本**是否足够
-- 足够才会调度到该节点
-
-#### 层 2：Worker 内存预留（需特殊配置）
-如果启用 **cgroup 资源隔离**：
-```bash
-ray start --head --enable-resource-isolation \
-          --system-reserved-cpu=2 \
-          --system-reserved-memory=32000000000
-```
-- Ray 会创建 cgroup 限制 Worker 的实际内存使用
-- 这是真正的硬隔离
-
----
-
-### 5.7 异构集群的运维痛点与解决方案
-
-#### ❌ 痛点 1：容器化场景的资源漂移
-```yaml
-# Kubernetes Pod 资源限制可以动态调整
-resources:
-  limits:
-    cpu: "16"
-    memory: "64Gi"
-```
-**问题**：K8s limit 变化时，Raylet 不会自动刷新，账本与实际长期不一致
-
-#### ❌ 痛点 2：混部场景的动态腾挪
-- 白天：在线服务占用 80%，Ray 只能用 20%
-- 半夜：在线缩容，Ray 可以用 80%
-- Ray 当前不支持按时间窗口动态调整声明值
-
-#### ✅ 解决方案 A：Sidecar 自动校准模式
-每台机器运行一个小守护进程：
-```python
-# sidecar.py - 每个节点每分钟运行
-while True:
-    actual_cpus = psutil.cpu_count()
-    actual_memory = psutil.virtual_memory().available
-    
-    ray_resources = ray.nodes()[0]["Resources"]
-    declared_cpus = ray_resources.get("CPU", 0)
-    
-    # 偏差超过阈值时自动更新
-    if abs(actual_cpus - declared_cpus) > 0.1:
-        ray.autoscaler.sdk.request_resources(num_cpus=actual_cpus)
-        logger.info(f"Updated CPU from {declared_cpus} to {actual_cpus}")
-    
-    time.sleep(60)
-```
-
-#### ✅ 解决方案 B：标签驱动调度（适合 GPU 异构）
-不要依赖标准资源字段，用自定义标签表达异构性：
-```bash
-# 不要这么做（维护成本高）
-ray start --num-cpus=32 --num-gpus=8
-
-# 应该这么做（标签驱动）
-ray start --resources={"zone": "us-west-1", "gpu_model": "A100", "ram_64g": 1}
-```
-
-调度时：
-```python
-@ray.remote(resources={"gpu_model:A100": 0.001})  # 软亲和
-def run_on_a100():
-    pass
-```
-
----
-
-### 5.8 自动资源检测机制
-
-Ray 支持自动检测，不需要每个节点手动配置：
-
-**CPU 自动检测**（std::thread::hardware_concurrency）
-**内存自动检测**（取可用内存的 80% 作为保守值）
-**GPU 自动检测**（通过 NVML 调用，自动识别型号并打标签）
-
-```bash
-# 最简启动，所有资源自动检测
-ray start --head
-```
-
----
-
-### 5.9 常见陷阱与最佳实践
-
-| 陷阱 | 现象 | 规避方法 |
-|------|------|---------|
-| **任务 > 单机最大容量** | 任务永远 Infeasible 卡住 | 使用 Placement Group 或拆分成更小任务 |
-| **内存"账用完了"但系统还有空闲** | 任务排队但机器很空 | memory 参数设为实际峰值的 1.2-1.5 倍，监控实际内存而非只看 Ray 账本 |
-| **超线程导致超售** | 任务都很慢但 CPU 显示只用了 50% | 手动 `--num-cpus=物理核心数`，不要相信逻辑核数 |
-
----
-
-### 5.10 核心设计洞察
-
-> Ray 的资源管理是"**基于承诺的调度**"——节点承诺自己有多少资源，任务声明自己需要多少，调度器检查承诺是否可兑现。
->
-> 它是**软约束不是硬隔离**，理解这点可以避免 80% 的 Ray 使用困惑。
-
----
-
 ## 附录：关键文件索引
 
 ### Python 层
@@ -1565,4 +1260,3 @@ ray start --head
 *重构时间: 2024-04-25 - 按调用链组织并建立交叉引用*
 *新增章节时间: 2024-04-27 - 新增对象存储与外部存储集成*
 *结构整理时间: 2024-04-27 - 统一数字编号，使用 [toc] 自动目录*
-*新增核心洞察: 2024-04-28 - 新增第4章"核心架构洞察"，含进程边界、任务本质、控制关系图谱*

@@ -385,11 +385,11 @@ $$
 
 式 $(1.14)$ 中的猜想可以直接推出，因为我们可以解出这些方程：$C(n) = n - A(n) = l$，$B(n) = A(n) - 1 - C(n) = 2^m - 1 - l$。
 
-这一方法展示了一种非常有用的**构造库方法**，用于求解递推关系。首先我们找到一般参数中已知解的取值，从而得到一组可解的特例库；然后通过组合这些特例得到一般情形。我们需要的独立特解数量与独立参数数量相同（本例中有 $\alpha$，$\beta$ 和 $\gamma$ 三个参数）。习题 16 和 20 给出了构造库方法的更多例子。
+这一方法展示了一种非常有用的*构造库方法(repertoire method)*，用于求解递推关系。首先我们找到一般参数中已知解的取值，从而得到一组可解的特例库；然后通过组合这些特例得到一般情形。我们需要的独立特解数量与独立参数数量相同（本例中有 $\alpha$，$\beta$ 和 $\gamma$ 三个参数）。习题 16 和 20 给出了构造库方法的更多例子。
 
 我们知道原约瑟夫斯递推 $J$ 有一个神奇的二进制解：
 $$
-J\bigl((b_m b_{m-1} \dots b_1 b_0)_2\bigr) = (b_{m-1} \dots b_1 b_0 b_m)_2,\quad \text{其中 } b_m = 1.
+J\bigl((b_m b_{m-1} \dots b_1 b_0)_2\bigr) = (b_{m-1} \dots b_1 b_0 b_m)_2,\quad \text{ where } b_m = 1.
 $$
 推广后的约瑟夫斯递推是否也有类似的神奇性质？
 
@@ -397,10 +397,10 @@ $$
 $$
 \begin{aligned}
 f(1) &= \alpha; \\
-f(2n + j) &= 2f(n) + \beta_j,\quad j = 0,1,\ n \ge 1,
+f(2n + j) &= 2f(n) + \beta_j,\quad \text{for } j = 0,1\ \text{ and } n \ge 1, \tag{1.15}
 \end{aligned}
-\tag{1.15}
 $$
+
 只需令 $\beta_0 = \beta$，$\beta_1 = \gamma$。这个递推式按二进制展开为：
 $$
 \begin{aligned}
@@ -423,15 +423,18 @@ $$
 \begin{array}{c|l}
 n & f(n) \\
 \hline
-1 & \alpha \\
-2 & 2\alpha + \beta \\
-3 & 2\alpha + \gamma \\
+1 & \qquad \qquad \ \alpha \\
+\hline
+2 & \qquad \ 2\alpha + \beta \\
+3 & \qquad \ 2\alpha + \gamma \\
+\hline
 4 & 4\alpha + 2\beta + \beta \\
 5 & 4\alpha + 2\beta + \gamma \\
 6 & 4\alpha + 2\gamma + \beta \\
 7 & 4\alpha + 2\gamma + \gamma
 \end{array}
 $$
+
 
 例如，当 $n = 100 = (1100100)_2$ 时，我们原始的约瑟夫斯参数 $\alpha = 1$，$\beta = -1$，$\gamma = 1$ 给出
 $$
@@ -449,11 +452,11 @@ $$
 因此，记号的改变为我们给出了一般递推式 $(1.15)$ 的简洁解 $(1.16)$。如果我们愿意，还可以进一步推广。递推关系
 $$
 \begin{aligned}
-f(j) &= \alpha_j,\quad 1 \le j < d; \\
-f(dn + j) &= c f(n) + \beta_j,\quad 0 \le j < d,\ n \ge 1,
+f(j) &= \alpha_j, && \text{ for } 1 \le j < d; \\
+f(dn + j) &= c f(n) + \beta_j,&& \text{ for } 0 \le j < d \text{ and }  n \ge 1, \tag{1.17}
 \end{aligned}
-\tag{1.17}
 $$
+
 与之前的递推类似，只是我们从 $d$ 进制数出发，结果用 $c$ 进制表示。也就是说，它具有进制变换解
 $$
 f\bigl((b_m b_{m-1} \dots b_1 b_0)_d\bigr)
@@ -466,11 +469,12 @@ $$
 \begin{aligned}
 f(1) &= 34, \\
 f(2) &= 5, \\
-f(3n) &= 10f(n) + 76,\quad n \ge 1, \\
-f(3n + 1) &= 10f(n) - 2,\quad n \ge 1, \\
-f(3n + 2) &= 10f(n) + 8,\quad n \ge 1,
+f(3n) &= 10f(n) + 76, && \text{ for }  n \ge 1, \\
+f(3n + 1) &= 10f(n) - 2,&& \text{ for }  n \ge 1, \\
+f(3n + 2) &= 10f(n) + 8, && \text{ for }  n \ge 1,
 \end{aligned}
 $$
+
 并希望计算 $f(19)$。这里 $d = 3$，$c = 10$。而 $19 = (201)_3$，进制变换解告诉我们按位从 3 进制替换为 10 进制。于是最高位 2 变为 5，0 和 1 分别变为 76 和 -2，得到
 $$
 f(19) = f\bigl((201)_3\bigr) = (5\ 76\ -2)_{10} = 1258,

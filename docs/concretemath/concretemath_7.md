@@ -521,8 +521,10 @@ g_n=
 g_{n-1}+g_{n-2},&\text{if }n>1.
 \end{cases}
 $$
-但这并不算真正的统一表达式。步骤 1 需要一个不含分情况的公式。单一等式 
+
+但这种做法实属投机取巧。步骤 1 需要一个不含分情况的公式。单一等式 
 $$g_n = g_{n-1} + g_{n-2}$$
+
 在 $n \ge 2$ 时成立，在 $n \le 0$ 时也成立（因为 $g_0=0$ 且负下标项均为 0）。但当 $n=1$ 时，左边为 1，右边为 0。
 
 幸运的是，这个问题很容易修正：我们可以在右侧加上 $[n=1]$，它在 $n=1$ 时贡献 1，在其他 $n$ 时无影响。于是得到
@@ -551,10 +553,12 @@ $$
 $$
 [z^n]\frac{z}{1-z-z^2}
 $$
-是多少？更一般地，对任意有理函数
+
+将 $z/(1-z-z^2)$ 展开为幂级数时，$z^n$ 的系数是什么？更一般地，若给定任意有理函数
 $$
 R(z) = P(z)/Q(z),
 $$
+
 其中 $P,Q$ 为多项式，系数 $[z^n]R(z)$ 如何求？
 
 有一类有理函数的系数特别简洁，即
@@ -578,6 +582,7 @@ $$
 R(z)=S(z)+T(z),
 \tag{7.28}
 $$
+
 其中 $S(z)$ 形如 (7.26)，$T(z)$ 是一个多项式。因此系数 $[z^n]R(z)$ 一定存在闭式。求出 $S(z)$ 与 $T(z)$ 等价于对 $R(z)$ 做部分分式展开。
 
 注意到当 $z=1/\rho_1,\dots,1/\rho_l$ 时 $S(z)=\infty$。因此，若要将 $R(z)=P(z)/Q(z)$ 成功表示为 $S(z)+T(z)$，所需的 $\rho_k$ 必定是满足 $Q(\alpha_k)=0$ 的根 $\alpha_k$ 的倒数。（因为 $R(z)=\infty$ 当且仅当 $Q(z)=0$。）
@@ -586,27 +591,29 @@ $$
 $$
 Q(z)=q_0+q_1z+\cdots+q_mz^m,\quad q_0\ne0,\ q_m\ne0.
 $$
+
 其“反向多项式”
 $$
 Q^R(z)=q_0z^m+q_1z^{m-1}+\cdots+q_m
 $$
+
 与 $Q(z)$ 有重要关系：
 $$
-Q^R(z)=q_0(z-\rho_1)\cdots(z-\rho_m)
-\iff
-Q(z)=q_0(1-\rho_1z)\cdots(1-\rho_mz).
+Q^R(z)=q_0(z-\rho_1)\cdots(z-\rho_m) \iff Q(z)=q_0(1-\rho_1z)\cdots(1-\rho_mz).
 $$
+
 也就是说，$Q^R$ 的根是 $Q$ 的根的倒数，反之亦然。因此我们可以通过分解反向多项式 $Q^R(z)$ 来得到所需的 $\rho_k$。
 
 以斐波那契为例，
 $$
 Q(z)=1-z-z^2,\quad Q^R(z)=z^2-z-1.
 $$
+
 对 $Q^R$ 用二次求根公式 $(-b\pm\sqrt{b^2-4ac})/(2a)$，取 $a=1,b=-1,c=-1$，得根为
 $$
-\phi=\frac{1+\sqrt5}{2},\quad
-\hat\phi=\frac{1-\sqrt5}{2}.
+\phi=\frac{1+\sqrt5}{2},\quad \hat\phi=\frac{1-\sqrt5}{2}.
 $$
+
 于是 $Q^R(z)=(z-\phi)(z-\hat\phi)$，对应 $Q(z)=(1-\phi z)(1-\hat\phi z)$。
 
 一旦求出了所有 $\rho$，我们就可以继续进行部分分式展开。如果所有根互不相同，过程会最简单，因此我们先考虑这种特殊情形。不妨正式叙述并证明这一一般性结论：
@@ -614,17 +621,13 @@ $$
 **互异根的有理展开定理**
 设 $R(z)=P(z)/Q(z)$，其中 $Q(z)=q_0(1-\rho_1z)\cdots(1-\rho_l z)$，且 $\rho_1,\dots,\rho_l$ 互不相同，$P(z)$ 是次数小于 $l$ 的多项式，则
 $$
-[z^n]R(z)=a_1\rho_1^n+\cdots+a_l\rho_l^n,
-\quad\text{其中}\quad
-a_k=\frac{-\rho_k P(1/\rho_k)}{Q'(1/\rho_k)}.
-\tag{7.29}
+[z^n]R(z)=a_1\rho_1^n+\cdots+a_l\rho_l^n, \quad\text{ where }\quad a_k=\frac{-\rho_k P(1/\rho_k)}{Q'(1/\rho_k)}. \tag{7.29}
 $$
 
-证明：设 $a_1,\dots,a_l$ 为上式给出的常数。若 $R(z)=P(z)/Q(z)$ 等于
+证明：设 $a_1,\dots,a_l$ 为上式给出的常数。则式 (7.29) 成立，若 $R(z)=P(z)/Q(z)$ 等于
 $$
 S(z)=\frac{a_1}{1-\rho_1z}+\cdots+\frac{a_l}{1-\rho_l z},
 $$
-则式 (7.29) 成立。
 
 我们可以通过证明函数 $T(z)=R(z)-S(z)$ 在 $z\to1/\rho_k$ 时不趋于无穷来证明 $R(z)=S(z)$。这说明有理函数 $T(z)$ 没有极点，因此必为多项式。同时可以证明 $z\to\infty$ 时 $T(z)\to0$，故 $T(z)$ 只能是零。
 
@@ -632,13 +635,10 @@ $$
 $$
 \lim_{z\to\alpha_k}(z-\alpha_k)R(z)=\lim_{z\to\alpha_k}(z-\alpha_k)S(z).
 $$
-右边极限为 $\lim_{z\to\alpha_k}a_k(z-\alpha_k)/(1-\rho_k z)=-a_k/\rho_k$，因为 $1-\rho_k z=-\rho_k(z-\alpha_k)$，且对 $j\ne k$ 有 $(z-\alpha_k)/(1-\rho_j z)\to0$。
 
-左边极限由洛必达法则得
+右边极限为 $\lim_{z\to\alpha_k}a_k(z-\alpha_k)/(1-\rho_k z)=-a_k/\rho_k$，因为 $1-\rho_k z=-\rho_k(z-\alpha_k)$，且对 $j\ne k$ 有 $(z-\alpha_k)/(1-\rho_j z)\to0$。左边极限由洛必达法则得
 $$
-\lim_{z\to\alpha_k}(z-\alpha_k)\frac{P(z)}{Q(z)}
-=P(\alpha_k)\lim_{z\to\alpha_k}\frac{z-\alpha_k}{Q(z)}
-=\frac{P(\alpha_k)}{Q'(\alpha_k)}.
+\lim_{z\to\alpha_k}(z-\alpha_k)\frac{P(z)}{Q(z)} =P(\alpha_k)\lim_{z\to\alpha_k}\frac{z-\alpha_k}{Q(z)} =\frac{P(\alpha_k)}{Q'(\alpha_k)}.
 $$
 定理得证。
 
@@ -646,13 +646,11 @@ $$
 $$
 \frac{-\rho P(1/\rho)}{Q'(1/\rho)}=\frac{-1}{-1-2/\rho}=\frac{\rho}{\rho+2}.
 $$
-由 (7.29)，$[z^n]R(z)$ 中 $\phi^n$ 的系数为 $\phi/(\phi+2)=1/\sqrt5$；$\hat\phi^n$ 的系数为 $\hat\phi/(\hat\phi+2)=-1/\sqrt5$。因此定理给出
-$$
-F_n=(\phi^n-\hat\phi^n)/\sqrt5,
-$$
-与式 (6.123) 一致。
+
+由 (7.29)，$[z^n]R(z)$ 中 $\phi^n$ 的系数为 $\phi/(\phi+2)=1/\sqrt5$；$\hat\phi^n$ 的系数为 $\hat\phi/(\hat\phi+2)=-1/\sqrt5$。因此定理给出 $F_n=(\phi^n-\hat\phi^n)/\sqrt5$，与式 (6.123) 一致。
 
 当 $Q(z)$ 出现重根时，计算会变得更复杂，但我们可以加强上述定理的证明，得到下面更一般的结论：
+
 
 **有理生成函数的一般展开定理**
 设 $R(z)=P(z)/Q(z)$，其中 $Q(z)=q_0(1-\rho_1 z)^{d_1}\cdots(1-\rho_l z)^{d_l}$，$\rho_1,\dots,\rho_l$ 互不相同，且 $P(z)$ 是次数小于 $d_1+\cdots+d_l$ 的多项式，则对所有 $n\ge0$ 有

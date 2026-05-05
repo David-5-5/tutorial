@@ -22,7 +22,28 @@ class Solution:
                 n_sum -= v
             ans.append(n_sum)
         return ans
-    
+
+    def unmarkedSumArray(self, nums: List[int], queries: List[List[int]]) -> List[int]:
+        #  2026.5.2 复习
+        n = len(nums)
+        ids = sorted(range(n), key=lambda i: nums[i])
+
+        n_sum = sum(nums)
+        j = 0
+
+        ans = []
+        for i, k in queries:
+            s -= nums[i]
+            nums[i] = 0  # mark
+            while j<n and k:
+                if nums[ids[j]]:     # >0: not mark
+                    n_sum -= nums[ids[j]]
+                    nums[ids[j]] = 0 # mark
+                    k -= 1
+            ans.append(n_sum)
+        return ans
+
+
 if __name__ == "__main__":
     sol = Solution()
     nums, queries = [1,2,2,1,2,3,1], [[1,2],[3,3],[4,2]]

@@ -36,5 +36,19 @@ public:
         return min(res1, res2);
     }
 
+    int minOperations(string s) {    
+        // 参考题解写法
+        if (ranges::is_sorted(s)) return 0;
+        
+        int n = s.length();
+        if (n == 2) return -1;
 
+        auto [mn, mx] = ranges:: minmax(s);
+
+        if (s[0] == mn || s[n-1] == mx) return 1;
+
+        for (int i=1; i<n-1; i++) if (s[i] == mn || s[i] == mx) return 2;
+
+        return 3; // s[0] = mx, s[n-1] = mn; 
+    }
 };

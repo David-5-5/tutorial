@@ -992,7 +992,7 @@ $$
 \sum_{k}\genfrac\{\}{0pt}{}{m}{k}\frac{k!z^k}{(1-z)^{k+1}}=\sum_{n\ge0}n^m z^n\tag{7.46}
 $$
 $$
-\left(\frac{1}{z}-1\right)^{-m}=\frac{z^m}{(1-z)(1-2z)\cdots(1-mz)}=\sum_{n\ge0}\genfrac\{\}{0pt}{}{n}{m}z^n\tag{7.47}
+\left(z^{-1}\right)^{\overline{-m}}=\frac{z^m}{(1-z)(1-2z)\cdots(1-mz)}=\sum_{n\ge0}\genfrac\{\}{0pt}{}{n}{m}z^n\tag{7.47}
 $$
 $$
 z^{\overline m}=z(z+1)\cdots(z+m-1)=\sum_{n\ge0}\genfrac[]{0pt}{}{m}{n}z^n\tag{7.48}
@@ -1004,22 +1004,22 @@ $$
 \left(\ln\frac{1}{1-z}\right)^m=m!\sum_{n\ge0}\genfrac[]{0pt}{}{n}{m}\frac{z^n}{n!}\tag{7.50}
 $$
 $$
-\left(\ln\frac{1+z}{z}\right)^m=\sum_{n\ge0}\frac{z^n}{n!}\genfrac\{\}{0pt}{}{m}{m-n}\bigg/\binom{m}{n-1}\tag{7.51}
+\left(\frac{z}{\ln(1+z)}\right)^m=\sum_{n\ge0}\frac{z^n}{n!}\genfrac\{\}{0pt}{}{m}{m-n}\bigg/\binom{m-1}{n}\tag{7.51}
 $$
 $$
-\left(1-\frac{z}{e^{-z}}\right)^m=\sum_{n\ge0}\frac{z^n}{n!}\genfrac[]{0pt}{}{m}{m-n}\bigg/\binom{m}{n-1}\tag{7.52}
+\left(1-\frac{z}{e^{-z}}\right)^m=\sum_{n\ge0}\frac{z^n}{n!}\genfrac[]{0pt}{}{m}{m-n}\bigg/\binom{m-1}{n}\tag{7.52}
 $$
 $$
-e^{z+wz}=\sum_{m,n\ge0}\binom{n}{m}\frac{w^m z^n}{n!}\tag{7.53}
+e^{z+wz}=\sum_{m,n\ge0}\binom{n}{m}w^m \frac{z^n}{n!}\tag{7.53}
 $$
 $$
-e^{w(e^z-1)}=\sum_{m,n\ge0}\genfrac\{\}{0pt}{}{n}{m}\frac{w^m z^n}{n!}\tag{7.54}
+e^{w(e^z-1)}=\sum_{m,n\ge0}\genfrac\{\}{0pt}{}{n}{m}w^m \frac{z^n}{n!}\tag{7.54}
 $$
 $$
-\frac{1}{(1-z)^w}=\sum_{m,n\ge0}\genfrac[]{0pt}{}{n}{m}\frac{w^m z^n}{n!}\tag{7.55}
+\frac{1}{(1-z)^w}=\sum_{m,n\ge0}\genfrac[]{0pt}{}{n}{m}w^m \frac{z^n}{n!}\tag{7.55}
 $$
 $$
-\frac{1-w}{e^{(w-1)z}-w}=\sum_{m,n\ge0}\left\langle\genfrac{}{}{0pt}{}{n}{m}\right\rangle\frac{w^m z^n}{n!}\tag{7.56}
+\frac{1-w}{e^{(w-1)z}-w}=\sum_{m,n\ge0}\left\langle\genfrac{}{}{0pt}{}{n}{m}\right\rangle w^m \frac{z^n}{n!}\tag{7.56}
 $$
 
 表 $351$ 是我们需要的数据库，该表中的恒等式证明并不困难，因此不必过多赘述；本表主要用于遇到新问题时查阅参考。但第一个公式 $(7.43)$ 有一种巧妙的证明方法值得一提：我们从恒等式
@@ -1030,40 +1030,38 @@ $$\frac{1}{x+n}+\cdots+\frac{1}{x+1}=H_{x+n}-H_x$$
 
 顺便一提，这种对复杂乘积求导并保留乘积形式的方法，通常比将导数展开为和式更简便。例如
 $$
-\frac{d}{dx}\left((x+n)^{\underline{n}}\cdots(x+1)^{\underline{1}}\right)=(x+n)^{\underline{n}}\cdots(x+1)^{\underline{1}}\left(\frac{n}{x+n}+\cdots+\frac{1}{x+1}\right)
+\frac{d}{dx}\left((x+n)^n\cdots(x+1)^1\right)=(x+n)^n\cdots(x+1)^1\left(\frac{n}{x+n}+\cdots+\frac{1}{x+1}\right)
 $$
 的右侧若展开为和式会繁琐得多。
 
 表 $351$ 中的通用恒等式包含许多重要特例，例如当 $m=0$ 时，$(7.43)$ 可简化为调和数 $H_n$ 的生成函数：
-$$\frac{1}{1-z}\ln\frac{1}{1-z}=\sum_{n}H_n z^n \tag{7.57}$$
+$$\frac{1}{1-z}\ln1/(1-z)=\sum_{n}H_n z^n \tag{7.57}$$
 
 该式也可通过其他方式推导，例如对 $\ln\frac{1}{1-z}$ 的幂级数除以 $1-z$ 得到累积和。
 
-恒等式 $(7.51)$ 与 $(7.52)$ 分别包含比值 $\genfrac\{\}{0pt}{}{m}{m-n}\big/\binom{m}{n-1}$ 与 $\genfrac[]{0pt}{}{m}{m-n}\big/\binom{m}{n-1}$，当 $n\ge m$ 时会出现未定义形式 $0/0$。但借助 $(6.45)$ 中的斯特林多项式可以为其赋予合理定义，因为我们有
-$$\genfrac\{\}{0pt}{}{m}{m-n}\big/\binom{m}{n-1}=(-1)^{n+1}n!m\sigma_n(n-m), \tag{7.58}$$
-$$\genfrac[]{0pt}{}{m}{m-n}\big/\binom{m}{n-1}=n!m\sigma_n(m) \tag{7.59}$$
+恒等式 $(7.51)$ 与 $(7.52)$ 分别包含比值 $\genfrac\{\}{0pt}{}{m}{m-n}\big/\binom{m-1}{n}$ 与 $\genfrac[]{0pt}{}{m}{m-n}\big/\binom{m-1}{n}$，当 $n\ge m$ 时会出现未定义形式 $0/0$。但借助 $(6.45)$ 中的斯特林多项式可以为其赋予合理定义，因为我们有
+$$\genfrac\{\}{0pt}{}{m}{m-n}\big/\binom{m-1}{n}=(-1)^{n+1}n!m\sigma_n(n-m), \tag{7.58}$$
+$$\genfrac[]{0pt}{}{m}{m-n}\big/\binom{m-1}{n}=n!m\sigma_n(m) \tag{7.59}$$
 
-因此举例而言，$(7.51)$ 中 $m=1$ 的情形不应被视为幂级数 $\sum_{n\ge0}\frac{z^n}{n!}\genfrac\{\}{0pt}{}{1}{1-n}\big/\binom{0}{n}$，而应写作
+因此举例而言，$(7.51)$ 中 $m=1$ 的情形不应被视为幂级数 $\sum_{n\ge0} (z^n/n!)\genfrac\{\}{0pt}{}{1}{1-n}\big/\binom{0}{n}$，而应写作
 $$\frac{z}{\ln(1+z)}=-\sum_{n\ge0}(-z)^n\sigma_n(n-1)=1+\frac{1}{2}z-\frac{1}{12}z^2+\cdots$$。
 
 
-恒等式 $(7.53)$、$(7.55)$、$(7.54)$ 与 $(7.56)$ 是**二重生成函数**或称**超生成函数**，因为它们形如 $G(w,z)=\sum_{m,n}g_{m,n}w^m z^n$。$w^m$ 的系数是关于变量 $z$ 的生成函数；$z^n$ 的系数是关于变量 $w$ 的生成函数。
+恒等式 $(7.53)$，$(7.55)$，$(7.54)$ 与 $(7.56)$ 是二重生成函数或称超生成函数，因为它们形如 $G(w,z)=\sum_{m,n}g_{m,n}w^m z^n$。$w^m$ 的系数是关于变量 $z$ 的生成函数；$z^n$ 的系数是关于变量 $w$ 的生成函数。
 
 式 $(7.56)$ 可以写成更对称的形式：
 $$
-\frac{e^w-e^z}{we^z-ze^w}
-=\sum_{m,n}\left\langle\genfrac{}{}{0pt}{}{m+n+1}{m}\right\rangle
-\frac{w^m z^n}{(m+n+1)!}
-\tag{7.60}
+\frac{e^w-e^z}{we^z-ze^w} =\sum_{m,n}\left\langle\genfrac{}{}{0pt}{}{m+n+1}{m}\right\rangle \frac{w^m z^n}{(m+n+1)!} \tag{7.60}
 $$
 
-## 7.5 CONVOLUTIONS
-两个给定序列 $\langle f_0,f_1,\dots\rangle=\langle f_n\rangle$ 与 $\langle g_0,g_1,\dots\rangle=\langle g_n\rangle$ 的卷积是序列 $\langle f_0g_0,f_0g_1+f_1g_0,\dots\rangle=\langle\sum_k f_k g_{n-k}\rangle$。我们在 $5.4$ 节与 $7.2$ 节中已经发现，序列的卷积对应于它们生成函数的乘积，这一事实使得许多原本难以处理的和式变得易于计算。
+
+## 7.5 CONVOLUTIONS 卷积
+两个给定序列 $\langle f_0,f_1,\dots\rangle=\langle f_n\rangle$ 与 $\langle g_0,g_1,\dots\rangle=\langle g_n\rangle$ 的*卷积*是序列 $\langle f_0g_0,f_0g_1+f_1g_0,\dots\rangle=\langle\sum_k f_k g_{n-k}\rangle$。我们在 $5.4$ 节与 $7.2$ 节中已经发现，序列的卷积对应于它们生成函数的乘积，这一事实使得许多原本难以处理的和式变得易于计算。
 
 例 $1$：斐波那契卷积
 例如，我们尝试计算 $\sum_{k=0}^n F_k F_{n-k}$ 的闭式表达式，这是序列 $\langle F_n \rangle$ 与自身的卷积，因此该和式必定是 $F(z)^2$ 中 $z^n$ 的系数，其中 $F(z)$ 是序列 $\langle F_n \rangle$ 的生成函数，我们只需要求出这个系数的值即可。
 
-生成函数 $F(z)$ 为 $\dfrac{z}{1-z-z^2}$，是多项式的商式，因此有理函数的通用展开定理表明可以通过部分分式分解得到答案，我们可以使用通用展开定理 $(7.30)$ 直接计算，也可以利用如下等式：
+生成函数 $F(z)$ 为 $z/(1-z-z^2)$，是多项式的商式，因此有理函数的通用展开定理表明可以通过部分分式分解得到答案，我们可以使用通用展开定理 $(7.30)$ 直接计算，也可以利用如下等式：
 
 $$
 \begin{aligned}
@@ -1114,9 +1112,7 @@ $$
 因此，由 $(7.43)$ 可得
 $$
 \begin{aligned}
-T_{m,n}
-&= [z^n]\frac{z^m}{(1-z)^{m+1}}\ln\frac{1}{1-z} \\
-&= [z^{n-m}]\frac{1}{(1-z)^{m+1}}\ln\frac{1}{1-z} \\
+T_{m,n} = [z^n]\frac{z^m}{(1-z)^{m+1}}\ln\frac{1}{1-z}  &= [z^{n-m}]\frac{1}{(1-z)^{m+1}}\ln\frac{1}{1-z} \\
 &= (H_n - H_m)\binom{n}{n-m}
 \end{aligned}
 $$
@@ -1137,27 +1133,31 @@ $$
 
 这看起来好得令人难以置信，但至少在 $n=2$ 时可以验证成立：
 $$
-\binom{r+1}{1}\binom{s+1}{1}\frac{1}{r+1}
-+\binom{r+2}{2}\binom{s+0}{0}\left(\frac{1}{r+2}+\frac{1}{r+1}\right)
-=\binom{r+s+3}{2}\left(\frac{1}{r+s+3}+\frac{1}{r+s+2}\right)
+\begin{aligned}
+\binom{r+1}{1}\binom{s+1}{1}\frac{1}{r+1} &+\binom{r+2}{2}\binom{s+0}{0}\left(\frac{1}{r+2}+\frac{1}{r+1}\right) \\
+&=\binom{r+s+3}{2}\left(\frac{1}{r+s+3}+\frac{1}{r+s+2}\right)
+\end{aligned}
 $$
 像 $s=0$ 这样的特例与一般情形同样精妙。
 
 不止如此，我们还可以利用卷积恒等式
 $$
-\sum_{k}\binom{r+k}{k}\binom{s+n-k}{n-k}
-=\binom{r+s+n+1}{n}
+\sum_{k}\binom{r+k}{k}\binom{s+n-k}{n-k}=\binom{r+s+n+1}{n}
 $$
+
 将 $H_r$ 移到等式另一边，因为 $H_r$ 与 $k$ 无关：
 $$
-\sum_{k}\binom{r+k}{k}\binom{s+n-k}{n-k}H_{r+k}
-=\binom{r+s+n+1}{n}(H_{r+s+n+1}-H_{r+s+1}+H_r) \tag{7.63}
+\begin{aligned}
+\sum_{k}\binom{r+k}{k}&\binom{s+n-k}{n-k}H_{r+k} \\
+&=\binom{r+s+n+1}{n}(H_{r+s+n+1}-H_{r+s+1}+H_r) \tag{7.63}
+\end{aligned}
 $$
+
 更进一步：如果 $r,s$ 为非负整数 $l,m$，我们可以把 $\binom{r+k}{k}$ 换成 $\binom{l+k}{l}$，把 $\binom{s+n-k}{n-k}$ 换成 $\binom{m+n-k}{m}$；再将 $k$ 替换为 $k-l$，$n$ 替换为 $n-m-l$，可得
 $$
-\sum_{k=0}^n\binom{k}{l}\binom{n-k}{m}H_k
-=\binom{n+1}{l+m+1}(H_{n+1}-H_{l+m+1}+H_l),\quad 整数\ l,m,n\ge0 \tag{7.64}
+\sum_{k=0}^n\binom{k}{l}\binom{n-k}{m}H_k =\binom{n+1}{l+m+1}(H_{n+1}-H_{l+m+1}+H_l),\\ \text{ integers } l,m,n\ge0 \tag{7.64}
 $$
+
 即便这个恒等式取 $l=m=0$ 的特例，在第 $2$ 章中对我们而言也相当棘手（见 $(2.36)$）。我们已然前进了一大步。
 
 例 $3$：卷积的卷积。

@@ -80,6 +80,404 @@ Ray Data 采用 5 层架构设计：
 
 Dataset 是用户直接交互的入口，提供了类似 Pandas 的声明式 API。
 
+### 2.1 类设计与核心成员
+
+```python
+@PublicAPI
+class Dataset:
+    def __init__(
+        self,
+        plan: ExecutionPlan,
+        logical_plan: LogicalPlan,
+    ):
+        self._plan = plan              # 执行计划（物理）
+        self._logical_plan = logical_plan  # 逻辑计划
+        self._current_executor: Optional["Executor"] = None
+```
+
+**设计要点**:
+1. **构造函数不公开** - 用户通过 `ray.data.read_*()` 工厂方法创建
+2. **双计划架构** - 同时持有逻辑计划和执行计划
+3. **不可变设计** - 所有转换方法返回新的 Dataset 对象（通过 `copy()`）
+4. **Lazy 执行** - 只构建 DAG，触发 Action 时才真正执行
+
+### 2.2 API 分组架构
+
+Dataset 使用常量定义 API 分组（第 155-163 行）：
+
+| 分组常量 | 分组名称 | 代表方法 |
+|---------|---------|---------|
+| `BT_API_GROUP` | Basic Transformations | `map`, `map_batches`, `filter`, `add_column` |
+| `SSR_API_GROUP` | Sorting, Shuffling and Repartitioning | `sort`, `random_shuffle`, `repartition` |
+| `SMJ_API_GROUP` | Splitting, Merging, Joining | `split`, `union`, `join`, `zip` |
+| `GGA_API_GROUP` | Grouped and Global aggregations | `groupby`, `sum`, `mean`, `min`, `max` |
+| `CD_API_GROUP` | Consuming Data | `count`, `take`, `iter_rows`, `to_pandas` |
+| `IOC_API_GROUP` | I/O and Conversion | `write_parquet`, `write_csv`, `to_arrow_refs` |
+| `IM_API_GROUP` | Inspecting Metadata | `schema`, `columns`, `num_blocks` |
+| `E_API_GROUP` | Execution | `materialize`, `explain`, `stats` |
+| `EXPRESSION_API_GROUP` | Expressions | 列表达式计算 |
+
+### 2.3 核心 API 分类详解
+
+#### 2.3.1 基础转换（Lazy，不执行）
+
+**代表方法**: `map()`, `map_batches()`, `flat_map()`, `filter()`
+
+```python
+def map(
+    self,
+    fn: Callable[[Dict[str, Any]], Dict[str, Any]],
+    *,
+    compute: Optional[ComputeStrategy] = None,  # Task / Actor 选择
+    num_cpus: Optional[float] = None,            # 资源配置
+    num_gpus: Optional[float] = None,
+    concurrency: Optional[Union[int, Tuple]] = None,  # Actor 并发数
+    **ray_remote_args,
+) -> "Dataset":
+    """Lazy: 只构建 MapRows 逻辑算子，不立即执行"""
+```
+
+**关键技术点**:
+- **返回新 Dataset** - 通过 `copy()` 创建新实例，原对象不变
+- **ComputeStrategy** - 支持 Task 模式（默认）或 Actor 模式（有状态）
+- **资源隔离** - 每个 UDF 可独立配置 CPU/GPU
+
+#### 2.3.2 全局混洗（All-to-All）
+
+**代表方法**: `sort()`, `random_shuffle()`, `repartition()`
+
+**关键技术点**:
+- **Map + Reduce 两阶段** - 先分片采样，再全局排序
+- **Exchange 算子** - 跨节点数据传输，网络开销大
+- **SortKey 抽象** - 支持多列排序、升降序配置
+
+#### 2.3.3 Action 算子（触发执行）
+
+**代表方法**: `count()`, `take()`, `materialize()`, `iter_rows()`
+
+```python
+def count(self) -> int:
+    """触发执行：构建 Count 算子并执行"""
+    return self._execute_with_count(Count(self._logical_plan.dag))
+
+def materialize(self) -> "MaterializedDataset":
+    """全量执行并缓存所有 Block 到对象存储"""
+```
+
+**执行触发点**:
+- 所有 `iter_*` 系列方法
+- 所有 `to_*` 转换方法
+- 所有 `write_*` 输出方法
+- `count()`, `take()`, `show()` 等立即返回结果的方法
+
+#### 2.3.4 I/O 方法
+
+**代表方法**: `write_parquet()`, `write_csv()`, `write_json()` 等 10+ 种
+
+**设计模式**:
+- 每种格式对应一个 `Datasink` 类（如 `ParquetDatasink`）
+- `Write` 逻辑算子封装写入操作
+- 支持 `SaveMode`: `append`, `overwrite`, `error`, `ignore`
+
+### 2.4 Dataset 调用链构建机制
+
+**核心模式**: 链式调用 + 不可变对象
+
+```
+用户调用:
+  ds = ray.data.read_parquet("path")  # Read 算子
+       .map_batches(fn)               # MapBatches 追加
+       .filter(pred)                   # Filter 追加
+       .count()                        # Count 触发执行
+```
+
+**内部实现**:
+1. **Copy 新对象** - 每个转换方法先调用 `Dataset.copy()` 创建新实例
+2. **追加逻辑算子** - 在新实例的 `_logical_plan` 上追加 Operator
+3. **返回新实例** - 原对象完全不变，支持分支处理
+
+```python
+# copy 方法实现（第 265 行）
+@staticmethod
+def copy(ds: "Dataset", _deep_copy: bool = False, _as: Optional[type] = None) -> "Dataset":
+    """创建新 Dataset 实例，共享计划对象"""
+    if _deep_copy:
+        return _as(ds._plan.deep_copy(), ds._logical_plan)
+    else:
+        return _as(ds._plan.copy(), ds._logical_plan)
+```
+
+### 2.5 ComputeStrategy 多执行模式
+
+`map_batches` 支持三种执行模式：
+
+| 模式 | 实现 | 适用场景 | 关键参数 |
+|------|------|---------|---------|
+| **Task 模式** | 普通 Ray 任务 | 无状态处理，启动快 | 默认 |
+| **Actor Pool 模式** | Actor 池复用 | 有状态初始化（模型加载） | `compute=ActorPoolStrategy(size=8)` |
+| **Actor 自动扩缩容** | Actor 动态增减 | 负载波动场景 | `concurrency=(1, 10)` |
+
+**关键参数**（第 457-489 行 `map_batches` 签名）:
+- `batch_size` - 批大小，性能调优关键
+- `batch_format` - "pandas", "pyarrow", "numpy" 三种格式
+- `zero_copy_batch` - 零拷贝批量读取优化
+- `concurrency` - Actor 并发数（min, max）
+
+### 2.6 数据消费模式
+
+Dataset 支持多种消费方式，满足不同场景：
+
+#### 2.6.1 迭代器模式（推荐）
+
+```python
+# 逐行迭代
+for row in ds.iter_rows():
+    process(row)
+
+# 逐批迭代（推荐，性能好）
+for batch in ds.iter_batches(batch_size=256):
+    process_batch(batch)
+
+# PyTorch 格式
+for batch in ds.iter_torch_batches(batch_size=32):
+    train_step(batch)
+```
+
+**关键技术**: `DataIteratorImpl` - 流式拉取，内存友好
+
+#### 2.6.2 全量转换模式
+
+```python
+# 全部拉取到本地（注意内存！）
+df = ds.to_pandas()          # → Pandas DataFrame
+table = ds.to_arrow()        # → Arrow Table
+refs = ds.to_arrow_refs()    # → List[ObjectRef]（分布式）
+```
+
+#### 2.6.3 外部系统集成
+
+支持直接转换到：
+- Dask / Modin / Mars 分布式 DataFrame
+- Spark DataFrame
+- TensorFlow Dataset (`to_tf()`)
+- PyTorch DataLoader (`to_torch()`)
+
+### 2.7 执行调试与诊断 API
+
+| 方法 | 作用 |
+|------|------|
+| `explain()` | 打印逻辑计划 + 物理计划（见第 6102 行） |
+| `stats()` | 执行统计：耗时、吞吐量、内存等 |
+| `schema()` | 查看数据结构（不触发执行） |
+| `num_blocks()` | Block 数量（并行度指标） |
+| `size_bytes()` | 数据总大小 |
+
+### 2.8 MaterializedDataset 子类
+
+当 Dataset 完全执行后，可转换为 `MaterializedDataset`：
+- Block 全部在 Plasma 对象存储中
+- 可重复消费，不需要重新计算
+- 支持 `random_access_dataset` 索引查询
+
+### 2.9 Read API - 数据源读取接口
+
+**文件位置**: `python/ray/data/read_api.py`（183KB，第二大文件）
+
+Read API 是 Ray Data 的**入口层**，提供 20+ 种数据源的统一读取接口。
+
+#### 2.9.1 数据源分类
+
+| 类别 | 代表方法 | 对应 Datasource 类 |
+|------|---------|-------------------|
+| **列式存储** | `read_parquet`, `read_iceberg`, `read_lance` | `ParquetDatasource`, `IcebergDatasource` |
+| **行式存储** | `read_csv`, `read_json`, `read_avro` | `CSVDatasource`, `ArrowJSONDatasource` |
+| **半结构化** | `read_webdataset` | `WebDatasetDatasource` |
+| **二进制/媒体** | `read_images`, `read_video`, `read_audio` | `ImageDatasource`, `VideoDatasource` |
+| **数组格式** | `read_numpy`, `read_tfrecords` | `NumpyDatasource`, `TFRecordDatasource` |
+| **数据库** | `read_sql`, `read_bigquery`, `read_mongo`, `read_clickhouse` | `SQLDatasource`, `BigQueryDatasource` |
+| **数据湖** | `read_hudi`, `read_delta` | `HudiDatasource`, `DeltaSharingDatasource` |
+| **内存数据** | `from_items`, `from_pandas`, `from_arrow`, `from_blocks` | `RangeDatasource` |
+| **外部生态** | `from_huggingface`, `from_dask`, `from_spark`, `from_torch` | 直接转换为 Blocks |
+
+#### 2.9.2 核心设计模式：Datasource 抽象
+
+所有数据源统一实现 `Datasource` 基类，提供：
+
+```python
+# 核心方法协议
+class Datasource:
+    def create_reader(self, **read_args) -> Reader:
+        """创建 Reader 实例，准备读取任务"""
+        
+    def prepare_read(self, parallelism: int, **read_args) -> List[ReadTask]:
+        """生成并行读取任务列表 - 最核心的方法"""
+        
+    def on_read_complete(self, read_tasks: List[ReadTask]) -> None:
+        """读取完成后的回调"""
+```
+
+**关键设计点**（第 67-68 行 `Read` 逻辑算子）：
+```python
+# 所有 read_*() 方法最终生成 Read 逻辑算子
+Read(datasource, parallelism, read_args)
+```
+
+#### 2.9.3 并行读取机制
+
+**两步读取架构**：
+
+```
+Step 1: Driver 端（本地执行）
+  ↓
+  read_parquet("s3://bucket/*")
+  ↓
+  1. 调用 datasource.create_reader()
+  2. 列出所有文件 / 分区
+  3. 按文件大小分片，生成 N 个 ReadTask
+  4. 返回 Read 逻辑算子（Lazy，不执行）
+
+Step 2: Executor 端（分布式执行）
+  ↓
+  每个 ReadTask 在独立 Ray Task 中执行
+  ↓
+  1. Worker 拉取文件分片
+  2. 解析为 Arrow/Pandas Block
+  3. 写入 Plasma 对象存储
+  ↓
+  输出 N 个 Block
+```
+
+**自动并行度推断**（第 72 行 `_autodetect_parallelism`）:
+- 默认: `target_max_block_size = 512MB`
+- 按文件大小估算所需 Block 数
+- 受限于集群可用 CPU 数
+
+#### 2.9.4 内存数据读取
+
+`from_items`, `from_pandas`, `from_arrow` 等方法是**特殊情况**：
+- 不需要分布式读取
+- 直接在 Driver 端分割为 Blocks
+- 调用 `FromItems`, `FromPandas`, `FromArrow` 等逻辑算子
+- 直接返回 `MaterializedDataset`（已物化）
+
+```python
+# from_blocks 直接创建物化数据集（第 128-154 行）
+def from_blocks(blocks: List[Block]):
+    block_refs = [ray.put(block) for block in blocks]
+    from_blocks_op = FromBlocks(block_refs, meta)
+    return MaterializedDataset(execution_plan, logical_plan)
+```
+
+#### 2.9.5 高级特性
+
+| 特性 | 说明 | 关键实现 |
+|------|------|---------|
+| **分区推断** | 自动识别 Hive 风格目录分区 | `Partitioning` 类 |
+| **Schema 推断** | 采样前 N 个文件推断 Schema | 在 `prepare_read` 阶段执行 |
+| **谓词下推** | Iceberg/Parquet 支持行过滤 | 底层引擎直接下推 |
+| **列裁剪** | 只读取需要的列，减少 IO | `columns` 参数 |
+| **文件元数据缓存** | 避免重复 list S3 等操作 | `FileMetadataProvider` 抽象 |
+
+### 2.10 Write API - 数据写出接口
+
+**文件位置**: `dataset.py` 第 3781-5100 行
+
+与 Read API 对称，Ray Data 提供 10+ 种写出格式的统一接口。
+
+#### 2.10.1 写出格式一览
+
+| 类别 | 代表方法 | 对应 Datasink 类 |
+|------|---------|-------------------|
+| **列式存储** | `write_parquet`, `write_iceberg`, `write_lance` | `ParquetDatasink`, `IcebergDatasink` |
+| **行式存储** | `write_csv`, `write_json` | `CSVDatasink`, `JSONDatasink` |
+| **二进制/媒体** | `write_images`, `write_numpy` | `ImageDatasink`, `NumpyDatasink` |
+| **机器学习** | `write_tfrecords`, `write_webdataset` | `TFRecordDatasink`, `WebDatasetDatasink` |
+| **数据库** | `write_sql`, `write_bigquery`, `write_mongo`, `write_clickhouse`, `write_snowflake` | `SQLDatasink`, `MongoDatasink` |
+
+#### 2.10.2 核心设计模式：Datasink 抽象
+
+所有写出源实现 `Datasink` 基类（第 112 行 `dataset.py` import）：
+
+```python
+# 核心写出协议
+class Datasink:
+    def write(self, blocks: List[ObjectRef[Block]], **kwargs) -> WriteResult:
+        """将 Blocks 写出到目标系统"""
+        
+    def on_write_complete(self, write_results: List[WriteResult]) -> None:
+        """写出完成后的回调"""
+```
+
+**对应逻辑算子**（第 84 行 `Read` 的对称算子）：
+```python
+# Write 逻辑算子封装写出操作
+Write(datasink, ds._logical_plan.dag)
+```
+
+#### 2.10.3 分布式写入机制
+
+**并行写出流程**：
+```
+用户调用 ds.write_parquet("s3://bucket/output")
+    ↓
+1. 触发 Dataset 执行（Lazy → 执行）
+   ↓
+2. 每个 Block 对应一个写出 Task
+   ↓
+3. Worker 分布式并行写出
+   ├── 每个 Task 写一个或多个文件
+   ├── 文件名自动编号: part-00000.parquet
+   └── 支持按列分区写入
+    ↓
+4. 返回 WriteResult 汇总
+```
+
+#### 2.10.4 SaveMode：写入冲突策略
+
+**第 112 行 `SaveMode` 枚举**：
+```python
+from ray.data.datasource import SaveMode
+```
+
+| 模式 | 行为 | 适用场景 |
+|------|------|---------|
+| `ERROR` | 目录已存在则报错（默认） | 安全写入，防止覆盖 |
+| `OVERWRITE` | 覆盖已有目录 | 重跑场景 |
+| `APPEND` | 追加到已有目录 | 增量写入 |
+| `IGNORE` | 目录已存在则跳过 | 幂等写入场景 |
+
+#### 2.10.5 高级写出特性
+
+| 特性 | 说明 | 关键参数 |
+|------|------|---------|
+| **按列分区写出** | Hive 风格分区目录 | `partition_cols` |
+| **文件数控制** | 调整并行度控制文件数 | `repartition()` + write |
+| **文件名模板** | 自定义输出文件名 | `filename_provider` |
+| **行组大小** | Parquet 行组优化 | `row_group_size_bytes` |
+| **分桶写出** | 按哈希分桶输出 | `bucket_col` |
+
+#### 2.10.6 Read/Write 对称性设计
+
+Ray Data 的 I/O 设计高度对称：
+
+| 方向 | 核心抽象 | 逻辑算子 |
+|------|---------|---------|
+| **读** | `Datasource` + `ReadTask` | `Read` 算子 |
+| **写** | `Datasink` + `WriteTask` | `Write` 算子 |
+
+这种对称性带来的好处：
+- 新增一种格式只需同时实现 `Datasource` + `Datasink`
+- 统一的错误处理和重试机制
+- ETL 流程表达简洁：`read -> transform -> write`
+
+---
+
+## 3. Logical Plan（逻辑计划层）
+
+**文件位置**: `python/ray/data/dataset.py`
+
+Dataset 是用户直接交互的入口，提供了类似 Pandas 的声明式 API。
+
 ### 2.1 典型使用流程
 
 ```python
@@ -438,50 +836,3 @@ result = ds.count()  # 这里开始真正执行
 | 测试文件 | 大小 | 测试内容 |
 |---------|------|---------|
 | `test_autoscaler.py` | 11KB | Actor 自动扩缩容逻辑、资源利用率优化 |
-
----
-
-### 11.5 开发环境测试运行规范
-
-#### ❗ 重要：必须用 `pytest` 命令运行测试
-
-| 运行方式 | `pytest test_file.py` | `python test_file.py` |
-|---------|---------------------|----------------------|
-| **pytest.ini 配置** | ✅ 自动加载根目录配置 | ❌ 不加载 |
-| **conftest.py fixtures** | ✅ 自动发现并加载 | ⚠️ 只加载当前目录的 |
-| **环境变量 `setenv`** | ✅ 自动生效 | ❌ 不生效 |
-| **Dashboard 错误** | ✅ 被禁用（无报错） | ❌ 必报错 |
-| **命令行参数（`-v`, `-k`）** | ✅ 完整支持 | ⚠️ 需手动传递 |
-
-**根本原因：**
-- `pytest` 是完整测试运行器，从**项目根目录**开始扫描所有配置文件
-- `python test_file.py` 只是执行普通 Python 脚本，只会运行文件底部的 `pytest.main()`，**不会扫描父目录的 `pytest.ini`**
-
-**正确运行方式（推荐）：**
-```bash
-# ✅ 单个测试用例
-pytest python/ray/data/tests/test_consumption.py::test_iter_rows -v
-
-# ✅ 整个测试文件
-pytest python/ray/data/tests/test_consumption.py -v
-
-# ✅ 过滤测试
-pytest python/ray/data/tests/test_consumption.py -k "iter_batch" -v
-```
-
-**错误运行方式（避免）：**
-```bash
-# ❌ 会触发 Dashboard 报错，且 pytest.ini 配置不生效
-python python/ray/data/tests/test_consumption.py
-```
-
-#### 开发环境配置
-
-`pytest.ini` 中已配置以下环境变量：
-```ini
-setenv =
-    RAY_DISABLE_DASHBOARD=1    # 禁用 Dashboard（避免前端未构建的报错）
-    RAY_DEDUP_LOGS=0           # 关闭日志去重
-```
-
-`python/ray/tests/conftest.py` 中 `pre_envs` fixture 会自动应用上述配置。

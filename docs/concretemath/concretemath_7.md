@@ -1236,11 +1236,12 @@ $$
 $$
 因此利用 $(5.37)$ 可得：
 $$
-\frac{1-\sqrt{1-4z}}{2z}
-= \sum_{k\ge1}\frac{1}{k}\binom{-1/2}{k-1}(-4z)^{k-1}
-= \sum_{n\ge0}\frac{1}{n+1}\binom{-1/2}{n}(-4z)^n
-= \sum_{n\ge0}\frac{1}{n+1}\binom{2n}{n}z^n
+\begin{aligned}
+\frac{1-\sqrt{1-4z}}{2z} &= \sum_{k\ge1}\frac{1}{k}\binom{-1/2}{k-1}(-4z)^{k-1} \\
+&= \sum_{n\ge0}\binom{-1/2}{n}\frac{(-4z)^n}{n+1}= \sum_{n\ge0}\binom{2n}{n}
+\frac{z^n}{n+1}\end{aligned}
 $$
+
 加括号的方法数 $C_n$ 即为 $\frac{1}{n+1}\binom{2n}{n}$。
 
 我们在第 $5$ 章介绍卡特兰数序列 $\langle 1,1,2,5,14,\dots\rangle=\langle C_n\rangle$ 时就已经预见过这一结果。这个数列会出现在几十个乍看彼此无关的问题中 [46]，因为很多场景都具有与卷积递推 $(7.66)$ 对应的递归结构。

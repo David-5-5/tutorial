@@ -1184,7 +1184,7 @@ $$
 $$
 F(z)=G(z)+G(z)^2+G(z)^3+\cdots=\frac{G(z)}{1-G(z)}
 $$
-其中 $G(z)$ 是序列 $\langle 0,1,2,3,\dots\rangle$ 的生成函数，即 $\dfrac{z}{(1-z)^2}$。
+其中 $G(z)$ 是序列 $\langle 0,1,2,3,\dots\rangle$ 的生成函数，即 $z/(1-z)^2$。
 
 于是我们得到
 $$

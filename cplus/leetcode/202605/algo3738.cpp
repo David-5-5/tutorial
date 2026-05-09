@@ -27,4 +27,23 @@ public:
         return ans;
         
     }
+
+    int countPartitions(vector<int>& nums, int k) {    
+        // 自行解答，前后缀分解
+        int n = nums.size(), ans = 1;
+        if (n<=2) return n;
+        vector<int> suf(n, 1);
+        for (int i=n-2; i; i--) if (nums[i] <= nums[i+1]) suf[i] += suf[i+1];
+        
+        int pre = 1;
+        // 枚举 修改 1 ~ n-2 个元素
+        for (int i=1; i<n-1; i++) {
+            if (nums[i-1]<=nums[i+1]) ans = max(ans, pre + suf[i+1] + 1); 
+            else ans = max(ans, max(pre, suf[i+1]) + 1);
+
+            if (nums[i-1] <= nums[i]) pre += 1;
+            else pre = 1;
+        }
+        return max(ans, max(1 + suf[1], pre + 1)); // 修改第 0/n-1 个元素
+    }
 };

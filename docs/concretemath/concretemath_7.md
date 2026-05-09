@@ -1384,51 +1384,15 @@ $$
 
 定义的幂级数 $\mathcal{B}_t(z)$ 具有一个非凡性质：只要 $t$ 和 $r$ 是正整数，就有
 $$
-\mathcal{B}_t(z)^r=\sum_n\frac{r}{tn+r}\binom{tn+r}{n}z^n.
+\mathcal{B}_t(z)^r=\sum_n \binom{tn+r}{n}\frac{r z^n}{tn+r}.
 $$
 
-我们能否把这些结果推广到任意的 $t$ 和 $r$？可以；因为系数 $\dfrac{r}{tn+r}\binom{tn+r}{n}$ 本身就是关于 $t$ 和 $r$ 的多项式。由
+我们能否把这些结果推广到任意的 $t$ 和 $r$？可以；因为系数 $\binom{tn+r}{n}\frac{r}{tn+r}$ 本身就是关于 $t$ 和 $r$ 的多项式。由
 $$
-\mathcal{B}_t(z)^r=e^{r\ln\mathcal{B}_t(z)}
-=\sum_{n\ge0}\frac{(r\ln\mathcal{B}_t(z))^n}{n!}
-=\sum_{n\ge0}\frac{r^n}{n!}\left(-\sum_{m\ge1}\frac{(1-\mathcal{B}_t(z))^m}{m}\right)^n
-$$
-定义的一般 $r$ 次幂，其系数是关于 $t$ 和 $r$ 的多项式；而这些多项式对无穷多组 $t$ 和 $r$ 的值都等于 $\frac{r}{tn+r}\binom{tn+r}{n}$，因此这两个多项式序列必定完全恒等。
-
-因此我们这个难题有了一个出奇简洁的答案：
-$$
-[z^n]G(z)^l = \frac{l}{mn+l}\binom{mn+l}{n}, \tag{7.70}
-$$
-对所有整数 $l>0$ 成立。
-
-没有忘记第 $5$ 章内容的读者很可能会感到似曾相识：“这个公式看着很眼熟，我们以前见过吗？”没错，确实见过；兰伯特方程 $(5.60)$ 指出
-$$
-[z^n]\mathcal{B}_t(z)^r = \frac{r}{tn+r}\binom{tn+r}{n}.
-$$
-所以 $(7.69)$ 中的生成函数 $G(z)$ 其实就是广义二项级数 $\mathcal{B}_m(z)$。果然，方程 $(5.59)$ 表明
-$$
-\mathcal{B}_m(z)^{1-m}-\mathcal{B}_m(z)^{-m}=z,
-$$
-它等价于
-$$
-\mathcal{B}_m(z)-1=z\mathcal{B}_m(z)^m.
-$$
-既然知道我们在处理广义二项式，现在就改用第 $5$ 章的记号。第 $5$ 章曾给出一大批恒等式但未加证明。我们现在补上了部分缺口，证明了由
-$$
-\mathcal{B}_t(z)=\sum_n\frac{1}{tn+1}\binom{tn+1}{n}z^n
-$$
-定义的幂级数 $\mathcal{B}_t(z)$ 具有一个非凡性质：只要 $t$ 和 $r$ 是正整数，就有
-$$
-\mathcal{B}_t(z)^r=\sum_n\frac{r}{tn+r}\binom{tn+r}{n}z^n.
+\mathcal{B}_t(z)^r=e^{r\ln\mathcal{B}_t(z)} =\sum_{n\ge0}\frac{(r\ln\mathcal{B}_t(z))^n}{n!} =\sum_{n\ge0}\frac{r^n}{n!}\left(-\sum_{m\ge1}\frac{(1-\mathcal{B}_t(z))^m}{m}\right)^n
 $$
 
-我们能否把这些结果推广到任意的 $t$ 和 $r$？可以；因为系数 $\dfrac{r}{tn+r}\binom{tn+r}{n}$ 本身就是关于 $t$ 和 $r$ 的多项式。由
-$$
-\mathcal{B}_t(z)^r=e^{r\ln\mathcal{B}_t(z)}
-=\sum_{n\ge0}\frac{(r\ln\mathcal{B}_t(z))^n}{n!}
-=\sum_{n\ge0}\frac{r^n}{n!}\left(-\sum_{m\ge1}\frac{(1-\mathcal{B}_t(z))^m}{m}\right)^n
-$$
-定义的一般 $r$ 次幂，其系数是关于 $t$ 和 $r$ 的多项式；而这些多项式对无穷多组 $t$ 和 $r$ 的值都等于 $\dfrac{r}{tn+r}\binom{tn+r}{n}$，因此这两个多项式序列必定完全恒等。
+定义的一般 $r$ 次幂，其系数是关于 $t$ 和 $r$ 的多项式；而这些多项式对无穷多组 $t$ 和 $r$ 的值都等于 $\binom{tn+r}{n}\frac{r}{tn+r}$，因此这两个多项式序列必定完全恒等。
 
 第 $5$ 章还提到了广义指数级数
 $$
@@ -1443,7 +1407,8 @@ $$
 \mathcal{E}_t(z)^r = \lim_{x\to\infty}\mathcal{B}_{xt}(z/x)^{xr}.
 $$
 
-## 7.6 EXPONENTIAL GF’S
+
+## 7.6 EXPONENTIAL GF’S 指数型生成函数
 有时候，序列 $\langle g_n\rangle$ 的生成函数性质十分复杂，而与之相关的序列 $\langle g_n/n!\rangle$ 的生成函数却非常简单。在这种情况下，我们自然更倾向于先处理 $\langle g_n/n!\rangle$，最后再乘以 $n!$。这个技巧非常常用，因此我们给它起了一个专门的名称：我们称幂级数
 $$
 \widehat{G}(z) = \sum_{n\ge0}\frac{g_n}{n!}z^n \tag{7.72}

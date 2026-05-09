@@ -1345,39 +1345,43 @@ $$
 例如，我们可以在序列 $\langle -2,1,-1,0,1,1,-1,1,1,1\rangle$ 上验证这一结论。其循环移位为
 $$
 \begin{aligned}
-&\langle -2,1,-1,0,1,1,-1,1,1,1\rangle,\quad\langle 1,-1,1,1,1,-2,1,-1,0,1\rangle,\\
-&\langle 1,-1,0,1,1,-1,1,1,1,-2\rangle,\quad\langle -1,1,1,1,-2,1,-1,0,1,1\rangle,\\
-&\langle -1,0,1,1,-1,1,1,1,-2,1\rangle,\quad\langle 1,1,1,-2,1,-1,0,1,1,-1\rangle,\\
-&\langle 0,1,1,-1,1,1,1,-2,1,-1\rangle,\quad\langle 1,1,-2,1,-1,0,1,1,-1,1\rangle,\\
-&\langle 1,1,-1,1,1,1,-2,1,-1,0\rangle,\quad\langle 1,-2,1,-1,0,1,1,-1,1,1\rangle
+&\langle -2,1,-1,0,1,1,-1,1,1,1\rangle\qquad\langle 1,-1,1,1,1,-2,1,-1,0,1\rangle\\
+&\langle 1,-1,0,1,1,-1,1,1,1,-2\rangle\qquad\langle -1,1,1,1,-2,1,-1,0,1,1\rangle\\
+&\langle -1,0,1,1,-1,1,1,1,-2,1\rangle\qquad\langle 1,1,1,-2,1,-1,0,1,1,-1\rangle\surd\\
+&\langle 0,1,1,-1,1,1,1,-2,1,-1\rangle\qquad\langle 1,1,-2,1,-1,0,1,1,-1,1\rangle\\
+&\langle 1,1,-1,1,1,1,-2,1,-1,0\rangle\surd \quad\langle 1,-2,1,-1,0,1,1,-1,1,1\rangle
 \end{aligned}
 $$
-其中只有标 √ 的两个序列所有部分和均为正。这一推广引理的证明见习题 $13$。
+其中只有标 $\surd$ 的两个序列所有部分和均为正。这一推广引理的证明见习题 $13$。
 
-一个由 $+1$ 与 $(1-m)$ 组成、长度为 $mn+l$ 且总和为 $l$ 的序列，必恰好含 $n$ 个 $(1-m)$。推广引理告诉我们，在这 $\dbinom{mn+l}{n}$ 个序列中，有 $\dfrac{l}{mn+l}$ 个序列的所有部分和均为正；
+一个由 $+1$ 与 $(1-m)$ 组成、长度为 $mn+l$ 且总和为 $l$ 的序列，必恰好含 $n$ 个 $(1-m)$。推广引理告诉我们，在这 $\binom{mn+l}{n}$ 个序列中，有 $l/(mn+l)$ 个序列的所有部分和均为正；
 
 因此我们这个难题有了一个出奇简洁的答案：
 $$
-[z^n]G(z)^l = \frac{l}{mn+l}\binom{mn+l}{n}, \tag{7.70}
+[z^n]G(z)^l = \binom{mn+l}{n}\frac{l}{mn+l}, \tag{7.70}
 $$
 对所有整数 $l>0$ 成立。
 
 没有忘记第 $5$ 章内容的读者很可能会感到似曾相识：“这个公式看着很眼熟，我们以前见过吗？”没错，确实见过；兰伯特方程 $(5.60)$ 指出
 $$
-[z^n]\mathcal{B}_t(z)^r = \frac{r}{tn+r}\binom{tn+r}{n}.
+[z^n]\mathcal{B}_t(z)^r = \binom{tn+r}{n}\frac{r}{tn+r}.
 $$
+
 所以 $(7.69)$ 中的生成函数 $G(z)$ 其实就是广义二项级数 $\mathcal{B}_m(z)$。果然，方程 $(5.59)$ 表明
 $$
 \mathcal{B}_m(z)^{1-m}-\mathcal{B}_m(z)^{-m}=z,
 $$
+
 它等价于
 $$
 \mathcal{B}_m(z)-1=z\mathcal{B}_m(z)^m.
 $$
+
 既然知道我们在处理广义二项式，现在就改用第 $5$ 章的记号。第 $5$ 章曾给出一大批恒等式但未加证明。我们现在补上了部分缺口，证明了由
 $$
-\mathcal{B}_t(z)=\sum_n\frac{1}{tn+1}\binom{tn+1}{n}z^n
+\mathcal{B}_t(z)=\sum_n \binom{tn+1}{n}\frac{z^n}{tn+1}
 $$
+
 定义的幂级数 $\mathcal{B}_t(z)$ 具有一个非凡性质：只要 $t$ 和 $r$ 是正整数，就有
 $$
 \mathcal{B}_t(z)^r=\sum_n\frac{r}{tn+r}\binom{tn+r}{n}z^n.

@@ -1411,41 +1411,37 @@ $$
 ## 7.6 EXPONENTIAL GF’S 指数型生成函数
 有时候，序列 $\langle g_n\rangle$ 的生成函数性质十分复杂，而与之相关的序列 $\langle g_n/n!\rangle$ 的生成函数却非常简单。在这种情况下，我们自然更倾向于先处理 $\langle g_n/n!\rangle$，最后再乘以 $n!$。这个技巧非常常用，因此我们给它起了一个专门的名称：我们称幂级数
 $$
-\widehat{G}(z) = \sum_{n\ge0}\frac{g_n}{n!}z^n \tag{7.72}
+\widehat{G}(z) = \sum_{n\ge0} g_n\frac{z^n}{n!} \tag{7.72}
 $$
 
-为序列 $\langle g_0,g_1,g_2,\dots\rangle$ 的**指数生成函数**，简称 egf。这个名称来源于指数函数 $e^z$ 正是序列 $\langle 1,1,1,\dots\rangle$ 的指数生成函数。
+为序列 $\langle g_0,g_1,g_2,\dots\rangle$ 的*指数生成函数*，简称 egf。这个名称来源于指数函数 $e^z$ 正是序列 $\langle 1,1,1,\dots\rangle$ 的指数生成函数。
 
-表 $351$ 中的许多生成函数其实都是指数生成函数。例如，方程 $(7.50)$ 指出，$\frac1{m!}\left(\ln\frac1{1-z}\right)^m$ 是序列 $\left\langle\genfrac{[}{]}{0pt}{}{0}{m},\genfrac{[}{]}{0pt}{}{1}{m},\genfrac{[}{]}{0pt}{}{2}{m},\dots\right\rangle$ 的指数生成函数。该序列的普通生成函数则要复杂得多（而且还是发散的）。
+表 $351$ 中的许多生成函数其实都是指数生成函数。例如，方程 $(7.50)$ 指出，$\left(\ln\frac1{1-z}\right)^m/m!$ 是序列 $\left\langle\genfrac{[}{]}{0pt}{}{0}{m},\genfrac{[}{]}{0pt}{}{1}{m},\genfrac{[}{]}{0pt}{}{2}{m},\dots\right\rangle$ 的指数生成函数。该序列的普通生成函数则要复杂得多（而且还是发散的）。
 
 指数生成函数有一套自身的基本运算，与我们在 $7.2$ 节学到的运算类似。比如，如果将 $\langle g_n\rangle$ 的指数生成函数乘以 $z$，可得
 $$
-\sum_{n\ge0}\frac{g_n}{n!}z^{n+1}
-=\sum_{n\ge1}\frac{g_{n-1}}{(n-1)!}z^n
-=\sum_{n\ge0}\frac{n g_{n-1}}{n!}z^n,
+\sum_{n\ge0} g_n\frac{z^{n+1}}{n!} =\sum_{n\ge1}g_{n-1} \frac{z^n}{(n-1)!} =\sum_{n\ge0}n g_{n-1}\frac{z^n}{n!},
 $$
+
 这正是序列 $\langle 0,g_0,2g_1,\dots\rangle=\langle n g_{n-1}\rangle$ 的指数生成函数。
 
 对序列 $\langle g_0,g_1,g_2,\dots\rangle$ 的指数生成函数关于 $z$ 求导，可得
 $$
-\sum_{n\ge0}\frac{n g_n}{n!}z^{n-1}
-= \sum_{n\ge1}\frac{g_n}{(n-1)!}z^{n-1}
-= \sum_{n\ge0}\frac{g_{n+1}}{n!}z^n; \tag{7.73}
+\sum_{n\ge0}n g_n\frac{z^{n-1}}{n!} = \sum_{n\ge1}g_n\frac{z^{n-1}}{(n-1)!} = \sum_{n\ge0}g_{n+1}\frac{z^n}{n!}; \tag{7.73}
 $$
 
 这是序列 $\langle g_1,g_2,\dots\rangle$ 的指数生成函数。因此，指数生成函数的求导对应于普通生成函数的左移运算 $(G(z)-g_0)/z$。（我们在研究超几何级数 $(5.106)$ 时就用到了指数生成函数的这一左移性质。）对指数生成函数积分可得
 $$
-\int_0^z\sum_{n\ge0}\frac{g_n t^n}{n!}\mathrm dt
-=\sum_{n\ge0}\frac{g_n z^{n+1}}{(n+1)!}
-=\sum_{n\ge1}\frac{g_{n-1} z^n}{n!}; \tag{7.74}
+\int_0^z\sum_{n\ge0}\frac{g_n t^n}{n!}\mathrm dt =\sum_{n\ge0}\frac{g_n z^{n+1}}{(n+1)!} =\sum_{n\ge1}\frac{g_{n-1} z^n}{n!}; \tag{7.74}
 $$
 这对应右移，是序列 $\langle 0,g_0,g_1,\dots\rangle$ 的指数生成函数。
 
-与普通生成函数一样，指数生成函数最有趣的运算是乘法。若 $\widehat F(z)$ 与 $\widehat G(z)$ 分别是 $\langle f_n\rangle$ 与 $\langle g_n\rangle$ 的指数生成函数，则 $\widehat F(z)\widehat G(z)=\widehat H(z)$ 是序列 $\langle h_n\rangle$ 的指数生成函数，其中 $\langle h_n\rangle$ 称为 $\langle f_n\rangle$ 与 $\langle g_n\rangle$ 的**二项式卷积**：
+与普通生成函数一样，指数生成函数最有趣的运算是乘法。若 $\widehat F(z)$ 与 $\widehat G(z)$ 分别是 $\langle f_n\rangle$ 与 $\langle g_n\rangle$ 的指数生成函数，则 $\widehat F(z)\widehat G(z)=\widehat H(z)$ 是序列 $\langle h_n\rangle$ 的指数生成函数，其中 $\langle h_n\rangle$ 称为 $\langle f_n\rangle$ 与 $\langle g_n\rangle$ 的*二项式卷积*：
 $$
 h_n=\sum_k\binom{n}{k}f_k g_{n-k}. \tag{7.75}
 $$
-这里出现二项式系数是因为 $\binom{n}{k}=n!/(k!(n-k)!)$，即
+
+这里出现二项式系数是因为 $\binom{n}{k}=n!/k!(n-k)!$，即
 $$
 \frac{h_n}{n!}=\sum_{k=0}^n\frac{f_k}{k!}\frac{g_{n-k}}{(n-k)!},
 $$
@@ -1466,12 +1462,12 @@ $$
 S_m(n) = 0^m + 1^m + 2^m + \cdots + (n-1)^m
 = \sum_{0\le k<n}k^m.
 $$
-这一次我们尝试用生成函数分析，希望能让问题突然变简单。我们把 $n$ 视为常数，$m$ 视为变量；因此目标是理解幂级数
+
+这一次我们尝试用生成函数分析，希望能让问题突然变简单。我们把 $n$ 视为常数，$m$ 视为变量；因此目标是理解幂级数的系数。
 $$
 S(z) = S_0(n) + S_1(n)z + S_2(n)z^2 + \cdots
 = \sum_{m\ge0}S_m(n)z^m
 $$
-的系数。
 
 我们知道序列 $\langle 1,k,k^2,\dots\rangle$ 的生成函数是
 $$
@@ -1482,11 +1478,14 @@ $$
 S(z) = \sum_{m\ge0}\sum_{0\le k<n}k^m z^m
 = \sum_{0\le k<n}\frac{1}{1-kz}.
 $$
+
 我们可以把这个和写成闭式：
 $$
-S(z) = \frac1z\left(
-\frac1{z^{-1}-0} + \frac1{z^{-1}-1} + \cdots + \frac1{z^{-1}-n+1}
-\right) = \frac1z\!\left(H_{z^{-1}} - H_{z^{-1}-n}\right); \tag{7.77}
+\begin{aligned}
+S(z) &= \frac1z\left(\frac1{z^{-1}-0} + \frac1{z^{-1}-1} + \cdots + \frac1{z^{-1}-n+1}
+\right) \\
+&= \frac1z\!\left(H_{z^{-1}} - H_{z^{-1}-n}\right); \tag{7.77}
+\end{aligned}
 $$
 但我们完全不知道如何把这样的闭式按 $z$ 的幂次展开。
 
@@ -1498,6 +1497,7 @@ $$
 $$
 e^{kz} = \sum_{m\ge0}k^m\frac{z^m}{m!},
 $$
+
 于是有
 $$
 \widehat S(z,n) = \sum_{m\ge0}\sum_{0\le k<n}k^m\frac{z^m}{m!} = \sum_{0\le k<n}e^{kz}.

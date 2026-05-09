@@ -303,53 +303,68 @@ C_n = 2(n+1)H_n - 2n \qquad (2.14)
 
 
 ## 2.3 和的操作
+掌握求和运算的关键，是能够把一个 $\sum$ 变换为另一个更简洁、或更贴近求解目标的求和形式。只需熟记几条基本变换规则并多加练习，就能轻松做到这一点。
 
-和操作的成功的关键是把一个 $\sum$ 改变成另一个较简单或更接近某个目标的能力。
-设 K 是任何有限的整数集合，可用三哪个简单的规则来变化 K 的元素上的和：
-
-- 分配律 distributive law
+设 $K$ 为任意有限整数集。对集合 $K$ 中元素求和，可通过三条简单规则进行变换：
 ```math
-\sum_{k\in K}ca_k = c\sum_{k\in K}a_k \tag{2.15}
+\sum_{k\in K}ca_k = c\sum_{k\in K}a_k; \qquad \qquad \text{(distributive law)} \tag{2.15}
+```
+```math
+\sum_{k\in K}(a_k + b_k) = \sum_{k\in K}a_k + \sum_{k\in K}b_k ;\quad\text{(distributive law)} \tag{2.16}
+```
+```math
+\sum_{k\in K}a_k = \sum_{p(k)\in K}a_{p(k)}; \qquad\qquad\text{(commutative law)} \tag{2.17}
 ```
 
-- 结合律 associative law
-```math
-\sum_{k\in K}(a_k + b_k) = \sum_{k\in K}a_k + \sum_{k\in K}b_k \tag{2.16}
-```
+分配律允许我们将常数移入或移出 $\sum$。结合律可以把一个 $\sum$ 拆成两部分，也能将两个 $\sum$ 合并为一个。交换律表明我们可以任意重排求和项的顺序；其中 $p(k)$ 是全体整数集合上的任意一个排列。
 
-- 交换律 commutative law
-```math
-\sum_{k\in K}a_k = \sum_{p(k)\in K}a_{p(k)} \tag{2.17}
-```
-重要的是牢记一般交换律中的函数 (2.17) 中的函数 p(k) 假设为所有整数中的一种排列。换句话说，对于每个整数 n，恰好有就有一个整数 k 使得 p(k) = n。否则交换律不成立。
+例如，若 $K=\{-1,0,+1\}$ 且 $p(k)=-k$，这三条定律分别给出：
+$c a_{-1} + c a_0 + c a_1 = c(a_{-1} + a_0 + a_1) \qquad \text{distributive law}$
+$(a_{-1}+b_{-1})+(a_0+b_0)+(a_1+b_1) \\
+\qquad = (a_{-1}+a_0+a_1)+(b_{-1}+b_0+b_1)\qquad \text{associative law}$
+$a_{-1}+a_0+a_1 = a_1+a_0+a_{-1}\qquad \text{commutative law}$
 
-利用交换律证明一个算术级数的一般形式：
+第一章中的高斯求和技巧，便可看作这三条基本定律的应用。假设我们要求解等差数列的一般和式
 ```math
 S = \sum_{0\le k\le n}(a + bk)
 ```
-根据交换律，用 n-k 替代 k，得到
+
+根据交换律，用 $n-k$ 替代 $k$，得到
 ```math
 S = \sum_{0\le n-k\le n}(a + b(n-k)) = \sum_{0\le k\le n}(a + bn - bk)
 ```
+
 利用交换律可把这两个方程相加：
 ```math
-\begin{aligned}
-2S &= \sum_{0\le k\le n}((a + bk)+(a + bn - bk)) = \sum_{0\le k\le n}(2a + bn) \\
-2S &= (2a+bn) \sum_{0\le k\le n} 1 = (2a + bn) (n+1)
-\end{aligned}
+2S = \sum_{0\le k\le n}((a + bk)+(a + bn - bk)) = \sum_{0\le k\le n}(2a + bn) \\
+```
+
+此时我们便可运用分配律，并计算一个平凡和式：
+```math
+2S = (2a+bn) \sum_{0\le k\le n} 1 = (2a + bn) (n+1)
 ```
 
 两边各除以 2, 证明了：
 ```math
-S = \sum_{k=0}^n(a + bk) = (a+\frac{1}{2}bn)(n+1)
+\sum_{k=0}^n(a + bk) = (a+\frac{1}{2}bn)(n+1) \tag{2.18}
 ```
+等式右侧可以记忆为首项与末项的平均值 $\dfrac12\big(a+(a+bn)\big)$ 乘以项数 $n+1$。
 
----
+需要重点注意，通用交换律 $(2.17)$ 中的函数 $p(k)$ 必须是全体整数上的一个排列。也就是说，对任意整数 $n$，有且仅有一个整数 $k$ 满足 $p(k)=n$。如若不然，交换律可能不再成立；习题3给出了极具说服力的例证。形如 $p(k)=k+c$ 或 $p(k)=c-k$（其中 $c$ 为整数常数）的变换恒为排列，因此始终适用。
 
-艾弗森(Iverson)约定
+另一方面，我们可以略微放宽排列的限制条件：仅要求当 $n$ 属于下标集 $K$ 时，有且仅有一个整数 $k$ 使得 $p(k)=n$。若 $n\notin K$（即 $n$ 不在集合 $K$ 中），$p(k)=n$ 出现多少次都无关紧要，因为这类 $k$ 并不参与求和。
+
+例如由此可以推导：
+$$
+\sum_{k\in K\atop k\text{ even}} a_k=\sum_{n\in K\atop n\text{ even}} a_n=\sum_{2k\in K\atop 2k\text{ even}} a_{2k}=\sum_{2k\in K} a_{2k} \tag{2.19}
+$$
+原因是当 $n\in K$ 且 $n$ 为偶数时，有且仅有一个 $k$ 满足 $2k=n$。
+
+艾弗森约定可以在公式中间通过逻辑语句得到 $0$ 或 $1$ 的值，将它与分配律、结合律、交换律配合使用，能够推导出求和运算的更多性质。例如有一条合并不同下标集的重要规则：若 $K$ 与 $K'$ 为任意整数集合，则
 ```math
 \sum_{k\in K}^na_k + \sum_{k\in K'}^na_k = \sum_{k\in K\cap K'}^na_k + \sum_{k\in K\cup K'}^na_k \tag{2.20}
 ```
+
 这是根据下列的一般公式
 ```math
 \sum_{k\in K}^na_k = \sum_ka_k[k\in K] \tag{2.21}
@@ -361,19 +376,20 @@ S = \sum_{k=0}^n(a + bk) = (a+\frac{1}{2}bn)(n+1)
 
 得出的。典型的把规则 (2.20) 用到结合两个几乎不相交的指标集合，如同：
 ```math
-\sum_{k=1}^ma_k + \sum_{k=m}^na_k = a_m + \sum_{k=1}^na_k, for 1\le m\le n;
+\sum_{k=1}^ma_k + \sum_{k=m}^na_k = a_m + \sum_{k=1}^na_k, \qquad \text{ for } 1\le m\le n;
 ```
 
 或者从和中分出一项：
 ```math
-\sum_{0\le k\le n}a_k = a_0 + \sum_{1\le k\le n}a_k, for n\ge 0; \tag{2.23}
+\sum_{0\le k\le n}a_k = a_0 + \sum_{1\le k\le n}a_k, \qquad \text{ for }  n\ge 0; \tag{2.23}
 ```
 
-此分出一项的操作是摄动法的基础 (perturbation method)，它允许计算一个和为闭形式。想法从一个未知和 $S_n$ 开始，然后以两种方式重写 $S_{n+1}$，通过既分出它的第一项和最后一项：
-
+这种拆分单项的运算，是*扰动法*(perturbation method)的基础，该方法常可求出和式的闭式表达式。思路为先设未知和式为 $S_n$：
+$$S_n = \sum_{0\le k\le n} a_k$$
+随后用两种方式改写 $S_{n+1}$，分别拆分其末项与首项：
 ```math
 \begin{aligned}
-S_n + a_{n+1} &= \sum_{0\le k\le n+1}a_k = a_0 + \sum_{1\le k\le n+1}a_k \\
+S_n + a_{n+1} = \sum_{0\le k\le n+1}a_k &= a_0 + \sum_{1\le k\le n+1}a_k \\
               &= a_0 + \sum_{1\le k+1\le n+1}a_{k+1} \\
               &= a_0 + \sum_{0\le k\le n}a_{k+1} \tag{2.24}
 \end{aligned}
@@ -391,20 +407,22 @@ S_n + ax^{n+1} = ax^0 + \sum_{0\le k\le n}ax^{k+1} .
 
 根据分配律，右边的和是 $x\sum_{0\le k\le n}ax^k = xS_n$，因此 $S_n + ax^{n+1} = a + xS_n$，这样解出 $S_n$ 得到
 ```math
-\sum_{k=0}^nax^k = \frac{a-ax^{n+1}}{1-x}, 
- for\ x\ne 1 \tag{2.25}
+\sum_{k=0}^nax^k = \frac{a-ax^{n+1}}{1-x},  \qquad \text{ for } x\ne 1 \tag{2.25}
 ```
 
-让我们在一个稍困难的和上试用摄动技巧
+（当 $x = 1$ 时，该和式显然就是 $(n + 1)a$。）等式右侧可以记作：求和包含的首项减去末尾之后被舍去的首项，再除以 $1$ 减去公比。
+
+这一过程显得格外简便。我们再用扰动法求解一个稍复杂的和式，
 ```math
 S_n = \sum_{0\le k\le n}k2^k .
 ```
 
-按照式 (2.24) 有
+本例中有 $S_0 = 0$，$S_1 = 2$，$S_2 = 10$，$S_3 = 34$，$S_4 = 98$；其通项公式是什么？由式 $(2.24)$ 可得
 ```math
 S_n + (n+1)2^{n+1} = \sum_{0\le k\le n}(k+1)2^{k+1} .
 ```
-右边的和借助结合律分为两个和
+
+于是我们希望把右侧的和式用 $S_n$ 表示。借助结合律，可将其拆分为两个和式，
 ```math
 \sum_{0\le k\le n}k2^{k+1} + \sum_{0\le k\le n}2^{k+1} 
 ```
@@ -413,19 +431,18 @@ S_n + (n+1)2^{n+1} = \sum_{0\le k\le n}(k+1)2^{k+1} .
 \sum_{0\le k\le n}k2^k = (n-1)2^{n+1} + 2 .
 ```
 
-用 x 替换 2,相似推导给出方程
+现在就能理解为何 $S_3 = 34$：它等于 $32 + 2$，而非 $2\cdot 17$。
+
+将推导中的 $2$ 替换为 $x$，同理可得方程 $S_n + (n + 1)x^{n+1} = xS_n + (x - x^{n+2})/(1 - x)$ 因此我们能推出
 ```math
-S_n + (n+1)x^{n+1} = xS_n + (x - x^{n+2})/ (1 - x) .
-```
-因此我们能推出
-```math
-\sum_{0\le k\le n}kx^k = \frac{x- (n+1)x^{n+1} + nx^{n+2}}{(1-x) ^2} . \tag{2.26}
+\sum_{0\le k\le n}kx^k = \frac{x- (n+1)x^{n+1} + nx^{n+2}}{(1-x) ^2}, \qquad \text{ for } x\ne 1. \tag{2.26}
 ```
 
-我们能以完全不同的方法推导这个闭形式是有趣的，此方法运用了微分的基本技巧。从方程
+值得一提的是，我们完全可以用另一种截然不同的方式推导出该闭式，利用初等微积分知识即可。若从等式
 ```math
 \sum_{k=0}^nx^k = \frac{1-x^{n+1}}{1-x} .
 ```
+
 开始，且两边对 x 求导，得到
 ```math
 \sum_{k=0}^nkx^{k-1} = \frac{(1-x)(-(n+1)x^n)+1-x^{n+1}}{(1-x)^2} = \frac{1-(n+1)x^n+nx^{n+1}}{(1-x)^2} .

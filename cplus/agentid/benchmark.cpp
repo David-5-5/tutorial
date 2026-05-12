@@ -14,7 +14,7 @@ using namespace std::chrono;
 const int ITERATIONS = 1000000;
 
 // 动态输入，阻止编译器常量折叠优化
-volatile const char* g_test_id = "10001000011K912345E789ABCDEF45";
+volatile const char* g_test_id = "10001000011K912345E789ABCDEF23";
 
 // ======================================================================
 //  1. Horner 实现 (100%复制 horner.cpp 原代码)

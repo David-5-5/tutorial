@@ -250,7 +250,7 @@ using namespace std;
 using namespace std::chrono;
 
 const int ITERATIONS = 1000000;
-volatile const char* g_test_id = "10001000011K912345E789ABCDEF45";
+volatile const char* g_test_id = "10001000011K912345E789ABCDEF23";
 
 // ========== Horner 实现 ==========
 namespace Horner {
@@ -508,7 +508,7 @@ import subprocess
 import os
 
 ITERATIONS = 100000
-TEST_ID = "10001000011K912345E789ABCDEF45"
+TEST_ID = "10001000011K912345E789ABCDEF23"
 
 def get_val(c):
     if c <= '9':

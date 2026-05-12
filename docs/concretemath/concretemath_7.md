@@ -1573,9 +1573,8 @@ t_4 = 3t_3 + \frac12\left(\binom{3}{1,2}2t_1t_2 + \binom{3}{2,1}2t_2t_1\right) +
 $$
 
 $t_n$ 的递推式乍一看很复杂，甚至有点吓人；但其实并不糟糕，只是卷积形式而已。我们可以令
-$$
-u_n = n t_n,
-$$
+$$u_n = n t_n, $$
+
 之后一切都会大幅简化：
 $$
 \frac{u_n}{n!} = \sum_{m>0}\frac1{m!}\sum_{\substack{k_1+k_2+\cdots+k_m=n-1}}\frac{u_{k_1}}{k_1!}\frac{u_{k_2}}{k_2!}\cdots\frac{u_{k_m}}{k_m!},\quad \text{ if } n>1. \tag{7.83}
@@ -1583,30 +1582,21 @@ $$
 
 内层和正是指数生成函数 $\widehat U(z)$ 的 $m$ 次幂中 $z^{n-1}$ 的系数；如果加入对应 $m=0$ 的项 $\widehat U(z)^0$，那么对 $n=1$ 公式也成立。于是
 $$
-\frac{u_n}{n!} = [z^{n-1}]\sum_{m\ge0}\frac1{m!}\widehat U(z)^m
-= [z^{n-1}]e^{\widehat U(z)}
-= [z^n]z e^{\widehat U(z)}
-$$
-对所有 $n>0$ 成立，从而得到方程
-$$
-\widehat U(z) = z e^{\widehat U(z)}. \tag{7.84}
+\frac{u_n}{n!} = [z^{n-1}]\sum_{m\ge0}\frac1{m!}\widehat U(z)^m = [z^{n-1}]e^{\widehat U(z)} = [z^n]z e^{\widehat U(z)}
 $$
 
+对所有 $n>0$ 成立，从而得到方程
+$$ \widehat U(z) = z e^{\widehat U(z)}. \tag{7.84} $$
+
 有进展了！式 $(7.84)$ 非常接近
-$$
-\mathcal{E}(z) = e^{z \mathcal{E}(z)},
-$$
+$$ \mathcal{E}(z) = e^{z \mathcal{E}(z)},$$
+
 而这正是 $(5.59)$ 和 $(7.71)$ 中定义广义指数级数 $\mathcal{E}(z)=\mathcal{E}_1(z)$ 的式子；实际上我们有
-$$
-\widehat U(z) = z \mathcal{E}(z).
-$$
+$$\widehat U(z) = z \mathcal{E}(z).$$
 
 于是可以直接读出问题的答案：
 $$
-t_n = \frac{u_n}{n}
-= \frac{n!}{n}[z^n]\widehat U(z)
-= (n-1)!\,[z^{n-1}]\mathcal{E}(z)
-= n^{n-2}. \tag{7.85}
+t_n = \frac{u_n}{n} = \frac{n!}{n}[z^n]\widehat U(z) = (n-1)!\,[z^{n-1}]\mathcal{E}(z) = n^{n-2}. \tag{7.85}
 $$
 
 顶点集 $\{1,2,\dots,n\}$ 上的完全图，对所有 $n>0$，恰好有 $n^{n-2}$ 棵生成树。
@@ -1616,6 +1606,7 @@ $$
 $$
 \sum_n g_n K_n(z)=0\implies g_n=0,\quad \forall n
 $$
+
 至少在理论上就可以使用。普通生成函数使用 $K_n(z)=z^n$，指数生成函数使用 $K_n(z)=z^n/n!$；我们也可以使用下降幂 $z^{\underline{n}}$，或是二项式系数 $z^{\underline{n}}/n!=\binom{z}{n}$。
 
 在普通生成函数与指数生成函数之外，最重要的一类生成函数使用核函数 $1/n^z$，它适用于从 $n=1$ 开始的序列 $\langle g_1,g_2,\dots\rangle$：
@@ -1623,57 +1614,47 @@ $$
 \widetilde G(z)=\sum_{n\ge1}\frac{g_n}{n^z}.\tag{7.86}
 $$
 
-它被称为**狄利克雷生成函数**（dgf），以德国数学家古斯塔夫·勒热纳·狄利克雷（1805–1859）的名字命名，他对这一工具做了大量研究。
+它被称为*狄利克雷生成函数*（dgf），以德国数学家古斯塔夫·勒热纳·狄利克雷（1805–1859）的名字命名，他对这一工具做了大量研究。
 
 例如，常序列 $\langle 1,1,1,\dots\rangle$ 的狄利克雷生成函数为
-$$
-\sum_{n\ge1}\frac{1}{n^z}=\zeta(z).\tag{7.87}
-$$
+$$\sum_{n\ge1}\frac{1}{n^z}=\zeta(z).\tag{7.87}$$
 
-这就是黎曼ζ函数，当 $z>1$ 时我们也将它记作广义调和数 $H_\infty^{(z)}$。
+这就是黎曼 *$\zeta$ 函数*，当 $z>1$ 时我们也将它记作广义调和数 $H_\infty^{(z)}$。
 
 狄利克雷生成函数的乘积对应一种特殊的卷积：
 $$
-\widetilde F(z)\widetilde G(z)
-=\sum_{l,m\ge1}\frac{f_l}{l^z}\frac{g_m}{m^z}
-=\sum_{n\ge1}\frac{1}{n^z}\sum_{l,m\ge1}f_l g_m\,[l\cdot m=n].
+\widetilde F(z)\widetilde G(z) =\sum_{l,m\ge1}\frac{f_l}{l^z}\frac{g_m}{m^z} =\sum_{n\ge1}\frac{1}{n^z}\sum_{l,m\ge1}f_l g_m\,[l\cdot m=n].
 $$
 
-因此 $\widetilde F(z)\widetilde G(z)=\widetilde H(z)$ 是序列
-$$
-h_n=\sum_{d\mid n}f_d g_{n/d}\tag{7.88}
-$$
-的狄利克雷生成函数。
+因此 $\widetilde F(z)\widetilde G(z)=\widetilde H(z)$ 是序列的狄利克雷生成函数。
+$$h_n=\sum_{d\mid n}f_d g_{n/d}\tag{7.88}$$
 
-例如，由式 (4.55) 我们知道 $\sum_{d\mid n}\mu(d)=[n=1]$，这是莫比乌斯序列 $\langle\mu(1),\mu(2),\mu(3),\dots\rangle$ 与 $\langle1,1,1,\dots\rangle$ 的**狄利克雷卷积**，因此
-$$
-\widetilde M(z)\zeta(z)=\sum_{n\ge1}\frac{[n=1]}{n^z}=1.\tag{7.89}
-$$
+例如，由式 (4.55) 我们知道 $\sum_{d\mid n}\mu(d)=[n=1]$，这是莫比乌斯序列 $\langle\mu(1),\mu(2),\mu(3),\dots\rangle$ 与 $\langle1,1,1,\dots\rangle$ 的狄利克雷卷积，因此
+$$\widetilde M(z)\zeta(z)=\sum_{n\ge1}\frac{[n=1]}{n^z}=1.\tag{7.89}$$
 
 换句话说，$\langle\mu(1),\mu(2),\mu(3),\dots\rangle$ 的狄利克雷生成函数是 $\zeta(z)^{-1}$。
 
-狄利克雷生成函数对于序列 $\langle g_1,g_2,\dots\rangle$ 是**积性函数**的情形格外有用，即满足
-$$
-g_{mn}=g_m g_n,\quad \text{当 }m\perp n.
-$$
+狄利克雷生成函数对于序列 $\langle g_1,g_2,\dots\rangle$ 是*积性函数*的情形格外有用，即满足
+$$g_{mn}=g_m g_n,\quad \text{ for }m\perp n.$$
+
 在这种情况下，所有 $n$ 对应的 $g_n$ 都由素数幂处的取值决定，并且我们可以将狄利克雷生成函数按素数分解为乘积形式：
 $$
-\widetilde G(z)=\prod_{p\text{ 素数}}\left(1+\frac{g_p}{p^z}+\frac{g_{p^2}}{p^{2z}}+\frac{g_{p^3}}{p^{3z}}+\cdots\right).\tag{7.90}
+\widetilde G(z)=\prod_{p\text{ prime }}\left(1+\frac{g_p}{p^z}+\frac{g_{p^2}}{p^{2z}}+\frac{g_{p^3}}{p^{3z}}+\cdots\right).\tag{7.90}
 $$
 
-例如，如果对所有 $n$ 令 $g_n=1$，就得到黎曼ζ函数的乘积表示：
+例如，如果对所有 $n$ 令 $g_n=1$，就得到黎曼 $\zeta$ 函数的乘积表示：
 $$
-\zeta(z)=\prod_{p\text{ 素数}}\frac1{1-p^{-z}}.\tag{7.91}
+\zeta(z)=\prod_{p\text{ prime}}\frac1{1-p^{-z}}.\tag{7.91}
 $$
 
 莫比乌斯函数满足 $\mu(p)=-1$，且对 $k>1$ 有 $\mu(p^k)=0$，因此它的狄利克雷生成函数为
 $$
-\widetilde M(z)=\prod_{p\text{ 素数}}(1-p^{-z});\tag{7.92}
+\widetilde M(z)=\prod_{p\text{ prime}}(1-p^{-z});\tag{7.92}
 $$
+
 这当然与式 (7.89) 和 (7.91) 一致。欧拉函数 $\varphi$ 满足 $\varphi(p^k)=p^k-p^{k-1}$，因此其狄利克雷生成函数有如下分解形式：
 $$
-\widetilde\Phi(z)=\prod_{p\text{ 素数}}\left(1+\frac{p-1}{p^z-p}\right)
-=\prod_{p\text{ 素数}}\frac{1-p^{-z}}{1-p^{1-z}}.\tag{7.93}
+\widetilde\Phi(z)=\prod_{p\text{ prime}}\left(1+\frac{p-1}{p^z-p}\right) =\prod_{p\text{ prime }}\frac{1-p^{-z}}{1-p^{1-z}}.\tag{7.93}
 $$
 
 由此可得 $\widetilde\Phi(z)=\zeta(z-1)/\zeta(z)$。

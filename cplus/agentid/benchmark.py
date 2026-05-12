@@ -4,7 +4,7 @@ import subprocess
 import os
 
 ITERATIONS = 100000  # Python慢，减少迭代次数
-TEST_ID = "10001000011K912345E789ABCDEF45"
+TEST_ID = "10001000011K912345E789ABCDEF23"
 
 # pow36 table
 pow36 = [1,36,35,96,61,62,1,36,35,96,61,62,1,36,35,96,61,62,1,36,35,96,61,62,1,36,35,96,61,62]
@@ -62,7 +62,7 @@ def main():
     for line in lines:
         if line.startswith(('1. ', '2. ', '3. ', '4. ', '5. ')):
             print(line)
-            # "1. Horner                : result=73, total=89172919 ns, 89.17 ns/call"
+            # "1. Horner                : result=45, total=89172919 ns, 89.17 ns/call"
             parts = line.split(',')
             name = parts[0].split(':')[0].strip()
             ns_str = parts[-1].strip().split(' ')[0]

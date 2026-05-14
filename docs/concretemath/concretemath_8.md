@@ -256,14 +256,10 @@ $$
 因此，在两期独立彩票中各买一张的总收益方差为 $2\times99M^2=198M^2$。更一般地，$n$ 张独立彩票的方差为 $n\times99M^2$。
 
 骰子点数和 $S$ 的方差也可以用同样公式得出，因为 $S=S_1+S_2$ 是两个独立随机变量的和。对于均匀骰子，有
-$$
-VS_1 = \frac16(1^2+2^2+3^2+4^2+5^2+6^2) - \left(\frac72\right)^2 = \frac{35}{12},
-$$
+$$VS_1 = \frac16(1^2+2^2+3^2+4^2+5^2+6^2) - \left(\frac72\right)^2 = \frac{35}{12},$$
 
 因此 $VS = \frac{35}{12}+\frac{35}{12} = \frac{35}{6}$。对于灌铅骰子，有
-$$
-VS_1 = \frac18(2\cdot1^2+2^2+3^2+4^2+5^2+2\cdot6^2) - \left(\frac72\right)^2 = \frac{45}{12},
-$$
+$$VS_1 = \frac18(2\cdot1^2+2^2+3^2+4^2+5^2+2\cdot6^2) - \left(\frac72\right)^2 = \frac{45}{12},$$
 
 因此两个骰子都灌铅时 $VS = \frac{45}{6}=7.5$。可以看到，灌铅骰子让 $S$ 的方差更大，尽管 $S$ 取平均值 $7$ 的频率反而比均匀骰子更高。如果我们的目标是掷出更多 $7$ 点，方差并不是衡量成功率的最佳指标。
 
@@ -295,64 +291,40 @@ $$
 $$
 
 所以切比雪夫不等式告诉我们：当抛掷 $n$ 次均匀骰子时，在至少 99% 的实验中，总点数会落在
-$$
-7n - 10\sqrt{\frac{35}{6}n} \quad\text{和}\quad 7n + 10\sqrt{\frac{35}{6}n}
-$$
+$$7n - 10\sqrt{\frac{35}{6}n} \quad\text{和}\quad 7n + 10\sqrt{\frac{35}{6}n}$$
 之间。例如，抛掷一百万次时，总点数在 697.6 万到 702.4 万之间的概率大于 99:1。
 
 一般地，设 $X$ 是概率空间 $\Omega$ 上的任意随机变量，均值 $\mu$ 与标准差 $\sigma$ 均有限。我们可以构造概率空间 $\Omega^n$，其基本事件为 $n$ 元组 $(\omega_1,\omega_2,\dots,\omega_n)$，每个 $\omega_k\in\Omega$，且概率为
-$$
-\Pr(\omega_1,\omega_2,\dots,\omega_n)=\Pr(\omega_1)\Pr(\omega_2)\cdots\Pr(\omega_n).
-$$
+$$\Pr(\omega_1,\omega_2,\dots,\omega_n)=\Pr(\omega_1)\Pr(\omega_2)\cdots\Pr(\omega_n).$$
+
 定义随机变量
-$$
-X_k(\omega_1,\omega_2,\dots,\omega_n)=X(\omega_k),
-$$
+$$X_k(\omega_1,\omega_2,\dots,\omega_n)=X(\omega_k),$$
 则
-$$
-X_1+X_2+\cdots+X_n
-$$
+$$X_1+X_2+\cdots+X_n$$
+
 是 $n$ 个独立随机变量之和，对应在 $\Omega$ 上对 $X$ 做 $n$ 次独立抽样并求和。其均值为 $n\mu$，标准差为 $\sqrt n\,\sigma$。因此，$n$ 次抽样的平均值
-$$
-\frac1n(X_1+X_2+\cdots+X_n)
-$$
+$$\frac1n(X_1+X_2+\cdots+X_n)$$
+
 至少有 99% 的概率落在
-$$
-\mu-\frac{10\sigma}{\sqrt n}\quad\text{和}\quad\mu+\frac{10\sigma}{\sqrt n}
-$$
+$$\mu-\frac{10\sigma}{\sqrt n}\quad\text{和}\quad\mu+\frac{10\sigma}{\sqrt n}$$
 之间。换句话说，只要 $n$ 足够大，$n$ 次独立样本的平均值几乎一定非常接近期望值 $EX$。（概率论教材中会证明更强的强大数定律，但我们这里由切比雪夫不等式得到的简单结论已经够用。）
 
 有时我们并不知道概率空间的具体特性，需要通过重复抽样来估计随机变量 $X$ 的均值。（比如估计旧金山一月正午的平均气温，或保险代理人的平均预期寿命。）如果我们得到了独立观测值 $X_1,X_2,\dots,X_n$，就可以用其作为真实均值的近似估计。
-$$
-\widehat{E}X=\frac{X_1+X_2+\cdots+X_n}n\tag{8.19}
-$$
+$$\widehat{E}X=\frac{X_1+X_2+\cdots+X_n}n\tag{8.19}$$
 
 我们还可以用下面的公式对方差做出估计：
-$$
-\widehat{V}X = \frac{X_1^2+X_2^2+\cdots+X_n^2}{n-1} - \frac{(X_1+X_+\cdots+X_n)^2}{n(n-1)}. \tag{8.20}
-$$
+$$\widehat{V}X = \frac{X_1^2+X_2^2+\cdots+X_n^2}{n-1} - \frac{(X_1+X_+\cdots+X_n)^2}{n(n-1)}. \tag{8.20}$$
+
 式中的 $n-1$ 看起来像是笔误，似乎本该像 (8.19) 那样用 $n$；毕竟真实方差 $VX$ 是用期望在 (8.15) 中定义的。但这里用 $n-1$ 会得到更好的估计，因为定义 (8.20) 满足
-$$
-E(\widehat{V}X)=VX.\tag{8.21}
-$$
+$$E(\widehat{V}X)=VX.\tag{8.21}$$
+
 推导如下：
 $$
 \begin{aligned}
-E(\widehat{V}X)
-&=\frac1{n-1}E\left(
-\sum_{k=1}^n X_k^2 -
-\frac1n\sum_{j=1}^n\sum_{k=1}^n X_jX_k
-\right)\\
-&=\frac1{n-1}\left(
-\sum_{k=1}^nE(X_k^2) -
-\frac1n\sum_{j=1}^n\sum_{k=1}^nE(X_jX_k)
-\right)\\
-&=\frac1{n-1}\Bigg(
-nE(X^2) -
-\frac1n\bigg(
-nE(X^2)+n(n-1)E(X)^2
-\bigg)
-\Bigg)\\
+E(\widehat{V}X)&=\frac1{n-1}E\left(\sum_{k=1}^n X_k^2 -\frac1n\sum_{j=1}^n\sum_{k=1}^n X_jX_k\right)\\
+&=\frac1{n-1}\left(\sum_{k=1}^nE(X_k^2) -\frac1n\sum_{j=1}^n\sum_{k=1}^nE(X_jX_k)\right)\\
+&= \frac{1}{n - 1}\left(\sum_{k=1}^n E(X^2) - \dfrac{1}{n}\sum_{j=1}^n\sum_{k=1}^n \big(E(X)^2[j\ne k] + E(X^2)[j=k]\big)\right) \\
+&=\frac1{n-1}\Bigg(nE(X^2) - \frac1n\bigg(nE(X^2)+n(n-1)E(X)^2 \bigg)\Bigg)\\
 &=E(X^2)-E(X)^2=VX.
 \end{aligned}
 $$
@@ -360,71 +332,52 @@ $$
 
 在实际应用中，对随机变量 $X$ 的实验结果通常表示为：样本均值 $\hat\mu=\widehat{E}X$，样本标准差 $\hat\sigma=\sqrt{\widehat{V}X}$，并以形式 $\hat\mu\pm\hat\sigma/\sqrt n$ 给出结果。
 
-例如，下面是两组据称均匀的骰子的 10 次投掷结果：
-点数和依次为：7, 11, 8, 5, 4, 6, 10, 8, 8, 7。
+例如，下面是两组据称均匀的骰子的 10 次投掷结果：点数和依次为：7, 11, 8, 5, 4, 6, 10, 8, 8, 7。
 
 样本均值为：
-$$
-\hat\mu=(7+11+8+5+4+6+10+8+8+7)/10=7.4;
-$$
+$$\hat\mu=(7+11+8+5+4+6+10+8+8+7)/10=7.4;$$
+
 样本方差为：
-$$
-(7^2+11^2+8^2+5^2+4^2+6^2+10^2+8^2+8^2+7^2-10\hat\mu^2)/9
-\approx 2.1^2.
-$$
+$$(7^2+11^2+8^2+5^2+4^2+6^2+10^2+8^2+8^2+7^2-10\hat\mu^2)/9 \approx 2.1^2.$$
 
 我们根据这些实验估计，骰子点数和的平均值为 $7.4\pm2.1/\sqrt{10}=7.4\pm0.7$。
 
-我们再用一个均值与方差的例子，展示如何从理论上计算，而不是靠实验。第 5 章中我们讨论过“帽子匹配问题”：$n$ 顶帽子被随机抛起，形成一个随机排列。我们在式 (5.51) 中证明过，没有人拿到自己帽子的概率约为 $1/e$。我们还推导出了恰好有 $k$ 个人拿到自己帽子的概率公式：
-$$
-P(n,k)=\frac1{n!}\binom nk (n-k)!
-=\frac1{k!}\frac{(n-k)!}{(n-k)!}.\tag{8.22}
-$$
+我们再举一个均值与方差的例子，用以说明如何通过理论推导而非经验统计来计算它们。第5章中讨论过“足球赢家问题”：将 $n$ 顶帽子抛向空中，最终形成帽子的一个随机排列。由式 $(5.51)$ 可知，无人拿回自己帽子的概率为 $!n/n!\approx 1/e$。我们还推导得出如下公式
+$$P(n,k)=\frac1{n!}\binom nk !(n-k) =\frac1{k!}\frac{!(n-k)}{(n-k)!}.\tag{8.22}$$
 
-用刚学的形式化语言重述：设概率空间 $\Pi_n$ 为 $\{1,2,\dots,n\}$ 的所有 $n!$ 个排列 $\pi$，每个排列概率 $\Pr(\pi)=1/n!$。随机变量
-$$
-F_n(\pi)=\text{ number of "fixed points" of }\pi, \text{ for } \pi\in\Pi_n,
-$$
+用刚学过的形式体系重新表述上述结论，可考虑由集合 $\{1,2,\dots,n\}$ 的全部 $n!$ 个排列 $\pi$ 构成的概率空间 $\Omega_n$，其中对任意 $\pi\in\Omega_n$ 都有 $\text{Pr}(\pi)=1/n!$。该随机变量
+$$F_n(\pi)=\text{ number of "fixed points" of }\pi, \text{ for } \pi\in\Pi_n,$$
 就对应帽子匹配问题中拿对帽子的人数。式 (8.22) 给出了 $\Pr(F_n=k)$，但现在我们假装不知道这个公式，只想求 $F_n$ 的均值与标准差。
 
 均值其实非常好算，完全避开第 5 章的复杂内容。只需注意到：
 $$
-F_n(\pi)=F_{n,1}(\pi)+F_{n,2}(\pi)+\cdots+F_{n,n}(\pi),
-$$
-其中
-$$
-F_{n,k}(\pi)=[\text{position k of }\pi\text{ is a fixed point}] , \text{ for } \pi\in\Pi_n,.
-$$
-于是
-$$
-EF_n=EF_{n,1}+EF_{n,2}+\cdots+EF_{n,n}.
-$$
-而 $EF_{n,k}$ 就是 $F_{n,k}=1$ 的概率，即 $1/n$，因为 $n!$ 个排列中恰有 $(n-1)!$ 个满足 $\pi_k=k$。因此
-$$
-EF_n=\frac n n=1,\quad n>0.\tag{8.23}
-$$
-平均而言，会有一个人拿对自己的帽子。
-
-接下来求标准差。这稍微难一点，因为 $F_{n,k}$ 之间并不独立，但我们可以通过分析相关性计算方差：
-$$
 \begin{aligned}
-E(F_n^2)
-&=E\left(\left(\sum_{k=1}^n F_{n,k}\right)^2\right)
-=\sum_{j=1}^n\sum_{k=1}^nE(F_{n,j}F_{n,k})\\
-&=\sum_{k=1}^nE(F_{n,k}^2)
-+2\sum_{1\le j<k\le n}E(F_{n,j}F_{n,k}).
+F_n(\pi) &= F_{n,1}(\pi)+F_{n,2}(\pi)+\cdots+F_{n,n}(\pi),
+F_{n,k}(\pi) &= [\text{position k of }\pi\text{ is a fixed point}] , \text{ for } \pi\in\Pi_n,.
 \end{aligned}
 $$
 
-因为 $F_{n,k}$ 只取 0 或 1，所以 $F_{n,k}^2=F_{n,k}$，从而 $E(F_{n,k}^2)=EF_{n,k}=1/n$。当 $j<k$ 时，$ E(F_{n,j}F_{n,k})=\Pr(\pi\text{ has both j and k asxed points})=\frac{(n-2)!}{n!}=\frac1{n(n-1)}.$ 因此
+于是
+$$EF_n=EF_{n,1}+EF_{n,2}+\cdots+EF_{n,n}.$$
+
+而 $F_{n,k}$ 的期望值恰好等于 $F_{n,k}=1$ 的概率，该概率为 $1/n$ 。这是因为在 $\Omega_n$ 的 $n!$ 个排列 $\pi=\pi_1\pi_2\cdots\pi_n$ 中，满足 $\pi_k=k$ 的排列恰好有 $(n-1)!$ 个。因此
+$$EF_n=\frac n n=1,\quad \text{ for } n>0.\tag{8.23}$$
+平均而言，会有一顶帽子落在原本的位置上。“一个随机排列平均有一个不动点。”
+
+那么标准差是多少呢？这个问题难度更高，因为 $F_{n,k}$ 之间并不相互独立。但我们可以通过分析它们之间的相互关联来计算方差：
 $$
+\begin{aligned}
 E(F_n^2)
-=n\cdot\frac1n+2\binom n2\cdot\frac1{n(n-1)}=2,\quad n\ge2.\tag{8.24}
+&=E\left(\left(\sum_{k=1}^n F_{n,k}\right)^2\right) =E\left(\sum_{j=1}^n\sum_{k=1}^nF_{n,j}F_{n,k}\right)\\
+&=\sum_{j=1}^n\sum_{k=1}^nE(F_{n,j}F_{n,k})=\sum_{k=1}^nE(F_{n,k}^2) +2\sum_{1\le j<k\le n}E(F_{n,j}F_{n,k}).
+\end{aligned}
 $$
+
+（我们在第2章推导式 $(2.33)$ 时也曾用过类似技巧。）由于 $F_{n,k}$ 取值只能是 $0$ 或 $1$，故有 $F_{n,k}^2 = F_{n,k}$；因此 $\mathbb{E}(F_{n,k}^2) = \mathbb{E}F_{n,k} = 1/n$，与前文一致。若 $j<k$，则 $\mathbb{E}(F_{n,j}F_{n,k})$ 等于排列 $\pi$ 同时以 $j$ 和 $k$ 为不动点的概率，即 $(n-2)!/n! = 1/n(n-1)$。因此
+$$E(F_n^2)=\fracnn+\binom n2\cdot\frac2{n(n-1)}=2,\quad \text{ for } n\ge2.\tag{8.24}$$
+
 于是方差为
-$$
-VF_n=E(F_n^2)-(EF_n)^2=2-1=1,
-$$
+$$VF_n=E(F_n^2)-(EF_n)^2=2-1=1,$$
 标准差也为 1。“$n\ge2$ 个元素的随机排列，不动点个数约为 $1\pm1$。”
 
 
@@ -434,37 +387,29 @@ $$
 G_X(z)=\sum_{k\ge0}\Pr(X=k)z^k.\tag{8.25}
 $$
 这个关于 $z$ 的幂级数包含了随机变量 $X$ 的全部信息。它也可以写成另外两种形式：
-$$
-G_X(z)=\sum_{\omega\in\Omega}\Pr(\omega)z^{X(\omega)}=E(z^X).\tag{8.26}
-$$
+$$G_X(z)=\sum_{\omega\in\Omega}\Pr(\omega)z^{X(\omega)}=E(z^X).\tag{8.26}$$
+
 $G_X(z)$ 的系数均非负，且系数和为 1；后一条件可写作
-$$
-G_X(1)=1.\tag{8.27}
-$$
+$$G_X(1)=1.\tag{8.27}$$
+
 反之，任何系数非负且满足 $G(1)=1$ 的幂级数 $G(z)$，都是某个随机变量的概率生成函数。
 
 概率生成函数最妙的一点是，它通常能**简化均值与方差的计算**。例如，均值可以很方便地表示为：
 $$
-EX
-=\sum_{k\ge0}k\cdot\Pr(X=k)
-=\sum_{k\ge0}\Pr(X=k)\cdot kz^{k-1}\bigg|_{z=1}
-=G_X'(1).\tag{8.28}
-$$
+EX =\sum_{k\ge0}k\cdot\Pr(X=k) =\sum_{k\ge0}\Pr(X=k)\cdot kz^{k-1}\bigg|_{z=1} =G_X'(1).\tag{8.28} $$
 我们只需要对概率生成函数关于 $z$ 求导，再令 $z=1$ 即可。
 
 方差的计算只稍微复杂一点：
 $$
 \begin{aligned}
-E(X^2)
-&=\sum_{k\ge0}k^2\cdot\Pr(X=k)\\
+E(X^2) &=\sum_{k\ge0}k^2\cdot\Pr(X=k)\\
 &=\sum_{k\ge0}\Pr(X=k)\cdot\bigl(k(k-1)z^{k-2}+kz^{k-1}\bigr)\bigg|_{z=1}\\
 &=G_X''(1)+G_X'(1).
 \end{aligned}
 $$
+
 因此
-$$
-VX=G_X''(1)+G_X'(1)-G_X'(1)^2.\tag{8.29}
-$$
+$$VX=G_X''(1)+G_X'(1)-G_X'(1)^2.\tag{8.29} $$
 
 式 (8.28) 和 (8.29) 表明，只要算出两个导数值 $G_X'(1)$ 和 $G_X''(1)$，就能求出均值和方差。我们不需要知道概率的闭式，甚至不需要知道 $G_X(z)$ 本身的闭式。
 

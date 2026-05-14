@@ -543,42 +543,47 @@ a_na_1 & a_na_2 & a_na_3 & \cdots & a_na_n \\
 ```
 由 $n^2$ 个乘积项 $a_j a_k$ 构成。我们的目标是求出
 ```math
-S_\triangle = \sum_{1\le j\le k\le n}a_{j,k} =  
-    \sum_{1\le k\le j\le n}a_{k,j} +
-    \sum_{1\le k\le j\le n}a_{j,k} = S_\triangledown, \ a_{j,k} = a_{k,j}
+S_\triangle = \sum_{1\le j\le k\le n}a_ja_k,
 ```
 数阵主对角线及其上方所有元素的和。由于 $a_j a_k = a_k a_j$，该数阵关于主对角线对称；因此 $S$ 的值约为全体元素和的一半（需额外计入主对角线的修正项）。
 
-基于这一对称性质，我们做如下推导：
+基于上述分析，我们可以进行如下推导变换：
+```math
+S_\triangle = \sum_{1\le j\le k\le n}a_ja_k =  \sum_{1\le k\le j\le n}a_ka_j = \sum_{1\le k\le j\le n}a_ja_k  = S_\triangledown,
+```
+
+这是因为我们可以将下标 $(j,k)$ 重命名为 $(k,j)$。此外，由于
+$$[1\le j\le k\le n] + [1\le k\le j\le n] = [1\le j,k\le n] + [1\le j=k\le n]$$
+
+于是可得
 ```math
 \begin{aligned}
-2S_\triangle &= S_\triangle + S_\triangledown = 
-    \sum_{1\le k, j\le n}a_{k,j} + 
-    \sum_{1\le k=j\le n}a_{j,k} \\
-    &= (\sum_{k=1}^na_k)^2 + \sum_{k=1}^na_k^2
+2S_\triangle &= S_\triangle + S_\triangledown =  \sum_{1\le k, j\le n}a_ja_k  +  \sum_{1\le k=j\le n}a_ja_k  .
 \end{aligned}
 ```
 
-因此得到
+由一般分配律 $(2.28)$ 可得，第一个和式等于 $\big(\sum_{j=1}^n a_j\big)\big(\sum_{k=1}^n a_k\big) = \big(\sum_{k=1}^n a_k\big)^2$。 第二个和式为 $\sum_{k=1}^n a_k^2$。因此有
 ```math
-S_\triangle = \frac{1}{2}((\sum_{k=1}^na_k)^2 + \sum_{k=1}^na_k^2)
+S_\triangle =\sum_{1\le j\le k\le n}a_ja_k  = \frac{1}{2}\left(\left(\sum_{k=1}^na_k\right)^2 + \sum_{k=1}^na_k^2\right) \tag{2.33}
 ```
 
-另一个二重和，当交换 j 和 k 时，也有对称性:
+由此得到用上三角和式表示为最简单重和的表达式。受此推导启发，我们再来看另一个二重和：
 ```math
-\begin{aligned}
-S &= \sum_{1\le j< k\le n}(a_k-a_j)(b_k-b_j) \\
-  &= \sum_{1\le k< j\le n}(a_j-a_k)(b_j-b_k) = \sum_{1\le k< j\le n}(a_k-a_j)(b_k-b_j)
-\end{aligned}
+S = \sum_{1\le j< k\le n}(a_k-a_j)(b_k-b_j) 
 ```
 
-利用等式
+同样，将 $j$ 与 $k$ 互换后具有对称性：
+```math
+S = \sum_{1\le k< j\le n}(a_j-a_k)(b_j-b_k) = \sum_{1\le k< j\le n}(a_k-a_j)(b_k-b_j)
+```
+
+于是我们可以将 $S$ 自身相加，并利用恒等式
 ```math
 [1\le j< k\le n] + [1\le k< j\le n] = [1\le j, k\le n] - [1\le j=k\le n]
 ```
 得出：
 ```math
-2S= \sum_{1\le j,k\le n}(a_k-a_j)(b_k-b_j) - \sum_{1\le j=k\le n}(a_k-a_j)(b_k-b_j)
+2S= \sum_{1\le j,k\le n}(a_j-a_k)(b_j-b_k) - \sum_{1\le j=k\le n}(a_j-a_k)(b_j-b_k)
 ```
 
 上式中，第二项的和为 0；第一项可以分为四个和：
@@ -586,22 +591,35 @@ S &= \sum_{1\le j< k\le n}(a_k-a_j)(b_k-b_j) \\
 \begin{aligned}
 & \sum_{1\le j,k\le n}a_jb_j - \sum_{1\le j,k\le n}a_jb_k - \sum_{1\le j,k\le n}a_kb_j + \sum_{1\le j,k\le n}a_kb_k \\
 &= 2\sum_{1\le j,k\le n}a_kb_k - 2\sum_{1\le j,k\le n}a_jb_k \\
-&= 2n\sum_{1\le k\le n}a_kb_k - 2(\sum_{k=1}^na_k)(\sum_{k=1}^nb_k) \\
+&= 2n\sum_{1\le k\le n}a_kb_k - 2\left(\sum_{k=1}^na_k\right)\left(\sum_{k=1}^nb_k\right) 
 \end{aligned}
 ```
 
-回到讨论的地方，式子两边同除以 2:
+最后一步中，两个和式均依据一般分配律 $(2.28)$ 完成化简。若第一个和式的变换不易理解，下面分步重新推导一遍：
+$$
+\begin{aligned}
+2\sum_{1\le j,k\le n} a_kb_k
+&= 2\sum_{1\le k\le n}\sum_{1\le j\le n} a_kb_k \\
+&= 2\sum_{1\le k\le n} a_kb_k \sum_{1\le j\le n} 1 \\
+&= 2\sum_{1\le k\le n} a_kb_k \cdot n
+= 2n\sum_{1\le k\le n} a_kb_k .
+\end{aligned}
+$$
+
+若求和式中未出现某个下标变量（此处为 $j$），只需将剩余部分乘以该下标变量取值集合的元素个数（此处为 $n$），便可直接消去该求和下标。
+回到之前的推导步骤，现将等式两边同除以 $2$ 并整理变形，即可得到一个精巧的公式：
 ```math
 (\sum_{k=1}^na_k)(\sum_{k=1}^nb_k) = n\sum_{1\le k\le n}a_kb_k - \sum_{1\le j< k\le n}(a_k-a_j)(b_k-b_j) \tag{2.34}
 ```
 此等式产生了作为一种特殊情形的切比雪夫单调不等式(Chebyshev's monotonic inequalities):
 
 ```math
-(\sum_{k=1}^na_k)(\sum_{k=1}^nb_k) \le n\sum_{1\le k\le n}a_kb_k, if\ a_1\le\cdots\le a_n\And b_1\le\cdots\le b_n;
+(\sum_{k=1}^na_k)(\sum_{k=1}^nb_k) \le n\sum_{k=1}^na_kb_k, \text{ if } a_1\le\cdots\le a_n \text{ and } b_1\le\cdots\le b_n;
 ```
 ```math
-(\sum_{k=1}^na_k)(\sum_{k=1}^nb_k) \ge n\sum_{1\le k\le n}a_kb_k, if\ a_1\le\cdots\le a_n\And b_1\gt\cdots\gt b_n;
+(\sum_{k=1}^na_k)(\sum_{k=1}^nb_k) \ge n\sum_{k=1}^n a_kb_k, \text{ if } a_1\le\cdots\le a_n \text{ and } b_1\gt\cdots\gt b_n;
 ```
+（一般地，若 $a_1 \le \cdots \le a_n$，且 $p$ 是集合 $\{1,\dots,n\}$ 的一个排列，则不难证明：$\sum_{k=1}^n a_k b_{p(k)}$ 的最大值在 $b_{p(1)} \le \cdots \le b_{p(n)}$ 时取得，最小值在 $b_{p(1)} \ge \cdots \ge b_{p(n)}$ 时取得。）
 
 多重求和于单个和中改变求和的指标的一般操作有一种有趣的连续，如果 p(k) 是整数的任何排列，有交换律知道：
 ```math

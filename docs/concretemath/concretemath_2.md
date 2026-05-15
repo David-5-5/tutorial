@@ -621,39 +621,39 @@ $$
 ```
 （一般地，若 $a_1 \le \cdots \le a_n$，且 $p$ 是集合 $\{1,\dots,n\}$ 的一个排列，则不难证明：$\sum_{k=1}^n a_k b_{p(k)}$ 的最大值在 $b_{p(1)} \le \cdots \le b_{p(n)}$ 时取得，最小值在 $b_{p(1)} \ge \cdots \ge b_{p(n)}$ 时取得。）
 
-多重求和于单个和中改变求和的指标的一般操作有一种有趣的连续，如果 p(k) 是整数的任何排列，有交换律知道：
+多重求和与*单重*求和中变换求和下标的一般运算有着有趣的关联。由交换律可知
 ```math
 \sum_{k\in K}a_k = \sum_{p(k)\in K}a_{p(k)},
 ```
 
-若 p(k) 为整数的任意一个排列，那么当我们将 k 替换为 f(j), 其中 f 为任意函数:
+若 $p(k)$ 是整数的任意排列。但当我们把 $k$ 替换为 $f(j)$，其中 $f$ 为任意函数时，又会发生什么呢？
 ```math
 f: J\to K
 ```
 
-取整数 $j\in J$ 映射为整数 $f(j)\in K$，那么此时的情况又将如何？指标替换的通用公式为:
+将整数 $j \in J$ 映射为整数 $f(j) \in K$ 时，下标替换的通用公式为
 ```math
 \sum_{j\in J}a_{f(j)} = \sum_{k\in K}a_k\#f^-(k), \tag{2.35}
 ```
 
-其中 #$f^-(k)$ 表明集合：
+其中 $\#f^-(k)$ 表明集合：
 ```math
 f^-(k) = \{j|f(j) = k\}
 ```
-中元素的个数，也就是使得 f(j) 等于 k 的 $j\in J$ 的值的个数。
+即满足 $f(j)$ 等于 $k$ 且 $j \in J$ 的取值个数。
 
-由于 $\sum_{j\in J}[f(j)=k]=$#$f^-(k)$，通过交换求和的次序容易证明式 (2.35)
+通过交换求和次序，不难证明式 $(2.35)$ 。
 ```math
 \sum_{j\in J}a_{f(j)} = \sum_{j\in J, k\in K}a_k[f(j)=k] = \sum_{k\in K}a_k\sum_{j\in J}[f(j)=k]
 ```
 
-在 f 是 J 和 K 之间的一个 1-1 对应的特殊情形中，对于所有 k 有 #$f^-(k)=1$，一般公式 (2.35) 化为：
+由于 $\sum_{j\in J} [f(j)=k] = \#f^{-1}(k)$。在 $f$ 是集合 $J$ 与 $K$ 之间一一映射的特殊情形下，对任意 $k$ 都有 $\#f^{-1}(k)=1$，此时通用公式 $(2.35)$ 可化简为
 ```math
 \sum_{j\in J}a_{f(j)} = \sum_{f(j)\in K}a_{f(j)} = \sum_{k\in K}a_k
 ```
+这正是我们之前见过的交换律 $(2.17)$，只是形式稍有变换。
 
----
-看一看实际数的一个多重和：
+至此我们接触的多重和示例，通项均为 $a_k$，$b_k$ 这类一般形式。但本书侧重具体实例，下面来看一个含有具体数值的多重和：
 ```math
 S_n = \sum_{1\le j < k \le n}\frac{1}{k-j}
 ```
@@ -662,37 +662,38 @@ S_n = \sum_{1\le j < k \le n}\frac{1}{k-j}
 计算一个双重和的标准方法是先对 j 或先对 k 求和，所有讨论两种选取
 ```math
 \begin{aligned}
-S_n &=  \sum_{1\le k \le n}\sum_{1\le j < k}\frac{1}{k-j} &\qquad summing\ first\ on\ j \\
-&=  \sum_{1\le k \le n}\sum_{1\le k-j < k}\frac{1}{j} &\qquad replace\ j\ by\ k - j \\
-&=  \sum_{1\le k \le n}\sum_{0< j\le k-1}\frac{1}{j} &\qquad simplifying\ the\ bounds\ of\ j \\
-&=  \sum_{1\le k \le n}H_{k-1} &\qquad by (2.13) \\
-&=  \sum_{1\le k+1 \le n}H_k &\qquad replace\ k\ by\ k+1 \\
-&=  \sum_{0\le k < n}H_k &\qquad simplifying\ the\ bounds\ of\ k
+S_n &=  \sum_{1\le k \le n}\sum_{1\le j < k}\frac{1}{k-j}  & & \text {summing first on j} \\
+&=  \sum_{1\le k \le n}\sum_{1\le k-j < k}\frac{1}{j}   & & \text {replacing j by k − j} \\
+&=  \sum_{1\le k \le n}\sum_{0< j\le k-1}\frac{1}{j}  & & \text {simplifying the bounds on j}\\
+&=  \sum_{1\le k \le n}H_{k-1}  & & \text {by (2.13), the definition of } H_{k−1} \\
+&=  \sum_{1\le k+1 \le n}H_k   & & \text {replacing k by k + 1} \\
+&=  \sum_{0\le k < n}H_k & & \text {simplifying the bounds on k} \\
 \end{aligned}
 ```
 
-但是我们不知道如何得到调和数的和的闭形式。若尝试先对 k 求和，则得到：
+但是我们不知道如何得到调和数的和的闭形式。若尝试先对 $k$ 求和，则得到：
 ```math
 \begin{aligned}
-S_n &=  \sum_{1\le j \le n}\sum_{j< k \le n}\frac{1}{k-j} &\qquad summing\ first\ on\ k \\
-&=  \sum_{1\le j \le n}\sum_{j\le k+j \le n}\frac{1}{k} &\qquad replace\ k\ by\ k + j \\
-&=  \sum_{1\le j \le n}\sum_{0< k\le n-j}\frac{1}{k} &\qquad simplifying\ the\ bounds\ of\ k \\
-&=  \sum_{1\le j \le n}H_{n-j} &\qquad by (2.13) \\
-&=  \sum_{1\le n-j \le n}H_j &\qquad replace\ j\ by\ n-j \\
-&=  \sum_{0\le j < n}H_j &\qquad simplifying\ the\ bounds\ of\ j
+S_n &=  \sum_{1\le j \le n}\sum_{j< k \le n}\frac{1}{k-j}  & & \text {summing first on k} \\
+&=  \sum_{1\le j \le n}\sum_{j\le k+j \le n}\frac{1}{k} & & \text {replacing k by k + j} \\
+&=  \sum_{1\le j \le n}\sum_{0< k\le n-j}\frac{1}{k}& & \text {simplifying the bounds on k} \\
+&=  \sum_{1\le j \le n}H_{n-j} & & \text {by (2.13), the definition of } H_{n−j}\\
+&=  \sum_{1\le n-j \le n}H_j  & & \text {replacing j by n − j} \\
+&=  \sum_{0\le j < n}H_j  & & \text {simplifying the bounds on j}
 \end{aligned}
 ```
 又回到相同的绝境。
 
-但是有另一种方法来处理，若在决定把 $S_n$ 化为和的和之前用 k+j 替换 k：
+还有另一种推导思路：在将 $S_n$ 化为多重和之前，先把 $k$ 替换为 $k+j$。
 ```math
 \begin{aligned}
-S_n &=  \sum_{1\le j < k \le n}\frac{1}{k-j} &\qquad recopying\ the\ given\ sum \\
-&=  \sum_{1\le j < k+j \le n}\frac{1}{k} &\qquad replace\ k\ by\ k + j \\
-&=  \sum_{1\le k \le n}\frac{n-k}{k} &\qquad the\ sum\ on\ j\ is\ trivial \\
-&=  \sum_{1\le k \le n}\frac{n}{k} - \sum_{1\le k \le n}1 &\qquad associative\ law \\
-&=  n\sum_{1\le k \le n}\frac{1}{k} - n &\qquad by\ gosh \\
-&=  nH_n - n &\qquad by (2.13) 
+S_n &=  \sum_{1\le j < k \le n}\frac{1}{k-j} & & \text {recopying the given sum} \\
+&=  \sum_{1\le j < k+j \le n}\frac{1}{k} & & \text {replacing k by k + j} \\
+&=  \sum_{1\le k\le n}\sum_{1\le j\le n-k}\frac{1}{k} & & \text {summing first on j} \\
+&=  \sum_{1\le k \le n}\frac{n-k}{k} & & \text {the sum on j is trivial} \\
+&=  \sum_{1\le k \le n}\frac{n}{k} - \sum_{1\le k \le n}1 & & \text {by the associative law} \\
+&=  n\left(\sum_{1\le k \le n}\frac{1}{k}\right) - n & & \text {by gosh} \\
+&=  nH_n - n & & \text {by (2.13), the definition of }H_n
 \end{aligned}
 ```
 我们找到了 $S_n$。把它和冒失的开端结合起来，作为一个额外的结果：
@@ -700,6 +701,17 @@ S_n &=  \sum_{1\le j < k \le n}\frac{1}{k-j} &\qquad recopying\ the\ given\ sum 
 \sum_{0\le k < n}H_k = nH_n - n. \tag{2.36}
 ```
 
+我们可以从代数和几何两个角度理解这里用到的技巧。（1）代数角度：若二重和的通项含有 $k+f(j)$，其中 $f$ 为任意函数，本例说明可尝试将 $k$ 换为 $k-f(j)$ 再对 $j$ 求和。（2）几何角度：以 $n=4$ 为例，可将该和式 $S_n$ 表示为如下形式：
+```math
+\begin{aligned}
+ && k=1 \qquad k=2 \qquad k=3 \qquad k=4 \\
+j=1 &&\frac{1}{1} \quad + \quad \frac{1}{2}\quad + \quad\frac{1}{3} \\
+j=2 && \frac{1}{1}\quad+ \quad\frac{1}{2} \\
+j=3 && \frac{1}{1}  \\
+j=4 &&
+\end{aligned}
+```
+最初按列先对 $j$ 求和、或按行先对 $k$ 求和，得到 $H_1+H_2+H_3=H_3+H_2+H_1$。而更巧妙的做法本质是沿对角线求和，得到 $\dfrac{3}{1}+\dfrac{2}{2}+\dfrac{1}{3}$。
 
 
 ## 2.5 一般的方法

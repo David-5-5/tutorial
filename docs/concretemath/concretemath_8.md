@@ -382,10 +382,11 @@ $$VF_n=E(F_n^2)-(EF_n)^2=2-1=1,$$
 
 
 ## 8.3 PROBABILITY GENERATING FUNCTIONS 概率生成函数
-若随机变量 $X$ 只取非负整数值，我们可以用第7章的技巧很好地刻画它的概率分布。$X$ 的**概率生成函数**（pgf）为
+若随机变量 $X$ 只取非负整数值，我们可以用第7章的技巧很好地刻画它的概率分布。$X$ 的*概率生成函数*（pgf）为
 $$
 G_X(z)=\sum_{k\ge0}\Pr(X=k)z^k.\tag{8.25}
 $$
+
 这个关于 $z$ 的幂级数包含了随机变量 $X$ 的全部信息。它也可以写成另外两种形式：
 $$G_X(z)=\sum_{\omega\in\Omega}\Pr(\omega)z^{X(\omega)}=E(z^X).\tag{8.26}$$
 
@@ -394,17 +395,15 @@ $$G_X(1)=1.\tag{8.27}$$
 
 反之，任何系数非负且满足 $G(1)=1$ 的幂级数 $G(z)$，都是某个随机变量的概率生成函数。
 
-概率生成函数最妙的一点是，它通常能**简化均值与方差的计算**。例如，均值可以很方便地表示为：
-$$
-EX =\sum_{k\ge0}k\cdot\Pr(X=k) =\sum_{k\ge0}\Pr(X=k)\cdot kz^{k-1}\bigg|_{z=1} =G_X'(1).\tag{8.28} $$
+概率生成函数最妙的一点是，它通常能简化均值与方差的计算。例如，均值可以很方便地表示为：
+$$EX =\sum_{k\ge0}k\cdot\Pr(X=k) =\sum_{k\ge0}\Pr(X=k)\cdot kz^{k-1}\bigg|_{z=1} =G_X'(1).\tag{8.28} $$
 我们只需要对概率生成函数关于 $z$ 求导，再令 $z=1$ 即可。
 
 方差的计算只稍微复杂一点：
 $$
 \begin{aligned}
 E(X^2) &=\sum_{k\ge0}k^2\cdot\Pr(X=k)\\
-&=\sum_{k\ge0}\Pr(X=k)\cdot\bigl(k(k-1)z^{k-2}+kz^{k-1}\bigr)\bigg|_{z=1}\\
-&=G_X''(1)+G_X'(1).
+&=\sum_{k\ge0}\Pr(X=k)\cdot\bigl(k(k-1)z^{k-2}+kz^{k-1}\bigr)\bigg|_{z=1}=G_X''(1)+G_X'(1).
 \end{aligned}
 $$
 
@@ -414,20 +413,13 @@ $$VX=G_X''(1)+G_X'(1)-G_X'(1)^2.\tag{8.29} $$
 式 (8.28) 和 (8.29) 表明，只要算出两个导数值 $G_X'(1)$ 和 $G_X''(1)$，就能求出均值和方差。我们不需要知道概率的闭式，甚至不需要知道 $G_X(z)$ 本身的闭式。
 
 为方便起见，对任意函数 $G$ 记：
-$$
-\text{Mean}(G)=G'(1),\tag{8.30}
-$$
-$$
-\text{Var}(G)=G''(1)+G'(1)-G'(1)^2,\tag{8.31}
-$$
+$$\text{Mean}(G)=G'(1),\tag{8.30}$$
+$$\text{Var}(G)=G''(1)+G'(1)-G'(1)^2,\tag{8.31}$$
 因为我们经常需要计算这些导数组合。
 
-概率生成函数第二妙的地方是：在许多重要情形下，它都是关于 $z$ 的相对简单的函数。
-例如，考虑**$n$ 阶均匀分布**：随机变量等概率取 $\{0,1,\dots,n-1\}$ 中每个值。此时的概率生成函数为
+概率生成函数第二妙的地方是：在许多重要情形下，它都是关于 $z$ 的相对简单的函数。例如，考虑 $n$ 阶*均匀分布*：随机变量等概率取 $\{0,1,\dots,n-1\}$ 中每个值。此时的概率生成函数为
 $$
-U_n(z)
-=\frac1n(1+z+\cdots+z^{n-1})
-=\frac1n\,\frac{1-z^n}{1-z},\quad n\ge1.\tag{8.32}
+U_n(z) =\frac1n(1+z+\cdots+z^{n-1})=\frac1n\,\frac{1-z^n}{1-z},\quad \text{ for }n\ge1. \tag{8.32}
 $$
 这是等比级数，因此有闭式。
 
@@ -441,25 +433,26 @@ $$
 
 例如，均匀分布的概率生成函数 $U_n(z)$ 用此法很容易求出各阶导数：
 $$
-U_n(1+t)=\frac1n\,\frac{(1+t)^n-1}{t}=\frac1n\binom n1+\frac1n\binom n2 t+\frac1n\binom n3 t^2+\cdots+\frac1n\binom nn t^{n-1}.
+\begin{aligned}
+U_n(1+t)&=\frac1n\,\frac{(1+t)^n-1}{t} \\
+&=\frac1n\binom n1+\frac1n\binom n2 t+\frac1n\binom n3 t^2+\cdots+\frac1n\binom nn t^{n-1}.
+\end{aligned}
 $$
+
 与 (8.33) 比较可得：
 $$
-U_n(1)=1,\quad
-U_n'(1)=\frac{n-1}{2},\quad
-U_n''(1)=\frac{(n-1)(n-2)}{3};\tag{8.34}
+U_n(1)=1,\quad U_n'(1)=\frac{n-1}{2},\quad U_n''(1)=\frac{(n-1)(n-2)}{3};\tag{8.34}
 $$
-一般有 $U_n^{(m)}(1)=\dfrac{(n-1)^{\underline m}}{m+1}$，不过计算均值和方差只需要 $m=1$ 和 $m=2$。
 
-均匀分布的均值为
+一般有 $U_n^{(m)}(1)=(n-1)^{\underline m}/(m+1)$，不过计算均值和方差只需要 $m=1$ 和 $m=2$。均匀分布的均值为
 $$
 U_n'(1)=\frac{n-1}{2},\tag{8.35}
 $$
+
 方差为
 $$
 \begin{aligned}
-U_n''(1)+U_n'(1)-U_n'(1)^2
-&=\frac{(n-1)(n-2)}{3}+\frac{n-1}{2}-\frac{(n-1)^2}{4}\\
+U_n''(1)+U_n'(1)-U_n'(1)^2&=\frac{(n-1)(n-2)}{3}+\frac{n-1}{2}-\frac{(n-1)^2}{4}\\
 &=\frac{n^2-1}{12}.\tag{8.36}
 \end{aligned}
 $$
@@ -467,31 +460,20 @@ $$
 概率生成函数第三妙的地方是：独立随机变量之和的概率生成函数，等于各自概率生成函数的乘积。第 5、7 章已经知道，生成函数的乘积对应序列的卷积；而在应用中更重要的是：概率的卷积对应独立随机变量的和。
 
 事实上，若 $X,Y$ 是只取整数值的随机变量，则
-$$
-\Pr(X+Y=n)
-=\sum_k\Pr(X=k\text{ 且 }Y=n-k).
-$$
+$$\Pr(X+Y=n) =\sum_k\Pr(X=k\text{ and }Y=n-k).$$
+
 若 $X,Y$ 独立，则
-$$
-\Pr(X+Y=n)
-=\sum_k\Pr(X=k)\Pr(Y=n-k),
-$$
+$$\Pr(X+Y=n)=\sum_k\Pr(X=k)\Pr(Y=n-k),$$
+
 这正是卷积。因此核心结论是：
-$$
-G_{X+Y}(z)=G_X(z)G_Y(z),\quad \text{若 }X,Y\text{ 独立}.\tag{8.37}
-$$
+$$G_{X+Y}(z)=G_X(z)G_Y(z),\quad \text{ if X and Y are independent }$$
 
 本章前面已经看到，独立时 $V(X+Y)=VX+VY$。设 $F(z),G(z)$ 分别是 $X,Y$ 的概率生成函数，$H(z)$ 是 $X+Y$ 的，则
-$$
-H(z)=F(z)G(z),
-$$
+$$H(z)=F(z)G(z),$$
+
 而由 (8.28)–(8.31) 可得：
-$$
-\text{Mean}(H)=\text{Mean}(F)+\text{Mean}(G);\tag{8.38}
-$$
-$$
-\text{Var}(H)=\text{Var}(F)+\text{Var}(G).\tag{8.39}
-$$
+$$\text{Mean}(H)=\text{Mean}(F)+\text{Mean}(G);\tag{8.38}$$
+$$\text{Var}(H)=\text{Var}(F)+\text{Var}(G).\tag{8.39}$$
 
 这些公式来自导数关系 $\text{Mean}(H)=H'(1)$，$\text{Var}(H)=H''(1)+H'(1)-H'(1)^2$，对一般的函数乘积 $H(z)=F(z)G(z)$ 并不天然成立，因为
 $$
@@ -499,14 +481,13 @@ $$
 H'(z)&=F'(z)G(z)+F(z)G'(z),\\
 H''(z)&=F''(z)G(z)+2F'(z)G'(z)+F(z)G''(z).
 \end{aligned}
+
 $$
 但令 $z=1$ 即可看出，只要
-$$
-F(1)=G(1)=1\tag{8.40}
-$$
+$$F(1)=G(1)=1\tag{8.40}$$
 且导数存在，(8.38) 和 (8.39) 就普遍成立。“概率”甚至不必落在 $[0,1]$ 内。只要 $F(1),G(1)\ne0$，我们总可以用 $F(1),G(1)$ 分别除以 $F(z),G(z)$ 做归一化，使条件满足。
 
-均值和方差并非全部，它们只是由丹麦天文学家托瓦尔·尼科莱·蒂勒于 1903 年引入的无穷级数——**累积量**（cumulant）统计量中的前两项。随机变量的前两个累积量 $\kappa_1$ 和 $\kappa_2$ 就是我们所说的均值和方差；更高阶的累积量可以刻画分布更精细的性质。一般公式
+均值和方差并非全部，它们只是由丹麦天文学家托瓦尔·尼科莱·蒂勒于 1903 年引入的无穷级数——*累积量*（cumulant）统计量中的前两项。随机变量的前两个累积量 $\kappa_1$ 和 $\kappa_2$ 就是我们所说的均值和方差；更高阶的累积量可以刻画分布更精细的性质。一般公式
 $$
 \ln G(e^t)=\frac{\kappa_1}{1!}\,t+\frac{\kappa_2}{2!}\,t^2+\frac{\kappa_3}{3!}\,t^3+\frac{\kappa_4}{4!}\,t^4+\cdots\tag{8.41}
 $$
@@ -525,33 +506,21 @@ $$
 $$
 \mu_m=\sum_{k\ge0}k^m\Pr(X=k)=E(X^m).\tag{8.43}
 $$
-$\mu_m$ 称为 $X$ 的 **$m$ 阶原点矩**。
 
-对 (8.41) 两边取指数，得到 $G(e^t)$ 的另一表达式：
+$\mu_m$ 称为 $X$ 的 $m$ 阶原点矩。对 (8.41) 两边取指数，得到 $G(e^t)$ 的另一表达式：
 $$
 \begin{aligned}
-G(e^t)
-&=1+\frac1{1!}\left(\kappa_1t+\frac12\kappa_2t^2+\cdots\right)
-+\frac1{2!}\left(\kappa_1t+\frac12\kappa_2t^2+\cdots\right)^2
-+\cdots\\
+G(e^t)&=1+\frac1{1!}\left(\kappa_1t+\frac12\kappa_2t^2+\cdots\right)+\frac1{2!}\left(\kappa_1t+\frac12\kappa_2t^2+\cdots\right)^2+\cdots\\
 &=1+\kappa_1t+\frac12(\kappa_2+\kappa_1^2)t^2+\cdots.
 \end{aligned}
 $$
+
 比较 $t$ 的同次幂系数，可得一系列公式：
-$$
-\kappa_1=\mu_1,\tag{8.44}
-$$
-$$
-\kappa_2=\mu_2-\mu_1^2,\tag{8.45}
-$$
-$$
-\kappa_3=\mu_3-3\mu_1\mu_2+2\mu_1^3,\tag{8.46}
-$$
-$$
-\kappa_4=\mu_4-4\mu_1\mu_3+12\mu_1^2\mu_2-3\mu_2^2-6\mu_1^4,\tag{8.47}
-$$
-$$
-\kappa_5=\mu_5-5\mu_1\mu_4+20\mu_1^2\mu_3-10\mu_2\mu_3 \\
+$$\kappa_1=\mu_1,\tag{8.44}
+$$$$\kappa_2=\mu_2-\mu_1^2,\tag{8.45}
+$$$$\kappa_3=\mu_3-3\mu_1\mu_2+2\mu_1^3,\tag{8.46}
+$$$$\kappa_4=\mu_4-4\mu_1\mu_3+12\mu_1^2\mu_2-3\mu_2^2-6\mu_1^4,\tag{8.47}
+$$$$\kappa_5=\mu_5-5\mu_1\mu_4+20\mu_1^2\mu_3-10\mu_2\mu_3 \\
 \qquad\qquad +30\mu_1\mu_2^2-60\mu_1^3\mu_2+24\mu_1^5,\tag{8.48}
 $$
 它们用矩表示了累积量。可以看到 $\kappa_2$ 确实就是方差 $E(X^2)-(EX)^2$。
@@ -562,7 +531,7 @@ $$
 $$
 G(1 + t)=1 + \frac{\alpha_1}{1!}\,t +\frac{\alpha_2}{2!}\,t^2 +\frac{\alpha_3}{3!}\,t^3 +\cdots,
 $$
-由式 (8.33) 可知，$\alpha_m$ 就是**阶乘矩**：
+由式 (8.33) 可知，$\alpha_m$ 就是阶乘矩：
 $$
 \begin{aligned}
 \alpha_m &=G^{(m)}(1) =\sum_{k\ge0}\Pr(X=k)\,k^{\underline m}\,z^{k-m}\bigg|_{z=1}\\
@@ -577,16 +546,11 @@ $$
 &=1+\alpha_1t+\frac12(\alpha_2+\alpha_1)t^2+\cdots,
 \end{aligned}
 $$
+
 从而可以用导数 $G^{(m)}(1)$ 表示累积量：
-$$
-\kappa_1=\alpha_1,\tag{8.50}
-$$
-$$
-\kappa_2=\alpha_2+\alpha_1-\alpha_1^2,\tag{8.51}
-$$
-$$
-\kappa_3=\alpha_3+3\alpha_2+\alpha_1-3\alpha_2\alpha_1-3\alpha_1^ +2\alpha_1^3,\tag{8.52}
-$$
+$$\kappa_1=\alpha_1,\tag{8.50}
+$$$$\kappa_2=\alpha_2+\alpha_1-\alpha_1^2,\tag{8.51}
+$$$$\kappa_3=\alpha_3+3\alpha_2+\alpha_1-3\alpha_2\alpha_1-3\alpha_1^ +2\alpha_1^3,\tag{8.52}$$
 这一系列公式给出了可加恒等式，把 (8.38)、(8.39) 推广到所有累积量。
 
 回到简单例子，把这些思路落地。最简单的随机变量是“随机常数”：$X$ 以概率 1 取固定值 $x$。此时 $G_X(z)=z^x$，且 $\ln G_X(e^t)=xt$，因此均值为 $x$，其余所有累积量均为 0。这说明：给任意 pgf 乘以 $z^x$，会让均值增加 $x$，而方差及其他累积量保持不变。
@@ -600,35 +564,31 @@ $$
 
 两颗独立骰子总点数的 pgf 是单颗 pgf 的平方：
 $$
-G_S(z)
-=\frac{z^2+2z^3+3z^4+4z^5+5z^6+6z^7+5z^8+4z^9+3z^{10}+2z^{11}+z^{12}}{36}
-=z^2U_6(z)^2.
+\begin{aligned}
+G_S(z)&=\frac{z^2+2z^3+3z^4+4z^5+5z^6+6z^7+5z^8+4z^9+3z^{10}+2z^{11}+z^{12}}{36}\\
+&=z^2U_6(z)^2.
+\end{aligned}
 $$
 
 同理，如果把一对均匀骰子掷 $n$ 次，总点数为 $k$ 的概率为
 $$
-[z^k]\,G_S(z)^n
-=[z^k]\,z^{2n}U_6(z)^{2n}
-=[z^{k-2n}]\,U_6(z)^{2n}.
+[z^k]\,G_S(z)^n=[z^k]\,z^{2n}U_6(z)^{2n}=[z^{k-2n}]\,U_6(z)^{2n}.
 $$
 
 在之前讨论的帽子匹配问题（即随机排列不动点计数问题）中，由式 (5.49) 可知其 pgf 为
 $$
-F_n(z)
-=\sum_{0\le k\le n}\frac{(n-k)!}{(n-k)!}\frac{z^k}{k!},\quad n\ge0.\tag{8.53}
+F_n(z)=\sum_{0\le k\le n}\frac{!(n-k)}{(n-k)!}\frac{z^k}{k!},\quad \text{ for } n\ge0.\tag{8.53}
 $$
+
 因此
 $$
 \begin{aligned}
-F_n'(z)
-&=\sum_{1\le k\le n}\frac{(n-k)!}{(n-k)!}\frac{z^{k-1}}{(k-1)!}\\
-&=\sum_{0\le k\le n-1}\frac{(n-1-k)!}{(n-1-k)!}\frac{z^k}{k!}
-=F_{n-1}(z).
+F_n'(z)&=\sum_{1\le k\le n}\frac{!(n-k)}{(n-k)!}\frac{z^{k-1}}{(k-1)!}\\
+&=\sum_{0\le k\le n-1}\frac{!(n-1-k)}{(n-1-k)!}\frac{z^k}{k!}=F_{n-1}(z).
 \end{aligned}
 $$
 
-不需要知道系数细节，由递推式 $F_n'(z)=F_{n-1}(z)$ 即可推出
-$F_n^{(m)}(z)=F_{n-m}(z)$，因此
+不需要知道系数细节，由递推式 $F_n'(z)=F_{n-1}(z)$ 即可推出 $F_n^{(m)}(z)=F_{n-m}(z)$，因此
 $$
 F_n^{(m)}(1)=F_{n-m}(1)=[n\ge m].\tag{8.54}
 $$
@@ -636,16 +596,11 @@ $$
 用这个公式计算均值和方差非常简便，我们可以更快得到之前的结论：当 $n\ge2$ 时均值和方差都等于 1。
 
 事实上，我们还能证明：只要 $n\ge m$，该随机变量的 $m$ 阶累积量 $\kappa_m$ 就等于 1。因为 $m$ 阶累积量只依赖于 $F_n'(1),F_n''(1),\dots,F_n^{(m)}(1)$，而这些导数全都是 1。所以把 $F_n(z)$ 换成极限 pgf
+$$F_\infty(z)=e^{z-1}\tag{8.55}$$
+
+后，得到的 $m$ 阶累积量完全相同，而 $F_\infty(z)$ 的各阶导数在 1 处都满足 $F_\infty^{(m)}(1)=1$。$F_\infty$ 的所有累积量都恒等于 1，因为
 $$
-F_\infty(z)=e^{z-1}\tag{8.55}
-$$
-后，得到的 $m$ 阶累积量完全相同，而 $F_\infty(z)$ 的各阶导数在 1 处都满足 $F_\infty^{(m)}(1)=1$。
-$F_\infty$ 的所有累积量都恒等于 1，因为
-$$
-\ln F_\infty(e^t)
-=\ln e^{e^t-1}
-=e^t-1
-=\frac t{1!}+\frac{t^2}{2!}+\frac{t^3}{3!}+\cdots.
+\ln F_\infty(e^t)=\ln e^{e^t-1}=e^t-1=\frac t{1!}+\frac{t^2}{2!}+\frac{t^3}{3!}+\cdots.
 $$
 
 

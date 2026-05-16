@@ -256,14 +256,10 @@ $$
 因此，在两期独立彩票中各买一张的总收益方差为 $2\times99M^2=198M^2$。更一般地，$n$ 张独立彩票的方差为 $n\times99M^2$。
 
 骰子点数和 $S$ 的方差也可以用同样公式得出，因为 $S=S_1+S_2$ 是两个独立随机变量的和。对于均匀骰子，有
-$$
-VS_1 = \frac16(1^2+2^2+3^2+4^2+5^2+6^2) - \left(\frac72\right)^2 = \frac{35}{12},
-$$
+$$VS_1 = \frac16(1^2+2^2+3^2+4^2+5^2+6^2) - \left(\frac72\right)^2 = \frac{35}{12},$$
 
 因此 $VS = \frac{35}{12}+\frac{35}{12} = \frac{35}{6}$。对于灌铅骰子，有
-$$
-VS_1 = \frac18(2\cdot1^2+2^2+3^2+4^2+5^2+2\cdot6^2) - \left(\frac72\right)^2 = \frac{45}{12},
-$$
+$$VS_1 = \frac18(2\cdot1^2+2^2+3^2+4^2+5^2+2\cdot6^2) - \left(\frac72\right)^2 = \frac{45}{12},$$
 
 因此两个骰子都灌铅时 $VS = \frac{45}{6}=7.5$。可以看到，灌铅骰子让 $S$ 的方差更大，尽管 $S$ 取平均值 $7$ 的频率反而比均匀骰子更高。如果我们的目标是掷出更多 $7$ 点，方差并不是衡量成功率的最佳指标。
 
@@ -295,64 +291,40 @@ $$
 $$
 
 所以切比雪夫不等式告诉我们：当抛掷 $n$ 次均匀骰子时，在至少 99% 的实验中，总点数会落在
-$$
-7n - 10\sqrt{\frac{35}{6}n} \quad\text{和}\quad 7n + 10\sqrt{\frac{35}{6}n}
-$$
+$$7n - 10\sqrt{\frac{35}{6}n} \quad\text{和}\quad 7n + 10\sqrt{\frac{35}{6}n}$$
 之间。例如，抛掷一百万次时，总点数在 697.6 万到 702.4 万之间的概率大于 99:1。
 
 一般地，设 $X$ 是概率空间 $\Omega$ 上的任意随机变量，均值 $\mu$ 与标准差 $\sigma$ 均有限。我们可以构造概率空间 $\Omega^n$，其基本事件为 $n$ 元组 $(\omega_1,\omega_2,\dots,\omega_n)$，每个 $\omega_k\in\Omega$，且概率为
-$$
-\Pr(\omega_1,\omega_2,\dots,\omega_n)=\Pr(\omega_1)\Pr(\omega_2)\cdots\Pr(\omega_n).
-$$
+$$\Pr(\omega_1,\omega_2,\dots,\omega_n)=\Pr(\omega_1)\Pr(\omega_2)\cdots\Pr(\omega_n).$$
+
 定义随机变量
-$$
-X_k(\omega_1,\omega_2,\dots,\omega_n)=X(\omega_k),
-$$
+$$X_k(\omega_1,\omega_2,\dots,\omega_n)=X(\omega_k),$$
 则
-$$
-X_1+X_2+\cdots+X_n
-$$
+$$X_1+X_2+\cdots+X_n$$
+
 是 $n$ 个独立随机变量之和，对应在 $\Omega$ 上对 $X$ 做 $n$ 次独立抽样并求和。其均值为 $n\mu$，标准差为 $\sqrt n\,\sigma$。因此，$n$ 次抽样的平均值
-$$
-\frac1n(X_1+X_2+\cdots+X_n)
-$$
+$$\frac1n(X_1+X_2+\cdots+X_n)$$
+
 至少有 99% 的概率落在
-$$
-\mu-\frac{10\sigma}{\sqrt n}\quad\text{和}\quad\mu+\frac{10\sigma}{\sqrt n}
-$$
+$$\mu-\frac{10\sigma}{\sqrt n}\quad\text{和}\quad\mu+\frac{10\sigma}{\sqrt n}$$
 之间。换句话说，只要 $n$ 足够大，$n$ 次独立样本的平均值几乎一定非常接近期望值 $EX$。（概率论教材中会证明更强的强大数定律，但我们这里由切比雪夫不等式得到的简单结论已经够用。）
 
 有时我们并不知道概率空间的具体特性，需要通过重复抽样来估计随机变量 $X$ 的均值。（比如估计旧金山一月正午的平均气温，或保险代理人的平均预期寿命。）如果我们得到了独立观测值 $X_1,X_2,\dots,X_n$，就可以用其作为真实均值的近似估计。
-$$
-\widehat{E}X=\frac{X_1+X_2+\cdots+X_n}n\tag{8.19}
-$$
+$$\widehat{E}X=\frac{X_1+X_2+\cdots+X_n}n\tag{8.19}$$
 
 我们还可以用下面的公式对方差做出估计：
-$$
-\widehat{V}X = \frac{X_1^2+X_2^2+\cdots+X_n^2}{n-1} - \frac{(X_1+X_+\cdots+X_n)^2}{n(n-1)}. \tag{8.20}
-$$
+$$\widehat{V}X = \frac{X_1^2+X_2^2+\cdots+X_n^2}{n-1} - \frac{(X_1+X_+\cdots+X_n)^2}{n(n-1)}. \tag{8.20}$$
+
 式中的 $n-1$ 看起来像是笔误，似乎本该像 (8.19) 那样用 $n$；毕竟真实方差 $VX$ 是用期望在 (8.15) 中定义的。但这里用 $n-1$ 会得到更好的估计，因为定义 (8.20) 满足
-$$
-E(\widehat{V}X)=VX.\tag{8.21}
-$$
+$$E(\widehat{V}X)=VX.\tag{8.21}$$
+
 推导如下：
 $$
 \begin{aligned}
-E(\widehat{V}X)
-&=\frac1{n-1}E\left(
-\sum_{k=1}^n X_k^2 -
-\frac1n\sum_{j=1}^n\sum_{k=1}^n X_jX_k
-\right)\\
-&=\frac1{n-1}\left(
-\sum_{k=1}^nE(X_k^2) -
-\frac1n\sum_{j=1}^n\sum_{k=1}^nE(X_jX_k)
-\right)\\
-&=\frac1{n-1}\Bigg(
-nE(X^2) -
-\frac1n\bigg(
-nE(X^2)+n(n-1)E(X)^2
-\bigg)
-\Bigg)\\
+E(\widehat{V}X)&=\frac1{n-1}E\left(\sum_{k=1}^n X_k^2 -\frac1n\sum_{j=1}^n\sum_{k=1}^n X_jX_k\right)\\
+&=\frac1{n-1}\left(\sum_{k=1}^nE(X_k^2) -\frac1n\sum_{j=1}^n\sum_{k=1}^nE(X_jX_k)\right)\\
+&= \frac{1}{n - 1}\left(\sum_{k=1}^n E(X^2) - \dfrac{1}{n}\sum_{j=1}^n\sum_{k=1}^n \big(E(X)^2[j\ne k] + E(X^2)[j=k]\big)\right) \\
+&=\frac1{n-1}\Bigg(nE(X^2) - \frac1n\bigg(nE(X^2)+n(n-1)E(X)^2 \bigg)\Bigg)\\
 &=E(X^2)-E(X)^2=VX.
 \end{aligned}
 $$
@@ -360,129 +332,94 @@ $$
 
 在实际应用中，对随机变量 $X$ 的实验结果通常表示为：样本均值 $\hat\mu=\widehat{E}X$，样本标准差 $\hat\sigma=\sqrt{\widehat{V}X}$，并以形式 $\hat\mu\pm\hat\sigma/\sqrt n$ 给出结果。
 
-例如，下面是两组据称均匀的骰子的 10 次投掷结果：
-点数和依次为：7, 11, 8, 5, 4, 6, 10, 8, 8, 7。
+例如，下面是两组据称均匀的骰子的 10 次投掷结果：点数和依次为：7, 11, 8, 5, 4, 6, 10, 8, 8, 7。
 
 样本均值为：
-$$
-\hat\mu=(7+11+8+5+4+6+10+8+8+7)/10=7.4;
-$$
+$$\hat\mu=(7+11+8+5+4+6+10+8+8+7)/10=7.4;$$
+
 样本方差为：
-$$
-(7^2+11^2+8^2+5^2+4^2+6^2+10^2+8^2+8^2+7^2-10\hat\mu^2)/9
-\approx 2.1^2.
-$$
+$$(7^2+11^2+8^2+5^2+4^2+6^2+10^2+8^2+8^2+7^2-10\hat\mu^2)/9 \approx 2.1^2.$$
 
 我们根据这些实验估计，骰子点数和的平均值为 $7.4\pm2.1/\sqrt{10}=7.4\pm0.7$。
 
-我们再用一个均值与方差的例子，展示如何从理论上计算，而不是靠实验。第 5 章中我们讨论过“帽子匹配问题”：$n$ 顶帽子被随机抛起，形成一个随机排列。我们在式 (5.51) 中证明过，没有人拿到自己帽子的概率约为 $1/e$。我们还推导出了恰好有 $k$ 个人拿到自己帽子的概率公式：
-$$
-P(n,k)=\frac1{n!}\binom nk (n-k)!
-=\frac1{k!}\frac{(n-k)!}{(n-k)!}.\tag{8.22}
-$$
+我们再举一个均值与方差的例子，用以说明如何通过理论推导而非经验统计来计算它们。第5章中讨论过“足球赢家问题”：将 $n$ 顶帽子抛向空中，最终形成帽子的一个随机排列。由式 $(5.51)$ 可知，无人拿回自己帽子的概率为 $!n/n!\approx 1/e$。我们还推导得出如下公式
+$$P(n,k)=\frac1{n!}\binom nk !(n-k) =\frac1{k!}\frac{!(n-k)}{(n-k)!}.\tag{8.22}$$
 
-用刚学的形式化语言重述：设概率空间 $\Pi_n$ 为 $\{1,2,\dots,n\}$ 的所有 $n!$ 个排列 $\pi$，每个排列概率 $\Pr(\pi)=1/n!$。随机变量
-$$
-F_n(\pi)=\text{ number of "fixed points" of }\pi, \text{ for } \pi\in\Pi_n,
-$$
+用刚学过的形式体系重新表述上述结论，可考虑由集合 $\{1,2,\dots,n\}$ 的全部 $n!$ 个排列 $\pi$ 构成的概率空间 $\Omega_n$，其中对任意 $\pi\in\Omega_n$ 都有 $\text{Pr}(\pi)=1/n!$。该随机变量
+$$F_n(\pi)=\text{ number of "fixed points" of }\pi, \text{ for } \pi\in\Pi_n,$$
 就对应帽子匹配问题中拿对帽子的人数。式 (8.22) 给出了 $\Pr(F_n=k)$，但现在我们假装不知道这个公式，只想求 $F_n$ 的均值与标准差。
 
 均值其实非常好算，完全避开第 5 章的复杂内容。只需注意到：
 $$
-F_n(\pi)=F_{n,1}(\pi)+F_{n,2}(\pi)+\cdots+F_{n,n}(\pi),
-$$
-其中
-$$
-F_{n,k}(\pi)=[\text{position k of }\pi\text{ is a fixed point}] , \text{ for } \pi\in\Pi_n,.
-$$
-于是
-$$
-EF_n=EF_{n,1}+EF_{n,2}+\cdots+EF_{n,n}.
-$$
-而 $EF_{n,k}$ 就是 $F_{n,k}=1$ 的概率，即 $1/n$，因为 $n!$ 个排列中恰有 $(n-1)!$ 个满足 $\pi_k=k$。因此
-$$
-EF_n=\frac n n=1,\quad n>0.\tag{8.23}
-$$
-平均而言，会有一个人拿对自己的帽子。
-
-接下来求标准差。这稍微难一点，因为 $F_{n,k}$ 之间并不独立，但我们可以通过分析相关性计算方差：
-$$
 \begin{aligned}
-E(F_n^2)
-&=E\left(\left(\sum_{k=1}^n F_{n,k}\right)^2\right)
-=\sum_{j=1}^n\sum_{k=1}^nE(F_{n,j}F_{n,k})\\
-&=\sum_{k=1}^nE(F_{n,k}^2)
-+2\sum_{1\le j<k\le n}E(F_{n,j}F_{n,k}).
+F_n(\pi) &= F_{n,1}(\pi)+F_{n,2}(\pi)+\cdots+F_{n,n}(\pi),
+F_{n,k}(\pi) &= [\text{position k of }\pi\text{ is a fixed point}] , \text{ for } \pi\in\Pi_n,.
 \end{aligned}
 $$
 
-因为 $F_{n,k}$ 只取 0 或 1，所以 $F_{n,k}^2=F_{n,k}$，从而 $E(F_{n,k}^2)=EF_{n,k}=1/n$。当 $j<k$ 时，$ E(F_{n,j}F_{n,k})=\Pr(\pi\text{ has both j and k asxed points})=\frac{(n-2)!}{n!}=\frac1{n(n-1)}.$ 因此
+于是
+$$EF_n=EF_{n,1}+EF_{n,2}+\cdots+EF_{n,n}.$$
+
+而 $F_{n,k}$ 的期望值恰好等于 $F_{n,k}=1$ 的概率，该概率为 $1/n$ 。这是因为在 $\Omega_n$ 的 $n!$ 个排列 $\pi=\pi_1\pi_2\cdots\pi_n$ 中，满足 $\pi_k=k$ 的排列恰好有 $(n-1)!$ 个。因此
+$$EF_n=\frac n n=1,\quad \text{ for } n>0.\tag{8.23}$$
+平均而言，会有一顶帽子落在原本的位置上。“一个随机排列平均有一个不动点。”
+
+那么标准差是多少呢？这个问题难度更高，因为 $F_{n,k}$ 之间并不相互独立。但我们可以通过分析它们之间的相互关联来计算方差：
 $$
+\begin{aligned}
 E(F_n^2)
-=n\cdot\frac1n+2\binom n2\cdot\frac1{n(n-1)}=2,\quad n\ge2.\tag{8.24}
+&=E\left(\left(\sum_{k=1}^n F_{n,k}\right)^2\right) =E\left(\sum_{j=1}^n\sum_{k=1}^nF_{n,j}F_{n,k}\right)\\
+&=\sum_{j=1}^n\sum_{k=1}^nE(F_{n,j}F_{n,k})=\sum_{k=1}^nE(F_{n,k}^2) +2\sum_{1\le j<k\le n}E(F_{n,j}F_{n,k}).
+\end{aligned}
 $$
+
+（我们在第2章推导式 $(2.33)$ 时也曾用过类似技巧。）由于 $F_{n,k}$ 取值只能是 $0$ 或 $1$，故有 $F_{n,k}^2 = F_{n,k}$；因此 $\mathbb{E}(F_{n,k}^2) = \mathbb{E}F_{n,k} = 1/n$，与前文一致。若 $j<k$，则 $\mathbb{E}(F_{n,j}F_{n,k})$ 等于排列 $\pi$ 同时以 $j$ 和 $k$ 为不动点的概率，即 $(n-2)!/n! = 1/n(n-1)$。因此
+$$E(F_n^2)=\fracnn+\binom n2\cdot\frac2{n(n-1)}=2,\quad \text{ for } n\ge2.\tag{8.24}$$
+
 于是方差为
-$$
-VF_n=E(F_n^2)-(EF_n)^2=2-1=1,
-$$
+$$VF_n=E(F_n^2)-(EF_n)^2=2-1=1,$$
 标准差也为 1。“$n\ge2$ 个元素的随机排列，不动点个数约为 $1\pm1$。”
 
 
 ## 8.3 PROBABILITY GENERATING FUNCTIONS 概率生成函数
-若随机变量 $X$ 只取非负整数值，我们可以用第7章的技巧很好地刻画它的概率分布。$X$ 的**概率生成函数**（pgf）为
+若随机变量 $X$ 只取非负整数值，我们可以用第7章的技巧很好地刻画它的概率分布。$X$ 的*概率生成函数*（pgf）为
 $$
 G_X(z)=\sum_{k\ge0}\Pr(X=k)z^k.\tag{8.25}
 $$
+
 这个关于 $z$ 的幂级数包含了随机变量 $X$ 的全部信息。它也可以写成另外两种形式：
-$$
-G_X(z)=\sum_{\omega\in\Omega}\Pr(\omega)z^{X(\omega)}=E(z^X).\tag{8.26}
-$$
+$$G_X(z)=\sum_{\omega\in\Omega}\Pr(\omega)z^{X(\omega)}=E(z^X).\tag{8.26}$$
+
 $G_X(z)$ 的系数均非负，且系数和为 1；后一条件可写作
-$$
-G_X(1)=1.\tag{8.27}
-$$
+$$G_X(1)=1.\tag{8.27}$$
+
 反之，任何系数非负且满足 $G(1)=1$ 的幂级数 $G(z)$，都是某个随机变量的概率生成函数。
 
-概率生成函数最妙的一点是，它通常能**简化均值与方差的计算**。例如，均值可以很方便地表示为：
-$$
-EX
-=\sum_{k\ge0}k\cdot\Pr(X=k)
-=\sum_{k\ge0}\Pr(X=k)\cdot kz^{k-1}\bigg|_{z=1}
-=G_X'(1).\tag{8.28}
-$$
+概率生成函数最妙的一点是，它通常能简化均值与方差的计算。例如，均值可以很方便地表示为：
+$$EX =\sum_{k\ge0}k\cdot\Pr(X=k) =\sum_{k\ge0}\Pr(X=k)\cdot kz^{k-1}\bigg|_{z=1} =G_X'(1).\tag{8.28} $$
 我们只需要对概率生成函数关于 $z$ 求导，再令 $z=1$ 即可。
 
 方差的计算只稍微复杂一点：
 $$
 \begin{aligned}
-E(X^2)
-&=\sum_{k\ge0}k^2\cdot\Pr(X=k)\\
-&=\sum_{k\ge0}\Pr(X=k)\cdot\bigl(k(k-1)z^{k-2}+kz^{k-1}\bigr)\bigg|_{z=1}\\
-&=G_X''(1)+G_X'(1).
+E(X^2) &=\sum_{k\ge0}k^2\cdot\Pr(X=k)\\
+&=\sum_{k\ge0}\Pr(X=k)\cdot\bigl(k(k-1)z^{k-2}+kz^{k-1}\bigr)\bigg|_{z=1}=G_X''(1)+G_X'(1).
 \end{aligned}
 $$
+
 因此
-$$
-VX=G_X''(1)+G_X'(1)-G_X'(1)^2.\tag{8.29}
-$$
+$$VX=G_X''(1)+G_X'(1)-G_X'(1)^2.\tag{8.29} $$
 
 式 (8.28) 和 (8.29) 表明，只要算出两个导数值 $G_X'(1)$ 和 $G_X''(1)$，就能求出均值和方差。我们不需要知道概率的闭式，甚至不需要知道 $G_X(z)$ 本身的闭式。
 
 为方便起见，对任意函数 $G$ 记：
-$$
-\text{Mean}(G)=G'(1),\tag{8.30}
-$$
-$$
-\text{Var}(G)=G''(1)+G'(1)-G'(1)^2,\tag{8.31}
-$$
+$$\text{Mean}(G)=G'(1),\tag{8.30}$$
+$$\text{Var}(G)=G''(1)+G'(1)-G'(1)^2,\tag{8.31}$$
 因为我们经常需要计算这些导数组合。
 
-概率生成函数第二妙的地方是：在许多重要情形下，它都是关于 $z$ 的相对简单的函数。
-例如，考虑**$n$ 阶均匀分布**：随机变量等概率取 $\{0,1,\dots,n-1\}$ 中每个值。此时的概率生成函数为
+概率生成函数第二妙的地方是：在许多重要情形下，它都是关于 $z$ 的相对简单的函数。例如，考虑 $n$ 阶*均匀分布*：随机变量等概率取 $\{0,1,\dots,n-1\}$ 中每个值。此时的概率生成函数为
 $$
-U_n(z)
-=\frac1n(1+z+\cdots+z^{n-1})
-=\frac1n\,\frac{1-z^n}{1-z},\quad n\ge1.\tag{8.32}
+U_n(z) =\frac1n(1+z+\cdots+z^{n-1})=\frac1n\,\frac{1-z^n}{1-z},\quad \text{ for }n\ge1. \tag{8.32}
 $$
 这是等比级数，因此有闭式。
 
@@ -496,25 +433,26 @@ $$
 
 例如，均匀分布的概率生成函数 $U_n(z)$ 用此法很容易求出各阶导数：
 $$
-U_n(1+t)=\frac1n\,\frac{(1+t)^n-1}{t}=\frac1n\binom n1+\frac1n\binom n2 t+\frac1n\binom n3 t^2+\cdots+\frac1n\binom nn t^{n-1}.
+\begin{aligned}
+U_n(1+t)&=\frac1n\,\frac{(1+t)^n-1}{t} \\
+&=\frac1n\binom n1+\frac1n\binom n2 t+\frac1n\binom n3 t^2+\cdots+\frac1n\binom nn t^{n-1}.
+\end{aligned}
 $$
+
 与 (8.33) 比较可得：
 $$
-U_n(1)=1,\quad
-U_n'(1)=\frac{n-1}{2},\quad
-U_n''(1)=\frac{(n-1)(n-2)}{3};\tag{8.34}
+U_n(1)=1,\quad U_n'(1)=\frac{n-1}{2},\quad U_n''(1)=\frac{(n-1)(n-2)}{3};\tag{8.34}
 $$
-一般有 $U_n^{(m)}(1)=\dfrac{(n-1)^{\underline m}}{m+1}$，不过计算均值和方差只需要 $m=1$ 和 $m=2$。
 
-均匀分布的均值为
+一般有 $U_n^{(m)}(1)=(n-1)^{\underline m}/(m+1)$，不过计算均值和方差只需要 $m=1$ 和 $m=2$。均匀分布的均值为
 $$
 U_n'(1)=\frac{n-1}{2},\tag{8.35}
 $$
+
 方差为
 $$
 \begin{aligned}
-U_n''(1)+U_n'(1)-U_n'(1)^2
-&=\frac{(n-1)(n-2)}{3}+\frac{n-1}{2}-\frac{(n-1)^2}{4}\\
+U_n''(1)+U_n'(1)-U_n'(1)^2&=\frac{(n-1)(n-2)}{3}+\frac{n-1}{2}-\frac{(n-1)^2}{4}\\
 &=\frac{n^2-1}{12}.\tag{8.36}
 \end{aligned}
 $$
@@ -522,31 +460,20 @@ $$
 概率生成函数第三妙的地方是：独立随机变量之和的概率生成函数，等于各自概率生成函数的乘积。第 5、7 章已经知道，生成函数的乘积对应序列的卷积；而在应用中更重要的是：概率的卷积对应独立随机变量的和。
 
 事实上，若 $X,Y$ 是只取整数值的随机变量，则
-$$
-\Pr(X+Y=n)
-=\sum_k\Pr(X=k\text{ 且 }Y=n-k).
-$$
+$$\Pr(X+Y=n) =\sum_k\Pr(X=k\text{ and }Y=n-k).$$
+
 若 $X,Y$ 独立，则
-$$
-\Pr(X+Y=n)
-=\sum_k\Pr(X=k)\Pr(Y=n-k),
-$$
+$$\Pr(X+Y=n)=\sum_k\Pr(X=k)\Pr(Y=n-k),$$
+
 这正是卷积。因此核心结论是：
-$$
-G_{X+Y}(z)=G_X(z)G_Y(z),\quad \text{若 }X,Y\text{ 独立}.\tag{8.37}
-$$
+$$G_{X+Y}(z)=G_X(z)G_Y(z),\quad \text{ if X and Y are independent }$$
 
 本章前面已经看到，独立时 $V(X+Y)=VX+VY$。设 $F(z),G(z)$ 分别是 $X,Y$ 的概率生成函数，$H(z)$ 是 $X+Y$ 的，则
-$$
-H(z)=F(z)G(z),
-$$
+$$H(z)=F(z)G(z),$$
+
 而由 (8.28)–(8.31) 可得：
-$$
-\text{Mean}(H)=\text{Mean}(F)+\text{Mean}(G);\tag{8.38}
-$$
-$$
-\text{Var}(H)=\text{Var}(F)+\text{Var}(G).\tag{8.39}
-$$
+$$\text{Mean}(H)=\text{Mean}(F)+\text{Mean}(G);\tag{8.38}$$
+$$\text{Var}(H)=\text{Var}(F)+\text{Var}(G).\tag{8.39}$$
 
 这些公式来自导数关系 $\text{Mean}(H)=H'(1)$，$\text{Var}(H)=H''(1)+H'(1)-H'(1)^2$，对一般的函数乘积 $H(z)=F(z)G(z)$ 并不天然成立，因为
 $$
@@ -554,14 +481,13 @@ $$
 H'(z)&=F'(z)G(z)+F(z)G'(z),\\
 H''(z)&=F''(z)G(z)+2F'(z)G'(z)+F(z)G''(z).
 \end{aligned}
+
 $$
 但令 $z=1$ 即可看出，只要
-$$
-F(1)=G(1)=1\tag{8.40}
-$$
+$$F(1)=G(1)=1\tag{8.40}$$
 且导数存在，(8.38) 和 (8.39) 就普遍成立。“概率”甚至不必落在 $[0,1]$ 内。只要 $F(1),G(1)\ne0$，我们总可以用 $F(1),G(1)$ 分别除以 $F(z),G(z)$ 做归一化，使条件满足。
 
-均值和方差并非全部，它们只是由丹麦天文学家托瓦尔·尼科莱·蒂勒于 1903 年引入的无穷级数——**累积量**（cumulant）统计量中的前两项。随机变量的前两个累积量 $\kappa_1$ 和 $\kappa_2$ 就是我们所说的均值和方差；更高阶的累积量可以刻画分布更精细的性质。一般公式
+均值和方差并非全部，它们只是由丹麦天文学家托瓦尔·尼科莱·蒂勒于 1903 年引入的无穷级数——*累积量*（cumulant）统计量中的前两项。随机变量的前两个累积量 $\kappa_1$ 和 $\kappa_2$ 就是我们所说的均值和方差；更高阶的累积量可以刻画分布更精细的性质。一般公式
 $$
 \ln G(e^t)=\frac{\kappa_1}{1!}\,t+\frac{\kappa_2}{2!}\,t^2+\frac{\kappa_3}{3!}\,t^3+\frac{\kappa_4}{4!}\,t^4+\cdots\tag{8.41}
 $$
@@ -580,33 +506,21 @@ $$
 $$
 \mu_m=\sum_{k\ge0}k^m\Pr(X=k)=E(X^m).\tag{8.43}
 $$
-$\mu_m$ 称为 $X$ 的 **$m$ 阶原点矩**。
 
-对 (8.41) 两边取指数，得到 $G(e^t)$ 的另一表达式：
+$\mu_m$ 称为 $X$ 的 $m$ 阶原点矩。对 (8.41) 两边取指数，得到 $G(e^t)$ 的另一表达式：
 $$
 \begin{aligned}
-G(e^t)
-&=1+\frac1{1!}\left(\kappa_1t+\frac12\kappa_2t^2+\cdots\right)
-+\frac1{2!}\left(\kappa_1t+\frac12\kappa_2t^2+\cdots\right)^2
-+\cdots\\
+G(e^t)&=1+\frac1{1!}\left(\kappa_1t+\frac12\kappa_2t^2+\cdots\right)+\frac1{2!}\left(\kappa_1t+\frac12\kappa_2t^2+\cdots\right)^2+\cdots\\
 &=1+\kappa_1t+\frac12(\kappa_2+\kappa_1^2)t^2+\cdots.
 \end{aligned}
 $$
+
 比较 $t$ 的同次幂系数，可得一系列公式：
-$$
-\kappa_1=\mu_1,\tag{8.44}
-$$
-$$
-\kappa_2=\mu_2-\mu_1^2,\tag{8.45}
-$$
-$$
-\kappa_3=\mu_3-3\mu_1\mu_2+2\mu_1^3,\tag{8.46}
-$$
-$$
-\kappa_4=\mu_4-4\mu_1\mu_3+12\mu_1^2\mu_2-3\mu_2^2-6\mu_1^4,\tag{8.47}
-$$
-$$
-\kappa_5=\mu_5-5\mu_1\mu_4+20\mu_1^2\mu_3-10\mu_2\mu_3 \\
+$$\kappa_1=\mu_1,\tag{8.44}
+$$$$\kappa_2=\mu_2-\mu_1^2,\tag{8.45}
+$$$$\kappa_3=\mu_3-3\mu_1\mu_2+2\mu_1^3,\tag{8.46}
+$$$$\kappa_4=\mu_4-4\mu_1\mu_3+12\mu_1^2\mu_2-3\mu_2^2-6\mu_1^4,\tag{8.47}
+$$$$\kappa_5=\mu_5-5\mu_1\mu_4+20\mu_1^2\mu_3-10\mu_2\mu_3 \\
 \qquad\qquad +30\mu_1\mu_2^2-60\mu_1^3\mu_2+24\mu_1^5,\tag{8.48}
 $$
 它们用矩表示了累积量。可以看到 $\kappa_2$ 确实就是方差 $E(X^2)-(EX)^2$。
@@ -617,7 +531,7 @@ $$
 $$
 G(1 + t)=1 + \frac{\alpha_1}{1!}\,t +\frac{\alpha_2}{2!}\,t^2 +\frac{\alpha_3}{3!}\,t^3 +\cdots,
 $$
-由式 (8.33) 可知，$\alpha_m$ 就是**阶乘矩**：
+由式 (8.33) 可知，$\alpha_m$ 就是阶乘矩：
 $$
 \begin{aligned}
 \alpha_m &=G^{(m)}(1) =\sum_{k\ge0}\Pr(X=k)\,k^{\underline m}\,z^{k-m}\bigg|_{z=1}\\
@@ -632,16 +546,11 @@ $$
 &=1+\alpha_1t+\frac12(\alpha_2+\alpha_1)t^2+\cdots,
 \end{aligned}
 $$
+
 从而可以用导数 $G^{(m)}(1)$ 表示累积量：
-$$
-\kappa_1=\alpha_1,\tag{8.50}
-$$
-$$
-\kappa_2=\alpha_2+\alpha_1-\alpha_1^2,\tag{8.51}
-$$
-$$
-\kappa_3=\alpha_3+3\alpha_2+\alpha_1-3\alpha_2\alpha_1-3\alpha_1^ +2\alpha_1^3,\tag{8.52}
-$$
+$$\kappa_1=\alpha_1,\tag{8.50}
+$$$$\kappa_2=\alpha_2+\alpha_1-\alpha_1^2,\tag{8.51}
+$$$$\kappa_3=\alpha_3+3\alpha_2+\alpha_1-3\alpha_2\alpha_1-3\alpha_1^ +2\alpha_1^3,\tag{8.52}$$
 这一系列公式给出了可加恒等式，把 (8.38)、(8.39) 推广到所有累积量。
 
 回到简单例子，把这些思路落地。最简单的随机变量是“随机常数”：$X$ 以概率 1 取固定值 $x$。此时 $G_X(z)=z^x$，且 $\ln G_X(e^t)=xt$，因此均值为 $x$，其余所有累积量均为 0。这说明：给任意 pgf 乘以 $z^x$，会让均值增加 $x$，而方差及其他累积量保持不变。
@@ -655,35 +564,31 @@ $$
 
 两颗独立骰子总点数的 pgf 是单颗 pgf 的平方：
 $$
-G_S(z)
-=\frac{z^2+2z^3+3z^4+4z^5+5z^6+6z^7+5z^8+4z^9+3z^{10}+2z^{11}+z^{12}}{36}
-=z^2U_6(z)^2.
+\begin{aligned}
+G_S(z)&=\frac{z^2+2z^3+3z^4+4z^5+5z^6+6z^7+5z^8+4z^9+3z^{10}+2z^{11}+z^{12}}{36}\\
+&=z^2U_6(z)^2.
+\end{aligned}
 $$
 
 同理，如果把一对均匀骰子掷 $n$ 次，总点数为 $k$ 的概率为
 $$
-[z^k]\,G_S(z)^n
-=[z^k]\,z^{2n}U_6(z)^{2n}
-=[z^{k-2n}]\,U_6(z)^{2n}.
+[z^k]\,G_S(z)^n=[z^k]\,z^{2n}U_6(z)^{2n}=[z^{k-2n}]\,U_6(z)^{2n}.
 $$
 
 在之前讨论的帽子匹配问题（即随机排列不动点计数问题）中，由式 (5.49) 可知其 pgf 为
 $$
-F_n(z)
-=\sum_{0\le k\le n}\frac{(n-k)!}{(n-k)!}\frac{z^k}{k!},\quad n\ge0.\tag{8.53}
+F_n(z)=\sum_{0\le k\le n}\frac{!(n-k)}{(n-k)!}\frac{z^k}{k!},\quad \text{ for } n\ge0.\tag{8.53}
 $$
+
 因此
 $$
 \begin{aligned}
-F_n'(z)
-&=\sum_{1\le k\le n}\frac{(n-k)!}{(n-k)!}\frac{z^{k-1}}{(k-1)!}\\
-&=\sum_{0\le k\le n-1}\frac{(n-1-k)!}{(n-1-k)!}\frac{z^k}{k!}
-=F_{n-1}(z).
+F_n'(z)&=\sum_{1\le k\le n}\frac{!(n-k)}{(n-k)!}\frac{z^{k-1}}{(k-1)!}\\
+&=\sum_{0\le k\le n-1}\frac{!(n-1-k)}{(n-1-k)!}\frac{z^k}{k!}=F_{n-1}(z).
 \end{aligned}
 $$
 
-不需要知道系数细节，由递推式 $F_n'(z)=F_{n-1}(z)$ 即可推出
-$F_n^{(m)}(z)=F_{n-m}(z)$，因此
+不需要知道系数细节，由递推式 $F_n'(z)=F_{n-1}(z)$ 即可推出 $F_n^{(m)}(z)=F_{n-m}(z)$，因此
 $$
 F_n^{(m)}(1)=F_{n-m}(1)=[n\ge m].\tag{8.54}
 $$
@@ -691,25 +596,18 @@ $$
 用这个公式计算均值和方差非常简便，我们可以更快得到之前的结论：当 $n\ge2$ 时均值和方差都等于 1。
 
 事实上，我们还能证明：只要 $n\ge m$，该随机变量的 $m$ 阶累积量 $\kappa_m$ 就等于 1。因为 $m$ 阶累积量只依赖于 $F_n'(1),F_n''(1),\dots,F_n^{(m)}(1)$，而这些导数全都是 1。所以把 $F_n(z)$ 换成极限 pgf
+$$F_\infty(z)=e^{z-1}\tag{8.55}$$
+
+后，得到的 $m$ 阶累积量完全相同，而 $F_\infty(z)$ 的各阶导数在 1 处都满足 $F_\infty^{(m)}(1)=1$。$F_\infty$ 的所有累积量都恒等于 1，因为
 $$
-F_\infty(z)=e^{z-1}\tag{8.55}
-$$
-后，得到的 $m$ 阶累积量完全相同，而 $F_\infty(z)$ 的各阶导数在 1 处都满足 $F_\infty^{(m)}(1)=1$。
-$F_\infty$ 的所有累积量都恒等于 1，因为
-$$
-\ln F_\infty(e^t)
-=\ln e^{e^t-1}
-=e^t-1
-=\frac t{1!}+\frac{t^2}{2!}+\frac{t^3}{3!}+\cdots.
+\ln F_\infty(e^t)=\ln e^{e^t-1}=e^t-1=\frac t{1!}+\frac{t^2}{2!}+\frac{t^3}{3!}+\cdots.
 $$
 
 
-## 8.4 FLIPPING COINS
+## 8.4 FLIPPING COINS 抛硬币
 现在我们来看只有两种结果的随机过程。抛一枚硬币，正面朝上的概率为 $p$，反面朝上的概率为 $q$，满足
-$$
-p+q=1.
-$$
-（我们假设硬币不会立在边缘、掉进洞里等。）本节中 $p,q$ 始终满足和为 1。若硬币均匀，则 $p=q=1/2$；否则称硬币有偏。
+$$p+q=1.$$
+（我们假设硬币不会立在边缘、掉进洞里等。）本节中 $p,q$ 始终满足和为 1。若硬币均匀，则 $p=q=1/2$；否则称硬币*有偏*。
 
 抛一次硬币得到正面数的概率生成函数为
 $$
@@ -718,29 +616,29 @@ $$
 
 如果独立抛硬币 $n$ 次，正面次数的生成函数为
 $$
-H(z)^n=(q+pz)^n
-=\sum_{k\ge0}\binom nk p^kq^{n-k}z^k,\tag{8.57}
+H(z)^n=(q+pz)^n=\sum_{k\ge0}\binom nk p^kq^{n-k}z^k,\tag{8.57}
 $$
-这正是二项式定理。因此，$n$ 次抛掷中恰好出现 $k$ 次正面的概率为 $\binom nk p^kq^{n-k}$，这一概率序列称为**二项分布**。
 
-假设我们反复抛硬币，直到**首次出现正面**为止。问恰好需要 $k$ 次抛掷的概率是多少？$k=1$：概率为 $p$（第一次就正面）；$k=2$：概率为 $qp$（先反后正）；一般 $k$：概率为 $q^{k-1}p$。因此生成函数为
+这正是二项式定理。因此，$n$ 次抛掷中恰好出现 $k$ 次正面的概率为 $\binom nk p^kq^{n-k}$，这一概率序列称为*二项分布*。
+
+假设我们反复抛硬币，直到首次出现正面为止。问恰好需要 $k$ 次抛掷的概率是多少？$k=1$：概率为 $p$（第一次就正面）；$k=2$：概率为 $qp$（先反后正）；一般 $k$：概率为 $q^{k-1}p$。因此生成函数为
 $$
-pz+qpz^2+q^2pz^3+\cdots
-=\frac{pz}{1-qz}.\tag{8.58}
+pz+qpz^2+q^2pz^3+\cdots=\frac{pz}{1-qz}.\tag{8.58}
 $$
 
 重复这一过程，直到出现 $n$ 次正面为止，对应的概率生成函数为
 $$
-\left(\frac{pz}{1-qz}\right)^n
-= p^nz^n\sum_k\binom{n+k-1}{k}(qz)^k
-=\sum_k\binom{k-1}{n-1}p^nq^{k-n}z^k.\tag{8.59}
+\begin{aligned}
+\left(\frac{pz}{1-qz}\right)^n &= p^nz^n\sum_k\binom{n+k-1}{k}(qz)^k \\
+&=\sum_k\binom{k-1}{n-1}p^nq^{k-n}z^k.\tag{8.59}
+\end{aligned}
 $$
+
 顺便一提，它等于 $z^n$ 乘以
 $$
-\left(\frac{p}{1-qz}\right)^n
-=\sum_k\binom{n+k-1}{k}p^nq^kz^k,\tag{8.60}
+\left(\frac{p}{1-qz}\right)^n =\sum_k\binom{n+k-1}{k}p^nq^kz^k,\tag{8.60}
 $$
-这就是**负二项分布**的生成函数。
+这就是*负二项分布*的生成函数。
 
 式 (8.59) 对应的概率空间——反复抛硬币直到出现 $n$ 次正面——与本章前面见过的不同，它包含无穷多个基本事件。每个事件是一个有限的正反序列，恰好含 $n$ 个正面且以正面结尾；这样一个序列的概率为 $p^nq^{k-n}$，其中 $k-n$ 是反面的次数。例如，当 $n=3$ 时，序列 THTTTHH 属于该空间，概率为 $qpqqqpp=p^3q^4$。
 

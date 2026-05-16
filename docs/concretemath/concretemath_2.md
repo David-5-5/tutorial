@@ -310,7 +310,7 @@ C_n = 2(n+1)H_n - 2n \qquad (2.14)
 \sum_{k\in K}ca_k = c\sum_{k\in K}a_k; \qquad \qquad \text{(distributive law)} \tag{2.15}
 ```
 ```math
-\sum_{k\in K}(a_k + b_k) = \sum_{k\in K}a_k + \sum_{k\in K}b_k ;\quad\text{(distributive law)} \tag{2.16}
+\sum_{k\in K}(a_k + b_k) = \sum_{k\in K}a_k + \sum_{k\in K}b_k ;\quad\text{(associative law)} \tag{2.16}
 ```
 ```math
 \sum_{k\in K}a_k = \sum_{p(k)\in K}a_{p(k)}; \qquad\qquad\text{(commutative law)} \tag{2.17}
@@ -462,13 +462,13 @@ S_n + (n+1)2^{n+1} = \sum_{0\le k\le n}(k+1)2^{k+1} .
 
 对于多重和，我们沿用单重和的记号与方法。设 $P(j,k)$ 为关于 $j$ 和 $k$ 的条件性质，所有满足 $P(j,k)$ 成立的 $a_{j,k}$ 之和有两种表达方式，其中一种借助艾弗森约定，对所有整数数对 $j,k$ 进行求和：
 ```math
-\sum_{P(j,k)}a_jb_k = \sum_{j,k}a_jb_k[P(j,k)].
+\sum_{P(j,k)}a_{j,k} = \sum_{j,k}a_{j,k}[P(j,k)].
 ```
 即便存在多个求和下标，也只需使用一个 $\sum$ 符号；$\sum$ 表示对所有符合条件的下标组合进行求和。
 
 当处理和式的和时，我们也会用到两个 $\sum$ 符号。例如，
 ```math
-\sum_j\sum_ka_jb_k[P(j,k)] 
+\sum_j\sum_k a_{j,k}[P(j,k)] 
 ```
 的简写形式是：
 $$\sum_j\left(\sum_k a_{j,k}\,[P(j,k)]\right)$$
@@ -478,7 +478,7 @@ $$\sum_j\left(\sum_k a_{j,k}\,[P(j,k)]\right)$$
 
 对此有一条基本法则，称为交换求和次序，它是前文结合律 $(2.16)$ 的推广：
 ```math
-\sum_j\sum_ka_jb_k[P(j,k)] = \sum_{P(j,k)}a_jb_k = \sum_k\sum_ja_jb_k[P(j,k)] . \tag{2.27}
+\sum_j\sum_k a_{j,k}[P(j,k)] = \sum_{P(j,k)}a_{j,k} = \sum_k\sum_j a_{j,k}[P(j,k)] . \tag{2.27}
 ```
 
 该法则中间项为双下标求和。左侧 $\sum_j\sum_k$ 代表先对 $k$ 求和，再对 $j$ 求和；右侧 $\sum_k\sum_j$ 代表先对 $j$ 求和，再对 $k$ 求和。实际求解二重和的闭式时，通常优先选择某一个下标先计算会更加简便，我们可以任选更便捷的求和次序。

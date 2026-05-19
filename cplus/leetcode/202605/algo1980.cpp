@@ -16,5 +16,13 @@ public:
         return "";
     }
 
+    string findDifferentBinaryString(vector<string>& nums) {
+        // 康托对角线 
+        string ans = ""; int n = nums.size();
+        for (int i=0; i<n; i++) {
+            ans.push_back(((nums[i][i]-'0')^1)+'0');
+        }
+        return ans;  
 
+    }
 };

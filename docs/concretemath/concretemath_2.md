@@ -147,7 +147,7 @@ R_n = A(n)\alpha + B(n)\beta + C(n)\gamma,  \tag{2.8}
 
 其中 $A(n), B(n), C(n)$ 是对一般参数 $\alpha, \beta, \gamma$ 的依赖系数。
 
-构造库方法告诉我们，尝试将 $n$ 的简单函数代入 $R_n$，希望能找到常数参数 $\alpha, \beta, \gamma$，使解特别简单。令 $R_n = 1$，则有 $\alpha=1, \beta=0, \gamma=0$；因此
+待定系数构造法告诉我们，尝试将 $n$ 的简单函数代入 $R_n$，希望能找到常数参数 $\alpha, \beta, \gamma$，使解特别简单。令 $R_n = 1$，则有 $\alpha=1, \beta=0, \gamma=0$；因此
 ```math
 A(n) = 1.
 ```

@@ -873,10 +873,11 @@ E_n &=  \Box_n - \frac13n^3 =  \Box_{n-1} + n^2 - \frac13n^3\\
 
 
 - 方法5 伸展和收缩
-还有另外一种方式来找 $\Box_n$ 的闭形式，用看来较复杂的双重和来替换原来的和，如果适当的来回处理双重和，则实际上能简化它：
+
+推导 $\Box_n$ 闭式表达式另有方法，将原式改写为看似繁复的二重和式，合理变换后即可化简求解：
 ```math
 \begin{aligned}
-\Box_n &= \sum_{1\le k\le n}k^2 = \sum_{1\le j\le k\le n}k \qquad too\ abstract. \\ 
+\Box_n &= \sum_{1\le k\le n}k^2 = \sum_{1\le j\le k\le n}k \\ 
     &= \sum_{1\le j\le n}\sum_{j\le k\le n}k \\
     &= \sum_{1\le j\le n} \frac{j+n}{2} (n-j+1) \\
     &= \frac{1}{2} \sum_{1\le j\le n} (n(n+1) + j - j^2) \\

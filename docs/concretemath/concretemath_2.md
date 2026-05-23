@@ -1207,6 +1207,7 @@ $$
 \end{aligned}
 ```
 
+
 此公式可利用 *移位运算符* $E$ 以便捷形式表示，该运算符由定义
 ```math
 Ef(x) = f(x+1).
@@ -1234,21 +1235,20 @@ Ef(x) = f(x+1).
 \begin{aligned}
 \sum_{k=0}^n k2^k &= \sum_0^{n+1} x2^x\delta x \\
     &= x2^x - 2^{x+1}\bigg|_0^{n+1} \\
-    &= ((n+1)2^{n+1} - 2^{n+2}) - (0\cdot 2^0 - 2^1) \\
-    &= (n-1)2^{n+1} + 2.
+    &= ((n+1)2^{n+1} - 2^{n+2}) - (0\cdot 2^0 - 2^1) = (n-1)2^{n+1} + 2.
 \end{aligned}
 ```
 
 用这种方法求和比用微扰法更容易，因为我们不用动脑筋。
 
-我们偶然发现了一个公式，用于 $\sum_{0\le k<n} H_k$ 在本章前面，并且自认为很幸运。但如果我们知道分部求和法，本可以更系统地找到我们的公式(2.36)。让我们通过解决一个看似更难的求和问题来证明这一断言： $\sum_{0\le k<n} kH_k$。如果我们以 $\int x\ln xdx$ 为类比，这个解题过程并不困难。我们设 $u(x) = H_x, \Delta v(x) = x = x^{\underline{1}}$，因此 $\Delta u(x) = x^{\underline{-1}}，v(x) = x^{\underline{2}}/2，Ev(x) = (x+1)^{\underline{2}}/2$，于是我们得到
-```math
+我们偶然发现了一个公式，用于 $\sum_{0\le k<n} H_k$ 在本章前面，并且自认为很幸运。但如果我们知道分部求和法，本可以更系统地找到我们的公式 (2.36)。让我们通过解决一个看似更难的求和问题来证明这一断言： $\sum_{0\le k<n} kH_k$。如果我们以 $\int x\ln xdx$ 为类比，这个解题过程并不困难。我们设 $u(x) = H_x, \Delta v(x) = x = x^{\underline{1}}$，因此 $\Delta u(x) = x^{\underline{-1}}，v(x) = x^{\underline{2}}/2，Ev(x) = (x+1)^{\underline{2}}/2$，于是我们得到
+$$
 \begin{aligned}
 \sum xH_x\delta x &= \frac{x^{\underline{2}}}{2}H_x - \sum\frac{(x+1)^{\underline{2}}}{2}x^{\underline{-1}}\delta x \\
     &= \frac{x^{\underline{2}}}{2}H_x - \frac{1}{2}\sum x^{\underline{1}}\delta x \\
     &= \frac{x^{\underline{2}}}{2}H_x - \frac{x^{\underline{2}}}{4} + C.
 \end{aligned}
-```
+$$
 
 从第一行到第二行，我们利用指数法则(2.52)，将两个下降的幂 $(x+1)^{\underline{2}}x^{\underline{-1}}$ 合并起来，其中 $m=−1$ 且 $n=2$。现在我们可以加上极限，并得出结论
 ```math

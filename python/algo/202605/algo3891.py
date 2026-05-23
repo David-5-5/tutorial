@@ -21,3 +21,15 @@ class Solution:
             return res
         return dfs(n-2, 1)
 
+    def minIncrease(self, nums: List[int]) -> int:
+        # 代码优化 性能一般
+        n = len(nums)
+
+        @cache
+        def dfs(i:int, l:int) -> int:
+            if i < 1: return 0
+            res = max(max(nums[i-1], nums[i+1]) - nums[i] + 1, 0) + dfs(i-2, l) # 不选
+            if l:
+                res = min(res, dfs(i-1, 0))
+            return res
+        return dfs(n-2, (n-1)%2)

@@ -1137,13 +1137,12 @@ f(x) = \frac{1}{1} + \frac{1}{2} + \cdots + \frac{1}{x} .
 
 是一种这样的函数，当 $x$ 为整数时，该量恰好是 (2.13) 的调和数 $H_x$。因此，$H_x$ 是连续对数 $\ln x$ 的离散模拟。（我们将在第6章中定义非整数 $x$ 的 $H_x$，但就目前目的而言，整数值已足够。我们还将在第9章中看到，对于较大的 $x$， $H_x-\ln x$ 的值大约等于 $0.577 + 1/(2x)$。因此， $H_x$ 与 $\ln x$ 不仅具有相似性，它们的值通常相差不到 1。）
 
-
 我们现在可以完整地描述下降幂的和：
 ```math
 \sum_a^bx^{\underline{m}}\delta x = 
 \begin{cases} 
-\frac{x^{\underline{m+1}}}{m+1}\bigg|_a^b, & for\ m\ne -1; \\
-H_x\bigg|_a^b, & for\ m=-1. \tag{2.53}
+\frac{x^{\underline{m+1}}}{m+1}\bigg|_a^b, & \text{ if m }\ne -1; \\
+H_x\bigg|_a^b, & \text{ if m }=-1. \tag{2.53}
 \end{cases} 
 ```
 
@@ -1163,7 +1162,7 @@ $c^x$ 的差值也相当简单，对于任意 $c$，即
 
 因此， $c^x$ 的反差分(anti-difference)为 $c^x/(c − 1)$，如果 $c\ne 1$。这一事实，连同基本定律 (2.47) 和 (2.48)，为我们提供了一种简洁的方法来理解等比数列求和的一般公式：
 ```math
-\sum_{a\le k<b} c^k = \sum_a^b c^x\delta x = \frac{c^x}{c-1}\bigg|_a^b = \frac{c^b-c^a}{c-1}, for\ c\ne 1.
+\sum_{a\le k<b} c^k = \sum_a^b c^x\delta x = \frac{c^x}{c-1}\bigg|_a^b = \frac{c^b-c^a}{c-1}, \text{ for c }\ne 1.
 ```
 
 每次我们遇到一个可能以封闭形式表示的函数 $f$，我们都可以计算它的差分 $\Delta f = g$；然后我们就得到了一个函数 $g$，其不定和 $\sum g(x) \delta x$ 是已知的。表55是用于求和的差分/反差分对表的开头。
@@ -1179,6 +1178,22 @@ D(uv) = uDv + vDu
 ```math
 \int uDv = uv - \int vDu,
 ```
+
+**表55 差分运算对照表**
+$$
+\begin{array}{llll}
+\hline
+f = \sum g & \Delta f = g & f = \sum g & \Delta f = g \\
+\hline
+x^{\underline{0}} = 1 & 0 & 2^x & 2^x \\
+x^{\underline{1}} = x & 1 & c^x & (c-1)c^x \\
+x^{\underline{2}} = x(x-1) & 2x & \dfrac{c^x}{c-1} & c^x \\
+x^{\underline{m}} & m x^{\underline{m-1}} & cf & c\Delta f \\
+\dfrac{x^{\underline{m+1}}}{m+1} & x^{\underline{m}} & f+g & \Delta f+\Delta g \\
+H_x & x^{\underline{-1}} = \dfrac{1}{x+1} & fg & f\Delta g + \text{E}g\Delta f \\
+\hline
+\end{array}
+$$
 
 在整合并重新排列各项之后，我们可以在有限微积分中做类似的事情。
 

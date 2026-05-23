@@ -1093,7 +1093,6 @@ x^{\underline{-m}} = \frac{1}{(x+1)(x+2)\cdots(x+m)}\text{ , for m}>0. \tag{2.51
 x^{m+n} = x^mx^n
 ```
 
-
 对于普通幂。下降幂版本是
 ```math
 x^{\underline{m+n}} = x^{\underline{m}}(x-m)^{\underline{n}}. \tag{2.52}
@@ -1118,7 +1117,7 @@ x^{\underline{2-3}} = x^{\underline{2}}(x-2)^{\underline{-3}} = x(x-1)\frac{1}{(
 
 因此，求和性质（2.50）对于负下降幂以及正下降幂均成立，只要不出现除以零的情况：
 ```math
-\sum_a^bx^{\underline{m}}\delta x = \frac{x^{\underline{m+1}}}{m+1}\bigg|_a^b, for\ m\ne -1.
+\sum_a^bx^{\underline{m}}\delta x = \frac{x^{\underline{m+1}}}{m+1}\bigg|_a^b\text{ , for m} \ne -1.
 ```
 
 但是，当 $m = −1$ 时又如何呢？请记住，对于积分，我们使用
@@ -1137,6 +1136,7 @@ f(x) = \frac{1}{1} + \frac{1}{2} + \cdots + \frac{1}{x} .
 ```
 
 是一种这样的函数，当 $x$ 为整数时，该量恰好是 (2.13) 的调和数 $H_x$。因此，$H_x$ 是连续对数 $\ln x$ 的离散模拟。（我们将在第6章中定义非整数 $x$ 的 $H_x$，但就目前目的而言，整数值已足够。我们还将在第9章中看到，对于较大的 $x$， $H_x-\ln x$ 的值大约等于 $0.577 + 1/(2x)$。因此， $H_x$ 与 $\ln x$ 不仅具有相似性，它们的值通常相差不到 1。）
+
 
 我们现在可以完整地描述下降幂的和：
 ```math

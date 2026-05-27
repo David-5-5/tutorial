@@ -54,7 +54,7 @@ def main():
 
     print("Running C++ benchmarks (1M iterations)...")
     print("-" * 70)
-    result = subprocess.run(['./benchmark'], capture_output=True, text=True)
+    result = subprocess.run(['../../.build/benchmark'], capture_output=True, text=True)
     lines = result.stdout.split('\n')
 
     # Extract C++ results

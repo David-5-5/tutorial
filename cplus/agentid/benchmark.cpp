@@ -112,76 +112,9 @@ namespace LutSimd {
     }
 }
 
-// ======================================================================
-//  4. LUT SIMD Montgomery 实现 (100%复制 lut_simd_mont.cpp 原代码)
-// ======================================================================
-namespace LutSimdMont {
-    const int MOD = 97;
-    const int R = 128;
-    const int R2 = 88;
-    const int INV = 95;
-
-    int montgomery_reduce(long long x) {
-        int q = (x * INV) & 127;
-        long long res = (x + (long long)q * MOD) >> 7;
-        if (res >= MOD) res -= MOD;
-        return (int)res;
-    }
-    int montgomery_mul(int a, int b) {
-        return montgomery_reduce((long long)a * b);
-    }
-    int to_mont(int x) {
-        return montgomery_mul(x % MOD, R2);
-    }
-    int from_mont(int x) {
-        int res = montgomery_reduce(x);
-        return res < 0 ? res + MOD : res;
-    }
-    int get_val(char c) {
-        if (c >= '0' && c <= '9') return c - '0';
-        return 10 + c - 'A';
-    }
-    int run() {
-        const char* s = (const char*)g_test_id;
-        const int len = 30;
-        const int pow36[] = {1,36,35,96,61,62,1,36,35,96,61,62,1,36,35,96,61,62,1,36,35,96,61,62,1,36,35,96,61,62};
-        __m128i sum = _mm_setzero_si128();
-        int i = 0;
-        for (; i < len; i += 4) {
-            int v0 = get_val(s[i]);
-            int v1 = (i+1 < len) ? get_val(s[i+1]) : 0;
-            int v2 = (i+2 < len) ? get_val(s[i+2]) : 0;
-            int v3 = (i+3 < len) ? get_val(s[i+3]) : 0;
-            int e0 = (len-1) - i;
-            int e1 = (len-1) - (i+1);
-            int e2 = (len-1) - (i+2);
-            int e3 = (len-1) - (i+3);
-            int w0 = pow36[e0];
-            int w1 = (i+1 < len) ? pow36[e1] : 0;
-            int w2 = (i+2 < len) ? pow36[e2] : 0;
-            int w3 = (i+3 < len) ? pow36[e3] : 0;
-            __m128i v = _mm_set_epi32(v3, v2, v1, v0);
-            __m128i w = _mm_set_epi32(w3, w2, w1, w0);
-            __m128i p = _mm_mullo_epi32(v, w);
-            sum = _mm_add_epi32(sum, p);
-        }
-        int buf[4];
-        _mm_storeu_si128((__m128i*)buf, sum);
-        long long total = 0;
-        total += (unsigned int)buf[0];
-        total += (unsigned int)buf[1];
-        total += (unsigned int)buf[2];
-        total += (unsigned int)buf[3];
-        total %= MOD;
-        int m_val = to_mont(total);
-        int final_val = from_mont(m_val);
-        int ans = (final_val * 100) % MOD;
-        return ans;
-    }
-}
 
 // ======================================================================
-//  5. LUT SIMD 固定前缀优化（前13位编译期常量）
+//  4. LUT SIMD 固定前缀优化（前13位编译期常量）
 // ======================================================================
 namespace LutSimdFixedPrefix {
     const int MOD = 97;
@@ -283,16 +216,14 @@ int main() {
     long long t1 = benchmark("1. Horner", []() { return Horner::run(); });
     long long t2 = benchmark("2. LookupTable", []() { return LookupTable::run(); });
     long long t3 = benchmark("3. LUT SIMD", []() { return LutSimd::run(); });
-    long long t4 = benchmark("4. LUT SIMD Montgomery", []() { return LutSimdMont::run(); });
-    long long t5 = benchmark("5. LUT SIMD FixedPrefix", []() { return LutSimdFixedPrefix::calc(); });
+    long long t4 = benchmark("4. LUT SIMD FixedPrefix", []() { return LutSimdFixedPrefix::calc(); });
 
     printf("\nPerformance Comparison (vs Horner):\n");
     printf("=======================================\n");
     printf("Horner:                   1.00x (baseline)\n");
     printf("LookupTable:              %.2fx\n", (double)t1 / t2);
     printf("LUT SIMD:                 %.2fx\n", (double)t1 / t3);
-    printf("LUT SIMD Montgomery:      %.2fx\n", (double)t1 / t4);
-    printf("LUT SIMD FixedPrefix:     %.2fx\n", (double)t1 / t5);
+    printf("LUT SIMD FixedPrefix:     %.2fx\n", (double)t1 / t4);
 
     printf("\n[NOTE] 100%% non-intrusive: your original files are NOT modified.\n");
     printf("       All implementation code is verbatim copied from your files.\n");

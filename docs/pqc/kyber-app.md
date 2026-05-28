@@ -639,9 +639,9 @@ $$
 Montgomery域与普通域关键操作对比
 | 操作类型 | 普通域运算  | Montgomery域运算 | 说明 |
 |---|---|---|---|
-| 加法 | $(a + b) \bmod q$ | $(\tilde{a}  + \tilde{b} ) \bmod q$  | 完全一致，直接模加|
-| 减法 | $(a - b) \bmod q$ | $(\tilde{a}  + \tilde{b}) \bmod q$  | 完全一致，直接模减 |
-| 标量乘 | $(ka) \bmod q$ | $(k\tilde{a}) \bmod q$  | 完全一致，直接模减 |
+| 加法 | $(a + b) \bmod q$ | $(\tilde{a}  + \tilde{b} ) \bmod q$  | 完全一致，模加|
+| 减法 | $(a - b) \bmod q$ | $(\tilde{a}  - \tilde{b}) \bmod q$  | 完全一致，模减 |
+| 标量乘 | $(ka) \bmod q$ | $(k\tilde{a}) \bmod q$  | 完全一致，模归约 |
 | 乘法 | $(a × b) \bmod q$ | $montmul(\tilde{a}, \tilde{b}) = (\tilde{a}×\tilde{b}×R^{-1}) \bmod q$  | Montgomery核心优化：<br>1. 用乘法和移位代替除法<br>2. 需预计算$q'=-q^{-1} \bmod R$ |
 | 转换 | - | $\tilde{a} = montmul(a, R^2)$| 进入Montgomery域的代价                                              |
 | 逆转换 | - | $a = montmul(\tilde{a}, 1)$ | 退出Montgomery域的代价                                              |

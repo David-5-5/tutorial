@@ -112,59 +112,9 @@ namespace LutSimd {
     }
 }
 
-// ======================================================================
-//  4. LUT SIMD Montgomery 实现 (100%复制 lut_simd_mont.cpp 原代码)
-// ======================================================================
-namespace LutSimdMont {
-    const int MOD = 97;
-    const int R = 128;
-    const int R2 = 88;
-    const int INV = 95;
-
-    int montgomery_reduce(long long x) {
-        int q = (x * INV) & 127;
-        long long res = (x + (long long)q * MOD) >> 7;
-        if (res >= MOD) res -= MOD;
-        return (int)res;
-    }
-    int montgomery_mul(int a, int b) {
-        return montgomery_reduce((long long)a * b);
-    }
-    int to_mont(int x) {
-        return montgomery_mul(x % MOD, R2);
-    }
-    int from_mont(int x) {
-        int res = montgomery_reduce(x);
-        return res < 0 ? res + MOD : res;
-    }
-    int get_val(char c) {
-        if (c >= '0' && c <= '9') return c - '0';
-        return 10 + c - 'A';
-    }
-    int run() {
-        const char* s = (const char*)g_test_id;
-        const int len = 30;
-        const int pow36_mont[] = {
-            31,49,18,66,48,79,31,49,18,66,
-            48,79,31,49,18,66,48,79,31,49,
-            18,66,48,79,31,49,18,66,48,79
-        };
-
-        int total_mont = to_mont(0);
-        for (int i = 0; i < len; ++i) {
-            int v_mont = to_mont(get_val(s[i]));
-            int p_mont = montgomery_mul(v_mont, pow36_mont[len - 1 - i]);
-            total_mont += p_mont;
-            if (total_mont >= MOD) total_mont -= MOD;
-        }
-
-        int ans_mont = montgomery_mul(total_mont, to_mont(100));
-        return from_mont(ans_mont);
-    }
-}
 
 // ======================================================================
-//  5. LUT SIMD 固定前缀优化（前13位编译期常量）
+//  4. LUT SIMD 固定前缀优化（前13位编译期常量）
 // ======================================================================
 namespace LutSimdFixedPrefix {
     const int MOD = 97;
@@ -266,16 +216,14 @@ int main() {
     long long t1 = benchmark("1. Horner", []() { return Horner::run(); });
     long long t2 = benchmark("2. LookupTable", []() { return LookupTable::run(); });
     long long t3 = benchmark("3. LUT SIMD", []() { return LutSimd::run(); });
-    long long t4 = benchmark("4. LUT SIMD Montgomery", []() { return LutSimdMont::run(); });
-    long long t5 = benchmark("5. LUT SIMD FixedPrefix", []() { return LutSimdFixedPrefix::calc(); });
+    long long t4 = benchmark("4. LUT SIMD FixedPrefix", []() { return LutSimdFixedPrefix::calc(); });
 
     printf("\nPerformance Comparison (vs Horner):\n");
     printf("=======================================\n");
     printf("Horner:                   1.00x (baseline)\n");
     printf("LookupTable:              %.2fx\n", (double)t1 / t2);
     printf("LUT SIMD:                 %.2fx\n", (double)t1 / t3);
-    printf("LUT SIMD Montgomery:      %.2fx\n", (double)t1 / t4);
-    printf("LUT SIMD FixedPrefix:     %.2fx\n", (double)t1 / t5);
+    printf("LUT SIMD FixedPrefix:     %.2fx\n", (double)t1 / t4);
 
     printf("\n[NOTE] 100%% non-intrusive: your original files are NOT modified.\n");
     printf("       All implementation code is verbatim copied from your files.\n");

@@ -73,12 +73,12 @@ def main():
     print("=" * 70)
     print("Performance Comparison (vs Pure Python):")
     print("=" * 70)
-    print(f"Pure Python (lookup):      {ns_pure_py:.2f} ns,   1.00x (baseline)")
+    print(f"Pure Python Horner:        {ns_pure_py:.2f} ns,   1.00x (baseline)")
     print(f"Python int(s, 36):         {ns_int_conv:.2f} ns,   {ns_pure_py/ns_int_conv:.2f}x")
     print()
 
     baseline = ns_pure_py
-    order = ["1. Horner", "2. LookupTable", "3. LUT SIMD", "4. LUT SIMD Montgomery", "5. LUT SIMD FixedPrefix"]
+    order = ["1. Horner", "2. LookupTable", "3. LUT SIMD", "4. LUT SIMD FixedPrefix"]
     for name in order:
         if name in cpp_times:
             ns = cpp_times[name]

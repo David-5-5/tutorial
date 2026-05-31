@@ -189,7 +189,7 @@ T_n/2^n &= T_{n-1}/2^{n-1} + 1/2^n, \quad \text{ for }n > 0.
 ```math
 \begin{aligned}
 S_0 &= 0; \\
-S_n &= S_{n-1} + =2^{-n}, \quad \text{ for }n > 0.
+S_n &= S_{n-1} + 2^{-n}, \quad \text{ for }n > 0.
 \end{aligned}
 ```
 由此可知

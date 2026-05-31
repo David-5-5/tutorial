@@ -14,12 +14,10 @@ class MountainArray {
 class Solution {
 public:
     int findInMountainArray(int target, MountainArray &mountainArr) {
-        int l = 0, r = mountainArr.length() - 1;
+        int l = 1, r = mountainArr.length() - 2;
         int i = 0;
         while (l <= r) {
             auto m = (l + r) / 2;
-            if (m-1 < 0) {l ++ ; continue;}
-            if (m+1 >= mountainArr.length()) {r --; continue;}
             auto v_m = mountainArr.get(m), v_m_l = mountainArr.get(m-1), v_m_r = mountainArr.get(m+1);
             if (v_m > v_m_l && v_m > v_m_r) {
                 i = m; break;

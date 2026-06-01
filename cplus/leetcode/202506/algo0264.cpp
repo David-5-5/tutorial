@@ -6,20 +6,20 @@ class Solution {
 public:
     int nthUglyNumber(int n) {
         int factors[] = {2, 3, 5};
-        priority_queue<int, vector<int>, greater<>> pq;
+        priority_queue<long, vector<long>, greater<>> pq;
         set<int> contains;
         contains.insert(1); pq.emplace(1);
 
         for (int _=0; _<n-1; ++_) {
-            int mn = pq.top(); pq.pop();
+            long mn = pq.top(); pq.pop();
             for (int i=0; i<3; ++i) {
-                int val = mn * factors[i];
+                long val = mn * factors[i];
                 if (!contains.count(val)) {
                     pq.emplace(val); contains.insert(val);
                 }
             }
         }
 
-        return pq.top();
+        return pq.top(); 
     }
 };

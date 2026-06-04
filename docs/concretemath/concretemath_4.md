@@ -21,23 +21,23 @@ m\backslash n \iff m > 0\ and\ n = mk\ for\ some\ integer\ k. \tag{4.1}
 
 两个整数 $m$ 和 $n$ 的*最大公约数*，是能够同时整除它们两者的最大整数：
 ```math
-\gcd(m, n) = \max\{k| k\backslash m\ and\ k\backslash n\}. \tag{4.2}
+\gcd(m, n) = \max\{k| k\backslash m \text{ and } k \backslash n\}. \tag{4.2}
 ```
 
-例如，$\gcd(12,18)=6$。这是一个我们很熟悉的概念，因为四年级学生学习化简分数 $\frac{m}{n}$ 时，用到的就是这个公因子：$\frac{12}{18} = \frac{12/6}{18/6} = \frac{2}{3}$。注意，如果 $n>0$，我们有 $\gcd(0,n)=n$，因为任何正数都能整除 $0$，而且 $n$ 是它自身最大的因子。$\gcd(0,0)$ 是没有定义的。
+例如，$\gcd(12,18)=6$。这是一个我们很熟悉的概念，因为四年级学生学习化简分数 $\frac{m}{n}$ 时，用到的就是这个公因子：$12/18 = (12/6)(18/6) = 2/3$。注意，如果 $n>0$，我们有 $\gcd(0,n)=n$，因为任何正数都能整除 $0$，而且 $n$ 是它自身最大的因子。$\gcd(0,0)$ 是没有定义的。
 
 另一个我们熟悉的概念是最小公倍数，
 ```math
-\operatorname{lcm}(m, n) = \min\{k| k>0, m\backslash k\ and\ n\backslash k\}. \tag{4.3}
+\operatorname{lcm}(m, n) = \min\{k| k>0, m\backslash k\ \text{ and } n\backslash k\}. \tag{4.3}
 ```
 
 若 $m \le 0$ 或 $n \le 0$，则它没有定义。学习算术的学生会把它认作最小公分母，用于对分母为 $m$ 和 $n$ 的分数做加法。例如，$\operatorname{lcm}(12,18)=36$。并且四年级的学生都知道$\frac{7}{12} + \frac{1}{18}= \frac{21}{36} + \frac{2}{36}= \frac{23}{36}$。 $\operatorname{lcm}$ 与 $\gcd$ 在某种程度上是类似的，但我们不会对它同等重视，因为 $\gcd$ 拥有更良好的性质。
 
-$\gcd$ 最优秀的性质之一是它很容易计算，使用一种有 2300 年历史的方法，称为欧几里得算法。对于给定的 $0 \le m < n$，为计算 $\gcd(m,n)$，欧几里得算法使用如下递推式：
+$\gcd$ 最优秀的性质之一是它很容易计算，使用一种有 2300 年历史的方法，称为*欧几里得算法*。对于给定的 $0 \le m < n$，为计算 $\gcd(m,n)$，欧几里得算法使用如下递推式：
 ```math
 \begin{aligned}
 \gcd(0, n) &= n; \\
-\gcd(m, n) &= \gcd(n\mod m, m), for\ m>0. \tag{4.4}
+\gcd(m, n) &= \gcd(n\mod m, m), \text{ for } m>0. \tag{4.4}
 \end{aligned}
 ```
 因此，例如 $\gcd(12,18) = \gcd(6,12) = \gcd(0,6) = 6$。上述递推式是成立的，因为任何能同时整除 $m$ 和 $n$ 的公约数，也必定能同时整除 $m$ 和 $n \bmod m$（即 $n - \lfloor n/m \rfloor m$）。而对于 $\operatorname{lcm}(m,n)$，似乎不存在任何能与这个递推式相提并论的简单递推关系（见习题 2）。

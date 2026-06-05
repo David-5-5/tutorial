@@ -57,5 +57,29 @@ public:
 
     }
 
+    int minSwaps3(vector<int>& nums) {
+        vector<int> odd, even;
+        int n = nums.size();
+
+        for (int i=0; i<n; i++) {
+            if (nums[i] % 2) odd.push_back(i);
+            else even.push_back(i);
+        }
+
+        if (abs((int)(odd.size() - even.size())) > 1) return -1;
+
+        auto arrange = [&](vector<int>& arr) -> int {
+            int res = 0;
+            for (int i=0; i<n; i+=2) {
+                res += abs(arr[i / 2] - i);
+            }
+            return res / 2;
+        };
+
+        if (odd.size() == even.size()) return min(arrange(odd), arrange(even));
+        else if (odd.size() > even.size()) return arrange(odd);
+        else return arrange(even);   
+
+    }
   
 };

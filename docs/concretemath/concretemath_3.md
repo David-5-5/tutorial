@@ -88,7 +88,7 @@ $x$ 与 $\lfloor x\rfloor$ 之间的差值称为 $x$ 的小数部分，它在应
 
 这里有一道难度更高的问题：证明或证伪该断言：
 ```math
-\lfloor\sqrt{\lfloor x\rfloor}\rfloor = \lfloor\sqrt{x}\rfloor, real\ x\ge 0 \tag{3.9}
+\lfloor\sqrt{\lfloor x\rfloor}\rfloor = \lfloor\sqrt{x}\rfloor, \quad  \text{ real } x\ge 0 \tag{3.9}
 ```
 
 当 $x$ 是整数时，显然等式成立，因为 $x=\lfloor x\rfloor$。在特殊情况下也存在等式： $\pi=3.14159\cdots$， $e=2.71828\cdots$，以及 ($\phi= (1 + \sqrt{5})/2 = 1.61803\cdots$)，因为我们得到 $1 = 1$。我们未能找到反例，这表明等式一般情况下成立，那么让我们试着证明它吧。
@@ -116,14 +116,14 @@ f(x) = integer \implies x = integer.
 
 该定理的一个重要特例值得明确指出：
 ```math
-\lfloor\frac{x+m}{n}\rfloor = \lfloor\frac{\lfloor x\rfloor+m}{n}\rfloor, \lceil\frac{x+m}{n}\rceil = \lceil\frac{\lceil x\rceil+m}{n}\rceil \tag{3.11}
+\left\lfloor\frac{x+m}{n}\right\rfloor = \left\lfloor\frac{\lfloor x\rfloor+m}{n}\right\rfloor \text{ and } \left\lceil\frac{x+m}{n}\right\rceil = \left\lceil\frac{\lceil x\rceil+m}{n}\right\rceil \tag{3.11}
 ```
 
 如果 $m$ 和 $n$ 是整数，且分母 $n$ 为正数。例如，令 $m=0$；我们有 $\lfloor\lfloor\lfloor x/10 \rfloor/10 \rfloor/10 \rfloor = \lfloor x/1000\rfloor$。连续三次除以 $10$ 并舍弃小数部分，等同于除以 $1000$ 并丢弃余数。
 
 我们现在来尝试证明或证伪另一个命题：
 ```math
-\lceil\sqrt{\lfloor x\rfloor}\rceil \stackrel{?}{=} \lceil\sqrt{x}\rceil， real\ x\ge 0.
+\lceil\sqrt{\lfloor x\rfloor}\rceil \stackrel{?}{=} \lceil\sqrt{x}\rceil， \quad  \text{ real } x\ge 0.
 ```
 
 当 $x = \pi$ 且 $x = e$ 时，此方法有效；但当 $x = \phi$ 时，它会失效；因此我们知道，这在一般情况下并不成立。

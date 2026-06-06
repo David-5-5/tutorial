@@ -1,6 +1,6 @@
 from typing import Counter, List
 
-// LCR series
+# LCR series
 class Solution:
     def trainingPlan(self, actions: List[int]) -> int:
         cnt = Counter(actions)

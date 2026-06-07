@@ -88,7 +88,7 @@ $x$ 与 $\lfloor x\rfloor$ 之间的差值称为 $x$ 的小数部分，它在应
 
 这里有一道难度更高的问题：证明或证伪该断言：
 ```math
-\lfloor\sqrt{\lfloor x\rfloor}\rfloor = \lfloor\sqrt{x}\rfloor, real\ x\ge 0 \tag{3.9}
+\lfloor\sqrt{\lfloor x\rfloor}\rfloor = \lfloor\sqrt{x}\rfloor, \quad  \text{ real } x\ge 0 \tag{3.9}
 ```
 
 当 $x$ 是整数时，显然等式成立，因为 $x=\lfloor x\rfloor$。在特殊情况下也存在等式： $\pi=3.14159\cdots$， $e=2.71828\cdots$，以及 ($\phi= (1 + \sqrt{5})/2 = 1.61803\cdots$)，因为我们得到 $1 = 1$。我们未能找到反例，这表明等式一般情况下成立，那么让我们试着证明它吧。
@@ -97,9 +97,9 @@ $x$ 与 $\lfloor x\rfloor$ 之间的差值称为 $x$ 的小数部分，它在应
 
 如果我们试图借助微积分证明 $\lfloor\sqrt{\lfloor x\rfloor}\rfloor = \lfloor\sqrt{x}\rfloor$，我们可能会先将 x分解成整数部分和小数部分： $\lfloor x\rfloor+\{x\}=n+\theta$ ，然后利用二项式定理展开平方根： $(n+\theta)^{1/2} = n^{1/2} + n^{−1/2}\theta/2 − n^{−3/2}\theta^2/8 +\cdots$。但这种方法会变得相当复杂。
 
-使用我们开发的工具要容易得多。这里有一个可能的策略：某种方式下，先去掉外层的 $floor$ 函数和平方根 $\lfloor\sqrt{\lfloor x\rfloor}\rfloor$，再移除内层的 $floor$ 函数，然后把外层的值加回去，得到 $\lfloor\sqrt{x}\rfloor$。好的。我们令 $m=\lfloor\sqrt{\lfloor x\rfloor}\rfloor$，并调用(3.5(a))，得到 $m\le \sqrt{\lfloor x\rfloor}<m+1$。这样就去掉了外层的 $floor$ 括号，且没有丢失任何信息。由于这三个表达式都是非负的，我们对两边同时平方，得到 $m^2\le\sqrt{x}<(m + 1)^2$。这一步消除了平方根。接下来，我们利用(3.7(d))处理左边不等式，用(3.7(a))处理右边不等式，从而去掉 $floor$ 函数： $m^2\le x<(m + 1)^2$。现在，只需简单地反向推导，取平方根即可得到 $m\le \sqrt{x}<m+1$，再调用(3.5(a))，得到 $m=\lfloor\sqrt{x}\rfloor$。因此，$\lfloor\sqrt{\lfloor x\rfloor}\rfloor = m = \lfloor\sqrt{x}\rfloor$；该断言成立。类似地，我们也可以证明
+使用我们开发的工具要容易得多。这里有一个可能的策略：某种方式下，先去掉外层的 $floor$ 函数和平方根 $\lfloor\sqrt{\lfloor x\rfloor}\rfloor$，再移除内层的 $floor$ 函数，然后把外层的值加回去，得到 $\lfloor\sqrt{x}\rfloor$。好的。我们令 $m=\lfloor\sqrt{\lfloor x\rfloor}\rfloor$，并调用(3.5(a))，得到 $m\le \sqrt{\lfloor x\rfloor}<m+1$。这样就去掉了外层的 $floor$ 括号，且没有丢失任何信息。由于这三个表达式都是非负的，我们对两边同时平方，得到 $m^2\le\lfloor x\rfloor<(m + 1)^2$。这一步消除了平方根。接下来，我们利用(3.7(d))处理左边不等式，用(3.7(a))处理右边不等式，从而去掉 $floor$ 函数： $m^2\le x<(m + 1)^2$。现在，只需简单地反向推导，取平方根即可得到 $m\le \sqrt{x}<m+1$，再调用(3.5(a))，得到 $m=\lfloor\sqrt{x}\rfloor$。因此，$\lfloor\sqrt{\lfloor x\rfloor}\rfloor = m = \lfloor\sqrt{x}\rfloor$；该断言成立。类似地，我们也可以证明
 ```math
-\lceil\sqrt{\lceil x\rceil}\rceil = \lceil\sqrt{x}\rceil, real\ x\ge 0
+\lceil\sqrt{\lceil x\rceil}\rceil = \lceil\sqrt{x}\rceil, \quad  \text{ real }x\ge 0
 ```
 
 我们刚刚找到的证明并不严重依赖于平方根的性质。仔细观察会发现，我们可以推广这些思路并证明更多内容：设 $f(x)$ 是任意一个连续、单调递增的函数，且具有以下性质
@@ -116,14 +116,14 @@ f(x) = integer \implies x = integer.
 
 该定理的一个重要特例值得明确指出：
 ```math
-\lfloor\frac{x+m}{n}\rfloor = \lfloor\frac{\lfloor x\rfloor+m}{n}\rfloor, \lceil\frac{x+m}{n}\rceil = \lceil\frac{\lceil x\rceil+m}{n}\rceil \tag{3.11}
+\left\lfloor\frac{x+m}{n}\right\rfloor = \left\lfloor\frac{\lfloor x\rfloor+m}{n}\right\rfloor \text{ and } \left\lceil\frac{x+m}{n}\right\rceil = \left\lceil\frac{\lceil x\rceil+m}{n}\right\rceil \tag{3.11}
 ```
 
 如果 $m$ 和 $n$ 是整数，且分母 $n$ 为正数。例如，令 $m=0$；我们有 $\lfloor\lfloor\lfloor x/10 \rfloor/10 \rfloor/10 \rfloor = \lfloor x/1000\rfloor$。连续三次除以 $10$ 并舍弃小数部分，等同于除以 $1000$ 并丢弃余数。
 
 我们现在来尝试证明或证伪另一个命题：
 ```math
-\lceil\sqrt{\lfloor x\rfloor}\rceil \stackrel{?}{=} \lceil\sqrt{x}\rceil， real\ x\ge 0.
+\lceil\sqrt{\lfloor x\rfloor}\rceil \stackrel{?}{=} \lceil\sqrt{x}\rceil， \quad  \text{ real } x\ge 0.
 ```
 
 当 $x = \pi$ 且 $x = e$ 时，此方法有效；但当 $x = \phi$ 时，它会失效；因此我们知道，这在一般情况下并不成立。

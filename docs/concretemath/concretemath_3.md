@@ -158,7 +158,7 @@ f(x) = integer \implies x = integer.
 
 顺便说一下，有一个记忆技巧可以帮助你记住哪些情况用 $floor$，哪些情况用 $ceiling$：半开区间如果包含左端点但不包含右端点（比如 $0\le\theta < 1$），比包含右端点但不包含左端点的区间稍微多一些；而 $floor$ 比 $ceiling$ 稍微多一些。因此，根据墨菲定律(Murphy's Law)，正确的规则与我们预期的恰恰相反——对于 $[\alpha\cdots \beta)$，用 $ceil$；而对于 $(\alpha\cdots \beta]$，用 $floor$。
 
-类似分析表明，闭区间 $[\alpha\cdots \beta]$ 恰好包含 $\lfloor\beta\rfloor−\lceil\alpha\rceil+1$ 个整数，而开区间 $(\alpha\cdots \beta)$ 包含 $\lfloor\beta\rfloor−\lceil\alpha\rceil-1$；但我们对后者施加了额外的限制 $\alpha\ne\beta$，以避免该公式因声称空区间 $(\alpha\cdots \alpha)$ 总共包含 −1 个整数而令人尴尬。总而言之，我们推导出了以下事实：
+类似分析表明，闭区间 $[\alpha\cdots \beta]$ 恰好包含 $\lfloor\beta\rfloor−\lceil\alpha\rceil+1$ 个整数，而开区间 $(\alpha\cdots \beta)$ 包含 $\lceil\beta\rceil-\lfloor\alpha\rfloor-1$；但我们对后者施加了额外的限制 $\alpha\ne\beta$，以避免该公式因声称空区间 $(\alpha\cdots \alpha)$ 总共包含 −1 个整数而令人尴尬。总而言之，我们推导出了以下事实：
 ```math
 \begin{aligned}
 区间 &\qquad 包含的整数 &\qquad 限制 \\
@@ -188,9 +188,8 @@ f(x) = integer \implies x = integer.
 若运用第 2 章的求和技巧，并借助艾弗森约定（逻辑命题的取值为 0 或 1），我们便可对整套构造进行系统的分析：
 ```math
 \begin{aligned}
-W &= \sum_{n=1}^{1000} [n\ is\ a\ winner] \\
-  &= \sum_{1\le n\le 1000} [\lfloor\sqrt[3]{n}\rfloor \backslash n] \\
-  &= \sum_{k, m}[k=\lfloor\sqrt[3]{n}\rfloor][k\backslash n][1\le n\le 1000] \\
+W &= \sum_{n=1}^{1000} [\text{ n is a winner }] \\
+  &= \sum_{1\le n\le 1000} [\lfloor\sqrt[3]{n}\rfloor \backslash n] = \sum_{k, m}[k=\lfloor\sqrt[3]{n}\rfloor][k\backslash n][1\le n\le 1000] \\
   &= 1 + \sum_{k, m}[k^3\le km<(k+1)^3][1\le k< 10] \\
   &= 1 + \sum_{k, m}[m\in [k^2\cdots (k+1)^3/k]][1\le k< 10] \\
   &= 1 + \sum_{1\le k\le 10}(\lceil k^2+3k+3+1/k\rceil - \lceil k^2\rceil) \\
@@ -232,7 +231,7 @@ W = \lfloor N/K\rfloor + \frac{1}{2}K^2 + \frac{5}{2}K - 3, K=\lfloor \sqrt[3]{N
 W = \frac{3}{2}N^{2/3} + O(N^{1/3})
 ```
 
-其中，$O(N^{1/3})$ 表示一个量，其值不超过常数与 $N^{1/3}$ 的乘积。无论这个常数是多少，我们都知道它与 $N$ 无关；因此，对于较大的 $N$ 而言，$O$ 项对 $W$ 的贡献将远小于 $N^{2/3}$。例如，下表展示了 $N^{2/3}$ 与 W 的接近程度：
+其中，$O(N^{1/3})$ 表示一个量，其值不超过常数与 $N^{1/3}$ 的乘积。无论这个常数是多少，我们都知道它与 $N$ 无关；因此，对于较大的 $N$ 而言，$O$ 项对 $W$ 的贡献将远小于 $N^{2/3}$。例如，下表展示了 $\frac32 N^{2/3}$ 与 W 的接近程度：
 | N | $\frac{3}{2}N^{2/3}$ | W | 误差 |
 | --: | --: | --: | --: |
 1,000 | 150 | 172 | 12.79

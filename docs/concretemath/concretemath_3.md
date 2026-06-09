@@ -154,7 +154,7 @@ f(x) = integer \implies x = integer.
 \end{aligned}
 ```
 
-当 $n$ 是一个整数时，根据（3.7）。右侧的区间具有整数端点，并且包含与左侧区间相同数量的整数，而左侧区间的端点是实数。因此，区间 $[\alpha\cdots \beta)$ 恰好包含 $\lceil\beta\rceil −\lfloor \alpha\rfloor$ 个整数，而 $(\alpha . . \beta]$  包含 $\lfloor\beta\rfloor -\lceil\alpha\rceil$ 个整数。这种情况正是我们实际上希望引入下取整或上取整符号的时候，而不是将其去除。
+当 $n$ 是一个整数时，根据（3.7）。右侧的区间具有整数端点，并且包含与左侧区间相同数量的整数，而左侧区间的端点是实数。因此，区间 $[\alpha\cdots \beta)$ 恰好包含 $\lceil\beta\rceil −\lceil \alpha\rceil$ 个整数，而 $(\alpha . . \beta]$  包含 $\lfloor\beta\rfloor -\lfloor\alpha\rfloor$ 个整数。这种情况正是我们实际上希望引入下取整或上取整符号的时候，而不是将其去除。
 
 顺便说一下，有一个记忆技巧可以帮助你记住哪些情况用 $floor$，哪些情况用 $ceiling$：半开区间如果包含左端点但不包含右端点（比如 $0\le\theta < 1$），比包含右端点但不包含左端点的区间稍微多一些；而 $floor$ 比 $ceiling$ 稍微多一些。因此，根据墨菲定律(Murphy's Law)，正确的规则与我们预期的恰恰相反——对于 $[\alpha\cdots \beta)$，用 $ceil$；而对于 $(\alpha\cdots \beta]$，用 $floor$。
 

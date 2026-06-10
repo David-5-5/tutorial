@@ -253,7 +253,7 @@ Spec(\alpha) = \{\lfloor\alpha\rfloor, \lfloor 2\alpha\rfloor, \lfloor 3\alpha\r
 
 多重集与集合类似，但允许元素重复出现。例如，$1/2$​ 的谱的前几项为 $\{0,1,1,2,2,3,3,\cdots\}$。
 
-不难证明没有两个不同的实数会拥有相同的谱—— 也就是说，$\alpha\ne\beta$ 当且仅当 $Spec(\alpha)\ne Spec(\beta)$。证明如下：不妨设 $\alpha<\beta$，则存在正整数 $m$ 使得 $m(\beta−\alpha)\ge 1$。（事实上，任意满足 $m\ge \lceil\beta−\alpha\rceil$ 的 $m$ 都可以；不过我们也不必时时刻刻都炫耀自己对上下取整函数的掌握。）于是有 $m\beta−m\alpha\ge 1$，进而 $\lfloor m\beta\rfloor>\lfloor m\alpha\rfloor$。因此， $Spec(\beta)$ 中 $\le \lfloor m\alpha\rfloor$ 的元素个数少于 $m$ 个，而 $Spec(\alpha)$ 中这样的元素至少有 $m$ 个。
+不难证明没有两个不同的实数会拥有相同的谱—— 也就是说，$\alpha\ne\beta$ 当且仅当 $Spec(\alpha)\ne Spec(\beta)$。证明如下：不妨设 $\alpha<\beta$，则存在正整数 $m$ 使得 $m(\beta−\alpha)\ge 1$。（事实上，任意满足 $m\ge \lceil 1/(\beta−\alpha)\rceil$ 的 $m$ 都可以；不过我们也不必时时刻刻都炫耀自己对上下取整函数的掌握。）于是有 $m\beta−m\alpha\ge 1$，进而 $\lfloor m\beta\rfloor>\lfloor m\alpha\rfloor$。因此， $Spec(\beta)$ 中 $\le \lfloor m\alpha\rfloor$ 的元素个数少于 $m$ 个，而 $Spec(\alpha)$ 中这样的元素至少有 $m$ 个。
 
 谱 (Spectra) 具有许多优美的性质。例如，我们来考察如下两个多重集：
 ```math
@@ -285,9 +285,9 @@ m\le n \iff m < n+1, integers\ m\ and\ n \tag{3.15}
 
 我们有了一个公式 $N(\alpha, n)$。现在，我们可以通过检验 $N(\sqrt{2}, n)$ + $N(2+\sqrt{2}, n)$ 是否等于 $n$ 来判断 $Spec(\sqrt{2}​)$ 和 $Spec(2+\sqrt{2}​)$ 是否将正整数进行了划分，其中 $n$ 是所有大于 $0$ 的整数，使用 (3.14):
 ```math
-\lceil\frac{n+1}{\sqrt{2}}\rceil -1 + \lceil\frac{n+1}{2+\sqrt{2}}\rceil -1 = n \\
-\iff \lfloor\frac{n+1}{\sqrt{2}}\rfloor + \lfloor\frac{n+1}{2+\sqrt{2}}\rfloor = n, \qquad by (3.2)\\
-\iff \frac{n+1}{\sqrt{2}} - \{\frac{n+1}{\sqrt{2}}\}  + \frac{n+1}{2+\sqrt{2}} - \{\frac{n+1}{2+\sqrt{2}}\} = n, \qquad by (3.8)
+\left\lceil\frac{n+1}{\sqrt{2}}\right\rceil -1 + \left\lceil\frac{n+1}{2+\sqrt{2}}\right\rceil -1 = n \\
+\iff \left\lfloor\frac{n+1}{\sqrt{2}}\right\rfloor + \left\lfloor\frac{n+1}{2+\sqrt{2}}\right\rfloor = n, \qquad by (3.2)\\
+\iff \frac{n+1}{\sqrt{2}} - \left\{\frac{n+1}{\sqrt{2}}\right\}  + \frac{n+1}{2+\sqrt{2}} - \left\{\frac{n+1}{2+\sqrt{2}}\right\} = n, \qquad by (3.8)
 ```
 
 现在一切都变得简单了，因为有了这个简洁的标识。

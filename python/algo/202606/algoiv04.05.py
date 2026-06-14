@@ -32,3 +32,13 @@ class Solution:
         dfs(root)
         return ans
     
+    def isValidBST(self, root: Optional[TreeNode]) -> bool:
+        # 优化，代码更加优雅
+        if not root: return True
+        def dfs(node: Optional[TreeNode], mn:int, mx: int) -> bool:
+            return mn < node.val < mx and \
+                (dfs(node.left, mn, node.val) if node.left else True) and \
+                (dfs(node.right, node.val, mx) if node.right else True)
+        
+        return dfs(root, -inf, inf)
+        

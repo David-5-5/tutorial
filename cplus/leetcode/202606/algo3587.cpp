@@ -5,6 +5,7 @@ using namespace std;
 class Solution {
 public:
     int minSwaps(vector<int>& nums) {
+        // 自行解答
         vector<int> odd, even;
         int n = nums.size();
 

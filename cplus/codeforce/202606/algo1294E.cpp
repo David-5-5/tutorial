@@ -25,7 +25,7 @@ int main() {
         unordered_map<int, int> shift;
         for (int i=0; i<n; i++) {
             auto& val = mat[i][j];
-            if ((val-1) % m == j) {
+            if ((val-1) % m == j && val <= m*n) {
                 shift[(n + i - (val-1) / m) % n] ++;
             }
         }

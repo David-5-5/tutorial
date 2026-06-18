@@ -24,3 +24,19 @@ class Solution:
                 ans = len(learn)
         return ans
 
+    def minimumTeachings2(self, n: int, languages: List[List[int]], friendships: List[List[int]]) -> int:
+        # 计数法
+        lans = list(map(set, languages))
+        total = set()
+        for f in friendships:
+            m1, m2 = f[0] - 1, f[1] - 1
+            if lans[m1] & lans[m2]: continue
+            total.add(m1)
+            total.add(m2)
+        
+        cnt = [0] * n
+        for mem in total:
+            for lan in lans[mem]:
+                cnt[lan-1] += 1
+
+        return len(total) - max(cnt)

@@ -14,7 +14,7 @@ struct TreeNode {
 class Solution {
 public:
     int pathSum(TreeNode* root, int targetSum) {
-        // 自行解答
+        // 同 437
         unordered_map<long, int> cnt;
 
         auto dfs = [&](this auto&& dfs, TreeNode* node, long sum) -> int {

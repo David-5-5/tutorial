@@ -36,5 +36,22 @@ public:
         return dfs(t1);
     }
 
+    bool checkSubTree2(TreeNode* t1, TreeNode* t2) {
+        // 优化比较实现
+        auto isSame = [&](this auto&& isSame, TreeNode* node, TreeNode* subNode) -> bool {
+            if (node == nullptr || subNode == nullptr) return node == subNode;
+            
+            if (node->val != subNode->val) return false;
+            return isSame(node->left, subNode->left) && isSame(node->right, subNode->right);
+        };
 
+        auto dfs = [&](this auto&& dfs, TreeNode* node) -> bool {
+            if (isSame(node, t2)) return true;
+            if (node->left && dfs(node->left)) return true;
+            if (node->right && dfs(node->right)) return true;
+
+            return false;
+        };
+        return dfs(t1);
+    }
 };

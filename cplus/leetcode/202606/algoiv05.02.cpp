@@ -21,5 +21,20 @@ public:
 
     }
 
-
+    string printBin(double num) {
+        string ans = "0.";
+        double const epl = 1e-12;   // 带精度
+        double a = 0.5;            
+        for (int _=0; _<30 && num > epl; _++) {
+            if (num >= a) {
+                num -= a; ans.push_back('1');
+            } else {
+                ans.push_back('0');
+            }
+            a *= 0.5;
+        }
+        
+        if (num < epl) return ans;
+        else return "ERROR";
+    }    
 };

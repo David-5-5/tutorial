@@ -15,7 +15,8 @@ public:
             vector<int> dp;
 
             for (auto& env : pairArr) {
-                auto it = ranges::upper_bound(dp, env[1]);
+                // auto it = ranges::upper_bound(dp, env[1]);
+                auto it = upper_bound(dp.begin(), dp.end(), env[1]);
                 if (it == dp.end()) dp.push_back(env[1]);
                 else *it = env[1];
 

@@ -15,5 +15,17 @@ public:
         nums = move(ans);
 
     }
- 
+
+    void wiggleSort2(vector<int>& nums) {
+        // 原地修改
+        int n = nums.size();
+        sort(nums.begin(), nums.end());
+        int l = 1, r = (n+1)/2;
+        while (l < r) {
+            swap(nums[l], nums[r]);
+            l += 2; r++;
+        }
+    }
 };
+
+

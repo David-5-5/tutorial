@@ -309,13 +309,13 @@ $floor$ 和 $ceiling$ 为研究增添了有趣的新维度关于递归关系。�
 ```math
 \begin{aligned}
 K_0 &= 1; \\
-K_{n+1} &= 1 + min(2K_{\lfloor n/2\rfloor}, 3K_{\lfloor n/3\rfloor}), for\ n\ge 0. \tag{3.16}
+K_{n+1} &= 1 + \min(2K_{\lfloor n/2\rfloor}, 3K_{\lfloor n/3\rfloor}), \text{ for n} \ge 0. \tag{3.16}
 \end{aligned}
 ```
 
-因此，例如，$K_1$ 是 $1 + min(2K_0, 3K_0) = 3$；该序列以 $1, 3, 3, 4, 7, 7, 7, 9, 9, 10, 13,\cdots$ 开始。 本书作者之一谦虚地决定将这些称为克努斯数。
+因此，例如，$K_1$ 是 $1 + \min(2K_0, 3K_0) = 3$；该序列以 $1, 3, 3, 4, 7, 7, 7, 9, 9, 10, 13,\cdots$ 开始。 本书作者之一谦虚地决定将这些称为克努斯数。
 
-习题 25 要求证明或证伪：对所有 $n\ge 0$，有 $K_n​\ge n$。上面列出的前几项 $K$ 确实满足该不等式，因此这个命题很有可能在一般情形下也成立。我们尝试用数学归纳法证明：归纳基础：$n=0$ 的情形可直接由定义递推式得出。归纳步骤：假设不等式对不超过某个固定非负整数 $n$ 的所有值都成立，我们来证明 $K_{n+1}​\ge {n+1}$。由递推式可知：$K_{n+1}= 1 + min(2K_{\lfloor n/2\rfloor}, 3K_{\lfloor n/3\rfloor})$。归纳假设告诉我们：$2K_{\lfloor n/2\rfloor}​\ge 2\lfloor n/2\rfloor,3K_{\lfloor n/3\rfloor}​\ge 3\lfloor n/3\rfloor$，然而，$2\lfloor n/2\rfloor$ 最小可以取到 $n−1$，$3\lfloor n/3\rfloor$ 最小可以取到 $n−2$。由归纳假设我们最多只能推出：$K_{n+1}\ge 1+(n−2)$ 这与需要证明的 $K_{n+1​}\ge n+1$ 相差甚远。
+习题 25 要求证明或证伪：对所有 $n\ge 0$，有 $K_n​\ge n$。上面列出的前几项 $K$ 确实满足该不等式，因此这个命题很有可能在一般情形下也成立。我们尝试用数学归纳法证明：归纳基础：$n=0$ 的情形可直接由定义递推式得出。归纳步骤：假设不等式对不超过某个固定非负整数 $n$ 的所有值都成立，我们来证明 $K_{n+1}​\ge {n+1}$。由递推式可知：$K_{n+1}= 1 + \min(2K_{\lfloor n/2\rfloor}, 3K_{\lfloor n/3\rfloor})$。归纳假设告诉我们：$2K_{\lfloor n/2\rfloor}​\ge 2\lfloor n/2\rfloor,3K_{\lfloor n/3\rfloor}​\ge 3\lfloor n/3\rfloor$，然而，$2\lfloor n/2\rfloor$ 最小可以取到 $n−1$，$3\lfloor n/3\rfloor$ 最小可以取到 $n−2$。由归纳假设我们最多只能推出：$K_{n+1}\ge 1+(n−2)$ 这与需要证明的 $K_{n+1​}\ge n+1$ 相差甚远。
 
 现在我们有理由对 $K_n​\ge n$ 这一命题的正确性产生怀疑，因此不妨尝试证伪它。如果我们能找到某个正整数 $n$，使得 $2K_{\lfloor n/2\rfloor}​<n$ 或 $3K_{\lfloor n/3\rfloor}​<n$ 成立，换言之，只要找到满足
 ```math

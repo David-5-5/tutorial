@@ -319,7 +319,7 @@ K_{n+1} &= 1 + \min(2K_{\lfloor n/2\rfloor}, 3K_{\lfloor n/3\rfloor}), \text{ fo
 
 现在我们有理由对 $K_n​\ge n$ 这一命题的正确性产生怀疑，因此不妨尝试证伪它。如果我们能找到某个正整数 $n$，使得 $2K_{\lfloor n/2\rfloor}​<n$ 或 $3K_{\lfloor n/3\rfloor}​<n$ 成立，换言之，只要找到满足
 ```math
-K_{\lfloor n/2\rfloor}​<n/2\ or\ K_{\lfloor n/3\rfloor} < n/3,
+K_{\lfloor n/2\rfloor}​<n/2 \text{ or } K_{\lfloor n/3\rfloor} < n/3,
 ```
 
 那么就会有 $K_{n+1​}<n+1$。这是否真的可能发生？我们最好先不在这里揭晓答案，否则会破坏习题 25 的解题乐趣。
@@ -333,7 +333,7 @@ n = \lfloor n/2\rfloor + \lceil n/2\rceil; \tag{3.17}
 ```math
 \begin{aligned}
 f(0) &= 0; \\
-f(n) &= f(\lfloor n/2\rfloor) + f(\lceil n/2\rceil), for\ n> 1. \tag{3.18}
+f(n) &= f(\lfloor n/2\rfloor) + f(\lceil n/2\rceil), \text{ for n}> 1. \tag{3.18}
 \end{aligned}
 ```
 该递推式的解法见习题 34
@@ -342,7 +342,7 @@ f(n) &= f(\lfloor n/2\rfloor) + f(\lceil n/2\rceil), for\ n> 1. \tag{3.18}
 ```math
 \begin{aligned}
 J(1) &= 1; \\
-J(n) &= 2J(\lfloor n/2\rfloor) - (-1)^n, for\ n> 1.
+J(n) &= 2J(\lfloor n/2\rfloor) - (-1)^n, \text{ for n}> 1.
 \end{aligned}
 ```
 
@@ -403,7 +403,7 @@ J_3(n) := 3n + 1 - D.
 ```math
 \begin{aligned}
 &D_0^{(q)} = 1; \\
-&D_n^{(q)} :=  \lceil\frac{q}{q-1}D_{n-1}^{(q)}\rceil \qquad for\ n > 0 \tag{3.20}
+&D_n^{(q)} :=  \lceil\frac{q}{q-1}D_{n-1}^{(q)}\rceil \qquad \text{ for n}> 0 \tag{3.20}
 \end{aligned} 
 ```
 

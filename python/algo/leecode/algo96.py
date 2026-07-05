@@ -1,3 +1,6 @@
+from functools import cache
+
+
 class Solution:
     func = []
     def numTrees(self, n: int) -> int:
@@ -15,6 +18,16 @@ class Solution:
         self.func[n] = total
         return self.func[n]
 
+    def numTrees(self, n: int) -> int:
+        # 2026.7.5 复习
+        @cache
+        def dfs(i: int) -> int:
+            if i <= 1: return 1
+            res = 0
+            for j in range(i):
+                res += dfs(j) * dfs(i-j-1)
+            return res
+        return dfs(n)
 
 if __name__ == "__main__":
     sol = Solution()

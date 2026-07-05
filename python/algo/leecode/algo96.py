@@ -29,6 +29,15 @@ class Solution:
             return res
         return dfs(n)
 
+    def numTrees(self, n: int) -> int:
+        # 递归 -> 递推
+        dp = [0] * (n+1)
+        dp[0] = dp[1] = 1
+        for i in range(2, n+1):
+            for j in range(i):
+                dp[i] += dp[j] * dp[i-j-1]
+        return dp[n]
+
 if __name__ == "__main__":
     sol = Solution()
     print(sol.numTrees(3))

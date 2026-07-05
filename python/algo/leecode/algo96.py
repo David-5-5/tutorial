@@ -37,7 +37,14 @@ class Solution:
             for j in range(i):
                 dp[i] += dp[j] * dp[i-j-1]
         return dp[n]
-
+    
+    def numTrees(self, n: int) -> int:
+        # 卡特兰数
+        C = 1
+        for i in range(n):
+            C = C * 2 * (2 * i + 1) // (i + 2)
+        return C
+    
 if __name__ == "__main__":
     sol = Solution()
     print(sol.numTrees(3))

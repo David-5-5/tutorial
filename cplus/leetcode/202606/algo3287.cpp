@@ -34,7 +34,42 @@ public:
         return ans;
     }
 
+    int maxValue2(vector<int>& nums, int k) {
+        // 降维
+        int n = nums.size(), m = reduce(nums.begin(), nums.end(), 0, bit_or<>());
 
+        vector dp(k+1, vector<bool>(m+1));
+        vector suf(n-k+1, vector<bool>(m+1));
+        dp[0][0] = true;
+
+        for (int i=0; i<n-k; i++) for (int j=k; j>=0; j--) {
+            for (int x=m; x>=0; x--) {
+                if (dp[j][x] && j<k) {
+                    dp[j+1][x|nums[n-1-i]] = dp[j][x];
+                }
+            }
+            if (i+1>=k) suf[i+1] = dp[k];
+        }
+        int ans = 0;
+        for (auto& row : dp) {
+            fill(row.begin(), row.end(), false);
+        }
+
+        dp[0][0] = true;
+        for (int i=0; i<n-k; i++) {
+            for (int j=k; j>=0; j--)  for (int x=m; x>=0; x--) {
+                if (dp[j][x] && j<k) {
+                    dp[j+1][x|nums[i]] = dp[j][x];
+                }
+            }
+            if (i+1>=k)  {
+                for (int x=0; x<=m; x++)  for (int y=0; y<=m; y++) {
+                    if (dp[k][x] && suf[n-1-i][y]) ans = max(ans, x ^ y);
+                }
+            }
+        }
+        return ans;
+    }  
 };
 
 int main() {

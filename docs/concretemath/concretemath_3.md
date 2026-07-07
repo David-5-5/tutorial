@@ -54,7 +54,7 @@ x-1 < \lfloor x\rfloor\le x\le\lceil x\rceil<x+1. \tag{3.3}
 \lfloor x+n\rfloor= \lfloor x\rfloor + n, \qquad \text { integer n} \tag{3.6}
 ```
 
-因为规则 (3.5(a)) 说明，该断言等价于不等式 $\lfloor x\rfloor + n\le x+n< \lfloor x\rfloor+n+1$。但类似这样的操作，比如提取常数因子，并不能普遍适用。例如，我们有 $\lfloor nx\rfloor\ne n\lfloor x\rfloor$，当 $n = 2$ 且 $x = 1/2$ 时。这意味着 $floor$ 和 $ceil$ 括号相对来说不够灵活。通常情况下，如果我们能去掉它们，或者至少能在它们存在时证明一些东西，我们就已经很满足了。
+（由法则(3.5(a))可知该命题等价于不等式 $\lfloor x \rfloor + n \le x + n < \lfloor x \rfloor + n + 1$。）但诸如提取常数系数这类同类变形一般不成立。例如取 $n=2$，$x=1/2$ 时，$\lfloor nx \rfloor \ne n\lfloor x \rfloor$。这说明向下取整与向上取整符号的运算约束较强。只要能消去取整符号，或是在保留符号的前提下完成证明，通常就已满足需求。
 
 事实证明，在许多情况下，$floor$ 和 $ceil$ 括号都是多余的，因此我们可以随意插入或删除它们。例如，实数与整数之间的任何不等式都等价于整数之间的下取整或上取整不等式：
 ```math

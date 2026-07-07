@@ -507,25 +507,26 @@ c(x\mod y) = c(x-y\lfloor x/y\rfloor) = cx -cy\lfloor cx/cy\rfloor = cx\mod cy,
 
 第 $k$ 个 $group$ 里有多少个 $things$？我们希望找到一个公式：当 $k\le n\mod m$ 时，结果为 $\lceil n/m\rceil$；其余情况则为 $\lfloor n/m\rfloor$。想要验证这一点并不困难。
 ```math
-\lceil\frac{n-k+1}{m} \rceil
+\left\lceil\frac{n-k+1}{m} \right\rceil
 ```
 
 该式具备我们想要的性质，因为若按照上一段的写法令 $n=qm+r$，其中 $q=\lfloor n/m\rfloor$，原式可化简为：$q+\lceil (r−k+1​)/m\rceil$。 当 $1\le k\le m$ 且 $0\le r<m$ 时，有 $\lceil (r−k+1​)/m\rceil=[k\le r]$。由此我们可写出一个恒等式，它将 $n$ 划分为 $m$ 个尽可能相等、且按非递增顺序排列的部分:
 ```math
-n = \lceil\frac{n}{m}\rceil + \lceil\frac{n-1}{m}\rceil + \cdots + \lceil\frac{n-m+1}{m}\rceil. \tag{3.24}
+n = \left\lceil\frac{n}{m}\right\rceil + \left\lceil\frac{n-1}{m}\right\rceil + \cdots + \left\lceil\frac{n-m+1}{m}\right\rceil. \tag{3.24}
 ```
+
 该恒等式对所有正整数 $m$ 以及任意整数 $n$（无论正、负或零）均成立。我们在式 (3.17) 中已经见过 $m=2$ 的情形，尽管当时的写法略有不同：$n=\lfloor n/2\rfloor + \lceil n/2\rceil​$
 
 如果我们希望各部分按非递减顺序排列，让较小的 $groups$ 出现在较大的 $groups$ 之前，只需沿用同样的推导方式，只是在第一组中放入 $\lfloor n/m\rfloor$ 个 $%$ 即可。这样我们便能推导出对应的恒等式：
 ```math
-n = \lfloor\frac{n}{m}\rfloor + \lfloor\frac{n+1}{m}\rfloor + \cdots + \lfloor\frac{n+m-1}{m}\rfloor. \tag{3.25}
+n = \left\lfloor\frac{n}{m}\right\rfloor + \left\lfloor\frac{n+1}{m}\right\rfloor + \cdots + \left\lfloor\frac{n+m-1}{m}\right\rfloor. \tag{3.25}
 ```
 
 利用式 (3.4) 或习题 12 中的恒等式，即可在式 (3.25) 与式 (3.24) 之间相互转换。
 
 现在，如果我们将 (3.25) 中的 $n$ 替换为 $\lfloor mx\rfloor$，并运用规则 (3.11) 消去嵌套在内层的 $floor$ 符号，就能得到一个对所有实数 $x$ 都成立的恒等式：
 ```math
-\lfloor mx\rfloor = \lfloor x\rfloor + \lfloor x+\frac{1}{m}\rfloor + \cdots + \lfloor x+\frac{m-1}{m}\rfloor. \tag{3.26}
+\lfloor mx\rfloor = \lfloor x\rfloor + \left\lfloor x+\frac{1}{m}\right\rfloor + \cdots + \left\lfloor x+\frac{m-1}{m}\right\rfloor. \tag{3.26}
 ```
 
 这一结论相当令人惊叹，因为下取整函数只是对实数的整数近似，但左侧这单次近似，竟然与右侧一长串近似值的总和完全相等。如果我们假设平均来看 $\lfloor x\rfloor \approx x-\frac{1}{2}$​，那么左侧大致等于 $mx-\frac{1}{2}$​；而右侧则近似为 $(x-\frac{1}{2}) + (x-\frac{1}{2}+\frac{1}{m})+ \cdots + (x-\frac{1}{2}+\frac{m-1}{m}) = mx-\frac{1}{2}$；​这些粗略近似值的总和，最终竟然是精确等式！

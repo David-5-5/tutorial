@@ -18,7 +18,7 @@ public:
 
         auto check = [&] (int limit) -> bool {
             for (long long x: arr) {
-                long long end = x + 4LL * side - limit, cur = -1;                
+                long long end = x + 4LL * side - limit;                
                 for (int _=0; _<k-1; _++) {
                     auto it = ranges::lower_bound(arr, x + limit);
                     if (it == arr.end() || *it > end) {

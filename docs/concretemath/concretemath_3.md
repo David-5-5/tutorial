@@ -54,7 +54,7 @@ x-1 < \lfloor x\rfloor\le x\le\lceil x\rceil<x+1. \tag{3.3}
 \lfloor x+n\rfloor= \lfloor x\rfloor + n, \qquad \text { integer n} \tag{3.6}
 ```
 
-因为规则 (3.5(a)) 说明，该断言等价于不等式 $\lfloor x\rfloor + n\le x+n< \lfloor x\rfloor+n+1$。但类似这样的操作，比如提取常数因子，并不能普遍适用。例如，我们有 $\lfloor nx\rfloor\ne n\lfloor x\rfloor$，当 $n = 2$ 且 $x = 1/2$ 时。这意味着 $floor$ 和 $ceil$ 括号相对来说不够灵活。通常情况下，如果我们能去掉它们，或者至少能在它们存在时证明一些东西，我们就已经很满足了。
+（由法则(3.5(a))可知该命题等价于不等式 $\lfloor x \rfloor + n \le x + n < \lfloor x \rfloor + n + 1$。）但诸如提取常数系数这类同类变形一般不成立。例如取 $n=2$，$x=1/2$ 时，$\lfloor nx \rfloor \ne n\lfloor x \rfloor$。这说明向下取整与向上取整符号的运算约束较强。只要能消去取整符号，或是在保留符号的前提下完成证明，通常就已满足需求。
 
 事实证明，在许多情况下，$floor$ 和 $ceil$ 括号都是多余的，因此我们可以随意插入或删除它们。例如，实数与整数之间的任何不等式都等价于整数之间的下取整或上取整不等式：
 ```math
@@ -265,7 +265,7 @@ Spec(2 + \sqrt{2}) = \{3,6,10,13,17,20,23,27,30,34 \}
 
 为证明这一断言，我们来统计：$Spec(\sqrt{2}​)$ 中不大于 $n$ 的元素个数，以及 $Spec(2+\sqrt{2}​)$ 中不大于 $n$ 的元素个数。若对每个正整数 $n$，这两个数之和恰好等于 $n$，则这两个谱确实构成了正整数集的划分。
 
-设正实数 $\alpha>0$，则 $Spec(\sqrt{\alpha}​)$ 中不大于 n 的元素个数为:
+设正实数 $\alpha>0$，则 $Spec(\alpha​)$ 中不大于 n 的元素个数为:
 ```math
 \begin{aligned}
 N(\alpha, n) &= \sum_{k>0}[\lfloor k\alpha\rfloor\le n]  \\
@@ -281,7 +281,7 @@ N(\alpha, n) &= \sum_{k>0}[\lfloor k\alpha\rfloor\le n]  \\
 m\le n \iff m < n+1, integers\ m\ and\ n \tag{3.15}
 ```
 
-将 $\le$ 改为 $<$,以便能够通过(3.7)去掉括号。另外，这一点更微妙，它对范围 $k > 0$ 求和，而不是对 $k\ge 1$ 求和，因为 $(n + 1)/\alpha$ 对于某些 $n$ 和 $\alpha$ 可能小于 $1$。如果我们试图应用(3.12)来确定 $[1..(n + 1)/\alpha]$ 中的整数个数，而不是 $(0..(n + 1)/\alpha)$ 中的整数个数，我们本会得到正确的答案；但我们的推导过程会有问题，因为适用条件并未满足。
+将 $\le$ 改为 $<$，即可借助式 $(3.7)$ 去掉向下取整符号。。另外，这一点更微妙，它对范围 $k > 0$ 求和，而不是对 $k\ge 1$ 求和，因为 $(n + 1)/\alpha$ 对于某些 $n$ 和 $\alpha$ 可能小于 $1$。如果我们试图应用 $(3.12)$ 来确定 $[1..(n + 1)/\alpha]$ 中的整数个数，而不是 $(0..(n + 1)/\alpha)$ 中的整数个数，我们本会得到正确的答案；但我们的推导过程会有问题，因为适用条件并未满足。
 
 我们有了一个公式 $N(\alpha, n)$。现在，我们可以通过检验 $N(\sqrt{2}, n)$ + $N(2+\sqrt{2}, n)$ 是否等于 $n$ 来判断 $Spec(\sqrt{2}​)$ 和 $Spec(2+\sqrt{2}​)$ 是否将正整数进行了划分，其中 $n$ 是所有大于 $0$ 的整数，使用 (3.14):
 ```math
@@ -297,7 +297,7 @@ m\le n \iff m < n+1, integers\ m\ and\ n \tag{3.15}
 
 我们的条件归结为测试是否
 ```math
-\{\frac{n+1}{\sqrt{2}}\}  +  \{\frac{n+1}{2+\sqrt{2}}\} = 1,
+\left\{\frac{n+1}{\sqrt{2}}\right\} + \left\{\frac{n+1}{2+\sqrt{2}}\right\} = 1,
 ```
 
 对于所有 $n> 0$，我们赢了，因为这两个非整数的分数部分相加等于整数 $n + 1$。这便是一个划分。
@@ -309,17 +309,17 @@ $floor$ 和 $ceiling$ 为研究增添了有趣的新维度关于递归关系。�
 ```math
 \begin{aligned}
 K_0 &= 1; \\
-K_{n+1} &= 1 + min(2K_{\lfloor n/2\rfloor}, 3K_{\lfloor n/3\rfloor}), for\ n\ge 0. \tag{3.16}
+K_{n+1} &= 1 + \min(2K_{\lfloor n/2\rfloor}, 3K_{\lfloor n/3\rfloor}), \text{ for n} \ge 0. \tag{3.16}
 \end{aligned}
 ```
 
-因此，例如，$K_1$ 是 $1 + min(2K_0, 3K_0) = 3$；该序列以 $1, 3, 3, 4, 7, 7, 7, 9, 9, 10, 13,\cdots$ 开始。 。本书作者之一谦虚地决定将这些称为克努斯数。
+因此，例如，$K_1$ 是 $1 + \min(2K_0, 3K_0) = 3$；该序列以 $1, 3, 3, 4, 7, 7, 7, 9, 9, 10, 13,\cdots$ 开始。 本书作者之一谦虚地决定将这些称为克努斯数。
 
-习题 25 要求证明或证伪：对所有 $n\ge 0$，有 $K_n​\ge n$。上面列出的前几项 $K$ 确实满足该不等式，因此这个命题很有可能在一般情形下也成立。我们尝试用数学归纳法证明：归纳基础：$n=0$ 的情形可直接由定义递推式得出。归纳步骤：假设不等式对不超过某个固定非负整数 $n$ 的所有值都成立，我们来证明 $K_{n+1}​\ge {n+1}$。由递推式可知：$K_{n+1}= 1 + min(2K_{\lfloor n/2\rfloor}, 3K_{\lfloor n/3\rfloor})$。归纳假设告诉我们：$2K_{\lfloor n/2\rfloor}​\ge 2\lfloor n/2\rfloor,3K_{\lfloor n/3\rfloor}​\ge 3\lfloor n/3\rfloor$，然而，$2\lfloor n/2\rfloor$ 最小可以取到 $n−1$，$3\lfloor n/3\rfloor$ 最小可以取到 $n−2$。由归纳假设我们最多只能推出：$K_{n+1}\ge 1+(n−2)$ 这与需要证明的 $K_{n+1​}\ge n+1$ 相差甚远。
+习题 25 要求证明或证伪：对所有 $n\ge 0$，有 $K_n​\ge n$。上面列出的前几项 $K$ 确实满足该不等式，因此这个命题很有可能在一般情形下也成立。我们尝试用数学归纳法证明：归纳基础：$n=0$ 的情形可直接由定义递推式得出。归纳步骤：假设不等式对不超过某个固定非负整数 $n$ 的所有值都成立，我们来证明 $K_{n+1}​\ge {n+1}$。由递推式可知：$K_{n+1}= 1 + \min(2K_{\lfloor n/2\rfloor}, 3K_{\lfloor n/3\rfloor})$。归纳假设告诉我们：$2K_{\lfloor n/2\rfloor}​\ge 2\lfloor n/2\rfloor,3K_{\lfloor n/3\rfloor}​\ge 3\lfloor n/3\rfloor$，然而，$2\lfloor n/2\rfloor$ 最小可以取到 $n−1$，$3\lfloor n/3\rfloor$ 最小可以取到 $n−2$。由归纳假设我们最多只能推出：$K_{n+1}\ge 1+(n−2)$ 这与需要证明的 $K_{n+1​}\ge n+1$ 相差甚远。
 
 现在我们有理由对 $K_n​\ge n$ 这一命题的正确性产生怀疑，因此不妨尝试证伪它。如果我们能找到某个正整数 $n$，使得 $2K_{\lfloor n/2\rfloor}​<n$ 或 $3K_{\lfloor n/3\rfloor}​<n$ 成立，换言之，只要找到满足
 ```math
-K_{\lfloor n/2\rfloor}​<n/2\ or\ K_{\lfloor n/3\rfloor} < n/3,
+K_{\lfloor n/2\rfloor}​<n/2 \text{ or } K_{\lfloor n/3\rfloor} < n/3,
 ```
 
 那么就会有 $K_{n+1​}<n+1$。这是否真的可能发生？我们最好先不在这里揭晓答案，否则会破坏习题 25 的解题乐趣。
@@ -333,7 +333,7 @@ n = \lfloor n/2\rfloor + \lceil n/2\rceil; \tag{3.17}
 ```math
 \begin{aligned}
 f(0) &= 0; \\
-f(n) &= f(\lfloor n/2\rfloor) + f(\lceil n/2\rceil), for\ n> 1. \tag{3.18}
+f(n) &= f(\lfloor n/2\rfloor) + f(\lceil n/2\rceil), \text{ for n}> 1. \tag{3.18}
 \end{aligned}
 ```
 该递推式的解法见习题 34
@@ -342,7 +342,7 @@ f(n) &= f(\lfloor n/2\rfloor) + f(\lceil n/2\rceil), for\ n> 1. \tag{3.18}
 ```math
 \begin{aligned}
 J(1) &= 1; \\
-J(n) &= 2J(\lfloor n/2\rfloor) - (-1)^n, for\ n> 1.
+J(n) &= 2J(\lfloor n/2\rfloor) - (-1)^n, \text{ for n}> 1.
 \end{aligned}
 ```
 
@@ -403,7 +403,7 @@ J_3(n) := 3n + 1 - D.
 ```math
 \begin{aligned}
 &D_0^{(q)} = 1; \\
-&D_n^{(q)} :=  \lceil\frac{q}{q-1}D_{n-1}^{(q)}\rceil \qquad for\ n > 0 \tag{3.20}
+&D_n^{(q)} :=  \lceil\frac{q}{q-1}D_{n-1}^{(q)}\rceil \qquad \text{ for n}> 0 \tag{3.20}
 \end{aligned} 
 ```
 
@@ -507,25 +507,26 @@ c(x\mod y) = c(x-y\lfloor x/y\rfloor) = cx -cy\lfloor cx/cy\rfloor = cx\mod cy,
 
 第 $k$ 个 $group$ 里有多少个 $things$？我们希望找到一个公式：当 $k\le n\mod m$ 时，结果为 $\lceil n/m\rceil$；其余情况则为 $\lfloor n/m\rfloor$。想要验证这一点并不困难。
 ```math
-\lceil\frac{n-k+1}{m} \rceil
+\left\lceil\frac{n-k+1}{m} \right\rceil
 ```
 
 该式具备我们想要的性质，因为若按照上一段的写法令 $n=qm+r$，其中 $q=\lfloor n/m\rfloor$，原式可化简为：$q+\lceil (r−k+1​)/m\rceil$。 当 $1\le k\le m$ 且 $0\le r<m$ 时，有 $\lceil (r−k+1​)/m\rceil=[k\le r]$。由此我们可写出一个恒等式，它将 $n$ 划分为 $m$ 个尽可能相等、且按非递增顺序排列的部分:
 ```math
-n = \lceil\frac{n}{m}\rceil + \lceil\frac{n-1}{m}\rceil + \cdots + \lceil\frac{n-m+1}{m}\rceil. \tag{3.24}
+n = \left\lceil\frac{n}{m}\right\rceil + \left\lceil\frac{n-1}{m}\right\rceil + \cdots + \left\lceil\frac{n-m+1}{m}\right\rceil. \tag{3.24}
 ```
+
 该恒等式对所有正整数 $m$ 以及任意整数 $n$（无论正、负或零）均成立。我们在式 (3.17) 中已经见过 $m=2$ 的情形，尽管当时的写法略有不同：$n=\lfloor n/2\rfloor + \lceil n/2\rceil​$
 
 如果我们希望各部分按非递减顺序排列，让较小的 $groups$ 出现在较大的 $groups$ 之前，只需沿用同样的推导方式，只是在第一组中放入 $\lfloor n/m\rfloor$ 个 $%$ 即可。这样我们便能推导出对应的恒等式：
 ```math
-n = \lfloor\frac{n}{m}\rfloor + \lfloor\frac{n+1}{m}\rfloor + \cdots + \lfloor\frac{n+m-1}{m}\rfloor. \tag{3.25}
+n = \left\lfloor\frac{n}{m}\right\rfloor + \left\lfloor\frac{n+1}{m}\right\rfloor + \cdots + \left\lfloor\frac{n+m-1}{m}\right\rfloor. \tag{3.25}
 ```
 
 利用式 (3.4) 或习题 12 中的恒等式，即可在式 (3.25) 与式 (3.24) 之间相互转换。
 
 现在，如果我们将 (3.25) 中的 $n$ 替换为 $\lfloor mx\rfloor$，并运用规则 (3.11) 消去嵌套在内层的 $floor$ 符号，就能得到一个对所有实数 $x$ 都成立的恒等式：
 ```math
-\lfloor mx\rfloor = \lfloor x\rfloor + \lfloor x+\frac{1}{m}\rfloor + \cdots + \lfloor x+\frac{m-1}{m}\rfloor. \tag{3.26}
+\lfloor mx\rfloor = \lfloor x\rfloor + \left\lfloor x+\frac{1}{m}\right\rfloor + \cdots + \left\lfloor x+\frac{m-1}{m}\right\rfloor. \tag{3.26}
 ```
 
 这一结论相当令人惊叹，因为下取整函数只是对实数的整数近似，但左侧这单次近似，竟然与右侧一长串近似值的总和完全相等。如果我们假设平均来看 $\lfloor x\rfloor \approx x-\frac{1}{2}$​，那么左侧大致等于 $mx-\frac{1}{2}$​；而右侧则近似为 $(x-\frac{1}{2}) + (x-\frac{1}{2}+\frac{1}{m})+ \cdots + (x-\frac{1}{2}+\frac{m-1}{m}) = mx-\frac{1}{2}$；​这些粗略近似值的总和，最终竟然是精确等式！

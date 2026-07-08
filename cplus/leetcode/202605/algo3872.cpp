@@ -29,5 +29,41 @@ public:
         return max(ans, pre + 1);
     }
 
+    int longestArithmetic(vector<int>& nums) {
+        // 状态机 DP
+        int n = nums.size();
+        vector dp(n, vector<int>(2));
+        dp[0][0] = 1, dp[0][1] = 1; dp[1][0] = 2, dp[1][1] = 2;
+        for (int i=2; i<n; i++) {
+            for (int left = 0; left<2; left ++){
+                // 不改
+                auto & res = dp[i][left] = 2;
+                if (nums[i-2] + nums[i] == 2 * nums[i-1]) {
+                    res = dp[i-1][left] + 1;
+                }
+                if (left) {
+                    res = max(res, 3);  // 改 nums[i-2]
+                    if (i >= 3) {
+                        if ((nums[i-2] - nums[i-3]) * 2 == nums[i]-nums[i-2])
+                            res = max(res, dp[i-2][0] + 2); // 改 nums[i-1]
+                        
+                        // 改 nums[i-2]
+                        int d = nums[i] - nums[i-1];
+                        if (nums[i-1] - nums[i-3] == d * 2) {
+                            res = max(res, 4);
+                            if (i >= 4 && nums[i-3] - nums[i-4] == d) 
+                                res = max(res, dp[i-3][0] + 3);
+                        }
+                    }
+                }
+            }
+        }
 
+        int ans1 = 0, ans2 = 0;
+        for (int i=0; i<n; i++) {
+            ans1 = max(ans1, dp[i][1]);
+            if (i<n-1) ans2 = max(ans2, dp[i][0] + 1);
+        }
+        return max(ans1, ans2);
+    }    
 };

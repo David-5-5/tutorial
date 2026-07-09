@@ -1,11 +1,11 @@
 class Solution:
     def findTheWinner(self, n: int, k: int) -> int:
-        
+        # Josephus problem
         # 复习推导 约瑟夫环
         # 思维过程举例 
         # n = 6 k = 3 举例
         # f(n) = [0, 1, 2, 3, 4, 5]     k=2 去除
-        # f(n-1) = [3, 4, , 0, 1, 2]    剩余元素重新编号
+        # f(n-1) = [3, 4, 5, 0, 1]    剩余元素重新编号
         # 因此 f(n-1) 与 f(n) 的编号关系为 (除去 =2 之后， 从3开始重新编号)
         # f(n) = (f(n-1) + k) % n
         # 校验 f(n-1) = 3 -> 3 + 3 % n = 0 = f(n)

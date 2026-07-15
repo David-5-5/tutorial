@@ -533,14 +533,14 @@ n = \left\lfloor\frac{n}{m}\right\rfloor + \left\lfloor\frac{n+1}{m}\right\rfloo
 
 
 ## 3.5 FLOOR/CEILING SUMS
-式 (3.26) 表明，至少对于一类包含"floor" $\lfloor\rfloor$ 的求和式，我们是可以求出闭式的。这样的求和式还有其他吗？当然有。处理这类问题的常用技巧是：通过引入一个新变量，消去 "floor" 或 "ceil" 符号。
+式 (3.26) 表明，至少对于一类包含"floor" $\lfloor\rfloor$ 的求和式，我们是可以求出闭式的。这样的求和式还有其他吗？当然有。处理这类问题的常用技巧是：通过引入一个新变量，消去下取整或上取整符号。
 
 例如，我们来看看能否求出这个和式的闭式：
 ```math
 \sum_{0\le k<n} \lfloor\sqrt{k}\rfloor
 ```
 
-求出其闭式。一种思路是引入变量 $m=\lfloor k\rfloor$；我们可以像处理轮盘赌问题时那样，“mechanically”（机械地）按部就班地操作：
+求出其闭式。一种思路是引入变量 $m=\lfloor sqrt{k}\rfloor$；我们可以像处理轮盘赌问题时那样，机械地 (mechanically) 按部就班地操作：
 ```math
 \begin{aligned}
 \sum_{0\le k<n} \lfloor\sqrt{k}\rfloor &= \sum_{k,m\ge 0} m[k<n] [m=\lfloor\sqrt{k}\rfloor]                 \\
@@ -563,7 +563,7 @@ n = \left\lfloor\frac{n}{m}\right\rfloor + \left\lfloor\frac{n+1}{m}\right\rfloo
 \end{aligned} 
 ```
 
-对于一般情形，我们可令 $a=\lfloor\sqrt{n}\rfloor$；此时只需补上满足 $a^2\le k< n$ 的项，这些项的值均为 $a$，因此它们的和为 $(n-a^2)a$。由此便得到了所求的closed form（闭式）：
+对于一般情形，我们可令 $a=\lfloor\sqrt{n}\rfloor$；此时只需补上满足 $a^2\le k< n$ 的项，这些项的值均为 $a$，因此它们的和为 $(n-a^2)a$。由此便得到了所求的闭式（closed form）：
 ```math
 \sum_{0\le k<n} \lfloor\sqrt{k}\rfloor=na -\frac{1}{3}a^3 -\frac{1}{2}a^2-\frac{1}{6}a, \qquad a=\lfloor\sqrt{n}\rfloor \tag{3.27}
 ```

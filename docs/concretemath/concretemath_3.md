@@ -540,7 +540,7 @@ n = \left\lfloor\frac{n}{m}\right\rfloor + \left\lfloor\frac{n+1}{m}\right\rfloo
 \sum_{0\le k<n} \lfloor\sqrt{k}\rfloor
 ```
 
-求出其闭式。一种思路是引入变量 $m=\lfloor sqrt{k}\rfloor$；我们可以像处理轮盘赌问题时那样，机械地 (mechanically) 按部就班地操作：
+求出其闭式。一种思路是引入变量 $m=\lfloor \sqrt{k}\rfloor$；我们可以像处理轮盘赌问题时那样，机械地 (mechanically) 按部就班地操作：
 ```math
 \begin{aligned}
 \sum_{0\le k<n} \lfloor\sqrt{k}\rfloor &= \sum_{k,m\ge 0} m[k<n] [m=\lfloor\sqrt{k}\rfloor]                 \\

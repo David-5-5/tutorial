@@ -23,4 +23,23 @@ public:
         return ans;
     }
 
+
+    vector<long long> resultArray(vector<int>& nums, int k) {
+        // 空间优化
+        vector<long long> ans(k), prev(k); int n = nums.size();
+       
+        for (int i= 0; i<n; i++) {
+            vector<long long> cur(k);
+            for (long long x=0; x<k; x++) {
+                cur[x * nums[i] % k] += prev[x];
+            }
+            cur[nums[i]%k] ++;
+            for (int x=0; x<k; x++) {
+                ans[x] += cur[x];
+            }
+            prev = move(cur);
+        }
+   
+        return ans;
+    }    
 };

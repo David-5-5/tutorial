@@ -584,7 +584,7 @@ n = \left\lfloor\frac{n}{m}\right\rfloor + \left\lfloor\frac{n+1}{m}\right\rfloo
 
 对所有无理数 $\alpha$，以及所有几乎处处连续的函数 $f$，该式均成立。例如，取 $f(x)=x$，即可求出 ${n\alpha}$ 的平均值；我们会得到 $\frac{1}{2}$​.（这正是我们直观预期的结果；但无论 $\alpha$ 是怎样的无理数，这个结论都能被严格证明成立，这一点依然十分美妙。）
 
-Bohl、Sierpiński 和 Weyl 的这条定理，是通过用 *step functions* （阶梯函数）对 $f(x)$ 进行上下逼近来证明的；而阶梯函数是若干简单函数的线性组合。
+Bohl、Sierpiński 和 Weyl 的这条定理，是通过用阶梯函数 (step functions) 对 $f(x)$ 进行上下逼近来证明的；而阶梯函数是若干简单函数的线性组合。
 ```math
 f_v(x) = [0\le x<v]
 ```

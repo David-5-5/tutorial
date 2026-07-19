@@ -584,7 +584,7 @@ n = \left\lfloor\frac{n}{m}\right\rfloor + \left\lfloor\frac{n+1}{m}\right\rfloo
 
 对所有无理数 $\alpha$，以及所有几乎处处连续的函数 $f$，该式均成立。例如，取 $f(x)=x$，即可求出 ${n\alpha}$ 的平均值；我们会得到 $\frac{1}{2}$​.（这正是我们直观预期的结果；但无论 $\alpha$ 是怎样的无理数，这个结论都能被严格证明成立，这一点依然十分美妙。）
 
-Bohl、Sierpiński 和 Weyl 的这条定理，是通过用 *step functions* （阶梯函数）对 $f(x)$ 进行上下逼近来证明的；而阶梯函数是若干简单函数的线性组合。
+Bohl、Sierpiński 和 Weyl 的这条定理，是通过用阶梯函数 (step functions) 对 $f(x)$ 进行上下逼近来证明的；而阶梯函数是若干简单函数的线性组合。
 ```math
 f_v(x) = [0\le x<v]
 ```
@@ -832,4 +832,21 @@ c = \frac{d-m}{2}
 
 例如，当 $m=41, n=127$ 时，左边的和只有 $41$ 项，右边的和却有 $127$ 项，但对任意实数 $x$，它们的值仍然完全相等。
 
+
+---
+习题
+
+- 3.17 当 $x \ge 0$ 时，求解求和式 $\sum_{0 \le k < m} \big\lfloor x + \dfrac{k}{m} \big\rfloor$；将 $\big\lfloor x + \dfrac{k}{m} \big\rfloor$ 替换为 $\sum_j \big[1 \le j \le x + \dfrac{k}{m}\big]$，先对 $k$ 求和。所得结果是否与式(3.26)一致？
+解答：
+
+```math
+\begin{align*}
+\sum_{j,k} & [0 \le k < m]\big[1 \le j \le x + \tfrac{k}{m}\big] \\
+&= \sum_{j,k} [0 \le k < m]\big[1 \le j \le \lceil x \rceil\big] \times \big[k \ge m(j - x)\big] \\
+&= \sum_{1 \le j \le \lceil x \rceil} \sum_{k} [0 \le k < m]
+- \sum_{j=\lceil x \rceil} \sum_{k} \big[0 \le k < m(j - x)\big] \\
+&= m\lceil x \rceil - \big\lceil m(\lceil x \rceil - x) \big\rceil \\
+&= -\lceil -mx \rceil = \lfloor mx \rfloor .
+\end{align*}
+```
 

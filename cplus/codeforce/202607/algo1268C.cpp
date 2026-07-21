@@ -1,83 +1,82 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-// 常用数据结构 - 8.2 树状数组和线段树 - 逆序对
 template<typename T>
 class FenwickTree {
     vector<T> tree;
-
 public:
-    // 使用下标 1 到 n
     FenwickTree(int n) : tree(n + 1) {}
-    // a[i] 增加 val, 1 <= i <= n
     void update(int i, T val) {
         for (; i < tree.size(); i += i & -i) {
             tree[i] += val;
         }
     }
-    // 求前缀和 a[1] + ... + a[i] 1 <= i <= n
     T pre(int i) const {
         T res = 0;
-        for (; i > 0; i &= i - 1) { // i-= i&-i
+        for (; i > 0; i &= i - 1) {
             res += tree[i];
         }
         return res;
     }
-    // 求区间和 a[l] + ... + a[r], 1 <= l <= r <= n
     T query(int l, int r) const {
-        if (r < l) {
-            return 0;
-        }
+        if (r < l) return 0;
         return pre(r) - pre(l - 1);
-    }    
+    }
 };
 
-
 int main() {
-    // 极致输入加速（比ios::sync_with_stdio更快）
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
     cin.exceptions(ios::badbit | ios::failbit);
 
-    long long n;
+    int n;
     cin >> n;
-    vector<int> arr(n);
-    for (int i=0; i<n; i++) cin >> arr[i];
-    int idx[n];
-    iota(idx, idx+n, 0);
-    sort(idx, idx + n, [&](int i, int j) {
-        return arr[i] < arr[j];
-    });
+    vector<int> pos(n + 1);
+    for (int i = 1; i <= n; i++) {
+        int x;
+        cin >> x;
+        pos[x] = i;
+    }
 
-    FenwickTree<int> ft(n);
-    vector<int> ans(n);
-    ft.update(1, 1);
-    auto l = idx[0], r = idx[0];
-    for (int i=1; i<n; i++) {
-        auto pos = idx[i];
-        if (pos >= l && pos <= r) continue; // 区间内已遍历
-        if (pos < l) {
-            for (int j=l-1; j>=pos; j--) {
-                auto & x = arr[j];
-                ans[x-1] = ft.pre(x);
-                ft.update(x, 1);
-            }
-            l = pos;
-        } else {
-            for (int j=r+1; j<=pos; j++) {
-                auto & x = arr[j];
-                ans[x-1] = ft.query(x, n);
-                ft.update(x, 1);
-            }
-            r = pos;
+    FenwickTree<long long> bitCnt(n), bitSum(n);
+    vector<long long> f(n + 1);
+    long long invCnt = 0;
+
+    for (int k = 1; k <= n; k++) {
+        int p = pos[k];
+        
+        // 1. 新增逆序对：已选位置中比 p 大的个数
+        invCnt += bitCnt.query(p + 1, n);
+        
+        // 2. 插入当前位置
+        bitCnt.update(p, 1);
+        bitSum.update(p, p);
+        
+        // 3. 计算聚拢代价
+        int target = (k + 1) / 2;
+        int lo = 1, hi = n;
+        while (lo < hi) {
+            int mid = (lo + hi) / 2;
+            if (bitCnt.pre(mid) >= target) hi = mid;
+            else lo = mid + 1;
         }
+        int median = lo;
+        
+        long long cntL = bitCnt.query(1, median - 1);
+        long long sumL = bitSum.query(1, median - 1);
+        long long cntR = bitCnt.query(median + 1, n);
+        long long sumR = bitSum.query(median + 1, n);
+        
+        // 修正公式：目标位置是从 median - cntL 开始的连续区间
+        long long leftCost = cntL * median - cntL * (cntL + 1) / 2 - sumL;
+        long long rightCost = sumR - cntR * median - cntR * (cntR + 1) / 2;
+        long long gatherCost = leftCost + rightCost;
+        
+        f[k] = invCnt + gatherCost;
     }
-    int pres = 0;
-    for (int i=0; i<n; i++) {
-        pres += ans[i];
-        cout << pres << " ";
+
+    for (int k = 1; k <= n; k++) {
+        cout << f[k] << " \n"[k == n];
     }
-    cout << endl;
     return 0;
 }
-

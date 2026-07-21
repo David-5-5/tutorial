@@ -35,5 +35,26 @@ public:
         return right;   
     }
 
+    int findKthNumber2(int m, int n, int k) {
+        if (m > n) swap(m, n);
+        auto check = [&] (int val) -> int {
+            // 矩阵 le 是小于等于 val 的值，有点画蛇添足了
+            int cnt = 0;    
+            for (int i=1; i<=m; i++) {  // 没有多余代码，反而更快
+                cnt += min(n, val / i);
+            }
+            return cnt;
+        };
 
+        int left = 0, right = m * n + 1;
+        while (left + 1 < right) {
+            auto mid = (left + right) / 2;
+            if (check(mid) >= k) {
+                right = mid;
+            } else {
+                left = mid;
+            }
+        }
+        return right;
+    }    
 };

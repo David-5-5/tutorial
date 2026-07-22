@@ -24,4 +24,24 @@ public:
         
         return ans;
     }
+
+    string orderlyQueue2(string s, int k) {
+        if (k > 1) {
+            sort(s.begin(), s.end()); return s;
+        }
+
+        // oi-wiki 字符串 循环同构最小字典序 朴素算法 O(N^2)
+        int l = 0, i = 0, j = 1, n = s.length();
+        while (l < n && i < n && j < n) {
+            if (s[(i+l) % n] == s[(j+l) % n]) l++;
+            else {
+                s[(i+l) % n] > s[(j+l) % n]?i++:j=j++;
+                if (i == j) i++;
+                l = 0;
+            }
+        }
+        i = min(i, j);
+        return s.substr(i) + s.substr(0, i);
+    }
+
 };

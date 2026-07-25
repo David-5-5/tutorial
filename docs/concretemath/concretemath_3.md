@@ -673,7 +673,7 @@ D(\alpha, n)\le D(\alpha',\lfloor \alpha n\rfloor) + \alpha^{-1} + 2. \tag{3.31}
 
 跟往常一样，尤其是面对难题时，我们先从简单情形入手观察。$n=1$ 的特例就是公式 (3.26)，只是把 $x$ 换成了 $x/m$：
 ```math
- \lfloor\frac{x}{m}\rfloor + \lfloor\frac{1+x}{m}\rfloor + \cdots + \lfloor\frac{m-1+x}{m}\rfloor = \lfloor x\rfloor.
+ \left\lfloor\frac{x}{m}\right\rfloor +  \left\lfloor\frac{1+x}{m}\right\rfloor + \cdots +  \left\lfloor\frac{m-1+x}{m}\right\rfloor =  \lfloor x\rfloor.
 ```
 
 就像在第 1 章里那样，我们发现往更简单的方向推广到 $n=0$ 来获取更多数据是很有用的：

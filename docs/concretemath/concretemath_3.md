@@ -666,7 +666,7 @@ D(\alpha, n)\le D(\alpha',\lfloor \alpha n\rfloor) + \alpha^{-1} + 2. \tag{3.31}
 
 现在让我们深呼吸，再来算一个和式。它并不简单，但相比我们刚才做的那些，它有一个巨大的优点：最终能得到闭式，这样我们就能轻松检验结果对不对。我们现在的目标，是把式 (3.26) 中的和式推广，求出下面这个表达式：
 ```math
-\sum_{0\le <m} \bigg\lfloor\frac{nk+x}{m}\bigg\rfloor, \quad \text{integer m>0, integer n}.
+\sum_{0\le k<m} \left\lfloor\frac{nk+x}{m}\right\rfloor, \quad \text{integer m>0, integer n}.
 ```
 
 求出这个和式的闭式，比我们到目前为止做过的所有题目都更难（也许只比刚才那个偏差问题简单一点）。但它非常有启发性，所以本章剩下的内容，我们就专心把它啃下来。
@@ -683,12 +683,12 @@ D(\alpha, n)\le D(\alpha',\lfloor \alpha n\rfloor) + \alpha^{-1} + 2. \tag{3.31}
 
 我们的问题里有两个参数：$m$ 和 $n$。先来看 $m$ 取小值的情况。当 $m=1$ 时，和式里只有一项，值为 $\lfloor x\rfloor$。当 $m=2$ 时，和式是 $\lfloor x/2\rfloor + \lfloor (x+n)/2\rfloor$。我们可以把 $n$ 从下取整符号里挪出来，以此消除 $x$ 和 $n$ 之间的耦合，但要这么做，必须分偶数和奇数两种情况讨论。如果 $n$ 是偶数，$n/2$ 是整数，于是可以把它从下取整里提出来：
 ```math
-\left\lfloor\frac{x}{2}\right\rfloor + (\left\lfloor\frac{x}{2}\right\rfloor + \frac{n}{2}) = 2\left\lfloor\frac{x}{2}\right\rfloor + \frac{n}{2}.
+\left\lfloor\frac{x}{2}\right\rfloor + \left(\left\lfloor\frac{x}{2}\right\rfloor + \frac{n}{2}\right) = 2\left\lfloor\frac{x}{2}\right\rfloor + \frac{n}{2}.
 ```
 
 如果 $n$ 是奇数，那么 $(n−1)/2$ 是整数，于是我们得到：
 ```math
-\left\lfloor\frac{x}{2}\right\rfloor + (\left\lfloor\frac{x+1}{2}\right\rfloor + \frac{n-1}{2}) = \lfloor\ x\rfloor + \frac{n-1}{2}.
+\left\lfloor\frac{x}{2}\right\rfloor + \left(\left\lfloor\frac{x+1}{2}\right\rfloor + \frac{n-1}{2}\right) = \lfloor\ x\rfloor + \frac{n-1}{2}.
 ```
 最后一步是由公式 (3.26) 取 $m=2$ 得到的。
 
@@ -700,17 +700,17 @@ D(\alpha, n)\le D(\alpha',\lfloor \alpha n\rfloor) + \alpha^{-1} + 2. \tag{3.31}
 
 我们对 $n$ 分三种情况讨论：它要么是 $3$ 的倍数，要么是 $3$ 的倍数加 $1$，要么是 $3$ 的倍数加 $2$。也就是说，$n\mod 3=0,1,2$。如果 $n\mod 3=0$，那么 $n/3$ 和 $2n/3$ 都是整数，于是这个和为：
 ```math
-\left\lfloor\frac{x}{3}\right\rfloor + (\left\lfloor\frac{x}{3}\right\rfloor+\frac{n}{3}) + (\left\lfloor\frac{x}{3}\right\rfloor+\frac{2n}{3})=3\left\lfloor\frac{x}{3}\right\rfloor + n.
+\left\lfloor\frac{x}{3}\right\rfloor + \left(\left\lfloor\frac{x}{3}\right\rfloor+\frac{n}{3}\right) + \left(\left\lfloor\frac{x}{3}\right\rfloor+\frac{2n}{3}\right)=3\left\lfloor\frac{x}{3}\right\rfloor + n.
 ```
 
 如果 $n\mod 3=1$，那么 $(n−1)/3$ 和 $(2n−2)/3$ 都是整数，于是我们得到：
 ```math
-\left\lfloor\frac{x}{3}\right\rfloor + (\left\lfloor\frac{x+1}{3}\right\rfloor+\frac{n-1}{3}) + (\left\lfloor\frac{x+2}{3}\right\rfloor+\frac{2n-2}{3})=\lfloor x\rfloor + n-1.
+\left\lfloor\frac{x}{3}\right\rfloor + \left(\left\lfloor\frac{x+1}{3}\right\rfloor+\frac{n-1}{3}\right) + \left(\left\lfloor\frac{x+2}{3}\right\rfloor+\frac{2n-2}{3}\right)=\lfloor x\rfloor + n-1.
 ```
 
 最后这一步同样由公式 (3.26) $m=3$ 时得出，。最后如果 $n\mod 3=2$，那么：
 ```math
-\left\lfloor\frac{x}{3}\right\rfloor + (\left\lfloor\frac{x+2}{3}\right\rfloor+\frac{n-2}{3}) + (\left\lfloor\frac{x+1}{3}\right\rfloor+\frac{2n-1}{3})=\lfloor x\rfloor + n-1.
+\left\lfloor\frac{x}{3}\right\rfloor + \left(\left\lfloor\frac{x+2}{3}\right\rfloor+\frac{n-2}{3}\right) + \left(\left\lfloor\frac{x+1}{3}\right\rfloor+\frac{2n-1}{3}\right)=\lfloor x\rfloor + n-1.
 ```
 
 我们大脑的左脑已经搞定了 $m=3$ 的情况，但右脑还是没看出规律，于是我们继续看 $m=4$：
@@ -720,18 +720,18 @@ D(\alpha, n)\le D(\alpha',\lfloor \alpha n\rfloor) + \alpha^{-1} + 2. \tag{3.31}
 
 至少现在我们已经很清楚，要根据 $n\mod m$ 来分情况讨论。如果 $n\mod 4 = 0$，那么：
 ```math
-\left\lfloor\frac{x}{4}\right\rfloor + (\left\lfloor\frac{x}{4}\right\rfloor+\frac{n}{4}) + (\left\lfloor\frac{x}{4}\right\rfloor+\frac{2n}{4}) + (\left\lfloor\frac{x}{4}\right\rfloor+\frac{3n}{4})=4\left\lfloor\frac{x}{4}\right\rfloor + \frac{3n}{2}.
+\left\lfloor\frac{x}{4}\right\rfloor + \left(\left\lfloor\frac{x}{4}\right\rfloor+\frac{n}{4}\right) + \left(\left\lfloor\frac{x}{4}\right\rfloor+\frac{2n}{4}\right) + \left(\left\lfloor\frac{x}{4}\right\rfloor+\frac{3n}{4}\right)=4\left\lfloor\frac{x}{4}\right\rfloor + \frac{3n}{2}.
 ```
 
 如果 $n\mod 4 = 1$：
 ```math
-\left\lfloor\frac{x}{4}\right\rfloor + (\left\lfloor\frac{x+1}{4}\right\rfloor+\frac{n-1}{4}) + (\left\lfloor\frac{x+2}{4}\right\rfloor+\frac{2n-2}{4}) + (\left\lfloor\frac{x+3}{4}\right\rfloor+\frac{3n-3}{4})=\lfloor x\rfloor + \frac{3n}{2}-\frac{3}{2}.
+\left\lfloor\frac{x}{4}\right\rfloor + \left(\left\lfloor\frac{x+1}{4}\right\rfloor+\frac{n-1}{4}\right) + \left(\left\lfloor\frac{x+2}{4}\right\rfloor+\frac{2n-2}{4}\right) + \left(\left\lfloor\frac{x+3}{4}\right\rfloor+\frac{3n-3}{4}\right)=\lfloor x\rfloor + \frac{3n}{2}-\frac{3}{2}.
 ```
 
 结果发现，$n\mod 4=3$ 的情况也给出相同的结果。最后，在 $n\mod 4=2$ 的情况下，我们得到了一个略有不同的式子，而这恰恰成为了理解整体规律的一条重要线索：
 ```math
-\lfloor\frac{x}{4}\rfloor + (\lfloor\frac{x+2}{4}\rfloor+\frac{n-2}{4}) + (\lfloor\frac{x}{4}\rfloor+\frac{2n}{4}) + (\lfloor\frac{x+2}{4}\rfloor+\frac{3n-2}{4}) \\
-=2(\lfloor\frac{x}{4}\rfloor + \lfloor\frac{x+2}{4}\rfloor) + \frac{3n}{2} -1 = 2\lfloor\frac{x}{2}\rfloor+ \frac{3n}{2} -1.
+\left\lfloor\frac{x}{4}\right\rfloor + \left(\left\lfloor\frac{x+2}{4}\right\rfloor+\frac{n-2}{4}\right) + \left(\left\lfloor\frac{x}{4}\right\rfloor+\frac{2n}{4}\right) + \left(\left\lfloor\frac{x+2}{4}\right\rfloor+\frac{3n-2}{4}\right) \\
+=2\left(\left\lfloor\frac{x}{4}\right\rfloor + \left\lfloor\frac{x+2}{4}\right\rfloor\right) + \frac{3n}{2} -1 = 2\left\lfloor\frac{x}{2}\right\rfloor+ \frac{3n}{2} -1.
 ```
 
 最后这一步化简的是形如 $\lfloor y/2\rfloor + \lfloor (y+1)/2\rfloor$ 的式子，这同样是公式 (3.26) 的一个特例。
@@ -746,14 +746,14 @@ D(\alpha, n)\le D(\alpha',\lfloor \alpha n\rfloor) + \alpha^{-1} + 2. \tag{3.31}
 
 看起来我们得到的结果好像都具有某种形式：
 ```math
-a\lfloor\frac{x}{a}\rfloor + bn + c,
+a\left\lfloor\frac{x}{a}\right\rfloor + bn + c,
 ```
 
 其中 $a, b, c$ 以某种方式依赖于 $m$ 和 $n$。就算是眼力不太好的人也能看出，$b$ 很可能就是 $(m−1)/2$​。要找出 $a$ 的表达式则更难一些，但 $n\mod 4=2$ 这个例子给了我们一个提示：$a$ 很可能是 $\gcd(m,n)$，也就是 $m$ 和 $n$ 的最大公约数。这是合理的，因为 $\gcd(m,n)$ 正是我们把分数 $n/m$​ 约分成最简形式时，从 $m$ 和 $n$ 中约去的那个因子，而我们的和式里正好出现了 $n/m$​。（我们会在第 4 章仔细研究最大公约数运算。）$c$ 的值看起来就更神秘了，不过也许等我们证明完 $a$ 和 $b$ 之后，$c$ 自然就清楚了。
 
 在对较小的 $m$ 计算这个和式时，我们实际上已经把和式中的每一项重新写成了：
 ```math
-\lfloor\frac{x+kn}{m}\rfloor = \lfloor\frac{x+kn\mod m}{m}\rfloor + \frac{kn}{m} - \frac{kn\mod m}{m},
+\left\lfloor\frac{x+kn}{m}\right\rfloor = \left\lfloor\frac{x+kn\mod m}{m}\right\rfloor + \frac{kn}{m} - \frac{kn\mod m}{m},
 ```
 
 因为 $(kn−(kn\mod m))/m$ 是一个整数，可以从下取整括号里提出来。于是，原来的和式就可以展开成下面这样的形式：
@@ -767,11 +767,11 @@ a\lfloor\frac{x}{a}\rfloor + bn + c,
 \end{aligned}
 ```
 
-当我们用较小的 $m$ 做试验时，这三列分别对应得到了：$a\lfloor\frac{x}{a}\rfloor, bn, c$。
+当我们用较小的 $m$ 做试验时，这三列分别对应得到了：$a\lfloor x/a\rfloor, bn, c$。
 
 尤其是，我们能看出 $b$ 是怎么来的。第二列是一个等差数列，它的和我们是知道的 —— 等于首项与末项的平均值，再乘以项数：
 ```math
-\frac{1}{2}(0 + \frac{(m-1)n}{m})\cdot m = \frac{(m-1)n}{2}.
+\frac{1}{2}\left(0 + \frac{(m-1)n}{m}\right)\cdot m = \frac{(m-1)n}{2}.
 ```
 
 于是我们之前猜测的 $b=(m−1)/2$ ​就得到了验证。

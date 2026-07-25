@@ -790,9 +790,9 @@ a\left\lfloor\frac{x}{a}\right\rfloor + bn + c,
 我们求和的第一列现在完全说得通了。它包含 $d$ 个项的副本： $\lfloor x/m\rfloor, \lfloor (x+d)/m\rfloor,\cdots, \lfloor (x+m-d)/m\rfloor$，顺序不一，因此其总和为:
 ```math
 \begin{aligned} 
-d(\lfloor\frac{x}{m}\rfloor&+\lfloor\frac{x+d}{m}\rfloor+\cdots+\lfloor\frac{x+m-d}{m}\rfloor) \\
-&=d(\lfloor\frac{x/d}{m/d}\rfloor+\lfloor\frac{x/d+1}{m/d}\rfloor+\cdots+\lfloor\frac{x/d+m/d-1}{m/d}\rfloor) \\
-&=d\lfloor\frac{x}{d}\rfloor
+&d\left(\left\lfloor\frac{x}{m}\right\rfloor+\left\lfloor\frac{x+d}{m}\right\rfloor+\cdots+\left\lfloor\frac{x+m-d}{m}\right\rfloor\right) \\
+&=d\left(\left\lfloor\frac{x/d}{m/d}\right\rfloor+\left\lfloor\frac{x/d+1}{m/d}\right\rfloor+\cdots+\left\lfloor\frac{x/d+m/d-1}{m/d}\right\rfloor\right) \\
+&=d\left\lfloor\frac{x}{d}\right\rfloor
 \end{aligned}
 ```
 
@@ -803,7 +803,7 @@ a = d = \gcd(m, n).
 
 而且正如我们猜测的那样，现在也可以算出 $c$ 了，因为第三列已经变得很容易理解。它包含了 $d$ 段等差数列 $0/m, d/m, 2d/m, \cdots, (m−d)/m$，所以它的和是：
 ```math
-d(\frac{1}{2}(0+\frac{m-d}{m})\cdot\frac{n}{d}) = \frac{m-d}{2};
+d\left(\frac{1}{2}\left(0+\frac{m-d}{m}\right)\cdot\frac{n}{d}\right) = \frac{m-d}{2};
 ```
 
 事实上，第三列是要减去，而不是加上，因此我们得到：
@@ -813,7 +813,7 @@ c = \frac{d-m}{2}
 
 谜团解开，探索结束。我们想要的闭式就是：
 ```math
-\sum_{0\le k<m} \lfloor\frac{nk+x}{m}\rfloor = d\lfloor\frac{x}{d}\rfloor + \frac{m-1}{2}\cdot n + \frac{d-m}{2},
+\sum_{0\le k<m} \left\lfloor\frac{nk+x}{m}\right\rfloor = d\left\lfloor\frac{x}{d}\right\rfloor + \frac{m-1}{2}\cdot n + \frac{d-m}{2},
 ```
 
 其中 $d=\gcd(m,n)$。作为验证，我们可以用之前已知的特殊情况 $n=0$ 和 $n=1$ 来检验：当 $n=0$ 时，有 $d=\gcd(m,0)=m$；公式中最后两项都为 $0$，因此公式正确给出 $m\lfloor x/m\rfloor$。当 $n=1$ 时，有 $d=\gcd(m,1)=1$；最后两项正好抵消，和式就等于 $\lfloor x\rfloor $。
@@ -821,15 +821,15 @@ c = \frac{d-m}{2}
 只要对这个闭式稍作整理，我们就能让它在 $m$ 和 $n$ 之间呈现出对称性：
 ```math
 \begin{aligned} 
-\sum_{0\le k<m} \lfloor\frac{nk+x}{m}\rfloor &= d\lfloor\frac{x}{d}\rfloor + \frac{m-1}{2}\cdot n + \frac{d-m}{2} \\
-&= d\lfloor\frac{x}{d}\rfloor + \frac{(m-1)(n-1)}{2} + \frac{(m-1)}{2} + \frac{d-m}{2} \\
-&= d\lfloor\frac{x}{d}\rfloor + \frac{(m-1)(n-1)}{2} + \frac{(d-1)}{2}. \tag{3.32}
+\sum_{0\le k<m} \left\lfloor\frac{nk+x}{m}\right\rfloor &= d\left\lfloor\frac{x}{d}\right\rfloor + \frac{m-1}{2}\cdot n + \frac{d-m}{2} \\
+&= d\left\lfloor\frac{x}{d}\right\rfloor + \frac{(m-1)(n-1)}{2} + \frac{(m-1)}{2} + \frac{d-m}{2} \\
+&= d\left\lfloor\frac{x}{d}\right\rfloor + \frac{(m-1)(n-1)}{2} + \frac{(d-1)}{2}. \tag{3.32}
 \end{aligned}
 ```
 
 这结果简直令人惊叹，因为从代数形式上，我们完全没有理由预料到这个和式会具有这样的对称性。我彻底被折服了。没错，我们就此证明了一条互反律。
 ```math
-\sum_{0\le k<m} \lfloor\frac{nk+x}{m}\rfloor = \sum_{0\le k<n} \lfloor\frac{mk+x}{n}\rfloor, \quad \text{integers m, n>0}.
+\sum_{0\le k<m} \left\lfloor\frac{nk+x}{m}\right\rfloor = \sum_{0\le k<n} \left\lfloor\frac{mk+x}{n}\right\rfloor, \quad \text{integers m, n>0}.
 ```
 
 例如，当 $m=41, n=127$ 时，左边的和只有 $41$ 项，右边的和却有 $127$ 项，但对任意实数 $x$，它们的值仍然完全相等。

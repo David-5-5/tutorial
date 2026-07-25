@@ -31,7 +31,28 @@ public:
         return ans;
     }
 
-  
+    long long maxProduct2(vector<int>& nums) {
+        int mx = *max_element(nums.begin(), nums.end());
+        int bw = bit_width((unsigned) mx);  // bw 维
+
+        // 高维前缀和模板
+        auto tot = (1 << bw) - 1;
+        vector<int> dp(tot + 1);
+
+        for (auto x: nums) dp[x] = x;
+
+        for (int i=0; i<bw; i++) {
+            for (int j=0; j<(1<<bw); j++) {
+                if (j >> i & 1) dp[j] = max(dp[j], dp[j^(1<<i)]);
+            }
+        }
+
+        long long ans = 0;
+        for (auto x : nums) {
+            ans = max(ans, 1LL * x * dp[tot - x]);
+        }
+        return ans;
+    }    
 };
 
 int main() {

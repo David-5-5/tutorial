@@ -26,7 +26,7 @@ class Solution:
     def computeSimilarities(self, docs: List[List[int]]) -> List[str]:
         # 参考题解，倒排索引
         len_docs = [len(doc) for doc in docs]
-        cnt  = defaultdict(list)    # key : id of docs
+        cnt  = defaultdict(list)    # key : word, value: id of docs
         sim_cnt = defaultdict(int)  # key : (id1, id2)
 
         for i, doc in enumerate(docs):

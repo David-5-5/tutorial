@@ -637,7 +637,7 @@ s(\alpha, n, v) = -nv + \lceil n\alpha\rceil b + \sum_{0\le j<\lceil n\alpha\rce
 
 其中 S 是对那些我们未能排除的 $k\ge n$ 情况所作的修正。量 $j\alpha'$ 永远不会是整数，因为 $\alpha$（从而 $\alpha'$）是无理数；而且 $j\alpha'-v'$  至多只有一个 $j$ 的值会是整数。因此我们可以把上取整项换成下取整项：
 ```math
-s(\alpha, n, v) = -nv + \lceil n\alpha\rceil b + \sum_{0\le j<\lceil n\alpha\rceil}(\lfloor j\alpha'\rfloor - \lfloor j\alpha'-v'\rfloor) - S + \{0\ or\ 1\}.
+s(\alpha, n, v) = -nv + \lceil n\alpha\rceil b - \sum_{0\le j<\lceil n\alpha\rceil}(\lfloor j\alpha'\rfloor - \lfloor j\alpha'-v'\rfloor) - S + \{0\ or\ 1\}.
 ```
 
 挺有意思的。我们并没有得到闭式，反而得到了一个和式，它看上去和 $s(\alpha, n, v)$ 十分相似，只是参数不同：用 $\alpha'$ 代替了 $\alpha$，用 $\lceil n\alpha\rceil$ 代替了 $n$，用 $v'$ 代替了 $v$。这样一来，我们就能得到关于 $s(\alpha, n, v)$ 的一个递推关系，而这（有望）进一步导出偏差 $D(\alpha,n)$ 的递推关系。这就意味着，我们也要亲自上阵

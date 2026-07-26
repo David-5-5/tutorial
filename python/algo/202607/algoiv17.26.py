@@ -23,3 +23,25 @@ class Solution:
         return ans
 
 
+    def computeSimilarities(self, docs: List[List[int]]) -> List[str]:
+        # 参考题解，倒排索引
+        len_docs = [len(doc) for doc in docs]
+        cnt  = defaultdict(list)    # key : id of docs
+        sim_cnt = defaultdict(int)  # key : (id1, id2)
+
+        for i, doc in enumerate(docs):
+            for word in doc:
+                if word in cnt.keys():
+                    for j in cnt[word]: sim_cnt[(j, i)] += 1
+                cnt[word].append(i)
+        ans = []
+
+        # def fmt4(x):
+        #     d = Decimal(str(x)).quantize(Decimal("0.0000"), rounding=ROUND_HALF_UP)
+        #     return str(d)        
+        for i, (key, val) in  enumerate(sim_cnt.items()):
+            id1, id2 = key
+            sim_score = val / (len_docs[id1] + len_docs[id2] - val)
+            # ans.append(f"{id1},{id2}: {sim_score+1e-9:.4f}")
+            ans.append(f"{id1},{id2}: {round(sim_score, 4):.4f}")
+        return ans

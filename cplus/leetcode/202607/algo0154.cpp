@@ -12,5 +12,15 @@ public:
         return mn;      
     }
 
-
+    int findMin2(vector<int>& nums) {
+        // 旋转数组 重复元素 二分   比较 iv 10.03
+        int l = -1, r = nums.size() - 1;
+        while (l+1 < r) {
+            auto m = (l + r) / 2;
+            if (nums[m] == nums[r]) r -= 1; 
+            else if (nums[m] < nums[r]) r = m; 
+            else l = m;
+        }
+        return nums[r];
+    }
 };

@@ -14,5 +14,12 @@ public:
         return dfs(n, 0, k);
     }
 
-
+    int kthGrammar2(int n, int k) {
+        if (n == 1) return 0;
+        
+        // father ： kthGrammar(n-1, (k+1)/2) 
+        // left child == father        , k is odd
+        // right child == 1 ^ father   , k is even 
+        return (k&1) ^ 1 ^ kthGrammar(n-1, (k+1)/2);
+    }    
 };

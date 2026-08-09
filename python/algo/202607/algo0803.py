@@ -77,6 +77,44 @@ class Solution:
 
         return ans[::-1]
 
+class Solution:
+    def hitBricks(self, grid: List[List[int]], hits: List[List[int]]) -> List[int]:
+        dirs = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+        m, n = len(grid), len(grid[0])
+        uf = UnionFind(m * n + 1)   # 增加 m * n 为哨兵，所有第一层节点都指向哨兵
+
+        last = copy.deepcopy(grid)
+        for h in hits:
+            last[h[0]][h[1]] = 0
+        
+        for i, row in enumerate(last):
+            for j, v in enumerate(row):
+                if v == 1:
+                    if j+1 < n and last[i][j+1] == 1:
+                        uf.merge(i*n+j, i*n+j+1)
+                    if i+1 < m and last[i+1][j] == 1:
+                        uf.merge(i*n+j, (i+1)*n+j)
+                    if i == 0:
+                        uf.merge(j, m * n)
+        
+        prev = uf.count(m*n)
+        ans = []
+        k = len(hits)
+        for i in range(k-1, -1, -1):
+            x, y = hits[i][0], hits[i][1]
+            if grid[x][y] == 1:
+                last[x][y] = 1
+                if x == 0: uf.merge(y, m*n)
+
+                for dx, dy in dirs:
+                    if 0 <= x + dx < m and 0 <= y + dy < n and last[x+dx][y+dy]:
+                        uf.merge(x*n+y, (x+dx)*n + y + dy)
+            cur = uf.count(m * n)
+            ans.append(max(0, cur - prev - 1))
+            prev = cur
+
+        return ans[::-1]
+
 
 
 if __name__ == "__main__":

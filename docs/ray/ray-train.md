@@ -194,6 +194,110 @@ Ray Dataset 在 `ScalingConfig(num_workers=N)` 下**自动按 N 分片**，每 w
 - 闭包捕获 `threading.Lock` / `socket` / DB connection → 报错并打印 `inspect_serializability` 诊断；
 - 不可 pickle 的 `lambda` 默认能过（cloudpickle 支持）但 `lambda` 本身若是闭包会失败。
 
+### 5.6 数据接入的三种模式
+
+> **核心结论**：Ray Train **`datasets` 参数只接受 `ray.data.Dataset`（或工厂），不接受 `torch.utils.data.Dataset`**。`GenDataset = Union["Dataset", Callable[[], "Dataset"]]` 在 [base_trainer.py:46](python/ray/train/base_trainer.py#L46) 已明确。torch Dataset 要先经 **`ray.data.from_torch()`** 桥（[read_api.py:3723](python/ray/data/read_api.py#L3723)）转 Ray Dataset 再注入。
+
+#### 模式 A（推荐）：Ray Dataset 端分片 + `iter_torch_batches()`
+
+官方 4 步法（[data-loading-preprocessing.rst](doc/source/train/user-guides/data-loading-preprocessing.rst)）：
+
+```python
+import torch, ray
+from ray import train
+from ray.train.torch import TorchTrainer
+
+# Step 1: 创建 Ray Dataset（多种来源：from_items/from_torch/read_parquet...）
+train_ds = ray.data.from_items([{"x": [x], "y": [2 * x]} for x in range(200)])
+
+# Step 2: Ray Data 端预处理（CPU 节点并行）
+train_ds = train_ds.map_batches(lambda b: {"y": b["y"] + 1})
+
+def train_func():
+    shard = train.get_dataset_shard("train")                 # 拿本 worker 的分片
+    loader = shard.iter_torch_batches(batch_size=16, dtypes=torch.float32)  # → torch.Tensor
+    for batch in loader:
+        x, y = batch["x"], batch["y"]
+        # ... 训练 ...
+
+trainer = TorchTrainer(
+    train_loop_per_worker=train_func,
+    datasets={"train": train_ds},                              # 关键参数
+    scaling_config=ScalingConfig(num_workers=2),
+)
+```
+
+**数据流**：
+
+```
+Ray Dataset ──streaming_split──> worker 0 shard ──iter_torch_batches──> torch.Tensor batches
+                              worker 1 shard
+```
+
+**Train 自动做的**（你看不到但要清楚）：
+- `DataConfig.configure()` 在 fit() 阶段对每个 worker 调用 `Dataset.streaming_split`（[data_config.py:90-100](python/ray/train/_internal/data_config.py#L90)）；
+- 按 `world_size` 平均分片、保留数据局部性（`enable_shard_locality=True`）；
+- `iter_torch_batches` 把 Arrow block 直接转 torch.Tensor（不经过 Python 对象转换）——高效的秘密。
+
+#### 模式 B：torch Dataset → `from_torch()` 桥接
+
+如果你有现成的 `torch.utils.data.Dataset`（如 torchvision `datasets.MNIST`）：
+
+```python
+from torchvision import datasets
+import ray
+
+torch_ds = datasets.MNIST("data", download=True)        # torch Dataset
+ray_ds = ray.data.from_torch(torch_ds)                   # 桥接
+trainer = TorchTrainer(datasets={"train": ray_ds}, ...)
+```
+
+`from_torch` 底层是 `read_datasource(TorchDatasource(...))`——Ray Data 框架**逐项读 torch Dataset 内部**并打包为 Arrow block。这是 **torch Dataset → Ray Dataset 的单向桥**，Train 本身从来不直接接受 torch Dataset。
+
+#### 模式 C：train_func 内用原生 torch DataLoader（不推荐）
+
+如果**不想用 Ray Data**，可在 `train_func` 内自管 DataLoader，但要手动分片：
+
+```python
+def train_func(config):
+    dataset = MyTorchDataset()
+    sampler = torch.utils.data.distributed.DistributedSampler(dataset)  # 手动分片
+    loader = torch.utils.data.DataLoader(
+        dataset, sampler=sampler,
+        num_workers=2,
+        multiprocessing_context=multiprocessing.get_context("forkserver"),  # 避免 fork
+    )
+    for epoch in range(epochs):
+        sampler.set_epoch(epoch)                              # PyTorch 硬性要求
+        for X, y in loader:
+            # ... 训练 ...
+
+trainer = TorchTrainer(train_loop_per_worker=train_func, scaling_config=...)
+# 注意：未传 datasets 参数，Train 不知道有数据要分
+```
+
+**关键差异**：
+- 数据**不经过 Ray Data 分布式预处理层**——失去"CPU 节点并行预处理 + GPU 节点专训"解耦；
+- 你**手动管** `DistributedSampler` 和 `set_epoch`（这个不能省，PyTorch 自身硬性要求）；
+- "forking Ray Actors"反模式警告——Ray actor 进程内再 fork DataLoader worker 会死锁。
+
+#### 三种模式对比
+
+| 维度 | 模式 A（推荐） | 模式 B（torch→Ray） | 模式 C（纯原生） |
+|---|---|---|---|
+| 数据接入 | `datasets={"train": ray.data.Dataset}` | 同 A，但来源是 `from_torch` | **不传 datasets**，train_func 内自管 |
+| 分布式分片 | Ray Data 自动 | 同 A | **手动 DistributedSampler** |
+| 预处理 | `map_batches` 在 CPU 节点并行 | 同 A | train_func 内 CPU 串行 |
+| `set_epoch` | 不需要 | 不需要 | **必须手动** |
+| 适用场景 | 大数据 + 多 GPU | 有现成 torch Dataset | 极小数据/调试/不想引入 Ray Data |
+
+#### `test_torch_e2e` 为何没数据？
+
+`test_torch_e2e`（[test_torch_trainer.py:64-77](python/ray/train/tests/test_torch_trainer.py#L64)）没有 `input` 数据，**它测试的不是训练本身**——而是 **Checkpoint 保存与 Predictor 加载** 这条链路：
+- 验证 `TorchCheckpoint.from_model()` 序列化整个模型；
+- 验证 `TorchPredictor` 能从 Checkpoint 重建模型并预测。
+无数据可练（`train.report({}, checkpoint=...)` 空指标），是合理的——该测试专注 Checkpoint 机制。
+
 ---
 
 ## 6. 后端封装机制：三层抽象 + 钩子模式
@@ -371,11 +475,11 @@ def train_func(config):
 
 | 维度 | v1 | v2 |
 |---|---|---|
-| 默认启用 | ✅ `RAY_TRAIN_V2_ENABLED` 默认 `False` 即走 v1 | ❌ 需显式开 `RAY_TRAIN_V2_ENABLED=1` |
+| 默认启用 | `RAY_TRAIN_V2_ENABLED` 默认 `False` 即走 v1 | 需显式开 `RAY_TRAIN_V2_ENABLED=1` |
 | 成熟度 | 生产稳定 | 实验性、有迁移警告（[issue 49454](https://github.com/ray-project/ray/issues/49454)） |
 | 测试规模 | 51 个 | 37 个 |
 | 文档 | 全部基于 v1 | 文档未迁移 |
-| 6 个后端支持 | ✅ | ✅（v2 独立实现） |
+| 6 个后端支持 | 支持 | 支持（v2 独立实现） |
 
 ### 7.2 架构差异
 

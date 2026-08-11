@@ -209,7 +209,7 @@ python code-analysis/debug_logical_plan.py
 
 ---
 
-## 🔧 步骤 3：断点调试高级技巧
+## 步骤 3：断点调试高级技巧
 
 ### 3.1 使用 PDB 断点调试算子创建
 
@@ -253,9 +253,9 @@ import pdb; pdb.set_trace()
 ```
 
 **关键断点设置**：
-- ✅ `Operator.__init__` - 观察每个算子的创建时刻
-- ✅ `Operator._wire_output_deps` - 观察依赖关系自动建立
-- ✅ `Dataset.map_batches` - 观察 API 调用如何转化为算子
+- `Operator.__init__` - 观察每个算子的创建时刻
+- `Operator._wire_output_deps` - 观察依赖关系自动建立
+- `Dataset.map_batches` - 观察 API 调用如何转化为算子
 
 ---
 
@@ -308,7 +308,7 @@ for op in root_op.post_order_iter():
     for input_op in op.input_dependencies:
         assert input_op in visited, f"{op.name} 的输入 {input_op.name} 未访问"
     visited.add(op)
-print("✅ 拓扑排序正确！")
+print("拓扑排序正确！")
 ```
 
 ### 角度 5：`_apply_transform` 递归变换机制
@@ -352,7 +352,7 @@ print(ds.explain())  # 观察融合前后的差异
 
 ---
 
-## 📝 步骤 6：问题排查清单
+## 步骤 6：问题排查清单
 
 | 问题现象 | 排查方法 | 常见原因 |
 |---------|---------|---------|
@@ -375,7 +375,7 @@ print(ds.explain())  # 观察融合前后的差异
 
 ---
 
-## 🎯 学习路径建议
+## 学习路径建议
 
 1. **Day 1**: 运行调试脚本，理解输出结构
 2. **Day 2**: 单步调试 `Operator._wire_output_deps`，理解依赖自动建立

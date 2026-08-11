@@ -16,11 +16,11 @@ Ray Data 是 Ray 生态中的分布式数据处理库，专为机器学习工作
 
 ### 1.1 核心设计理念
 
-| 设计理念 | 说明 |
+|设计理念|说明|
 |---------|------|
-| **Lazy Execution** | 算子调用时不立即执行，而是构建执行计划 |
-| **Streaming Execution** | 数据分块流式处理，避免全量加载内存 |
-| **Block-based Architecture** | 数据以 Block 为单位进行分布式处理 |
+|**Lazy Execution**|算子调用时不立即执行，而是构建执行计划|
+|**Streaming Execution**|数据分块流式处理，避免全量加载内存|
+|**Block-based Architecture**|数据以 Block 为单位进行分布式处理|
 
 ### 1.2 核心目录结构
 
@@ -87,14 +87,14 @@ Dataset 是用户直接交互的入口，提供了类似 Pandas 的声明式 API
 ```python
 @PublicAPI
 class Dataset:
-    def __init__(
-        self,
-        plan: ExecutionPlan,
-        logical_plan: LogicalPlan,
-    ):
-        self._plan = plan              # 执行计划（物理）
-        self._logical_plan = logical_plan  # 逻辑计划
-        self._current_executor: Optional["Executor"] = None
+def __init__(
+self,
+plan: ExecutionPlan,
+logical_plan: LogicalPlan,
+):
+self._plan = plan              # 执行计划（物理）
+self._logical_plan = logical_plan  # 逻辑计划
+self._current_executor: Optional["Executor"] = None
 ```
 
 **设计要点**:
@@ -107,28 +107,28 @@ class Dataset:
 
 Dataset 使用常量定义 API 分组（第 155-163 行）：
 
-| 分组常量 | 分组名称 | 代表方法 |
+|分组常量|分组名称|代表方法|
 |---------|---------|---------|
-| `BT_API_GROUP` | Basic Transformations | `map`, `map_batches`, `filter`, `add_column` |
-| `SSR_API_GROUP` | Sorting, Shuffling and Repartitioning | `sort`, `random_shuffle`, `repartition` |
-| `SMJ_API_GROUP` | Splitting, Merging, Joining | `split`, `union`, `join`, `zip` |
-| `GGA_API_GROUP` | Grouped and Global aggregations | `groupby`, `sum`, `mean`, `min`, `max` |
-| `CD_API_GROUP` | Consuming Data | `count`, `take`, `iter_rows`, `to_pandas` |
-| `IOC_API_GROUP` | I/O and Conversion | `write_parquet`, `write_csv`, `to_arrow_refs` |
-| `IM_API_GROUP` | Inspecting Metadata | `schema`, `columns`, `num_blocks` |
-| `E_API_GROUP` | Execution | `materialize`, `explain`, `stats` |
-| `EXPRESSION_API_GROUP` | Expressions | 列表达式计算 |
+|`BT_API_GROUP`|Basic Transformations|`map`, `map_batches`, `filter`, `add_column`|
+|`SSR_API_GROUP`|Sorting, Shuffling and Repartitioning|`sort`, `random_shuffle`, `repartition`|
+|`SMJ_API_GROUP`|Splitting, Merging, Joining|`split`, `union`, `join`, `zip`|
+|`GGA_API_GROUP`|Grouped and Global aggregations|`groupby`, `sum`, `mean`, `min`, `max`|
+|`CD_API_GROUP`|Consuming Data|`count`, `take`, `iter_rows`, `to_pandas`|
+|`IOC_API_GROUP`|I/O and Conversion|`write_parquet`, `write_csv`, `to_arrow_refs`|
+|`IM_API_GROUP`|Inspecting Metadata|`schema`, `columns`, `num_blocks`|
+|`E_API_GROUP`|Execution|`materialize`, `explain`, `stats`|
+|`EXPRESSION_API_GROUP`|Expressions|列表达式计算|
 
 ### 2.3 核心 API 分类
 
-| 类别 | 代表方法 | 对应逻辑算子 | 是否触发执行 |
+|类别|代表方法|对应逻辑算子|是否触发执行|
 |------|---------|------------|------|
-| 基础转换 | `map`, `map_batches`, `flat_map`, `filter` | MapRows, MapBatches, FlatMap, Filter | Lazy |
-| 排序/混洗 | `sort`, `random_shuffle`, `repartition` | Sort, RandomShuffle, Repartition | Lazy |
-| 拆分/合并 | `split`, `union`, `zip`, `join` | StreamingSplit, Union, Zip, Join | Lazy |
-| 聚合 | `groupby`, `sum`, `mean`, `max`, `min` | Aggregate | Lazy |
-| 消费（Action） | `count`, `take`, `iter_rows`, `iter_batches` | Count, Limit | ✅ 触发 |
-| 写入 | `write_parquet`, `write_csv`, `write_json` | Write | ✅ 触发 |
+|基础转换|`map`, `map_batches`, `flat_map`, `filter`|MapRows, MapBatches, FlatMap, Filter|Lazy|
+|排序/混洗|`sort`, `random_shuffle`, `repartition`|Sort, RandomShuffle, Repartition|Lazy|
+|拆分/合并|`split`, `union`, `zip`, `join`|StreamingSplit, Union, Zip, Join|Lazy|
+|聚合|`groupby`, `sum`, `mean`, `max`, `min`|Aggregate|Lazy|
+|消费（Action）|`count`, `take`, `iter_rows`, `iter_batches`|Count, Limit|是 触发|
+|写入|`write_parquet`, `write_csv`, `write_json`|Write|是 触发|
 
 **执行触发点**：所有 `iter_*`、`to_*`、`write_*` 方法，以及 `count()`、`take()`、`show()`、`materialize()`。
 
@@ -136,11 +136,11 @@ Dataset 使用常量定义 API 分组（第 155-163 行）：
 
 `map_batches`/`map`/`filter` 支持三种执行模式：
 
-| 模式 | 实现 | 适用场景 | 关键参数 |
+|模式|实现|适用场景|关键参数|
 |------|------|---------|---------|
-| **Task 模式** | 普通 Ray 任务 | 无状态处理，启动快 | 默认（`TaskPoolStrategy`） |
-| **Actor Pool 模式** | Actor 池复用 | 有状态初始化（模型加载） | `compute=ActorPoolStrategy(size=8)` |
-| **Actor 自动扩缩容** | Actor 动态增减 | 负载波动场景 | `concurrency=(1, 10)` |
+|**Task 模式**|普通 Ray 任务|无状态处理，启动快|默认（`TaskPoolStrategy`）|
+|**Actor Pool 模式**|Actor 池复用|有状态初始化（模型加载）|`compute=ActorPoolStrategy(size=8)`|
+|**Actor 自动扩缩容**|Actor 动态增减|负载波动场景|`concurrency=(1, 10)`|
 
 **`map_batches` 关键参数**（第 457-489 行签名）:
 - `batch_size` - 批大小，性能调优关键
@@ -153,11 +153,11 @@ Dataset 使用常量定义 API 分组（第 155-163 行）：
 ```python
 # 逐批迭代（推荐，性能好）
 for batch in ds.iter_batches(batch_size=256):
-    process_batch(batch)
+process_batch(batch)
 
 # 框架格式
 for batch in ds.iter_torch_batches(batch_size=32):
-    train_step(batch)
+train_step(batch)
 
 # 全量拉取（注意内存！）
 df = ds.to_pandas()          # → Pandas DataFrame
@@ -173,10 +173,10 @@ refs = ds.to_arrow_refs()    # → List[ObjectRef]（分布式）
 
 **Write API**（`dataset.py` 第 3781-5100 行）：与 Read 对称，所有写出源实现 `Datasink` 基类，生成 `Write` 逻辑算子。
 
-| 方向 | 核心抽象 | 逻辑算子 |
+|方向|核心抽象|逻辑算子|
 |------|---------|---------|
-| **读** | `Datasource` + `ReadTask` | `Read` 算子 |
-| **写** | `Datasink` + `WriteTask` | `Write` 算子 |
+|**读**|`Datasource` + `ReadTask`|`Read` 算子|
+|**写**|`Datasink` + `WriteTask`|`Write` 算子|
 
 对称性带来的好处：新增格式只需同时实现 `Datasource` + `Datasink`；统一的错误处理和重试；ETL 表达简洁（`read → transform → write`）。
 
@@ -188,12 +188,12 @@ refs = ds.to_arrow_refs()    # → List[ObjectRef]（分布式）
 
 ### 2.8 调试与诊断 API
 
-| 方法 | 作用 |
+|方法|作用|
 |------|------|
-| `explain()` | 打印逻辑计划 + 物理计划 |
-| `stats()` | 执行统计：耗时、吞吐量、内存等 |
-| `schema()` | 查看数据结构（不触发执行） |
-| `num_blocks()` | Block 数量（并行度指标） |
+|`explain()`|打印逻辑计划 + 物理计划|
+|`stats()`|执行统计：耗时、吞吐量、内存等|
+|`schema()`|查看数据结构（不触发执行）|
+|`num_blocks()`|Block 数量（并行度指标）|
 
 ```python
 print(ds.explain())
@@ -236,20 +236,20 @@ return Dataset(plan, logical_plan)                   # ④ 返回全新 Dataset
 
 ### 3.3 三种标准构建范式
 
-| 范式 | 场景 | 代码位置 | 效果 |
+|范式|场景|代码位置|效果|
 |------|------|---------|------|
-| **入口算子（0→1）** | 创建 DAG 根节点 | `read_api.py` Read 创建 | `input_dependencies=[]`，DAG 叶子 |
-| **单输入链式追加（1→1）** | 90% 的转换 API | `dataset.py` `map_batches` 772-789 行 | 当前 DAG 根作为新算子输入 |
-| **多输入合并（N→1）** | Join/Union/Zip | `dataset.py` `join` 2867-2881 行 | 两个独立 DAG 作为输入 |
+|**入口算子（0→1）**|创建 DAG 根节点|`read_api.py` Read 创建|`input_dependencies=[]`，DAG 叶子|
+|**单输入链式追加（1→1）**|90% 的转换 API|`dataset.py` `map_batches` 772-789 行|当前 DAG 根作为新算子输入|
+|**多输入合并（N→1）**|Join/Union/Zip|`dataset.py` `join` 2867-2881 行|两个独立 DAG 作为输入|
 
 ```
 单输入链式：ds = read_parquet().map_batches(fn).filter(pred)
-  Read → MapBatches(Read) → Filter(MapBatches)  ← Filter 是新根节点
+Read → MapBatches(Read) → Filter(MapBatches)  ← Filter 是新根节点
 
 多输入合并：ds1.join(ds2)
-          Join
-         /    \
-  ds1_root    ds2_root
+Join
+/    \
+ds1_root    ds2_root
 ```
 
 ### 3.4 DAG 方向与两个 plan
@@ -265,23 +265,23 @@ return Dataset(plan, logical_plan)                   # ④ 返回全新 Dataset
 
 ```python
 class Operator:
-    def __init__(self, name: str, input_dependencies: List["Operator"]):
-        self._input_dependencies = input_dependencies   # 入边
-        self._output_dependencies = []                  # 出边
-        self._wire_output_deps(input_dependencies)       # ★ 自动建立反向引用
+def __init__(self, name: str, input_dependencies: List["Operator"]):
+self._input_dependencies = input_dependencies   # 入边
+self._output_dependencies = []                  # 出边
+self._wire_output_deps(input_dependencies)       # 自动建立反向引用
 
-    def _wire_output_deps(self, input_dependencies):
-        for x in input_dependencies:
-            x._output_dependencies.append(self)
+def _wire_output_deps(self, input_dependencies):
+for x in input_dependencies:
+x._output_dependencies.append(self)
 ```
 
 **② 后序遍历 = 拓扑排序**——保证任何算子被访问时其所有上游依赖都已访问完毕：
 
 ```python
 def post_order_iter(self) -> Iterator["Operator"]:
-    for op in self.input_dependencies:
-        yield from op.post_order_iter()
-    yield self
+for op in self.input_dependencies:
+yield from op.post_order_iter()
+yield self
 ```
 
 **③ 不可变变换 `_apply_transform`**——递归产生新 DAG，原始 DAG 完全不被修改（优化器基础设施，详见 [附录 B.2](#b2-operator-不可变变换机制)）。
@@ -296,17 +296,17 @@ def post_order_iter(self) -> Iterator["Operator"]:
 
 ```python
 class LogicalPlan(Plan):
-    def __init__(self, dag: LogicalOperator, context: "DataContext"):
-        self._dag = dag
+def __init__(self, dag: LogicalOperator, context: "DataContext"):
+self._dag = dag
 
-    def sources(self) -> List[LogicalOperator]:
-        """递归找出所有源算子（无输入依赖的叶子节点）"""
-        if not any(self._dag.input_dependencies):
-            return [self._dag]
-        sources = []
-        for op in self._dag.input_dependencies:
-            sources.extend(LogicalPlan(op, self._context).sources())
-        return sources
+def sources(self) -> List[LogicalOperator]:
+"""递归找出所有源算子（无输入依赖的叶子节点）"""
+if not any(self._dag.input_dependencies):
+return [self._dag]
+sources = []
+for op in self._dag.input_dependencies:
+sources.extend(LogicalPlan(op, self._context).sources())
+return sources
 ```
 
 多输入场景（如 Join 两个数据源）天然并行执行，执行器基于源算子列表初始化并发任务数。
@@ -320,27 +320,27 @@ class LogicalPlan(Plan):
 ```
 Operator（interfaces/operator.py — 图结构：双向依赖边、post_order_iter、_apply_transform）
 └── LogicalOperator（interfaces/logical_operator.py — 计划语义：元数据推断接口）
-    ├── 【Source 零输入】Read / AbstractFrom(FromItems…FromPandas) / InputData（非 lineage 可序列化）
-    ├── 【AbstractOneToOne 单入单出】— 定义 can_modify_num_rows()
-    │   ├── AbstractMap（+ compute 策略 / remote args / min_rows_per_bundle / per_block_limit）
-    │   │   ├── AbstractUDFMap（+ fn 及构造参数）→ MapBatches / MapRows / Filter / FlatMap
-    │   │   ├── Project / StreamingRepartition
-    │   │   ├── Read（源头也算 Map！）/ Write
-    │   ├── Limit / Download
-    ├── 【AbstractAllToAll】RandomizeBlocks / RandomShuffle / Repartition / Sort / Aggregate
-    ├── 【NAry 多输入】Zip / Union / Join
-    └── 其他：StreamingSplit / Count
+├── 【Source 零输入】Read / AbstractFrom(FromItems…FromPandas) / InputData（非 lineage 可序列化）
+├── 【AbstractOneToOne 单入单出】— 定义 can_modify_num_rows()
+│   ├── AbstractMap（+ compute 策略 / remote args / min_rows_per_bundle / per_block_limit）
+│   │   ├── AbstractUDFMap（+ fn 及构造参数）→ MapBatches / MapRows / Filter / FlatMap
+│   │   ├── Project / StreamingRepartition
+│   │   ├── Read（源头也算 Map！）/ Write
+│   ├── Limit / Download
+├── 【AbstractAllToAll】RandomizeBlocks / RandomShuffle / Repartition / Sort / Aggregate
+├── 【NAry 多输入】Zip / Union / Join
+└── 其他：StreamingSplit / Count
 ```
 
 **五大类速查**：
 
-| 类型 | 基类 | 输入数 | 代表算子 | 并行特性 |
+|类型|基类|输入数|代表算子|并行特性|
 |------|------|-------|---------|---------|
-| **Source** | `SourceOperator` | 0 | Read, FromItems, InputData | ✅ 完全并行 |
-| **OneToOne** | `AbstractOneToOne` | 1 | MapBatches, Filter, Project, Limit | ✅ 流水线并行 |
-| **AllToAll** | `AbstractAllToAll` | 1 | Sort, Repartition, RandomShuffle | ⚠️ 必须等上游全部完成 |
-| **NAry** | `NAry` | N | Join, Union, Zip | ⚠️ 必须等所有输入分支完成 |
-| **Terminal** | 无专用基类 | 1 | Count, Write | 执行入口 |
+|**Source**|`SourceOperator`|0|Read, FromItems, InputData|是 完全并行|
+|**OneToOne**|`AbstractOneToOne`|1|MapBatches, Filter, Project, Limit|是 流水线并行|
+|**AllToAll**|`AbstractAllToAll`|1|Sort, Repartition, RandomShuffle|注意： 必须等上游全部完成|
+|**NAry**|`NAry`|N|Join, Union, Zip|注意： 必须等所有输入分支完成|
+|**Terminal**|无专用基类|1|Count, Write|执行入口|
 
 ### 4.2 两个正交维度
 
@@ -368,7 +368,7 @@ Repartition（纯数据移动零语义；`shuffle=False` 的 split 模式便宜�
 
 ```
 Read → MapBatches → Filter → │ Sort │ → MapBatches → Write
-  ──── 流式段（融合/并发的天下）──── 水闸 ──── 流式段 ────
+──── 流式段（融合/并发的天下）──── 水闸 ──── 流式段 ────
 ```
 
 - Map↔Map 融合 = 压缩流式段；Map→AllToAll 融合 = 省掉水闸前最后一次物化；
@@ -380,22 +380,22 @@ Read → MapBatches → Filter → │ Sort │ → MapBatches → Write
 
 逻辑算子只声明"做什么 + 语义属性"，各优化规则是这些谓词的组合器：
 
-| 谓词/接口 | 消费方 |
+|谓词/接口|消费方|
 |---|---|
-| `can_modify_num_rows()` | LimitPushdown（能否穿过）、Fusion（行数保护） |
-| `infer_schema()` / `infer_metadata()` | Limit 直接算 `min(input_rows, limit)`；SetReadParallelism 读 `size_bytes` |
-| `LogicalOperatorSupportsProjectionPushdown` mixin | ProjectionPushdown 挂载点 |
-| `_compute` / `_ray_remote_args` / `_min_rows_per_bundled_input` | Fusion 兼容性判据 |
-| `estimated_num_outputs()` | plan 展示、并行度推断 |
+|`can_modify_num_rows()`|LimitPushdown（能否穿过）、Fusion（行数保护）|
+|`infer_schema()` / `infer_metadata()`|Limit 直接算 `min(input_rows, limit)`；SetReadParallelism 读 `size_bytes`|
+|`LogicalOperatorSupportsProjectionPushdown` mixin|ProjectionPushdown 挂载点|
+|`_compute` / `_ray_remote_args` / `_min_rows_per_bundled_input`|Fusion 兼容性判据|
+|`estimated_num_outputs()`|plan 展示、并行度推断|
 
 新增算子的主要工作 = 正确实现这几个谓词，各规则自动获得正确行为。
 
 **`can_modify_num_rows()` 实测表**（逐个核对源码）：
 
-| 值 | 算子 | 理由 |
+|值|算子|理由|
 |---|---|---|
-| `False` | Project / MapRows / MapBatches / Download / StreamingRepartition | 行保持（MapBatches 一批进一批出） |
-| `True` | Filter / FlatMap / **Read** / Limit | 过滤展开；Read 注释明确：reader 把输入展开成多行 |
+|`False`|Project / MapRows / MapBatches / Download / StreamingRepartition|行保持（MapBatches 一批进一批出）|
+|`True`|Filter / FlatMap / **Read** / Limit|过滤展开；Read 注释明确：reader 把输入展开成多行|
 
 ---
 
@@ -411,15 +411,15 @@ Read → MapBatches → Filter → │ Sort │ → MapBatches → Write
 
 ```python
 class Optimizer:
-    def optimize(self, plan: Plan) -> Plan:
-        previous_plan = plan
-        while True:
-            for rule in self.rules:
-                plan = rule.apply(plan)
-            if plan.dag.dag_str == previous_plan.dag.dag_str:  # 不动点判据
-                break
-            previous_plan = plan
-        return plan
+def optimize(self, plan: Plan) -> Plan:
+previous_plan = plan
+while True:
+for rule in self.rules:
+plan = rule.apply(plan)
+if plan.dag.dag_str == previous_plan.dag.dag_str:  # 不动点判据
+break
+previous_plan = plan
+return plan
 ```
 
 **不动点迭代的价值**：规则间无需显式声明顺序、可扩展、自动处理规则相互触发（如 Limit 下推到 Read 后激活新优化）。局限：`dag_str` 字符串比较较脆弱。
@@ -434,10 +434,10 @@ class Optimizer:
 
 ```python
 def get_execution_plan(logical_plan: LogicalPlan) -> PhysicalPlan:
-    optimized_logical_plan = LogicalOptimizer().optimize(logical_plan)  # 阶段1
-    logical_plan._dag = optimized_logical_plan.dag
-    physical_plan = create_planner().plan(optimized_logical_plan)       # 阶段2
-    return PhysicalOptimizer().optimize(physical_plan)                  # 阶段3
+optimized_logical_plan = LogicalOptimizer().optimize(logical_plan)  # 阶段1
+logical_plan._dag = optimized_logical_plan.dag
+physical_plan = create_planner().plan(optimized_logical_plan)       # 阶段2
+return PhysicalOptimizer().optimize(physical_plan)                  # 阶段3
 ```
 
 **顺序有讲究**：物理阶段的融合依赖前面规则已确定的块大小和读并行度。
@@ -446,20 +446,20 @@ def get_execution_plan(logical_plan: LogicalPlan) -> PhysicalPlan:
 
 **逻辑优化阶段（3 条）**：
 
-| 规则 | 作用 + 机制要点 |
+|规则|作用 + 机制要点|
 |---|---|
-| **InheritBatchFormatRule** | AllToAll 算子沿单输入链向上找最近 MapBatches 继承 `batch_format`——水闸不记得格式，要向上游借 |
-| **LimitPushdownRule** | 三种动作：相邻 Limit 融合取 min；保守穿过**不改行数**的 OneToOne（额外排除 MapBatches——行数不变但可能 rebatch）；Union 时每分支插本地 Limit + 保留全局 Limit；给 Read/Map 挂 `per_block_limit` 减 I/O |
-| **ProjectionPushdown** | 经 `LogicalOperatorSupportsProjectionPushdown` mixin 挂载（目前仅 Parquet Read 实现）；相邻 Project 用 `_ProjectSpec`（cols+rename+exprs）合并，做重命名双射/列子集校验；**表达式不下推进 Read** |
+|**InheritBatchFormatRule**|AllToAll 算子沿单输入链向上找最近 MapBatches 继承 `batch_format`——水闸不记得格式，要向上游借|
+|**LimitPushdownRule**|三种动作：相邻 Limit 融合取 min；保守穿过**不改行数**的 OneToOne（额外排除 MapBatches——行数不变但可能 rebatch）；Union 时每分支插本地 Limit + 保留全局 Limit；给 Read/Map 挂 `per_block_limit` 减 I/O|
+|**ProjectionPushdown**|经 `LogicalOperatorSupportsProjectionPushdown` mixin 挂载（目前仅 Parquet Read 实现）；相邻 Project 用 `_ProjectSpec`（cols+rename+exprs）合并，做重命名双射/列子集校验；**表达式不下推进 Read**|
 
 **物理优化阶段（4 条）**：
 
-| 规则 | 作用 + 机制要点 |
+|规则|作用 + 机制要点|
 |---|---|
-| **InheritTargetMaxBlockSizeRule** | 递归 DFS 携带参数向上传播 `target_max_block_size`，遇另一个 override 换值 |
-| **SetReadParallelismRule** | 遍历实为 FIFO 队列 **BFS**；`_autodetect_parallelism` 综合数据大小/目标块/集群 CPU；块数不足设 `additional_split_factor`；块数超 CPU 4 倍且 ≥5000 告警 |
-| **FuseOperators** | 相邻 Map 算子融合（详见 §5.4） |
-| **ConfigureMapTaskMemoryUsingOutputSize** | 遍历用 `post_order_iter()` 原语；包装 `ray_remote_args_fn` 动态注入 `memory=average_bytes_per_output`；放置组调度下跳过（否则任务无法调度） |
+|**InheritTargetMaxBlockSizeRule**|递归 DFS 携带参数向上传播 `target_max_block_size`，遇另一个 override 换值|
+|**SetReadParallelismRule**|遍历实为 FIFO 队列 **BFS**；`_autodetect_parallelism` 综合数据大小/目标块/集群 CPU；块数不足设 `additional_split_factor`；块数超 CPU 4 倍且 ≥5000 告警|
+|**FuseOperators**|相邻 Map 算子融合（详见 §5.4）|
+|**ConfigureMapTaskMemoryUsingOutputSize**|遍历用 `post_order_iter()` 原语；包装 `ray_remote_args_fn` 动态注入 `memory=average_bytes_per_output`；放置组调度下跳过（否则任务无法调度）|
 
 **遍历原语两处**：`operator.py` 的 `post_order_iter()`（递归生成器，物理规则用）与 `_apply_transform()`（函数式后序重写返回新节点，逻辑规则用）。物理规则多为命令式直接改 `_input_dependencies` 指针。
 
@@ -488,9 +488,9 @@ Planner（`planner/planner.py`）用后序递归把 Logical Operator DAG 转换�
 
 ```python
 _DEFAULT_PLAN_FNS = {
-    Read: plan_read_op,          Write: plan_write_op,
-    AbstractUDFMap: plan_udf_map_op,   AbstractAllToAll: plan_all_to_all_op,
-    Filter: plan_filter_op,      Join: plan_join_op,  ...
+Read: plan_read_op,          Write: plan_write_op,
+AbstractUDFMap: plan_udf_map_op,   AbstractAllToAll: plan_all_to_all_op,
+Filter: plan_filter_op,      Join: plan_join_op,  ...
 }
 ```
 
@@ -514,13 +514,13 @@ ds.sort("age").filter(expr=col("age") > 18)
 
 ### 5.7 研究方向与优化机会
 
-| 方向 | 问题描述 | 技术难度 | 收益潜力 |
+|方向|问题描述|技术难度|收益潜力|
 |------|---------|---------|---------|
-| **公共子图消除** | `ds1=ds.map(a); ds2=ds.map(b)` 目前 ds 计算两次 | ★★★☆☆ | ★★★★★ |
-| **算子融合扩展** | 扩展到 Filter → Map 等更多组合 | ★★☆☆☆ | ★★★★☆ |
-| **谓词下推** | 实现 Filter 穿过 Sort 等重排 | ★★★☆☆ | ★★★★☆ |
-| **动态拓扑调整** | 执行中发现数据倾斜，动态插入 repartition | ★★★★★ | ★★★★☆ |
-| **dag_str 替代** | 字符串比较改为结构哈希比较 | ★★☆☆☆ | ★★☆☆☆ |
+|**公共子图消除**|`ds1=ds.map(a); ds2=ds.map(b)` 目前 ds 计算两次|中（需较多工作量）|高（重要且影响大）|
+|**算子融合扩展**|扩展到 Filter → Map 等更多组合|低（可探索）|中上（有价值）|
+|**谓词下推**|实现 Filter 穿过 Sort 等重排|中（需较多工作量）|中上（有价值）|
+|**动态拓扑调整**|执行中发现数据倾斜，动态插入 repartition|高（重要且影响大）|中上（有价值）|
+|**dag_str 替代**|字符串比较改为结构哈希比较|低（可探索）|低（可探索）|
 
 ---
 
@@ -534,23 +534,23 @@ ExecutionPlan 是连接 Logical Plan 和 Streaming Executor 的枢纽，负责�
 
 ```python
 class ExecutionPlan:
-    def __init__(self, stats: DatasetStats, data_context: DataContext):
-        self._in_stats = stats
-        # 计算快照：已执行的算子前缀
-        self._snapshot_operator: Optional[LogicalOperator] = None
-        self._snapshot_bundle = None       # 缓存的结果 blocks
-        self._snapshot_metadata_schema = None  # 仅元数据缓存
-        self._schema = None
-        self._has_started_execution = False
-        self._context = data_context
+def __init__(self, stats: DatasetStats, data_context: DataContext):
+self._in_stats = stats
+# 计算快照：已执行的算子前缀
+self._snapshot_operator: Optional[LogicalOperator] = None
+self._snapshot_bundle = None       # 缓存的结果 blocks
+self._snapshot_metadata_schema = None  # 仅元数据缓存
+self._schema = None
+self._has_started_execution = False
+self._context = data_context
 ```
 
-| 职责 | 关键代码 |
+|职责|关键代码|
 |------|---------|
-| 逻辑优化 / 计划转换 / 物理优化 | `LogicalOptimizer` / `Planner.plan()` / `PhysicalOptimizer` |
-| Snapshot 缓存 | `_snapshot_bundle` |
-| Schema 推断 | `schema()` |
-| 执行入口 | `execute()` / `execute_to_iterator()` |
+|逻辑优化 / 计划转换 / 物理优化|`LogicalOptimizer` / `Planner.plan()` / `PhysicalOptimizer`|
+|Snapshot 缓存|`_snapshot_bundle`|
+|Schema 推断|`schema()`|
+|执行入口|`execute()` / `execute_to_iterator()`|
 
 ### 6.2 Snapshot 机制：懒执行的核心
 
@@ -558,9 +558,9 @@ Snapshot 解决了"懒执行但不重复计算"的问题：多次执行同一 Da
 
 ```python
 def has_computed_output(self) -> bool:
-    """是否已完整执行整个 DAG"""
-    return (self._snapshot_bundle is not None
-            and self._snapshot_operator == self._logical_plan.dag)
+"""是否已完整执行整个 DAG"""
+return (self._snapshot_bundle is not None
+and self._snapshot_operator == self._logical_plan.dag)
 ```
 
 **两种执行模式**：
@@ -583,13 +583,13 @@ def has_computed_output(self) -> bool:
 
 **常见误解**：Streaming Executor 会序列化分发到各节点执行。**实际**：Executor 只在 Driver 运行。
 
-| 架构层 | 运行位置 | 是否序列化分发 | 序列化内容 |
+|架构层|运行位置|是否序列化分发|序列化内容|
 |--------|---------|---------------|-----------|
-| **Dataset API** | Driver 本地 | ❌ 否 | 用户脚本本身不分发 |
-| **Logical Plan** | Driver 本地 | ❌ 否 | 算子 DAG 不分发 |
-| **Execution Plan** | Driver 本地 | ❌ 否 | 执行计划不分发 |
-| **Streaming Executor** | Driver 本地线程 | ❌ 否 | **只在 Driver 运行！** |
-| **Physical Operators** | Worker 分布式 | ✅ 部分 | 仅 `MapTransformer`（含 UDF）、`ObjectRef` |
+|**Dataset API**|Driver 本地|否 否|用户脚本本身不分发|
+|**Logical Plan**|Driver 本地|否 否|算子 DAG 不分发|
+|**Execution Plan**|Driver 本地|否 否|执行计划不分发|
+|**Streaming Executor**|Driver 本地线程|否 否|**只在 Driver 运行！**|
+|**Physical Operators**|Worker 分布式|是 部分|仅 `MapTransformer`（含 UDF）、`ObjectRef`|
 
 **核心结论**：只有用户 UDF、包装 UDF 的 `MapTransformer`、数据引用 `ObjectRef` 会被序列化分发到 Worker。
 
@@ -604,12 +604,12 @@ def has_computed_output(self) -> bool:
 
 > 核心结论：物理算子**不是**统一的"发 UDF 给 worker"模型，而是**四种截然不同的执行形态**。
 
-| 类型 | 代表算子 | 提交方式 | 发什么 | 流式? | worker 生命周期 |
+|类型|代表算子|提交方式|发什么|流式?|worker 生命周期|
 |---|---|---|---|---|---|
-| **TaskPoolMap** | filter/map/无状态 map_batches | `_map_task.options().remote()`（`task_pool_map_operator.py:106`） | transformer_ref + block_refs | ✅ 逐块提交 | 用完即弃（无状态 task） |
-| **ActorPoolMap** | 有状态 UDF（callable class） | 先 `ray.remote(cls)` 建 actor，再 `actor.submit.remote()`（`actor_pool_map_operator.py:204,306`） | 同上，但目标是常驻 actor | ✅ | **常驻**，跨 task 保持状态 |
-| **AllToAll** | sort/shuffle/aggregate/repartition | driver 上 `_bulk_fn(input_buffer)`（`base_physical_operator.py:122`），内部经 exchange 调度器提交多轮 map/reduce/sample task | **数据对象**（如 `SortKey`），非 Python UDF | ❌ **barrier** | 多阶段 task 图 |
-| **InputDataBuffer** | 源头缓冲 | **不提交 task**（`input_data_buffer.py:12`） | 仅供给已物化 block ref | — | — |
+|**TaskPoolMap**|filter/map/无状态 map_batches|`_map_task.options().remote()`（`task_pool_map_operator.py:106`）|transformer_ref + block_refs|是 逐块提交|用完即弃（无状态 task）|
+|**ActorPoolMap**|有状态 UDF（callable class）|先 `ray.remote(cls)` 建 actor，再 `actor.submit.remote()`（`actor_pool_map_operator.py:204,306`）|同上，但目标是常驻 actor|是|**常驻**，跨 task 保持状态|
+|**AllToAll**|sort/shuffle/aggregate/repartition|driver 上 `_bulk_fn(input_buffer)`（`base_physical_operator.py:122`），内部经 exchange 调度器提交多轮 map/reduce/sample task|**数据对象**（如 `SortKey`），非 Python UDF|否 barrier|多阶段 task 图|
+|**InputDataBuffer**|源头缓冲|**不提交 task**（`input_data_buffer.py:12`）|仅供给已物化 block ref|—|—|
 
 **以 `ds.filter(expr=col("age")>18).sort("age", descending=True)` 为例**：
 - **filter 走 TaskPoolMap**：plan 阶段一次序列化表达式，执行时流式逐块提交 task；
@@ -630,25 +630,25 @@ def has_computed_output(self) -> bool:
 `StreamingExecutor` 采用**独立线程 + 事件循环**的调度模型。
 
 ```
-  Main Thread                 StreamingExecutor 线程（Driver 本地）
+Main Thread                 StreamingExecutor 线程（Driver 本地）
 ───────────┐                  ┌───────────────────────┐
-           │  execute()       │  Scheduling Loop      │
-           └──────────────────>  ray.wait()           │
-                              │  处理完成任务          │
+│  execute()       │  Scheduling Loop      │
+└──────────────────>  ray.wait()           │
+│  处理完成任务          │
 OutputIterator <── yield ──── │  选择下一个算子运行     │
-                              └───────────┬───────────┘
-     ┌──────────┐  ┌──────────┐  ┌────────▼─┐
-     │  Worker  │  │  Worker  │  │  Worker  │  ← Ray Task Pool
-     └──────────┘  └──────────┘  └──────────┘
+└───────────┬───────────┘
+┌──────────┐  ┌──────────┐  ┌────────▼─┐
+│  Worker  │  │  Worker  │  │  Worker  │  ← Ray Task Pool
+└──────────┘  └──────────┘  └──────────┘
 ```
 
-| 机制 | 说明 | 关键函数 |
+|机制|说明|关键函数|
 |------|------|---------|
-| **拓扑构建** | 构建算子执行拓扑 | `build_streaming_topology()` |
-| **资源管理** | 管理 CPU/GPU/内存预算 | `ResourceManager` |
-| **调度循环** | 事件驱动的任务调度 | `ray.wait()`, `process_completed_tasks()` |
-| **算子选择** | 根据资源和背压选择算子 | `select_operator_to_run()` |
-| **背压控制** | 限制算子队列长度防 OOM | `target_max_block_overflow`（默认 200 blocks） |
+|**拓扑构建**|构建算子执行拓扑|`build_streaming_topology()`|
+|**资源管理**|管理 CPU/GPU/内存预算|`ResourceManager`|
+|**调度循环**|事件驱动的任务调度|`ray.wait()`, `process_completed_tasks()`|
+|**算子选择**|根据资源和背压选择算子|`select_operator_to_run()`|
+|**背压控制**|限制算子队列长度防 OOM|`target_max_block_overflow`（默认 200 blocks）|
 
 ---
 
@@ -656,22 +656,22 @@ OutputIterator <── yield ──── │  选择下一个算子运行     �
 
 **文件位置**: `python/ray/data/_internal/execution/operators/`
 
-| 算子类型 | 代表类 | 用途 |
+|算子类型|代表类|用途|
 |---------|--------|------|
-| **输入源** | `InputDataBuffer` | 缓存输入数据 blocks（不提交 task） |
-| **Map类** | `MapOperator` / `TaskPoolMapOperator` | 逐块转换，无状态 |
-| **Actor Map类** | `ActorPoolMapOperator` | 使用 Actor 池执行有状态 UDF |
-| **AllToAll类** | `AllToAllOperator` | shuffle、sort、repartition（barrier） |
-| **N-Ary类** | `ZipOperator`, `UnionOperator` | 多输入合并 |
+|**输入源**|`InputDataBuffer`|缓存输入数据 blocks（不提交 task）|
+|**Map类**|`MapOperator` / `TaskPoolMapOperator`|逐块转换，无状态|
+|**Actor Map类**|`ActorPoolMapOperator`|使用 Actor 池执行有状态 UDF|
+|**AllToAll类**|`AllToAllOperator`|shuffle、sort、repartition（barrier）|
+|**N-Ary类**|`ZipOperator`, `UnionOperator`|多输入合并|
 
 **ActorPoolMapOperator** 是最强大的特性之一，适合 GPU 推理（模型加载一次多次复用）、有状态处理、昂贵初始化：
 
 ```python
 ds = ds.map_batches(
-    inference_fn,
-    compute=ray.data.ActorPoolStrategy(size=8),  # 8个 Actor 并行
-    batch_size=256,
-    num_gpus=1  # 每个 Actor 占用 1 个 GPU
+inference_fn,
+compute=ray.data.ActorPoolStrategy(size=8),  # 8个 Actor 并行
+batch_size=256,
+num_gpus=1  # 每个 Actor 占用 1 个 GPU
 )
 ```
 
@@ -687,19 +687,19 @@ Ray Data 的数据以 `Block` 为单位存储和传输，每个 Block 是一个 
 
 ```python
 class BlockAccessor:
-    def num_rows(self) -> int: ...
-    def size_bytes(self) -> int: ...
-    def schema(self) -> Schema: ...
-    def slice(self, start: int, end: int) -> Block: ...
-    def to_pandas(self) -> pandas.DataFrame: ...
-    def to_arrow(self) -> pyarrow.Table: ...
+def num_rows(self) -> int: ...
+def size_bytes(self) -> int: ...
+def schema(self) -> Schema: ...
+def slice(self, start: int, end: int) -> Block: ...
+def to_pandas(self) -> pandas.DataFrame: ...
+def to_arrow(self) -> pyarrow.Table: ...
 ```
 
-| 实现类 | 说明 |
+|实现类|说明|
 |--------|------|
-| `ArrowBlockAccessor` | Arrow Table 格式（默认） |
-| `PandasBlockAccessor` | Pandas DataFrame 格式 |
-| `TensorBlockAccessor` | 张量数据支持 |
+|`ArrowBlockAccessor`|Arrow Table 格式（默认）|
+|`PandasBlockAccessor`|Pandas DataFrame 格式|
+|`TensorBlockAccessor`|张量数据支持|
 
 **RefBundle**（`interfaces/ref_bundle.py`）是 Block 在执行流中的载体：`blocks: List[Tuple[ObjectRef[Block], BlockMetadata]]` + 元数据。
 
@@ -744,7 +744,7 @@ result = ds.count()  # 这里开始真正执行
 2. ExecutionPlan.execute() 调用
 3. 逻辑优化（Limit/Projection 下推）
 4. Planner 转换 → 物理优化（融合）
-   生成: InputDataBuffer → MapOperator → FilterOperator → CountOperator
+生成: InputDataBuffer → MapOperator → FilterOperator → CountOperator
 5. StreamingExecutor 在独立线程启动，构建拓扑
 6. 调度循环：Read 任务先提交 → map 任务 → filter 任务，结果流经管道
 7. OutputIterator 产出结果 → Executor 关闭
@@ -756,15 +756,15 @@ result = ds.count()  # 这里开始真正执行
 
 ## 13. 核心特性总结
 
-| 特性 | 说明 | 关键文件 |
+|特性|说明|关键文件|
 |------|------|---------|
-| **延迟执行** | 算子调用构建 DAG，Action 触发执行 | `plan.py`, `dataset.py` |
-| **流式执行** | 数据分块流式处理，内存友好 | `streaming_executor.py` |
-| **算子融合** | 相邻 Map 算子合并，减少任务开销 | `rules/operator_fusion.py` |
-| **背压控制** | 上游速率适配下游消费能力 | `backpressure_policy/` |
-| **Actor 池** | 有状态任务复用 Actor，避免重复初始化 | `actor_pool_map_operator.py` |
-| **自动扩缩容** | 根据负载自动调整 Actor 数量 | `actor_autoscaler/` |
-| **进度追踪** | 详细执行进度条和统计指标 | `progress_bar.py`, `stats.py` |
+|**延迟执行**|算子调用构建 DAG，Action 触发执行|`plan.py`, `dataset.py`|
+|**流式执行**|数据分块流式处理，内存友好|`streaming_executor.py`|
+|**算子融合**|相邻 Map 算子合并，减少任务开销|`rules/operator_fusion.py`|
+|**背压控制**|上游速率适配下游消费能力|`backpressure_policy/`|
+|**Actor 池**|有状态任务复用 Actor，避免重复初始化|`actor_pool_map_operator.py`|
+|**自动扩缩容**|根据负载自动调整 Actor 数量|`actor_autoscaler/`|
+|**进度追踪**|详细执行进度条和统计指标|`progress_bar.py`, `stats.py`|
 
 ---
 
@@ -772,12 +772,12 @@ result = ds.count()  # 这里开始真正执行
 
 ### 14.1 功能测试
 
-| 测试文件 | 测试内容 |
+|测试文件|测试内容|
 |---------|---------|
-| `test_consumption.py`（72KB） | 数据消费：`iter_rows()`, `iter_batches()`, `to_tf()`, `to_torch()` |
-| `test_actor_pool_map_operator.py`（28KB） | Actor 池创建、扩缩容、有状态 UDF 执行 |
-| `test_backpressure_e2e.py`（11KB） | 背压机制、内存使用控制 |
-| `test_autoscaler.py`（11KB） | Actor 自动扩缩容、资源利用率 |
+|`test_consumption.py`（72KB）|数据消费：`iter_rows()`, `iter_batches()`, `to_tf()`, `to_torch()`|
+|`test_actor_pool_map_operator.py`（28KB）|Actor 池创建、扩缩容、有状态 UDF 执行|
+|`test_backpressure_e2e.py`（11KB）|背压机制、内存使用控制|
+|`test_autoscaler.py`（11KB）|Actor 自动扩缩容、资源利用率|
 
 ### 14.2 优化器测试：验证优化后 DAG
 
@@ -792,12 +792,12 @@ assert ds._plan._logical_plan.dag.dag_str == expected_plan   # ② DAG 结构正
 
 **测试文件分工**：
 
-| 测试文件 | 验证对象 | 断言方式 |
+|测试文件|验证对象|断言方式|
 |---|---|---|
-| `test_execution_optimizer_limit_pushdown.py` | LimitPushdown 后逻辑 DAG | `dag.dag_str == expected` |
-| `test_operator_fusion.py` | 融合后物理 DAG | 算子 `.name`（如 `"ReadParquet->MapBatches(<lambda>)"`）+ `.input_dependencies` |
-| `test_projection_fusion.py` | ProjectionPushdown | dag_str / name 断言 |
-| `test_ruleset.py` | 规则**排序机制**（非 DAG 结果） | `list(ruleset) == [...]`、循环检测 |
+|`test_execution_optimizer_limit_pushdown.py`|LimitPushdown 后逻辑 DAG|`dag.dag_str == expected`|
+|`test_operator_fusion.py`|融合后物理 DAG|算子 `.name`（如 `"ReadParquet->MapBatches(<lambda>)"`）+ `.input_dependencies`|
+|`test_projection_fusion.py`|ProjectionPushdown|dag_str / name 断言|
+|`test_ruleset.py`|规则**排序机制**（非 DAG 结果）|`list(ruleset) == [...]`、循环检测|
 
 **"下推遇 Sort 停止"的可执行证据**（`test_limit_pushdown_union_with_sort:296-311`）：
 
@@ -820,12 +820,12 @@ Limit 仍在 Sort 下游——官方用断言明确"有意不让下推穿过 Sor
 
 ### A.1 建图路径对比：编译器 vs 程序化 Builder
 
-| | SQL 编译器路径（Hive 主流） | 程序化 Builder 路径（Ray Data） |
+||SQL 编译器路径（Hive 主流）|程序化 Builder 路径（Ray Data）|
 |---|---|---|
-| 输入 | HQL 字符串 | Python 方法调用 |
-| 建图 | ANTLR 解析→AST→SemanticAnalyzer 一次性生成整棵树 | 每次方法调用追加一个节点，逐节生长 |
-| 列名/类型解析 | 语义分析阶段全局查 catalog | 延迟到执行前 `infer_schema` |
-| 灵活度 | 仅限 SQL 可表达 | 可嵌任意 Python UDF |
+|输入|HQL 字符串|Python 方法调用|
+|建图|ANTLR 解析→AST→SemanticAnalyzer 一次性生成整棵树|每次方法调用追加一个节点，逐节生长|
+|列名/类型解析|语义分析阶段全局查 catalog|延迟到执行前 `infer_schema`|
+|灵活度|仅限 SQL 可表达|可嵌任意 Python UDF|
 
 Ray Data 的链式调用 ≈ **Calcite 的 `RelBuilder`**（程序化构建），而非 Hive 面向用户的 SQL 编译器。Spark 两者皆有（`spark.sql(...)` vs `df.filter().groupBy()`），最终都汇聚到 Catalyst LogicalPlan。
 
@@ -833,9 +833,9 @@ Ray Data 的链式调用 ≈ **Calcite 的 `RelBuilder`**（程序化构建）�
 
 Ray 算子对应 Hive 的**子句级关系代数节点**，不是 sum/max 这种函数：
 
-| SQL 子句 | Hive 算子 | Ray 算子 |
+|SQL 子句|Hive 算子|Ray 算子|
 |---|---|---|
-| FROM / WHERE / SELECT 列 / JOIN / GROUP BY / ORDER BY / LIMIT / UNION ALL | TableScan / Filter / Select / Join / GroupBy / ReduceSink / Limit / Union | Read / Filter / Project / Join / Aggregate / Sort / Limit / Union |
+|FROM / WHERE / SELECT 列 / JOIN / GROUP BY / ORDER BY / LIMIT / UNION ALL|TableScan / Filter / Select / Join / GroupBy / ReduceSink / Limit / Union|Read / Filter / Project / Join / Aggregate / Sort / Limit / Union|
 
 **sum/max 在两边都不是算子**：Hive 中是 GroupByOperator 内的 UDAF descriptor；Ray 中是 `Aggregate._aggs: List[AggregateFn]`。执行模式同构：`AggregateFn`（init/accumulate/merge/finalize，`aggregate.py`）≈ Hive UDAF 两阶段聚合 ≈ MapReduce combiner。标量表达式同理：Hive 的 ExprNode 树在 Select 算子内，Ray 的 `Expr` 树在 `Project.exprs` 内——**函数永远比算子低一层**。
 
@@ -864,14 +864,14 @@ Hive = Calcite CBO + 上百条规则（join 重排序、分区裁剪、代价模
 
 **Read 数据源分类**：
 
-| 类别 | 代表方法 | 对应 Datasource 类 |
+|类别|代表方法|对应 Datasource 类|
 |------|---------|-------------------|
-| 列式存储 | `read_parquet`, `read_iceberg`, `read_lance` | `ParquetDatasource` |
-| 行式存储 | `read_csv`, `read_json`, `read_avro` | `CSVDatasource` |
-| 二进制/媒体 | `read_images`, `read_video`, `read_audio` | `ImageDatasource`, `VideoDatasource` |
-| 数据库 | `read_sql`, `read_bigquery`, `read_mongo` | `SQLDatasource` |
-| 内存数据 | `from_items`, `from_pandas`, `from_arrow` | `RangeDatasource` |
-| 外部生态 | `from_huggingface`, `from_dask`, `from_spark` | 直接转 Blocks |
+|列式存储|`read_parquet`, `read_iceberg`, `read_lance`|`ParquetDatasource`|
+|行式存储|`read_csv`, `read_json`, `read_avro`|`CSVDatasource`|
+|二进制/媒体|`read_images`, `read_video`, `read_audio`|`ImageDatasource`, `VideoDatasource`|
+|数据库|`read_sql`, `read_bigquery`, `read_mongo`|`SQLDatasource`|
+|内存数据|`from_items`, `from_pandas`, `from_arrow`|`RangeDatasource`|
+|外部生态|`from_huggingface`, `from_dask`, `from_spark`|直接转 Blocks|
 
 **两步读取架构**：Driver 端 `create_reader()` 列文件、按大小分片生成 N 个 ReadTask（Lazy）；Executor 端每个 ReadTask 在独立 Ray Task 中解析为 Block 写入 Plasma。自动并行度推断 `_autodetect_parallelism`（默认 `target_max_block_size=512MB`，受限集群 CPU）。
 
@@ -883,18 +883,18 @@ Hive = Calcite CBO + 上百条规则（join 重排序、分区裁剪、代价模
 
 ```python
 def _apply_transform(self, transform: Callable) -> "Operator":
-    """递归应用变换，保证不可变性；原始 DAG 完全不被修改，变换产生新 DAG"""
-    # Step 1: 递归变换所有输入（后序）
-    transformed_input_ops = [op._apply_transform(transform) for op in self.input_dependencies]
-    # Step 2: 输入有变化才创建副本
-    if any(new is not old for new, old in zip(transformed_input_ops, self.input_dependencies)):
-        target = copy.copy(self)
-        target._input_dependencies = transformed_input_ops
-        target._wire_output_deps(transformed_input_ops)
-    else:
-        target = self
-    # Step 3: 对当前节点应用变换
-    return transform(target)
+"""递归应用变换，保证不可变性；原始 DAG 完全不被修改，变换产生新 DAG"""
+# Step 1: 递归变换所有输入（后序）
+transformed_input_ops = [op._apply_transform(transform) for op in self.input_dependencies]
+# Step 2: 输入有变化才创建副本
+if any(new is not old for new, old in zip(transformed_input_ops, self.input_dependencies)):
+target = copy.copy(self)
+target._input_dependencies = transformed_input_ops
+target._wire_output_deps(transformed_input_ops)
+else:
+target = self
+# Step 3: 对当前节点应用变换
+return transform(target)
 ```
 
 逻辑优化规则（LimitPushdown/ProjectionPushdown）都基于此做函数式后序重写。
@@ -906,13 +906,13 @@ def _apply_transform(self, transform: Callable) -> "Operator":
 ```python
 upstream_ops = dag.input_dependencies
 while (len(upstream_ops) == 1
-       and isinstance(dag, MapOperator)
-       and isinstance(upstream_ops[0], MapOperator)
-       and self._can_fuse(dag, upstream_ops[0])):
-    dag = self._get_fused_map_operator(dag, upstream_ops[0])  # 造新节点，重绑定
-    upstream_ops = dag.input_dependencies
+and isinstance(dag, MapOperator)
+and isinstance(upstream_ops[0], MapOperator)
+and self._can_fuse(dag, upstream_ops[0])):
+dag = self._get_fused_map_operator(dag, upstream_ops[0])  # 造新节点，重绑定
+upstream_ops = dag.input_dependencies
 dag._input_dependencies = [
-    self._fuse_map_operators_in_dag(op) for op in upstream_ops  # 越过边界继续
+self._fuse_map_operators_in_dag(op) for op in upstream_ops  # 越过边界继续
 ]
 ```
 
@@ -928,26 +928,26 @@ dag._input_dependencies = [
 
 ```python
 def _plan_recursively(self, logical_op, data_context):
-    """后序递归转换：先转换输入依赖，再转换当前算子"""
-    op_map = {}
-    physical_children = []
-    for child in logical_op.input_dependencies:          # Step1 递归转换输入（后序）
-        physical_child, child_op_map = self._plan_recursively(child, data_context)
-        physical_children.append(physical_child)
-        op_map.update(child_op_map)
-    plan_fn = self.get_plan_fn(logical_op)               # Step2 查找转换函数
-    physical_op = plan_fn(logical_op, physical_children, data_context)  # Step3 生成物理算子
-    # Step4 建立物理→逻辑反向映射（一个物理算子可能对应多个逻辑算子——融合后）
-    queue = [physical_op]
-    while queue:
-        curr = queue.pop()
-        if curr._logical_operators:
-            break
-        curr.set_logical_operators(logical_op)
-        op_map[curr] = logical_op
-        queue.extend(curr.input_dependencies)
-    op_map[physical_op] = logical_op
-    return physical_op, op_map
+"""后序递归转换：先转换输入依赖，再转换当前算子"""
+op_map = {}
+physical_children = []
+for child in logical_op.input_dependencies:          # Step1 递归转换输入（后序）
+physical_child, child_op_map = self._plan_recursively(child, data_context)
+physical_children.append(physical_child)
+op_map.update(child_op_map)
+plan_fn = self.get_plan_fn(logical_op)               # Step2 查找转换函数
+physical_op = plan_fn(logical_op, physical_children, data_context)  # Step3 生成物理算子
+# Step4 建立物理→逻辑反向映射（一个物理算子可能对应多个逻辑算子——融合后）
+queue = [physical_op]
+while queue:
+curr = queue.pop()
+if curr._logical_operators:
+break
+curr.set_logical_operators(logical_op)
+op_map[curr] = logical_op
+queue.extend(curr.input_dependencies)
+op_map[physical_op] = logical_op
+return physical_op, op_map
 ```
 
 ### B.5 UDF 序列化链路与代码详解
@@ -956,11 +956,11 @@ def _plan_recursively(self, logical_op, data_context):
 
 ```
 用户 UDF
- → 1. Dataset API 包装为 MapTransformFn
- → 2. 多个 MapTransformFn 封装为 MapTransformer
- → 3. MapTransformer 放入对象存储（ray.put）
- → 4. cached_remote_fn 提交到 Ray 调度器
- → 5. Worker 反序列化 MapTransformer 并执行 _map_task
+→ 1. Dataset API 包装为 MapTransformFn
+→ 2. 多个 MapTransformFn 封装为 MapTransformer
+→ 3. MapTransformer 放入对象存储（ray.put）
+→ 4. cached_remote_fn 提交到 Ray 调度器
+→ 5. Worker 反序列化 MapTransformer 并执行 _map_task
 ```
 
 **`cached_remote_fn` 缓存机制**（`remote_fn.py`）——避免重复 cloudpickle 序列化相同函数：
@@ -968,41 +968,41 @@ def _plan_recursively(self, logical_op, data_context):
 ```python
 CACHED_FUNCTIONS = {}
 def cached_remote_fn(fn, **ray_remote_args):
-    cache_key = (fn, hash(_make_hashable(ray_remote_args)))
-    if cache_key not in CACHED_FUNCTIONS:
-        CACHED_FUNCTIONS[cache_key] = ray.remote(**ray_remote_args)(fn)
-    return CACHED_FUNCTIONS[cache_key]
+cache_key = (fn, hash(_make_hashable(ray_remote_args)))
+if cache_key not in CACHED_FUNCTIONS:
+CACHED_FUNCTIONS[cache_key] = ray.remote(**ray_remote_args)(fn)
+return CACHED_FUNCTIONS[cache_key]
 ```
 
 **任务提交入口**（`task_pool_map_operator.py`）：
 
 ```python
 gen = self._map_task.options(**dynamic_ray_remote_args).remote(
-    self._map_transformer_ref,  # ✅ ray.put 预放对象存储，仅传引用
-    data_context,               # ❌ 每次任务都序列化 ★ 优化点
-    ctx,                        # ❌ 每次任务都序列化 ★ 优化点
-    *bundle.block_refs,         # ✅ ObjectRef，轻量引用
+self._map_transformer_ref,  # ray.put 预放对象存储（仅传引用）
+data_context,               # 每次任务都序列化（待优化）
+ctx,                        # 每次任务都序列化（待优化）
+*bundle.block_refs,         # ObjectRef（轻量引用）
 )
 ```
 
 **`filter` 的两条 UDF 路径**（`plan_udf_map_op.py:208-262`）：
 
-| 写法 | 序列化发出的"UDF" | worker 执行 | 物理 transform |
+|写法|序列化发出的"UDF"|worker 执行|物理 transform|
 |---|---|---|---|
-| `filter(fn=lambda r: r["age"]>18)` | 你的**函数**（cloudpickle） | 逐行调 Python `fn(row)` | `RowMapTransformFn` |
-| `filter(expr=col("age")>18)` | **表达式树**（结构化数据，无 Python 函数） | Arrow 列式向量化（`block_accessor.filter(expr)`） | `BlockMapTransformFn` |
+|`filter(fn=lambda r: r["age"]>18)`|你的**函数**（cloudpickle）|逐行调 Python `fn(row)`|`RowMapTransformFn`|
+|`filter(expr=col("age")>18)`|**表达式树**（结构化数据，无 Python 函数）|Arrow 列式向量化（`block_accessor.filter(expr)`）|`BlockMapTransformFn`|
 
 官方推荐 `expr` 写法（native、无 Python 调用开销）——`dataset.py` 带 "Use 'expr' instead of 'fn' when possible" 提示。
 
 **5 个性能优化机会点**：
 
-| 优化方向 | 文件位置 | 改进思路 |
+|优化方向|文件位置|改进思路|
 |------|---------|---------|
-| DataContext 增量序列化 | `task_pool_map_operator.py` | 大部分字段不变，只序列化差异 |
-| TaskContext 预序列化 | `task_pool_map_operator.py` | 任务间 ctx 结构相似，复用序列化结果 |
-| MapTransformer 压缩 | `map_transformer.py` | 大 UDF 链压缩后再放对象存储 |
-| 动态参数缓存失效优化 | `remote_fn.py` | 按参数子集分层缓存 |
-| 闭包捕获分析 | 用户 UDF | 检测警告不必要的大对象闭包捕获 |
+|DataContext 增量序列化|`task_pool_map_operator.py`|大部分字段不变，只序列化差异|
+|TaskContext 预序列化|`task_pool_map_operator.py`|任务间 ctx 结构相似，复用序列化结果|
+|MapTransformer 压缩|`map_transformer.py`|大 UDF 链压缩后再放对象存储|
+|动态参数缓存失效优化|`remote_fn.py`|按参数子集分层缓存|
+|闭包捕获分析|用户 UDF|检测警告不必要的大对象闭包捕获|
 
 ### B.6 多模态处理端到端示例
 
@@ -1011,18 +1011,18 @@ gen = self._map_task.options(**dynamic_ray_remote_args).remote(
 ```python
 dataset = ray.data.read_images("example://image-datasets/simple")
 def preprocess(batch):  # 张量化
-    return {"out": np.stack([transform(image) for image in batch["image"]])}
+return {"out": np.stack([transform(image) for image in batch["image"]])}
 dataset = dataset.map_batches(preprocess, batch_format="numpy")
 
 class Predictor:        # 有状态模型（Actor 池）
-    def __init__(self):
-        self.model = resnet18(pretrained=True)
-    def __call__(self, batch):
-        with torch.inference_mode():
-            return {"prediction": self.model(torch.as_tensor(batch["out"]))}
+def __init__(self):
+self.model = resnet18(pretrained=True)
+def __call__(self, batch):
+with torch.inference_mode():
+return {"prediction": self.model(torch.as_tensor(batch["out"]))}
 
 predictions = dataset.map_batches(
-    Predictor, compute=ray.data.ActorPoolStrategy(min_size=1), batch_size=4096)
+Predictor, compute=ray.data.ActorPoolStrategy(min_size=1), batch_size=4096)
 ```
 
 这是 `read → map_batches(预处理) → map_batches(ActorPool 模型推理)` 的标准范式，可套用到音频 embedding、视频行为识别等自定义 UDF。
@@ -1031,21 +1031,21 @@ predictions = dataset.map_batches(
 
 ## 附录 C：关键源码索引
 
-| 内容 | 位置 |
+|内容|位置|
 |---|---|
-| Dataset API | `python/ray/data/dataset.py` |
-| Read/Write API | `python/ray/data/read_api.py` |
-| Rule/Optimizer 基类、不动点循环 | `python/ray/data/_internal/logical/interfaces/optimizer.py` |
-| Ruleset 拓扑排序 | `python/ray/data/_internal/logical/ruleset.py` |
-| 两套规则注册、两阶段管线 | `python/ray/data/_internal/logical/optimizers.py` |
-| 融合规则（核心） | `python/ray/data/_internal/logical/rules/operator_fusion.py` |
-| Limit/Projection 下推 | `.../rules/limit_pushdown.py`、`.../rules/projection_pushdown.py` |
-| 遍历原语 / Operator 基类 | `python/ray/data/_internal/logical/interfaces/operator.py` |
-| 算子继承树 | `python/ray/data/_internal/logical/operators/` |
-| Planner（无 memo，物理 DAG 为树） | `python/ray/data/_internal/planner/planner.py` |
-| filter 物理规划（fn/expr 两路径） | `python/ray/data/_internal/planner/plan_udf_map_op.py` |
-| ExecutionPlan / Snapshot | `python/ray/data/_internal/plan.py` |
-| Streaming Executor 调度循环 | `python/ray/data/_internal/execution/streaming_executor.py` |
-| Map/AllToAll 物理算子 | `python/ray/data/_internal/execution/operators/` |
-| AggregateFn 四段式 | `python/ray/data/aggregate.py` |
-| 优化器测试 | `python/ray/data/tests/test_execution_optimizer_*.py`、`test_operator_fusion.py`、`test_ruleset.py` |
+|Dataset API|`python/ray/data/dataset.py`|
+|Read/Write API|`python/ray/data/read_api.py`|
+|Rule/Optimizer 基类、不动点循环|`python/ray/data/_internal/logical/interfaces/optimizer.py`|
+|Ruleset 拓扑排序|`python/ray/data/_internal/logical/ruleset.py`|
+|两套规则注册、两阶段管线|`python/ray/data/_internal/logical/optimizers.py`|
+|融合规则（核心）|`python/ray/data/_internal/logical/rules/operator_fusion.py`|
+|Limit/Projection 下推|`.../rules/limit_pushdown.py`、`.../rules/projection_pushdown.py`|
+|遍历原语 / Operator 基类|`python/ray/data/_internal/logical/interfaces/operator.py`|
+|算子继承树|`python/ray/data/_internal/logical/operators/`|
+|Planner（无 memo，物理 DAG 为树）|`python/ray/data/_internal/planner/planner.py`|
+|filter 物理规划（fn/expr 两路径）|`python/ray/data/_internal/planner/plan_udf_map_op.py`|
+|ExecutionPlan / Snapshot|`python/ray/data/_internal/plan.py`|
+|Streaming Executor 调度循环|`python/ray/data/_internal/execution/streaming_executor.py`|
+|Map/AllToAll 物理算子|`python/ray/data/_internal/execution/operators/`|
+|AggregateFn 四段式|`python/ray/data/aggregate.py`|
+|优化器测试|`python/ray/data/tests/test_execution_optimizer_*.py`、`test_operator_fusion.py`、`test_ruleset.py`|

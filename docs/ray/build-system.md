@@ -56,7 +56,7 @@ bazel --version   # 6.5.0 ✓ 暂时成功
 # 重新进入 conda 环境
 conda deactivate
 conda activate ray-dev
-bazel --version   # ❌ 又变回 5.4.0！
+bazel --version   # 又变回 5.4.0
 ```
 
 ### 真正的根本原因
@@ -89,10 +89,10 @@ conda list -n ray-dev bazel
 
 ## 解决方案
 
-### ✅ 永久解决：删除 conda 环境内的 bazel
+### 永久解决：删除 conda 环境内的 bazel
 
 ```bash
-# ✅ 删除环境内的 bazel 硬链接（推荐，真正永久解决）
+# 删除环境内的 bazel 硬链接（推荐，真正永久解决）
 rm -f /home/luming/miniconda3/envs/ray-dev/bin/bazel
 
 # 验证（必须重新进入环境）

@@ -28,4 +28,25 @@ public:
         
     }
 
+    int maxProfitAssignment(vector<int>& difficulty, vector<int>& profit, vector<int>& worker) {
+        // 双指针
+        int n = difficulty.size(), m = worker.size(), idx[n]; iota(idx, idx+n, 0);
+        sort(idx, idx + n, [&](int i, int j) {
+            return difficulty[i] < difficulty[j];
+        });
+
+        int mx_profit = 0;
+        sort(worker.begin(), worker.end());
+
+        int ans = 0, i = 0, j = 0;
+        while (j < m) { // !! profit difficulty use idx[i]
+            while (i < n && difficulty[idx[i]] <= worker[j]) 
+                mx_profit = max(mx_profit, profit[idx[i++]]); 
+            
+            ans += mx_profit; j++;
+        }
+        return ans; 
+    }
+
+    
 };

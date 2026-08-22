@@ -5,7 +5,7 @@ using namespace std;
 class Solution {
 public:
     vector<long long> distance(vector<int>& nums) {
-        // 自行解答 绝对值之和 同 1685
+        // 自行解答 绝对值之和 同 2121 类似于 1685
         int n = nums.size();
         unordered_map<int, vector<int>> groups;
 

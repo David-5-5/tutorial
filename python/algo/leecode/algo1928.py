@@ -1,6 +1,8 @@
+from typing import List
+
 class Solution:
     
-    def minCost(self, maxTime: int, edges, passingFees) -> int: 
+    def minCost(self, maxTime: int, edges: List[List[int]], passingFees: List[int]) -> int:
         n = len(passingFees)
         f = [[float("inf")] * n for _ in range(maxTime + 1)]
         f[0][0] = passingFees[0]

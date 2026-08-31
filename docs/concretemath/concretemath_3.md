@@ -368,10 +368,13 @@ J_3(n) = \lceil\frac{3}{2}J_3(\lfloor \frac{2}{3}n\rfloor)+a_n \rceil \mod n+1,
 
 若新编号 $N>n$，则新编号为 $N$ 的人必然对应一个原始编号，我们可按如下方法求出该原始编号：新编号满足 $N=n+2k+1$ 或 $N=n+2k+2$，因此 $k=\lfloor(N−n−1)/2\rfloor$；对应的原始编号则分别为 $3k+1$ 和 $3k+2$。换言之，原始编号可化简为 $3k+(N−n−2k)=k+N−n$。因此，我们可按如下方式计算每 3 人淘汰的约瑟夫问题中存活者的编号 $J_3​(n)$：
 ```math
-N := 3n; \\
-while\ N>n\ do\ N:=\lfloor\frac{N-n-1}{2}\rfloor + N - n; \\
-J_3(n) := N.
+\begin{aligned}
+&N := 3n; \\
+&\text{ while } N>n \text{ do } N:=\left\lfloor\frac{N-n-1}{2}\right\rfloor + N - n; \\
+&J_3(n) := N.
+\end{aligned}
 ```
+
 这并非 $J_3​(n)$ 的闭式解，甚至都算不上一个递推式。但至少它告诉我们，当 $n$ 很大时，如何高效地计算出答案。
 
 所幸，若引入变量 $D=3n+1−N$ 替代 $N$，我们就能找到简化该算法的方法。（这一记法的变更，等价于将编号从 $3n$ 倒序分配至 $1$，而非原先的从 $1$ 正序分配至 $3n$；这有点类似倒计时的方式。）如此一来，原本针对 $N$ 的复杂赋值操作，就简化为：
@@ -383,16 +386,18 @@ D :&= 3n + 1 - (\lfloor\frac{(3n+1-D)-n-1}{2}\rfloor + (3n+1-D) - n) \\
 ```
 由此，我们可将该算法重写如下：
 ```math
-D := 1; \\
-while\ D\le 2n\ do\ D:=\lceil\frac{3}{2}D\rceil; \\
-J_3(n) := 3n + 1 - D.
+\begin{aligned}
+& D := 1; \\
+& \text{ while D } \le 2n \text{ do } D:=\left\lceil\frac{3}{2}D\right\rceil; \\
+& J_3(n) := 3n + 1 - D.
+\end{aligned}
 ```
 
 这样的形式就简洁多了，因为 $n$ 在计算中的参与方式变得极为简洁。事实上，我们可通过完全相同的推导思路证明：当每第 $q$ 个人被淘汰时，存活者的编号 $J_q​(n)$ 可按如下方法计算：
 ```math
 \begin{aligned}
 &D := 1; \\
-&while\ D\le (q-1)n\ do\ D:=\lceil\frac{q}{q-1}D\rceil; \\
+&\text{ while } D\le (q-1)n \text{ do } D:=\left\lceil\frac{q}{q-1}D\right\rceil; \\
 &J_q(n) := qn + 1 - D. \tag{3.19}
 \end{aligned} 
 ```
@@ -403,7 +408,7 @@ J_3(n) := 3n + 1 - D.
 ```math
 \begin{aligned}
 &D_0^{(q)} = 1; \\
-&D_n^{(q)} :=  \lceil\frac{q}{q-1}D_{n-1}^{(q)}\rceil \qquad \text{ for n}> 0 \tag{3.20}
+&D_n^{(q)} :=  \left\lceil\frac{q}{q-1}D_{n-1}^{(q)}\right\rceil \qquad \text{ for n}> 0 \tag{3.20}
 \end{aligned} 
 ```
 

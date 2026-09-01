@@ -348,7 +348,7 @@ J(n) &= 2J(\lfloor n/2\rfloor) - (-1)^n, \text{ for n}> 1.
 
 如今我们掌握的解题工具，已经比第 1 章时丰富多了；因此我们来研究更贴合原题原型的约瑟夫问题 —— 此次是每第三个人被淘汰，而非原先的每第二个人。若我们将第 1 章中奏效的方法套用到这个更复杂的问题上，最终会得到形如这样的递推关系：
 ```math
-J_3(n) = \lceil\frac{3}{2}J_3(\lfloor \frac{2}{3}n\rfloor)+a_n \rceil \mod n+1,
+J_3(n) = \left\lceil\frac{3}{2}J_3(\left\lfloor \frac{2}{3}n\right\rfloor)+a_n \right\rceil \mod n+1,
 ```
 
 其中 $mod$ 为我们即将展开研究的模函数；参数 $a_n$ 的取值为 $−2, +1$ 或 $1/2$，具体取决于 $n\mod 3$ 的结果是 0、1 还是 2。但这个递推式过于复杂，根本无从继续深究。

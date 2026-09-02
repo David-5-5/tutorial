@@ -32,5 +32,17 @@ public:
         return ans;
     }    
 
+    int countElements(vector<int>& nums, int k) {
+        // nth_element 用法
+        int n = nums.size(), ans = 0;
 
+        if (k == 0) return n;
+        nth_element(nums.begin(), nums.begin() + n - k, nums.end());
+        int kth = nums[n-k];
+        for (auto & x: nums) {
+            ans += x < kth;
+        }
+        
+        return ans;
+    }       
 };

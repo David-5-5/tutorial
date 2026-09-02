@@ -15,5 +15,22 @@ public:
         return ans;
     }
 
-  
+    int countElements(vector<int>& nums, int k) {
+        if (k == 0) return nums.size();
+
+        sort(nums.rbegin(), nums.rend());
+        int gr_cnt = 0, prev = nums[0], cur_cnt = 0, ans = 0;
+        for (auto v : nums) {
+            if (prev == v) cur_cnt ++;
+            else {
+                gr_cnt += cur_cnt;
+                prev = v; cur_cnt = 1;
+            }
+            if (gr_cnt >= k) ans ++;
+        }
+        
+        return ans;
+    }    
+
+
 };

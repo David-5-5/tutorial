@@ -30,3 +30,19 @@ class Solution:
             ql, qr = que.popleft()
             ans += "(" * ql + ")" * qr
         return ans
+
+
+    def removeSubstring2(self, s: str, k: int) -> str:
+        # 优化，使用栈，结构很清晰，性能 340 ms
+        st = []
+        for ch in s:
+            if st and ch == st[-1][0]:
+                st[-1][1] += 1
+            else:
+                st.append([ch, 1])
+            if st[-1][0] == ')' and len(st) > 1 and st[-1][1] == k and st[-2][1] >= k:
+                st.pop()
+                if st[-1][1] == k: st.pop()
+                else: st[-1][1] -= k
+        
+        return ''.join(ch * c for ch, c in st)

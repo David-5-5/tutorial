@@ -20,4 +20,19 @@ public:
         return ans;
     }
 
+    long long calculateScore2(vector<string>& instructions, vector<int>& values) {
+        // 使用 set 103ms
+        long long ans = 0; int i = 0, n = instructions.size(); set<int> vis;
+        while (i>=0 && i < n) {
+            if (vis.count(i)) return ans;
+            else vis.insert(i);
+            if (instructions[i] == "add") {
+                ans += values[i++];
+            } else {
+                i += values[i];
+            }
+        }
+
+        return ans;
+    }    
 };

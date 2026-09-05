@@ -35,5 +35,16 @@ public:
         return ans;   
     }
 
+    long long countSubarrays(vector<int>& nums, long long k) {
+        // 性能比较 deque
+        long long ans = 0; int l = 0, n = nums.size();
+        deque<int> sorted;
+        for (int r=0; r<n; r++) {
+            sorted[nums[r]] ++;
 
+            ans += r - l + 1;
+        }
+
+        return ans;   
+    }    
 };

@@ -25,3 +25,23 @@ class Solution:
             if not dfs(0,0,0): target |= 1 << i     # 不存在为 0 的路径，该位设置为 1
         return target
 
+    def minCost(self, grid: list[list[int]]) -> int:
+        # 剪枝
+        m, n = len(grid), len(grid[0])
+        vis, ans = set(), inf
+
+        def dfs(i: int, j:int, xor:int):
+            nonlocal ans
+            if i >= m or j >= n or ans == 0 or (i, j, xor) in vis: return
+
+            vis.add((i, j, xor))
+            xor ^= grid[i][j]
+
+            if i == m-1 and j == n-1:
+                ans = min(ans, xor)
+                return
+            
+            dfs(i+1,j, xor)
+            dfs(i,j+1, xor)
+        dfs(0,0,0)
+        return ans

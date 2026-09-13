@@ -12,6 +12,6 @@ public:
             else sr += num[n+i] - '0';
         }
 
-        return (ql + qr) % 2 || sr - sl == (ql - qr) * 9 / 2;
+        return (ql + qr) % 2 || sr - sl != (ql - qr) / 2 * 9;
     }
 };

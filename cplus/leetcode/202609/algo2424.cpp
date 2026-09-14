@@ -23,6 +23,27 @@ public:
     }
 };
 
+
+class LUPrefix {
+private:
+    vector<int> uploads;
+    int x = 0;
+public:
+    LUPrefix(int n):uploads(n+1) {
+        uploads[0] = 1;
+    }
+    
+    void upload(int video) {
+        uploads[video] = 1;
+    }
+    
+    int longest() {
+        while (x+1 < uploads.size()  && uploads[x+1]) x+=1;
+        return x;
+    }
+};
+
+
 /**
  * Your LUPrefix object will be instantiated and called as such:
  * LUPrefix* obj = new LUPrefix(n);

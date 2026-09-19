@@ -44,5 +44,30 @@ public:
         return ans;
     }
 
-
+    int maximumGap3(vector<int>& nums) {
+        // 桶排序
+        auto mx = *max_element(nums.begin(), nums.end());
+        auto mn = *min_element(nums.begin(), nums.end());
+        int n = nums.size(); if (n < 2) return 0;
+        int d = max(1, (mx - mn)/(n-1)); int bucketSize = (mx-mn) / d + 1;
+        vector<pair<int, int>> bucket(bucketSize, {-1, -1});
+        for (auto & v: nums) {
+            int idx = (v - mn) / d;
+            if (bucket[idx].first == -1) {
+                bucket[idx].first = bucket[idx].second = v;
+            } else {
+                bucket[idx].first = min(bucket[idx].first, v);
+                bucket[idx].second = max(bucket[idx].second, v);
+            }
+        }
+        int ans = 0, prev = -1;
+        for (int i=0; i<bucketSize; i++) {
+            if (bucket[i].first == -1) continue;
+            if (prev != -1) {
+                ans = max(ans, bucket[i].first - bucket[prev].second);
+            }
+            prev = i;
+        }
+        return ans; 
+    }
 };

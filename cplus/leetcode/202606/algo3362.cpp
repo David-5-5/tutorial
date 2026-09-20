@@ -5,6 +5,9 @@ using namespace std;
 class Solution {
 public:
     int maxRemoval(vector<int>& nums, vector<vector<int>>& queries) {
+        // Greedy: sort queries by left endpoint, use max‑heap to select the farthest right endpoint
+        // when current position lacks required deletions; difference array maintains range add,
+        // leftover queries inside heap are the maximum removable count, return‑1 if impossible.
         priority_queue<int> pq;
 
         int n = nums.size(), m = queries.size(), sum = 0, j = 0;

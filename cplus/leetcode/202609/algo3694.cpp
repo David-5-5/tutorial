@@ -37,11 +37,41 @@ public:
             else if (c == 'D') dy--;
             else if (c == 'L') dx--;
             else dx ++;
-            terms.emplace(x-dx, y-dy);         
+            terms.emplace(x-dx, y-dy);
         }
 
         return terms.size();
     }
 
+    int distinctPoints2(string s, int k) {
+        set<pair<int, int>> terms;
+
+        auto change = [&](char& ch, bool inc, int& x, int& y) -> void{
+            if (ch == 'U') y += inc?1:-1;
+            else if (ch == 'D') y += inc?-1:1;
+            else if (ch == 'L') x += inc?-1:1;
+            else x += inc?1:-1;
+        };
+
+        int x = 0, y = 0, n = s.length();
+        for (auto& c: s) {
+            change(c, true, x, y);
+        }
+
+        int dx = 0, dy = 0;
+        for (int i=0; i<k; i++){
+            change(s[i], true, dx, dy);
+        }
+
+        terms.emplace(x-dx, y-dy);
+
+        for (int i=k; i<n; i++) {
+            change(s[i-k], false, dx, dy);
+            change(s[i], true, dx, dy);    
+            terms.emplace(x-dx, y-dy);    
+        }
+
+        return terms.size();        
+    }
 
 };

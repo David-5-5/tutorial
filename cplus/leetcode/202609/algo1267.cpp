@@ -27,4 +27,20 @@ public:
         return comms.size();
     }
 
+    int countServers(vector<vector<int>>& grid) {
+        unordered_map<int, int> rows, cols;
+        int m = grid.size(), n = grid[0].size();
+        
+        for (int r=0; r<m; r++) for (int c=0; c<n; c++) {
+            if (grid[r][c]) {
+                rows[r] ++; cols[c] ++;
+            }
+        }
+
+        int ans = 0;
+        for (int r=0; r<m; r++) for (int c=0; c<n; c++){
+            if (grid[r][c] && (rows[r] > 1 || cols[c] > 1)) ans ++;
+        }
+        return ans;
+    }    
 };

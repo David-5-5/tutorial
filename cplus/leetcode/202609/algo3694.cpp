@@ -74,4 +74,27 @@ public:
         return terms.size();        
     }
 
+    int distinctPoints3(string s, int k) {
+        set<pair<int, int>> terms;
+
+        auto change = [&](char& ch, bool inc, int& x, int& y) -> void{
+            if (ch == 'U') y += inc?1:-1;
+            else if (ch == 'D') y += inc?-1:1;
+            else if (ch == 'L') x += inc?-1:1;
+            else x += inc?1:-1;
+        };
+
+        int x = 0, y = 0, n = s.length();
+
+        terms.emplace(0, 0);
+
+        for (int i=k; i<n; i++) {
+            change(s[i-k], false, x, y);
+            change(s[i], true, x, y);    
+            terms.emplace(x, y);    
+        }
+
+        return terms.size();        
+    }
+
 };

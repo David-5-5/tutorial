@@ -25,9 +25,9 @@ class Solution:
         for i, v in enumerate(arr):
             ans = min(ans, abs(target-arr[i]))
             for j in range(i-1, -1, -1):
-                if arr[j] == arr[j] | v:
+                if arr[j] == arr[j] & v:
                     break
-                arr[j] |= v
+                arr[j] &= v
                 ans = min(ans, abs(target-arr[j]))
         return ans    
 

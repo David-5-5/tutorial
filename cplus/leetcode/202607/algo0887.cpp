@@ -50,12 +50,20 @@ public:
                 auto x = (l + r) / 2;
                 auto t0 = dfs(i-1, x-1), t1 = dfs(i, j-x);
                 auto s0 = dfs(i-1, x), s1 = dfs(i, j-x-1);
-                if (t0 <= t1 && s0 >= s1) { // equals is must!!!
-                    res = min(max(t0, t1), max(s0, s1)); break;
-                } else if (t0 < t1 && s0 < s1) {
-                    l = x;
-                } else {
+                // if (t0 <= t1 && s0 >= s1) { // equals is must!!!
+                //     res = min(max(t0, t1), max(s0, s1)); break;
+                // } else if (t0 < t1 && s0 < s1) {
+                //     l = x;
+                // } else {
+                //     r = x;
+                // }
+                // simpified statements
+                if (s0 < s1) { 
+                    l = x;                    
+                } else if (t0 > t1) {
                     r = x;
+                } else {
+                    res = min(max(t0, t1), max(s0, s1)); break;
                 }
             }
 

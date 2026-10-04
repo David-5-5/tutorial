@@ -38,5 +38,34 @@ public:
 
     }
 
+    long long weightedSum2(vector<int>& parent, vector<int>& nums) {
+        int n = parent.size();
+        vector g(n, vector<int>());
 
+        for (int i=0; i<n; i++) {
+            auto& p = parent[i];
+            if (p != -1) {
+                g[p].emplace_back(i);
+            }
+        }
+        vector<int> depths(n);
+        auto get_height = [&](this auto&& f, int u) -> int {
+            int height = 0;
+            for (auto & v: g[u]) {
+                depths[v] = depths[u] + 1;
+                height = max(height, f(v));
+            }
+
+            return height + 1;
+        };
+
+        auto h = get_height(0);
+        
+        long long res = 0;
+        for (int i=0; i<n; i++) 
+            res += 1LL * (h - depths[i]) * nums[i];
+        
+        return res;
+
+    }    
 };

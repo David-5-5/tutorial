@@ -27,3 +27,27 @@ class Solution:
             ans[i] = v
         return ans
 
+    def restoreArray(self, adjacentPairs: List[List[int]]) -> List[int]:
+        # list 不排序直接删除
+        n = len(adjacentPairs)
+        adjs = defaultdict(list)    # key1 (key2, val) key1 = u key2 = v, val = count of key2
+        for u, v in adjacentPairs:
+            adjs[u].append(v)
+            adjs[v].append(u)
+        
+        ans = [0] * (n + 1)
+        ans[0] = next(iter(adjs))
+        for k, v in adjs.items():
+            if len(v) % 2: 
+                ans[0] = k
+                break
+
+        for i in range(1, n+1):
+            u = ans[i-1]
+            v = adjs[u][-1]
+            adjs[u].pop() # u 中删除 v
+            adjs[v].remove(u)
+
+            ans[i] = v
+        return ans
+

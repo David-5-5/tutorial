@@ -51,3 +51,27 @@ class Solution:
             ans[i] = v
         return ans
 
+    def restoreArray(self, adjacentPairs: List[List[int]]) -> List[int]:
+        # set 适用与于相同元素的情况
+        n = len(adjacentPairs)
+        adjs = defaultdict(set)    # key1 (key2, val) key1 = u key2 = v, val = count of key2
+        for u, v in adjacentPairs:
+            adjs[u].add(v)
+            adjs[v].add(u)
+        
+        ans = [0] * (n + 1)
+        ans[0] = next(iter(adjs))
+        for k, v in adjs.items():
+            if len(v) % 2: 
+                ans[0] = k
+                break
+
+        for i in range(1, n+1):
+            u = ans[i-1]
+            v = next(iter(adjs[u]))
+            adjs[u].remove(v)
+            adjs[v].remove(u)
+
+            ans[i] = v
+        return ans
+

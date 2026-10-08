@@ -75,3 +75,26 @@ class Solution:
             ans[i] = v
         return ans
 
+    def restoreArray(self, adjacentPairs: List[List[int]]) -> List[int]:
+        # list 不排序不删除，在两个元素中比较，性能最佳，完美契合本题
+        n = len(adjacentPairs)
+        adjs = defaultdict(list) 
+        for u, v in adjacentPairs:
+            adjs[u].append(v)
+            adjs[v].append(u)
+        
+        ans = [0] * (n + 1)
+        ans[0] = next(iter(adjs))
+        for k, v in adjs.items():
+            if len(v) % 2: 
+                ans[0] = k
+                break
+        
+        prev = None
+        for i in range(1, n+1):
+            u = ans[i-1]
+            for v in adjs[u]:
+                if v != prev:
+                    ans[i] = v
+            prev = u
+        return ans

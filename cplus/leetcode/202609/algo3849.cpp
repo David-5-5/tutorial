@@ -34,5 +34,16 @@ public:
         return ans;
     }
 
-
+    string maximumXor3(string s, string t) {
+        int cnt[2], n = s.length();
+        for (auto & ch : t) cnt[ch-'0'] ++;
+            
+        string ans = string(n, '0');
+        for (int i=0; i<n; i++) {
+            int idx = s[i] - '0';
+            if (cnt[1 ^ idx]) {ans[i] = '1'; cnt[1 ^ idx]--;}
+            else cnt[idx]--;
+        }
+        return ans;
+    }
 };

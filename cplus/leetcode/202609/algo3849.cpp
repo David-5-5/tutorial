@@ -22,5 +22,17 @@ public:
         return ans;
     }
 
+    string maximumXor2(string s, string t) {
+        int cnt[2];
+        for (auto & ch : t) cnt[ch-'0'] ++;
+            
+        string ans = "";
+        for (auto & ch : s) {
+            if (cnt[1^(ch-'0')]) {ans += "1"; cnt[1^(ch-'0')]--;}
+            else {ans += "0"; cnt[ch-'0']--;}
+        }
+        return ans;
+    }
+
 
 };

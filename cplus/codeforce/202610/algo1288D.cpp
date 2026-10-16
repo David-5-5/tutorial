@@ -24,7 +24,8 @@ int main() {
     }
 
     auto check = [&](int limit) -> pair<int, int> {
-        unordered_map<int, int> masks;
+        // unordered_map<int, int> masks;
+        vector<int> masks(FULL+1, -1);
 
         for (int i=0; i<n; i++) {
             int msk = 0;
@@ -33,7 +34,7 @@ int main() {
             }
             if (msk == FULL) return {i, i};
             for (auto & y : pre[msk]) {
-                if (masks.count(y)) {
+                if (masks[y] != -1) {
                     return {i, masks[y]};
                 }
             }

@@ -618,7 +618,7 @@ f(S) = f\begin{pmatrix}\begin{pmatrix} n & n' \\ m & m' \end{pmatrix}\end{pmatri
 ```math
 \begin{aligned}
 & S := I; \\
-& \text{while } S \neq f(S) \text{ do} \\
+& \text{while m/n } \neq f(S) \text{ do} \\
 & \quad \text{if m/n < f(S)}  &\text{then (output(L);S := SL;) }  \\ 
 & \quad &\text{else (output(R); S := SR;) } .
 \end{aligned}
@@ -674,11 +674,14 @@ e = R L^0 R L R^2 L R L^4 R L R^6 L R L^8 R L R^{10} L R L^{12} R L\ldots;
 
 从这个表示中我们可以推导出这些分数
 ```math
-RRLRRLRLLLRLLRRRR, \\
-\frac{1}{1},\frac{2}{1},\frac{3}{1},\frac{5}{2},\frac{8}{3},\frac{11}{4},\frac{19}{7},\frac{30}{11},\frac{49}{18},\frac{68}{25},\frac{87}{32},\frac{106}{39},\ldots
+\begin{aligned}
+&\kern0.5em R\kern0.5em R\kern0.5em L\kern0.5em R\kern0.5em R\kern0.6em L\kern0.8em R\kern0.9em L\kern0.9em L\kern1.0em L\kern1.0em L\kern1.2em R\kern1.4em L\kern1.6em R\kern1.6em R\kern1.6em R\kern1.6em R \\
+&\frac11\kern0.4em\frac21\kern0.4em\frac31\kern0.4em\frac52\kern0.4em\frac83\kern0.4em\frac{11}{4}\kern0.4em\frac{19}{7}\kern0.4em\frac{30}{11}\kern0.4em\frac{49}{18}\kern0.4em\frac{68}{25}\kern0.4em\frac{87}{32}\kern0.4em\frac{106}{39}\kern0.4em\frac{193}{71}\kern0.4em\frac{299}{110}\kern0.4em\frac{492}{181}\kern0.4em\frac{685}{252}\kern0.4em\frac{878}{323}
+\end{aligned}
+
 ```
 
-这些是 $e$ 最简单的有理数上、下逼近。因为如果 $m/n$ 不在此列表中，那么列表中就存在某个分子 $\le m$、分母 $\le n$ 的分数介于 $m/n$ 和 $e$ 之间。例如，$\frac{25}{9}$ 就不如列表里的 $\frac{19}{7}=2.714\ldots$ 那样简洁且更接近 $e$。这是因为斯特恩‑布罗科特树不仅包含所有有理数，还按顺序排列，并且所有分子分母较小的分数都出现在更复杂的分数上方。于是，$\frac{25}{9}=RRLRRLL$ 小于 $\frac{19}{7}=RRLRRL$，而后者又小于 $e=RRLRRLRR\ldots$。用这种方法可以得到非常优秀的逼近。例如，$\frac{1264}{465}\approx 2.718280$ 与 $e$ 精确到小数点后六位一致；我们从 $e$ 的前19个斯特恩‑布罗科特表示字符得到这个分数，其精度与用19位二进制表示 $e$ 大致相当。
+这些是 $e$ 最简单的有理数上、下逼近。因为如果 $m/n$ 不在此列表中，那么列表中就存在某个分子 $\le m$、分母 $\le n$ 的分数介于 $m/n$ 和 $e$ 之间。例如，$\frac{25}{10}$ 就不如列表里的 $\frac{19}{7}=2.714\ldots$ 那样简洁且更接近 $e$。这是因为斯特恩‑布罗科特树不仅包含所有有理数，还按顺序排列，并且所有分子分母较小的分数都出现在更复杂的分数上方。于是，$\frac{25}{10}=RRLRRLL$ 小于 $\frac{19}{7}=RRLRRL$，而后者又小于 $e=RRLRRLRR\ldots$。用这种方法可以得到非常优秀的逼近。例如，$\frac{1264}{465}\approx 2.718280$ 与 $e$ 精确到小数点后六位一致；我们从 $e$ 的前19个斯特恩‑布罗科特表示字符得到这个分数，其精度与用19位二进制表示 $e$ 大致相当。
 
 我们可以通过对无矩阵二分查找过程稍作修改，来得到无理数 $\alpha$ 的无限表示：
 ```math

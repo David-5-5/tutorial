@@ -1,4 +1,4 @@
-from cmath import inf
+from math import inf
 from typing import List
 
 # 动态规划 - 专题：把 X 变成 Y

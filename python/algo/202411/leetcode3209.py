@@ -1,5 +1,5 @@
 from bisect import bisect_left, bisect_right
-from cmath import inf
+from math import inf
 from typing import List
 
 # 双周赛 134

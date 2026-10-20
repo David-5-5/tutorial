@@ -1,6 +1,5 @@
-from cmath import inf
 from functools import cache
-
+from math import inf
 
 class Solution:
     def minCut(self, s: str) -> int:

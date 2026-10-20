@@ -1,5 +1,5 @@
 from bisect import bisect_left
-from cmath import inf
+from math import inf
 from functools import cache
 import heapq
 from typing import List

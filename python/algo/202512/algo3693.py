@@ -1,5 +1,5 @@
-from cmath import inf
 from functools import cache
+from math import inf
 from typing import List
 
 # 动态规划 - 爬楼梯

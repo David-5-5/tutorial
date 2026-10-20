@@ -1,4 +1,4 @@
-from cmath import inf
+from math import inf
 from typing import List
 
 # 七、其他线性 DP - 7.1 一维 DP

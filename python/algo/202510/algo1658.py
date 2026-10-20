@@ -1,6 +1,6 @@
 from bisect import bisect_right
-from cmath import inf
 from itertools import accumulate
+from math import inf
 from typing import List
 
 # 滑动窗口与双指针 - 不定长滑动窗口 2.1.1 基础

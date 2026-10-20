@@ -1,5 +1,5 @@
-from cmath import inf
-from functools import lru_cache
+from functools import cache
+from math import inf
 from typing import List
 
 # refer to https://www.bilibili.com/video/BV1Hj411D7Tr/?spm_id_from=333.880.my_history.page.click
@@ -9,7 +9,7 @@ class Solution:
         n = len(cost)
         # 前 i 面墙, j 所需时间
         # 返回值为最小 cost
-        @lru_cache(maxsize=None)
+        @cache(maxsize=None)
         def dfs(i:int, j:int) -> int:
             # 下面注释代码内存溢出
             # if i < 0: 

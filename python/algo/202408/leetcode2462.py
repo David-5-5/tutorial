@@ -1,4 +1,4 @@
-from cmath import inf
+from math import inf
 from heapq import heapify, heapreplace, heappop
 from typing import List
 

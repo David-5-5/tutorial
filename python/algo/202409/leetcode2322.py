@@ -1,5 +1,5 @@
-from cmath import inf
 from functools import reduce
+from math import inf
 from operator import xor
 from typing import List
 

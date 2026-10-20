@@ -1,6 +1,6 @@
-from cmath import inf
 from collections import defaultdict, deque
 from itertools import accumulate
+from math import inf
 from typing import List
 
 

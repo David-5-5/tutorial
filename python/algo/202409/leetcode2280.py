@@ -1,4 +1,4 @@
-from cmath import inf
+from math import inf
 from itertools import pairwise
 from typing import List
 

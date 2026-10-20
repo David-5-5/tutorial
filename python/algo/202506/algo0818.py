@@ -1,6 +1,6 @@
-from cmath import inf
 from functools import cache
 from heapq import heappop, heappush
+from math import inf
 
 
 class Solution:

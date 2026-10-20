@@ -1,5 +1,5 @@
 import sys
-from cmath import inf
+from math import inf
 sys.path.append(sys.path[0] + "/../..")
 from common import TreeNode, createTreeNode
 # class TreeNode:

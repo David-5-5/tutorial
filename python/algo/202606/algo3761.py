@@ -1,4 +1,4 @@
-from cmath import inf
+from math import inf
 from collections import defaultdict
 from typing import List
 

@@ -1,6 +1,6 @@
 
-from cmath import inf
 from functools import cache
+from math import inf
 from typing import List
 
 # 动态规划 - 六、状态机 DP 6.1 买卖股票

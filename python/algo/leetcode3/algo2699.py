@@ -1,6 +1,6 @@
-from cmath import inf
 from collections import defaultdict
 import heapq
+from math import inf
 from typing import List
 
 class Solution:

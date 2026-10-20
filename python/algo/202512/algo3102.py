@@ -1,4 +1,4 @@
-from cmath import inf
+from math import inf
 from typing import List
 
 # 杂项 - 7.3 曼哈顿距离

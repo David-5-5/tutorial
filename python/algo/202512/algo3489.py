@@ -1,5 +1,5 @@
-from cmath import inf
 from functools import cache
+from math import inf
 from typing import List
 
 # 动态规划 - 三、背包 3.1 0-1 背包 进阶

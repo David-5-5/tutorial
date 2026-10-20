@@ -1,5 +1,5 @@
-from cmath import inf
 import heapq
+from math import inf
 from typing import List
 
 # 双周赛 128

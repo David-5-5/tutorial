@@ -1,4 +1,4 @@
-from cmath import inf
+from math import inf
 import heapq
 from typing import List
 

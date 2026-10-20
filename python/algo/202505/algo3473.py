@@ -1,6 +1,6 @@
-from cmath import inf
 from functools import cache
 from itertools import accumulate
+from math import inf
 from typing import List
 
 # 动态规划 - 11.1 前缀和优化 DP

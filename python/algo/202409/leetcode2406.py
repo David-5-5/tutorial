@@ -1,6 +1,6 @@
 from bisect import bisect_right
-from cmath import inf
 import heapq
+from math import inf
 from typing import List
 
 # 周赛 310

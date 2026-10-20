@@ -1,6 +1,6 @@
 from bisect import bisect_left, bisect_right
-from cmath import inf
 from functools import cache
+from math import inf
 from typing import List
 
 

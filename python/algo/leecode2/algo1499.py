@@ -1,5 +1,5 @@
-from cmath import inf
 from collections import deque
+from math import inf
 from typing import List
 class Solution:
     def findMaxValueOfEquation(self, points: List[List[int]], k: int) -> int:

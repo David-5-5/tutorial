@@ -686,12 +686,12 @@ e = R L^0 R L R^2 L R L^4 R L R^6 L R L^8 R L R^{10} L R L^{12} R L\ldots;
 我们可以通过对无矩阵二分查找过程稍作修改，来得到无理数 $\alpha$ 的无限表示：
 ```math
 \begin{aligned}
-&\text{if } \alpha < 1 &&\text{then output(L);} \alpha:=\alpha(1-\alpha);  \\
-& \quad &&\text{else output(R);} \alpha:=\alpha - 1
+&\text{if } \alpha < 1 &&\text{ then } (output(L); \alpha:=\alpha/(1-\alpha))  \\
+& \quad &&\text{ else } (output(R); \alpha:=\alpha - 1)
 \end{aligned}
 ```
 
-（这些步骤需要无限次重复执行，或直至我们停止操作。）若 $\alpha$ 为有理数，通过这种方式得到的无限表示与之前的（有限）表示一致，只是在其右侧追加了 $RL^\infty$（即无限个L）。例如，当 $\alpha = 1$ 时，我们会得到 $RLLL\ldots$，对应分数序列 $\frac{1}{1},\frac{2}{1},\frac{3}{2},\frac{4}{3},\frac{5}{4},\ldots$，该序列的极限为1。若将 $L$ 视作0，$R$ 视作1，这个情形与普通二进制表示完全类似：正如区间 $[0..1)$ 内的每个实数 $x$ 都有一个不以全1结尾的无限二进制表示 $(.b_1b_2b_3\ldots)_2$，区间 $[0..\infty)$ 内的每个实数 $\alpha$ 都有一个不以全R结尾的无限斯特恩‑布罗科特表示 $B_1B_2B_3\ldots$。因此，若令 $0 \to L$、$1 \to R$，我们就能在区间 $[0..1)$ 和 $[0..\infty)$ 之间建立一个**保序的一一对应关系**。
+（这些步骤需要无限次重复执行，或直至我们停止操作。）若 $\alpha$ 为有理数，通过这种方式得到的无限表示与之前的（有限）表示一致，只是在其右侧追加了 $RL^\infty$（即无限个L）。例如，当 $\alpha = 1$ 时，我们会得到 $RLLL\ldots$，对应分数序列 $\frac{1}{1},\frac{2}{1},\frac{3}{2},\frac{4}{3},\frac{5}{4},\ldots$，该序列的极限为1。若将 $L$ 视作0，$R$ 视作1，这个情形与普通二进制表示完全类似：正如区间 $[0..1)$ 内的每个实数 $x$ 都有一个不以全1结尾的无限二进制表示 $(.b_1b_2b_3\ldots)_2$，区间 $[0..\infty)$ 内的每个实数 $\alpha$ 都有一个不以全R结尾的无限斯特恩‑布罗科特表示 $B_1B_2B_3\ldots$。因此，若令 $0 \leftrightarrow L$， $1 \leftrightarrow R$，我们就能在区间 $[0..1)$ 和 $[0..\infty)$ 之间建立一个**保序的一一对应关系**。
 
 欧几里得算法与有理数的斯特恩‑布罗科特表示之间存在密切联系。给定 $\alpha = m/n$，我们先得到 $\lfloor m/n \rfloor$ 个 $R$，接着是 $\lfloor n/(m \bmod n) \rfloor$ 个 $L$，然后是 $\lfloor (m \bmod n)/(n \bmod (m \bmod n)) \rfloor$ 个 $R$，依此类推。这些数 $m \bmod n$、$n \bmod (m \bmod n)$、…… 正是欧几里得算法中出现的数值。（最后需要稍作调整，以保证不会出现无限多个 $R$。）我们将在第6章进一步探讨这种关系。
 

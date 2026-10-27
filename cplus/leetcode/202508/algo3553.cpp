@@ -60,6 +60,9 @@ public:
 
         auto dfs = [&](this auto&& dfs, int x, int fa) -> void {
             pa[x][0] = fa;
+            for (int i = 1; i < m; i++) {
+                pa[x][i] = pa[x][i-1] == -1 ? -1 : pa[pa[x][i-1]][i-1];
+            }              
             for (auto& [y, w] : g[x]) {
                 if (y != fa) {
                     depth[y] = depth[x] + 1;
@@ -70,13 +73,6 @@ public:
         };
         dfs(0, -1);
 
-        for (int i = 0; i < m - 1; i++) {
-            for (int x = 0; x < n; x++) {
-                if (int p = pa[x][i]; p != -1) {
-                    pa[x][i + 1] = pa[p][i];
-                }
-            }
-        }
         // END 树上倍增 模板 - 计算 pa depth
         vector<int> ans;
         for (auto & q :queries) {

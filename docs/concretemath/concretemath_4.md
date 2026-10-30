@@ -722,17 +722,17 @@ a\bmod m = a-\lfloor a/m\rfloor m &= b+km-\lfloor (b+km)/m\rfloor m \\
 
 同余号 $\equiv$ 看起来与等号 $=$ 很相似，这很方便，因为同余式几乎就像等式一样。例如，同余是一种等价关系；也就是说，它满足自反律 $a\equiv a$，对称律 $a\equiv b\Rightarrow b\equiv a$，以及传递律 $a\equiv b,b\equiv c\Rightarrow a\equiv c$。所有这些性质都很容易证明，因为任何满足 $a\equiv b\iff f(a)=f(b)$（其中 $f$ 是某个函数）的关系 $\equiv$ 都是等价关系。（在我们这里，$f(x)=x\bmod m$。）此外，我们可以对同余的元素进行加、减运算而不破坏同余性：
 ```math
-a\equiv b \text{  and  } c\equiv d\ (\text{mod}\ m) \Rightarrow a+c\equiv b+d \pmod m;\\ 
+a\equiv b \text{  and  } c\equiv d\ \Rightarrow a+c\equiv b+d \pmod m;\\ 
 ```
 ```math
-a\equiv b \text{  and  } c\equiv d\ (\text{mod}\ m) \Rightarrow a-c\equiv b-d \pmod m.
+a\equiv b \text{  and  } c\equiv d\ \Rightarrow a-c\equiv b-d \pmod m.
 ```
 
 因为若 $a-b$ 和 $c-d$ 均为 $m$ 的倍数，则 $(a+c)-(b+d)=(a-b)+(c-d)$ 和 $(a-c)-(b-d)=(a-b)-(c-d)$ 也均为 $m$ 的倍数。顺便提一下，并非每出现一次 $\equiv$ 就需要书写一次 $\pmod{m}$；若模数保持不变，我们只需在开头声明一次即可确定上下文。这是同余记号带来的一大便利。
 
 乘法同样适用，只要我们处理的是整数：
 ```math
-a\equiv b\ \text{and}\ c\equiv d\ \Rightarrow\ ac\equiv bd\pmod{m}. \text{  integer b,c}.
+a\equiv b\ \text{and}\ c\equiv d\ \Rightarrow\ ac\equiv bd\pmod{m}. \\ \text{  integer b,c}.
 ```
 
 证明：$ac-bd=(a-b)c+b(c-d)$。反复应用这一乘法性质，我们现在还可以取幂：
@@ -776,7 +776,7 @@ a\equiv b\pmod{md}\Rightarrow a\equiv b\pmod{m},\quad \text{integer }d.\tag{4.40
 反之，如果已知 $a\equiv b$ 对两个较小的模数成立，我们能否推出对更大的模数也成立？答案是肯定的，其规则为：
 ```math
 \begin{aligned}
-a\equiv b &\pmod{m} \text{ and } a\equiv b &\pmod{n}\\
+a\equiv b &\pmod{m} \text{ and } a\equiv b \pmod{n}\\
 &\iff a\equiv b\pmod{lcm(m,n)}, \text{ integers m; n > 0 }.\tag{4.41}
 \end{aligned}
 ```

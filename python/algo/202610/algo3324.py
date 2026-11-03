@@ -15,3 +15,12 @@ class Solution:
                 ans.append("".join(seq))
         return ans
 
+    def stringSequence2(self, target: str) -> List[str]:
+        pre = ''
+        ans = []
+
+        for c in target:
+            for j in range(97, ord(c) + 1):
+                ans.append(pre + chr(j))
+            pre += c
+        return ans

@@ -1,9 +1,36 @@
 from typing import List
 
 
+class UnionFind:
+    def __init__(self, n:int):
+        self.fa = list(range(n))
+        self.cc = n                 # 连通块数目
+    
+    def find(self, x: int) -> int:
+        if self.fa[x] != x:
+            self.fa[x] = self.find(self.fa[x])
+        return self.fa[x]
+
+    def merge(self, u: int, v:int) -> None:
+        x, y = self.find(u), self.find(v)
+        if x != y:
+            self.fa[x] = y
+            self.cc -= 1
+
+
 class Solution:
 
     def minCost(self, n: int, edges: List[List[int]], k: int) -> int:
+        # 并查集
+        if k == n: return 0
+
+        uf = UnionFind(n)
+        for u, v, w in sorted(edges, key=lambda p:p[2]):
+            uf.merge(u, v)
+            if uf.cc <= k: return w
+
+
+    def minCost2(self, n: int, edges: List[List[int]], k: int) -> int:
         # 自行解答，二分，性能差
         mx_w = max([w for _, _, w in edges])
 

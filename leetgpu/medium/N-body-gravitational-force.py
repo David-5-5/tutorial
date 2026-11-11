@@ -35,3 +35,10 @@ def solve(positions: torch.Tensor, masses: torch.Tensor, forces: torch.Tensor, N
     # unsqueeze(-1) 把 (N,N) 变成 (N,N,1) 以便与 (N,N,3) 逐元素相乘
     # sum(dim=1) 就是对所有 j 求和，完成 Σ_{j≠i} 的聚合    
     forces[:] = (coef.unsqueeze(-1) * diff).sum(dim=1)  # (N, 3)
+
+N = 2
+positions = torch.tensor([[0.0, 0.0, 0.0], [0.0, 3.0, 4.0]])
+masses = torch.tensor([2.0, 1.0])
+forces = torch.zeros(2, 3)
+solve(positions, masses, forces, N)
+print(forces)

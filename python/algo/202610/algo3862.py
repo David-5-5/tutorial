@@ -14,3 +14,17 @@ class Solution:
             suf *= nums[i]
         return -1
         
+    def smallestBalancedIndex(self, nums: list[int]) -> int:
+        # 双指针 
+        n = len(nums)     
+        i, pres, j, sufd = 0, 0, n-1, 1
+        while i < j and sufd <= 10 ** 14:
+            if pres < sufd:
+                pres += nums[i]
+                i += 1
+            else:
+                sufd *= nums[j]
+                j -= 1
+
+        if pres == sufd: return i
+        else: return -1

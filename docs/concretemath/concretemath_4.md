@@ -1030,7 +1030,7 @@ n^{\varphi(m)}\equiv 1\pmod{m}, \text{if } n\perp m \tag{4.50}
 
 若 $m>1$ 不是素数幂，则可将 $m$ 写成 $m=m_1m_2$，其中 $m_1\perp m_2$。于是满足 $0\le n<m$ 的数 $n$ 可以在剩余数系中表示为 $(n\bmod m_1,n\bmod m_2)$。我们有
 ```math
-n\perp m \iff n\bmod m_1\perp m_1 \text{and } n\bmod m_2\perp m_2
+n\perp m \iff n\bmod m_1\,\perp\, m_1 \quad\text{ and }\quad n\bmod m_2\,\perp\, m_2
 ```
 
 根据 $(4.30)$ 与 $(4.4)$，$n\perp m$ 当且仅当 $n\bmod m_1$ 与 $m_1$ 互素且 $n\bmod m_2$ 与 $m_2$ 互素。因此，如果把互素当作“好”的性质，那么模 $m$ 下的数 $n$ 是“好”的，当且仅当 $n\bmod m_1$ 与 $n\bmod m_2$ 都是“好”的。现在可以递归计算模 $m$ 的“好”数的总数：它等于 $\varphi(m_1)\varphi(m_2)$，因为在剩余表示中，选取第一个分量 $n\bmod m_1$ 有 $\varphi(m_1)$ 种好的方式，选取第二个分量 $n\bmod m_2$ 有 $\varphi(m_2)$ 种好的方式。
@@ -1039,10 +1039,10 @@ n\perp m \iff n\bmod m_1\perp m_1 \text{and } n\bmod m_2\perp m_2
 
 若正整数的函数 $f(m)$ 满足 $f(1)=1$ 且
 ```math
-f(m_1m_2)=f(m_1)f(m_2) \text{ whenever } m_1\perp m_2 \tag{4.51}
+f(m_1m_2)=f(m_1)f(m_2) \qquad \text{ whenever } m_1\perp m_2 \tag{4.51}
 ```
 
-我们刚刚证明了 $\varphi(m)$ 是积性函数。本章前面还见过另一个积性函数的例子：同余式 $x^2\equiv 1\pmod{m}$ 的互不同余解的个数是积性的。还有一个例子是对任意指数 $x$，$f(m)=m^x$ 都是积性函数。
+我们刚刚证明了 $\varphi(m)$ 是积性函数。本章前面还见过另一个积性函数的例子：同余式 $x^2\equiv 1\pmod{m}$ 的互不同余解的个数是积性的。还有一个例子是对任意指数 $\alpha$，$f(m)=m^\alpha$ 都是积性函数。
 
 积性函数完全由其在素数幂处的取值决定，因为我们可以将任意正整数 $m$ 分解为两两互素的素数幂因子，其一般公式为
 ```math

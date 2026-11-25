@@ -157,6 +157,54 @@ def solve2(
         # 更新状态
         prev_s = cur_s
 
+def solve4(
+    Q: torch.Tensor,
+    K: torch.Tensor,
+    V: torch.Tensor,
+    alpha: torch.Tensor,
+    beta: torch.Tensor,
+    output: torch.Tensor,
+    batch: int,
+    seq_len: int,
+    d: int,
+):
+    # kimi code 代码，deepseek 接力优化版
+    C = 64
+    S_in = torch.zeros(batch, d, d, device=Q.device)
+    for s0 in range(0, seq_len, C):
+        s1 = min(s0 + C, seq_len)
+        T = s1 - s0
+        q, k, v = Q[:, s0:s1, :], K[:, s0:s1, :], V[:, s0:s1, :]
+        alpha_c, beta_c = alpha[:, s0:s1], beta[:, s0:s1]
+
+        g = torch.log(alpha_c).cumsum(1)
+        eg = g.exp()
+        em = (-g).exp()
+        w = k * eg
+        u = k * em
+        
+        # 修复 1：beta_c 乘以的是历史时刻 j 的更新强度，必须乘在列上 ([:, None, :])
+        Gmat = torch.tril((w @ u.transpose(1, 2)) * beta_c[:, None, :], diagonal=-1)
+        I_T = torch.eye(T, device=Q.device, dtype=Q.dtype).expand(batch, T, T).contiguous()
+        
+        # 这里直接用 w @ S_in，不要除以 alpha_c，因为 w 里已经包含了当前的 alpha_t
+        RHS = v - w @ S_in
+        Cmat = torch.linalg.solve_triangular(Gmat + I_T, RHS, upper=False, left=True)
+        
+        X = u * beta_c[:, :, None]
+        qtilde = q * eg
+        
+        # 修复 2：这里千万不能 transpose！S_in 是 [d_k, d_v]，qtilde 是 d_k 维，相乘正好得到 d_v 维。
+        base = qtilde @ S_in
+        
+        W2 = torch.tril(qtilde @ X.transpose(1, 2))
+        
+        output[:, s0:s1] = base + W2 @ Cmat
+        
+        # 修复 3：旧状态和新增量必须作为一个整体，被当前 Chunk 的总衰减系数 (eg[-1]) 缩放
+        S_in = eg[:, -1].unsqueeze(-1) * (S_in + X.transpose(1, 2) @ Cmat)
+
+
 batch, seq_len, d = 1, 2, 2
 Q = torch.tensor([[[1.0, 1], [1, 1]]])                        # (4,)
 K = torch.tensor([[[1.0, 0], [0, 1]]])                        # (12,) 扁平化
@@ -165,6 +213,6 @@ alpha = torch.tensor([[[1.0, 1], [0.5, 0.5]]])                # (3,)
 beta = torch.tensor([[1, 0.5]])                              # (3,)
 output = torch.zeros(batch, seq_len, d)                            # (4,)
 
-solve3(Q, K, V, alpha, beta, output, batch, seq_len, d)
+solve4(Q, K, V, alpha, beta, output, batch, seq_len, d)
 
 print(output)

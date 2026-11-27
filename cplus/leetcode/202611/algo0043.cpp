@@ -47,4 +47,37 @@ public:
 
     }
 
+    string multiply2(string num1, string num2) {
+        // 性能优化版本
+        if (num1 == "0" || num2 == "0") return "0";
+        
+        int n = num1.size(), m = num2.size();
+        // 结果最大长度为 n + m，直接预分配避免扩容
+        vector<int> res(n + m, 0);
+        
+        // 逆序遍历，直接累加到目标位置，避免存储 partials
+        for (int i = n - 1; i >= 0; --i) {
+            int d1 = num1[i] - '0';
+            for (int j = m - 1; j >= 0; --j) {
+                int d2 = num2[j] - '0';
+                int pos = i + j + 1; // 精准定位
+                int sum = res[pos] + d1 * d2;
+                
+                res[pos] = sum % 10;
+                res[pos - 1] += sum / 10; // 进位直接叠加，后续循环会处理
+            }
+        }
+        
+        // 一次性转换为字符串，跳过前导零
+        string product;
+        product.reserve(n + m);
+        int idx = 0;
+        while (idx < res.size() && res[idx] == 0) ++idx;
+        for (; idx < res.size(); ++idx) {
+            product.push_back('0' + res[idx]);
+        }
+        
+        return product.empty() ? "0" : product;
+
+    }    
 };
